@@ -11,7 +11,6 @@ test_common: &test_common
     POSTGRES_HOST: postgres
     POSTGRES_PASSWORD: scholarsphere
 
-
 steps:
 - name: build
   image: docker
