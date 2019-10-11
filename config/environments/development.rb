@@ -61,4 +61,8 @@ Rails.application.configure do
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
+
+  # This enables puma-dev to work. If you're not using this, then you
+  # can just ignore it.
+  config.hosts << 'scholarsphere-4.test'
 end

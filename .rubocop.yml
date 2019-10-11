@@ -13,3 +13,8 @@ AllCops:
     - 'vendor/**/*'
     - 'bin/**/*'
     - 'node_modules/**/*'
+
+Metrics/BlockLength:
+  Exclude:
+    - 'app/controllers/catalog_controller.rb'
+
