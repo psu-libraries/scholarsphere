@@ -1,0 +1,10 @@
+# Sample Figaro config file
+# Copy this to config/application.yml and edit as needed.
+
+POSTGRES_USER: "[username]" # This is typically $ whoami
+
+development:
+  POSTGRES_DB: "scholarsphere_4_development"
+
+test:
+  POSTGRES_DB: "scholarsphere_4_test"
