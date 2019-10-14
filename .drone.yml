@@ -1,0 +1,122 @@
+---
+kind: pipeline
+name: default
+
+test_common: &test_common
+  image: harbor.dsrd.libraries.psu.edu/library/scholarsphere:ci
+  environment:
+    RAILS_ENV: test
+    POSTGRES_USER: scholarsphere
+    POSTGRES_DB: scholarsphere
+    POSTGRES_HOST: postgres
+    POSTGRES_PASSWORD: scholarsphere
+
+steps:
+- name: build
+  image: docker
+  when:
+    branch:
+      exclude:
+        - skip-ci*
+    event:
+      exclude:
+      - pull_request
+      - tag
+  environment:
+    DOCKER_PASSWORD:
+      from_secret: DOCKER_PASSWORD
+  commands:
+    - export DOCKER_HOST=unix:///var/run/host.sock
+    - docker login -u 'robot$drone' -p $DOCKER_PASSWORD harbor.dsrd.libraries.psu.edu
+    - docker build -t harbor.dsrd.libraries.psu.edu/library/scholarsphere:$DRONE_BUILD_NUMBER . 
+    - docker tag harbor.dsrd.libraries.psu.edu/library/scholarsphere:$DRONE_BUILD_NUMBER harbor.dsrd.libraries.psu.edu/library/scholarsphere:ci
+    - docker push harbor.dsrd.libraries.psu.edu/library/scholarsphere:$DRONE_BUILD_NUMBER
+  volumes:
+  - name: docker-sock
+    path: /var/run/host.sock
+
+- name: niftany
+  <<: *test_common
+  commands:
+    - cd /app
+    - bundle exec niftany
+
+- name: test
+  <<: *test_common
+  commands:
+    - cd /app
+    - bundle exec rspec
+
+- name: update ArgoCD (prod)
+  image: alpine/git
+  environment:
+    CONFIG_ENV: prod
+  when:
+    branch:
+      include:
+        - master
+    event:
+      exclude:
+      - pull_request
+      - tag
+  commands:
+    - git clone https://github.com/psu-stewardship/scholarsphere-config.git
+    - cd scholarsphere-config
+    - ./generate_application.sh
+
+- name: update ArgoCD (qa)
+  image: alpine/git
+  environment:
+    CONFIG_ENV: qa
+  when:
+    event:
+      include:
+      - tag
+  commands:
+    - git clone https://github.com/psu-stewardship/scholarsphere-config.git
+    - cd scholarsphere-config
+    - ./generate_application.sh
+
+- name: update ArgoCD (dev)
+  image: harbor.dsrd.libraries.psu.edu/public/drone-utils:latest
+  environment:
+    CONFIG_ENV: dev
+    ARGOCD_SERVER: argocd.dsrd.libraries.psu.edu
+    SLACK_WEBHOOK_URL:
+      from_secret: SLACK_WEBHOOK_URL
+    ARGOCD_AUTH_TOKEN:
+      from_secret: ARGOCD_AUTH_TOKEN
+  when:
+    branch:
+      include:
+        - preview/*
+        - develop
+    event:
+      exclude:
+      - pull_request
+      - tag
+  commands:
+    - git clone https://github.com/psu-stewardship/scholarsphere-config.git
+    - cd scholarsphere-config
+    - ./generate_application.sh
+
+services:
+- name: postgres
+  image: postgres:10
+  when:
+    branch:
+      exclude:
+        - skip-ci*
+    event:
+      exclude:
+      - pull_request
+      - tag
+  environment:
+    POSTGRES_PASSWORD: scholarsphere
+    POSTGRES_USER: scholarsphere
+    POSTGRES_DB: scholarsphere
+  
+volumes:
+- name: docker-sock
+  host:
+    path: /var/run/docker.sock
