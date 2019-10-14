@@ -39,7 +39,8 @@ steps:
   <<: *test_common
   commands:
     - cd /app
-    - yarn run eslint --ext .js app/javascript
+    - yarn install --development
+    - yarn lint
 
 - name: niftany
   <<: *test_common
