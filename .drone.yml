@@ -35,6 +35,13 @@ steps:
   - name: docker-sock
     path: /var/run/host.sock
 
+- name: eslint
+  <<: *test_common
+  commands:
+    - cd /app
+    - yarn install --development
+    - yarn lint
+
 - name: niftany
   <<: *test_common
   commands:
