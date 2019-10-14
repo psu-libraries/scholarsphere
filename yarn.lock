@@ -6831,6 +6831,10 @@ tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
   integrity sha1-WuaBd/GS1EViadEIr6k/+HQ/T2Q=
 
+"twitter-typeahead-rails@https://github.com/yourabi/twitter-typeahead-rails.git#v0.11.1.pre.corejavascript":
+  version "0.0.0"
+  resolved "https://github.com/yourabi/twitter-typeahead-rails.git#fc343ac2f026589117bad0b7234c8bc69ef8bd6a"
+
 type-is@~1.6.17, type-is@~1.6.18:
   version "1.6.18"
   resolved "https://registry.yarnpkg.com/type-is/-/type-is-1.6.18.tgz#4e552cd05df09467dcbc4ef739de89f2cf37c131"

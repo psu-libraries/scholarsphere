@@ -33,3 +33,6 @@ yarn-debug.log*
 # CI
 drone.sec
 vendor/bundle
+
+# Ignore application configuration
+/config/application.yml

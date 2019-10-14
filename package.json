@@ -8,7 +8,8 @@
     "@rails/webpacker": "^4.0.7",
     "blacklight-frontend": "^7.2.0",
     "caniuse-lite": "^1.0.30000999",
-    "popper.js": "^1.15.0"
+    "popper.js": "^1.15.0",
+    "twitter-typeahead-rails": "https://github.com/yourabi/twitter-typeahead-rails.git#v0.11.1.pre.corejavascript"
   },
   "version": "0.1.0",
   "devDependencies": {
