@@ -13,6 +13,14 @@ RSpec.describe User, type: :model do
     it { is_expected.to have_db_index(:email).unique }
   end
 
+  describe 'factories' do
+    it { is_expected.to have_valid_factory(:user) }
+  end
+
+  describe 'associations' do
+    it { is_expected.to have_many(:works) }
+  end
+
   describe 'validations' do
     it { is_expected.to validate_presence_of(:email) }
     it { is_expected.to validate_uniqueness_of(:email) }
