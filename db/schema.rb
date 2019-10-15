@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_15_180744) do
+ActiveRecord::Schema.define(version: 2019_10_15_195716) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +25,22 @@ ActiveRecord::Schema.define(version: 2019_10_15_180744) do
     t.datetime "updated_at", null: false
     t.index ["document_id"], name: "index_bookmarks_on_document_id"
     t.index ["user_id"], name: "index_bookmarks_on_user_id"
+  end
+
+  create_table "file_resources", force: :cascade do |t|
+    t.jsonb "file_data"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "file_version_memberships", force: :cascade do |t|
+    t.bigint "work_version_id", null: false
+    t.bigint "file_resource_id", null: false
+    t.string "title"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["file_resource_id"], name: "index_file_version_memberships_on_file_resource_id"
+    t.index ["work_version_id"], name: "index_file_version_memberships_on_work_version_id"
   end
 
   create_table "searches", id: :serial, force: :cascade do |t|
@@ -65,6 +81,8 @@ ActiveRecord::Schema.define(version: 2019_10_15_180744) do
     t.index ["depositor_id"], name: "index_works_on_depositor_id"
   end
 
+  add_foreign_key "file_version_memberships", "file_resources"
+  add_foreign_key "file_version_memberships", "work_versions"
   add_foreign_key "work_versions", "works"
   add_foreign_key "works", "users", column: "depositor_id"
 end

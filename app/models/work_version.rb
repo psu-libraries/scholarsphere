@@ -20,10 +20,25 @@ class WorkVersion < ApplicationRecord
                  related_url: :string,
                  source: :string
 
-  belongs_to :work, inverse_of: :versions
+  belongs_to :work,
+             inverse_of: :versions
+  has_many :file_version_memberships,
+           dependent: :destroy
+  has_many :file_resources,
+           through: :file_version_memberships
+
+  accepts_nested_attributes_for :file_resources
 
   validates :title,
             presence: true
+
+  validates :file_resources,
+            presence: true,
+            if: :published?
+
+  validates :depositor_agreement,
+            acceptance: true,
+            if: :published?
 
   aasm do
     state :draft, intial: true

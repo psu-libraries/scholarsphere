@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-RSpec::Matchers.define :have_valid_factory do |factory_name|
+RSpec::Matchers.define :have_valid_factory do |*factory_args|
   match do |_model|
-    @factory = FactoryBot.build(factory_name)
+    @factory = FactoryBot.build(*factory_args)
     @factory.save
   end
 

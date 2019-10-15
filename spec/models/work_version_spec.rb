@@ -32,6 +32,10 @@ RSpec.describe WorkVersion, type: :model do
 
   describe 'associations' do
     it { is_expected.to belong_to(:work) }
+    it { is_expected.to have_many(:file_version_memberships) }
+    it { is_expected.to have_many(:file_resources).through(:file_version_memberships) }
+
+    it { is_expected.to accept_nested_attributes_for(:file_resources) }
   end
 
   describe 'states' do
@@ -55,7 +59,7 @@ RSpec.describe WorkVersion, type: :model do
 
       it { is_expected.to validate_presence_of(:title) }
 
-      xit 'validates the presence files' do
+      it 'validates the presence files' do
         work_version.file_resources = []
         work_version.validate
         expect(work_version.errors[:file_resources]).not_to be_empty
