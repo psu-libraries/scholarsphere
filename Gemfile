@@ -21,7 +21,7 @@ gem 'webpacker', '~> 4.0'
 group :development, :test do
   gem 'byebug', platform: :mri
   gem 'factory_bot_rails'
-  gem 'ffaker'
+  gem 'faker'
   gem 'niftany'
   gem 'pry-byebug'
   gem 'pry-rails'
