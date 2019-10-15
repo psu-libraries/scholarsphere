@@ -5,12 +5,14 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.6.3'
 
+gem 'aasm'
 gem 'blacklight', github: 'projectblacklight/blacklight', branch: 'master'
 gem 'bootsnap', '>= 1.4.2', require: false
 gem 'bootstrap', '~> 4.0'
 gem 'figaro'
 gem 'jbuilder', '~> 2.7'
 gem 'jquery-rails'
+gem 'jsonb_accessor', '~> 1.0.0'
 gem 'pg', '>= 0.18', '< 2.0'
 gem 'puma', '~> 3.11'
 gem 'rails', '~> 6.0.0'

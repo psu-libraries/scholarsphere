@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_15_144728) do
+ActiveRecord::Schema.define(version: 2019_10_15_180744) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,6 +47,16 @@ ActiveRecord::Schema.define(version: 2019_10_15_144728) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  create_table "work_versions", force: :cascade do |t|
+    t.bigint "work_id"
+    t.string "version_name"
+    t.string "aasm_state"
+    t.jsonb "metadata"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["work_id"], name: "index_work_versions_on_work_id"
+  end
+
   create_table "works", force: :cascade do |t|
     t.string "work_type"
     t.integer "depositor_id"
@@ -55,5 +65,6 @@ ActiveRecord::Schema.define(version: 2019_10_15_144728) do
     t.index ["depositor_id"], name: "index_works_on_depositor_id"
   end
 
+  add_foreign_key "work_versions", "works"
   add_foreign_key "works", "users", column: "depositor_id"
 end
