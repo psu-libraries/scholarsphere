@@ -20,6 +20,8 @@ gem 'webpacker', '~> 4.0'
 
 group :development, :test do
   gem 'byebug', platform: :mri
+  gem 'factory_bot_rails'
+  gem 'ffaker'
   gem 'niftany'
   gem 'pry-byebug'
   gem 'pry-rails'
@@ -32,6 +34,7 @@ group :development do
   gem 'flog'
   gem 'listen', '>= 3.0.5', '< 3.2'
   gem 'spring'
+  gem 'spring-commands-rspec'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'web-console', '>= 3.3.0'
   gem 'xray-rails'
