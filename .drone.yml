@@ -10,6 +10,8 @@ test_common: &test_common
     POSTGRES_DB: scholarsphere
     POSTGRES_HOST: postgres
     POSTGRES_PASSWORD: scholarsphere
+    CC_TEST_REPORTER_ID:
+      from_secret: CC_TEST_REPORTER_ID
 
 steps:
 - name: build
@@ -52,7 +54,7 @@ steps:
   <<: *test_common
   commands:
     - cd /app
-    - bundle exec rspec
+    - bin/ci-rspec
 
 - name: update ArgoCD (prod)
   image: alpine/git

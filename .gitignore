@@ -36,3 +36,5 @@ vendor/bundle
 
 # Ignore application configuration
 /config/application.yml
+coverage
+cc-test-reporter
