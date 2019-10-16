@@ -8,10 +8,11 @@ namespace :solr do
   end
 
   task init: :environment do
-    configurator = SolrConfigurator.new
-
-    configurator.upload_config
-    configurator.create_collection
-    configurator.modify_collection
+    conf = SolrConfigurator.new
+    conf.upload_config unless conf.configset_exists?
+    conf.create_collection unless conf.collection_exists?
+    # we always modify collection. it's call is idempotent, and 
+    # will ensure we have the config bound to the collection
+    conf.modify_collection 
   end
 end
