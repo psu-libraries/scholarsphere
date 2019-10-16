@@ -3,6 +3,12 @@
 
 POSTGRES_USER: "[username]" # This is typically $ whoami
 
+SOLR_HOST: localhost
+SOLR_COLLECTION: scholarsphere
+SOLR_PORT: 8983
+# SOLR_CONFIG_DIR: solr/conf
+# SOLR_NUM_SHARDS: 1
+
 development:
   POSTGRES_DB: "scholarsphere_4_development"
 
