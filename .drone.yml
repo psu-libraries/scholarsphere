@@ -52,6 +52,8 @@ steps:
   <<: *test_common
   commands:
     - cd /app
+    - bundle exec rails db:create
+    - bundle exec rails db:migrate
     - bundle exec rspec
 
 - name: update ArgoCD (prod)
