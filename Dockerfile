@@ -1,4 +1,4 @@
-FROM ruby:2.6.3 as ruby
+FROM ruby:2.6.3 as production
 
 WORKDIR /app
 
@@ -50,3 +50,18 @@ COPY --chown=app . /app
 RUN RAILS_ENV=production SECRET_KEY_BASE=$(bundle exec rails secret) aws_bucket=bucket aws_access_key_id=key aws_secret_access_key=access aws_region=us-east-1 bundle exec rails assets:precompile
 
 CMD ["./entrypoint.sh"]
+
+# Build targets for testing
+FROM production as rspec
+CMD /app/bin/ci-rspec
+
+FROM production as eslint
+CMD /app/bin/ci-eslint
+
+FROM production as niftany
+CMD /app/bin/ci-niftany
+
+# Final Target
+FROM production as final
+
+

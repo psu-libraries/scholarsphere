@@ -3,7 +3,7 @@ kind: pipeline
 name: default
 
 test_common: &test_common
-  image: harbor.dsrd.libraries.psu.edu/library/scholarsphere:ci
+  image: docker 
   environment:
     RAILS_ENV: test
     POSTGRES_USER: scholarsphere
@@ -30,8 +30,10 @@ steps:
   commands:
     - export DOCKER_HOST=unix:///var/run/host.sock
     - docker login -u 'robot$drone' -p $DOCKER_PASSWORD harbor.dsrd.libraries.psu.edu
-    - docker build -t harbor.dsrd.libraries.psu.edu/library/scholarsphere:$DRONE_BUILD_NUMBER . 
-    - docker tag harbor.dsrd.libraries.psu.edu/library/scholarsphere:$DRONE_BUILD_NUMBER harbor.dsrd.libraries.psu.edu/library/scholarsphere:ci
+    - docker build -t harbor.dsrd.libraries.psu.edu/library/scholarsphere:$DRONE_BUILD_NUMBER --target production . 
+    - docker build -t harbor.dsrd.libraries.psu.edu/library/scholarsphere:$DRONE_BUILD_NUMBER-rspec --target rspec . 
+    - docker build -t harbor.dsrd.libraries.psu.edu/library/scholarsphere:$DRONE_BUILD_NUMBER-eslint --target eslint . 
+    - docker build -t harbor.dsrd.libraries.psu.edu/library/scholarsphere:$DRONE_BUILD_NUMBER-niftany --target niftany . 
     - docker push harbor.dsrd.libraries.psu.edu/library/scholarsphere:$DRONE_BUILD_NUMBER
   volumes:
   - name: docker-sock
@@ -39,22 +41,36 @@ steps:
 
 - name: eslint
   <<: *test_common
+  volumes:
+  - name: docker-sock
+    path: /var/run/host.sock
+  depends_on:
+    - build
   commands:
-    - cd /app
-    - yarn install --development
-    - yarn lint
+    - export DOCKER_HOST=unix:///var/run/host.sock
+    - docker run harbor.dsrd.libraries.psu.edu/library/scholarsphere:$DRONE_BUILD_NUMBER-eslint
 
 - name: niftany
   <<: *test_common
+  volumes:
+  - name: docker-sock
+    path: /var/run/host.sock
+  depends_on:
+    - build
   commands:
-    - cd /app
-    - bundle exec niftany
+    - export DOCKER_HOST=unix:///var/run/host.sock
+    - docker run harbor.dsrd.libraries.psu.edu/library/scholarsphere:$DRONE_BUILD_NUMBER-niftany
 
 - name: test
   <<: *test_common
+  volumes:
+  - name: docker-sock
+    path: /var/run/host.sock
+  depends_on:
+    - build
   commands:
-    - cd /app
-    - bin/ci-rspec
+    - export DOCKER_HOST=unix:///var/run/host.sock
+    - docker run harbor.dsrd.libraries.psu.edu/library/scholarsphere:$DRONE_BUILD_NUMBER '/bin/sh -c bundle'
 
 - name: update ArgoCD (prod)
   image: alpine/git
@@ -68,6 +84,10 @@ steps:
       exclude:
       - pull_request
       - tag
+  depends_on:
+    - eslint
+    - niftany
+    - test
   commands:
     - git clone https://github.com/psu-stewardship/scholarsphere-config.git
     - cd scholarsphere-config
@@ -81,6 +101,10 @@ steps:
     event:
       include:
       - tag
+  depends_on:
+    - eslint
+    - niftany
+    - test
   commands:
     - git clone https://github.com/psu-stewardship/scholarsphere-config.git
     - cd scholarsphere-config
@@ -104,6 +128,10 @@ steps:
       exclude:
       - pull_request
       - tag
+  depends_on:
+    - eslint
+    - niftany
+    - test
   commands:
     - git clone https://github.com/psu-stewardship/scholarsphere-config.git
     - cd scholarsphere-config
