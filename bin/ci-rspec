@@ -6,6 +6,11 @@
 
 # Local variables
 REPORTER_BIN="cc-test-reporter"
+RAILS_ENV=test
+
+# Make sure we have a database and migrations
+bundle exec rails db:create
+bundle exec rails db:migrate
 
 # If there's no Git repo, then assume this is DroneCI's environment
 # and link variables to the ones that Code Climate expects.

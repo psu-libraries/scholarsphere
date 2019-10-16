@@ -70,7 +70,7 @@ steps:
     - build
   commands:
     - export DOCKER_HOST=unix:///var/run/host.sock
-    - docker run harbor.dsrd.libraries.psu.edu/library/scholarsphere:$DRONE_BUILD_NUMBER '/bin/sh -c bundle'
+    - docker run harbor.dsrd.libraries.psu.edu/library/scholarsphere:$DRONE_BUILD_NUMBER-rspec
 
 - name: update ArgoCD (prod)
   image: alpine/git
