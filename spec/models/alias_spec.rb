@@ -16,6 +16,7 @@ RSpec.describe Alias, type: :model do
 
   describe 'associations' do
     it { is_expected.to belong_to(:creator) }
-    xit { is_expected.to have_many(:work_creations) }
+    it { is_expected.to have_many(:work_creations) }
+    it { is_expected.to have_many(:works).through(:work_creations) }
   end
 end
