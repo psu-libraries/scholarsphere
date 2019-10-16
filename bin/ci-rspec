@@ -9,6 +9,7 @@ REPORTER_BIN="cc-test-reporter"
 RAILS_ENV=test
 
 # Make sure we have a database and migrations
+yarn
 bundle exec rails db:create
 bundle exec rails db:migrate
 
