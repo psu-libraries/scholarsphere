@@ -11,8 +11,8 @@ namespace :solr do
     conf = SolrConfigurator.new
     conf.upload_config unless conf.configset_exists?
     conf.create_collection unless conf.collection_exists?
-    # we always modify collection. it's call is idempotent, and 
+    # we always modify collection. it's call is idempotent, and
     # will ensure we have the config bound to the collection
-    conf.modify_collection 
+    conf.modify_collection
   end
 end
