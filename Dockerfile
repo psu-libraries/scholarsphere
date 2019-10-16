@@ -41,15 +41,10 @@ RUN chown -R app /app
 USER app
 ENV BUNDLE_PATH=vendor/bundle
 
-# RUN --mount=type=cache,id=gem,sharing=locked,uid=10000,target=/app/vendor bundle package 
 RUN bundle install --frozen --path vendor/bundle
-#RUN bundle install --frozen --path vendor/bundle2
 
-
-#RUN chown -R app /app
 COPY --chown=app . /app
 
-#TODO conditionally run this step, or use multistage or _something_
-#RUN RAILS_ENV=production SECRET_KEY_BASE=$(bundle exec rails secret) aws_bucket=bucket aws_access_key_id=key aws_secret_access_key=access aws_region=us-east-1 bundle exec rails assets:precompile
+RUN RAILS_ENV=production SECRET_KEY_BASE=$(bundle exec rails secret) aws_bucket=bucket aws_access_key_id=key aws_secret_access_key=access aws_region=us-east-1 bundle exec rails assets:precompile
 
 CMD ["./entrypoint.sh"]
