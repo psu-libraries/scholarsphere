@@ -116,7 +116,6 @@ services:
         - skip-ci*
     event:
       exclude:
-      - pull_request
       - tag
   environment:
     POSTGRES_PASSWORD: scholarsphere
