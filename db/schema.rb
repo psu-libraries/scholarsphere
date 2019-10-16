@@ -10,10 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_16_162427) do
+ActiveRecord::Schema.define(version: 2019_10_16_182924) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "access_controls", force: :cascade do |t|
+    t.string "access_level"
+    t.string "agent_type"
+    t.bigint "agent_id"
+    t.string "resource_type"
+    t.bigint "resource_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["agent_type", "agent_id"], name: "index_access_controls_on_agent_type_and_agent_id"
+    t.index ["resource_type", "resource_id"], name: "index_access_controls_on_resource_type_and_resource_id"
+  end
 
   create_table "aliases", force: :cascade do |t|
     t.bigint "creator_id", null: false
@@ -59,6 +71,12 @@ ActiveRecord::Schema.define(version: 2019_10_16_162427) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["file_resource_id"], name: "index_file_version_memberships_on_file_resource_id"
     t.index ["work_version_id"], name: "index_file_version_memberships_on_work_version_id"
+  end
+
+  create_table "groups", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "searches", id: :serial, force: :cascade do |t|

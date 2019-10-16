@@ -12,6 +12,10 @@ class Work < ApplicationRecord
   has_many :aliases,
            through: :work_creations
 
+  has_many :access_controls,
+           as: :resource,
+           dependent: :destroy
+
   has_many :versions,
            class_name: 'WorkVersion',
            inverse_of: 'work',

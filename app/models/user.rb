@@ -6,6 +6,10 @@ class User < ApplicationRecord
            inverse_of: 'depositor',
            dependent: :restrict_with_exception
 
+  has_many :access_controls,
+           as: :agent,
+           dependent: :destroy
+
   validates :email,
             presence: true,
             uniqueness: true

@@ -19,6 +19,7 @@ RSpec.describe User, type: :model do
 
   describe 'associations' do
     it { is_expected.to have_many(:works) }
+    it { is_expected.to have_many(:access_controls) }
   end
 
   describe 'validations' do
