@@ -10,10 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_16_155237) do
+ActiveRecord::Schema.define(version: 2019_10_16_161943) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "aliases", force: :cascade do |t|
+    t.bigint "creator_id", null: false
+    t.string "display_name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["creator_id"], name: "index_aliases_on_creator_id"
+  end
 
   create_table "bookmarks", id: :serial, force: :cascade do |t|
     t.integer "user_id", null: false
@@ -91,6 +99,7 @@ ActiveRecord::Schema.define(version: 2019_10_16_155237) do
     t.index ["depositor_id"], name: "index_works_on_depositor_id"
   end
 
+  add_foreign_key "aliases", "creators"
   add_foreign_key "file_version_memberships", "file_resources"
   add_foreign_key "file_version_memberships", "work_versions"
   add_foreign_key "work_versions", "works"

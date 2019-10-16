@@ -18,7 +18,7 @@ RSpec.describe Creator, type: :model do
   end
 
   describe 'associations' do
-    xit { is_expected.to have_many(:aliases) }
+    it { is_expected.to have_many(:aliases) }
   end
 
   describe 'validations' do
