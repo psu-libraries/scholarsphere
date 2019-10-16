@@ -1,0 +1,39 @@
+#!/bin/bash
+# ci-rspec
+# 
+# Runs the rspec test suite in our CI environment using Code Climate to send coverage reporting data.
+#
+
+# Local variables
+REPORTER_BIN="cc-test-reporter"
+
+# If there's no Git repo, then assume this is DroneCI's environment
+# and link variables to the ones that Code Climate expects.
+# Note: GIT_COMMITTED_AT is a guess since this isn't a real git repo. We don't know what kinds of effects this may have
+# on how Code Climate does its thing.
+if [ ! -d ".git" ]; then
+  GIT_COMMIT_SHA=$DRONE_COMMIT_SHA
+  export GIT_COMMIT_SHA
+  GIT_BRANCH=$DRONE_BRANCH
+  export GIT_BRANCH
+  GIT_COMMITTED_AT=$DRONE_BUILD_STARTED
+  export GIT_COMMITTED_AT
+fi
+
+if [ ! -f ${REPORTER_BIN} ]; then
+  echo "Downloading Code Climate reporting tool"
+  if [[ `uname` == *"Darwin"* ]]; then
+    wget https://codeclimate.com/downloads/test-reporter/test-reporter-latest-darwin-amd64 -O ${REPORTER_BIN}
+  else
+    wget https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 -O ${REPORTER_BIN}
+  fi
+  chmod 755 ${REPORTER_BIN}
+fi
+
+echo "Running RSpec with coverage reporting"
+./${REPORTER_BIN} before-build
+bundle exec rspec
+RSPEC_EXIT_CODE=$?
+./${REPORTER_BIN} after-build
+
+exit ${RSPEC_EXIT_CODE}

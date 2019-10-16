@@ -407,6 +407,7 @@ DEPENDENCIES
   sass-rails (~> 5)
   selenium-webdriver
   shoulda-matchers (~> 3.1)
+  simplecov
   solr_wrapper (>= 0.3)
   spring
   spring-watcher-listen (~> 2.0.0)
