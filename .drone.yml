@@ -62,14 +62,13 @@ steps:
     - export MINIO_HOST=$(dig +short minio)
     - docker run
         --net host
-        -e POSTGRES_PASSWORD=scholarsphere
-        -e AWS_BUCKET=scholarsphere
         -e S3_ENDPOINT=http://$MINIO_HOST:9000
         -e AWS_BUCKET=scholarsphere
         -e AWS_ACCESS_KEY_ID=scholarsphere
         -e AWS_SECRET_ACCESS_KEY=scholarsphere
         -e AWS_REGION=us-east-1
         -e POSTGRES_USER=scholarsphere
+        -e POSTGRES_PASSWORD=scholarsphere
         -e POSTGRES_DB=scholarsphere
         -e POSTGRES_HOST=$POSTGRES_HOST
         -e CC_TEST_REPORTER_ID=$CC_TEST_REPORTER_ID
@@ -193,6 +192,6 @@ volumes:
     path: /var/run/docker.sock
 ---
 kind: signature
-hmac: 371e19a9c5a6d7c8f14fba09c93714b364f083c957481e8a4051caf36ab4c8c8
+hmac: 9ac2d36848356d4afdbed5b1f7e50c652bb36476003b9ab359c375f4021f7c10
 
 ...
