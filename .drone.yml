@@ -54,6 +54,8 @@ steps:
   <<: *test_common
   commands:
     - cd /app
+    - bundle exec rails db:create
+    - bundle exec rails db:migrate
     - bin/ci-rspec
 
 - name: update ArgoCD (prod)
@@ -118,7 +120,6 @@ services:
         - skip-ci*
     event:
       exclude:
-      - pull_request
       - tag
   environment:
     POSTGRES_PASSWORD: scholarsphere
