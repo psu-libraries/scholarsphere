@@ -20,4 +20,65 @@ RSpec.describe FileVersionMembership, type: :model do
     it { is_expected.to belong_to(:work_version) }
     it { is_expected.to belong_to(:file_resource) }
   end
+
+  describe 'validations' do
+    subject(:membership) { create :file_version_membership }
+
+    it { is_expected.to validate_presence_of(:title) }
+    it { is_expected.to validate_uniqueness_of(:title).scoped_to(:work_version_id) }
+
+    it 'validates that the file extension cannot change' do
+      membership.title = 'wrong.extension'
+      membership.validate
+      expect(membership.errors[:title]).to include(a_string_matching(/extension/))
+    end
+  end
+
+  describe 'delegate methods' do
+    subject(:membership) { build :file_version_membership }
+
+    let(:mock_uploader) { instance_spy('FileUploader::UploadedFile') }
+
+    before { allow(membership.file_resource).to receive(:file).and_return(mock_uploader) }
+
+    it "delegates #size to the FileResource's uploader" do
+      membership.size
+      expect(mock_uploader).to have_received(:size)
+    end
+
+    it "delegates #original_filename to the FileResource's uploader" do
+      membership.original_filename
+      expect(mock_uploader).to have_received(:original_filename)
+    end
+
+    it "delegates #mime_type to the FileResource's uploader" do
+      membership.mime_type
+      expect(mock_uploader).to have_received(:mime_type)
+    end
+  end
+
+  describe 'initializing #title' do
+    # NOTE the :file_resource factory is created with a file named 'image.png'
+
+    context 'when no title is provided' do
+      subject(:membership) { build :file_version_membership }
+
+      it "initializes #title to the file's filename before validation" do
+        expect { membership.validate }
+          .to change(membership, :title)
+          .from(nil)
+          .to(membership.file_resource.file.original_filename)
+      end
+    end
+
+    context 'when title is provided' do
+      subject(:membership) { build :file_version_membership, title: 'provided_a_filename.png' }
+
+      it "initializes #title to the file's filename before validation" do
+        expect { membership.validate }
+          .not_to change(membership, :title)
+          .from('provided_a_filename.png')
+      end
+    end
+  end
 end

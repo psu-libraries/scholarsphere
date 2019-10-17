@@ -4,7 +4,6 @@ class FileVersionMembership < ApplicationRecord
   belongs_to :work_version
   belongs_to :file_resource
 
-  # TODO everything below needs to be tested
   before_validation :initialize_title, on: :create
 
   validates :title,
@@ -30,6 +29,6 @@ class FileVersionMembership < ApplicationRecord
     def filename_extentions_cannot_change
       return if title.blank? || File.extname(title) == File.extname(original_filename)
 
-      errors[:title] << "does not have the same filename extension as #{original_filename}"
+      errors.add(:title, :different_extension, original: original_filename)
     end
 end
