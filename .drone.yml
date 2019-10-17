@@ -4,6 +4,11 @@ name: default
 
 test_common: &test_common
   image: docker 
+  volumes:
+  - name: docker-sock
+    path: /var/run/host.sock
+  depends_on:
+    - build
   environment:
     RAILS_ENV: test
     POSTGRES_USER: scholarsphere
@@ -41,36 +46,33 @@ steps:
 
 - name: eslint
   <<: *test_common
-  volumes:
-  - name: docker-sock
-    path: /var/run/host.sock
-  depends_on:
-    - build
   commands:
     - export DOCKER_HOST=unix:///var/run/host.sock
     - docker run harbor.dsrd.libraries.psu.edu/library/scholarsphere:$DRONE_BUILD_NUMBER-eslint
 
 - name: niftany
   <<: *test_common
-  volumes:
-  - name: docker-sock
-    path: /var/run/host.sock
-  depends_on:
-    - build
   commands:
     - export DOCKER_HOST=unix:///var/run/host.sock
     - docker run harbor.dsrd.libraries.psu.edu/library/scholarsphere:$DRONE_BUILD_NUMBER-niftany
 
 - name: test
   <<: *test_common
-  volumes:
-  - name: docker-sock
-    path: /var/run/host.sock
-  depends_on:
-    - build
   commands:
     - export DOCKER_HOST=unix:///var/run/host.sock
-    - docker run harbor.dsrd.libraries.psu.edu/library/scholarsphere:$DRONE_BUILD_NUMBER-rspec
+    - apk add bind-tools
+    - export POSTGRES_HOST=$(dig +short postgres)
+    - docker run
+        --net host
+        -e POSTGRES_PASSWORD=scholarsphere
+        -e POSTGRES_USER=scholarsphere
+        -e POSTGRES_DB=scholarsphere
+        -e POSTGRES_HOST=$POSTGRES_HOST
+        -e CC_TEST_REPORTER_ID=$CC_TEST_REPORTER_ID
+        -e DRONE_COMMIT_SHA=$DRONE_COMMIT_SHA
+        -e DRONE_BRANCH=$DRONE_BRANCH
+        -e DRONE_BUILD_STARTED=$DRONE_BUILD_STARTED
+        harbor.dsrd.libraries.psu.edu/library/scholarsphere:$DRONE_BUILD_NUMBER-rspec
 
 - name: update ArgoCD (prod)
   image: alpine/git
