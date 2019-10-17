@@ -59,6 +59,6 @@ CMD /app/bin/ci-niftany
 # Final Target
 FROM base as production
 
-RUN RAILS_ENV=production SECRET_KEY_BASE=$(bundle exec rails secret) aws_bucket=bucket aws_access_key_id=key aws_secret_access_key=access aws_region=us-east-1 bundle exec rails assets:precompile
+RUN RAILS_ENV=production SECRET_KEY_BASE=$(bundle exec rails secret) AWS_BUCKET=bucket AWS_ACCESS_KEY_ID=key AWS_SECRET_ACCESS_KEY=secret AWS_REGION=us-east-1 bundle exec rails assets:precompile
 
 
