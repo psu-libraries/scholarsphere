@@ -29,9 +29,9 @@ fi
 if [ ! -f ${REPORTER_BIN} ]; then
   echo "Downloading Code Climate reporting tool"
   if [[ `uname` == *"Darwin"* ]]; then
-    wget https://codeclimate.com/downloads/test-reporter/test-reporter-latest-darwin-amd64 -O ${REPORTER_BIN}
+    wget -q https://codeclimate.com/downloads/test-reporter/test-reporter-latest-darwin-amd64 -O ${REPORTER_BIN}
   else
-    wget https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 -O ${REPORTER_BIN}
+    wget -q https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 -O ${REPORTER_BIN}
   fi
   chmod 755 ${REPORTER_BIN}
 fi
