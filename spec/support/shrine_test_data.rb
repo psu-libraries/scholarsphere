@@ -4,9 +4,9 @@
 module ShrineTestData
   module_function
 
-  def image_data
+  def image_data(file_name)
     attacher = Shrine::Attacher.new
-    attacher.set(uploaded_image)
+    attacher.set(uploaded_image(file_name))
 
     # if you're processing derivatives
     # attacher.set_derivatives(
@@ -18,9 +18,8 @@ module ShrineTestData
     JSON.parse(attacher.column_data)
   end
 
-  def uploaded_image
-    filename = 'image.png'
-    path = Rails.root.join('spec', 'fixtures', filename)
+  def uploaded_image(file_name)
+    path = Rails.root.join('spec', 'fixtures', 'image.png')
     file = File.open(path, binmode: true)
     file_size = file.size
 
@@ -29,7 +28,7 @@ module ShrineTestData
     uploaded_file.metadata.merge!(
       'size' => file_size,
       'mime_type' => 'image/png',
-      'filename' => filename
+      'filename' => file_name
     )
 
     uploaded_file
