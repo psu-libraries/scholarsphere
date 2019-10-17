@@ -17,6 +17,7 @@ class Work < ApplicationRecord
            dependent: :destroy
 
   has_many :versions,
+           -> { order(created_at: :desc) },
            class_name: 'WorkVersion',
            inverse_of: 'work',
            dependent: :destroy
@@ -46,6 +47,18 @@ class Work < ApplicationRecord
   validates :work_type,
             presence: true,
             inclusion: { in: Types.all }
+
+  def latest_version
+    versions.first
+  end
+
+  def latest_published_version
+    versions.published.first
+  end
+
+  def draft_version
+    versions.draft.first
+  end
 
   private
 

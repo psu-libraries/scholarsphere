@@ -1,2 +1,9 @@
 en:
   application_name: "Scholarsphere"
+  activerecord:
+    errors:
+      models:
+        file_version_membership:
+          attributes:
+            title:
+              different_extension: does not have the same filename extension as %{original}
