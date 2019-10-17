@@ -2,3 +2,5 @@ vendor/
 .git
 .drone.yml
 Dockerfile
+node_modules
+vendor/bundle

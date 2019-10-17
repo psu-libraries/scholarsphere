@@ -33,6 +33,7 @@ RUN curl -Lo /tmp/envconsul.zip https://releases.hashicorp.com/envconsul/0.9.0/e
 COPY Gemfile Gemfile.lock /app/
 COPY package.json yarn.lock /app/
 RUN gem install bundler
+RUN yarn
 
 RUN useradd -u 10000 app -d /app
 RUN chown -R app /app
@@ -41,8 +42,6 @@ RUN yarn
 
 RUN bundle install --frozen --path vendor/bundle
 
-
-RUN chown -R app /app
 COPY --chown=app . /app
 
 CMD ["./entrypoint.sh"]

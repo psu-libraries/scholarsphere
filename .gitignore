@@ -17,6 +17,9 @@
 /storage/*
 !/storage/.keep
 
+public/uploads
+public/uploads-test
+
 /public/assets
 .byebug_history
 

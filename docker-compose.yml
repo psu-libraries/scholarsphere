@@ -1,0 +1,53 @@
+version: '3.5'
+services:
+  web:
+    environment:
+      POSTGRES_DB: scholarsphere
+      POSTGRES_USER: scholarsphere
+      POSTGRES_PASSWORD: scholarsphere
+      # SOLR_URL: http://solr:8983/solr/scholarsphere
+      RAILS_ENV: development
+      SOLR_HOST: solr
+      SOLR_COLLECTION: scholarsphere
+      POSTGRES_DB: scholarsphere
+      POSTGRES_HOST: db
+    build: . 
+    ports:
+      - "3000:3000"
+    command: >
+      sh -c "echo starting database migrations &&
+            bundle exec rails db:migrate && 
+            bundle exec rake solr:init && 
+            echo starting rails &&
+            bundle exec rails s -b 0.0.0.0"
+  solr:
+    image: solr:8.2.0-slim
+    restart: always
+    volumes:
+    - solr-data:/var/solr
+    ports:
+    - 8983:8983
+    command: [
+      "solr-foreground",
+      "-DzkRun"
+    ]
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+    - "8080:8080"
+  db:
+    environment:
+      POSTGRES_PASSWORD: scholarsphere
+      POSTGRES_USER: scholarsphere
+      POSTGRES_DB: scholarsphere
+    image: postgres:10
+    ports:
+    - "5432:5432"
+    volumes:
+    - db-data:/var/lib/postgresql/data
+
+volumes:
+  solr-data:
+  db-data:

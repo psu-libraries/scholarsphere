@@ -7,5 +7,6 @@ else
     echo "starting rails"
     bundle exec rails db:create
     bundle exec rails db:migrate
+    bundle exec rails solr:init
     bundle exec rails s -b '0.0.0.0'
 fi
