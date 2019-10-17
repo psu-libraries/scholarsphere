@@ -1,7 +1,6 @@
 #!/bin/bash
 # A small wrapper around docker run to run commands inside of a freshly baked container
 
-yarn install --development
 yarn lint
 
 

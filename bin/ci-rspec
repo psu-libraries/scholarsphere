@@ -6,8 +6,6 @@
 
 # Local variables
 REPORTER_BIN="cc-test-reporter"
-export RAILS_ENV=production
-export SECRET_KEY_BASE=$(bundle exec rails secret) 
 
 # Make sure we have a database and migrations
 bundle exec rails db:create
