@@ -174,14 +174,6 @@ services:
 
 - name: postgres
   image: postgres:10
-  when:
-    branch:
-      exclude:
-        - skip-ci*
-    event:
-      exclude:
-      - pull_request
-      - tag
   environment:
     POSTGRES_PASSWORD: scholarsphere
     POSTGRES_USER: scholarsphere
@@ -193,6 +185,6 @@ volumes:
     path: /var/run/docker.sock
 ---
 kind: signature
-hmac: 2b2105e18ebff2f51f9bfd31656331e0b21fd68c23764aabf1c438ba1c7e4fa6
+hmac: 18f49187303ce3168da3a8b1c59b03f45f3128399cbd451cac012fcb41f979be
 
 ...
