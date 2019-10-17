@@ -79,6 +79,7 @@ steps:
         - skip-ci*
     event:
       exclude:
+      - pull_request
       - tag
   depends_on:
     - test
@@ -185,6 +186,6 @@ volumes:
     path: /var/run/docker.sock
 ---
 kind: signature
-hmac: 18f49187303ce3168da3a8b1c59b03f45f3128399cbd451cac012fcb41f979be
+hmac: 1c1b1fe237be4eb03f53978260bd2265da69ca2bbb05bee904c2d15eaf941ac0
 
 ...
