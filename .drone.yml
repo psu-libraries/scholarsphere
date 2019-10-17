@@ -59,9 +59,16 @@ steps:
     - export DOCKER_HOST=unix:///var/run/host.sock
     - apk add bind-tools
     - export POSTGRES_HOST=$(dig +short postgres)
+    - export MINIO_HOST=$(dig +short minio)
     - docker run
         --net host
         -e POSTGRES_PASSWORD=scholarsphere
+        -e AWS_BUCKET=scholarsphere
+        -e S3_ENDPOINT=http://$MINIO_HOST:9000
+        -e AWS_BUCKET=scholarsphere
+        -e AWS_ACCESS_KEY_ID=scholarsphere
+        -e AWS_SECRET_ACCESS_KEY=scholarsphere
+        -e AWS_REGION=us-east-1
         -e POSTGRES_USER=scholarsphere
         -e POSTGRES_DB=scholarsphere
         -e POSTGRES_HOST=$POSTGRES_HOST
@@ -186,6 +193,6 @@ volumes:
     path: /var/run/docker.sock
 ---
 kind: signature
-hmac: 1c1b1fe237be4eb03f53978260bd2265da69ca2bbb05bee904c2d15eaf941ac0
+hmac: 371e19a9c5a6d7c8f14fba09c93714b364f083c957481e8a4051caf36ab4c8c8
 
 ...
