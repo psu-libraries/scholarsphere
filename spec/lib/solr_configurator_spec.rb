@@ -6,7 +6,7 @@ RSpec.describe SolrConfigurator do
   describe '#zip_file' do
     # subject (described_class.new.raw_data)
 
-    it 'returns a zip file that we can read' do # rubocop:todo RSpec/MultipleExpectations
+    it 'returns a zip file that we can read' do 
       result = described_class.new.zip_file
       contents = result.read
       expect(contents).to be_a(String)
