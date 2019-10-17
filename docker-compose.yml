@@ -20,6 +20,20 @@ services:
             bundle exec rake solr:init && 
             echo starting rails &&
             bundle exec rails s -b 0.0.0.0"
+  minio:
+    image: minio/minio:latest
+    restart: always
+    volumes:
+    - minio-data:/data
+    environment: 
+      MINIO_ACCESS_KEY: scholarsphere
+      MINIO_SECRET_KEY: scholarsphere
+    ports:
+    - 9002:9002
+    entrypoint:
+    - /bin/sh
+    - -c 
+    - mkdir -p /data/scholarsphere; minio --compat server --address ':9002' /data
   solr:
     image: solr:8.2.0-slim
     restart: always
@@ -49,5 +63,6 @@ services:
     - db-data:/var/lib/postgresql/data
 
 volumes:
+  minio-data:
   solr-data:
   db-data:

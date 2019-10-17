@@ -1,4 +1,4 @@
-FROM ruby:2.6.3 as ruby
+FROM ruby:2.6.3 as base
 
 WORKDIR /app
 
@@ -7,7 +7,6 @@ ENV TZ=America/New_York
 # Install system deps
 RUN apt-get update && \
     apt-get install ffmpeg -y 
-
 
 ## NodeJS
 ENV NODE_VERSION 12.9.1
@@ -39,12 +38,27 @@ RUN yarn
 RUN useradd -u 10000 app -d /app
 RUN chown -R app /app
 USER app
-ENV BUNDLE_PATH=vendor/bundle
+RUN yarn
 
 RUN bundle install --frozen --path vendor/bundle
 
 COPY --chown=app . /app
 
+CMD ["./entrypoint.sh"]
+
+# Build targets for testing
+FROM base as rspec
+CMD /app/bin/ci-rspec
+
+FROM base as eslint
+CMD /app/bin/ci-eslint
+
+FROM base as niftany
+CMD /app/bin/ci-niftany
+
+# Final Target
+FROM base as production
+
 RUN RAILS_ENV=production SECRET_KEY_BASE=$(bundle exec rails secret) aws_bucket=bucket aws_access_key_id=key aws_secret_access_key=access aws_region=us-east-1 bundle exec rails assets:precompile
 
-CMD ["./entrypoint.sh"]
+

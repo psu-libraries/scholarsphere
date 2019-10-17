@@ -7,6 +7,10 @@
 # Local variables
 REPORTER_BIN="cc-test-reporter"
 
+# Make sure we have a database and migrations
+bundle exec rails db:create
+bundle exec rails db:migrate
+
 # If there's no Git repo, then assume this is DroneCI's environment
 # and link variables to the ones that Code Climate expects.
 # Note: GIT_COMMITTED_AT is a guess since this isn't a real git repo. We don't know what kinds of effects this may have
@@ -23,9 +27,9 @@ fi
 if [ ! -f ${REPORTER_BIN} ]; then
   echo "Downloading Code Climate reporting tool"
   if [[ `uname` == *"Darwin"* ]]; then
-    wget https://codeclimate.com/downloads/test-reporter/test-reporter-latest-darwin-amd64 -O ${REPORTER_BIN}
+    wget -q https://codeclimate.com/downloads/test-reporter/test-reporter-latest-darwin-amd64 -O ${REPORTER_BIN}
   else
-    wget https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 -O ${REPORTER_BIN}
+    wget -q https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 -O ${REPORTER_BIN}
   fi
   chmod 755 ${REPORTER_BIN}
 fi
