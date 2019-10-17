@@ -1,4 +1,4 @@
-FROM ruby:2.6.3 as production
+FROM ruby:2.6.3 as base
 
 WORKDIR /app
 
@@ -7,7 +7,6 @@ ENV TZ=America/New_York
 # Install system deps
 RUN apt-get update && \
     apt-get install ffmpeg -y 
-
 
 ## NodeJS
 ENV NODE_VERSION 12.9.1
@@ -31,7 +30,6 @@ RUN curl -Lo /tmp/envconsul.zip https://releases.hashicorp.com/envconsul/0.9.0/e
     rm /tmp/envconsul.zip
 
 
-
 COPY Gemfile Gemfile.lock /app/
 COPY package.json yarn.lock /app/
 RUN gem install bundler
@@ -39,6 +37,7 @@ RUN gem install bundler
 RUN useradd -u 10000 app -d /app
 RUN chown -R app /app
 USER app
+RUN yarn
 
 RUN bundle install --frozen --path vendor/bundle
 
@@ -46,22 +45,21 @@ RUN bundle install --frozen --path vendor/bundle
 RUN chown -R app /app
 COPY --chown=app . /app
 
-
-RUN RAILS_ENV=production SECRET_KEY_BASE=$(bundle exec rails secret) aws_bucket=bucket aws_access_key_id=key aws_secret_access_key=access aws_region=us-east-1 bundle exec rails assets:precompile
-
 CMD ["./entrypoint.sh"]
 
 # Build targets for testing
-FROM production as rspec
+FROM base as rspec
 CMD /app/bin/ci-rspec
 
-FROM production as eslint
+FROM base as eslint
 CMD /app/bin/ci-eslint
 
-FROM production as niftany
+FROM base as niftany
 CMD /app/bin/ci-niftany
 
 # Final Target
-FROM production as final
+FROM base as production
+
+RUN RAILS_ENV=production SECRET_KEY_BASE=$(bundle exec rails secret) aws_bucket=bucket aws_access_key_id=key aws_secret_access_key=access aws_region=us-east-1 bundle exec rails assets:precompile
 
 
