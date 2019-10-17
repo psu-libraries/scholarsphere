@@ -27,7 +27,6 @@ steps:
         - skip-ci*
     event:
       exclude:
-      - pull_request
       - tag
   environment:
     DOCKER_PASSWORD:
