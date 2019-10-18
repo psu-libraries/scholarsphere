@@ -2,6 +2,7 @@
 
 Rails.application.routes.draw do
   mount Blacklight::Engine => '/'
+  mount Shrine.uppy_s3_multipart(:cache) => '/s3/multipart'
   root to: 'catalog#index'
   concern :searchable, Blacklight::Routes::Searchable.new
 
