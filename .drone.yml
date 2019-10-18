@@ -181,6 +181,6 @@ volumes:
     path: /var/run/docker.sock
 ---
 kind: signature
-hmac: 9ac2d36848356d4afdbed5b1f7e50c652bb36476003b9ab359c375f4021f7c10
+hmac: 92fa7b808ca9d69902eb2529e4521650aefb79f0316700b494459c4ed42acbd8
 
 ...
