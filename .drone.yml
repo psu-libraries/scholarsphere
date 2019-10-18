@@ -19,7 +19,7 @@ test_common: &test_common
       from_secret: CC_TEST_REPORTER_ID
 
 argocd_common: &argocd_common
-  image: alpine/git
+  image: harbor.dsrd.libraries.psu.edu/public/drone-utils:latest
   depends_on:
     - eslint
     - niftany
@@ -181,6 +181,6 @@ volumes:
     path: /var/run/docker.sock
 ---
 kind: signature
-hmac: 92fa7b808ca9d69902eb2529e4521650aefb79f0316700b494459c4ed42acbd8
+hmac: cb3ef52389f9784f4654990c09d282f4371e8d6b9fdde362b0d189f2d39c66c6
 
 ...
