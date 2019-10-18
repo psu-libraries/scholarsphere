@@ -18,6 +18,19 @@ test_common: &test_common
     CC_TEST_REPORTER_ID:
       from_secret: CC_TEST_REPORTER_ID
 
+argocd_common: &argocd_common
+  image: alpine/git
+  depends_on:
+    - eslint
+    - niftany
+    - test
+    - push
+  commands:
+    - git clone https://github.com/psu-stewardship/scholarsphere-config.git
+    - cd scholarsphere-config
+    - ./generate_application.sh
+
+
 steps:
 - name: build
   image: docker
@@ -104,7 +117,7 @@ steps:
     path: /var/run/host.sock
 
 - name: update ArgoCD (prod)
-  image: alpine/git
+  <<: *argocd_common
   environment:
     CONFIG_ENV: prod
   when:
@@ -115,34 +128,18 @@ steps:
       exclude:
       - pull_request
       - tag
-  depends_on:
-    - eslint
-    - niftany
-    - test
-  commands:
-    - git clone https://github.com/psu-stewardship/scholarsphere-config.git
-    - cd scholarsphere-config
-    - ./generate_application.sh
 
 - name: update ArgoCD (qa)
-  image: alpine/git
+  <<: *argocd_common
   environment:
     CONFIG_ENV: qa
   when:
     event:
       include:
       - tag
-  depends_on:
-    - eslint
-    - niftany
-    - test
-  commands:
-    - git clone https://github.com/psu-stewardship/scholarsphere-config.git
-    - cd scholarsphere-config
-    - ./generate_application.sh
 
 - name: update ArgoCD (dev)
-  image: harbor.dsrd.libraries.psu.edu/public/drone-utils:latest
+  <<: *argocd_common
   environment:
     CONFIG_ENV: dev
     ARGOCD_SERVER: argocd.dsrd.libraries.psu.edu
@@ -159,14 +156,6 @@ steps:
       exclude:
       - pull_request
       - tag
-  depends_on:
-    - eslint
-    - niftany
-    - test
-  commands:
-    - git clone https://github.com/psu-stewardship/scholarsphere-config.git
-    - cd scholarsphere-config
-    - ./generate_application.sh
 
 services:
 - name: minio
