@@ -66,15 +66,7 @@ class WorkVersion < ApplicationRecord
     end
   end
 
-  def display_version_name
-    "Version: #{version_name.presence || version_index + 1}"
-  end
-
-  # TODO this is horrific. This should be moved into the Work for efficiency and
-  # probably into a decorator/presenter with display_version_name
-  def version_index
-    work.versions.order(created_at: :asc).to_enum.with_index.find { |version, _index| version == self }.last || 0
-  end
+  delegate :depositor, to: :work
 
   private
 

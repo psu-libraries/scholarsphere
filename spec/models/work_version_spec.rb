@@ -85,6 +85,8 @@ RSpec.describe WorkVersion, type: :model do
     end
   end
 
+  it { is_expected.to delegate_method(:depositor).to(:work) }
+
   describe '#keywords=' do
     subject { described_class.new(keywords: ['', 'thing']) }
 

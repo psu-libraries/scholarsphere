@@ -54,6 +54,26 @@ RSpec.describe Work, type: :model do
     end
   end
 
+  describe '.build_with_empty_version' do
+    it 'builds a Work with one empty version' do
+      work = described_class.build_with_empty_version
+      expect(work.versions.length).to eq 1
+    end
+
+    it 'passes through any arguments provided' do
+      work_type = described_class::Types.all.first
+      work = described_class.build_with_empty_version(work_type: work_type)
+      expect(work.versions).to be_present
+      expect(work.work_type).to eq work_type
+    end
+
+    it 'will not overwrite a provided version' do
+      versions = [WorkVersion.new]
+      new_work = described_class.build_with_empty_version(versions: versions)
+      expect(new_work.versions).to match_array(versions)
+    end
+  end
+
   describe 'initialize' do
     it 'does not initialize a work version too' do
       expect(described_class.new.versions).to be_empty
@@ -69,9 +89,11 @@ RSpec.describe Work, type: :model do
   describe 'version accessors' do
     subject(:work) { create :work, versions: [draft, v2, v1] }
 
-    let(:draft) { build :work_version, :draft, title: 'Draft', work: nil, created_at: Time.zone.now }
-    let(:v2) { build :work_version, :published, title: 'Published v2', work: nil, created_at: 1.day.ago }
-    let(:v1) { build :work_version, :published, title: 'Published v1', work: nil, created_at: 2.days.ago }
+    let(:draft) { build :work_version, :draft, title: 'Draft', work: nil, created_at: 1.day.ago }
+    let(:v2) { build :work_version, :published, title: 'Published v2', work: nil, created_at: 2.days.ago }
+    let(:v1) { build :work_version, :published, title: 'Published v1', work: nil, created_at: 3.days.ago }
+
+    before { work.reload }
 
     describe '#latest_version' do
       it 'returns the latest version regardless of status' do

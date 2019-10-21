@@ -17,7 +17,7 @@ class Work < ApplicationRecord
            dependent: :destroy
 
   has_many :versions,
-           -> { order(created_at: :desc) },
+           -> { order(created_at: :asc) },
            class_name: 'WorkVersion',
            inverse_of: 'work',
            dependent: :destroy
@@ -49,15 +49,21 @@ class Work < ApplicationRecord
   validates :versions,
             presence: true
 
+  def self.build_with_empty_version(*args)
+    work = new(*args)
+    work.versions.build if work.versions.empty?
+    work
+  end
+
   def latest_version
-    versions.first
+    versions.last
   end
 
   def latest_published_version
-    versions.published.first
+    versions.published.last
   end
 
   def draft_version
-    versions.draft.first
+    versions.draft.last
   end
 end

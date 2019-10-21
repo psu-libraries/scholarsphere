@@ -7,3 +7,16 @@ en:
           attributes:
             title:
               different_extension: does not have the same filename extension as %{original}
+
+  dashboard:
+    works:
+      index:
+        heading: "Your ScholarSphere Deposits"
+        by: "by"
+        edit: "edit"
+        delete: "delete"
+        new_version: "new version"
+        new: "New Work"
+      new:
+        heading: "Create A New Work"
+        error_message: "%{error} prohibited this work from being saved:"
