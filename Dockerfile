@@ -29,18 +29,16 @@ RUN curl -Lo /tmp/envconsul.zip https://releases.hashicorp.com/envconsul/0.9.0/e
     unzip /tmp/envconsul.zip -d /bin && \
     rm /tmp/envconsul.zip
 
-
-COPY Gemfile Gemfile.lock /app/
-COPY package.json yarn.lock /app/
-RUN gem install bundler
-RUN yarn
-
 RUN useradd -u 10000 app -d /app
 RUN chown -R app /app
 USER app
-RUN yarn
 
+COPY Gemfile Gemfile.lock /app/
+RUN gem install bundler
 RUN bundle install --frozen --path vendor/bundle
+
+COPY package.json yarn.lock /app/
+RUN yarn
 
 COPY --chown=app . /app
 
