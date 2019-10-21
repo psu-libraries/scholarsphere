@@ -25,6 +25,7 @@ RSpec.describe Work, type: :model do
 
   describe 'validations' do
     it { is_expected.to validate_inclusion_of(:work_type).in_array(Work::Types.all) }
+    it { is_expected.to validate_presence_of(:versions) }
   end
 
   describe '::Types' do
@@ -54,8 +55,8 @@ RSpec.describe Work, type: :model do
   end
 
   describe 'initialize' do
-    it 'initializes a work version too' do
-      expect(described_class.new.versions).not_to be_empty
+    it 'does not initialize a work version too' do
+      expect(described_class.new.versions).to be_empty
     end
 
     it 'accepts initial work versions' do
