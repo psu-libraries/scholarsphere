@@ -9,12 +9,4 @@ RSpec.describe ApplicationHelper, type: :helper do
 
     it { is_expected.to eq(new_user_session_path) }
   end
-
-  # Required to exist by default Blacklight. Does not exist because we're not
-  # using database_authenticatable
-  describe '#edit_user_registration_path' do
-    subject { helper.edit_user_registration_path }
-
-    it { is_expected.to eq '/' }
-  end
 end

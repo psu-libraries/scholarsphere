@@ -27,6 +27,10 @@ RSpec.describe User, type: :model do
     it { is_expected.to validate_uniqueness_of(:email).case_insensitive }
   end
 
+  describe 'Blacklight::User' do
+    it { is_expected.to respond_to(:bookmarks) }
+  end
+
   describe '.from_omniauth' do
     let(:auth_params) { build :psu_oauth_response,
                               first_name: 'Joe',
@@ -71,6 +75,5 @@ RSpec.describe User, type: :model do
         expect(described_class.from_omniauth(auth_params)).to eq existing_user
       end
     end
-  end
   end
 end

@@ -7,11 +7,15 @@ RSpec::Matchers.define :have_valid_factory do |*factory_args|
   end
 
   description do
-    "have a valid factory named :#{factory_name}"
+    "have a valid factory #{pretty_print(factory_args)}"
   end
 
   failure_message do |_model|
-    "expected factory :#{factory_name} to be valid, but it wasn't:\n" +
+    "expected factory #{pretty_print(factory_args)} to be valid, but it wasn't:\n" +
       @factory.errors.full_messages.map { |str| "  #{str}" }.join("\n")
+  end
+
+  def pretty_print(factory_args)
+    factory_args.map(&:inspect).join(', ')
   end
 end
