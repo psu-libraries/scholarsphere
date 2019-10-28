@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'omniauth/strategies/oauth2'
+
 module OmniAuth
   module Strategies
     class Psu < OmniAuth::Strategies::OAuth2

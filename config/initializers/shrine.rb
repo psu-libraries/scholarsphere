@@ -4,6 +4,8 @@ require 'shrine'
 require 'shrine/storage/s3'
 require 'uppy/s3_multipart'
 
+require 'scholarsphere/shrine_config'
+
 Shrine.storages = Scholarsphere::ShrineConfig.storages
 
 Shrine.plugin :activerecord
