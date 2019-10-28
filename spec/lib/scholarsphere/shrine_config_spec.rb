@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require 'spec_helper'
+
+require_relative '../../../lib/scholarsphere/shrine_config'
 
 RSpec.describe Scholarsphere::ShrineConfig do
   subject { described_class }

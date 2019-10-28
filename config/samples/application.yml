@@ -39,8 +39,14 @@ SOLR_PORT: 8983
 
 development:
   POSTGRES_DB: "scholarsphere_4_development"
+  OAUTH_APP_ID: ""
+  OAUTH_APP_URL: ""
+  OAUTH_APP_SECRET: ""
   # Configure uploading via S3 or Minio (see above)
 
 test:
   POSTGRES_DB: "scholarsphere_4_test"
+  OAUTH_APP_ID: ""
+  OAUTH_APP_URL: ""
+  OAUTH_APP_SECRET: ""
   # Configure uploading via Minio (see above)
