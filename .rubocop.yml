@@ -17,4 +17,4 @@ AllCops:
 Metrics/BlockLength:
   Exclude:
     - 'app/controllers/catalog_controller.rb'
-
+    - 'spec/**/*'
