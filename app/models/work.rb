@@ -24,8 +24,6 @@ class Work < ApplicationRecord
 
   accepts_nested_attributes_for :versions
 
-  after_initialize :set_defaults
-
   module Types
     DATASET = 'dataset'
 
@@ -48,6 +46,9 @@ class Work < ApplicationRecord
             presence: true,
             inclusion: { in: Types.all }
 
+  validates :versions,
+            presence: true
+
   def latest_version
     versions.first
   end
@@ -59,12 +60,4 @@ class Work < ApplicationRecord
   def draft_version
     versions.draft.first
   end
-
-  private
-
-    def set_defaults
-      # TODO Do we really want to do this, or is there a better way? A factory
-      #      object pattern for example?
-      versions.build if versions.empty?
-    end
 end
