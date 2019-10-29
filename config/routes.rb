@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  mount OkComputer::Engine, at: '/health'
   mount Blacklight::Engine => '/'
   mount Shrine.uppy_s3_multipart(:cache) => '/s3/multipart'
   root to: 'catalog#index'
