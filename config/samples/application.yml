@@ -11,19 +11,16 @@
 # To enable uploading via Minio, ensure that minio is installed. See:
 #   https://github.com/minio/minio
 #
-# Startup the service locally with:
-#   docker run
-#     -e MINIO_ACCESS_KEY=asdf
-#     -e MINIO_SECRET_KEY=asdfasdf
-#     -p 9000:9000 
-#     minio/minio:latest server --compat /data
+# You can optionally set a MINIO_ACCESS_KEY, MINIO_SECRET_KEY, and MINIO_PORT, or omit them and it will use defaults.
+# Start up minio with:
+#   bin/minio
 #
 # The corresponding environment configuation would look like:
 #
-#   S3_ENDPOINT:           "http://127.0.0.1:9000"
+#   S3_ENDPOINT:           "http://127.0.0.1:9000" # Port should be the same as MINIO_PORT
 #   AWS_BUCKET:            "scholarsphere"
-#   AWS_ACCESS_KEY_ID:     "asdf"     # this is MINIO_ACCESS_KEY
-#   AWS_SECRET_ACCESS_KEY: "asdfasdf" # this is MINIO_SECRET_KEY
+#   AWS_ACCESS_KEY_ID:     "asdf"     # this should be the same as MINIO_ACCESS_KEY
+#   AWS_SECRET_ACCESS_KEY: "asdfasdf" # this should be the same as MINIO_SECRET_KEY
 #   AWS_REGION:            "us-east-1"
 #
 # You will need to create a "scholarsphere" bucket in your Minio instance. This can be done via the web interface.
@@ -36,6 +33,9 @@ SOLR_COLLECTION: scholarsphere
 SOLR_PORT: 8983
 # SOLR_CONFIG_DIR: solr/conf
 # SOLR_NUM_SHARDS: 1
+# MINIO_ACCESS_KEY: "asdf"
+# MINIO_SECRET_KEY: "asdfasdf"
+# MINIO_PORT: "9000"
 
 # If the oauth servers authorize path differs from /oauth/authorize, you can set that value here
 # Under normal circumstances, this shouldn't need changing
