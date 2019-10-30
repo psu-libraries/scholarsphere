@@ -11,7 +11,7 @@ REPORTER_BIN="cc-test-reporter"
 bundle exec rails db:create
 bundle exec rails db:migrate
 echo "Waiting for Solr to become available"
-if ! timeout 60 bash -c "until printf "" 2>>/dev/null >>/dev/tcp/$0/$1; do sleep 1; done" "${SOLR_HOST:-localhost}" "${SOLR_PORT:-8983}"
+if ! timeout 60 bash -c 'until printf "" 2>>/dev/null >>/dev/tcp/$0/$1; do sleep 1; done' "${SOLR_HOST:-localhost}" "${SOLR_PORT:-8983}"
 then
   echo "Solr never became ready. Exiting"
   exit 1
