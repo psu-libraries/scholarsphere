@@ -40,6 +40,8 @@ class WorkVersion < ApplicationRecord
             acceptance: true,
             if: :published?
 
+  after_save :update_index
+
   aasm do
     state :draft, intial: true
     state :published, :withdrawn, :removed
@@ -78,5 +80,34 @@ class WorkVersion < ApplicationRecord
 
     def strip_blanks_from_array(arr)
       Array.wrap(arr).reject(&:blank?)
+    end
+
+    # @note Calls our indexer to add the work version to Solr. Newly created records won't have their uuid until they're
+    # reloaded from Postgres, which creates the uuids for us.
+    def update_index
+      reload if uuid.nil?
+
+      IndexingService.call(resource: self, schema: default_schema)
+    end
+
+    # @todo This is basic schema until we flesh one out that's more robust.
+    def default_schema
+      {
+        title_tesi: ['title'],
+        subtitle_tesi: ['subtitle'],
+        keywords_tesim: ['keywords'],
+        rights_tesi: ['rights'],
+        description_tesi: ['description'],
+        resource_type_tesi: ['resource_type'],
+        contributor_tesi: ['contributor'],
+        publisher_tesi: ['publisher'],
+        published_date_tesi: ['published_date'],
+        subject_tesi: ['subject'],
+        language_tesi: ['language'],
+        identifier_tesi: ['identifier'],
+        based_near_tesi: ['based_near'],
+        related_url_tesi: ['related_url'],
+        source_tesi: ['source']
+      }
     end
 end

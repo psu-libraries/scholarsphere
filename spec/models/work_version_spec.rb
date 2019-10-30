@@ -9,6 +9,7 @@ RSpec.describe WorkVersion, type: :model do
     it { is_expected.to have_db_index(:work_id) }
     it { is_expected.to have_db_column(:aasm_state) }
     it { is_expected.to have_db_column(:metadata).of_type(:jsonb) }
+    it { is_expected.to have_db_column(:uuid).of_type(:uuid) }
     it { is_expected.to have_jsonb_accessor(:title).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:subtitle).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:keywords).of_type(:string).is_array.with_default([]) }
@@ -70,9 +71,29 @@ RSpec.describe WorkVersion, type: :model do
     end
   end
 
+  describe 'indexing' do
+    subject { SolrDocument.find(work_version.uuid) }
+
+    let(:work_version) { create(:work_version) }
+
+    its(:to_h) do
+      is_expected.to include(
+        'title_tesi' => work_version.title,
+        'id' => work_version.uuid,
+        'model_ssi' => 'WorkVersion'
+      )
+    end
+  end
+
   describe '#keywords=' do
     subject { described_class.new(keywords: ['', 'thing']) }
 
     its(:keywords) { is_expected.to contain_exactly('thing') }
+  end
+
+  describe '#uuid' do
+    subject { create(:work_version) }
+
+    its(:uuid) { is_expected.to match(/[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}/) }
   end
 end
