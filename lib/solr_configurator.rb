@@ -101,7 +101,7 @@ class SolrConfigurator
     end
 
     def collection_name
-      ENV.fetch('SOLR_COLLECTION', 'scholarsphere')
+      ENV.fetch('SOLR_COLLECTION', 'blacklight-core')
     end
 
     def num_shards
