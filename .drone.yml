@@ -73,6 +73,7 @@ steps:
     - apk add bind-tools
     - export POSTGRES_HOST=$(dig +short postgres)
     - export MINIO_HOST=$(dig +short minio)
+    - export SOLR_HOST=$(dig +short solr)
     - docker run
         --net host
         -e S3_ENDPOINT=http://$MINIO_HOST:9000
@@ -84,6 +85,7 @@ steps:
         -e POSTGRES_PASSWORD=scholarsphere
         -e POSTGRES_DB=scholarsphere
         -e POSTGRES_HOST=$POSTGRES_HOST
+        -e SOLR_HOST=$SOLR_HOST
         -e CC_TEST_REPORTER_ID=$CC_TEST_REPORTER_ID
         -e DRONE_COMMIT_SHA=$DRONE_COMMIT_SHA
         -e DRONE_BRANCH=$DRONE_BRANCH
@@ -158,6 +160,11 @@ steps:
       - tag
 
 services:
+- name: solr
+  image: solr:8.2.0-slim
+  entrypoint:
+  - solr-foreground
+  - "-DzkRun"
 - name: minio
   image: minio/minio:latest
   environment:
@@ -181,6 +188,6 @@ volumes:
     path: /var/run/docker.sock
 ---
 kind: signature
-hmac: cb3ef52389f9784f4654990c09d282f4371e8d6b9fdde362b0d189f2d39c66c6
+hmac: f75878a49f4ed82f22e4892a246b2ca3d8ad48716fdbf54b9f0d7cf8ded85a0c
 
 ...
