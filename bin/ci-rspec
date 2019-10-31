@@ -10,6 +10,15 @@ REPORTER_BIN="cc-test-reporter"
 # Make sure we have a database and migrations
 bundle exec rails db:create
 bundle exec rails db:migrate
+echo "Waiting for Solr to become available"
+if ! timeout 60 bash -c 'until printf "" 2>>/dev/null >>/dev/tcp/$0/$1; do sleep 1; done' "${SOLR_HOST:-localhost}" "${SOLR_PORT:-8983}"
+then
+  echo "Solr never became ready. Exiting"
+  exit 1
+fi
+
+echo "Initaizing Solr"
+bundle exec rake solr:init
 
 # If there's no Git repo, then assume this is DroneCI's environment
 # and link variables to the ones that Code Climate expects.

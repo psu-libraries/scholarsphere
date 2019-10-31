@@ -1,23 +1,9 @@
-development:
+development: 
   adapter: solr
-  <% if ENV.fetch('SOLR_HOST', nil) %>
-  url: "http://<%= ENV['SOLR_HOST'] %>:<%= ENV.fetch("SOLR_PORT", "8983") %>/solr/<%= ENV.fetch("SOLR_COLLECTION", "blacklight-core") %>"
-  <% else %>
-  url: <%= ENV['SOLR_URL'] || "http://127.0.0.1:8983/solr/blacklight-core" %>
-  <% end %>
-
-test: &test
+  url: http://<%= ENV.fetch("SOLR_HOST", "localhost") %>:<%= ENV.fetch("SOLR_PORT", "8983") %>/solr/<%= ENV.fetch("SOLR_COLLECTION", "blacklight-core") %>
+test:
   adapter: solr
-  <% if ENV.fetch('SOLR_HOST', nil) %>
-  url: "http://<%= ENV['SOLR_HOST'] %>:<%= ENV.fetch("SOLR_PORT", "8983") %>/solr/<%= ENV.fetch("SOLR_COLLECTION", "blacklight-core") %>"
-  <% else %>
-  url: <%= ENV['SOLR_URL'] || "http://127.0.0.1:8983/solr/blacklight-core" %>
-  <% end %>
-
+  url: http://<%= ENV.fetch("SOLR_HOST", "localhost") %>:<%= ENV.fetch("SOLR_PORT", "8983") %>/solr/<%= ENV.fetch("SOLR_COLLECTION", "blacklight-core") %>
 production:
   adapter: solr
-  <% if ENV.fetch('SOLR_HOST', nil) %>
-  url: "http://<%= ENV['SOLR_HOST'] %>:<%= ENV.fetch("SOLR_PORT", "8983") %>/solr/<%= ENV.fetch("SOLR_COLLECTION", "blacklight-core") %>"
-  <% else %>
-  url: <%= ENV['SOLR_URL'] || "http://127.0.0.1:8983/solr/blacklight-core" %>
-  <% end %>
+  url: http://<%= ENV.fetch("SOLR_HOST", "localhost") %>:<%= ENV.fetch("SOLR_PORT", "8983") %>/solr/<%= ENV.fetch("SOLR_COLLECTION", "blacklight-core") %>
