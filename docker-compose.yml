@@ -26,14 +26,14 @@ services:
     volumes:
     - minio-data:/data
     environment: 
-      MINIO_ACCESS_KEY: scholarsphere
-      MINIO_SECRET_KEY: scholarsphere
+      MINIO_ACCESS_KEY: ${AWS_ACCESS_KEY_ID-:scholarsphere}
+      MINIO_SECRET_KEY: ${AWS_SECRET_ACCESS_KEY:-scholarsphere}
     ports:
-    - 9002:9002
+    - ${MINIO_PORT:-9000}:9000
     entrypoint:
     - /bin/sh
     - -c 
-    - mkdir -p /data/scholarsphere; minio --compat server --address ':9002' /data
+    - mkdir -p /data/scholarsphere; minio --compat server --address ':9000' /data
   solr:
     image: solr:8.2.0-slim
     restart: always
