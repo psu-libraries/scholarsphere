@@ -9,7 +9,9 @@ services:
       POSTGRES_PASSWORD: scholarsphere
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-scholarsphere}
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-scholarsphere}
-      S3_ENDPOINT: http://minio:${MINIO_PORT:-9000}
+      AWS_BUCKET: scholarsphere
+      AWS_REGION: us-east-1
+      S3_ENDPOINT: http://minio:9000
       RAILS_ENV: development
       SOLR_HOST: solr
       SOLR_COLLECTION: scholarsphere
