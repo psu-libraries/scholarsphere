@@ -34,7 +34,6 @@ group :development, :test do
   gem 'niftany'
   gem 'pry-byebug'
   gem 'pry-rails'
-  gem 'solr_wrapper', '>= 0.3'
 end
 
 group :development do
