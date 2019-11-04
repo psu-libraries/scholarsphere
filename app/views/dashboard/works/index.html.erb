@@ -1,0 +1,6 @@
+<h1><%= t('dashboard.works.index.heading') %></h1>
+<%= link_to t('dashboard.works.index.new'), new_dashboard_work_path, class: 'btn btn-large btn-success' %>
+
+<div class="work-list">
+  <%= render partial: 'index_work', collection: @works %>
+</div>

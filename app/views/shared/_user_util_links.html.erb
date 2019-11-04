@@ -8,10 +8,13 @@
       <li class="nav-item">
         <%= link_to t('blacklight.header_links.logout'), destroy_user_session_path, class: 'nav-link' %>
       </li>
-      <li class="nav-item">
-        <span class="navbar-text">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <%= current_user.name %> (<%= current_user.access_id %>)
-        </span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <%= link_to 'Works', dashboard_works_path, class: 'dropdown-item' %>
+        </div>
       </li>
     <% else %>
       <li class="nav-item">

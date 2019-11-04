@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'pundit/rspec'
 require 'simplecov'
 SimpleCov.start('rails')
 
