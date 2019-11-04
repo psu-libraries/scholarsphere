@@ -5,4 +5,10 @@
 
 require_relative 'config/application'
 
+unless Rails.env.production?
+  require 'seedbank'
+  Seedbank.load_tasks if defined?(Seedbank)
+  Rails.root.join('tasks').children.map { |file| load(file) }
+end
+
 Rails.application.load_tasks
