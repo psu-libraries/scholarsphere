@@ -5,9 +5,7 @@ if [ ${APP_ROLE:-app} == "sidekiq" ]; then
     bundle exec sidekiq
 else
     echo "starting rails"
-    if [ -f tmp/pids/server.pid ]; then
-      rm tmp/pids/server.pid
-    fi
+    rm -f tmp/pids/server.pid
     bundle exec rails db:create
     bundle exec rails db:migrate
     bundle exec rails solr:init
