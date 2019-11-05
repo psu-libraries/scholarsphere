@@ -4,11 +4,6 @@ WORKDIR /app
 
 ENV TZ=America/New_York
 
-# Install system deps
-RUN apt-get update && \
-    apt-get install --no-install-recommends ffmpeg=7:4.1.4-1~deb10u1 -y && \
-    rm -rf /var/lib/apt/lists/* 
-
 ## NodeJS
 ENV NODE_VERSION 12.9.1
 RUN mkdir /usr/local/nvm
