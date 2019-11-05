@@ -41,3 +41,8 @@ vendor/bundle
 /config/application.yml
 coverage
 cc-test-reporter
+
+# Docker sync ignores 
+.bash_history
+.cache
+.yarnrc

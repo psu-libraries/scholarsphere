@@ -1,39 +1,47 @@
 version: '3.5'
 services:
   web:
+    tty: true
+    stdin_open: true
     environment:
       POSTGRES_DB: scholarsphere
       POSTGRES_USER: scholarsphere
       POSTGRES_PASSWORD: scholarsphere
-      # SOLR_URL: http://solr:8983/solr/scholarsphere
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-scholarsphere}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-scholarsphere}
+      AWS_BUCKET: scholarsphere
+      AWS_REGION: us-east-1
+      S3_ENDPOINT: http://minio:9000
       RAILS_ENV: development
       SOLR_HOST: solr
       SOLR_COLLECTION: scholarsphere
-      POSTGRES_DB: scholarsphere
       POSTGRES_HOST: db
-    build: . 
+    build: 
+      context: . 
+      target: base
+    volumes:
+    # This is an empty volume to prevent empty dir bind it's way into the container
+    - /app/vendor/bundle
+    - /app/node_modules
+    - type: bind
+      source: ./
+      target: /app/
     ports:
       - "3000:3000"
-    command: >
-      sh -c "echo starting database migrations &&
-            bundle exec rails db:migrate && 
-            bundle exec rake solr:init && 
-            echo starting rails &&
-            bundle exec rails s -b 0.0.0.0"
   minio:
     image: minio/minio:latest
     restart: always
     volumes:
     - minio-data:/data
     environment: 
-      MINIO_ACCESS_KEY: scholarsphere
-      MINIO_SECRET_KEY: scholarsphere
+      MINIO_ACCESS_KEY: ${AWS_ACCESS_KEY_ID:-scholarsphere}
+      MINIO_SECRET_KEY: ${AWS_SECRET_ACCESS_KEY:-scholarsphere}
     ports:
-    - 9002:9002
+    - ${MINIO_PORT:-9000}:9000
     entrypoint:
     - /bin/sh
     - -c 
-    - mkdir -p /data/scholarsphere; minio --compat server --address ':9002' /data
+    - mkdir -p /data/scholarsphere; minio --compat server --address ':9000' /data
   solr:
     image: solr:8.2.0-slim
     restart: always
@@ -63,6 +71,7 @@ services:
     - db-data:/var/lib/postgresql/data
 
 volumes:
+  bundle-data:
   minio-data:
   solr-data:
   db-data:

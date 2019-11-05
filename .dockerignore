@@ -1,6 +1,14 @@
 vendor/
 .git
 .drone.yml
+.bash_history
+.yarnrc
+.cache
+.bundle
+config/application.yml
 Dockerfile
 node_modules
 vendor/bundle
+tmp/
+log/
+
