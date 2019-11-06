@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'scholarsphere/solr_admin'
+
 module Scholarsphere
   class Cleaner
     class << self
@@ -17,6 +19,9 @@ module Scholarsphere
       def clean_solr
         Blacklight.default_index.connection.delete_by_query('*:*')
         Blacklight.default_index.connection.commit
+      rescue RuntimeError
+        puts 'Solr endpoint not found, attempting to recreate it'
+        SolrAdmin.new.create_collection
       end
 
       def verify_aws
