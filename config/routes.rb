@@ -37,6 +37,13 @@ Rails.application.routes.draw do
 
   namespace :dashboard do
     resources :works, only: [:index, :new, :create, :destroy] do
+      resources :work_versions, except: [:new], shallow: true do
+        get 'file_list', to: 'file_lists#edit'
+        put 'file_list', to: 'file_lists#update'
+        patch 'file_list', to: 'file_lists#update'
+
+        get 'publish', to: 'work_versions#publish'
+      end
     end
   end
 end

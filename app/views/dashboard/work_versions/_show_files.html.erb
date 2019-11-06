@@ -1,0 +1,20 @@
+<% if work_version.file_resources.present? %>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th><%= t('dashboard.work_versions.files.name') %></th>
+        <th><%= t('dashboard.work_versions.files.size') %></th>
+        <th><%= t('dashboard.work_versions.files.mime_type') %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% work_version.file_version_memberships.includes(:file_resource).each do |file| %>
+      <tr>
+        <td><%= file.title %></td>
+        <td><%= number_to_human_size file.size %></td>
+        <td><%= file.mime_type %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

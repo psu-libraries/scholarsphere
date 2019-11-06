@@ -14,8 +14,4 @@ class Dashboard::BaseController < ApplicationController
     def policy_scope(scope)
       super([:dashboard, scope])
     end
-
-    def authorize(record, query = nil)
-      super([:dashboard, record], query)
-    end
 end

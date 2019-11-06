@@ -1,6 +1,23 @@
 en:
   application_name: "Scholarsphere"
   activerecord:
+    attributes:
+      work_version:
+        version_name: Version Name
+        subtitle: Subtitle
+        keywords: Keywords
+        rights: Rights
+        Description: Description
+        resource_type: Resource Type
+        contributor: Contributor
+        publisher: Publisher
+        published_date: Published Date
+        subject: Subject
+        language: Language
+        identifier: Identifier
+        based_near: Based Near
+        related_url: Related URL
+        source: Source
     errors:
       models:
         file_version_membership:
@@ -15,8 +32,42 @@ en:
         by: "by"
         edit: "edit"
         delete: "delete"
+        delete_confirm: "Are you sure you want to delete this version? This cannot be undone."
         new_version: "new version"
         new: "New Work"
       new:
         heading: "Create A New Work"
         error_message: "%{error} prohibited this work from being saved:"
+    work_versions:
+      files:
+        name: Name
+        size: Size
+        mime_type: Mime Type
+      edit:
+        breadcrumb: Edit %{title}
+        create: Create
+        add_files: Add Files
+        add_metadata: Add Metadata
+        publish: Publish
+        error_message: "%{error} prohibited this work from being saved:"
+      publish:
+        heading: Publishing Work Version
+        agreement: I agree to all the stuff I need to to make this work
+        error_message: "%{error} prohibited this work from being saved:"
+        create: Create
+        add_files: Add Files
+        add_metadata: Add Metadata
+        publish: Publish
+    file_list:
+      edit:
+        heading: File Listing 
+        name: Name
+        size: Size
+        mime_type: Mime Type
+        actions: Actions
+        create: Create
+        add_files: Add Files
+        add_metadata: Add Metadata
+        publish: Publish
+
+

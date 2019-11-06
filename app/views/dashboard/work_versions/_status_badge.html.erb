@@ -1,0 +1,2 @@
+<%- css_class = "version-status version-status--#{version.aasm_state.parameterize.dasherize}" -%>
+<span class="badge <%= css_class %>"><%= version.aasm_state.downcase %></span>

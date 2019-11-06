@@ -1,0 +1,24 @@
+<%# TODO extract this to a smart partial/helper/presenter %>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><%= link_to t('dashboard.works.index.heading'), dashboard_works_path %></li>
+    <li class="breadcrumb-item active" aria-current="page"><%= t('dashboard.work_versions.edit.breadcrumb', title: truncate(@work_version.title, escape: false)) %></li>
+  </ol>
+</nav>
+
+<div class="row">
+  <div class="col">
+    <ol class="progress-indicator">
+      <li class="is-complete" data-step="1"><%= t('dashboard.work_versions.edit.create') %></li>
+      <li class="is-complete" data-step="2"><%= t('dashboard.work_versions.edit.add_files') %></li>
+      <li class="is-active" data-step="3"><%= t('dashboard.work_versions.edit.add_metadata') %></li>
+      <li data-step="4" class="progress__last"><%= t('dashboard.work_versions.edit.publish') %></li>
+    </ol>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-8">
+    <%= render 'form', work_version: @work_version %>
+  </div>
+</div>

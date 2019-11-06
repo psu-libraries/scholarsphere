@@ -1,0 +1,20 @@
+<%= form_with(model: @work_version, url: dashboard_work_version_path(@work_version), local: true) do |form| %>
+  <% if work_version.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= t('dashboard.work_versions.edit.error_message', error: pluralize(work_version.errors.count, 'error')) %></h2>
+
+      <ul>
+      <% work_version.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= render 'form_fields', form: form %>
+
+  <div class="actions">
+    <%= link_to 'Back', dashboard_work_version_file_list_path(@work_version), class: 'btn btn-secondary' %>
+    <%= form.submit 'Save and Continue', class: 'btn btn-primary' %>
+  </div>
+<% end %>

@@ -1,0 +1,22 @@
+<%= form_with(
+      model: membership,
+      url: work_version_file_path(params[:work_id], params[:version_id], membership),
+      class: 'form-inline',
+      html: {
+        data: {
+          type: 'json',
+          action: 'ajax:success->filename-editor#onPostSuccess ' +
+          'ajax:error->filename-editor#onPostError',
+          target: 'filename-editor.form'
+        }
+      }
+    ) do |f| %>
+
+  <%= f.label :title, class: 'sr-only' %>
+  <%= f.text_field :title, class: 'form-control', data: { target: 'filename-editor.titleField' } %>
+  <%= f.submit 'Save', class: 'btn btn-primary', data: { disable_with: 'Saving...' } %>
+  <%= link_to 'Cancel', '#', class: 'btn btn-link', data: { action: 'click->filename-editor#hideForm' } %>
+  <div class="alert alert-danger" role="alert" data-target="filename-editor.errorsContainer">
+    <ul data-target="filename-editor.errors"></ul>
+  </div>
+<% end %>
