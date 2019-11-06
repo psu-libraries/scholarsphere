@@ -29,6 +29,7 @@ gem 'webpacker', '~> 4.0'
 
 group :development, :test do
   gem 'byebug', platform: :mri
+  gem 'database_cleaner'
   gem 'factory_bot_rails'
   gem 'faker'
   gem 'niftany'
@@ -41,6 +42,7 @@ group :development do
   gem 'binding_of_caller'
   gem 'flog'
   gem 'listen', '>= 3.0.5', '< 3.2'
+  gem 'seedbank'
   gem 'spring'
   gem 'spring-commands-rspec'
   gem 'spring-watcher-listen', '~> 2.0.0'
@@ -50,7 +52,6 @@ end
 
 group :test do
   gem 'capybara'
-  gem 'database_cleaner'
   gem 'launchy'
   gem 'rails-controller-testing'
   gem 'rspec'
