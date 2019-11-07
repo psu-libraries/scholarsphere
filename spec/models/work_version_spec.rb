@@ -78,7 +78,7 @@ RSpec.describe WorkVersion, type: :model do
 
     its(:to_h) do
       is_expected.to include(
-        'title_tesi' => work_version.title,
+        'title_tesim' => [work_version.title],
         'id' => work_version.uuid,
         'model_ssi' => 'WorkVersion'
       )
