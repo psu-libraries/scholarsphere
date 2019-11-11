@@ -37,6 +37,10 @@ SOLR_PORT: 8983
 # SOLR_CONFIG_DIR: solr/conf
 # SOLR_NUM_SHARDS: 1
 
+# If the oauth servers authorize path differs from /oauth/authorize, you can set that value here
+# Under normal circumstances, this shouldn't need changing
+# OAUTH_AUTHORIZE_URL: "/oauth/authorize"
+
 development:
   POSTGRES_DB: "scholarsphere_4_development"
   OAUTH_APP_ID: ""
