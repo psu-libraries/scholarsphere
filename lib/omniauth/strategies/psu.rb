@@ -9,7 +9,7 @@ module OmniAuth
 
       option :client_options,
              site: ENV['OAUTH_APP_URL'],
-             authorize_path: '/oauth/authorize'
+             authorize_url: ENV.fetch('OAUTH_AUTHORIZE_URL', 'oauth/authorize')
 
       uid do
         raw_info['uid']
