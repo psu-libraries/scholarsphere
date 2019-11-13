@@ -28,7 +28,7 @@ FactoryBot.define do
   end
 
   sequence(:work_title) do |n|
-    a = Faker::Lorem.words(rand(1..5)).join(' ').capitalize
+    a = Faker::Lorem.words(number: rand(1..5)).join(' ').capitalize
     b = Faker::Lorem.words.join(', ')
     c = Faker::Lorem.words.join("'s ")
     id = n.ordinalize

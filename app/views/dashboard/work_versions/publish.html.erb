@@ -1,0 +1,67 @@
+<%# TODO extract this to a smart partial/helper/presenter %>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <%= link_to t('dashboard.works.index.heading'), dashboard_works_path %>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">
+      <%= t('dashboard.work_versions.edit.breadcrumb', title: truncate(@work_version.title, escape: false)) %>
+    </li>
+  </ol>
+</nav>
+
+<div class="row">
+  <div class="col">
+    <ol class="progress-indicator">
+      <li class="is-complete" data-step="1"><%= t('dashboard.work_versions.publish.create') %></li>
+      <li class="is-complete" data-step="2"><%= t('dashboard.work_versions.publish.add_files') %></li>
+      <li class="is-complete" data-step="3"><%= t('dashboard.work_versions.publish.add_metadata') %></li>
+      <li class="is-active" data-step="4" class="progress__last"><%= t('dashboard.work_versions.publish.publish') %></li>
+    </ol>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-8">
+    <h1><%= t('dashboard.work_versions.publish.heading') %></h1>
+
+    <% if @work_version.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= t('dashboard.work_versions.publish.error_message', error: pluralize(@work_version.errors.count, 'error')) %></h2>
+
+        <ul>
+          <% @work_version.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <%= form_with(model: @work_version, url: dashboard_work_version_path(@work_version), local: true) do |form| %>
+
+      <div class="form-group">
+        <%= label_tag :access_level %>
+        <div class="input-group">
+          <%= select_tag :access_level,
+                         options_for_select(['Public', 'Penn State']),
+                         include_blank: false,
+                         class: 'form-control' %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= label_tag :depositor_agreement %>
+        <div class="form-check">
+          <%= form.check_box :depositor_agreement,
+                             class: 'form-check-input' %>
+
+          <%= form.label :depositor_agreement, t('dashboard.work_versions.publish.agreement'), class: 'form-check-label' %>
+        </div>
+      </div>
+
+      <div class="actions">
+        <%= link_to 'Back', edit_dashboard_work_version_path(@work_version), class: 'btn btn-secondary' %>
+        <%= form.button 'Publish', name: 'publish', class: 'btn btn-primary' %>
+    <% end %>
+  </div>
+</div>

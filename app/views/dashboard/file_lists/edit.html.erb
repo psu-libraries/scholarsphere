@@ -1,0 +1,35 @@
+<%# TODO extract this to a smart partial/helper/presenter %>
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <%= link_to t('dashboard.works.index.heading'), dashboard_works_path %>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">
+      <%= t('dashboard.work_versions.edit.breadcrumb', title: truncate(@work_version.title, escape: false)) %>
+    </li>
+  </ol>
+</nav>
+
+<div class="row">
+  <div class="col">
+    <ol class="progress-indicator">
+      <li class="is-complete" data-step="1"><%= t('dashboard.file_list.edit.create') %></li>
+      <li class="is-active" data-step="2"><%= t('dashboard.file_list.edit.add_files') %></li>
+      <li data-step="3"><%= t('dashboard.file_list.edit.add_metadata') %></li>
+      <li data-step="4" class="progress__last"><%= t('dashboard.file_list.edit.publish') %></li>
+    </ol>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <h1><% t('dashboard.file_list.edit.heading') %></h1>
+
+    <% if @file_version_memberships.any? %>
+      <%= render 'uploaded_file_list', file_version_memberships: @file_version_memberships %>
+    <% end %>
+
+    <%= render 'upload_form', version: @work_version %>
+  </div>
+</div>

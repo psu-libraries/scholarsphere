@@ -16,12 +16,20 @@ FactoryBot.define do
       end
     end
 
+    # Bare minimum for a valid draft
     trait :draft do
       aasm_state { WorkVersion::STATE_DRAFT }
     end
 
-    trait :published do
+    # A draft that has everything needed to pass validations and be published
+    trait :able_to_be_published do
+      draft
       with_files
+    end
+
+    # A valid published work-version
+    trait :published do
+      able_to_be_published
       aasm_state { WorkVersion::STATE_PUBLISHED }
     end
   end

@@ -3,7 +3,9 @@
 class Dashboard::WorkVersionPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      scope.all
+      scope
+        .includes(:work)
+        .where(works: { depositor_id: user.id })
     end
   end
 
@@ -16,7 +18,8 @@ class Dashboard::WorkVersionPolicy < ApplicationPolicy
   end
 
   alias_method :update?, :edit?
-  alias_method :delete?, :edit?
+  alias_method :destroy?, :edit?
+  alias_method :publish?, :edit?
 
   def new?(latest_version)
     record.published? && record == latest_version

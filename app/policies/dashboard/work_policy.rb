@@ -3,7 +3,7 @@
 class Dashboard::WorkPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      scope.all
+      scope.where(depositor: user).all
     end
   end
 

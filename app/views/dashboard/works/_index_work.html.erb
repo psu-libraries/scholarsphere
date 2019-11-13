@@ -1,21 +1,31 @@
-<div class="work-list--work">
+<div class="work-list__work">
   <h3><%= index_work.latest_version.title %></h3>
   <h5><%= Work::Types.display(index_work.work_type) %></h5>
-  <div class="work-list--versions">
+  <div class="work-list__versions">
     <% index_work.versions.each do |version| %>
       <div class="work-version row">
-        <div class="work-version--metadata col">
-          <%= link_to version.display_name, '#TODO' %>
+        <div class="work-version__metadata col">
+          <%= link_to version.display_name, dashboard_work_version_path(version) %>
           <%= version.display_date %>
           <%= t('dashboard.works.index.by') %> <%= version.work.depositor.email %>
         </div>
 
-        <div class="work-version--actions col-lg-3 col-sm-5">
-          <span class="badge badge-primary"><%= version.aasm_state %></span>
+        <div class="work-version__actions col-lg-3 col-sm-5">
+          <%= render partial: 'dashboard/work_versions/status_badge', locals: { version: version } %>
 
-          <%= link_to t('dashboard.works.index.edit'), '#TODO' if policy(version).edit? %>
-          <%= link_to t('dashboard.works.index.delete'), '#TODO', class: 'text-danger' if policy(version).delete? %>
-          <%= link_to t('dashboard.works.index.new_version'), '#TODO' if policy(version).new?(index_work.latest_version) %>
+          <%= link_to t('dashboard.works.index.edit'), dashboard_work_version_file_list_path(version) if policy(version).edit? %>
+          <%= if policy(version).destroy?
+                link_to t('dashboard.works.index.delete'),
+                        dashboard_work_version_path(version),
+                        method: :delete,
+                        data: { confirm: t('dashboard.works.index.delete_confirm') },
+                        class: 'text-danger'
+              end %>
+          <%= if policy(version).new?(index_work.latest_version)
+                link_to t('dashboard.works.index.new_version'),
+                        dashboard_work_work_versions_path(index_work),
+                        method: :post
+              end %>
         </div>
       </div>
     <% end %>

@@ -19,3 +19,15 @@ Metrics/BlockLength:
     - 'app/controllers/catalog_controller.rb'
     - 'config/routes.rb'
     - 'spec/**/*'
+
+RSpec/DescribeClass:
+  Exclude:
+    - 'spec/features/**/*'
+
+RSpec/ExampleLength:
+  Enabled:
+    false
+
+RSpec/MultipleExpectations:
+  Enabled:
+    false

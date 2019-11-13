@@ -1,0 +1,7 @@
+@import 'bootstrap';
+@import 'bootstrap/variables';
+
+.work-version--active {
+  background-color: lighten($yellow, 40%);
+  border-left: 1px solid $yellow;
+}

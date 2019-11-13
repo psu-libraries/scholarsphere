@@ -11,7 +11,19 @@ RSpec.describe Dashboard::WorkVersionPolicy, type: :policy do
   let(:other_user) { instance_double('User', 'another user') }
 
   permissions '.scope' do
-    pending "add some examples to (or delete) #{__FILE__}"
+    let(:scoped_versions) { described_class::Scope.new(user, WorkVersion).resolve }
+
+    let(:user) { my_work_version.depositor }
+    let!(:my_work_version) { create :work_version, title: 'My Version' }
+
+    before do
+      create :work_version, title: "Other User's Version"
+    end
+
+    it 'only finds my work versions' do
+      expect(scoped_versions.map(&:title)).to include('My Version')
+      expect(scoped_versions.map(&:title)).not_to include("Other User's Version")
+    end
   end
 
   permissions :show? do
@@ -19,7 +31,7 @@ RSpec.describe Dashboard::WorkVersionPolicy, type: :policy do
     it { is_expected.not_to permit(other_user, work_version) }
   end
 
-  permissions :edit?, :update?, :delete? do
+  permissions :edit?, :update?, :destroy?, :publish? do
     context 'when work version is draft' do
       before { allow(work_version).to receive(:draft?).and_return(true) }
 
