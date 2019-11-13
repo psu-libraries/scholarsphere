@@ -9,6 +9,7 @@ RSpec.describe BuildNewWorkVersion, type: :model do
           :published,
           work: nil, # FactoryBot trick needed for above
           title: 'My Happy Version',
+          version_number: 4,
           file_count: 1
   end
 
@@ -27,6 +28,7 @@ RSpec.describe BuildNewWorkVersion, type: :model do
     its(:aasm_state) { is_expected.to eq 'draft' }
     its(:title) { is_expected.to eq 'My Happy Version' }
     its(:work) { is_expected.to eq work }
+    its(:version_number) { is_expected.to eq 5 }
 
     it 'retains the same file resources' do
       expect(new_version.file_version_memberships.length).to eq 1

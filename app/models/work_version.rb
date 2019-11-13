@@ -40,6 +40,10 @@ class WorkVersion < ApplicationRecord
             acceptance: true,
             if: :published?
 
+  validates :version_number,
+            presence: true,
+            uniqueness: { scope: :work_id }
+
   after_save :update_index
 
   aasm do

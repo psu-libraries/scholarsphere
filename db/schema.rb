@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_30_160523) do
+ActiveRecord::Schema.define(version: 2019_11_13_144905) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -117,6 +117,7 @@ ActiveRecord::Schema.define(version: 2019_10_30_160523) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.uuid "uuid", default: -> { "uuid_generate_v4()" }
+    t.integer "version_number", null: false
     t.index ["work_id"], name: "index_work_versions_on_work_id"
   end
 
