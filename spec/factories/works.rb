@@ -20,10 +20,13 @@ FactoryBot.define do
       num_drafts_to_build = evaluator.has_draft ? 1 : 0
       num_published_to_build = evaluator.versions_count - num_drafts_to_build
 
-      work.versions = (
-        build_list(:work_version, num_published_to_build, :published, work: work) +
-        build_list(:work_version, num_drafts_to_build, :draft, work: work)
-      )
+      num_published_to_build.times do |n|
+        work.versions << build(:work_version, :published, work: work, version_number: (n + 1))
+      end
+
+      if evaluator.has_draft
+        work.versions << build(:work_version, :draft, work: work, version_number: (num_published_to_build + 1))
+      end
     end
   end
 

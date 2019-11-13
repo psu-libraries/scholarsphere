@@ -3,23 +3,15 @@
 require 'rails_helper'
 
 RSpec.describe Dashboard::WorkVersionDecorator do
-  subject(:decorator) { described_class.new(work_version, index) }
+  subject(:decorator) { described_class.new(work_version) }
 
   let(:work_version) { instance_spy('WorkVersion') }
-  let(:index) { 0 }
-
-  describe '.initialize' do
-    it 'accepts an index value' do
-      expect(decorator.version_number).to eq index + 1
-    end
-  end
 
   describe '#display_name' do
     subject { decorator.display_name }
 
     context 'when no version_name exists' do
-      let(:work_version) { instance_spy('WorkVersion', version_name: nil) }
-      let(:index) { 2 }
+      let(:work_version) { instance_spy('WorkVersion', version_name: nil, version_number: 3) }
 
       it { is_expected.to eq 'Version 3' }
     end
