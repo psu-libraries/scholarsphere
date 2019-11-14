@@ -70,13 +70,13 @@ steps:
   <<: *test_common
   commands:
     - export DOCKER_HOST=unix:///var/run/host.sock
-    - apk add bind-tools
-    - export POSTGRES_HOST=$(dig +short postgres)
-    - export MINIO_HOST=$(dig +short minio)
-    - export SOLR_HOST=$(dig +short solr)
-    - export SELENIUM_HOST=$(dig +short selenium)
+    # - apk add bind-tools
+    # - export POSTGRES_HOST=$(dig +short postgres)
+    # - export MINIO_HOST=$(dig +short minio)
+    # - export SOLR_HOST=$(dig +short solr)
+    # - export SELENIUM_HOST=$(dig +short selenium)
     - docker create --name test-$DRONE_BUILD_NUMBER --network drone
-        -e S3_ENDPOINT=http://$MINIO_HOST:9000
+        -e S3_ENDPOINT=http://minio:9000
         -e AWS_BUCKET=scholarsphere
         -e AWS_ACCESS_KEY_ID=scholarsphere
         -e AWS_SECRET_ACCESS_KEY=scholarsphere
@@ -86,8 +86,8 @@ steps:
         -e SELENIUM_URL=http://selenium:4444/wd/hub
         -e POSTGRES_PASSWORD=scholarsphere
         -e POSTGRES_DB=scholarsphere
-        -e POSTGRES_HOST=$POSTGRES_HOST
-        -e SOLR_HOST=$SOLR_HOST
+        -e POSTGRES_HOST=postgres
+        -e SOLR_HOST=solr
         -e CC_TEST_REPORTER_ID=$CC_TEST_REPORTER_ID
         -e DRONE_COMMIT_SHA=$DRONE_COMMIT_SHA
         -e DRONE_BRANCH=$DRONE_BRANCH
@@ -194,6 +194,6 @@ volumes:
     path: /var/run/docker.sock
 ---
 kind: signature
-hmac: c09b135cc9a7ade30216723990e2c00a7b56ca6147320a0fcb53772fb7a7ba33
+hmac: 795fa4de7feea0b50f6d43e2690b82982532c531656381650515198728970c06
 
 ...
