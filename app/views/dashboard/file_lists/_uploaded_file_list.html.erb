@@ -11,18 +11,18 @@
     <% file_version_memberships.each do |membership| %>
       <tr id="<%= dom_id membership %>" data-controller="filename-editor">
         <td>
-          <span data-target="filename-editor.titleStatic"><%= membership.title %></span>
-          <%# render 'inline_filename_editor', membership: membership %>
+          <span class="filename" data-target="filename-editor.titleStatic"><%= membership.title %></span>
+          <%= render 'inline_filename_editor', membership: membership %>
         </td>
         <td><%= number_to_human_size membership.size %></td>
         <td><%= membership.mime_type %></td>
         <td>
-          <%# link_to 'Rename',
-            edit_work_version_file_path(params[:work_id], params[:version_id], membership.id),
-            data: { action: 'click->filename-editor#toggleForm' } %> |
-            <%# link_to 'Delete',
-            work_version_file_path(params[:work_id], params[:version_id], membership.id),
-            method: :delete, data: { confirm: 'Are you sure?' } %>
+          <%= link_to t('dashboard.file_list.edit.rename'),
+                      edit_dashboard_file_path(membership),
+                      data: { action: 'click->filename-editor#toggleForm' } %> |
+          <%= link_to t('dashboard.file_list.edit.delete'),
+                      dashboard_file_path(membership),
+                      method: :delete, data: { confirm: 'Are you sure?' } %>
         </td>
       </tr>
     <% end %>

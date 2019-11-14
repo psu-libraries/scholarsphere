@@ -1,0 +1,33 @@
+<h1><%= t('dashboard.file_version_memberships.edit.heading', title: @file_version.title) %></h1>
+
+<%= form_with(
+      model: @file_version,
+      url: dashboard_file_path(@file_version),
+      local: true
+    ) do |form| %>
+
+  <% if form.object.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= t('dashboard.works.new.error_message', error: pluralize(form.object.errors.count, 'error')) %></h2>
+
+      <ul>
+      <% form.object.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= form.label :title %>
+    <div class="input-group">
+      <%= form.text_field :title, class: 'form-control' %>
+    </div>
+  </div>
+
+  <%= form.submit t('dashboard.file_version_memberships.edit.save'), class: 'btn btn-primary' %>
+  <%= link_to t('dashboard.file_version_memberships.edit.cancel'),
+              dashboard_work_version_file_list_path(@work_version),
+              class: 'btn btn-link' %>
+
+<% end %>

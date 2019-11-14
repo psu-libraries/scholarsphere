@@ -43,6 +43,11 @@ Rails.application.routes.draw do
         patch 'file_list', to: 'file_lists#update'
 
         get 'publish', to: 'work_versions#publish'
+
+        resources :files,
+                  controller: :file_version_memberships,
+                  only: %i(edit update destroy),
+                  shallow: true
       end
     end
   end

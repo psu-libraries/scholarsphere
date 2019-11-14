@@ -8,10 +8,16 @@ RSpec.shared_examples 'an authorized dashboard controller' do
   context "when signed in, but requesting someone else's resource" do
     before { sign_in create :user }
 
+    # Either ActiveRecord::RecordNotFound or Pundit::NotAuthorizedError are
+    # legitimate, depending on whether the authorization is rejected by
+    # `policy_scope` or `authorize`, which will raise those errors respectively
     it do
       expect {
         perform_request
-      }.to raise_error(ActiveRecord::RecordNotFound)
+      }.to raise_error(
+        an_instance_of(ActiveRecord::RecordNotFound)
+        .or(an_instance_of(Pundit::NotAuthorizedError))
+      )
     end
   end
 

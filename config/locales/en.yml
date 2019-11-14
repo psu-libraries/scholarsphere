@@ -60,7 +60,7 @@ en:
         publish: Publish
     file_list:
       edit:
-        heading: File Listing 
+        heading: File Listing
         name: Name
         size: Size
         mime_type: Mime Type
@@ -69,5 +69,12 @@ en:
         add_files: Add Files
         add_metadata: Add Metadata
         publish: Publish
+        rename: Rename
+        delete: Delete
+    file_version_memberships:
+      edit:
+        heading: Editing %{title}
+        save: Save
+        cancel: Cancel
 
 
