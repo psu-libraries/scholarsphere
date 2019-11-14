@@ -2,12 +2,12 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Publishing a new work', unless: ci_build? do
+RSpec.describe 'Publishing a new work' do
   let(:user) { create(:user) }
   let(:metadata) { MetadataFactory.new.work_version }
   let(:updated_metadata) { MetadataFactory.new.work_version }
 
-  it 'routes the user through the workflow', with_user: :user, with_driver: :selenium_chrome_headless do
+  it 'routes the user through the workflow', with_user: :user, with_driver: :selenium_remote do
     visit(new_dashboard_work_path)
     fill_in('Title', with: metadata[:title])
     click_button('Create Work')

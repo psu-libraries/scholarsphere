@@ -74,14 +74,16 @@ steps:
     - export POSTGRES_HOST=$(dig +short postgres)
     - export MINIO_HOST=$(dig +short minio)
     - export SOLR_HOST=$(dig +short solr)
-    - docker run
-        --net host
+    - export SELENIUM_HOST=$(dig +short selenium)
+    - docker create --name test-$DRONE_BUILD_NUMBER --network drone
         -e S3_ENDPOINT=http://$MINIO_HOST:9000
         -e AWS_BUCKET=scholarsphere
         -e AWS_ACCESS_KEY_ID=scholarsphere
         -e AWS_SECRET_ACCESS_KEY=scholarsphere
         -e AWS_REGION=us-east-1
+        -e APP_HOST=test-$DRONE_BUILD_NUMBER
         -e POSTGRES_USER=scholarsphere
+        -e SELENIUM_URL=http://selenium:4444/wd/hub
         -e POSTGRES_PASSWORD=scholarsphere
         -e POSTGRES_DB=scholarsphere
         -e POSTGRES_HOST=$POSTGRES_HOST
@@ -91,6 +93,8 @@ steps:
         -e DRONE_BRANCH=$DRONE_BRANCH
         -e DRONE_BUILD_STARTED=$DRONE_BUILD_STARTED
         harbor.dsrd.libraries.psu.edu/library/scholarsphere:$DRONE_BUILD_NUMBER-rspec
+    - docker network connect $DOCKER_NETWORK_ID test-$DRONE_BUILD_NUMBER
+    - docker start test-$DRONE_BUILD_NUMBER -a
 
 - name: push
   image: docker
@@ -160,6 +164,8 @@ steps:
       - tag
 
 services:
+- name: selenium
+  image: selenium/standalone-chrome:3.141.59-xenon
 - name: solr
   image: solr:8.2.0-slim
   entrypoint:
@@ -188,6 +194,6 @@ volumes:
     path: /var/run/docker.sock
 ---
 kind: signature
-hmac: f75878a49f4ed82f22e4892a246b2ca3d8ad48716fdbf54b9f0d7cf8ded85a0c
+hmac: c09b135cc9a7ade30216723990e2c00a7b56ca6147320a0fcb53772fb7a7ba33
 
 ...
