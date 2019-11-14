@@ -32,11 +32,7 @@ RSpec/MessageSpies:
 # Configuration parameters: Max.
 RSpec/NestedGroups:
   Exclude:
-    - 'spec/controllers/dashboard/file_lists_controller_spec.rb'
-    - 'spec/controllers/dashboard/work_versions_controller_spec.rb'
-    - 'spec/controllers/dashboard/works_controller_spec.rb'
-    - 'spec/models/work_spec.rb'
-    - 'spec/policies/dashboard/work_version_policy_spec.rb'
+    - 'spec/**/*'
 
 # Offense count: 5
 RSpec/SubjectStub:

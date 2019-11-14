@@ -42,4 +42,5 @@ RSpec.configure do |config|
   end
 
   config.include CapybaraDrivers, type: :feature
+  config.include ActionView::RecordIdentifier, type: :feature
 end

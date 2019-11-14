@@ -1,6 +1,6 @@
 <%= form_with(
       model: membership,
-      url: work_version_file_path(params[:work_id], params[:version_id], membership),
+      url: dashboard_file_path(membership),
       class: 'form-inline',
       html: {
         data: {
@@ -8,14 +8,18 @@
           action: 'ajax:success->filename-editor#onPostSuccess ' +
           'ajax:error->filename-editor#onPostError',
           target: 'filename-editor.form'
-        }
+        },
+        style: 'display: none;' # Hide form if you don't have JS enabled
       }
     ) do |f| %>
 
   <%= f.label :title, class: 'sr-only' %>
   <%= f.text_field :title, class: 'form-control', data: { target: 'filename-editor.titleField' } %>
-  <%= f.submit 'Save', class: 'btn btn-primary', data: { disable_with: 'Saving...' } %>
-  <%= link_to 'Cancel', '#', class: 'btn btn-link', data: { action: 'click->filename-editor#hideForm' } %>
+  <%= f.submit t('dashboard.file_version_memberships.edit.save'), class: 'btn btn-primary', data: { disable_with: 'Saving...' } %>
+  <%= link_to t('dashboard.file_version_memberships.edit.cancel'),
+              dashboard_work_version_file_list_path(membership.work_version),
+              class: 'btn btn-link',
+              data: { action: 'click->filename-editor#hideForm' } %>
   <div class="alert alert-danger" role="alert" data-target="filename-editor.errorsContainer">
     <ul data-target="filename-editor.errors"></ul>
   </div>
