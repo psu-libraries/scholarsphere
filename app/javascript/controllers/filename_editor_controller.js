@@ -1,13 +1,13 @@
-import { Controller } from "stimulus"
+import { Controller } from 'stimulus'
 
 export default class extends Controller {
   static targets = ['titleStatic', 'form', 'titleField', 'errorsContainer']
 
-  connect() {
+  connect () {
     this.formTarget.style.display = 'none'
   }
 
-  showForm(event) {
+  showForm (event) {
     event && event.preventDefault()
     this.titleFieldTarget.value = this.titleStaticTarget.textContent
     this.formTarget.style.display = ''
@@ -15,27 +15,27 @@ export default class extends Controller {
     this.errorsContainerTarget.style.display = 'none'
   }
 
-  hideForm(event) {
+  hideForm (event) {
     event && event.preventDefault()
     this.formTarget.style.display = 'none'
     this.titleStaticTarget.style.display = ''
   }
 
-  toggleForm(event) {
+  toggleForm (event) {
     this.formTarget.style.display === 'none' ? this.showForm(event) : this.hideForm(event)
   }
 
-  onPostSuccess(event) {
-    let [ fileVersionMembership ] = event.detail
+  onPostSuccess (event) {
+    const [fileVersionMembership] = event.detail
     this.titleStaticTarget.textContent = fileVersionMembership.title
     this.hideForm()
   }
 
-  onPostError(event) {
-    let errorsList = this.errorsContainerTarget.querySelector('ul')
-    let [ errors ] = event.detail
-    let errorFullMessages = Object.keys(errors)
-      .map(attribute => [attribute, errors[attribute]] )
+  onPostError (event) {
+    const errorsList = this.errorsContainerTarget.querySelector('ul')
+    const [errors] = event.detail
+    const errorFullMessages = Object.keys(errors)
+      .map(attribute => [attribute, errors[attribute]])
       .flatMap(([attribute, messages]) => {
         return messages.map(message => `${attribute} ${message}`)
       })
