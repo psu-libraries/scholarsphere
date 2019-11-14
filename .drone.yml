@@ -70,11 +70,6 @@ steps:
   <<: *test_common
   commands:
     - export DOCKER_HOST=unix:///var/run/host.sock
-    # - apk add bind-tools
-    # - export POSTGRES_HOST=$(dig +short postgres)
-    # - export MINIO_HOST=$(dig +short minio)
-    # - export SOLR_HOST=$(dig +short solr)
-    # - export SELENIUM_HOST=$(dig +short selenium)
     - docker create --name test-$DRONE_BUILD_NUMBER --network drone
         -e S3_ENDPOINT=http://minio:9000
         -e AWS_BUCKET=scholarsphere
@@ -194,6 +189,6 @@ volumes:
     path: /var/run/docker.sock
 ---
 kind: signature
-hmac: 795fa4de7feea0b50f6d43e2690b82982532c531656381650515198728970c06
+hmac: d630d78dc587fbcd7da5a2b0247b3a280c709ae1d9b05f5a5cc67a053e4dabc3
 
 ...
