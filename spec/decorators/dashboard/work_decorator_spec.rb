@@ -15,8 +15,8 @@ RSpec.describe Dashboard::WorkDecorator do
     it 'creates version decorators with their indices' do
       allow(Dashboard::WorkVersionDecorator).to receive(:new)
       decorator.versions
-      expect(Dashboard::WorkVersionDecorator).to have_received(:new).with(work.versions[0], 0)
-      expect(Dashboard::WorkVersionDecorator).to have_received(:new).with(work.versions[1], 1)
+      expect(Dashboard::WorkVersionDecorator).to have_received(:new).with(work.versions[0])
+      expect(Dashboard::WorkVersionDecorator).to have_received(:new).with(work.versions[1])
     end
   end
 end

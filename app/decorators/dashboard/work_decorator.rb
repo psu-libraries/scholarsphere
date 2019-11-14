@@ -2,9 +2,8 @@
 
 module Dashboard
   class WorkDecorator < SimpleDelegator
-    # @todo remove with_index once we explicitly store the version index
     def versions
-      super.map.with_index { |version, index| WorkVersionDecorator.new(version, index) }
+      super.map { |version| WorkVersionDecorator.new(version) }
     end
   end
 end

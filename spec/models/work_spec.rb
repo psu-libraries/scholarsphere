@@ -60,6 +60,11 @@ RSpec.describe Work, type: :model do
       expect(work.versions.length).to eq 1
     end
 
+    it 'sets the version number to 1' do
+      work = described_class.build_with_empty_version
+      expect(work.versions.first.version_number).to eq 1
+    end
+
     it 'passes through any arguments provided' do
       work_type = described_class::Types.all.first
       work = described_class.build_with_empty_version(work_type: work_type)

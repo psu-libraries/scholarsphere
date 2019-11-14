@@ -5,6 +5,7 @@ FactoryBot.define do
     work
     aasm_state { WorkVersion::STATE_DRAFT }
     title { generate(:work_title) }
+    sequence(:version_number) { |n| work.present? ? work.versions.length + 1 : n }
 
     trait :with_files do
       transient do

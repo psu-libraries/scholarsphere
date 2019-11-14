@@ -10,6 +10,7 @@ RSpec.describe WorkVersion, type: :model do
     it { is_expected.to have_db_column(:aasm_state) }
     it { is_expected.to have_db_column(:metadata).of_type(:jsonb) }
     it { is_expected.to have_db_column(:uuid).of_type(:uuid) }
+    it { is_expected.to have_db_column(:version_number).of_type(:integer) }
     it { is_expected.to have_jsonb_accessor(:title).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:subtitle).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:keywords).of_type(:string).is_array.with_default([]) }
@@ -68,6 +69,13 @@ RSpec.describe WorkVersion, type: :model do
         work_version.validate
         expect(work_version.errors[:file_resources]).to be_empty
       end
+    end
+
+    context 'with the version number' do
+      before { work_version.version_number = 1 }
+
+      it { is_expected.to validate_uniqueness_of(:version_number).scoped_to(:work_id) }
+      it { is_expected.to validate_presence_of(:version_number) }
     end
   end
 

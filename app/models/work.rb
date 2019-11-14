@@ -52,6 +52,7 @@ class Work < ApplicationRecord
   def self.build_with_empty_version(*args)
     work = new(*args)
     work.versions.build if work.versions.empty?
+    work.versions.first.version_number = 1
     work
   end
 

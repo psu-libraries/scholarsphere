@@ -30,21 +30,8 @@ module Dashboard
     end
 
     def show
-      work_version = policy_scope(WorkVersion).find(params[:id])
-      @work = WorkDecorator.new(work_version.work)
-
-      # @todo remove everything below once WorkVersions know their own version number
-      #
-      # The following is necessary because currently, a WorkVersion does not know
-      # its own version number. (This will change.) Currently, it is assigned down
-      # through the WorkDecorator by iterating through all the WorkVersions on
-      # said work.
-
-      # Get a list of all WorkVersions, decorated with their indexes
-      decorated_work_versions = @work.versions
-
-      # Find this one
-      @work_version = decorated_work_versions.find { |v| v == work_version }
+      @work_version = WorkVersionDecorator.new(policy_scope(WorkVersion).find(params[:id]))
+      @work = WorkDecorator.new(@work_version.work)
     end
 
     def edit
