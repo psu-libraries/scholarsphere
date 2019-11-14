@@ -25,7 +25,7 @@ RSpec.describe 'Dashboard File Management', with_user: :user do
     end
   end
 
-  it 'renames a file inline with JavaScript', with_driver: :selenium_chrome_headless, unless: ci_build? do
+  it 'renames a file inline with JavaScript', js: true do
     visit(dashboard_work_version_file_list_path(work_version))
 
     edited_filename = "EDITED#{File.extname(file_membership.title)}"
