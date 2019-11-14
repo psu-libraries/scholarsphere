@@ -34,7 +34,7 @@ module CapybaraDrivers
     end
 
     def chrome_options
-      { args: ['no-sandbox', 'disable-gpu', 'window-size=1024,768', 'single-process'] }
+      { args: ['headless', 'no-sandbox', 'disable-gpu', 'window-size=1024,768', 'single-process'] }
     end
 
     def mock_auth_hash(user)
