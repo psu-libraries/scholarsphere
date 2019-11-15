@@ -16,8 +16,11 @@ RSpec.configure do |config|
     DatabaseCleaner.clean_with(:truncation)
   end
 
-  config.before do
-    DatabaseCleaner.strategy = :truncation
+  config.before do |example|
+    # Use transaction strategy by default because it's so much faster. However,
+    # it's not compatible with in-browser javascript testing, so fall back to
+    # truncation if the spec that we're about to run is tagged with :js.
+    DatabaseCleaner.strategy = example.metadata[:js] ? :truncation : :transaction
     DatabaseCleaner.start
   end
 
