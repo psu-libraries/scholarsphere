@@ -7,7 +7,7 @@ RSpec.describe 'Publishing a new work' do
   let(:metadata) { MetadataFactory.new.work_version }
   let(:updated_metadata) { MetadataFactory.new.work_version }
 
-  it 'routes the user through the workflow', with_user: :user, js: true  do
+  it 'routes the user through the workflow', with_user: :user, js: true do
     visit(new_dashboard_work_path)
     fill_in('Title', with: metadata[:title])
     click_button('Create Work')

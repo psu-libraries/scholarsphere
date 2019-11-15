@@ -52,3 +52,4 @@ Capybara.javascript_driver = if ci_build?
                               :selenium_remote
                             else
                                :selenium_chrome_headless
+                            end
