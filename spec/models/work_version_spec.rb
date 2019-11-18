@@ -15,17 +15,17 @@ RSpec.describe WorkVersion, type: :model do
     it { is_expected.to have_jsonb_accessor(:subtitle).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:keywords).of_type(:string).is_array.with_default([]) }
     it { is_expected.to have_jsonb_accessor(:rights).of_type(:string) }
-    it { is_expected.to have_jsonb_accessor(:description).of_type(:string) }
-    it { is_expected.to have_jsonb_accessor(:resource_type).of_type(:string) }
-    it { is_expected.to have_jsonb_accessor(:contributor).of_type(:string) }
-    it { is_expected.to have_jsonb_accessor(:publisher).of_type(:string) }
-    it { is_expected.to have_jsonb_accessor(:published_date).of_type(:string) }
-    it { is_expected.to have_jsonb_accessor(:subject).of_type(:string) }
-    it { is_expected.to have_jsonb_accessor(:language).of_type(:string) }
-    it { is_expected.to have_jsonb_accessor(:identifier).of_type(:string) }
-    it { is_expected.to have_jsonb_accessor(:based_near).of_type(:string) }
-    it { is_expected.to have_jsonb_accessor(:related_url).of_type(:string) }
-    it { is_expected.to have_jsonb_accessor(:source).of_type(:string) }
+    it { is_expected.to have_jsonb_accessor(:description).of_type(:string).is_array.with_default([]) }
+    it { is_expected.to have_jsonb_accessor(:resource_type).of_type(:string).is_array.with_default([]) }
+    it { is_expected.to have_jsonb_accessor(:contributor).of_type(:string).is_array.with_default([]) }
+    it { is_expected.to have_jsonb_accessor(:publisher).of_type(:string).is_array.with_default([]) }
+    it { is_expected.to have_jsonb_accessor(:published_date).of_type(:string).is_array.with_default([]) }
+    it { is_expected.to have_jsonb_accessor(:subject).of_type(:string).is_array.with_default([]) }
+    it { is_expected.to have_jsonb_accessor(:language).of_type(:string).is_array.with_default([]) }
+    it { is_expected.to have_jsonb_accessor(:identifier).of_type(:string).is_array.with_default([]) }
+    it { is_expected.to have_jsonb_accessor(:based_near).of_type(:string).is_array.with_default([]) }
+    it { is_expected.to have_jsonb_accessor(:related_url).of_type(:string).is_array.with_default([]) }
+    it { is_expected.to have_jsonb_accessor(:source).of_type(:string).is_array.with_default([]) }
   end
 
   describe 'factory' do
@@ -93,13 +93,22 @@ RSpec.describe WorkVersion, type: :model do
     end
   end
 
-  it { is_expected.to delegate_method(:depositor).to(:work) }
-
-  describe '#keywords=' do
-    subject { described_class.new(keywords: ['', 'thing']) }
-
-    its(:keywords) { is_expected.to contain_exactly('thing') }
+  describe 'multivalued fields' do
+    it_behaves_like 'a multivalued json field', :keywords
+    it_behaves_like 'a multivalued json field', :description
+    it_behaves_like 'a multivalued json field', :resource_type
+    it_behaves_like 'a multivalued json field', :contributor
+    it_behaves_like 'a multivalued json field', :publisher
+    it_behaves_like 'a multivalued json field', :published_date
+    it_behaves_like 'a multivalued json field', :subject
+    it_behaves_like 'a multivalued json field', :language
+    it_behaves_like 'a multivalued json field', :identifier
+    it_behaves_like 'a multivalued json field', :based_near
+    it_behaves_like 'a multivalued json field', :related_url
+    it_behaves_like 'a multivalued json field', :source
   end
+
+  it { is_expected.to delegate_method(:depositor).to(:work) }
 
   describe '#uuid' do
     subject { create(:work_version) }

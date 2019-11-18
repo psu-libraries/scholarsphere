@@ -8,17 +8,17 @@ class WorkVersion < ApplicationRecord
                  subtitle: :string,
                  keywords: [:string, array: true, default: []],
                  rights: :string,
-                 description: :string,
-                 resource_type: :string,
-                 contributor: :string,
-                 publisher: :string,
-                 published_date: :string,
-                 subject: :string,
-                 language: :string,
-                 identifier: :string,
-                 based_near: :string,
-                 related_url: :string,
-                 source: :string
+                 description: [:string, array: true, default: []],
+                 resource_type: [:string, array: true, default: []],
+                 contributor: [:string, array: true, default: []],
+                 publisher: [:string, array: true, default: []],
+                 published_date: [:string, array: true, default: []],
+                 subject: [:string, array: true, default: []],
+                 language: [:string, array: true, default: []],
+                 identifier: [:string, array: true, default: []],
+                 based_near: [:string, array: true, default: []],
+                 related_url: [:string, array: true, default: []],
+                 source: [:string, array: true, default: []]
 
   belongs_to :work,
              inverse_of: :versions
@@ -64,7 +64,20 @@ class WorkVersion < ApplicationRecord
   end
 
   # Fields that can contain multiple values automatically remove blank values
-  [:keywords].each do |array_field|
+  %i[
+    keywords
+    description
+    resource_type
+    contributor
+    publisher
+    published_date
+    subject
+    language
+    identifier
+    based_near
+    related_url
+    source
+  ].each do |array_field|
     define_method "#{array_field}=" do |vals|
       super(strip_blanks_from_array(vals))
     end
