@@ -44,6 +44,8 @@ Rails.application.routes.draw do
 
         get 'publish', to: 'work_versions#publish'
 
+        get 'diff/:previous_version_id', to: 'work_versions#diff', as: :diff
+
         resources :files,
                   controller: :file_version_memberships,
                   only: %i(edit update destroy),

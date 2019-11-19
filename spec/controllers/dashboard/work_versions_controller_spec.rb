@@ -152,6 +152,42 @@ RSpec.describe Dashboard::WorkVersionsController, type: :controller do
     end
   end
 
+  describe 'GET #diff' do
+    let(:work) { create(:work, versions_count: 2, has_draft: false) }
+    let(:work_version) { work.latest_version }
+    let(:previous_version) { work.versions.first }
+
+    let(:perform_request) do
+      get :diff, params: { work_version_id: work_version.to_param, previous_version_id: previous_version.to_param }
+    end
+
+    it_behaves_like 'an authorized dashboard controller'
+
+    context 'when signed in' do
+      before { sign_in user }
+
+      context 'when requesting a diff of two versions that I own' do
+        it 'returns a success response' do
+          perform_request
+          expect(response).to be_successful
+        end
+      end
+
+      context 'when requesting a diff from a version I do not own' do
+        let(:previous_version) { create(:work_version) }
+
+        it do
+          expect {
+            perform_request
+          }.to raise_error(
+            an_instance_of(ActiveRecord::RecordNotFound)
+            .or(an_instance_of(Pundit::NotAuthorizedError))
+          )
+        end
+      end
+    end
+  end
+
   describe 'PATCH #update metadata' do
     let(:invalid_attributes) { { 'title' => '' } }
     let(:valid_attributes) { { 'title' => 'My Edited Title' } }

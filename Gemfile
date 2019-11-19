@@ -10,6 +10,7 @@ gem 'blacklight', github: 'projectblacklight/blacklight', branch: 'master'
 gem 'bootsnap', '>= 1.4.2', require: false
 gem 'bootstrap', '~> 4.0'
 gem 'devise', '~> 4.7'
+gem 'diffy'
 gem 'faraday', '~> 0.17.0'
 gem 'figaro'
 gem 'jbuilder', '~> 2.7'
