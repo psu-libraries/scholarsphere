@@ -1,0 +1,28 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><%= link_to t('dashboard.works.index.heading'), dashboard_works_path %></li>
+    <li class="breadcrumb-item active" aria-current="page"><%= truncate @work_version.title %> (<%= @work_version.display_name %>)</li>
+  </ol>
+</nav>
+
+<h1><%= t('dashboard.diff.heading', work_version: @work_version.title) %></h1>
+<h2>
+  <%= @work_version.display_name %>
+  <%= render partial: 'status_badge', locals: { version: @work_version } %>
+</h2>
+
+<div class="row">
+
+  <div class="col-sm-7">
+    <% @presenter.terms.each do |term| %>
+      <p>
+        <strong><%= WorkVersion.human_attribute_name(term) %>:</strong>
+        <%= @presenter[term].to_s(:html).html_safe %>
+      </p>
+    <% end %>
+  </div>
+
+  <div class="col-sm-5">
+    <%= render partial: 'dashboard/works/sidebar_work', object: @work, locals: { active_version: @work_version } %>
+  </div>
+</div>

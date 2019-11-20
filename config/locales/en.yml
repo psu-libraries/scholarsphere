@@ -76,5 +76,8 @@ en:
         heading: Editing %{title}
         save: Save
         cancel: Cancel
+    diff:
+      link: View diff
+      heading: "Diff: %{work_version}"
 
 

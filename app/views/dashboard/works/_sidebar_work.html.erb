@@ -2,13 +2,20 @@
   <h3><%= sidebar_work.latest_version.title %></h3>
   <h5><%= Work::Types.display(sidebar_work.work_type) %></h5>
   <div class="work-list__versions">
-    <% sidebar_work.versions.each do |version| %>
+    <% sidebar_work.versions.unshift(nil).each_cons(2) do |previous_version, version| %>
       <%- active = version.id == active_version.id -%>
       <div class="work-version <%= 'work-version--active' if active %>">
         <div class="work-version__metadata col">
           <%= link_to version.display_name, dashboard_work_version_path(version) %>
           <%= version.display_date %>
           <%= render partial: 'status_badge', locals: { version: version } %>
+          <%= if previous_version && params['action'] != 'diff'
+                link_to t('dashboard.diff.link'),
+                        dashboard_work_version_diff_path(
+                          work_version_id: version.id,
+                          previous_version_id: previous_version.id
+                        )
+              end %>
         </div>
       </div>
     <% end %>

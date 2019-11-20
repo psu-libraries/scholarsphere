@@ -67,6 +67,13 @@ module Dashboard
       authorize(@work_version)
     end
 
+    def diff
+      @work_version = WorkVersionDecorator.new(policy_scope(WorkVersion).find(params[:work_version_id]))
+      @previous_version = WorkVersionDecorator.new(policy_scope(WorkVersion).find(params[:previous_version_id]))
+      @work = WorkDecorator.new(@work_version.work)
+      @presenter = DiffPresenter.new(MetadataDiff.call(@previous_version, @work_version))
+    end
+
     private
 
       def update_publish
