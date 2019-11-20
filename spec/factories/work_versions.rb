@@ -33,5 +33,23 @@ FactoryBot.define do
       able_to_be_published
       aasm_state { WorkVersion::STATE_PUBLISHED }
     end
+
+    trait :with_complete_metadata do
+      title { Faker::Book.title }
+      subtitle { FactoryBotHelpers.work_title }
+      keywords { Faker::Science.element }
+      rights { Faker::Lorem.sentence }
+      description { Faker::Lorem.paragraph }
+      resource_type { Faker::House.furniture }
+      contributor { Faker::Artist.name }
+      publisher { Faker::Book.publisher }
+      published_date { Faker::Date.between(from: 2.years.ago, to: Date.today).iso8601 }
+      subject { Faker::Book.genre }
+      language { Faker::Nation.language }
+      identifier { Faker::Number.leading_zero_number(digits: 10) }
+      based_near { FactoryBotHelpers.fancy_geo_location }
+      related_url { Faker::Internet.url }
+      source { Faker::SlackEmoji.emoji }
+    end
   end
 end

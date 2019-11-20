@@ -5,9 +5,8 @@ require 'rails_helper'
 RSpec.describe MetadataDiff do
   subject(:diff) { described_class.call(first, second) }
 
-  let(:work) { build(:work, versions_count: 2, has_draft: false) }
-  let(:first) { work.versions[0] }
-  let(:second) { work.versions[1] }
+  let(:first) { build(:work_version) }
+  let(:second) { build(:work_version) }
 
   it { is_expected.to be_a(HashWithIndifferentAccess) }
 

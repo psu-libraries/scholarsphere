@@ -31,3 +31,7 @@ RSpec/ExampleLength:
 RSpec/MultipleExpectations:
   Enabled:
     false
+
+RSpec/EmptyLineAfterSubject:
+  Exclude:
+    - 'spec/factories/work_versions.rb'

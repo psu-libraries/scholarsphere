@@ -80,6 +80,9 @@ class CatalogController < ApplicationController
     # case sensitive when searching values)
 
     config.add_facet_field 'aasm_state_tesim', label: 'Status'
+    config.add_facet_field 'keywords_tesim', label: 'Keywords'
+    config.add_facet_field 'resouce_type_tesim', label: 'Resource Type'
+    config.add_facet_field 'subject_tesim', label: 'Subject'
 
     # Example pivot facet
     # config.add_facet_field 'example_pivot_field', label: 'Pivot Field', pivot: ['format', 'language_ssim']
@@ -100,11 +103,32 @@ class CatalogController < ApplicationController
     #   The ordering of the field names is the order of the display
     config.add_index_field 'title_tesim', label: 'Title'
     config.add_index_field 'aasm_state_tesim', label: 'Status'
+    config.add_index_field 'keywords_tesim', label: 'Keywords'
+    config.add_index_field 'resource_type_tesim', label: 'Resource Type'
+    config.add_index_field 'created_at_dtsi', label: 'Date Created'
 
     # solr fields to be displayed in the show (single result) view
     #   The ordering of the field names is the order of the display
     config.add_show_field 'title_tesim', label: 'Title'
     config.add_show_field 'aasm_state_tesim', label: 'Status'
+    config.add_show_field 'keywords_tesim', label: 'Keywords'
+    config.add_show_field 'subtitle_tesim', label: 'Subtitle'
+    config.add_show_field 'rights_tesim', label: 'Rights'
+    config.add_show_field 'description_tesim', label: 'Description'
+    config.add_show_field 'resource_type_tesim', label: 'Resource Type'
+    config.add_show_field 'contributor_tesim', label: 'Contributor'
+    config.add_show_field 'publisher_tesim', label: 'Publisher'
+    config.add_show_field 'published_date_tesim', label: 'Published Date'
+    config.add_show_field 'subject_tesim', label: 'Subject'
+    config.add_show_field 'language_tesim', label: 'Language'
+    config.add_show_field 'identifier_tesim', label: 'Identifier'
+    config.add_show_field 'based_near_tesim', label: 'Based Near'
+    config.add_show_field 'related_url_tesim', label: 'Related URL'
+    config.add_show_field 'source_tesim', label: 'Source'
+    config.add_show_field 'version_number_isi', label: 'Version Number'
+    config.add_show_field 'version_name_tesim', label: 'Version Name'
+    config.add_show_field 'created_at_dtsi', label: 'Date Created'
+    config.add_show_field 'updated_at_dtsi', label: 'Last Updated'
 
     # "fielded" search configuration. Used by pulldown among other places.
     # For supported keys in hash, see rdoc for Blacklight::SearchFields

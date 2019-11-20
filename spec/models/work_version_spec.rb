@@ -108,6 +108,12 @@ RSpec.describe WorkVersion, type: :model do
     it_behaves_like 'a multivalued json field', :source
   end
 
+  describe 'singlevalued fields' do
+    it_behaves_like 'a singlevalued json field', :subtitle
+    it_behaves_like 'a singlevalued json field', :rights
+    it_behaves_like 'a singlevalued json field', :version_name
+  end
+
   it { is_expected.to delegate_method(:depositor).to(:work) }
 
   describe '#uuid' do

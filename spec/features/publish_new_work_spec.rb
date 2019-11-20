@@ -4,8 +4,8 @@ require 'rails_helper'
 
 RSpec.describe 'Publishing a new work' do
   let(:user) { create(:user) }
-  let(:metadata) { MetadataFactory.new.work_version }
-  let(:updated_metadata) { MetadataFactory.new.work_version }
+  let(:metadata) { attributes_for(:work_version, :with_complete_metadata) }
+  let(:updated_metadata) { attributes_for(:work_version, :with_complete_metadata) }
 
   it 'routes the user through the workflow', with_user: :user, js: true do
     visit(new_dashboard_work_path)

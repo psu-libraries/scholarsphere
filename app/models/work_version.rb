@@ -83,6 +83,12 @@ class WorkVersion < ApplicationRecord
     end
   end
 
+  %i[subtitle version_name rights].each do |field|
+    define_method "#{field}=" do |val|
+      super(val) unless val.empty?
+    end
+  end
+
   # @note Calls our indexer to add the work version to Solr and commits the results to the index.
   # Newly created records won't have their uuid until they're reloaded from Postgres, which creates the uuids for us.
   def update_index
