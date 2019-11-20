@@ -21,21 +21,24 @@ FactoryBot.define do
       num_published_to_build = evaluator.versions_count - num_drafts_to_build
 
       num_published_to_build.times do |n|
-        work.versions << build(:work_version, :published, work: work, version_number: (n + 1))
+        work.versions << build(:work_version,
+                               :published,
+                               :with_complete_metadata,
+                               work: work,
+                               version_number: (n + 1))
       end
 
       if evaluator.has_draft
-        work.versions << build(:work_version, :draft, work: work, version_number: (num_published_to_build + 1))
+        work.versions << build(:work_version,
+                               :draft,
+                               :with_complete_metadata,
+                               work: work,
+                               version_number: (num_published_to_build + 1))
       end
     end
   end
 
   sequence(:work_title) do |n|
-    a = Faker::Lorem.words(number: rand(1..5)).join(' ').capitalize
-    b = Faker::Lorem.words.join(', ')
-    c = Faker::Lorem.words.join("'s ")
-    id = n.ordinalize
-
-    %(#{a}: "#{b}; #{id} #{c}")
+    FactoryBotHelpers.work_title(n)
   end
 end
