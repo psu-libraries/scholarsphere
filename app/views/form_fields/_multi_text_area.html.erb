@@ -1,0 +1,10 @@
+<% terms = form.object.send(attribute).empty? ? [''] : form.object.send(attribute) %>
+
+<div class="form-group" data-controller="multiple-fields">
+  <%= form.label attribute %>
+  <% terms.each do |term| %>
+    <div class="input-group">
+      <%= form.text_area attribute, multiple: true, value: term, class: 'form-control' %>
+    </div>
+  <% end %>
+</div>

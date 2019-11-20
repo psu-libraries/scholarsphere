@@ -109,20 +109,20 @@ module Dashboard
           .permit(
             :title,
             :subtitle,
-            { keywords: [] },
             :rights,
-            :description,
-            :resource_type,
-            :contributor,
-            :publisher,
-            :published_date,
-            :subject,
-            :language,
-            :identifier,
-            :based_near,
-            :related_url,
-            :source,
-            :version_name
+            :version_name,
+            keywords: [],
+            description: [],
+            resource_type: [],
+            contributor: [],
+            publisher: [],
+            published_date: [],
+            subject: [],
+            language: [],
+            identifier: [],
+            based_near: [],
+            related_url: [],
+            source: []
           )
       end
 

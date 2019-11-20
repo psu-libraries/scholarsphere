@@ -6,6 +6,14 @@ module FeatureHelpers
     OmniAuth.config.mock_auth[:psu] = mock_auth_hash(user) if user.present?
   end
 
+  def retry_click(count: 0)
+    count = count + 1
+    yield
+  rescue Selenium::WebDriver::Error::WebDriverError => e
+    retry if count < 20
+    raise e
+  end
+
   private
 
     def mock_auth_hash(user)
