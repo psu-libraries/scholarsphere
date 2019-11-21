@@ -45,9 +45,7 @@ RSpec.describe 'Blacklight catalog page' do
     end
 
     # Show a random record
-    within(page.all('h3', text: record[:title]).first) do
-      click_link(record[:title])
-    end
+    visit(solr_document_path(record[:uuid]))
     expect(page).to have_blacklight_label('title_tesim')
     expect(page).to have_blacklight_label('aasm_state_tesim')
     expect(page).to have_blacklight_label('keywords_tesim')
