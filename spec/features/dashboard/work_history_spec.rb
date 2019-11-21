@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Dashboard Work History', with_user: :user do
+RSpec.describe 'Dashboard Work History', with_user: :user, versioning: true do
   let(:user) { create :user }
   let(:work) { create :work, versions_count: 2, has_draft: true, depositor: user }
 

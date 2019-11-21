@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe WorkHistoryPresenter do
+RSpec.describe WorkHistoryPresenter, versioning: true do
   let(:presenter) { described_class.new(work) }
 
   let(:user) { create :user }

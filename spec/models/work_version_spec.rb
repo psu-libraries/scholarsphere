@@ -36,6 +36,7 @@ RSpec.describe WorkVersion, type: :model do
     it { is_expected.to belong_to(:work) }
     it { is_expected.to have_many(:file_version_memberships) }
     it { is_expected.to have_many(:file_resources).through(:file_version_memberships) }
+    it { is_expected.to be_versioned }
 
     it { is_expected.to accept_nested_attributes_for(:file_resources) }
   end

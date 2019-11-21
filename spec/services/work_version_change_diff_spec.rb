@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe WorkVersionChangeDiff do
+RSpec.describe WorkVersionChangeDiff, versioning: true do
   subject(:diff) { described_class.call(last_paper_trail_version) }
 
   let(:work_version) { create :work_version }
