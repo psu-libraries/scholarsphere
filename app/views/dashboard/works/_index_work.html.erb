@@ -1,6 +1,9 @@
 <div class="work-list__work">
   <h3><%= index_work.latest_version.title %></h3>
-  <h5><%= Work::Types.display(index_work.work_type) %></h5>
+  <h5>
+    <%= Work::Types.display(index_work.work_type) %>
+    <%= link_to 'History', dashboard_work_history_path(index_work) %>
+  </h5>
   <div class="work-list__versions">
     <% index_work.versions.unshift(nil).each_cons(2) do |previous_version, version| %>
       <div class="work-version row">

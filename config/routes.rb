@@ -51,6 +51,8 @@ Rails.application.routes.draw do
                   only: %i(edit update destroy),
                   shallow: true
       end
+
+      get 'history', to: 'work_histories#show'
     end
   end
 end

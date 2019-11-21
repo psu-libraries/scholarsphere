@@ -1,0 +1,25 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><%= link_to t('dashboard.works.index.heading'), dashboard_works_path %></li>
+    <li class="breadcrumb-item active" aria-current="page">
+      <%= t('dashboard.work_history.heading', work: truncate(@latest_work_version.title)) %>
+    </li>
+  </ol>
+</nav>
+
+<h1><%= t('dashboard.work_history.heading', work: @latest_work_version.title) %></h1>
+
+<div class="work-history">
+  <% @work_history.changes_by_work_version.each do |work_version, changes| %>
+    <h3>
+      <%= work_version.display_name %>
+      <%= render partial: 'dashboard/work_versions/status_badge', locals: { version: work_version } %>
+    </h3>
+
+    <div id="work_version_changes_<%= work_version.id %>" class="work-history__changes">
+      <% changes.each do |change_presenter| %>
+        <%= render partial: change_presenter.to_partial_path, locals: { change: change_presenter } %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

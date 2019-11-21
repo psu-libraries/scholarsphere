@@ -1,6 +1,6 @@
-@import 'bootstrap';
+@import 'bootstrap/functions';
 @import 'bootstrap/variables';
-@import 'bootstrap/mixins/badge';
+@import 'bootstrap/mixins';
 
 .version-status--draft { @include badge-variant($primary); }
 .version-status--published { @include badge-variant($secondary); }
