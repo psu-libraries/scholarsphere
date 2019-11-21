@@ -5,9 +5,8 @@ require 'rails_helper'
 RSpec.describe DiffPresenter do
   subject(:presenter) { described_class.new(MetadataDiff.call(first, second)) }
 
-  let(:work) { create(:work, versions_count: 2, has_draft: false) }
-  let(:first) { work.versions[0] }
-  let(:second) { work.versions[1] }
+  let(:first) { build(:work_version) }
+  let(:second) { build(:work_version) }
 
   describe '#terms' do
     its(:terms) { is_expected.to contain_exactly('title') }
