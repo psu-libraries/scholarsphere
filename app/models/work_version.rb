@@ -86,7 +86,7 @@ class WorkVersion < ApplicationRecord
 
   %i[subtitle version_name rights].each do |field|
     define_method "#{field}=" do |val|
-      super(val) unless val.empty?
+      super(val.presence)
     end
   end
 
