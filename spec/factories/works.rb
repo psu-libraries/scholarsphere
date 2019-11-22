@@ -5,6 +5,9 @@ FactoryBot.define do
     association :depositor, factory: :user
     work_type { Work::Types.all.first }
 
+    # Postgres does this for us, but for testing, we can do it here to save having to call create/reload.
+    uuid { SecureRandom.uuid }
+
     transient do
       has_draft { true }
       versions_count { 1 }

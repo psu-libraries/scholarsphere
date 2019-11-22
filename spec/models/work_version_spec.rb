@@ -51,7 +51,7 @@ RSpec.describe WorkVersion, type: :model do
   end
 
   describe 'validations' do
-    subject(:work_version) { described_class.new }
+    subject(:work_version) { build(:work_version) }
 
     context 'when draft' do
       it { is_expected.to validate_presence_of(:title) }
@@ -80,20 +80,6 @@ RSpec.describe WorkVersion, type: :model do
     end
   end
 
-  describe 'indexing' do
-    subject { SolrDocument.find(work_version.uuid) }
-
-    let(:work_version) { create(:work_version) }
-
-    its(:to_h) do
-      is_expected.to include(
-        'title_tesim' => [work_version.title],
-        'id' => work_version.uuid,
-        'model_ssi' => 'WorkVersion'
-      )
-    end
-  end
-
   describe 'multivalued fields' do
     it_behaves_like 'a multivalued json field', :keywords
     it_behaves_like 'a multivalued json field', :description
@@ -118,8 +104,67 @@ RSpec.describe WorkVersion, type: :model do
   it { is_expected.to delegate_method(:depositor).to(:work) }
 
   describe '#uuid' do
-    subject { create(:work_version) }
+    subject(:work_version) { create(:work_version) }
+
+    before { work_version.reload }
 
     its(:uuid) { is_expected.to match(/[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}/) }
+  end
+
+  describe '#latest_published_version?' do
+    subject { work.versions.last }
+
+    context 'when there is no published version' do
+      let(:work) { create(:work) }
+
+      it { is_expected.not_to be_latest_published_version }
+    end
+
+    context 'when there is a published version' do
+      let(:work) { create(:work, versions_count: 2, has_draft: false) }
+
+      it { is_expected.to be_latest_published_version }
+    end
+  end
+
+  describe '#to_solr' do
+    subject(:work_version) { create(:work_version) }
+
+    its(:to_solr) do
+      is_expected.to include(
+        title_tesim: [work_version.title],
+        latest_version_bsi: false,
+        work_type_tesim: 'dataset'
+      )
+    end
+  end
+
+  describe '#update_index' do
+    let(:work_version) { described_class.new }
+
+    before do
+      allow(WorkIndexer).to receive(:call)
+      allow(work_version).to receive(:reload)
+    end
+
+    context 'when the uuid is nil' do
+      before { allow(work_version).to receive(:uuid).and_return(nil) }
+
+      it 'reloads the version and calls the WorkIndexer' do
+        work_version.update_index
+        expect(work_version).to have_received(:reload)
+        expect(WorkIndexer).to have_received(:call)
+      end
+    end
+
+    context 'when the uuid is present' do
+      before { allow(work_version).to receive(:uuid).and_return(SecureRandom.uuid) }
+
+      it 'does NOT reload the version and calls the WorkIndexer' do
+        work_version.update_index
+        expect(work_version).not_to have_received(:reload)
+        expect(WorkIndexer).to have_received(:call)
+      end
+    end
   end
 end

@@ -7,6 +7,9 @@ FactoryBot.define do
     title { generate(:work_title) }
     sequence(:version_number) { |n| work.present? ? work.versions.length + 1 : n }
 
+    # Postgres does this for us, but for testing, we can do it here to save having to call create/reload.
+    uuid { SecureRandom.uuid }
+
     trait :with_files do
       transient do
         file_count { 1 }

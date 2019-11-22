@@ -46,7 +46,7 @@ class WorkVersion < ApplicationRecord
             presence: true,
             uniqueness: { scope: :work_id }
 
-  after_save :update_index
+  after_save :update_index, if: :published?
 
   aasm do
     state :draft, intial: true
@@ -91,12 +91,25 @@ class WorkVersion < ApplicationRecord
     end
   end
 
-  # @note Calls our indexer to add the work version to Solr and commits the results to the index.
-  # Newly created records won't have their uuid until they're reloaded from Postgres, which creates the uuids for us.
+  def to_solr
+    SolrDocumentBuilder.call(resource: self).merge(
+      latest_version_bsi: latest_published_version?,
+      work_type_tesim: work.work_type
+    )
+  end
+
+  def latest_published_version?
+    work.latest_published_version.try(:id) == id
+  end
+
+  # @note Postgres mints uuids, but they are not present until the record is reloaded from the database.  In most cases,
+  # this won't present a problem because we only index published versions, and at that point, the version will have
+  # already been saved and reloaded from the database. However, there could be edge cases or other unforseen siutations
+  # where the uuid is nil and the version needs to be indexed. Reloading it from Postgres will avoid those problems.
   def update_index
     reload if uuid.nil?
 
-    IndexingService.call(resource: self, commit: true)
+    WorkIndexer.call(work, commit: true)
   end
 
   delegate :depositor, to: :work
