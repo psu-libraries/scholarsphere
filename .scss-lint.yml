@@ -19,3 +19,7 @@ severity: warning
 linters:
   SelectorFormat:
     convention: hyphenated_BEM
+  NestingDepth:
+    exclude: app/assets/stylesheets/progress_indicator.scss
+  ImportantRule:
+    exclude: app/assets/stylesheets/progress_indicator.scss

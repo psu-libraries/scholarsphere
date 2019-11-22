@@ -1,0 +1,84 @@
+@import 'bootstrap/functions';
+@import 'bootstrap/variables';
+
+$complete: $primary;
+$active: $primary;
+$mute: $gray-300;
+$background: $body-bg;
+
+.progress-indicator {
+  color: darken($mute, 33%);
+  display: table;
+  font-size: 1em;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  table-layout: fixed;
+  width: 100%;
+
+  > li {
+    display: table-cell;
+    font-size: .8em;
+    position: relative;
+    text-align: center;
+
+    &::before {
+      background: $mute;
+      border: .25em solid $background;
+      border-radius: 100%;
+      content: attr(data-step);
+      display: block;
+      height: 3em;
+      line-height: 2.5em;
+      margin: 0 auto;
+      margin-bottom: .25em;
+      position: relative;
+      text-align: center; //IE8 doesn't inherit this style
+      width: 3em;
+      z-index: 1000;
+    }
+
+    &::after {
+      background: $mute;
+      content: '';
+      display: block;
+      height: .5em;
+      left: 50%;
+      margin-left: 1.5em;
+      position: absolute;
+      top: 1.25em;
+      width: 100%;
+      z-index: 100;
+    }
+
+    &:last-child::after {
+      display: none;
+    }
+
+    &.is-complete {
+      color: $complete;
+
+      &::before,
+      &::after {
+        background: $complete;
+        color: $background;
+      }
+    }
+
+    &.is-active {
+      color: $active;
+
+      &::before {
+        background: $active;
+        color: $background;
+      }
+    }
+  }
+}
+
+//
+// Needed for IE8
+//
+.progress__last::after {
+  display: none !important;
+}
