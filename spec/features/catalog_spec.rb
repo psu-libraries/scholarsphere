@@ -5,24 +5,35 @@ require 'rails_helper'
 RSpec.describe 'Blacklight catalog page' do
   let(:user) { create(:user) }
 
-  let!(:works) do
+  # Create an array of all the latest published work versions. Some works may only have a draft, so we want to exclude
+  # those. Using `compact` removes them because `latest_published_version` returns nil.
+  let(:records) do
+    Work.all.map(&:latest_published_version).compact.map do |work_version|
+      HashWithIndifferentAccess.new(work_version.attributes)
+    end
+  end
+
+  # Select a random work version for inspection.
+  let(:record) do
+    records.sample
+  end
+
+  # Links to the catalog record are based on the work's uuid, and not the work version. This returns the uuid
+  # of the work associated with our random work version.
+  let(:record_uuid) do
+    WorkVersion.where(uuid: record[:uuid]).first.work.uuid
+  end
+
+  before do
     Array.new(10).map do
       FactoryBot.create(:work, depositor: user, versions_count: rand(1..5), has_draft: true)
     end
   end
 
-  let(:records) do
-    works.map { |work| HashWithIndifferentAccess.new(work.latest_version.attributes) }
-  end
-
-  let(:record) do
-    records.sample
-  end
-
   it 'displays the search form and facets' do
     visit search_catalog_path
     click_button('Search')
-    expect(page).to have_content("1 - 10 of #{WorkVersion.count}")
+    expect(page).to have_content("1 - #{records.count} of #{records.count}")
 
     # Check facets
     expect(page).to have_selector('h3', text: 'Status')
@@ -41,11 +52,11 @@ RSpec.describe 'Blacklight catalog page' do
       expect(page).to have_blacklight_field('aasm_state_tesim').with(work[:status])
       expect(page).to have_blacklight_field('keywords_tesim').with(work[:keywords].join(', '))
       expect(page).to have_blacklight_field('resource_type_tesim').with(work[:resource_type].join(', '))
-      expect(page).to have_blacklight_field('created_at_dtsi').with(work[:created_at].iso8601)
+      expect(page).to have_blacklight_field('created_at_dtsi').with(/^#{work[:created_at].strftime("%F")}/)
     end
 
     # Show a random record
-    visit(solr_document_path(record[:uuid]))
+    visit(solr_document_path(record_uuid))
     expect(page).to have_blacklight_label('title_tesim')
     expect(page).to have_blacklight_label('aasm_state_tesim')
     expect(page).to have_blacklight_label('keywords_tesim')
