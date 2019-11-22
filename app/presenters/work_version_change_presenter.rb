@@ -39,7 +39,9 @@ class WorkVersionChangePresenter
   def changed_attributes
     return [] unless update?
 
-    diff.keys
+    diff.keys.map do |attr|
+      WorkVersion.human_attribute_name(attr)
+    end
   end
 
   def changed_attributes_truncated(count = 3)

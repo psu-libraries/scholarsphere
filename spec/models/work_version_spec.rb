@@ -5,7 +5,6 @@ require 'rails_helper'
 RSpec.describe WorkVersion, type: :model do
   describe 'table' do
     it { is_expected.to have_db_column(:work_id) }
-    it { is_expected.to have_db_column(:version_name) }
     it { is_expected.to have_db_index(:work_id) }
     it { is_expected.to have_db_column(:aasm_state) }
     it { is_expected.to have_db_column(:metadata).of_type(:jsonb) }
@@ -13,6 +12,7 @@ RSpec.describe WorkVersion, type: :model do
     it { is_expected.to have_db_column(:version_number).of_type(:integer) }
     it { is_expected.to have_jsonb_accessor(:title).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:subtitle).of_type(:string) }
+    it { is_expected.to have_jsonb_accessor(:version_name).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:keywords).of_type(:string).is_array.with_default([]) }
     it { is_expected.to have_jsonb_accessor(:rights).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:description).of_type(:string).is_array.with_default([]) }
