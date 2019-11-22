@@ -54,10 +54,6 @@ en:
         heading: Publishing Work Version
         agreement: I agree to all the stuff I need to to make this work
         error_message: "%{error} prohibited this work from being saved:"
-        create: Create
-        add_files: Add Files
-        add_metadata: Add Metadata
-        publish: Publish
     file_list:
       edit:
         heading: File Listing
@@ -65,10 +61,6 @@ en:
         size: Size
         mime_type: Mime Type
         actions: Actions
-        create: Create
-        add_files: Add Files
-        add_metadata: Add Metadata
-        publish: Publish
         rename: Rename
         delete: Delete
     file_version_memberships:

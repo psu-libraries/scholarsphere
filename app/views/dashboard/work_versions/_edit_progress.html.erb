@@ -1,0 +1,21 @@
+<%- active_class = 'is-active' -%>
+<%- completed_class = 'is-complete' -%>
+
+<div class="row">
+  <div class="col">
+    <ol class="progress-indicator">
+      <li data-step="1" class="<%= active_class if step == 1 %> <%= completed_class if step > 1 %>">
+        <%= link_to_unless_current t('dashboard.work_versions.edit.add_files'),
+                                   dashboard_work_version_file_list_path(work_version) %>
+      </li>
+      <li data-step="2" class="<%= active_class if step == 2 %> <%= completed_class if step > 2 %>">
+        <%= link_to_unless_current t('dashboard.work_versions.edit.add_metadata'),
+                                   edit_dashboard_work_version_path(work_version) %>
+      </li>
+      <li data-step="3" class="<%= active_class if step == 3 %> <%= completed_class if step > 3 %>" class="progress__last">
+        <%= link_to_unless_current t('dashboard.work_versions.edit.publish'),
+                                   dashboard_work_version_publish_path(work_version) %>
+      </li>
+    </ol>
+  </div>
+</div>

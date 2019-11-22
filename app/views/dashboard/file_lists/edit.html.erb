@@ -11,16 +11,7 @@
   </ol>
 </nav>
 
-<div class="row">
-  <div class="col">
-    <ol class="progress-indicator">
-      <li class="is-complete" data-step="1"><%= t('dashboard.file_list.edit.create') %></li>
-      <li class="is-active" data-step="2"><%= t('dashboard.file_list.edit.add_files') %></li>
-      <li data-step="3"><%= t('dashboard.file_list.edit.add_metadata') %></li>
-      <li data-step="4" class="progress__last"><%= t('dashboard.file_list.edit.publish') %></li>
-    </ol>
-  </div>
-</div>
+<%= render 'dashboard/work_versions/edit_progress', step: 1, work_version: @work_version %>
 
 <div class="row">
   <div class="col">
