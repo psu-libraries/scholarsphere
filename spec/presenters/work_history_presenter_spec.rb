@@ -18,6 +18,14 @@ RSpec.describe WorkHistoryPresenter, versioning: true do
     PaperTrail.request.whodunnit = user.id
   end
 
+  describe '#latest_work_version' do
+    it 'returns a decorated version of the latest work version' do
+      latest = presenter.latest_work_version
+      expect(latest).to be_a(Dashboard::WorkVersionDecorator)
+      expect(latest.title).to eq work.latest_version.title
+    end
+  end
+
   describe '#changes_by_work_version' do
     subject(:changes_by_work_version) { presenter.changes_by_work_version }
 
@@ -35,6 +43,21 @@ RSpec.describe WorkHistoryPresenter, versioning: true do
       # Spot check that one presenter is instantiated correctly
       changes.first.tap do |change|
         expect(change.user).to eq user
+      end
+    end
+
+    context 'when the PaperTrail::Version `whodunnit` user cannot be found' do
+      before do
+        PaperTrail.request.whodunnit = nil
+      end
+
+      it 'provides a null-object User model to the presenters' do
+        _version, changes = changes_by_work_version.first
+
+        changes.first.tap do |change|
+          expect(change.user.id).to be_nil
+          expect(change.user).to be_readonly
+        end
       end
     end
   end

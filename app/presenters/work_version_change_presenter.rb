@@ -63,7 +63,7 @@ class WorkVersionChangePresenter
 
   def publish?
     paper_trail_version.event == 'update' &&
-      paper_trail_version.object_changes.fetch('aasm_state', []).last.to_s == WorkVersion::STATE_PUBLISHED.to_s
+      paper_trail_version.object_changes.fetch('aasm_state', []).last == WorkVersion::STATE_PUBLISHED
   end
 
   private

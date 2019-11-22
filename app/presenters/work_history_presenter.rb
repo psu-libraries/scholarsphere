@@ -11,6 +11,10 @@ class WorkHistoryPresenter
     @user_lookup_cache = {}
   end
 
+  def latest_work_version
+    @latest_work_version ||= Dashboard::WorkVersionDecorator.new(work.latest_version)
+  end
+
   # @returns a two dimensional array, where dimension 1 is all the WorkVersion
   # objects in the given Work, and dimension 2 is all the changes affecting that
   # WorkVersion returned as presenter objects
@@ -32,6 +36,8 @@ class WorkHistoryPresenter
   end
 
   private
+
+    attr_reader :user_lookup_cache
 
     def load_changes
       work
@@ -61,8 +67,6 @@ class WorkHistoryPresenter
     # Null Object Pattern here used to prevent "undefined method x for nil" in
     # the view
     def null_user
-      User.new
+      User.new.tap(&:readonly!)
     end
-
-    attr_reader :user_lookup_cache
 end
