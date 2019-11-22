@@ -79,5 +79,7 @@ en:
     diff:
       link: View diff
       heading: "Diff: %{work_version}"
-
-
+    work_history:
+      heading: "History of %{work}"
+      show_diff: Show Changes
+      by: by

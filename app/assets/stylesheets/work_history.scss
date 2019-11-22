@@ -1,0 +1,64 @@
+@import 'bootstrap/functions';
+@import 'bootstrap/variables';
+
+.work-history {
+  position: relative;
+
+  &::before {
+    background-color: $gray-400;
+    bottom: 0;
+    content: '';
+    display: block;
+    left: 8px;
+    position: absolute;
+    top: 0;
+    width: 2px;
+    z-index: -1;
+  }
+
+  h3 {
+    background-color: $white;
+  }
+}
+
+.work-history__change {
+  margin-bottom: $paragraph-margin-bottom;
+  margin-left: 19px;
+  position: relative;
+
+  &::before {
+    background: $white;
+    border: 2px solid $gray-400;
+    border-radius: 50%;
+    content: '';
+    display: inline-block;
+    height: 10px;
+    left: -15px;
+    position: absolute;
+    top: .5rem;
+    width: 10px;
+    z-index: 400;
+  }
+}
+
+.work-history__change-metadata {
+  color: $gray-700;
+  font-size: .8rem;
+}
+
+.work-history__diff {
+  border-bottom: 1px solid $gray-400;
+  border-top: 1px solid $gray-400;
+
+  p {
+    margin-bottom: 0;
+  }
+}
+
+.btn-group-xs > .btn,
+.btn-xs {
+  border-radius: .2rem;
+  font-size: .875rem;
+  line-height: .5;
+  padding: .25rem .4rem;
+}
