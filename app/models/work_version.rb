@@ -7,6 +7,7 @@ class WorkVersion < ApplicationRecord
   jsonb_accessor :metadata,
                  title: :string,
                  subtitle: :string,
+                 version_name: :string,
                  keywords: [:string, array: true, default: []],
                  rights: :string,
                  description: [:string, array: true, default: []],
