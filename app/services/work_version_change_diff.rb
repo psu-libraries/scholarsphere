@@ -13,7 +13,7 @@
 # the metadata.
 #
 # @example Given a PaperTrail::Version of a WorkVersion where title was updated:
-#   >  MetadataDiff(paper_trail_version)
+#   >  WorkVersionChangeDiff(paper_trail_version)
 #   => { title: ["Original title", "Updated title"] }
 class WorkVersionChangeDiff
   def self.call(paper_trail_version, options = {})
