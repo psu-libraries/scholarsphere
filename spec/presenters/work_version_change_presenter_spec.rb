@@ -68,14 +68,14 @@ RSpec.describe WorkVersionChangePresenter do
         allow(paper_trail_version).to receive(:event).and_return('update')
         allow(paper_trail_version).to receive(:object_changes).and_return(
           'metadata' => [
-            { 'title' => 'old', 'subtitle' => 'old' },
-            { 'title' => 'new', 'subtitle' => 'new' }
+            { 'title' => 'old', 'version_name' => 'old' },
+            { 'title' => 'new', 'version_name' => 'new' }
           ]
         )
       end
 
-      it 'returns an array of all metadata attributes that have changed' do
-        expect(presenter.changed_attributes).to contain_exactly('title', 'subtitle')
+      it 'returns an array of humanized metadata attributes that have changed' do
+        expect(presenter.changed_attributes).to contain_exactly('Title', 'Version Name')
       end
     end
 
@@ -102,7 +102,7 @@ RSpec.describe WorkVersionChangePresenter do
 
       it 'returns an abbreviated list of them' do
         expect(presenter.changed_attributes_truncated).to contain_exactly(
-          'title', 'subtitle', 'description', 'and 2 more'
+          'Title', 'Subtitle', 'Description', 'and 2 more'
         )
       end
     end
