@@ -136,6 +136,7 @@ ActiveRecord::Schema.define(version: 2019_11_22_162529) do
     t.integer "depositor_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.uuid "uuid", default: -> { "uuid_generate_v4()" }
     t.index ["depositor_id"], name: "index_works_on_depositor_id"
   end
 

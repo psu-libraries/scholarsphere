@@ -56,6 +56,11 @@ class Work < ApplicationRecord
     work
   end
 
+  def self.reindex_all
+    find_each { |work| WorkIndexer.call(work, commit: false) }
+    IndexingService.commit
+  end
+
   def latest_version
     versions.last
   end
@@ -66,5 +71,11 @@ class Work < ApplicationRecord
 
   def draft_version
     versions.draft.last
+  end
+
+  def to_solr
+    SolrDocumentBuilder.call(resource: latest_published_version)
+      .merge(SolrDocumentBuilder.call(resource: self))
+      .except(:latest_version_bsi)
   end
 end

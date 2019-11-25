@@ -7,6 +7,7 @@ RSpec.describe Work, type: :model do
     it { is_expected.to have_db_column(:work_type).of_type(:string) }
     it { is_expected.to have_db_column(:depositor_id) }
     it { is_expected.to have_db_index(:depositor_id) }
+    it { is_expected.to have_db_column(:uuid).of_type(:uuid) }
   end
 
   describe 'factories' do
@@ -122,6 +123,81 @@ RSpec.describe Work, type: :model do
 
         its(:draft_version) { is_expected.to be_nil }
       end
+    end
+  end
+
+  describe '#to_solr' do
+    context 'when the work only has a draft version' do
+      subject { build(:work).to_solr }
+
+      its(:keys) do
+        is_expected.to contain_exactly(
+          'created_at_dtsi',
+          'depositor_id_isi',
+          'id',
+          'model_ssi',
+          'updated_at_dtsi',
+          'uuid_ssi',
+          'work_type_tesim'
+        )
+      end
+    end
+
+    context 'when the work has a published version' do
+      subject { create(:work, has_draft: false).to_solr }
+
+      its(:keys) do
+        is_expected.to contain_exactly(
+          'aasm_state_tesim',
+          'based_near_tesim',
+          'contributor_tesim',
+          'created_at_dtsi',
+          'depositor_id_isi',
+          'description_tesim',
+          'id',
+          'identifier_tesim',
+          'keywords_tesim',
+          'language_tesim',
+          'model_ssi',
+          'published_date_tesim',
+          'publisher_tesim',
+          'related_url_tesim',
+          'resource_type_tesim',
+          'rights_tesim',
+          'source_tesim',
+          'subject_tesim',
+          'subtitle_tesim',
+          'title_tesim',
+          'updated_at_dtsi',
+          'uuid_ssi',
+          'version_name_tesim',
+          'version_number_isi',
+          'work_id_isi',
+          'work_type_tesim'
+        )
+      end
+    end
+  end
+
+  describe '#uuid' do
+    subject(:work) { create(:work) }
+
+    before { work.reload }
+
+    its(:uuid) { is_expected.to match(/[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}/) }
+  end
+
+  describe '::reindex_all' do
+    before do
+      create(:work)
+      allow(IndexingService).to receive(:commit)
+      allow(WorkIndexer).to receive(:call)
+    end
+
+    it 'reindexes all the works and their versions into solr' do
+      described_class.reindex_all
+      expect(WorkIndexer).to have_received(:call).once
+      expect(IndexingService).to have_received(:commit).once
     end
   end
 end

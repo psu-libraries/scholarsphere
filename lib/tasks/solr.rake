@@ -17,9 +17,8 @@ namespace :solr do
     conf.modify_collection
   end
 
-  desc 'Reindexes all our resources into Solr'
-  task reindex: :environment do
-    WorkVersion.all.map { |version| IndexingService.call(resource: version) }
-    Blacklight.default_index.connection.commit
+  desc 'Reindexes all the works (as well as their versions) into Solr'
+  task reindex_works: :environment do
+    Work.reindex_all
   end
 end
