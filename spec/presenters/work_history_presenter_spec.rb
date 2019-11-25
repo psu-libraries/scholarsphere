@@ -36,9 +36,10 @@ RSpec.describe WorkHistoryPresenter, versioning: true do
     end
 
     it 'returns a 2d array, where dimension 2 is the changes to each version, mapped to Presenter objects' do
-      _version, changes = changes_by_work_version.first
-      expect(changes).not_to be_empty
-      expect(changes).to all(be_a(WorkVersionChangePresenter))
+      _published_version, changes = changes_by_work_version.find { |v, _| v == v1 }
+
+      expect(changes).to include(an_instance_of(WorkVersionChangePresenter))
+      expect(changes).to include(an_instance_of(FileMembershipChangePresenter))
 
       # Spot check that one presenter is instantiated correctly
       changes.first.tap do |change|

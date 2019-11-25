@@ -75,3 +75,8 @@ en:
       heading: "History of %{work}"
       show_diff: Show Changes
       by: by
+      renamed_to: "&rarr;"
+      file_membership:
+        create: Added
+        rename: Renamed
+        destroy: Deleted

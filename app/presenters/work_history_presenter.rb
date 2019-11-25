@@ -23,12 +23,12 @@ class WorkHistoryPresenter
   # > WorkHistoryPresenter.new(work).changes_by_work_version
   # => [
   #      [
-  #        WorkVersion
-  #        [ WorkVersionChangePresenter, WorkVersionChangePresenter, ...]
+  #        WorkVersionDecorator
+  #        [ WorkVersionChangePresenter, FileMembershipChangePresenter, ...]
   #      ],
   #      [
-  #        WorkVersion
-  #        [ WorkVersionChangePresenter, WorkVersionChangePresenter, ...]
+  #        WorkVersionDecorator
+  #        [ WorkVersionChangePresenter, FileMembershipChangePresenter, ...]
   #      ],
   #    ]
   def changes_by_work_version
@@ -43,14 +43,30 @@ class WorkHistoryPresenter
       work
         .versions
         .map do |work_version|
-          changes = work_version.versions.map do |paper_trail_version|
+          decorated_work_version = Dashboard::WorkVersionDecorator.new(work_version)
+
+          changes_to_work_version = work_version.versions.map do |paper_trail_version|
             WorkVersionChangePresenter.new(
               paper_trail_version: paper_trail_version,
               user: lookup_user(paper_trail_version.whodunnit)
             )
           end
 
-          [Dashboard::WorkVersionDecorator.new(work_version), changes]
+          changes_to_files = PaperTrail::Version
+            .where(item_type: 'FileVersionMembership', work_version_id: work_version.id)
+            .map do |paper_trail_version|
+              FileMembershipChangePresenter.new(
+                paper_trail_version: paper_trail_version,
+                user: lookup_user(paper_trail_version.whodunnit)
+              )
+            end
+
+          all_changes = (
+            changes_to_work_version +
+            changes_to_files
+          ).sort_by(&:created_at)
+
+          [decorated_work_version, all_changes]
         end
     end
 
