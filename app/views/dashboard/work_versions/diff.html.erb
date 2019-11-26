@@ -20,6 +20,41 @@
         <%= @presenter[term].to_s(:html).html_safe %>
       </p>
     <% end %>
+
+    <% if @presenter.files.present? %>
+      <table class="table">
+        <thead>
+          <tr>
+            <th><%= t('dashboard.work_versions.files.name') %></th>
+            <th><%= t('dashboard.work_versions.files.size') %></th>
+            <th><%= t('dashboard.work_versions.files.mime_type') %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @presenter.renamed_files.each do |file| %>
+            <tr>
+              <td><%= file.title.to_s(:html).html_safe %></td>
+              <td><%= number_to_human_size file.size %></td>
+              <td><%= file.mime_type %></td>
+            </tr>
+          <% end %>
+          <% @presenter.deleted_files.each do |file| %>
+            <tr class="table-danger">
+              <td><%= file.title %></td>
+              <td><%= number_to_human_size file.size %></td>
+              <td><%= file.mime_type %></td>
+            </tr>
+          <% end %>
+          <% @presenter.added_files.each do |file| %>
+            <tr class="table-success">
+              <td><%= file.title %></td>
+              <td><%= number_to_human_size file.size %></td>
+              <td><%= file.mime_type %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
   </div>
 
   <div class="col-sm-5">
