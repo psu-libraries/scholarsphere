@@ -27,9 +27,9 @@ class WorkVersionChangePresenter
   end
 
   def action
-    return 'Published' if publish?
+    return t('publish') if publish?
 
-    "#{event}d".titleize # "update" becomes "Updated"
+    t(event)
   end
 
   def timestamp
@@ -47,7 +47,7 @@ class WorkVersionChangePresenter
   def changed_attributes_truncated(count = 3)
     truncated = changed_attributes.first(count)
     remainder = changed_attributes.length - truncated.length
-    truncated << "and #{remainder} more" if remainder > 0
+    truncated << t('truncated_attributes', count: remainder) if remainder > 0
     truncated
   end
 
@@ -69,6 +69,10 @@ class WorkVersionChangePresenter
   end
 
   private
+
+    def t(key, options = {})
+      I18n.t("dashboard.work_history.work_version.#{key}", options)
+    end
 
     def diff
       @diff ||= WorkVersionChangeDiff.call(paper_trail_version)

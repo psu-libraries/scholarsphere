@@ -5,7 +5,7 @@
   <small>
     <% if change.rename? %>
       <code><%= change.previous_filename %></code>
-      <%= t('dashboard.work_history.renamed_to').html_safe %>
+      <%= t 'dashboard.work_history.renamed_to.html' %>
     <% end %>
     <code><%= change.current_filename %></code>
   </small>

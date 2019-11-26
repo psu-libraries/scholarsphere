@@ -27,11 +27,7 @@ class FileMembershipChangePresenter
   def action
     return t('rename') if rename?
 
-    case event
-    when 'create' then t('create')
-    when 'destroy' then t('destroy')
-    else "#{event}d".titleize
-    end
+    t(event)
   end
 
   def timestamp
@@ -39,8 +35,8 @@ class FileMembershipChangePresenter
   end
 
   def current_filename
-    return paper_trail_object['title'] if event == 'destroy'
-    return paper_trail_object_changes['title'].last if event == 'create'
+    return paper_trail_object['title'] if destroy?
+    return paper_trail_object_changes['title'].last if create?
 
     paper_trail_object_changes.fetch('title', []).last ||
       paper_trail_object['title']
@@ -52,14 +48,26 @@ class FileMembershipChangePresenter
     paper_trail_object_changes.fetch('title', []).first
   end
 
+  def create?
+    event == 'create'
+  end
+
+  def update?
+    event == 'update' && !rename?
+  end
+
   def rename?
     event == 'update' && paper_trail_object_changes.key?('title')
   end
 
+  def destroy?
+    event == 'destroy'
+  end
+
   private
 
-    def t(key)
-      I18n.t("dashboard.work_history.file_membership.#{key}")
+    def t(key, options = {})
+      I18n.t("dashboard.work_history.file_membership.#{key}", options)
     end
 
     def paper_trail_object
