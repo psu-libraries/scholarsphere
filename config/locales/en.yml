@@ -75,3 +75,16 @@ en:
       heading: "History of %{work}"
       show_diff: Show Changes
       by: by
+      renamed_to:
+        html: "&rarr;"
+      file_membership:
+        create: Added
+        rename: Renamed
+        update: Updated
+        destroy: Deleted
+      work_version:
+        create: Created
+        publish: Published
+        update: Updated
+        destroy: Deleted
+        truncated_attributes: "and %{count} more"

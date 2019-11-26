@@ -15,7 +15,8 @@ class BuildNewWorkVersion
     previous_version.file_version_memberships.each do |previous_membership|
       new_version.file_version_memberships.build(
         file_resource_id: previous_membership.file_resource_id,
-        title: previous_membership.title
+        title: previous_membership.title,
+        changed_by_system: true
       )
     end
 

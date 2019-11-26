@@ -1,0 +1,18 @@
+<%# Note `change` is a FileMembershipChangePresenter %>
+<div id="change_<%= change.id %>" class="work-history__change work-history__change--file">
+  <strong><%= change.action %></strong>
+
+  <small>
+    <% if change.rename? %>
+      <code><%= change.previous_filename %></code>
+      <%= t 'dashboard.work_history.renamed_to.html' %>
+    <% end %>
+    <code><%= change.current_filename %></code>
+  </small>
+
+  <div class="work-history__change-metadata">
+    <span class="work-history__change-timestamp"><%= change.timestamp %></span>
+    <span class="text-secondary"><%= t 'dashboard.work_history.by' %></span>
+    <span class="work-history__change-user"><%= change.user.access_id %></span>
+  </div>
+</div>

@@ -23,12 +23,12 @@ class WorkHistoryPresenter
   # > WorkHistoryPresenter.new(work).changes_by_work_version
   # => [
   #      [
-  #        WorkVersion
-  #        [ WorkVersionChangePresenter, WorkVersionChangePresenter, ...]
+  #        WorkVersionDecorator
+  #        [ WorkVersionChangePresenter, FileMembershipChangePresenter, ...]
   #      ],
   #      [
-  #        WorkVersion
-  #        [ WorkVersionChangePresenter, WorkVersionChangePresenter, ...]
+  #        WorkVersionDecorator
+  #        [ WorkVersionChangePresenter, FileMembershipChangePresenter, ...]
   #      ],
   #    ]
   def changes_by_work_version
@@ -43,14 +43,46 @@ class WorkHistoryPresenter
       work
         .versions
         .map do |work_version|
-          changes = work_version.versions.map do |paper_trail_version|
-            WorkVersionChangePresenter.new(
-              paper_trail_version: paper_trail_version,
-              user: lookup_user(paper_trail_version.whodunnit)
-            )
-          end
+          decorated_work_version = Dashboard::WorkVersionDecorator.new(work_version)
 
-          [Dashboard::WorkVersionDecorator.new(work_version), changes]
+          change_presenters = (
+            changes_to_work_version(work_version) +
+            changes_to_work_versions_files(work_version)
+          ).sort_by(&:created_at)
+
+          [decorated_work_version, change_presenters]
+        end
+    end
+
+    # Accepts a WorkVersion, loads all the PaperTrail::Versions of it, then
+    # wraps each one in a WorkVersionChangePresenter.
+    #
+    # @param [WorkVersion]
+    # @return [Array<WorkVersionChangePresenter>]
+    def changes_to_work_version(work_version)
+      work_version.versions.map do |paper_trail_version|
+        WorkVersionChangePresenter.new(
+          paper_trail_version: paper_trail_version,
+          user: lookup_user(paper_trail_version.whodunnit)
+        )
+      end
+    end
+
+    # Accepts a WorkVersion, queries the database for all the
+    # PaperTrail::Versions of that WorkVersion's FileVersionMemberships
+    # (some of which may have been deleted), and wraps each one in a
+    # FileMembershipChangePresenter.
+    #
+    # @param [WorkVersion]
+    # @return [Array<FileMembershipChangePresenter>]
+    def changes_to_work_versions_files(work_version)
+      PaperTrail::Version
+        .where(item_type: 'FileVersionMembership', work_version_id: work_version.id)
+        .map do |paper_trail_version|
+          FileMembershipChangePresenter.new(
+            paper_trail_version: paper_trail_version,
+            user: lookup_user(paper_trail_version.whodunnit)
+          )
         end
     end
 

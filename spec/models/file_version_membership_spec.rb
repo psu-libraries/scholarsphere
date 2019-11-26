@@ -57,6 +57,31 @@ RSpec.describe FileVersionMembership, type: :model do
     end
   end
 
+  describe 'PaperTrail::Versions', versioning: true do
+    it { is_expected.to respond_to(:changed_by_system).and respond_to(:changed_by_system=) }
+    it { is_expected.to be_versioned }
+
+    context 'when the record is marked as changed by the system' do
+      let(:file_version_membership) { create(:file_version_membership, changed_by_system: true) }
+
+      it 'does not write a papertrail version' do
+        expect(file_version_membership.reload.versions).to be_empty
+      end
+    end
+
+    context 'when the record is NOT marked as changed by the system' do
+      let(:file_version_membership) { create(:file_version_membership, changed_by_system: false) }
+
+      it "writes a version and stores the WorkVersion's FK into the version metadata" do
+        paper_trail_version = file_version_membership.versions.first
+
+        expect(paper_trail_version.work_version_id).to eq(
+          file_version_membership.work_version_id
+        )
+      end
+    end
+  end
+
   describe 'initializing #title' do
     # NOTE the :file_resource factory is created with a file named 'image.png'
 
