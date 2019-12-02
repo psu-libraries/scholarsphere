@@ -25,7 +25,12 @@ class User < ApplicationRecord
     User.find_or_create_by(provider: auth.provider, uid: auth.uid) do |new_user|
       new_user.access_id = auth.info.access_id
       new_user.email = auth.info.email
-      new_user.name = "#{auth.info.first_name} #{auth.info.last_name}"
+      new_user.given_name = auth.info.given_name
+      new_user.surname = auth.info.surname
     end
+  end
+
+  def name
+    "#{given_name} #{surname}"
   end
 end

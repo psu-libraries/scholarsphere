@@ -7,7 +7,7 @@ FactoryBot.define do
     surname { Faker::Name.first_name }
     given_name { Faker::Name.last_name }
     email { "#{psu_id}@psu.edu" }
-    sequence(:psu_id) { |n| FactoryBotHelpers.generate_access_id_from_name("#{given_name} #{surname}", n) }
+    sequence(:psu_id) { |n| FactoryBotHelpers.generate_access_id_from_name(given_name, surname, n) }
 
     # The regex below takes an integer and formats it into 16 digits in groups
     # of 4, separated by '-'

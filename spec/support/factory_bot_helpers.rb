@@ -1,14 +1,13 @@
 # frozen_string_literal: true
 
 module FactoryBotHelpers
-  def self.generate_access_id_from_name(name, sequence_number)
-    first_name, *middle_names, last_name = name.downcase.split
+  def self.generate_access_id_from_name(given_name, surname, sequence_number)
     alphabet = ('a'..'z').to_a
 
     initials = [
-      first_name || alphabet.sample,
-      middle_names.first || alphabet.sample,
-      last_name || alphabet.sample
+      given_name || alphabet.sample,
+      _middle_name = alphabet.sample,
+      surname || alphabet.sample
     ].map(&:first).join('')
 
     format("#{initials}%<n>03d", n: sequence_number)
