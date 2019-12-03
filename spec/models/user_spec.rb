@@ -6,7 +6,8 @@ RSpec.describe User, type: :model do
   describe 'table' do
     it { is_expected.to have_db_column(:access_id).of_type(:string) }
     it { is_expected.to have_db_column(:email).of_type(:string) }
-    it { is_expected.to have_db_column(:name).of_type(:string) }
+    it { is_expected.to have_db_column(:given_name).of_type(:string) }
+    it { is_expected.to have_db_column(:surname).of_type(:string) }
     it { is_expected.to have_db_column(:provider).of_type(:string) }
     it { is_expected.to have_db_column(:uid).of_type(:string) }
 
@@ -33,8 +34,8 @@ RSpec.describe User, type: :model do
 
   describe '.from_omniauth' do
     let(:auth_params) { build :psu_oauth_response,
-                              first_name: 'Joe',
-                              last_name: 'Developer',
+                              given_name: 'Joe',
+                              surname: 'Developer',
                               access_id: 'jd1'
     }
 
@@ -49,7 +50,8 @@ RSpec.describe User, type: :model do
         new_user = described_class.from_omniauth(auth_params)
         expect(new_user).to be_persisted
         expect(new_user.access_id).to eq 'jd1'
-        expect(new_user.name).to eq 'Joe Developer'
+        expect(new_user.given_name).to eq 'Joe'
+        expect(new_user.surname).to eq 'Developer'
         expect(new_user.email).to eq 'jd1@psu.edu'
       end
     end
@@ -68,12 +70,21 @@ RSpec.describe User, type: :model do
 
         expect(user_after.access_id).to eq user_before.access_id
         expect(user_after.email).to eq user_before.email
-        expect(user_after.name).to eq user_before.name
+        expect(user_after.given_name).to eq user_before.given_name
+        expect(user_after.surname).to eq user_before.surname
       end
 
       it 'returns the User record' do
         expect(described_class.from_omniauth(auth_params)).to eq existing_user
       end
+    end
+  end
+
+  describe '#name' do
+    let(:user) { build_stubbed :user, given_name: 'Joe', surname: 'Developer' }
+
+    it 'concatenates given_name and surname' do
+      expect(user.name).to eq 'Joe Developer'
     end
   end
 end
