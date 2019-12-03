@@ -71,7 +71,10 @@ module Dashboard
       @work_version = WorkVersionDecorator.new(policy_scope(WorkVersion).find(params[:work_version_id]))
       @previous_version = WorkVersionDecorator.new(policy_scope(WorkVersion).find(params[:previous_version_id]))
       @work = WorkDecorator.new(@work_version.work)
-      @presenter = DiffPresenter.new(MetadataDiff.call(@previous_version, @work_version))
+      @presenter = DiffPresenter.new(
+        MetadataDiff.call(@previous_version, @work_version),
+        file_diff: FileVersionMembershipDiff.call(@previous_version, @work_version)
+      )
     end
 
     private
