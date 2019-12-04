@@ -48,6 +48,9 @@ CMD [ "/app/bin/ci-rspec" ]
 FROM base as eslint
 CMD [ "/app/bin/ci-eslint" ]
 
+FROM base as sidekiq
+CMD [ "/app/bin/sidekiq" ]
+
 FROM base as niftany
 CMD [ "/app/bin/ci-niftany" ]
 

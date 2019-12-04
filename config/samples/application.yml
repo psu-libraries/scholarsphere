@@ -26,6 +26,13 @@
 # You will need to create a "scholarsphere" bucket in your Minio instance. This can be done via the web interface.
 # Go to http://127.0.0.1:9000/minio and click the red circle plus (+) sign in the bottom-right corner.
 
+
+## Redis Configuration
+# REDIS_HOST:
+# REDIS_PORT:
+# REDIS_PASSWORD:
+# REDIS_DATABASE:
+
 POSTGRES_USER: "[username]" # This is typically $ whoami
 
 SOLR_HOST: localhost

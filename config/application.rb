@@ -32,6 +32,12 @@ module Scholarsphere
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
 
+    # Active Job Configurations
+    if ENV['REDIS_HOST']
+      config.active_job.queue_adapter = :sidekiq
+      # config.active_job.queue_name_prefix = "scholarsphere_production"
+    end
+
     # Don't generate system test files.
     config.generators.system_tests = nil
   end

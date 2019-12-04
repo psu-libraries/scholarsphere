@@ -1,6 +1,13 @@
 # frozen_string_literal: true
 
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
+  # TODO only alow admins
+  authenticate :user do
+    mount Sidekiq::Web => '/sidekiq'
+  end
+
   mount OkComputer::Engine, at: '/health'
   mount Blacklight::Engine => '/'
   mount Shrine.uppy_s3_multipart(:cache) => '/s3/multipart'

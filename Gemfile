@@ -65,3 +65,5 @@ group :test do
   gem 'webdrivers'
   gem 'webmock'
 end
+
+gem "sidekiq", "~> 6.0"
