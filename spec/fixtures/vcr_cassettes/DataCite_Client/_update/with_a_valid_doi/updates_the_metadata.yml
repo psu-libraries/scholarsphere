@@ -1,0 +1,115 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.test.datacite.org/dois
+    body:
+      encoding: UTF-8
+      string: '{"data":{"type":"dois","attributes":{"doi":"10.33532/abc802"}}}'
+    headers:
+      User-Agent:
+      - Faraday v0.17.0
+      Content-Type:
+      - application/vnd.api+json
+      Authorization:
+      - Basic cHN1LnNzLWRldjpzc2RldjIwMTg=
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Date:
+      - Thu, 05 Dec 2019 20:42:35 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Status:
+      - 201 Created
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Vary:
+      - Accept-Encoding, Origin
+      X-Credential-Username:
+      - psu.ss-dev
+      X-Request-Id:
+      - 31d64bc2-40a7-4084-8786-509be349a5b7
+      Location:
+      - https://api.test.datacite.org/dois/3132202
+      Etag:
+      - W/"a5bfedba3d2df7cff215c33a3dbb0413"
+      X-Runtime:
+      - '0.068090'
+      X-Powered-By:
+      - Phusion Passenger 6.0.4
+      Server:
+      - nginx/1.17.3 + Phusion Passenger 6.0.4
+    body:
+      encoding: ASCII-8BIT
+      string: '{"data":{"id":"10.33532/abc802","type":"dois","attributes":{"doi":"10.33532/abc802","prefix":"10.33532","suffix":"abc802","identifiers":null,"creators":[],"titles":null,"publisher":null,"container":{},"publicationYear":null,"subjects":null,"contributors":[],"dates":null,"language":null,"types":{},"relatedIdentifiers":null,"sizes":null,"formats":null,"version":null,"rightsList":[],"descriptions":null,"geoLocations":null,"fundingReferences":null,"xml":null,"url":null,"contentUrl":null,"metadataVersion":0,"schemaVersion":null,"source":null,"isActive":false,"state":"draft","reason":null,"landingPage":null,"created":"2019-12-05T20:42:35.000Z","registered":null,"published":"","updated":"2019-12-05T20:42:35.000Z"},"relationships":{"client":{"data":{"id":"psu.ss-dev","type":"clients"}},"media":{"data":{"id":"10.33532/abc802","type":"media"}}}},"included":[{"id":"psu.ss-dev","type":"clients","attributes":{"name":"Scholarsphere
+        Devlopement","symbol":"PSU.SS-DEV","year":2018,"contactEmail":"awead@psu.edu","alternateName":null,"description":null,"language":null,"clientType":"repository","domains":"*","re3data":null,"opendoar":null,"issn":null,"url":null,"created":"2018-11-02T18:30:18.000Z","updated":"2018-11-02T18:31:18.000Z","isActive":true,"hasPassword":true},"relationships":{"provider":{"data":{"id":"psu","type":"providers"}},"prefixes":{"data":[{"id":"10.33532","type":"prefixes"}]}}}]}'
+    http_version: 
+  recorded_at: Thu, 05 Dec 2019 20:42:35 GMT
+- request:
+    method: put
+    uri: https://api.test.datacite.org/dois/10.33532/abc802
+    body:
+      encoding: UTF-8
+      string: '{"data":{"type":"dois","id":"10.33532/abc802","attributes":{"titles":[{"title":"Work
+        Title"}]}}}'
+    headers:
+      User-Agent:
+      - Faraday v0.17.0
+      Content-Type:
+      - application/vnd.api+json
+      Authorization:
+      - Basic cHN1LnNzLWRldjpzc2RldjIwMTg=
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 05 Dec 2019 20:42:36 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Status:
+      - 200 OK
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Vary:
+      - Accept-Encoding, Origin
+      X-Credential-Username:
+      - psu.ss-dev
+      X-Request-Id:
+      - 9b687036-ff97-453e-9c84-03f525a3f286
+      Etag:
+      - W/"daf007085e620b0babceafc092612994"
+      X-Runtime:
+      - '0.071207'
+      X-Powered-By:
+      - Phusion Passenger 6.0.4
+      Server:
+      - nginx/1.17.3 + Phusion Passenger 6.0.4
+    body:
+      encoding: ASCII-8BIT
+      string: '{"data":{"id":"10.33532/abc802","type":"dois","attributes":{"doi":"10.33532/abc802","prefix":"10.33532","suffix":"abc802","identifiers":null,"creators":[],"titles":[{"title":"Work
+        Title"}],"publisher":null,"container":{},"publicationYear":null,"subjects":null,"contributors":[],"dates":null,"language":null,"types":{},"relatedIdentifiers":null,"sizes":null,"formats":null,"version":null,"rightsList":[],"descriptions":null,"geoLocations":null,"fundingReferences":null,"xml":"PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHJlc291cmNlIHhtbG5zOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhtbG5zPSJodHRwOi8vZGF0YWNpdGUub3JnL3NjaGVtYS9rZXJuZWwtNCIgeHNpOnNjaGVtYUxvY2F0aW9uPSJodHRwOi8vZGF0YWNpdGUub3JnL3NjaGVtYS9rZXJuZWwtNCBodHRwOi8vc2NoZW1hLmRhdGFjaXRlLm9yZy9tZXRhL2tlcm5lbC00L21ldGFkYXRhLnhzZCI+CiAgPGlkZW50aWZpZXIgaWRlbnRpZmllclR5cGU9IkRPSSI+MTAuMzM1MzIvQUJDODAyPC9pZGVudGlmaWVyPgogIDxjcmVhdG9ycy8+CiAgPHRpdGxlcz4KICAgIDx0aXRsZT5Xb3JrIFRpdGxlPC90aXRsZT4KICA8L3RpdGxlcz4KICA8cHVibGlzaGVyLz4KICA8cHVibGljYXRpb25ZZWFyLz4KICA8dmVyc2lvbi8+CjwvcmVzb3VyY2U+Cg==","url":null,"contentUrl":null,"metadataVersion":0,"schemaVersion":null,"source":null,"isActive":false,"state":"draft","reason":null,"landingPage":null,"created":"2019-12-05T20:42:35.000Z","registered":null,"published":"","updated":"2019-12-05T20:42:36.000Z"},"relationships":{"client":{"data":{"id":"psu.ss-dev","type":"clients"}},"media":{"data":{"id":"10.33532/abc802","type":"media"}}}},"included":[{"id":"psu.ss-dev","type":"clients","attributes":{"name":"Scholarsphere
+        Devlopement","symbol":"PSU.SS-DEV","year":2018,"contactEmail":"awead@psu.edu","alternateName":null,"description":null,"language":null,"clientType":"repository","domains":"*","re3data":null,"opendoar":null,"issn":null,"url":null,"created":"2018-11-02T18:30:18.000Z","updated":"2018-11-02T18:31:18.000Z","isActive":true,"hasPassword":true},"relationships":{"provider":{"data":{"id":"psu","type":"providers"}},"prefixes":{"data":[{"id":"10.33532","type":"prefixes"}]}}}]}'
+    http_version: 
+  recorded_at: Thu, 05 Dec 2019 20:42:36 GMT
+recorded_with: VCR 5.0.0

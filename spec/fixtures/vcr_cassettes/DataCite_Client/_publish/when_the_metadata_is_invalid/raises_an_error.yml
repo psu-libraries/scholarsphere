@@ -1,0 +1,54 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.test.datacite.org/dois
+    body:
+      encoding: UTF-8
+      string: '{"data":{"type":"dois","attributes":{"event":"publish","publisher":"scholarsphere","prefix":"10.33532"}}}'
+    headers:
+      User-Agent:
+      - Faraday v0.17.0
+      Content-Type:
+      - application/vnd.api+json
+      Authorization:
+      - Basic cHN1LnNzLWRldjpzc2RldjIwMTg=
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 422
+      message: Unprocessable Entity
+    headers:
+      Date:
+      - Thu, 05 Dec 2019 20:32:41 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Status:
+      - 422 Unprocessable Entity
+      Cache-Control:
+      - no-cache
+      Vary:
+      - Accept-Encoding, Origin
+      X-Credential-Username:
+      - psu.ss-dev
+      X-Request-Id:
+      - f83ce1ac-737e-479b-a217-b4fe6ef5e8aa
+      X-Runtime:
+      - '0.028091'
+      X-Powered-By:
+      - Phusion Passenger 6.0.4
+      Server:
+      - nginx/1.17.3 + Phusion Passenger 6.0.4
+    body:
+      encoding: ASCII-8BIT
+      string: '{"errors":[{"source":"url","title":"Can''t be blank"}]}'
+    http_version: 
+  recorded_at: Thu, 05 Dec 2019 20:32:41 GMT
+recorded_with: VCR 5.0.0

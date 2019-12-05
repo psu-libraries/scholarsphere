@@ -25,6 +25,17 @@
 #
 # You will need to create a "scholarsphere" bucket in your Minio instance. This can be done via the web interface.
 # Go to http://127.0.0.1:9000/minio and click the red circle plus (+) sign in the bottom-right corner.
+#
+# --------------------------------------------------------------------------------------------------------------------
+#
+# DataCite authorization for minting DOIs:
+#
+# DATACITE_ENDPOINT: "https://api.test.datacite.org/dois"
+# DATACITE_PREFIX: "10.33532"
+# DATACITE_PUBLISHER: "scholarsphere"
+# DATACITE_USERNAME: ""
+# DATACITE_PASSWORD: ""
+#
 
 POSTGRES_USER: "[username]" # This is typically $ whoami
 

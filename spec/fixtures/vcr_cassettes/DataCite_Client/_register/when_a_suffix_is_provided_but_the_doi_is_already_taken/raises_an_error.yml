@@ -1,0 +1,110 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.test.datacite.org/dois
+    body:
+      encoding: UTF-8
+      string: '{"data":{"type":"dois","attributes":{"doi":"10.33532/abc456"}}}'
+    headers:
+      User-Agent:
+      - Faraday v0.17.0
+      Content-Type:
+      - application/vnd.api+json
+      Authorization:
+      - Basic cHN1LnNzLWRldjpzc2RldjIwMTg=
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Date:
+      - Thu, 05 Dec 2019 17:07:50 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Status:
+      - 201 Created
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Vary:
+      - Accept-Encoding, Origin
+      X-Credential-Username:
+      - psu.ss-dev
+      X-Request-Id:
+      - a63767f6-3c09-4f46-8cd3-b370274d3231
+      Location:
+      - https://api.test.datacite.org/dois/3132062
+      Etag:
+      - W/"6c0bf6add5a89a5259957100ba4b4527"
+      X-Runtime:
+      - '0.073440'
+      X-Powered-By:
+      - Phusion Passenger 6.0.4
+      Server:
+      - nginx/1.17.3 + Phusion Passenger 6.0.4
+    body:
+      encoding: ASCII-8BIT
+      string: '{"data":{"id":"10.33532/abc456","type":"dois","attributes":{"doi":"10.33532/abc456","prefix":"10.33532","suffix":"abc456","identifiers":null,"creators":[],"titles":null,"publisher":null,"container":{},"publicationYear":null,"subjects":null,"contributors":[],"dates":null,"language":null,"types":{},"relatedIdentifiers":null,"sizes":null,"formats":null,"version":null,"rightsList":[],"descriptions":null,"geoLocations":null,"fundingReferences":null,"xml":null,"url":null,"contentUrl":null,"metadataVersion":0,"schemaVersion":null,"source":null,"isActive":false,"state":"draft","reason":null,"landingPage":null,"created":"2019-12-05T17:07:50.000Z","registered":null,"published":"","updated":"2019-12-05T17:07:50.000Z"},"relationships":{"client":{"data":{"id":"psu.ss-dev","type":"clients"}},"media":{"data":{"id":"10.33532/abc456","type":"media"}}}},"included":[{"id":"psu.ss-dev","type":"clients","attributes":{"name":"Scholarsphere
+        Devlopement","symbol":"PSU.SS-DEV","year":2018,"contactEmail":"awead@psu.edu","alternateName":null,"description":null,"language":null,"clientType":"repository","domains":"*","re3data":null,"opendoar":null,"issn":null,"url":null,"created":"2018-11-02T18:30:18.000Z","updated":"2018-11-02T18:31:18.000Z","isActive":true,"hasPassword":true},"relationships":{"provider":{"data":{"id":"psu","type":"providers"}},"prefixes":{"data":[{"id":"10.33532","type":"prefixes"}]}}}]}'
+    http_version: 
+  recorded_at: Thu, 05 Dec 2019 17:07:50 GMT
+- request:
+    method: post
+    uri: https://api.test.datacite.org/dois
+    body:
+      encoding: UTF-8
+      string: '{"data":{"type":"dois","attributes":{"doi":"10.33532/abc456"}}}'
+    headers:
+      User-Agent:
+      - Faraday v0.17.0
+      Content-Type:
+      - application/vnd.api+json
+      Authorization:
+      - Basic cHN1LnNzLWRldjpzc2RldjIwMTg=
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 422
+      message: Unprocessable Entity
+    headers:
+      Date:
+      - Thu, 05 Dec 2019 17:07:50 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Status:
+      - 422 Unprocessable Entity
+      Cache-Control:
+      - no-cache
+      Vary:
+      - Accept-Encoding, Origin
+      X-Credential-Username:
+      - psu.ss-dev
+      X-Request-Id:
+      - 6a1a314a-c353-4d0c-9fcf-573fc6fb4468
+      X-Runtime:
+      - '0.022334'
+      X-Powered-By:
+      - Phusion Passenger 6.0.4
+      Server:
+      - nginx/1.17.3 + Phusion Passenger 6.0.4
+    body:
+      encoding: ASCII-8BIT
+      string: '{"errors":[{"source":"doi","title":"This DOI has already been taken"}]}'
+    http_version: 
+  recorded_at: Thu, 05 Dec 2019 17:07:51 GMT
+recorded_with: VCR 5.0.0
