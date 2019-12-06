@@ -36,12 +36,12 @@ module Scholarsphere
     # Active Job Configurations
     redis_config = Scholarsphere::RedisConfig.new
 
-    if redis_config.valid?
-      config.active_job.queue_adapter = :sidekiq
-      # config.active_job.queue_name_prefix = "scholarsphere_production"
-    else
-      config.active_job.queue_adapter = :async
-    end
+    # config.active_job.queue_name_prefix = "scholarsphere_production"
+    config.active_job.queue_adapter = if redis_config.valid?
+                                        :sidekiq
+                                      else
+                                        :async
+                                      end
 
     # Don't generate system test files.
     config.generators.system_tests = nil

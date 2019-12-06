@@ -2,7 +2,6 @@
 
 module Scholarsphere
   class RedisConfig
-
     def host
       ENV.fetch('REDIS_HOST', nil)
     end
@@ -21,6 +20,7 @@ module Scholarsphere
 
     def valid?
       return true if host
+
       false
     end
 
