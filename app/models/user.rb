@@ -15,19 +15,34 @@ class User < ApplicationRecord
            as: :agent,
            dependent: :destroy
 
+  has_many :user_group_memberships,
+           dependent: :destroy
+
+  has_many :groups,
+           through: :user_group_memberships
+
   validates :email,
             presence: true,
             uniqueness: true
 
-  # TODO Which fields do we want updated each time a user logs in?
-  #   - Group memberships
   def self.from_omniauth(auth)
-    User.find_or_create_by(provider: auth.provider, uid: auth.uid) do |new_user|
+    user = User.find_or_initialize_by(provider: auth.provider, uid: auth.uid) do |new_user|
+      # Written once, when the user is created, then never again
       new_user.access_id = auth.info.access_id
-      new_user.email = auth.info.email
-      new_user.given_name = auth.info.given_name
-      new_user.surname = auth.info.surname
     end
+
+    # Updated every login
+    user.email = auth.info.email
+    user.given_name = auth.info.given_name
+    user.surname = auth.info.surname
+
+    user.groups = auth.info.groups.map do |group_name|
+      Group.find_or_create_by(name: group_name)
+    end
+
+    user.save!
+
+    user
   end
 
   def name

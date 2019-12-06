@@ -21,6 +21,8 @@ RSpec.describe User, type: :model do
   describe 'associations' do
     it { is_expected.to have_many(:works) }
     it { is_expected.to have_many(:access_controls) }
+    it { is_expected.to have_many(:user_group_memberships) }
+    it { is_expected.to have_many(:groups).through(:user_group_memberships) }
   end
 
   describe 'validations' do
@@ -36,7 +38,8 @@ RSpec.describe User, type: :model do
     let(:auth_params) { build :psu_oauth_response,
                               given_name: 'Joe',
                               surname: 'Developer',
-                              access_id: 'jd1'
+                              access_id: 'jd1',
+                              groups: ['admin', 'reporter']
     }
 
     context 'when the User record does not yet exist' do
@@ -53,6 +56,9 @@ RSpec.describe User, type: :model do
         expect(new_user.given_name).to eq 'Joe'
         expect(new_user.surname).to eq 'Developer'
         expect(new_user.email).to eq 'jd1@psu.edu'
+
+        expect(new_user.groups.length).to eq 2
+        expect(new_user.groups.map(&:name)).to contain_exactly('admin', 'reporter')
       end
     end
 
@@ -63,15 +69,25 @@ RSpec.describe User, type: :model do
         expect { described_class.from_omniauth(auth_params) }.not_to change(described_class, :count)
       end
 
-      it 'does NOT update ANY attributes on the user record' do
+      it 'overwrites all user attributes, except access_id' do
         user_before = described_class.find(existing_user.id)
         described_class.from_omniauth(auth_params)
         user_after = described_class.find(existing_user.id)
 
+        # OAuth does NOT overwrite these attributes:
         expect(user_after.access_id).to eq user_before.access_id
-        expect(user_after.email).to eq user_before.email
-        expect(user_after.given_name).to eq user_before.given_name
-        expect(user_after.surname).to eq user_before.surname
+
+        # OAuth DOES overwrite these attributes:
+        expect(user_after.email).not_to eq user_before.email
+        expect(user_after.given_name).not_to eq user_before.given_name
+        expect(user_after.surname).not_to eq user_before.surname
+      end
+
+      it 'DOES update the group membership' do
+        existing_user.groups.create!(name: 'MY OLD GROUP THAT SHOULD GO AWAY')
+        described_class.from_omniauth(auth_params)
+
+        expect(existing_user.reload.groups.map(&:name)).to contain_exactly('admin', 'reporter')
       end
 
       it 'returns the User record' do
