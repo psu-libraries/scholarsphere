@@ -1,12 +1,10 @@
 version: '3.5'
-x-web_env: &web_env
-  environment:
-      REDIS_HOST: redis
-      REDIS_PASSWORD: redispassword
+services:
+  web:
+    tty: true
+    stdin_open: true
+    environment:
       POSTGRES_DB: scholarsphere
-      OAUTH_APP_ID: ${OAUTH_APP_ID}
-      OAUTH_APP_URL: ${OAUTH_APP_URL}
-      OAUTH_APP_SECRET: ${OAUTH_APP_SECRET}
       POSTGRES_USER: scholarsphere
       POSTGRES_PASSWORD: scholarsphere
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-scholarsphere}
@@ -18,37 +16,13 @@ x-web_env: &web_env
       SOLR_HOST: solr
       SOLR_COLLECTION: scholarsphere
       POSTGRES_HOST: db
-services:
-  redis:
-    image: redis:5.0.5
-    command: redis-server --requirepass redispassword
-    volumes:
-      - redis-data:/data
-    ports:
-    - "6379:6379"
-  sidekiq:
-    tty: true
-    stdin_open: true
-    <<: *web_env
-    build:
-      context: . 
-      target: sidekiq
-    volumes:
-    - bundle-data:/app/vendor/bundle
-    - node-data:/app/node_modules
-    - type: bind
-      source: ./
-      target: /app/
-  web:
-    tty: true
-    stdin_open: true
-    <<: *web_env
     build: 
       context: . 
       target: base
     volumes:
-    - bundle-data:/app/vendor/bundle
-    - node-data:/app/node_modules
+    # This is an empty volume to prevent empty dir bind it's way into the container
+    - /app/vendor/bundle
+    - /app/node_modules
     - type: bind
       source: ./
       target: /app/
@@ -97,9 +71,7 @@ services:
     - db-data:/var/lib/postgresql/data
 
 volumes:
-  redis-data:
   bundle-data:
-  node-data:
   minio-data:
   solr-data:
   db-data:
