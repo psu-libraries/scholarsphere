@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_02_155736) do
+ActiveRecord::Schema.define(version: 2019_12_06_182722) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -98,6 +98,7 @@ ActiveRecord::Schema.define(version: 2019_12_02_155736) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "given_name"
     t.string "surname"
+    t.jsonb "ldap_groups", default: [], array: true
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 

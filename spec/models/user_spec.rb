@@ -36,7 +36,8 @@ RSpec.describe User, type: :model do
     let(:auth_params) { build :psu_oauth_response,
                               given_name: 'Joe',
                               surname: 'Developer',
-                              access_id: 'jd1'
+                              access_id: 'jd1',
+                              groups: ['admin', 'reporter']
     }
 
     context 'when the User record does not yet exist' do
@@ -53,6 +54,7 @@ RSpec.describe User, type: :model do
         expect(new_user.given_name).to eq 'Joe'
         expect(new_user.surname).to eq 'Developer'
         expect(new_user.email).to eq 'jd1@psu.edu'
+        expect(new_user.ldap_groups).to eq ['admin', 'reporter']
       end
     end
 
@@ -76,6 +78,18 @@ RSpec.describe User, type: :model do
 
       it 'returns the User record' do
         expect(described_class.from_omniauth(auth_params)).to eq existing_user
+      end
+    end
+
+    context 'when the users groups change' do
+      let!(:existing_user) { create :user, provider: auth_params.provider, uid: auth_params.uid }
+
+      it 'updates the groups' do
+        groups = ['admin']
+        auth_params.info.groups = groups
+        described_class.from_omniauth(auth_params)
+        user_after = described_class.find(existing_user.id)
+        expect(user_after.ldap_groups).to eq groups
       end
     end
   end

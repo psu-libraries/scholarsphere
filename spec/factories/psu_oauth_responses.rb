@@ -24,7 +24,7 @@ FactoryBot.define do
         given_name: given_name,
         surname: surname,
         primary_affiliation: 'STAFF',
-        groups: ['some-group']
+        groups: groups
       }
     end
   end
