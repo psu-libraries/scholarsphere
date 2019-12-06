@@ -2,32 +2,33 @@
 
 module Scholarsphere
   class RedisConfig
-    def call
-      redis_config
-    end
 
-    def redis_host
+    def host
       ENV.fetch('REDIS_HOST', nil)
     end
 
-    def redis_port
+    def port
       ENV.fetch('REDIS_PORT', 6379)
     end
 
-    def redis_database
+    def database
       ENV.fetch('REDIS_DATABASE', 0)
     end
 
-    def redis_password
+    def password
       ENV.fetch('REDIS_PASSWORD', nil)
     end
 
-    def redis_config
-      config = {
-        url: "redis://#{redis_host}:#{redis_port}/#{redis_database}",
-        password: redis_password
+    def valid?
+      return true if host
+      false
+    end
+
+    def to_hash
+      {
+        url: "redis://#{host}:#{port}/#{database}",
+        password: password
       }
-      config
     end
   end
 end

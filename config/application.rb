@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'boot'
+require_relative '../lib/scholarsphere/redis_config'
 
 require 'rails'
 # Pick the frameworks you want:
@@ -33,9 +34,13 @@ module Scholarsphere
     # the framework and any gems in your application.
 
     # Active Job Configurations
-    if ENV['REDIS_HOST']
+    redis_config = Scholarsphere::RedisConfig.new
+
+    if redis_config.valid?
       config.active_job.queue_adapter = :sidekiq
       # config.active_job.queue_name_prefix = "scholarsphere_production"
+    else
+      config.active_job.queue_adapter = :async
     end
 
     # Don't generate system test files.
