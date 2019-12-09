@@ -3,7 +3,10 @@
 Rails.application.routes.draw do
   mount OkComputer::Engine, at: '/health'
   mount Blacklight::Engine => '/'
-  mount Shrine.uppy_s3_multipart(:cache) => '/s3/multipart'
+
+  authenticate :user do
+    mount Shrine.uppy_s3_multipart(:cache) => '/s3/multipart'
+  end
   root to: 'catalog#index'
   concern :searchable, Blacklight::Routes::Searchable.new
 
