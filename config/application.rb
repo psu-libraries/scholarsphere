@@ -36,7 +36,6 @@ module Scholarsphere
     # Active Job Configurations
     redis_config = Scholarsphere::RedisConfig.new
 
-    # config.active_job.queue_name_prefix = "scholarsphere_production"
     config.active_job.queue_adapter = if redis_config.valid?
                                         :sidekiq
                                       else
