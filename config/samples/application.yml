@@ -37,6 +37,13 @@
 # DATACITE_PASSWORD: ""
 #
 
+
+## Redis Configuration
+# REDIS_HOST:
+# REDIS_PORT:
+# REDIS_PASSWORD:
+# REDIS_DATABASE:
+
 POSTGRES_USER: "[username]" # This is typically $ whoami
 
 SOLR_HOST: localhost
