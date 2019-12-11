@@ -94,7 +94,7 @@ RSpec.describe 'Blacklight catalog page' do
     expect(page).to have_blacklight_field('related_url_tesim').with(record[:related_url].join(', '))
     expect(page).to have_blacklight_field('source_tesim').with(record[:source].join(', '))
     expect(page).to have_blacklight_field('version_number_isi').with(record[:version_number])
-    expect(page).to have_blacklight_field('created_at_dtsi').with(record[:created_at].iso8601)
-    expect(page).to have_blacklight_field('updated_at_dtsi').with(record[:updated_at].iso8601)
+    expect(page).to have_blacklight_field('created_at_dtsi').with(/^#{record[:created_at].strftime("%Y-%m-%d")}/)
+    expect(page).to have_blacklight_field('updated_at_dtsi').with(/^#{record[:updated_at].strftime("%Y-%m-%d")}/)
   end
 end
