@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative 'boot'
-require_relative '../lib/scholarsphere/redis_config'
 
 require 'rails'
 # Pick the frameworks you want:
@@ -24,6 +23,8 @@ Bundler.require(*Rails.groups)
 
 module Scholarsphere
   class Application < Rails::Application
+    require 'scholarsphere/redis_config'
+
     config.generators { |generator| generator.test_framework :rspec }
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.0

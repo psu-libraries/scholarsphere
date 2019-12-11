@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'scholarsphere/redis_config'
-
 redis_config = Scholarsphere::RedisConfig.new
 
 OkComputer.mount_at = false
