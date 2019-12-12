@@ -35,3 +35,7 @@ RSpec/MultipleExpectations:
 RSpec/EmptyLineAfterSubject:
   Exclude:
     - 'spec/factories/work_versions.rb'
+
+RSpec/LeakyConstantDeclaration:
+  Exclude:
+    - 'spec/models/permissions_builder_spec.rb'

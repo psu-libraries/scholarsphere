@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Work < ApplicationRecord
+  include Permissions
+
   belongs_to :depositor,
              class_name: 'User',
              foreign_key: 'depositor_id',
@@ -11,10 +13,6 @@ class Work < ApplicationRecord
 
   has_many :aliases,
            through: :work_creations
-
-  has_many :access_controls,
-           as: :resource,
-           dependent: :destroy
 
   has_many :versions,
            -> { order(created_at: :asc) },
