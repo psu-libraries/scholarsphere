@@ -11,9 +11,8 @@ function start_envconsul() {
     envconsul \
         -vault-addr=${VAULT_ADDR} \
         -secret=${VAULT_PATH} \
-        -vault-token=${VAULT_TOKEN} \
         -no-prefix=true \
-        -vault-renew-token=false \
+        -vault-renew-token=true \
         -once \
         -exec='bash start.sh'
 }
