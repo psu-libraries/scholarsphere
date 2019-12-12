@@ -3,9 +3,12 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
-  # TODO only alow admins
-  authenticate :user do
-    mount Sidekiq::Web => '/sidekiq'
+  namespace :admin do
+    authenticate :user do
+      constraints ScholarsphereAdmin do
+        mount Sidekiq::Web => '/sidekiq'
+      end
+    end
   end
 
   mount OkComputer::Engine, at: '/health'
