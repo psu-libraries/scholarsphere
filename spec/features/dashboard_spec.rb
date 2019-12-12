@@ -11,6 +11,12 @@ RSpec.describe 'Dashboard' do
   it "lists the user's current work in published and draft states", with_user: :user do
     visit(dashboard_works_path)
     within('#user-util-collapse') do
+      # Must reload the user to get their current name (used below), because now
+      # a user's name is updated from OAuth when they log in. Our OAuth mock
+      # itself generates Fakerized attributes for the user, so we need to reload
+      # the user from the DB to access these in the test.
+      user.reload
+
       expect(page).to have_content("#{user.name} (#{user.access_id})")
       expect(page).to have_link('Works')
     end
