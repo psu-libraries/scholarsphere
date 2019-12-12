@@ -6,6 +6,8 @@ class User < ApplicationRecord
 
   devise :omniauthable, omniauth_providers: %i[psu]
 
+  attr_writer :guest
+
   has_many :works,
            foreign_key: 'depositor_id',
            inverse_of: 'depositor',
@@ -24,6 +26,10 @@ class User < ApplicationRecord
   validates :email,
             presence: true,
             uniqueness: true
+
+  def self.guest
+    new(guest: true, groups: [Group.public_agent]).tap(&:readonly!)
+  end
 
   def self.from_omniauth(auth)
     user = User.find_or_initialize_by(provider: auth.provider, uid: auth.uid) do |new_user|
@@ -51,5 +57,9 @@ class User < ApplicationRecord
 
   def name
     "#{given_name} #{surname}"
+  end
+
+  def guest?
+    @guest || false
   end
 end
