@@ -38,6 +38,10 @@
 #
 
 
+## ADMIN UMG
+## protects the admin namespace 
+# ADMIN_GROUP: "cn=umg/up.dlt.scholarsphere-admin,dc=psu,dc=edu"
+
 ## Redis Configuration
 # REDIS_HOST:
 # REDIS_PORT:

@@ -45,6 +45,10 @@ class User < ApplicationRecord
     user
   end
 
+  def admin?
+    groups.map(&:name).include? Scholarsphere::Application.config.admin_group
+  end
+
   def name
     "#{given_name} #{surname}"
   end

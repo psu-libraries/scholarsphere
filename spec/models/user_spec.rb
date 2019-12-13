@@ -96,6 +96,19 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe '#admin?' do
+    let(:user) { build_stubbed :user, given_name: 'Joe', surname: 'Developer' }
+    let(:admin_user) { create(:user, :admin) }
+
+    it 'is false when user is not an admin' do
+      expect(user.admin?).to be false
+    end
+
+    it 'is true when user is an admin' do
+      expect(admin_user.admin?).to be true
+    end
+  end
+
   describe '#name' do
     let(:user) { build_stubbed :user, given_name: 'Joe', surname: 'Developer' }
 
