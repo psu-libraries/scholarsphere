@@ -76,6 +76,7 @@ steps:
         -e AWS_ACCESS_KEY_ID=scholarsphere
         -e AWS_SECRET_ACCESS_KEY=scholarsphere
         -e AWS_REGION=us-east-1
+        -e REDIS_HOST=redis
         -e APP_HOST=test-$DRONE_BUILD_NUMBER
         -e POSTGRES_USER=scholarsphere
         -e SELENIUM_URL=http://selenium:4444/wd/hub
@@ -159,8 +160,12 @@ steps:
       - tag
 
 services:
+- name: redis
+  image: redis:5.0.5
+
 - name: selenium
   image: selenium/standalone-chrome:3.141.59-xenon
+
 - name: solr
   image: solr:8.2.0-slim
   entrypoint:
@@ -189,6 +194,6 @@ volumes:
     path: /var/run/docker.sock
 ---
 kind: signature
-hmac: d630d78dc587fbcd7da5a2b0247b3a280c709ae1d9b05f5a5cc67a053e4dabc3
+hmac: 0233fed56505ca792e83e19e9d965f88445c27d273c7ae032c226fa0b9a6dcef
 
 ...
