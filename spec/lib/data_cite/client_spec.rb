@@ -71,6 +71,28 @@ RSpec.describe DataCite::Client do
       end
     end
 
+    context 'when called multiple times with the same doi', :vcr do
+      let(:suffix) { 'abc891' }
+
+      it 'can be idempotentently called multiple times, to update metadata', :vcr do
+        # Register a draft DOI
+        existing_doi, registration_response = client.register(suffix)
+        expect(registration_response.dig('data', 'attributes', 'state')).to eq 'draft'
+
+        # Publish that DOI with one set of metadata
+        doi, response_hash = client.publish(doi: existing_doi, metadata: valid_metadata)
+        expect(doi).to eq existing_doi
+        expect(response_hash.dig('data', 'attributes', 'state')).to eq 'findable'
+
+        # "Publish" that DOI again with updated metadata
+        updated_metadata = valid_metadata.merge(titles: [{ title: 'Updated Title' }])
+        update_doi, update_response_hash = client.publish(doi: existing_doi, metadata: updated_metadata)
+        expect(update_doi).to eq existing_doi
+        expect(update_response_hash.dig('data', 'attributes', 'state')).to eq 'findable'
+        expect(update_response_hash.dig('data', 'attributes', 'titles', 0, 'title')).to eq 'Updated Title'
+      end
+    end
+
     context 'when the metadata is invalid', :vcr do
       it 'raises an error' do
         expect {
