@@ -10,6 +10,7 @@ RSpec.describe WorkVersion, type: :model do
     it { is_expected.to have_db_column(:metadata).of_type(:jsonb) }
     it { is_expected.to have_db_column(:uuid).of_type(:uuid) }
     it { is_expected.to have_db_column(:version_number).of_type(:integer) }
+    it { is_expected.to have_db_column(:doi).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:title).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:subtitle).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:version_name).of_type(:string) }
