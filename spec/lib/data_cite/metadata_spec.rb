@@ -29,10 +29,15 @@ RSpec.describe DataCite::Metadata do
             familyName: work_version.work.depositor.surname
           }]
         )
+        expect(attributes[:url]).to be_present
 
         # The following are tested thoroughly below
         expect(attributes[:publicationYear]).to be_present
         expect(attributes.dig(:types, :resourceTypeGeneral)).to be_present
+      end
+
+      pending 'uses the real public URL for a resource' do
+        expect(attributes[:url]).to match(/\.psu\.edu/)
       end
     end
 
