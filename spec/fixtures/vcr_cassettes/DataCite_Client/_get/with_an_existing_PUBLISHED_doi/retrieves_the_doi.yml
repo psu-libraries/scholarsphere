@@ -1,0 +1,113 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.test.datacite.org/dois
+    body:
+      encoding: UTF-8
+      string: '{"data":{"type":"dois","attributes":{"titles":[{"title":"Work Title"}],"creators":[{"name":"Creator"}],"publicationYear":2019,"types":{"resourceTypeGeneral":"Text"},"url":"http://example.test","event":"publish","publisher":"scholarsphere","prefix":"10.33532"}}}'
+    headers:
+      User-Agent:
+      - Faraday v0.17.0
+      Content-Type:
+      - application/vnd.api+json
+      Authorization:
+      - Basic cHN1LnNzLWRldjpzc2RldjIwMTg=
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Date:
+      - Wed, 18 Dec 2019 23:22:56 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Status:
+      - 201 Created
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Vary:
+      - Accept-Encoding, Origin
+      X-Credential-Username:
+      - psu.ss-dev
+      X-Request-Id:
+      - 1b5992c0-61a9-4a78-b50e-3a0fe22492e7
+      Location:
+      - https://api.test.datacite.org/dois/3393476
+      Etag:
+      - W/"33ba2e025bf5209b423459f84f7d5fba"
+      X-Runtime:
+      - '0.101825'
+      X-Powered-By:
+      - Phusion Passenger 6.0.4
+      Server:
+      - nginx/1.17.3 + Phusion Passenger 6.0.4
+    body:
+      encoding: ASCII-8BIT
+      string: '{"data":{"id":"10.33532/0gye-r156","type":"dois","attributes":{"doi":"10.33532/0gye-r156","prefix":"10.33532","suffix":"0gye-r156","identifiers":null,"creators":[{"name":"Creator","affiliation":[]}],"titles":[{"title":"Work
+        Title"}],"publisher":"scholarsphere","container":{},"publicationYear":2019,"subjects":null,"contributors":[],"dates":null,"language":null,"types":{"resourceTypeGeneral":"Text"},"relatedIdentifiers":null,"sizes":null,"formats":null,"version":null,"rightsList":[],"descriptions":null,"geoLocations":null,"fundingReferences":null,"xml":"PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHJlc291cmNlIHhtbG5zOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhtbG5zPSJodHRwOi8vZGF0YWNpdGUub3JnL3NjaGVtYS9rZXJuZWwtNCIgeHNpOnNjaGVtYUxvY2F0aW9uPSJodHRwOi8vZGF0YWNpdGUub3JnL3NjaGVtYS9rZXJuZWwtNCBodHRwOi8vc2NoZW1hLmRhdGFjaXRlLm9yZy9tZXRhL2tlcm5lbC00L21ldGFkYXRhLnhzZCI+CiAgPGlkZW50aWZpZXIgaWRlbnRpZmllclR5cGU9IkRPSSI+MTAuMzM1MzIvMEdZRS1SMTU2PC9pZGVudGlmaWVyPgogIDxjcmVhdG9ycz4KICAgIDxjcmVhdG9yPgogICAgICA8Y3JlYXRvck5hbWU+Q3JlYXRvcjwvY3JlYXRvck5hbWU+CiAgICA8L2NyZWF0b3I+CiAgPC9jcmVhdG9ycz4KICA8dGl0bGVzPgogICAgPHRpdGxlPldvcmsgVGl0bGU8L3RpdGxlPgogIDwvdGl0bGVzPgogIDxwdWJsaXNoZXI+c2Nob2xhcnNwaGVyZTwvcHVibGlzaGVyPgogIDxwdWJsaWNhdGlvblllYXI+MjAxOTwvcHVibGljYXRpb25ZZWFyPgogIDxyZXNvdXJjZVR5cGUgcmVzb3VyY2VUeXBlR2VuZXJhbD0iVGV4dCIvPgogIDx2ZXJzaW9uLz4KPC9yZXNvdXJjZT4K","url":"http://example.test","contentUrl":null,"metadataVersion":0,"schemaVersion":null,"source":null,"isActive":true,"state":"findable","reason":null,"landingPage":null,"created":"2019-12-18T23:22:56.000Z","registered":null,"published":"2019","updated":"2019-12-18T23:22:56.000Z"},"relationships":{"client":{"data":{"id":"psu.ss-dev","type":"clients"}},"media":{"data":{"id":"10.33532/0gye-r156","type":"media"}}}},"included":[{"id":"psu.ss-dev","type":"clients","attributes":{"name":"Scholarsphere
+        Devlopement","symbol":"PSU.SS-DEV","year":2018,"contactEmail":"awead@psu.edu","alternateName":null,"description":null,"language":null,"clientType":"repository","domains":"*","re3data":null,"opendoar":null,"issn":null,"url":null,"created":"2018-11-02T18:30:18.000Z","updated":"2018-11-02T18:31:18.000Z","isActive":true,"hasPassword":true},"relationships":{"provider":{"data":{"id":"psu","type":"providers"}},"prefixes":{"data":[{"id":"10.33532","type":"prefixes"}]}}}]}'
+    http_version: 
+  recorded_at: Wed, 18 Dec 2019 23:22:56 GMT
+- request:
+    method: get
+    uri: https://api.test.datacite.org/dois/10.33532/0gye-r156
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.0
+      Authorization:
+      - Basic cHN1LnNzLWRldjpzc2RldjIwMTg=
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Wed, 18 Dec 2019 23:22:57 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Status:
+      - 200 OK
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Vary:
+      - Accept-Encoding, Origin
+      X-Credential-Username:
+      - psu.ss-dev
+      X-Request-Id:
+      - c97346ad-ff9d-46e7-8bf6-7229f3cdff5f
+      Etag:
+      - W/"45dadcacb0785a00caf6261858d6952e"
+      X-Runtime:
+      - '0.021837'
+      X-Powered-By:
+      - Phusion Passenger 6.0.4
+      Server:
+      - nginx/1.17.3 + Phusion Passenger 6.0.4
+    body:
+      encoding: ASCII-8BIT
+      string: '{"data":{"id":"10.33532/0gye-r156","type":"dois","attributes":{"doi":"10.33532/0gye-r156","prefix":"10.33532","suffix":"0gye-r156","identifiers":null,"creators":[{"name":"Creator","affiliation":[]}],"titles":[{"title":"Work
+        Title"}],"publisher":"scholarsphere","container":{},"publicationYear":2019,"subjects":null,"contributors":[],"dates":null,"language":null,"types":{"resourceTypeGeneral":"Text"},"relatedIdentifiers":null,"sizes":null,"formats":null,"version":null,"rightsList":[],"descriptions":null,"geoLocations":null,"fundingReferences":null,"xml":"PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHJlc291cmNlIHhtbG5zOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhtbG5zPSJodHRwOi8vZGF0YWNpdGUub3JnL3NjaGVtYS9rZXJuZWwtNCIgeHNpOnNjaGVtYUxvY2F0aW9uPSJodHRwOi8vZGF0YWNpdGUub3JnL3NjaGVtYS9rZXJuZWwtNCBodHRwOi8vc2NoZW1hLmRhdGFjaXRlLm9yZy9tZXRhL2tlcm5lbC00L21ldGFkYXRhLnhzZCI+CiAgPGlkZW50aWZpZXIgaWRlbnRpZmllclR5cGU9IkRPSSI+MTAuMzM1MzIvMEdZRS1SMTU2PC9pZGVudGlmaWVyPgogIDxjcmVhdG9ycz4KICAgIDxjcmVhdG9yPgogICAgICA8Y3JlYXRvck5hbWU+Q3JlYXRvcjwvY3JlYXRvck5hbWU+CiAgICA8L2NyZWF0b3I+CiAgPC9jcmVhdG9ycz4KICA8dGl0bGVzPgogICAgPHRpdGxlPldvcmsgVGl0bGU8L3RpdGxlPgogIDwvdGl0bGVzPgogIDxwdWJsaXNoZXI+c2Nob2xhcnNwaGVyZTwvcHVibGlzaGVyPgogIDxwdWJsaWNhdGlvblllYXI+MjAxOTwvcHVibGljYXRpb25ZZWFyPgogIDxyZXNvdXJjZVR5cGUgcmVzb3VyY2VUeXBlR2VuZXJhbD0iVGV4dCIvPgogIDx2ZXJzaW9uLz4KPC9yZXNvdXJjZT4K","url":"http://example.test","contentUrl":null,"metadataVersion":0,"schemaVersion":null,"source":null,"isActive":true,"state":"findable","reason":null,"landingPage":null,"created":"2019-12-18T23:22:56.000Z","registered":"2019-12-18T23:22:57.000Z","published":"2019","updated":"2019-12-18T23:22:57.000Z"},"relationships":{"client":{"data":{"id":"psu.ss-dev","type":"clients"}},"media":{"data":{"id":"10.33532/0gye-r156","type":"media"}}}},"included":[{"id":"psu.ss-dev","type":"clients","attributes":{"name":"Scholarsphere
+        Devlopement","symbol":"PSU.SS-DEV","year":2018,"contactEmail":"awead@psu.edu","alternateName":null,"description":null,"language":null,"clientType":"repository","domains":"*","re3data":null,"opendoar":null,"issn":null,"url":null,"created":"2018-11-02T18:30:18.000Z","updated":"2018-11-02T18:31:18.000Z","isActive":true,"hasPassword":true},"relationships":{"provider":{"data":{"id":"psu","type":"providers"}},"prefixes":{"data":[{"id":"10.33532","type":"prefixes"}]}}}]}'
+    http_version: 
+  recorded_at: Wed, 18 Dec 2019 23:22:57 GMT
+recorded_with: VCR 5.0.0

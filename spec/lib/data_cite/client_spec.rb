@@ -131,6 +131,39 @@ RSpec.describe DataCite::Client do
     end
   end
 
+  describe '#get' do
+    context 'with an existing DRAFT doi', :vcr do
+      it 'retrieves the doi' do
+        draft_doi, _resp = client.register('abc950')
+        doi, response_hash = client.get(doi: draft_doi)
+
+        expect(doi).to eq draft_doi
+        expect(response_hash.dig('data', 'attributes', 'doi')).to eq draft_doi
+      end
+    end
+
+    context 'with an existing PUBLISHED doi', :vcr do
+      it 'retrieves the doi' do
+        published_doi, _resp = client.publish(metadata: valid_metadata)
+        doi, response_hash = client.get(doi: published_doi)
+
+        expect(doi).to eq published_doi
+        expect(response_hash.dig('data', 'attributes', 'doi')).to eq published_doi
+      end
+    end
+
+    context 'with an invalid doi', :vcr do
+      it 'raises an error' do
+        expect {
+          client.get(doi: 'bogus')
+        }.to raise_error(
+          DataCite::Client::Error,
+          /The resource you are looking for doesn't exist/
+        )
+      end
+    end
+  end
+
   describe '#delete' do
     context 'with an existing DRAFT doi', :vcr do
       it 'deletes the doi' do

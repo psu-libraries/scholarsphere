@@ -1,0 +1,111 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.test.datacite.org/dois
+    body:
+      encoding: UTF-8
+      string: '{"data":{"type":"dois","attributes":{"doi":"10.33532/abc950"}}}'
+    headers:
+      User-Agent:
+      - Faraday v0.17.0
+      Content-Type:
+      - application/vnd.api+json
+      Authorization:
+      - Basic cHN1LnNzLWRldjpzc2RldjIwMTg=
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Date:
+      - Wed, 18 Dec 2019 23:18:12 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Status:
+      - 201 Created
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Vary:
+      - Accept-Encoding, Origin
+      X-Credential-Username:
+      - psu.ss-dev
+      X-Request-Id:
+      - 48ed7d81-8ebc-473b-8f71-8e655d67da59
+      Location:
+      - https://api.test.datacite.org/dois/3393474
+      Etag:
+      - W/"7857bd604b2a974028cd25524bac5054"
+      X-Runtime:
+      - '0.071607'
+      X-Powered-By:
+      - Phusion Passenger 6.0.4
+      Server:
+      - nginx/1.17.3 + Phusion Passenger 6.0.4
+    body:
+      encoding: ASCII-8BIT
+      string: '{"data":{"id":"10.33532/abc950","type":"dois","attributes":{"doi":"10.33532/abc950","prefix":"10.33532","suffix":"abc950","identifiers":null,"creators":[],"titles":null,"publisher":null,"container":{},"publicationYear":null,"subjects":null,"contributors":[],"dates":null,"language":null,"types":{},"relatedIdentifiers":null,"sizes":null,"formats":null,"version":null,"rightsList":[],"descriptions":null,"geoLocations":null,"fundingReferences":null,"xml":null,"url":null,"contentUrl":null,"metadataVersion":0,"schemaVersion":null,"source":null,"isActive":false,"state":"draft","reason":null,"landingPage":null,"created":"2019-12-18T23:18:12.000Z","registered":null,"published":"","updated":"2019-12-18T23:18:12.000Z"},"relationships":{"client":{"data":{"id":"psu.ss-dev","type":"clients"}},"media":{"data":{"id":"10.33532/abc950","type":"media"}}}},"included":[{"id":"psu.ss-dev","type":"clients","attributes":{"name":"Scholarsphere
+        Devlopement","symbol":"PSU.SS-DEV","year":2018,"contactEmail":"awead@psu.edu","alternateName":null,"description":null,"language":null,"clientType":"repository","domains":"*","re3data":null,"opendoar":null,"issn":null,"url":null,"created":"2018-11-02T18:30:18.000Z","updated":"2018-11-02T18:31:18.000Z","isActive":true,"hasPassword":true},"relationships":{"provider":{"data":{"id":"psu","type":"providers"}},"prefixes":{"data":[{"id":"10.33532","type":"prefixes"}]}}}]}'
+    http_version: 
+  recorded_at: Wed, 18 Dec 2019 23:18:12 GMT
+- request:
+    method: get
+    uri: https://api.test.datacite.org/dois/10.33532/abc950
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.0
+      Authorization:
+      - Basic cHN1LnNzLWRldjpzc2RldjIwMTg=
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Wed, 18 Dec 2019 23:18:13 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Status:
+      - 200 OK
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Vary:
+      - Accept-Encoding, Origin
+      X-Credential-Username:
+      - psu.ss-dev
+      X-Request-Id:
+      - b2dec157-bb1d-4c8f-8a6d-09038c9ba6bb
+      Etag:
+      - W/"68a02bd72c0e0a9eedda1ce52cabd356"
+      X-Runtime:
+      - '0.021443'
+      X-Powered-By:
+      - Phusion Passenger 6.0.4
+      Server:
+      - nginx/1.17.3 + Phusion Passenger 6.0.4
+    body:
+      encoding: ASCII-8BIT
+      string: '{"data":{"id":"10.33532/abc950","type":"dois","attributes":{"doi":"10.33532/abc950","prefix":"10.33532","suffix":"abc950","identifiers":null,"creators":[],"titles":null,"publisher":null,"container":{},"publicationYear":null,"subjects":null,"contributors":[],"dates":null,"language":null,"types":{},"relatedIdentifiers":null,"sizes":null,"formats":null,"version":null,"rightsList":[],"descriptions":null,"geoLocations":null,"fundingReferences":null,"xml":null,"url":null,"contentUrl":null,"metadataVersion":0,"schemaVersion":null,"source":null,"isActive":false,"state":"draft","reason":null,"landingPage":null,"created":"2019-12-18T23:18:12.000Z","registered":null,"published":"","updated":"2019-12-18T23:18:12.000Z"},"relationships":{"client":{"data":{"id":"psu.ss-dev","type":"clients"}},"media":{"data":{"id":"10.33532/abc950","type":"media"}}}},"included":[{"id":"psu.ss-dev","type":"clients","attributes":{"name":"Scholarsphere
+        Devlopement","symbol":"PSU.SS-DEV","year":2018,"contactEmail":"awead@psu.edu","alternateName":null,"description":null,"language":null,"clientType":"repository","domains":"*","re3data":null,"opendoar":null,"issn":null,"url":null,"created":"2018-11-02T18:30:18.000Z","updated":"2018-11-02T18:31:18.000Z","isActive":true,"hasPassword":true},"relationships":{"provider":{"data":{"id":"psu","type":"providers"}},"prefixes":{"data":[{"id":"10.33532","type":"prefixes"}]}}}]}'
+    http_version: 
+  recorded_at: Wed, 18 Dec 2019 23:18:13 GMT
+recorded_with: VCR 5.0.0

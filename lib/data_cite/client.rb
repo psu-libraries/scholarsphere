@@ -54,6 +54,10 @@ module DataCite
       process_response put(doi: doi, data: data)
     end
 
+    def get(doi:)
+      process_response connection.get("/dois/#{doi}")
+    end
+
     def delete(doi:)
       process_response connection.delete("/dois/#{doi}")
     end
