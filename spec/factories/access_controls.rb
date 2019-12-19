@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :access_control do
-    access_level { 'MyString' }
+    access_level { AccessControl::Level.default }
 
     association(:agent, factory: :user)
     association(:resource, factory: :work)

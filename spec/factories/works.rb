@@ -44,4 +44,12 @@ FactoryBot.define do
   sequence(:work_title) do |n|
     FactoryBotHelpers.work_title(n)
   end
+
+  trait(:with_open_access) do
+    after(:build, &:apply_open_access)
+  end
+
+  trait(:with_authorized_access) do
+    after(:build, &:apply_authorized_access)
+  end
 end

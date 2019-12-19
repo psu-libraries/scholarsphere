@@ -24,7 +24,37 @@ RSpec.describe AccessControl, type: :model do
     it { is_expected.to belong_to(:resource) }
   end
 
-  describe 'validations' do
-    pending 'needed on access_level?'
+  describe '#valid?' do
+    subject { described_class.new(agent: agent, resource: resource, access_level: access_level) }
+
+    let(:resource) { create(:work) }
+    let(:agent) { create(:user) }
+    let(:access_level) { AccessControl::Level::READ }
+
+    context 'when specifying a duplicate type of access' do
+      before { described_class.create(agent: agent, resource: resource, access_level: access_level) }
+
+      it { is_expected.not_to be_valid }
+    end
+
+    context 'when specifying a different type of access' do
+      before { described_class.create(agent: agent, resource: resource, access_level: AccessControl::Level::EDIT) }
+
+      it { is_expected.to be_valid }
+    end
+
+    context 'when specifying an unsupported access level type' do
+      let(:access_level) { 'bogus' }
+
+      it { is_expected.not_to be_valid }
+    end
+  end
+
+  describe 'AccessControl::Level' do
+    specify { expect(AccessControl::Level::DISCOVER).to eq('discover') }
+    specify { expect(AccessControl::Level::READ).to eq('read') }
+    specify { expect(AccessControl::Level::EDIT).to eq('edit') }
+    specify { expect(AccessControl::Level.default).to eq('discover') }
+    specify { expect(AccessControl::Level.all).to contain_exactly('discover', 'read', 'edit') }
   end
 end
