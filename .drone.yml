@@ -10,6 +10,16 @@ test_common: &test_common
   depends_on:
     - build
   environment:
+    DATACITE_ENDPOINT:
+      from_secret: DATACITE_ENDPOINT
+    DATACITE_USERNAME:
+      from_secret: DATACITE_USERNAME
+    DATACITE_PASSWORD:
+      from_secret: DATACITE_PASSWORD
+    DATACITE_PREFIX:
+      from_secret: DATACITE_PREFIX
+    DATACITE_PUBLISHER:
+      from_secret: DATACITE_PUBLISHER
     RAILS_ENV: test
     POSTGRES_USER: scholarsphere
     POSTGRES_DB: scholarsphere
@@ -75,6 +85,11 @@ steps:
         -e AWS_BUCKET=scholarsphere
         -e AWS_ACCESS_KEY_ID=scholarsphere
         -e AWS_SECRET_ACCESS_KEY=scholarsphere
+        -e DATACITE_ENDPOINT=$DATACITE_ENDPOINT
+        -e DATACITE_USERNAME=$DATACITE_USERNAME
+        -e DATACITE_PASSWORD=$DATACITE_PASSWORD
+        -e DATACITE_PREFIX=$DATACITE_PREFIX
+        -e DATACITE_PUBLISHER=$DATACITE_PUBLISHER
         -e AWS_REGION=us-east-1
         -e REDIS_HOST=redis
         -e APP_HOST=test-$DRONE_BUILD_NUMBER
@@ -194,6 +209,6 @@ volumes:
     path: /var/run/docker.sock
 ---
 kind: signature
-hmac: 0233fed56505ca792e83e19e9d965f88445c27d273c7ae032c226fa0b9a6dcef
+hmac: fec077364ec8d7b5af5d66761821be7226d877d9eda915f46125094a2660aa8d
 
 ...
