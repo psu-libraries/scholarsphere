@@ -1,3 +1,4 @@
+set -e 
 
 if [ ${RAILS_ENV:-development} != "production" ]; then
   bundle check || bundle
