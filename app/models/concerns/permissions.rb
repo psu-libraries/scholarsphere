@@ -13,6 +13,14 @@ module Permissions
   include PermissionsBuilder.new(level: AccessControl::Level::READ, agents: [User, Group])
   include PermissionsBuilder.new(level: AccessControl::Level::EDIT, agents: [User, Group])
 
+  # @note This does not create an access control granting the depositor edit access. The depositor is already linked to
+  # the work by the User -> Work relationship.
+  def edit_users
+    return super if edit_access?(depositor)
+
+    super.append(depositor)
+  end
+
   def apply_open_access
     return if open_access?
 
