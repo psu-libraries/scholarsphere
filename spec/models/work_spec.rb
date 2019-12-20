@@ -8,6 +8,7 @@ RSpec.describe Work, type: :model do
     it { is_expected.to have_db_column(:depositor_id) }
     it { is_expected.to have_db_index(:depositor_id) }
     it { is_expected.to have_db_column(:uuid).of_type(:uuid) }
+    it { is_expected.to have_db_column(:doi).of_type(:string) }
   end
 
   describe 'factories' do
@@ -134,6 +135,7 @@ RSpec.describe Work, type: :model do
         is_expected.to contain_exactly(
           'created_at_dtsi',
           'depositor_id_isi',
+          'doi_tesim',
           'id',
           'model_ssi',
           'updated_at_dtsi',
@@ -154,6 +156,7 @@ RSpec.describe Work, type: :model do
           'created_at_dtsi',
           'depositor_id_isi',
           'description_tesim',
+          'doi_tesim',
           'id',
           'identifier_tesim',
           'keywords_tesim',

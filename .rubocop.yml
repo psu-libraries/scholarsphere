@@ -23,6 +23,7 @@ Metrics/BlockLength:
 RSpec/DescribeClass:
   Exclude:
     - 'spec/features/**/*'
+    - 'spec/integration/**/*'
 
 RSpec/ExampleLength:
   Enabled:

@@ -23,7 +23,8 @@ module DataCite
         publicationYear: publication_year,
         types: {
           resourceTypeGeneral: resource_type
-        }
+        },
+        url: generate_url
       }
     end
 
@@ -67,6 +68,10 @@ module DataCite
 
       def resource_type
         RESOURCE_TYPES[work.work_type]
+      end
+
+      def generate_url
+        'http://example.test'
       end
   end
 end

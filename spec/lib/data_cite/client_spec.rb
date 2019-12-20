@@ -5,7 +5,8 @@ require 'support/vcr'
 require 'data_cite'
 
 RSpec.describe DataCite::Client do
-  subject(:client) { described_class.new }
+  # Specify the prefix we used when we recorded these reponses from DataCite using VCR.
+  subject(:client) { described_class.new(prefix: '10.33532') }
 
   let(:valid_metadata) {
     {
@@ -71,6 +72,28 @@ RSpec.describe DataCite::Client do
       end
     end
 
+    context 'when called multiple times with the same doi', :vcr do
+      let(:suffix) { 'abc891' }
+
+      it 'can be idempotentently called multiple times, to update metadata', :vcr do
+        # Register a draft DOI
+        existing_doi, registration_response = client.register(suffix)
+        expect(registration_response.dig('data', 'attributes', 'state')).to eq 'draft'
+
+        # Publish that DOI with one set of metadata
+        doi, response_hash = client.publish(doi: existing_doi, metadata: valid_metadata)
+        expect(doi).to eq existing_doi
+        expect(response_hash.dig('data', 'attributes', 'state')).to eq 'findable'
+
+        # "Publish" that DOI again with updated metadata
+        updated_metadata = valid_metadata.merge(titles: [{ title: 'Updated Title' }])
+        update_doi, update_response_hash = client.publish(doi: existing_doi, metadata: updated_metadata)
+        expect(update_doi).to eq existing_doi
+        expect(update_response_hash.dig('data', 'attributes', 'state')).to eq 'findable'
+        expect(update_response_hash.dig('data', 'attributes', 'titles', 0, 'title')).to eq 'Updated Title'
+      end
+    end
+
     context 'when the metadata is invalid', :vcr do
       it 'raises an error' do
         expect {
@@ -101,6 +124,39 @@ RSpec.describe DataCite::Client do
       it 'raises an error' do
         expect {
           client.update(doi: 'invalid', metadata: valid_metadata)
+        }.to raise_error(
+          DataCite::Client::Error,
+          /The resource you are looking for doesn't exist/
+        )
+      end
+    end
+  end
+
+  describe '#get' do
+    context 'with an existing DRAFT doi', :vcr do
+      it 'retrieves the doi' do
+        draft_doi, _resp = client.register('abc950')
+        doi, response_hash = client.get(doi: draft_doi)
+
+        expect(doi).to eq draft_doi
+        expect(response_hash.dig('data', 'attributes', 'doi')).to eq draft_doi
+      end
+    end
+
+    context 'with an existing PUBLISHED doi', :vcr do
+      it 'retrieves the doi' do
+        published_doi, _resp = client.publish(metadata: valid_metadata)
+        doi, response_hash = client.get(doi: published_doi)
+
+        expect(doi).to eq published_doi
+        expect(response_hash.dig('data', 'attributes', 'doi')).to eq published_doi
+      end
+    end
+
+    context 'with an invalid doi', :vcr do
+      it 'raises an error' do
+        expect {
+          client.get(doi: 'bogus')
         }.to raise_error(
           DataCite::Client::Error,
           /The resource you are looking for doesn't exist/
