@@ -30,6 +30,9 @@ gem 'sidekiq', '~> 6.0'
 gem 'uppy-s3_multipart', '~> 0.3'
 gem 'webpacker', '~> 4.0'
 
+# Experimental
+gem 'actionview-component'
+
 group :development, :test do
   gem 'byebug', platform: :mri
   gem 'database_cleaner'
