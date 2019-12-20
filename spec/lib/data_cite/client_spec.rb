@@ -5,7 +5,8 @@ require 'support/vcr'
 require 'data_cite'
 
 RSpec.describe DataCite::Client do
-  subject(:client) { described_class.new }
+  # Specify the prefix we used when we recorded these reponses from DataCite using VCR.
+  subject(:client) { described_class.new(prefix: '10.33532') }
 
   let(:valid_metadata) {
     {
