@@ -21,23 +21,37 @@ module Permissions
     super.append(depositor)
   end
 
-  def apply_open_access
+  def grant_open_access
     return if open_access?
 
+    revoke_authorized_access
     access_controls.build(access_level: AccessControl::Level::READ, agent: Group.public_agent)
   end
 
-  def open_access?
-    access_controls.any? { |control| control.agent.public? }
+  def revoke_open_access
+    self.access_controls = access_controls.reject do |control|
+      control.agent.public? && control.access_level == AccessControl::Level::READ
+    end
   end
 
-  def apply_authorized_access
+  def open_access?
+    access_controls.any? { |control| control.agent.public? && control.access_level == AccessControl::Level::READ }
+  end
+
+  def grant_authorized_access
     return if authorized_access?
 
+    revoke_open_access
     access_controls.build(access_level: AccessControl::Level::READ, agent: Group.authorized_agent)
   end
 
+  def revoke_authorized_access
+    self.access_controls = access_controls.reject do |control|
+      control.agent.authorized? && control.access_level == AccessControl::Level::READ
+    end
+  end
+
   def authorized_access?
-    access_controls.any? { |control| control.agent.authorized? }
+    access_controls.any? { |control| control.agent.authorized? && control.access_level == AccessControl::Level::READ }
   end
 end

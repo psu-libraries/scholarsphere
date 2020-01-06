@@ -46,10 +46,16 @@ FactoryBot.define do
   end
 
   trait(:with_open_access) do
-    after(:build, &:apply_open_access)
+    after(:build, &:grant_open_access)
   end
 
   trait(:with_authorized_access) do
-    after(:build, &:apply_authorized_access)
+    after(:build, &:grant_authorized_access)
+  end
+
+  trait(:with_no_access) do
+    after(:build) do |work|
+      work.access_controls.destroy_all
+    end
   end
 end

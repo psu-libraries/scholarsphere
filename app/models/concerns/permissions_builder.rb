@@ -10,7 +10,7 @@
 # >  pole = ControlledResource.new
 # >  dog = Dog.new
 # >  cat = Cat.new
-# >  pole.apply_scratch_access(dog)
+# >  pole.grant_scratch_access(dog)
 # >  pole.scratch_access?(dog)
 # => true
 # >  pole.scratch_access?(cat)
@@ -35,10 +35,18 @@ class PermissionsBuilder < Module
       send("#{level}_agents").include?(agent)
     end
 
-    define_method "apply_#{level}_access" do |agent|
-      return if send("#{level}_access?", agent)
+    define_method "grant_#{level}_access" do |*args|
+      args.map do |agent|
+        access_controls.build(access_level: level, agent: agent) unless send("#{level}_access?", agent)
+      end
+    end
 
-      access_controls.build(access_level: level, agent: agent)
+    define_method "revoke_#{level}_access" do |*args|
+      args.map do |agent|
+        self.access_controls = access_controls.reject do |control|
+          control.access_level == level && control.agent == agent
+        end
+      end
     end
 
     agents.each do |agent|
