@@ -4,6 +4,7 @@ FactoryBot.define do
   factory :work do
     association :depositor, factory: :user
     work_type { Work::Types.all.first }
+    visibility { Permissions::Visibility.default }
 
     # Postgres does this for us, but for testing, we can do it here to save having to call create/reload.
     uuid { SecureRandom.uuid }
@@ -43,14 +44,6 @@ FactoryBot.define do
 
   sequence(:work_title) do |n|
     FactoryBotHelpers.work_title(n)
-  end
-
-  trait(:with_open_access) do
-    after(:build, &:grant_open_access)
-  end
-
-  trait(:with_authorized_access) do
-    after(:build, &:grant_authorized_access)
   end
 
   trait(:with_no_access) do

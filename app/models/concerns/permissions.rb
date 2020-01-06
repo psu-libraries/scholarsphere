@@ -3,6 +3,20 @@
 module Permissions
   extend ActiveSupport::Concern
 
+  class Visibility
+    OPEN = 'open'
+    AUTHORIZED = 'authorized'
+    PRIVATE = 'private'
+
+    def self.all
+      [OPEN, AUTHORIZED, PRIVATE]
+    end
+
+    def self.default
+      OPEN
+    end
+  end
+
   included do
     has_many :access_controls,
              as: :resource,
@@ -53,5 +67,28 @@ module Permissions
 
   def authorized_access?
     access_controls.any? { |control| control.agent.authorized? && control.access_level == AccessControl::Level::READ }
+  end
+
+  def visibility
+    if open_access?
+      Visibility::OPEN
+    elsif authorized_access?
+      Visibility::AUTHORIZED
+    else
+      Visibility::PRIVATE
+    end
+  end
+
+  def visibility=(level)
+    case level
+    when Visibility::OPEN
+      grant_open_access
+    when Visibility::AUTHORIZED
+      grant_authorized_access
+    when Visibility::PRIVATE
+      revoke_open_access && revoke_authorized_access
+    else
+      raise ArgumentError, "#{level} is not a supported visibility" unless Visibility.all.include?(level)
+    end
   end
 end

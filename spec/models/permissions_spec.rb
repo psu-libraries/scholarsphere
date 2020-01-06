@@ -17,6 +17,14 @@ RSpec.describe Permissions do
   it { is_expected.to respond_to(:edit_users) }
   it { is_expected.to respond_to(:edit_groups) }
 
+  describe Permissions::Visibility do
+    specify { expect(Permissions::Visibility::OPEN).to eq('open') }
+    specify { expect(Permissions::Visibility::AUTHORIZED).to eq('authorized') }
+    specify { expect(Permissions::Visibility::PRIVATE).to eq('private') }
+    specify { expect(described_class.default).to eq('open') }
+    specify { expect(described_class.all).to contain_exactly('open', 'authorized', 'private') }
+  end
+
   describe '#grant_open_access' do
     context 'when the resource is not open access' do
       it 'adds the necessary access controls to allow open access' do
@@ -28,7 +36,7 @@ RSpec.describe Permissions do
     end
 
     context 'when the resource already is open access' do
-      let(:resource) { build(:work, :with_open_access) }
+      let(:resource) { build(:work) }
 
       it 'does not add a duplicate access control' do
         expect(resource.access_controls.map(&:agent)).to contain_exactly(Group.public_agent)
@@ -39,7 +47,7 @@ RSpec.describe Permissions do
   end
 
   describe '#revoke_open_access' do
-    let(:resource) { build(:work, :with_open_access) }
+    let(:resource) { build(:work) }
 
     it 'removes open access' do
       expect(resource.access_controls.map(&:agent)).to contain_exactly(Group.public_agent)
@@ -50,7 +58,7 @@ RSpec.describe Permissions do
 
   describe '#open_access?' do
     context 'with an open access resource' do
-      let(:resource) { build(:work, :with_open_access) }
+      let(:resource) { build(:work) }
 
       it { is_expected.to be_open_access }
     end
@@ -77,7 +85,7 @@ RSpec.describe Permissions do
     end
 
     context 'when the resource already has authorized access' do
-      let(:resource) { build(:work, :with_authorized_access) }
+      let(:resource) { build(:work, visibility: Permissions::Visibility::AUTHORIZED) }
 
       it 'does not add any duplicate access controls' do
         expect(resource.access_controls.map(&:agent)).to contain_exactly(Group.authorized_agent)
@@ -88,7 +96,7 @@ RSpec.describe Permissions do
   end
 
   describe '#revoke_authorized_access' do
-    let(:resource) { build(:work, :with_authorized_access) }
+    let(:resource) { build(:work, visibility: Permissions::Visibility::AUTHORIZED) }
 
     it 'removes authorized access' do
       expect(resource.access_controls.map(&:agent)).to contain_exactly(Group.authorized_agent)
@@ -99,7 +107,7 @@ RSpec.describe Permissions do
 
   describe '#authorized?' do
     context 'with an autorized resource' do
-      let(:resource) { build(:work, :with_authorized_access) }
+      let(:resource) { build(:work, visibility: Permissions::Visibility::AUTHORIZED) }
 
       it { is_expected.to be_authorized_access }
     end
@@ -397,6 +405,32 @@ RSpec.describe Permissions do
 
       it 'is not duplicated in the list of edit users' do
         expect(resource.edit_users).to contain_exactly(resource.depositor)
+      end
+    end
+  end
+
+  describe '#visibility' do
+    context 'with open visibility' do
+      let(:resource) { build(:work, visibility: Permissions::Visibility::OPEN) }
+
+      its(:visibility) { is_expected.to eq(Permissions::Visibility::OPEN) }
+    end
+
+    context 'with authorized visibility' do
+      let(:resource) { build(:work, visibility: Permissions::Visibility::AUTHORIZED) }
+
+      its(:visibility) { is_expected.to eq(Permissions::Visibility::AUTHORIZED) }
+    end
+
+    context 'with private visibility' do
+      let(:resource) { build(:work, visibility: Permissions::Visibility::PRIVATE) }
+
+      its(:visibility) { is_expected.to eq(Permissions::Visibility::PRIVATE) }
+    end
+
+    context 'with an unsupported visibility' do
+      it 'raises an argument error' do
+        expect { resource.visibility = 'bogus' }.to raise_error(ArgumentError, 'bogus is not a supported visibility')
       end
     end
   end

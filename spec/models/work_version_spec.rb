@@ -71,6 +71,15 @@ RSpec.describe WorkVersion, type: :model do
         work_version.validate
         expect(work_version.errors[:file_resources]).to be_empty
       end
+
+      it 'validates the visibility of the work' do
+        work_version.work.access_controls.destroy_all
+        work_version.validate
+        expect(work_version.errors[:visibility]).to eq(['cannot be private'])
+        work_version.work.grant_open_access
+        work_version.validate
+        expect(work_version.errors[:visibility]).to be_empty
+      end
     end
 
     context 'with the version number' do
