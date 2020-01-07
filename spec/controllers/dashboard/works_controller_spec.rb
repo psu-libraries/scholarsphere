@@ -6,6 +6,7 @@ RSpec.describe Dashboard::WorksController, type: :controller do
   let(:valid_attributes) {
     {
       'work_type' => Work::Types.all.first,
+      'visibility' => Permissions::Visibility.default,
       'versions_attributes' => [
         { 'title' => 'My new work' }
       ]
@@ -93,6 +94,12 @@ RSpec.describe Dashboard::WorksController, type: :controller do
         it "returns a success response (i.e. to display the 'new' template)" do
           post :create, params: { work: invalid_attributes }
           expect(response).to be_successful
+        end
+      end
+
+      context 'with an invalid visibility' do
+        it 'raises an error' do
+          expect { post :create, params: { work: { visibility: 'bogus' } } }.to raise_error(ArgumentError)
         end
       end
     end

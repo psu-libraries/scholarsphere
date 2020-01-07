@@ -15,6 +15,13 @@ module Permissions
     def self.default
       OPEN
     end
+
+    def self.options_for_select_box
+      {
+        'Open Access' => OPEN,
+        'Penn State' => AUTHORIZED
+      }
+    end
   end
 
   included do
