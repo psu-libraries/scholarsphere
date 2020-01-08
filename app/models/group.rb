@@ -4,13 +4,25 @@ class Group < ApplicationRecord
   PUBLIC_AGENT_NAME = 'public'
   AUTHORIZED_AGENT_NAME = 'authorized'
 
+  # @note Database cleaner and transactional fixtures are causing caching problems so we re-find/create each time but
+  # only in test.
   def self.public_agent
-    @public_agent ||= find_or_create_by(name: PUBLIC_AGENT_NAME)
+    if Rails.env.test?
+      find_or_create_by(name: PUBLIC_AGENT_NAME)
+    else
+      @public_agent ||= find_or_create_by(name: PUBLIC_AGENT_NAME)
+    end
   end
   delegate :public_agent, to: :class
 
+  # @note Database cleaner and transactional fixtures are causing caching problems so we re-find/create each time but
+  # only in test.
   def self.authorized_agent
-    @authorized_agent ||= find_or_create_by(name: AUTHORIZED_AGENT_NAME)
+    if Rails.env.test?
+      find_or_create_by(name: AUTHORIZED_AGENT_NAME)
+    else
+      @authorized_agent ||= find_or_create_by(name: AUTHORIZED_AGENT_NAME)
+    end
   end
   delegate :authorized_agent, to: :class
 
