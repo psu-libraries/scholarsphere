@@ -54,6 +54,7 @@ module Dashboard
           .require(:work)
           .permit(
             :work_type,
+            :visibility,
             versions_attributes: [
               :title
             ]

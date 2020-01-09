@@ -20,7 +20,8 @@ RSpec.describe PermissionsBuilder do
     ActiveSupport::Dependencies.remove_constant('Pole')
   end
 
-  it { is_expected.to respond_to(:apply_scratch_access) }
+  it { is_expected.to respond_to(:grant_scratch_access) }
+  it { is_expected.to respond_to(:revoke_scratch_access) }
   it { is_expected.to respond_to(:scratch_access?) }
   it { is_expected.to respond_to(:scratch_agents) }
   it { is_expected.to respond_to(:scratch_dogs) }

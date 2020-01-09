@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe Permissions do
   subject { resource }
 
-  let(:resource) { build(:work) }
+  let(:resource) { build(:work, :with_no_access) }
 
   it { is_expected.to respond_to(:discover_agents) }
   it { is_expected.to respond_to(:discover_users) }
@@ -17,65 +17,97 @@ RSpec.describe Permissions do
   it { is_expected.to respond_to(:edit_users) }
   it { is_expected.to respond_to(:edit_groups) }
 
-  describe '#apply_open_access' do
+  describe Permissions::Visibility do
+    specify { expect(Permissions::Visibility::OPEN).to eq('open') }
+    specify { expect(Permissions::Visibility::AUTHORIZED).to eq('authorized') }
+    specify { expect(Permissions::Visibility::PRIVATE).to eq('private') }
+    specify { expect(described_class.default).to eq('open') }
+    specify { expect(described_class.all).to contain_exactly('open', 'authorized', 'private') }
+  end
+
+  describe '#grant_open_access' do
     context 'when the resource is not open access' do
       it 'adds the necessary access controls to allow open access' do
         expect(resource.access_controls).to be_empty
-        resource.apply_open_access
+        resource.grant_open_access
         expect(resource.access_controls.first.agent).to eq(Group.public_agent)
         expect(resource.access_controls.first.access_level).to eq(AccessControl::Level::READ)
       end
     end
 
     context 'when the resource already is open access' do
-      let(:resource) { build(:work, :with_open_access) }
+      let(:resource) { build(:work) }
 
       it 'does not add a duplicate access control' do
         expect(resource.access_controls.map(&:agent)).to contain_exactly(Group.public_agent)
-        resource.apply_open_access
+        resource.grant_open_access
         expect(resource.access_controls.map(&:agent)).to contain_exactly(Group.public_agent)
       end
     end
   end
 
+  describe '#revoke_open_access' do
+    let(:resource) { build(:work) }
+
+    it 'removes open access' do
+      expect(resource.access_controls.map(&:agent)).to contain_exactly(Group.public_agent)
+      resource.revoke_open_access
+      expect(resource.access_controls).to be_empty
+    end
+  end
+
   describe '#open_access?' do
     context 'with an open access resource' do
-      let(:resource) { build(:work, :with_open_access) }
+      let(:resource) { build(:work) }
 
       it { is_expected.to be_open_access }
     end
 
-    context 'when a restricted resource' do
-      let(:resource) { build(:work) }
+    context 'with a restricted resource' do
+      it { is_expected.not_to be_open_access }
+    end
+
+    context 'when the public agent does NOT have read access' do
+      before { resource.grant_discover_access(Group.public_agent) }
 
       it { is_expected.not_to be_open_access }
     end
   end
 
-  describe '#apply_authorized_access' do
+  describe '#grant_authorized_access' do
     context 'when the resource is not authorized access' do
       it 'adds the necessary access controls to allow authorized access' do
         expect(resource.access_controls).to be_empty
-        resource.apply_authorized_access
+        resource.grant_authorized_access
         expect(resource.access_controls.first.agent).to eq(Group.authorized_agent)
         expect(resource.access_controls.first.access_level).to eq(AccessControl::Level::READ)
       end
     end
 
     context 'when the resource already has authorized access' do
-      let(:resource) { build(:work, :with_authorized_access) }
+      let(:resource) { build(:work, visibility: Permissions::Visibility::AUTHORIZED) }
 
       it 'does not add any duplicate access controls' do
         expect(resource.access_controls.map(&:agent)).to contain_exactly(Group.authorized_agent)
-        resource.apply_authorized_access
+        resource.grant_authorized_access
         expect(resource.access_controls.map(&:agent)).to contain_exactly(Group.authorized_agent)
       end
     end
   end
 
+  describe '#revoke_authorized_access' do
+    let(:resource) { build(:work, visibility: Permissions::Visibility::AUTHORIZED) }
+
+    it 'removes authorized access' do
+      expect(resource.access_controls.map(&:agent)).to contain_exactly(Group.authorized_agent)
+      resource.revoke_authorized_access
+      expect(resource.access_controls).to be_empty
+    end
+  end
+
   describe '#authorized?' do
     context 'with an autorized resource' do
-      let(:resource) { build(:work, :with_authorized_access) }
+      let(:resource) { build(:work, visibility: Permissions::Visibility::AUTHORIZED) }
 
       it { is_expected.to be_authorized_access }
     end
@@ -85,10 +117,16 @@ RSpec.describe Permissions do
 
       it { is_expected.not_to be_authorized_access }
     end
+
+    context 'when the authorized agent does NOT have read access' do
+      before { resource.grant_discover_access(Group.authorized_agent) }
+
+      it { is_expected.not_to be_authorized_access }
+    end
   end
 
-  describe '#apply_discover_access' do
-    before { resource.apply_discover_access(agent) }
+  describe '#grant_discover_access' do
+    before { resource.grant_discover_access(agent) }
 
     context 'with a group agent' do
       let(:agent) { build(:group) }
@@ -107,7 +145,7 @@ RSpec.describe Permissions do
 
       it 'does not add any duplicate access controls' do
         expect(resource.access_controls.map(&:agent)).to contain_exactly(agent)
-        resource.apply_discover_access(agent)
+        resource.grant_discover_access(agent)
         expect(resource.access_controls.map(&:agent)).to contain_exactly(agent)
       end
     end
@@ -117,8 +155,31 @@ RSpec.describe Permissions do
 
       it 'does not add any duplicate access controls' do
         expect(resource.access_controls.map(&:agent)).to contain_exactly(agent)
-        resource.apply_discover_access(agent)
+        resource.grant_discover_access(agent)
         expect(resource.access_controls.map(&:agent)).to contain_exactly(agent)
+      end
+    end
+  end
+
+  describe '#revoke_discover_access' do
+    let(:group_agent) { build(:group) }
+    let(:user_agent) { build(:user) }
+
+    before { resource.grant_discover_access(group_agent, user_agent) }
+
+    context 'with a group agent' do
+      it 'removes only the group agent' do
+        expect(resource.access_controls.map(&:agent)).to contain_exactly(group_agent, user_agent)
+        resource.revoke_discover_access(group_agent)
+        expect(resource.access_controls.map(&:agent)).to contain_exactly(user_agent)
+      end
+    end
+
+    context 'with a user agent' do
+      it 'removes only the user agent' do
+        expect(resource.access_controls.map(&:agent)).to contain_exactly(group_agent, user_agent)
+        resource.revoke_discover_access(user_agent)
+        expect(resource.access_controls.map(&:agent)).to contain_exactly(group_agent)
       end
     end
   end
@@ -127,7 +188,7 @@ RSpec.describe Permissions do
     context 'when a user has discover access to the resource' do
       let(:agent) { build(:user) }
 
-      before { resource.apply_discover_access(agent) }
+      before { resource.grant_discover_access(agent) }
 
       specify { expect(resource.discover_access?(agent)).to be(true) }
     end
@@ -141,7 +202,7 @@ RSpec.describe Permissions do
     context 'when a group has discover access to the resource' do
       let(:agent) { build(:group) }
 
-      before { resource.apply_discover_access(agent) }
+      before { resource.grant_discover_access(agent) }
 
       specify { expect(resource.discover_access?(agent)).to be(true) }
     end
@@ -153,8 +214,8 @@ RSpec.describe Permissions do
     end
   end
 
-  describe '#apply_read_access' do
-    before { resource.apply_read_access(agent) }
+  describe '#grant_read_access' do
+    before { resource.grant_read_access(agent) }
 
     context 'with a group agent' do
       let(:agent) { build(:group) }
@@ -173,7 +234,7 @@ RSpec.describe Permissions do
 
       it 'does not add any duplicate access controls' do
         expect(resource.access_controls.map(&:agent)).to contain_exactly(agent)
-        resource.apply_read_access(agent)
+        resource.grant_read_access(agent)
         expect(resource.access_controls.map(&:agent)).to contain_exactly(agent)
       end
     end
@@ -183,8 +244,31 @@ RSpec.describe Permissions do
 
       it 'does not add any duplicate access controls' do
         expect(resource.access_controls.map(&:agent)).to contain_exactly(agent)
-        resource.apply_read_access(agent)
+        resource.grant_read_access(agent)
         expect(resource.access_controls.map(&:agent)).to contain_exactly(agent)
+      end
+    end
+  end
+
+  describe '#revoke_read_access' do
+    let(:group_agent) { build(:group) }
+    let(:user_agent) { build(:user) }
+
+    before { resource.grant_read_access(group_agent, user_agent) }
+
+    context 'with a group agent' do
+      it 'removes only the group agent' do
+        expect(resource.access_controls.map(&:agent)).to contain_exactly(group_agent, user_agent)
+        resource.revoke_read_access(group_agent)
+        expect(resource.access_controls.map(&:agent)).to contain_exactly(user_agent)
+      end
+    end
+
+    context 'with a user agent' do
+      it 'removes only the user agent' do
+        expect(resource.access_controls.map(&:agent)).to contain_exactly(group_agent, user_agent)
+        resource.revoke_read_access(user_agent)
+        expect(resource.access_controls.map(&:agent)).to contain_exactly(group_agent)
       end
     end
   end
@@ -193,7 +277,7 @@ RSpec.describe Permissions do
     context 'when a user has read access to the resource' do
       let(:agent) { build(:user) }
 
-      before { resource.apply_read_access(agent) }
+      before { resource.grant_read_access(agent) }
 
       specify { expect(resource.read_access?(agent)).to be(true) }
     end
@@ -207,7 +291,7 @@ RSpec.describe Permissions do
     context 'when a group has read access to the resource' do
       let(:agent) { build(:group) }
 
-      before { resource.apply_read_access(agent) }
+      before { resource.grant_read_access(agent) }
 
       specify { expect(resource.read_access?(agent)).to be(true) }
     end
@@ -219,8 +303,8 @@ RSpec.describe Permissions do
     end
   end
 
-  describe '#apply_edit_access' do
-    before { resource.apply_edit_access(agent) }
+  describe '#grant_edit_access' do
+    before { resource.grant_edit_access(agent) }
 
     context 'with a group agent' do
       let(:agent) { build(:group) }
@@ -239,7 +323,7 @@ RSpec.describe Permissions do
 
       it 'does not add any duplicate access controls' do
         expect(resource.access_controls.map(&:agent)).to contain_exactly(agent)
-        resource.apply_edit_access(agent)
+        resource.grant_edit_access(agent)
         expect(resource.access_controls.map(&:agent)).to contain_exactly(agent)
       end
     end
@@ -249,8 +333,31 @@ RSpec.describe Permissions do
 
       it 'does not add any duplicate access controls' do
         expect(resource.access_controls.map(&:agent)).to contain_exactly(agent)
-        resource.apply_edit_access(agent)
+        resource.grant_edit_access(agent)
         expect(resource.access_controls.map(&:agent)).to contain_exactly(agent)
+      end
+    end
+  end
+
+  describe '#revoke_edit_access' do
+    let(:group_agent) { build(:group) }
+    let(:user_agent) { build(:user) }
+
+    before { resource.grant_edit_access(group_agent, user_agent) }
+
+    context 'with a group agent' do
+      it 'removes only the group agent' do
+        expect(resource.access_controls.map(&:agent)).to contain_exactly(group_agent, user_agent)
+        resource.revoke_edit_access(group_agent)
+        expect(resource.access_controls.map(&:agent)).to contain_exactly(user_agent)
+      end
+    end
+
+    context 'with a user agent' do
+      it 'removes only the user agent' do
+        expect(resource.access_controls.map(&:agent)).to contain_exactly(group_agent, user_agent)
+        resource.revoke_edit_access(user_agent)
+        expect(resource.access_controls.map(&:agent)).to contain_exactly(group_agent)
       end
     end
   end
@@ -259,7 +366,7 @@ RSpec.describe Permissions do
     context 'when a user has edit access to the resource' do
       let(:agent) { build(:user) }
 
-      before { resource.apply_edit_access(agent) }
+      before { resource.grant_edit_access(agent) }
 
       specify { expect(resource.edit_access?(agent)).to be(true) }
     end
@@ -273,7 +380,7 @@ RSpec.describe Permissions do
     context 'when a group has edit access to the resource' do
       let(:agent) { build(:group) }
 
-      before { resource.apply_edit_access(agent) }
+      before { resource.grant_edit_access(agent) }
 
       specify { expect(resource.edit_access?(agent)).to be(true) }
     end
@@ -294,10 +401,36 @@ RSpec.describe Permissions do
     end
 
     context 'when the depositor has edit access via an AccessControl object' do
-      before { resource.apply_edit_access(resource.depositor) }
+      before { resource.grant_edit_access(resource.depositor) }
 
       it 'is not duplicated in the list of edit users' do
         expect(resource.edit_users).to contain_exactly(resource.depositor)
+      end
+    end
+  end
+
+  describe '#visibility' do
+    context 'with open visibility' do
+      let(:resource) { build(:work, visibility: Permissions::Visibility::OPEN) }
+
+      its(:visibility) { is_expected.to eq(Permissions::Visibility::OPEN) }
+    end
+
+    context 'with authorized visibility' do
+      let(:resource) { build(:work, visibility: Permissions::Visibility::AUTHORIZED) }
+
+      its(:visibility) { is_expected.to eq(Permissions::Visibility::AUTHORIZED) }
+    end
+
+    context 'with private visibility' do
+      let(:resource) { build(:work, visibility: Permissions::Visibility::PRIVATE) }
+
+      its(:visibility) { is_expected.to eq(Permissions::Visibility::PRIVATE) }
+    end
+
+    context 'with an unsupported visibility' do
+      it 'raises an argument error' do
+        expect { resource.visibility = 'bogus' }.to raise_error(ArgumentError, 'bogus is not a supported visibility')
       end
     end
   end

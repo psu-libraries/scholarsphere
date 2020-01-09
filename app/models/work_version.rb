@@ -46,6 +46,13 @@ class WorkVersion < ApplicationRecord
             presence: true,
             uniqueness: { scope: :work_id }
 
+  validates :visibility,
+            inclusion: {
+              in: [Permissions::Visibility::OPEN, Permissions::Visibility::AUTHORIZED],
+              message: 'cannot be private'
+            },
+            if: :published?
+
   after_save :update_index, if: :published?
 
   aasm do
@@ -112,7 +119,7 @@ class WorkVersion < ApplicationRecord
     WorkIndexer.call(work, commit: true)
   end
 
-  delegate :depositor, to: :work
+  delegate :depositor, :visibility, to: :work
 
   private
 

@@ -4,6 +4,7 @@ FactoryBot.define do
   factory :work do
     association :depositor, factory: :user
     work_type { Work::Types.all.first }
+    visibility { Permissions::Visibility.default }
 
     # Postgres does this for us, but for testing, we can do it here to save having to call create/reload.
     uuid { SecureRandom.uuid }
@@ -45,11 +46,9 @@ FactoryBot.define do
     FactoryBotHelpers.work_title(n)
   end
 
-  trait(:with_open_access) do
-    after(:build, &:apply_open_access)
-  end
-
-  trait(:with_authorized_access) do
-    after(:build, &:apply_authorized_access)
+  trait(:with_no_access) do
+    after(:build) do |work|
+      work.access_controls.destroy_all
+    end
   end
 end
