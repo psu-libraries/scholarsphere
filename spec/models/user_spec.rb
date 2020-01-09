@@ -65,8 +65,13 @@ RSpec.describe User, type: :model do
         expect(new_user.surname).to eq 'Developer'
         expect(new_user.email).to eq 'jd1@psu.edu'
 
-        expect(new_user.groups.length).to eq 2
-        expect(new_user.groups.map(&:name)).to contain_exactly('admin', 'reporter')
+        expect(new_user.groups.length).to eq 4
+        expect(new_user.groups.map(&:name)).to contain_exactly(
+          'admin',
+          'reporter',
+          Group::AUTHORIZED_AGENT_NAME,
+          Group::PUBLIC_AGENT_NAME
+        )
       end
     end
 
@@ -95,7 +100,12 @@ RSpec.describe User, type: :model do
         existing_user.groups.create!(name: 'MY OLD GROUP THAT SHOULD GO AWAY')
         described_class.from_omniauth(auth_params)
 
-        expect(existing_user.reload.groups.map(&:name)).to contain_exactly('admin', 'reporter')
+        expect(existing_user.reload.groups.map(&:name)).to contain_exactly(
+          'admin',
+          'reporter',
+          Group::AUTHORIZED_AGENT_NAME,
+          Group::PUBLIC_AGENT_NAME
+        )
       end
 
       it 'returns the User record' do

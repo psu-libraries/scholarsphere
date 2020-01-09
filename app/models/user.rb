@@ -31,6 +31,10 @@ class User < ApplicationRecord
     new(guest: true, groups: [Group.public_agent]).tap(&:readonly!)
   end
 
+  def self.default_groups
+    [Group.public_agent, Group.authorized_agent]
+  end
+
   def self.from_omniauth(auth)
     user = User.find_or_initialize_by(provider: auth.provider, uid: auth.uid) do |new_user|
       # Written once, when the user is created, then never again
@@ -42,9 +46,11 @@ class User < ApplicationRecord
     user.given_name = auth.info.given_name
     user.surname = auth.info.surname
 
-    user.groups = auth.info.groups.map do |group_name|
+    psu_groups = auth.info.groups.map do |group_name|
       Group.find_or_create_by(name: group_name)
     end
+
+    user.groups = psu_groups + default_groups
 
     user.save!
 
