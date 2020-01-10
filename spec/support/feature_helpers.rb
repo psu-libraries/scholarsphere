@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module FeatureHelpers
-  def sign_in(user: nil)
+  def setup_oauth(user: nil)
     OmniAuth.config.test_mode = true
     OmniAuth.config.mock_auth[:psu] = mock_auth_hash(user) if user.present?
   end
@@ -23,13 +23,20 @@ end
 
 RSpec.configure do |config|
   config.before(type: :feature) do |example|
-    if example.metadata.key?(:with_user)
-      sign_in(user: send(example.metadata.fetch(:with_user)))
-    else
-      sign_in
+    # @note Bypass OAuth and use Warden, except if we're testing Javascript because we'll be in a multithreaded
+    # situation. Note, however, that when using the :js option, .setup_oauth doesn't actually log you in. The login
+    # process is happening by conincidence in the DashboardController. Currently, we don't have a way of logging the
+    # user in after OAuth is setup unless we visit a page requiring authentication, or click the 'Log in' link.
+    if user = example.metadata[:with_user]
+      if example.metadata[:js]
+        setup_oauth(user: send(user))
+      else
+        login_as(send(user))
+      end
     end
   end
 
+  config.include Warden::Test::Helpers, type: :feature
   config.include FeatureHelpers, type: :feature
   config.include ActionView::RecordIdentifier, type: :feature
 end
