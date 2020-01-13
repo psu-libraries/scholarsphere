@@ -75,6 +75,7 @@ en:
       heading: "History of %{work}"
       show_diff: Show Changes
       by: by
+      unknown_user: '[unknown user]'
       renamed_to:
         html: "&rarr;"
       file_membership:

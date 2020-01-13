@@ -1,0 +1,27 @@
+<div id="<%= element_id %>" class="work-history__change work-history__change--work-version">
+  <strong class="work-history__change-event"><%= action %></strong>
+
+  <% if changed_attributes.any? %>
+    <span class="work-history__change-changed-attributes"><%= changed_attributes_truncated %></span>
+    <a class="btn btn-outline-primary btn-xs" data-toggle="collapse" href="#<%= diff_id %>" role="button" aria-expanded="false" aria-controls="collapseExample"><%= t 'dashboard.work_history.show_diff' %></a>
+  <% end %>
+
+  <div class="work-history__change-metadata">
+    <span class="work-history__change-timestamp"><%= timestamp %></span>
+    <span class="text-secondary"><%= t 'dashboard.work_history.by' %></span>
+    <span class="work-history__change-user"><%= user_name %></span>
+  </div>
+
+  <% if changed_attributes.any? %>
+    <div id="<%= diff_id %>" class="work-history__diff collapse">
+      <%# @todo make the diff its own component? %>
+      <% diff_presenter.hash.each do |term, value| %>
+        <p>
+        <strong><%= WorkVersion.human_attribute_name(term) %>:</strong>
+        <%= value.to_s(:html).html_safe %>
+        </p>
+      <% end %>
+    </div>
+
+  <% end %>
+</div>
