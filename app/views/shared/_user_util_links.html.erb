@@ -4,7 +4,11 @@
   <% end %>
 
   <% if has_user_authentication_provider? %>
-    <% if current_user %>
+    <% if current_user.guest? %>
+      <li class="nav-item">
+        <%= link_to t('blacklight.header_links.login'), new_user_session_path, class: 'nav-link' %>
+      </li>
+    <% else %>
       <li class="nav-item">
         <%= link_to t('blacklight.header_links.logout'), destroy_user_session_path, class: 'nav-link' %>
       </li>
@@ -15,10 +19,6 @@
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <%= link_to 'Works', dashboard_works_path, class: 'dropdown-item' %>
         </div>
-      </li>
-    <% else %>
-      <li class="nav-item">
-        <%= link_to t('blacklight.header_links.login'), new_user_session_path, class: 'nav-link' %>
       </li>
     <% end %>
   <% end %>

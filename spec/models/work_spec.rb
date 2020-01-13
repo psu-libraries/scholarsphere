@@ -140,7 +140,9 @@ RSpec.describe Work, type: :model do
           'model_ssi',
           'updated_at_dtsi',
           'uuid_ssi',
-          'work_type_tesim'
+          'work_type_tesim',
+          'discover_users_ssim',
+          'discover_groups_ssim'
         )
       end
     end
@@ -176,7 +178,9 @@ RSpec.describe Work, type: :model do
           'version_name_tesim',
           'version_number_isi',
           'work_id_isi',
-          'work_type_tesim'
+          'work_type_tesim',
+          'discover_users_ssim',
+          'discover_groups_ssim'
         )
       end
     end

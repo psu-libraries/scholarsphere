@@ -34,6 +34,14 @@ RSpec.describe User, type: :model do
     it { is_expected.to respond_to(:bookmarks) }
   end
 
+  describe '.guest' do
+    subject { described_class.guest }
+
+    it { is_expected.to be_guest }
+    its(:groups) { is_expected.to contain_exactly(Group.public_agent) }
+    it { is_expected.to be_readonly }
+  end
+
   describe '.from_omniauth' do
     let(:auth_params) { build :psu_oauth_response,
                               given_name: 'Joe',
@@ -57,8 +65,13 @@ RSpec.describe User, type: :model do
         expect(new_user.surname).to eq 'Developer'
         expect(new_user.email).to eq 'jd1@psu.edu'
 
-        expect(new_user.groups.length).to eq 2
-        expect(new_user.groups.map(&:name)).to contain_exactly('admin', 'reporter')
+        expect(new_user.groups.length).to eq 4
+        expect(new_user.groups.map(&:name)).to contain_exactly(
+          'admin',
+          'reporter',
+          Group::AUTHORIZED_AGENT_NAME,
+          Group::PUBLIC_AGENT_NAME
+        )
       end
     end
 
@@ -87,7 +100,12 @@ RSpec.describe User, type: :model do
         existing_user.groups.create!(name: 'MY OLD GROUP THAT SHOULD GO AWAY')
         described_class.from_omniauth(auth_params)
 
-        expect(existing_user.reload.groups.map(&:name)).to contain_exactly('admin', 'reporter')
+        expect(existing_user.reload.groups.map(&:name)).to contain_exactly(
+          'admin',
+          'reporter',
+          Group::AUTHORIZED_AGENT_NAME,
+          Group::PUBLIC_AGENT_NAME
+        )
       end
 
       it 'returns the User record' do
@@ -114,6 +132,26 @@ RSpec.describe User, type: :model do
 
     it 'concatenates given_name and surname' do
       expect(user.name).to eq 'Joe Developer'
+    end
+  end
+
+  describe '#guest?' do
+    context 'with a new user' do
+      subject { described_class.new }
+
+      it { is_expected.not_to be_guest }
+    end
+
+    context 'with an existing user' do
+      subject { build(:user) }
+
+      it { is_expected.not_to be_guest }
+    end
+
+    context 'with a guest user' do
+      subject { build(:user, guest: true) }
+
+      it { is_expected.to be_guest }
     end
   end
 end

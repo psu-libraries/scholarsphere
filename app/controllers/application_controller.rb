@@ -7,4 +7,8 @@ class ApplicationController < ActionController::Base
 
   # Authorization
   include Pundit
+
+  def current_user
+    super || User.guest
+  end
 end

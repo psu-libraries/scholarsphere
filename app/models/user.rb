@@ -6,6 +6,8 @@ class User < ApplicationRecord
 
   devise :omniauthable, omniauth_providers: %i[psu]
 
+  attr_writer :guest
+
   has_many :works,
            foreign_key: 'depositor_id',
            inverse_of: 'depositor',
@@ -25,6 +27,14 @@ class User < ApplicationRecord
             presence: true,
             uniqueness: true
 
+  def self.guest
+    new(guest: true, groups: [Group.public_agent]).tap(&:readonly!)
+  end
+
+  def self.default_groups
+    [Group.public_agent, Group.authorized_agent]
+  end
+
   def self.from_omniauth(auth)
     user = User.find_or_initialize_by(provider: auth.provider, uid: auth.uid) do |new_user|
       # Written once, when the user is created, then never again
@@ -36,9 +46,11 @@ class User < ApplicationRecord
     user.given_name = auth.info.given_name
     user.surname = auth.info.surname
 
-    user.groups = auth.info.groups.map do |group_name|
+    psu_groups = auth.info.groups.map do |group_name|
       Group.find_or_create_by(name: group_name)
     end
+
+    user.groups = psu_groups + default_groups
 
     user.save!
 
@@ -51,5 +63,9 @@ class User < ApplicationRecord
 
   def name
     "#{given_name} #{surname}"
+  end
+
+  def guest?
+    @guest || false
   end
 end

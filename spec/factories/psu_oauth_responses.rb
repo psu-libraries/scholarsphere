@@ -11,7 +11,9 @@ FactoryBot.define do
       given_name { Faker::Name.first_name }
       surname { Faker::Name.last_name }
       email { "#{access_id}@psu.edu" }
-      groups { Array.new(3) { Faker::Coffee.blend_name } }
+
+      # Group names cannot contain spaces (see #155)
+      groups { Array.new(3) { "up.libraries.#{Faker::Currency.code.downcase}" } }
     end
 
     provider { 'psu' }
