@@ -1,0 +1,20 @@
+<div
+  id="<%= element_id %>"
+  class="work-history__change work-history__change--file work-history__change--<%= event_class %>">
+
+  <strong class="work-history__change-event"><%= action %></strong>
+
+  <small class="work-history__files">
+    <% if rename? %>
+      <code><%= previous_filename %></code>
+      <%= t 'dashboard.work_history.renamed_to.html' %>
+    <% end %>
+    <code><%= current_filename %></code>
+  </small>
+
+  <div class="work-history__change-metadata">
+    <span class="work-history__change-timestamp"><%= timestamp %></span>
+    <span class="text-secondary"><%= t 'dashboard.work_history.by' %></span>
+    <span class="work-history__change-user"><%= user_name %></span>
+  </div>
+</div>

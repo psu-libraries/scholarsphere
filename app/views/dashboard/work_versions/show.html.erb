@@ -8,7 +8,7 @@
 <h1><%= @work_version.title %></h1>
 <h2>
   <%= @work_version.display_name %>
-  <%= render partial: 'status_badge', locals: { version: @work_version } %>
+  <%= render WorkVersions::StatusBadgeComponent, work_version: @work_version %>
 </h2>
 
 <div class="row">
