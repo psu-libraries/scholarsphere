@@ -8,7 +8,7 @@
         <div class="work-version__metadata col">
           <%= link_to version.display_name, dashboard_work_version_path(version) %>
           <%= version.display_date %>
-          <%= render partial: 'status_badge', locals: { version: version } %>
+          <%= render WorkVersions::StatusBadgeComponent, work_version: version %>
           <%= if previous_version && params['action'] != 'diff'
                 link_to t('dashboard.diff.link'),
                         dashboard_work_version_diff_path(
