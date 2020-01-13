@@ -47,7 +47,11 @@ RSpec.describe User, type: :model do
                               given_name: 'Joe',
                               surname: 'Developer',
                               access_id: 'jd1',
-                              groups: ['admin', 'reporter']
+                              groups: [
+                                'cn=admin,dc=psu,dc=edu',
+                                'cn=reporter,dc=psu,dc=edu',
+                                'cn=totally invalid with spaces,dc=psu,dc=edu'
+                              ]
     }
 
     context 'when the User record does not yet exist' do

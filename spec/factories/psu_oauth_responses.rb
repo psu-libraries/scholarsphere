@@ -13,7 +13,7 @@ FactoryBot.define do
       email { "#{access_id}@psu.edu" }
 
       # Group names cannot contain spaces (see #155)
-      groups { Array.new(3) { "up.libraries.#{Faker::Currency.code.downcase}" } }
+      groups { Array.new(3) { "cn=up.libraries.#{Faker::Currency.code.downcase},dc=psu,dc=edu" } }
     end
 
     provider { 'psu' }
