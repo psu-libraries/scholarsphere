@@ -46,9 +46,12 @@ class User < ApplicationRecord
     user.given_name = auth.info.given_name
     user.surname = auth.info.surname
 
-    psu_groups = auth.info.groups.map do |group_name|
-      Group.find_or_create_by(name: group_name)
-    end
+    psu_groups = auth.info.groups
+      .map { |ldap_group_name| LdapGroupCleaner.call(ldap_group_name) }
+      .compact
+      .map do |group_name|
+        Group.find_or_create_by(name: group_name)
+      end
 
     user.groups = psu_groups + default_groups
 
