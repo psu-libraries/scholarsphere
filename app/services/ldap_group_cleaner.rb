@@ -4,9 +4,12 @@ class LdapGroupCleaner
   class Error < RuntimeError; end
 
   class << self
+    attr_writer :logger_source
+
     def call(ldap_record)
       call!(ldap_record)
-    rescue Error
+    rescue Error => e
+      logger_source.call("#{e.class}: #{e.message.inspect} with record #{ldap_record.inspect}")
       nil
     end
 
@@ -20,6 +23,10 @@ class LdapGroupCleaner
       raise Error.new('LDAP group is empty') if value.to_s.empty?
 
       value
+    end
+
+    def logger_source
+      @logger_source ||= ->(msg) { Rails.logger.error(msg) }
     end
   end
 end

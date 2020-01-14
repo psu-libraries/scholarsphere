@@ -17,9 +17,21 @@ RSpec.describe LdapGroupCleaner do
 
     context 'with a value that would raise an error to .call! (see below)' do
       let(:input) { 'cn=i have spaces,dc=psu,dc=edu' }
+      let(:mock_logger) { instance_spy 'Proc' }
+
+      before { @old_logger = described_class.logger_source }
+
+      after { described_class.logger_source = @old_logger }
 
       it 'traps the error and returns nil' do
         expect(call).to eq nil
+      end
+
+      it 'logs the error' do
+        described_class.logger_source = mock_logger
+        call
+        expect(mock_logger).to have_received(:call)
+          .with(a_string_matching(input))
       end
     end
   end
