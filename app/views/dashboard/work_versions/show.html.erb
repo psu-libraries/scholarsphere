@@ -5,7 +5,10 @@
   </ol>
 </nav>
 
-<h1><%= @work_version.title %></h1>
+<h1>
+  <%= @work_version.title %>
+  <%= render VisibilityBadgeComponent, work: @work %>
+</h1>
 <h2>
   <%= @work_version.display_name %>
   <%= render WorkVersions::StatusBadgeComponent, work_version: @work_version %>

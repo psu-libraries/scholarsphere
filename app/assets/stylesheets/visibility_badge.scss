@@ -1,0 +1,13 @@
+@import 'bootstrap/functions';
+@import 'bootstrap/variables';
+@import 'bootstrap/mixins';
+
+.visibility {
+  img {
+    padding-right: 5px;
+  }
+}
+
+.visibility--authorized { @include badge-variant($light); }
+.visibility--open { @include badge-variant($light); }
+.visibility--private { @include badge-variant($light); }

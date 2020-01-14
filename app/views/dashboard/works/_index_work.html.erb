@@ -1,5 +1,8 @@
 <div class="work-list__work">
-  <h3><%= index_work.latest_version.title %></h3>
+  <h3>
+    <%= index_work.latest_version.title %>
+    <%= render VisibilityBadgeComponent, work: index_work %>
+  </h3>
   <h5>
     <%= Work::Types.display(index_work.work_type) %>
     <%= link_to 'History', dashboard_work_history_path(index_work) %>

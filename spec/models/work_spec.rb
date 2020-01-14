@@ -142,7 +142,8 @@ RSpec.describe Work, type: :model do
           'uuid_ssi',
           'work_type_tesim',
           'discover_users_ssim',
-          'discover_groups_ssim'
+          'discover_groups_ssim',
+          'visibility_ssi'
         )
       end
     end
@@ -180,7 +181,8 @@ RSpec.describe Work, type: :model do
           'work_id_isi',
           'work_type_tesim',
           'discover_users_ssim',
-          'discover_groups_ssim'
+          'discover_groups_ssim',
+          'visibility_ssi'
         )
       end
     end
