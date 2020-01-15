@@ -76,7 +76,8 @@ class Work < ApplicationRecord
       .merge(SolrDocumentBuilder.call(resource: self))
       .merge(
         'discover_users_ssim' => (discover_users + read_users).map(&:access_id).uniq,
-        'discover_groups_ssim' => (discover_groups + read_groups).map(&:name).uniq
+        'discover_groups_ssim' => (discover_groups + read_groups).map(&:name).uniq,
+        'visibility_ssi' => visibility
       )
       .except(:latest_version_bsi)
   end
