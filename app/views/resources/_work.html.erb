@@ -1,0 +1,4 @@
+<h1><%= work.latest_version.title %></h1>
+
+<%= render WorkVersionMetadataComponent, work_version: work.latest_version %>
+<%= render 'shared/work_version_files', work_version: work.latest_version %>

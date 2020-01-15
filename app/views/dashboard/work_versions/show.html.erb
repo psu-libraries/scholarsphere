@@ -16,8 +16,8 @@
 
 <div class="row">
   <div class="col-sm-7">
-    <%= render partial: 'show_fields', locals: { work_version: @work_version } %>
-    <%= render partial: 'show_files', locals: { work_version: @work_version } %>
+    <%= render WorkVersionMetadataComponent, work_version: @work_version %>
+    <%= render 'shared/work_version_files', work_version: @work_version %>
   </div>
 
   <div class="col-sm-5">
