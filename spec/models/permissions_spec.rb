@@ -212,6 +212,15 @@ RSpec.describe Permissions do
 
       specify { expect(resource.discover_access?(agent)).to be(false) }
     end
+
+    context 'when a user is a member of a group with discover access' do
+      let(:group) { build(:group) }
+      let(:agent) { build(:user, groups: [group]) }
+
+      before { resource.grant_discover_access(group) }
+
+      specify { expect(resource.discover_access?(agent)).to be(true) }
+    end
   end
 
   describe '#grant_read_access' do
@@ -301,6 +310,15 @@ RSpec.describe Permissions do
 
       specify { expect(resource.read_access?(agent)).to be(false) }
     end
+
+    context 'when a user is a member of a group with read access' do
+      let(:group) { build(:group) }
+      let(:agent) { build(:user, groups: [group]) }
+
+      before { resource.grant_read_access(group) }
+
+      specify { expect(resource.read_access?(agent)).to be(true) }
+    end
   end
 
   describe '#grant_edit_access' do
@@ -389,6 +407,15 @@ RSpec.describe Permissions do
       let(:agent) { build(:group) }
 
       specify { expect(resource.edit_access?(agent)).to be(false) }
+    end
+
+    context 'when a user is a member of a group with edit access' do
+      let(:group) { build(:group) }
+      let(:agent) { build(:user, groups: [group]) }
+
+      before { resource.grant_edit_access(group) }
+
+      specify { expect(resource.edit_access?(agent)).to be(true) }
     end
   end
 

@@ -31,8 +31,13 @@ class PermissionsBuilder < Module
       end
     end
 
+    # @note There's a little bit of "concern bleed" because an agent, like a user, can have associated agents, i.e.
+    # groups, which impact how we determine access. For now, we can ask the agent if it has any groups, and that should
+    # be fine, but we can refactor later, if desired.
     define_method "#{level}_access?" do |agent|
-      send("#{level}_agents").include?(agent)
+      associated_agents = agent.try(:groups) || []
+      available_agents = associated_agents.to_a + [agent]
+      (send("#{level}_agents") & available_agents).any?
     end
 
     define_method "grant_#{level}_access" do |*args|
