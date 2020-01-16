@@ -55,3 +55,7 @@ Style/NumericPredicate:
 Style/YodaCondition:
   Exclude:
     - 'app/components/work_histories/work_version_change_component.rb'
+
+Rails/OutputSafety:
+  Exclude:
+    - 'app/components/work_version_metadata_component.rb'
