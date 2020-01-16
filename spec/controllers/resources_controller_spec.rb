@@ -33,10 +33,10 @@ RSpec.describe ResourcesController, type: :controller do
     context 'when the resource is valid, but not publicly accessible' do
       let(:work) { create(:work, :with_no_access) }
 
-      pending do
+      it do
         expect {
           get :show, params: { id: work.uuid }
-        }.to raise_error(ActiveRecord::RecordNotFound)
+        }.to raise_error(Pundit::NotAuthorizedError)
       end
     end
   end

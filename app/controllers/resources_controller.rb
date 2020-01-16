@@ -2,8 +2,8 @@
 
 class ResourcesController < ApplicationController
   def show
-    # @todo authorization
     @resource = find_resource(params[:id])
+    authorize @resource
   end
 
   private
