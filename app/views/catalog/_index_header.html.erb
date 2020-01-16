@@ -16,7 +16,7 @@
         <%= t('blacklight.search.documents.counter', counter: counter) %>
       </span>
     <% end %>
-    <%= link_to_document document, counter: counter %>
+    <%= link_to Array.wrap(document['title_tesim']).first, resource_path(document.id) %>
     <%= render VisibilityBadgeComponent, work: document %>
   </h3>
 

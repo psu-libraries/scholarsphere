@@ -33,4 +33,51 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
       expect(result.css('dd.work-version-description')).to be_empty
     end
   end
+
+  describe 'fully loaded' do
+    let(:work_version) { build_stubbed :work_version, :with_complete_metadata }
+
+    it 'renders every field' do
+      # Titles
+      expect(result.css('dt.work-version-title')).to be_present
+      expect(result.css('dt.work-version-subtitle')).to be_present
+      expect(result.css('dt.work-version-version-number')).to be_present
+      expect(result.css('dt.work-version-description')).to be_present
+      expect(result.css('dt.work-version-keywords')).to be_present
+      expect(result.css('dt.work-version-rights')).to be_present
+      expect(result.css('dt.work-version-resource-type')).to be_present
+      expect(result.css('dt.work-version-contributor')).to be_present
+      expect(result.css('dt.work-version-publisher')).to be_present
+      expect(result.css('dt.work-version-published-date')).to be_present
+      expect(result.css('dt.work-version-subject')).to be_present
+      expect(result.css('dt.work-version-language')).to be_present
+      expect(result.css('dt.work-version-identifier')).to be_present
+      expect(result.css('dt.work-version-based-near')).to be_present
+      expect(result.css('dt.work-version-related-url')).to be_present
+      expect(result.css('dt.work-version-source')).to be_present
+      expect(result.css('dt.work-version-created-at')).to be_present
+
+      # Test that the fields have the correct values. Please note that some of
+      # the more exotic field type (multiples, dates, iso8601 strings) are only
+      # rudimentarily tested here, because they're unit-tested in detail above.
+      expect(result.css('dd.work-version-title').text).to eq work_version[:title]
+      expect(result.css('dd.work-version-subtitle').text).to eq work_version[:subtitle]
+      expect(result.css('dd.work-version-version-number').text).to eq work_version[:version_number].to_s
+      expect(result.css('dd.work-version-description').text).to include work_version[:description].first
+      expect(result.css('dd.work-version-keywords').text).to include work_version[:keywords].first
+      expect(result.css('dd.work-version-rights').text).to eq work_version[:rights]
+      expect(result.css('dd.work-version-resource-type').text).to include work_version[:resource_type].first
+      expect(result.css('dd.work-version-contributor').text).to include work_version[:contributor].first
+      expect(result.css('dd.work-version-publisher').text).to include work_version[:publisher].first
+      expect(result.css('dd.work-version-published-date').text)
+        .to include Time.zone.parse(work_version[:published_date].first).year.to_s
+      expect(result.css('dd.work-version-subject').text).to include work_version[:subject].first
+      expect(result.css('dd.work-version-language').text).to include work_version[:language].first
+      expect(result.css('dd.work-version-identifier').text).to include work_version[:identifier].first
+      expect(result.css('dd.work-version-based-near').text).to include work_version[:based_near].first
+      expect(result.css('dd.work-version-related-url').text).to include work_version[:related_url].first
+      expect(result.css('dd.work-version-source').text).to include work_version[:source].first
+      expect(result.css('dd.work-version-created-at').text).to include work_version[:created_at].year.to_s
+    end
+  end
 end
