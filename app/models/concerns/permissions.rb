@@ -42,6 +42,17 @@ module Permissions
     super.append(depositor)
   end
 
+  # @note Prevents the user from creating a unneeded access control object for the depositor.
+  def edit_users=(list)
+    super(list.reject { |user| user == depositor })
+  end
+
+  # @note Always add the visibility group when setting the list of read groups. This avoids the problem of inadvertently
+  # removing a visiliblity setting via the read groups setter.
+  def read_groups=(list)
+    super(list.append(visibility_agent))
+  end
+
   def grant_open_access
     return if open_access?
 
@@ -93,5 +104,10 @@ module Permissions
     else
       raise ArgumentError, "#{level} is not a supported visibility" unless Visibility.all.include?(level)
     end
+  end
+
+  def visibility_agent
+    return Group.public_agent if open_access?
+    return Group.authorized_agent if authorized_access?
   end
 end

@@ -59,5 +59,16 @@ class PermissionsBuilder < Module
         send("#{level}_agents").select { |level_agent| level_agent.is_a?(agent) }
       end
     end
+
+    agents.each do |agent|
+      define_method "#{level}_#{agent.to_s.pluralize.downcase}=" do |list|
+        # Remove access to agents not in the list
+        revoke = send("#{level}_#{agent.to_s.pluralize.downcase}") - list
+        send("revoke_#{level}_access", *revoke)
+
+        # Grant access to agents in the list
+        send("grant_#{level}_access", *list)
+      end
+    end
   end
 end
