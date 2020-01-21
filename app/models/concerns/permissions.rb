@@ -50,13 +50,11 @@ module Permissions
   end
 
   def revoke_open_access
-    self.access_controls = access_controls.reject do |control|
-      control.agent.public? && control.access_level == AccessControl::Level::READ
-    end
+    self.access_controls = access_controls.reject(&:public?)
   end
 
   def open_access?
-    access_controls.any? { |control| control.agent.public? && control.access_level == AccessControl::Level::READ }
+    access_controls.any?(&:public?)
   end
 
   def grant_authorized_access
@@ -67,13 +65,11 @@ module Permissions
   end
 
   def revoke_authorized_access
-    self.access_controls = access_controls.reject do |control|
-      control.agent.authorized? && control.access_level == AccessControl::Level::READ
-    end
+    self.access_controls = access_controls.reject(&:authorized?)
   end
 
   def authorized_access?
-    access_controls.any? { |control| control.agent.authorized? && control.access_level == AccessControl::Level::READ }
+    access_controls.any?(&:authorized?)
   end
 
   def visibility
