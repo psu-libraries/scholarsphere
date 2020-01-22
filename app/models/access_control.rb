@@ -23,4 +23,12 @@ class AccessControl < ApplicationRecord
   validates :access_level,
             uniqueness: { scope: [:agent, :resource] },
             inclusion: { in: AccessControl::Level.all }
+
+  def public?
+    agent.is_a?(Group) && agent.public? && access_level == AccessControl::Level::READ
+  end
+
+  def authorized?
+    agent.is_a?(Group) && agent.authorized? && access_level == AccessControl::Level::READ
+  end
 end
