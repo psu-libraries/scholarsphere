@@ -6,6 +6,12 @@ if [ -f /vault/token ]; then
     export VAULT_TOKEN=$(cat /vault/token)
 fi
 
+# New versions of vault-init calls the file something slightly different. export vault token if that file is found
+if [ -f /vault/.vault-token ]; then 
+    export VAULT_TOKEN=$(cat /vault/.vault-token)
+
+fi
+
 function start_envconsul() {
     set -u 
     envconsul \
