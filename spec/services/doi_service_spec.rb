@@ -51,7 +51,10 @@ RSpec.describe DoiService do
           it 'publishes a new doi with metadata' do
             allow(metadata_mock).to receive(:attributes).and_return(mocked: :metadata)
             call_service
-            expect(DataCite::Metadata).to have_received(:new).with(work_version: work_version)
+            expect(DataCite::Metadata).to have_received(:new).with(
+              work_version: work_version,
+              public_identifier: work_version.uuid
+            )
             expect(client_mock).to have_received(:publish).with(
               doi: nil,
               metadata: { mocked: :metadata }
@@ -88,7 +91,10 @@ RSpec.describe DoiService do
           it 'publishes the doi with metadata' do
             allow(metadata_mock).to receive(:attributes).and_return(mocked: :metadata)
             call_service
-            expect(DataCite::Metadata).to have_received(:new).with(work_version: work_version)
+            expect(DataCite::Metadata).to have_received(:new).with(
+              work_version: work_version,
+              public_identifier: work_version.uuid
+            )
             expect(client_mock).to have_received(:publish).with(
               doi: 'existing/doi',
               metadata: { mocked: :metadata }
@@ -141,7 +147,10 @@ RSpec.describe DoiService do
           it 'publishes a new doi with metadata' do
             allow(metadata_mock).to receive(:attributes).and_return(mocked: :metadata)
             call_service
-            expect(DataCite::Metadata).to have_received(:new).with(work_version: latest_work_version)
+            expect(DataCite::Metadata).to have_received(:new).with(
+              work_version: latest_work_version,
+              public_identifier: work.uuid
+            )
             expect(client_mock).to have_received(:publish).with(
               doi: nil,
               metadata: { mocked: :metadata }
@@ -178,7 +187,10 @@ RSpec.describe DoiService do
           it 'publishes the doi with metadata' do
             allow(metadata_mock).to receive(:attributes).and_return(mocked: :metadata)
             call_service
-            expect(DataCite::Metadata).to have_received(:new).with(work_version: latest_work_version)
+            expect(DataCite::Metadata).to have_received(:new).with(
+              work_version: latest_work_version,
+              public_identifier: work.uuid
+            )
             expect(client_mock).to have_received(:publish).with(
               doi: 'existing/doi',
               metadata: { mocked: :metadata }
