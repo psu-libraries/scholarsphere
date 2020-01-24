@@ -17,6 +17,14 @@ then
   exit 1
 fi
 
+# Sometimes, if we do a good enough job of caching the docker build, rspec will start running before the database is ready
+echo "Waiting for Postgres to become available"
+if ! timeout 60 bash -c 'until printf "" 2>>/dev/null >>/dev/tcp/$0/$1; do sleep 1; done' "${POSTGRES_HOST:-localhost}" "${POSTGRES_PORT:-5432}"
+then
+  echo "Postgres never became ready. Exiting"
+  exit 1
+fi
+
 echo "Initaizing Solr"
 bundle exec rake solr:init
 
