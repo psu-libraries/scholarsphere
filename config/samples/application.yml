@@ -59,6 +59,9 @@ SOLR_PORT: 8983
 # MINIO_SECRET_KEY: "asdfasdf"
 # MINIO_PORT: "9000"
 
+# Default URL host. answers the question "who am i?" 
+# DEFAULT_URL_HOST: "" # defaults to nil, required for production, however.
+
 # If the oauth servers authorize path differs from /oauth/authorize, you can set that value here
 # Under normal circumstances, this shouldn't need changing
 # OAUTH_AUTHORIZE_URL: "/oauth/authorize"

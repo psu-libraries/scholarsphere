@@ -92,6 +92,7 @@ steps:
         -e DATACITE_PUBLISHER=$DATACITE_PUBLISHER
         -e AWS_REGION=us-east-1
         -e REDIS_HOST=redis
+        -e DEFAULT_URL_HOST=scholarsphere
         -e APP_HOST=test-$DRONE_BUILD_NUMBER
         -e POSTGRES_USER=scholarsphere
         -e SELENIUM_URL=http://selenium:4444/wd/hub
@@ -209,6 +210,6 @@ volumes:
     path: /var/run/docker.sock
 ---
 kind: signature
-hmac: fec077364ec8d7b5af5d66761821be7226d877d9eda915f46125094a2660aa8d
+hmac: 1a1f3f4e1c2893e31fb1cdef8830cd316b4fcae1f3527d0b2cad386584a4adf4
 
 ...
