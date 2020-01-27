@@ -2,15 +2,18 @@
 
 module Scholarsphere
   class ShrineConfig
-    PROMOTION_LOCATION = 'store'
+    CACHE_PREFIX = ENV.fetch('SHRINE_CACHE_PREFIX', 'cache')
     PROMOTION_PREFIX = ENV.fetch('SHRINE_PROMOTION_PREFIX', 'store')
+    DERIVATIVES_PREFIX = ENV.fetch('SHRINE_DERIVATIVES_PREFIX', 'derivatives')
 
     class << self
+      # @note :cache and :store keys shouldn't be changed because Shrine relies on them heavily; however, we can add
+      # additional arbitrary storage locationas as needed.
       def storages
         {
-          cache: Shrine::Storage::S3.new(prefix: 'cache', **s3_options),
-          PROMOTION_LOCATION.to_sym => Shrine::Storage::S3.new(prefix: PROMOTION_PREFIX, **s3_options),
-          derivatives: Shrine::Storage::S3.new(prefix: 'derivatives', **s3_options)
+          cache: Shrine::Storage::S3.new(prefix: CACHE_PREFIX, **s3_options),
+          store: Shrine::Storage::S3.new(prefix: PROMOTION_PREFIX, **s3_options),
+          derivatives: Shrine::Storage::S3.new(prefix: DERIVATIVES_PREFIX, **s3_options)
         }
       end
 
