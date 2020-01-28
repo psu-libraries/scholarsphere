@@ -48,8 +48,9 @@ RSpec.describe DataCite::Metadata do
           metadata.public_url_source = nil # Clear a previously injected mock
         end
 
-        pending 'uses the real public URL for a resource' do
-          expect(attributes[:url]).to match(/\.psu\.edu\/resources\/#{uuid}/)
+        it 'uses the real public URL for a resource' do
+          expected_url = Rails.application.routes.url_helpers.resource_url(uuid)
+          expect(attributes[:url]).to eq expected_url
         end
       end
     end
