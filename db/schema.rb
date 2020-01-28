@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_17_203329) do
+ActiveRecord::Schema.define(version: 2020_01_28_204546) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,14 +26,6 @@ ActiveRecord::Schema.define(version: 2019_12_17_203329) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["agent_type", "agent_id"], name: "index_access_controls_on_agent_type_and_agent_id"
     t.index ["resource_type", "resource_id"], name: "index_access_controls_on_resource_type_and_resource_id"
-  end
-
-  create_table "aliases", force: :cascade do |t|
-    t.bigint "creator_id", null: false
-    t.string "display_name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["creator_id"], name: "index_aliases_on_creator_id"
   end
 
   create_table "bookmarks", id: :serial, force: :cascade do |t|
@@ -124,15 +116,6 @@ ActiveRecord::Schema.define(version: 2019_12_17_203329) do
     t.index ["work_version_id"], name: "index_versions_on_work_version_id"
   end
 
-  create_table "work_creations", force: :cascade do |t|
-    t.bigint "alias_id", null: false
-    t.bigint "work_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["alias_id"], name: "index_work_creations_on_alias_id"
-    t.index ["work_id"], name: "index_work_creations_on_work_id"
-  end
-
   create_table "work_versions", force: :cascade do |t|
     t.bigint "work_id"
     t.string "aasm_state"
@@ -155,13 +138,10 @@ ActiveRecord::Schema.define(version: 2019_12_17_203329) do
     t.index ["depositor_id"], name: "index_works_on_depositor_id"
   end
 
-  add_foreign_key "aliases", "creators"
   add_foreign_key "file_version_memberships", "file_resources"
   add_foreign_key "file_version_memberships", "work_versions"
   add_foreign_key "user_group_memberships", "groups"
   add_foreign_key "user_group_memberships", "users"
-  add_foreign_key "work_creations", "aliases"
-  add_foreign_key "work_creations", "works"
   add_foreign_key "work_versions", "works"
   add_foreign_key "works", "users", column: "depositor_id"
 end

@@ -8,12 +8,6 @@ class Work < ApplicationRecord
              foreign_key: 'depositor_id',
              inverse_of: 'works'
 
-  has_many :work_creations,
-           dependent: :restrict_with_exception
-
-  has_many :aliases,
-           through: :work_creations
-
   has_many :versions,
            -> { order(created_at: :asc) },
            class_name: 'WorkVersion',
