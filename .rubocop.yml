@@ -20,18 +20,13 @@ Metrics/BlockLength:
     - 'config/routes.rb'
     - 'spec/**/*'
 
+Rails/FilePath:
+  EnforcedStyle: arguments
+
 RSpec/DescribeClass:
   Exclude:
     - 'spec/features/**/*'
     - 'spec/integration/**/*'
-
-RSpec/ExampleLength:
-  Enabled:
-    false
-
-RSpec/MultipleExpectations:
-  Enabled:
-    false
 
 RSpec/EmptyLineAfterSubject:
   Exclude:
