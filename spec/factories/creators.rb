@@ -4,8 +4,8 @@ require Rails.root.join('spec', 'support', 'factory_bot_helpers')
 
 FactoryBot.define do
   factory :creator do
-    surname { Faker::Name.first_name }
-    given_name { Faker::Name.last_name }
+    given_name { Faker::Name.first_name }
+    surname { Faker::Name.last_name }
     email { "#{psu_id}@psu.edu" }
     sequence(:psu_id) { |n| FactoryBotHelpers.generate_access_id_from_name(given_name, surname, n) }
 
