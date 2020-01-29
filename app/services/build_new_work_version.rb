@@ -22,8 +22,8 @@ class BuildNewWorkVersion
     end
 
     # Copy over creators
-    previous_version.creations.each do |previous_creation|
-      new_version.creations.build(
+    previous_version.creator_aliases.each do |previous_creation|
+      new_version.creator_aliases.build(
         creator_id: previous_creation.creator_id,
         alias: previous_creation.alias,
         changed_by_system: true # mute papertrail for this change

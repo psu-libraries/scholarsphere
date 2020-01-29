@@ -20,7 +20,7 @@ FactoryBot.define do
       creators.each do |creator|
         # Alias "Pat Doe" to "Dr. Pat Doe"
         creator_alias = "#{Faker::Name.prefix} #{creator.given_name} #{creator.surname}"
-        work_version.creations.build(
+        work_version.creator_aliases.build(
           creator: creator,
           alias: creator_alias
         )
