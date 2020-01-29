@@ -18,6 +18,8 @@ RSpec.describe Creator, type: :model do
   end
 
   describe 'associations' do
+    it { is_expected.to have_many(:work_version_creations) }
+    it { is_expected.to have_many(:work_versions).through(:work_version_creations) }
   end
 
   describe 'validations' do

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_28_204546) do
+ActiveRecord::Schema.define(version: 2020_01_28_205514) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -116,6 +116,16 @@ ActiveRecord::Schema.define(version: 2020_01_28_204546) do
     t.index ["work_version_id"], name: "index_versions_on_work_version_id"
   end
 
+  create_table "work_version_creations", force: :cascade do |t|
+    t.bigint "work_version_id", null: false
+    t.bigint "creator_id", null: false
+    t.string "alias"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["creator_id"], name: "index_work_version_creations_on_creator_id"
+    t.index ["work_version_id"], name: "index_work_version_creations_on_work_version_id"
+  end
+
   create_table "work_versions", force: :cascade do |t|
     t.bigint "work_id"
     t.string "aasm_state"
@@ -142,6 +152,8 @@ ActiveRecord::Schema.define(version: 2020_01_28_204546) do
   add_foreign_key "file_version_memberships", "work_versions"
   add_foreign_key "user_group_memberships", "groups"
   add_foreign_key "user_group_memberships", "users"
+  add_foreign_key "work_version_creations", "creators"
+  add_foreign_key "work_version_creations", "work_versions"
   add_foreign_key "work_versions", "works"
   add_foreign_key "works", "users", column: "depositor_id"
 end
