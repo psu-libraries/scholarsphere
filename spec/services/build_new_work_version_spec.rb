@@ -10,14 +10,19 @@ RSpec.describe BuildNewWorkVersion, type: :model do
           work: nil, # FactoryBot trick needed for above
           title: 'My Happy Version',
           version_number: 4,
-          file_count: 1
+          file_count: 1,
+          creator_count: 1
   end
 
   let(:initial_file_membership) { initial_work_version.file_version_memberships.first }
   let(:file_resource) { initial_file_membership.file_resource }
 
+  let(:initial_creation) { initial_work_version.creations.first }
+  let(:creator) { initial_creation.creator }
+
   before do
     initial_file_membership.update!(title: 'overridden-title.png')
+    initial_creation.update!(alias: 'My Creator Alias')
   end
 
   describe '.call' do
@@ -36,6 +41,15 @@ RSpec.describe BuildNewWorkVersion, type: :model do
       new_version.file_version_memberships.first.tap do |membership|
         expect(membership.title).to eq 'overridden-title.png'
         expect(membership.file_resource).to eq file_resource
+      end
+    end
+
+    it 'retains the same creators' do
+      expect(new_version.creations.length).to eq 1
+
+      new_version.creations.first.tap do |creation|
+        expect(creation.alias).to eq 'My Creator Alias'
+        expect(creation.creator).to eq creator
       end
     end
 

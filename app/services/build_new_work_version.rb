@@ -12,11 +12,21 @@ class BuildNewWorkVersion
       version_number: highest_version_number + 1
     )
 
+    # Copy over files
     previous_version.file_version_memberships.each do |previous_membership|
       new_version.file_version_memberships.build(
         file_resource_id: previous_membership.file_resource_id,
         title: previous_membership.title,
-        changed_by_system: true
+        changed_by_system: true # mute papertrail for this change
+      )
+    end
+
+    # Copy over creators
+    previous_version.creations.each do |previous_creation|
+      new_version.creations.build(
+        creator_id: previous_creation.creator_id,
+        alias: previous_creation.alias,
+        changed_by_system: true # mute papertrail for this change
       )
     end
 
