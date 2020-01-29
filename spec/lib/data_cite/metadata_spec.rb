@@ -5,17 +5,24 @@ require 'data_cite'
 require 'factory_bot'
 
 RSpec.describe DataCite::Metadata do
-  subject(:metadata) { described_class.new(work_version: work_version) }
+  subject(:metadata) { described_class.new(work_version: work_version, public_identifier: uuid) }
+
+  let(:uuid) { 'abc-123' }
 
   let(:attributes) { metadata.attributes }
 
   let(:work_version) { FactoryBot.build_stubbed :work_version, :with_complete_metadata }
   let(:work) { work_version.work }
 
+  before do
+    metadata.public_url_source = ->(id) { "http://example.test/resources/#{id}" }
+  end
+
   describe '#initialize' do
-    it 'accepts a WorkVersion' do
-      metadata = described_class.new(work_version: work_version)
+    it 'accepts a WorkVersion and public identifier (uuid)' do
+      metadata = described_class.new(work_version: work_version, public_identifier: uuid)
       expect(metadata.work_version).to eq work_version
+      expect(metadata.public_identifier).to eq uuid
     end
   end
 
@@ -36,8 +43,15 @@ RSpec.describe DataCite::Metadata do
         expect(attributes.dig(:types, :resourceTypeGeneral)).to be_present
       end
 
-      pending 'uses the real public URL for a resource' do
-        expect(attributes[:url]).to match(/\.psu\.edu/)
+      describe 'url generation' do
+        before do
+          metadata.public_url_source = nil # Clear a previously injected mock
+        end
+
+        it 'uses the real public URL for a resource' do
+          expected_url = Rails.application.routes.url_helpers.resource_url(uuid)
+          expect(attributes[:url]).to eq expected_url
+        end
       end
     end
 

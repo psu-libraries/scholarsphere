@@ -31,6 +31,9 @@ RSpec.describe 'minting a doi', skip: !ci_build? do
     api_sleep
     _doi, published_verison_datacite_metadata = client.get(doi: work_version.doi)
     expect(published_verison_datacite_metadata.dig('data', 'attributes', 'published')).to be_present
+    expect(published_verison_datacite_metadata.dig('data', 'attributes', 'url')).to eq(
+      Rails.application.routes.url_helpers.resource_url(work_version.uuid)
+    )
 
     # mint a DOI for the work
     work.reload

@@ -59,6 +59,11 @@ SOLR_PORT: 8983
 # MINIO_SECRET_KEY: "asdfasdf"
 # MINIO_PORT: "9000"
 
+# Default URL host. answers the question "who am i?"
+# Required for all environments. For development, you can set it to
+# "localhost:3000" for `bin/rails s` or "scholarsphere-4.test" for puma-dev
+DEFAULT_URL_HOST: "localhost:3000"
+
 # If the oauth servers authorize path differs from /oauth/authorize, you can set that value here
 # Under normal circumstances, this shouldn't need changing
 # OAUTH_AUTHORIZE_URL: "/oauth/authorize"
