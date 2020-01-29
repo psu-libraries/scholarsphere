@@ -38,7 +38,7 @@ FactoryBot.define do
     end
 
     trait :with_complete_metadata do
-      title { Faker::Book.title }
+      title { generate(:work_title) }
       subtitle { FactoryBotHelpers.work_title }
       keywords { Faker::Science.element }
       rights { Faker::Lorem.sentence }
