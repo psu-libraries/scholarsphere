@@ -25,5 +25,7 @@ RSpec.describe PermissionsBuilder do
   it { is_expected.to respond_to(:scratch_access?) }
   it { is_expected.to respond_to(:scratch_agents) }
   it { is_expected.to respond_to(:scratch_dogs) }
+  it { is_expected.to respond_to(:scratch_dogs=) }
   it { is_expected.to respond_to(:scratch_cats) }
+  it { is_expected.to respond_to(:scratch_cats=) }
 end
