@@ -1,0 +1,40 @@
+FROM ruby:2.6.3
+
+WORKDIR /app
+
+ENV TZ=America/New_York
+
+RUN curl -Lo /tmp/envconsul.zip https://releases.hashicorp.com/envconsul/0.9.0/envconsul_0.9.0_linux_amd64.zip && \
+    unzip /tmp/envconsul.zip -d /bin && \
+    rm /tmp/envconsul.zip
+
+
+ENV NODE_VERSION 12.9.1
+RUN mkdir /usr/local/nvm
+ENV NVM_DIR /usr/local/nvm
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
+ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
+
+
+RUN . $NVM_DIR/nvm.sh \
+    && nvm install $NODE_VERSION \
+    && nvm alias default $NODE_VERSION \
+    && nvm use default
+
+RUN npm install -g yarn@1.19.1
+
+
+RUN useradd -u 2000 app -d /app
+RUN mkdir /app/tmp
+RUN chown -R app /app
+USER app
+
+COPY Gemfile Gemfile.lock /app
+RUN gem install bundler:2.0.2
+RUN bundle install --path vendor/bundle
+
+
+
+

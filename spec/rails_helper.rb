@@ -5,7 +5,7 @@ require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
 
 def ci_build?
-  ENV.key?('DRONE_COMMIT_SHA')
+  ENV.key?('DRONE_COMMIT_SHA') || ENV.key?("CIRCLECI") || ENV.key?("CI")
 end
 
 require File.expand_path('../config/environment', __dir__)

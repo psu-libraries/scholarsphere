@@ -4,7 +4,11 @@ x-web_env: &web_env
       REDIS_HOST: redis
       REDIS_PASSWORD: redispassword
       OAUTH_APP_ID: ${OAUTH_APP_ID}
+      DRONE_COMMIT_SHA: FOO
       OAUTH_APP_SECRET: ${OAUTH_APP_SECRET}
+      DEFAULT_URL_HOST: web
+      SELENIUM_URL: http://selenium:4444/wd/hub
+      APP_HOST: web
       OAUTH_APP_URL: ${OAUTH_APP_URL}
       POSTGRES_DB: scholarsphere
       POSTGRES_USER: scholarsphere
@@ -14,11 +18,13 @@ x-web_env: &web_env
       AWS_BUCKET: scholarsphere
       AWS_REGION: us-east-1
       S3_ENDPOINT: http://minio:9000
-      RAILS_ENV: development
+      RAILS_ENV: ${RAILS_ENV:-development}
       SOLR_HOST: solr
       SOLR_COLLECTION: scholarsphere
       POSTGRES_HOST: db
 services:
+  selenium:
+    image: selenium/standalone-chrome:3.141.59-xenon
   redis:
     image: redis:5.0.5
     command: redis-server --requirepass redispassword
@@ -44,14 +50,18 @@ services:
     stdin_open: true
     <<: *web_env
     build: 
+      cache_from:
+        - ruby:2.6.3
+        - harbor.dsrd.libraries.psu.edu/library/ss-test:latest-base
+        - harbor.dsrd.libraries.psu.edu/library/ss-test:latest
       context: . 
       target: base
-    volumes:
-    - bundle-data:/app/vendor/bundle
-    - node-data:/app/node_modules
-    - type: bind
-      source: ./
-      target: /app/
+    # volumes:
+    # - bundle-data:/app/vendor/bundle
+    # - node-data:/app/node_modules
+    # - type: bind
+    #   source: ./
+    #   target: /app/
     ports:
       - "3000:3000"
   minio:

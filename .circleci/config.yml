@@ -1,0 +1,114 @@
+version: 2.1
+
+orbs:
+  slack: circleci/slack@3.4.2
+
+jobs:
+  build:
+    docker:
+      - image: devago/docker-compose
+    environment:
+      REGISTRY_HOST: harbor.dsrd.libraries.psu.edu
+      REGISTRY_URL: harbor.dsrd.libraries.psu.edu/library/ss-test
+      DOCKER_USERNAME: 'robot$circleci'
+    steps:
+    - setup_remote_docker
+    - checkout
+    - run:
+        name: "Running Tests"
+        command: |
+          echo "building the image"
+          docker build -t $REGISTRY_URL:$CIRCLE_SHA1 --target base .
+          echo "starting up the stack"
+          docker-compose up -d solr minio selenium redis db
+          export TAG=${CIRCLE_SHA1}
+          export GIT_COMMITED_AT=$(git log -1 --date=short --pretty=format:%ct)
+          echo "running the tests"
+          RAILS_ENV=test docker-compose -f docker-compose.yml -f docker-compose.test.yml run --name=test --service-ports test /app/bin/ci-rspec
+    - run:
+        name: "linting"
+        command: |
+          export TAG=${CIRCLE_SHA1}
+          RAILS_ENV=test docker-compose -f docker-compose.yml -f docker-compose.test.yml run --name=eslint --service-ports test /app/bin/ci-eslint
+          RAILS_ENV=test docker-compose -f docker-compose.yml -f docker-compose.test.yml run --name=niftany --service-ports test /app/bin/ci-niftany
+    - run:
+        name: "Publishing the image"
+        command: |
+          docker build -t $REGISTRY_URL:$CIRCLE_SHA1 .
+          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $REGISTRY_HOST
+          docker push $REGISTRY_URL:$CIRCLE_SHA1
+  argocd_qa:
+    docker:
+      - image: harbor.dsrd.libraries.psu.edu/public/drone-utils:latest
+    environment:
+      CONFIG_REPO: git@github.com:psu-stewardship/scholarsphere-config.git
+      CONFIG_ENV: qa
+      IMAGE_REPOSITORY: harbor.dsrd.libraries.psu.edu/library/ss-test
+    steps:
+    - add_ssh_keys
+    - run:
+        name: "Updating Config Repo"
+        command: |
+            ssh-keyscan github.com > ~/.ssh/known_hosts
+            git clone $CONFIG_REPO
+            cd scholarsphere-config
+            ./generate_circle_application.sh
+  argocd_nonprod:
+    docker:
+      - image: harbor.dsrd.libraries.psu.edu/public/drone-utils:latest
+    environment:
+      CONFIG_REPO: git@github.com:psu-stewardship/scholarsphere-config.git
+      IMAGE_REPOSITORY: harbor.dsrd.libraries.psu.edu/library/ss-test
+    steps:
+    - add_ssh_keys
+    - run:
+        name: "Updating Config Repo"
+        command: |
+           ssh-keyscan github.com > ~/.ssh/known_hosts
+           git clone $CONFIG_REPO
+           cd scholarsphere-config
+           ./generate_circle_application.sh
+    # - slack/notify:
+    #     message: "Argo Sync Complete. You can visit this deployment at the following URL 
+
+
+workflows:
+  version: 2
+  scholarsphere:
+    jobs:
+      - build
+      - slack/approval-notification:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - master
+                - /preview\/.*/
+      - hold:
+          type: approval
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - master
+                - /preview\/.*/
+      - argocd_qa:
+          requires:
+            - build
+            - hold
+          filters:
+            branches:
+               only:
+                - master
+      - argocd_nonprod:
+          requires:
+            - build
+            - hold
+          filters:
+            branches:
+              only:
+                - /preview\/.*/
+
+
