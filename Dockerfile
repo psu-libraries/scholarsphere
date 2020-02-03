@@ -1,6 +1,6 @@
 ARG BASETAG=base
-FROM harbor.dsrd.libraries.psu.edu/library/scholarsphere-4:${BASETAG} as cache
-FROM harbor.dsrd.libraries.psu.edu/library/scholarsphere-4:${BASETAG} as base
+FROM harbor.dsrd.libraries.psu.edu/library/scholarsphere:${BASETAG} as cache
+FROM harbor.dsrd.libraries.psu.edu/library/scholarsphere:${BASETAG} as base
 
 ENV TZ=America/New_York
 
