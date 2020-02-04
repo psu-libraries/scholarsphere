@@ -88,14 +88,14 @@ workflows:
       - test
       - deploy-qa:
           requires:
-            - build
+            - test
           filters:
             branches:
                only:
                 - master
       - deploy-preview:
           requires:
-            - build
+            - test
           filters:
             branches:
               only:
