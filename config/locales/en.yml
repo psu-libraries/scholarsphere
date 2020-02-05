@@ -2,12 +2,17 @@ en:
   application_name: "Scholarsphere"
   activerecord:
     attributes:
+      creator:
+        psu_id: PSU ID
+      work_version_creation:
+        alias: Display Name
       work_version:
         version_name: Version Name
         subtitle: Subtitle
         keywords: Keywords
         rights: Rights
-        Description: Description
+        description: Description
+        creator_aliases: Creator
         resource_type: Resource Type
         contributor: Contributor
         publisher: Publisher
