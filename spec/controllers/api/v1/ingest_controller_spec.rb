@@ -18,7 +18,7 @@ RSpec.describe Api::V1::IngestController, type: :controller do
         }
       end
 
-      it 'publishes a new work' do
+      pending 'publishes a new work' do
         expect(response).to be_ok
         expect(response.body).to eq(
           "{\"message\":\"Work was successfully created\",\"url\":\"/resources/#{Work.last.uuid}\"}"
@@ -38,7 +38,7 @@ RSpec.describe Api::V1::IngestController, type: :controller do
         }
       end
 
-      it 'publishes a new work' do
+      pending 'publishes a new work' do
         expect(response).to be_ok
         expect(response.body).to eq(
           "{\"message\":\"Work was successfully created\",\"url\":\"/resources/#{Work.last.uuid}\"}"
@@ -71,7 +71,7 @@ RSpec.describe Api::V1::IngestController, type: :controller do
         }
       end
 
-      it 'reports the error' do
+      pending 'reports the error' do
         expect(response.status).to eq(422)
         expect(response.body).to eq(
           "{\"message\":\"Unable to complete the request\",\"errors\":[\"Versions title can't be blank\"]}"

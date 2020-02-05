@@ -11,7 +11,7 @@ RSpec.describe DataCite::Metadata do
 
   let(:attributes) { metadata.attributes }
 
-  let(:work_version) { FactoryBot.build_stubbed :work_version, :with_complete_metadata }
+  let(:work_version) { FactoryBot.build_stubbed :work_version, :with_complete_metadata, creator_count: 1 }
   let(:work) { work_version.work }
 
   before do
@@ -32,8 +32,7 @@ RSpec.describe DataCite::Metadata do
         expect(attributes[:titles]).to eq([{ title: work_version.title }])
         expect(attributes[:creators]).to eq(
           [{
-            givenName: work_version.work.depositor.given_name,
-            familyName: work_version.work.depositor.surname
+            name: work_version.creator_aliases.first.alias
           }]
         )
         expect(attributes[:url]).to be_present

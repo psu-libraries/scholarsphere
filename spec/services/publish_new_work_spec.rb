@@ -25,7 +25,7 @@ RSpec.describe PublishNewWork do
       )
     end
 
-    it 'creates a new work' do
+    pending 'creates a new work' do
       expect { service }.to change(Work, :count).by(1)
       new_work = Work.last
       expect(new_work).to be_open_access

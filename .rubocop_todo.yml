@@ -45,6 +45,10 @@ Rails/OutputSafety:
   Exclude:
     - 'app/components/work_version_metadata_component.rb'
 
+Style/CollectionMethods:
+  Exclude:
+    - 'app/models/work_version.rb'
+
 # Offense count: 1
 # Cop supports --auto-correct.
 # Configuration parameters: AutoCorrect, EnforcedStyle, IgnoredMethods.

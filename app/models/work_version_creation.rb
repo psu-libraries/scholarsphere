@@ -1,8 +1,13 @@
 # frozen_string_literal: true
 
 class WorkVersionCreation < ApplicationRecord
-  belongs_to :work_version
-  belongs_to :creator
+  belongs_to :work_version,
+             inverse_of: :creator_aliases
+
+  belongs_to :creator,
+             inverse_of: :work_version_creations
+
+  accepts_nested_attributes_for :creator
 
   validates :alias,
             presence: true
@@ -17,4 +22,8 @@ class WorkVersionCreation < ApplicationRecord
       work_version_id: :work_version_id
     }
   )
+
+  def alias
+    super.presence || creator&.default_alias
+  end
 end

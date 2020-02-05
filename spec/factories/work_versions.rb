@@ -14,7 +14,7 @@ FactoryBot.define do
       creator_count { 1 }
     end
 
-    after(:build) do |work_version, evaluator|
+    after(:build, :stub) do |work_version, evaluator|
       creators = build_list(:creator, evaluator.creator_count)
 
       creators.each do |creator|

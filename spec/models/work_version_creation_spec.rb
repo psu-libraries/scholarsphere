@@ -48,4 +48,27 @@ RSpec.describe WorkVersionCreation, type: :model do
       end
     end
   end
+
+  describe 'initialization' do
+    let(:creator) { build :creator, default_alias: 'Creator Default Alias' }
+    let(:work_version) { build :work_version }
+
+    context 'when an alias is not provided' do
+      subject(:wv_creation) { described_class.new creator: creator, work_version: work_version }
+
+      it 'initializes itself with the given Creator#default_alias' do
+        wv_creation.save!
+        expect(wv_creation.reload.alias).to eq 'Creator Default Alias'
+      end
+    end
+
+    context 'when an alias is provided' do
+      subject(:wv_creation) { described_class.new alias: 'Provided Alias', creator: creator, work_version: work_version }
+
+      it 'uses the provided alias' do
+        wv_creation.save!
+        expect(wv_creation.reload.alias).to eq 'Provided Alias'
+      end
+    end
+  end
 end
