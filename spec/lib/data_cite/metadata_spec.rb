@@ -2,7 +2,6 @@
 
 require 'spec_helper'
 require 'data_cite'
-require 'factory_bot'
 
 RSpec.describe DataCite::Metadata do
   subject(:metadata) { described_class.new(work_version: work_version, public_identifier: uuid) }
@@ -11,8 +10,10 @@ RSpec.describe DataCite::Metadata do
 
   let(:attributes) { metadata.attributes }
 
-  let(:work_version) { FactoryBot.build_stubbed :work_version, :with_complete_metadata, creator_count: 1 }
+  let(:work_version) { FactoryBot.build_stubbed :work_version, :with_complete_metadata, creator_count: 0, creators: [creator] }
   let(:work) { work_version.work }
+
+  let(:creator) { FactoryBot.build_stubbed :creator, orcid: nil }
 
   before do
     metadata.public_url_source = ->(id) { "http://example.test/resources/#{id}" }
@@ -30,14 +31,10 @@ RSpec.describe DataCite::Metadata do
     context 'when given the happy path' do
       it "maps the given WorkVersion's attributes into ones needed by DataCite" do
         expect(attributes[:titles]).to eq([{ title: work_version.title }])
-        expect(attributes[:creators]).to eq(
-          [{
-            name: work_version.creator_aliases.first.alias
-          }]
-        )
-        expect(attributes[:url]).to be_present
 
         # The following are tested thoroughly below
+        expect(attributes[:url]).to be_present
+        expect(attributes[:creators]).to be_present
         expect(attributes[:publicationYear]).to be_present
         expect(attributes.dig(:types, :resourceTypeGeneral)).to be_present
       end
@@ -83,6 +80,37 @@ RSpec.describe DataCite::Metadata do
 
         it 'maps to the correct resource type' do
           expect(attributes.dig(:types, :resourceTypeGeneral)).to eq 'Dataset'
+        end
+      end
+    end
+
+    context 'when the creators may or may not have ORCiDs' do
+      subject(:first_creator) { attributes[:creators].first }
+
+      context 'when the creator has no orcid' do
+        before { creator.orcid = nil }
+
+        it "sets the creator's name" do
+          expect(first_creator).to eq(
+            name: work_version.creator_aliases.first.alias
+          )
+        end
+      end
+
+      context 'when the creator has an ORCiD' do
+        before { creator.orcid = '1111-2222-3333-4444' }
+
+        it "sets the creator's name and provides the ORCiD" do
+          expect(first_creator).to eq(
+            name: work_version.creator_aliases.first.alias,
+            nameIdentifiers: [
+              {
+                nameIdentifier: '1111-2222-3333-4444',
+                nameIdentifierScheme: 'ORCID',
+                schemeUri: 'http://orcid.org/'
+              }
+            ]
+          )
         end
       end
     end

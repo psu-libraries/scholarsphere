@@ -23,7 +23,7 @@ module DataCite
     def attributes
       {
         titles: [{ title: work_version.title }],
-        creators: [creator],
+        creators: creators,
         publicationYear: publication_year,
         types: {
           resourceTypeGeneral: resource_type
@@ -58,11 +58,26 @@ module DataCite
 
       attr_reader :work
 
-      def creator
-        {
-          givenName: work.depositor.given_name,
-          familyName: work.depositor.surname
-        }
+      def creators
+        work_version
+          .creator_aliases
+          .map { |ca| creator_attributes(ca) }
+      end
+
+      def creator_attributes(creator_alias)
+        attrs = { name: creator_alias.alias }
+
+        if orcid = creator_alias.creator.orcid.presence
+          attrs[:nameIdentifiers] = [
+            {
+              nameIdentifier: orcid,
+              nameIdentifierScheme: 'ORCID',
+              schemeUri: 'http://orcid.org/'
+            }
+          ]
+        end
+
+        attrs
       end
 
       def publication_year
