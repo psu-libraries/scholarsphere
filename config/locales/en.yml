@@ -50,6 +50,9 @@ en:
         add_metadata: Add Metadata
         publish: Publish
         error_message: "%{error} prohibited this work from being saved:"
+        creator: Creator
+        add_creator: 'Add another Creator'
+        remove_creator: 'Remove'
       publish:
         heading: Publishing Work Version
         agreement: I agree to all the stuff I need to to make this work

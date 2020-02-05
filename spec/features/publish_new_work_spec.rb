@@ -43,6 +43,16 @@ RSpec.describe 'Publishing a new work' do
 
     click_button('Save and Continue')
 
+    # Ensure one creator is pre-filled with the User
+    within('#creator_aliases') do
+      user.reload
+      expect(find_field('Display Name').value).to eq user.name
+      expect(find_field('Email').value).to eq user.email
+      expect(find_field('Given name').value).to eq user.given_name
+      expect(find_field('Surname').value).to eq user.surname
+      expect(find_field('PSU ID').value).to eq user.access_id
+    end
+
     fill_in('Subtitle', with: metadata[:subtitle])
     fill_in('Keywords', with: metadata[:keywords].first)
     fill_in('Rights', with: metadata[:rights])
@@ -57,6 +67,22 @@ RSpec.describe 'Publishing a new work' do
     fill_in('Based Near', with: metadata[:based_near])
     fill_in('Related URL', with: metadata[:related_url])
     fill_in('Source', with: metadata[:source])
+
+    # Rename "my" creator
+    within('#creator_aliases .nested-fields:nth-of-type(1)') do
+      fill_in('Display Name', with: 'MY EDITED CREATOR NAME')
+    end
+
+    retry_click { click_link('Add another Creator') }
+
+    # Add another creator
+    within('#creator_aliases .nested-fields:nth-of-type(2)') do
+      fill_in('Display Name', with: 'Dr. Second Creator, PhD.')
+      fill_in('Email', with: '2nd.creator@example.com')
+      fill_in('Given name', with: 'Second')
+      fill_in('Surname', with: 'Creator')
+    end
+
     click_button('Save and Continue')
 
     expect(page).to have_selector('h1', text: 'Publishing Work Version')
@@ -105,6 +131,18 @@ RSpec.describe 'Publishing a new work' do
     expect(page).to have_field('Based Near', with: metadata[:based_near])
     expect(page).to have_field('Related URL', with: metadata[:related_url])
     expect(page).to have_field('Source', with: metadata[:source])
+
+    within('#creator_aliases .nested-fields:nth-of-type(1)') do
+      expect(page).to have_field('Display Name', with: 'MY EDITED CREATOR NAME')
+    end
+
+    within('#creator_aliases .nested-fields:nth-of-type(2)') do
+      expect(page).to have_field('Display Name', with: 'Dr. Second Creator, PhD.')
+      expect(page).to have_field('Email', with: '2nd.creator@example.com')
+      expect(page).to have_field('Given name', with: 'Second')
+      expect(page).to have_field('Surname', with: 'Creator')
+    end
+
     fill_in('Title', with: updated_metadata[:title])
     click_button('Save and Continue')
 
