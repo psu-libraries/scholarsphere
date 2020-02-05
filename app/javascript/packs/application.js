@@ -5,6 +5,7 @@
 
 import 'controllers'
 import '../stylesheets/application'
+import 'cocoon-js'
 require('@rails/ujs').start()
 require('@rails/activestorage').start()
 require('channels')
