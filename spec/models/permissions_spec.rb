@@ -7,15 +7,23 @@ RSpec.describe Permissions do
 
   let(:resource) { build(:work, :with_no_access) }
 
-  it { is_expected.to respond_to(:discover_agents) }
-  it { is_expected.to respond_to(:discover_users) }
-  it { is_expected.to respond_to(:discover_groups) }
-  it { is_expected.to respond_to(:read_agents) }
-  it { is_expected.to respond_to(:read_users) }
-  it { is_expected.to respond_to(:read_groups) }
-  it { is_expected.to respond_to(:edit_agents) }
-  it { is_expected.to respond_to(:edit_users) }
-  it { is_expected.to respond_to(:edit_groups) }
+  describe 'generated methods from PermissionsBuilder' do
+    it { is_expected.to respond_to(:discover_agents) }
+    it { is_expected.to respond_to(:discover_users) }
+    it { is_expected.to respond_to(:discover_users=) }
+    it { is_expected.to respond_to(:discover_groups) }
+    it { is_expected.to respond_to(:discover_groups=) }
+    it { is_expected.to respond_to(:read_agents) }
+    it { is_expected.to respond_to(:read_users) }
+    it { is_expected.to respond_to(:read_users=) }
+    it { is_expected.to respond_to(:read_groups) }
+    it { is_expected.to respond_to(:read_groups=) }
+    it { is_expected.to respond_to(:edit_agents) }
+    it { is_expected.to respond_to(:edit_users) }
+    it { is_expected.to respond_to(:edit_users=) }
+    it { is_expected.to respond_to(:edit_groups) }
+    it { is_expected.to respond_to(:edit_groups=) }
+  end
 
   describe Permissions::Visibility do
     specify { expect(Permissions::Visibility::OPEN).to eq('open') }
@@ -223,6 +231,40 @@ RSpec.describe Permissions do
     end
   end
 
+  describe '#discover_users=' do
+    let(:user1) { build(:user) }
+    let(:user2) { build(:user) }
+
+    before { resource.discover_users = [user1, user2] }
+
+    context 'when setting new users' do
+      its(:discover_users) { is_expected.to include(user1, user2) }
+    end
+
+    context 'when removing users' do
+      before { resource.discover_users = [user2] }
+
+      its(:discover_users) { is_expected.not_to include(user1) }
+    end
+  end
+
+  describe '#discover_groups=' do
+    let(:group1) { build(:group) }
+    let(:group2) { build(:group) }
+
+    before { resource.discover_groups = [group1, group2] }
+
+    context 'when setting new groups' do
+      its(:discover_groups) { is_expected.to include(group1, group2) }
+    end
+
+    context 'when removing groups' do
+      before { resource.discover_groups = [group2] }
+
+      its(:discover_groups) { is_expected.not_to include(group1) }
+    end
+  end
+
   describe '#grant_read_access' do
     before { resource.grant_read_access(agent) }
 
@@ -318,6 +360,52 @@ RSpec.describe Permissions do
       before { resource.grant_read_access(group) }
 
       specify { expect(resource.read_access?(agent)).to be(true) }
+    end
+  end
+
+  describe '#read_users=' do
+    let(:user1) { build(:user) }
+    let(:user2) { build(:user) }
+
+    before { resource.read_users = [user1, user2] }
+
+    context 'when setting new users' do
+      its(:read_users) { is_expected.to include(user1, user2) }
+    end
+
+    context 'when removing users' do
+      before { resource.read_users = [user2] }
+
+      its(:read_users) { is_expected.not_to include(user1) }
+    end
+  end
+
+  describe '#read_groups=' do
+    let(:group1) { build(:group) }
+    let(:group2) { build(:group) }
+
+    before { resource.read_groups = [group1, group2] }
+
+    context 'when setting new groups' do
+      its(:read_groups) { is_expected.to include(group1, group2) }
+    end
+
+    context 'when removing groups' do
+      before { resource.read_groups = [group2] }
+
+      its(:read_groups) { is_expected.not_to include(group1) }
+    end
+
+    context 'with a public resource' do
+      let(:resource) { build(:work, visibility: Permissions::Visibility::OPEN) }
+
+      its(:read_groups) { is_expected.to contain_exactly(group1, group2, Group.public_agent) }
+    end
+
+    context 'with an authorized resource' do
+      let(:resource) { build(:work, visibility: Permissions::Visibility::AUTHORIZED) }
+
+      its(:read_groups) { is_expected.to contain_exactly(group1, group2, Group.authorized_agent) }
     end
   end
 
@@ -433,6 +521,48 @@ RSpec.describe Permissions do
       it 'is not duplicated in the list of edit users' do
         expect(resource.edit_users).to contain_exactly(resource.depositor)
       end
+    end
+  end
+
+  describe '#edit_users=' do
+    let(:user1) { build(:user) }
+    let(:user2) { build(:user) }
+
+    before { resource.edit_users = [user1, user2] }
+
+    context 'when setting new users' do
+      its(:edit_users) { is_expected.to include(user1, user2) }
+    end
+
+    context 'when removing users' do
+      before { resource.edit_users = [user2] }
+
+      its(:edit_users) { is_expected.not_to include(user1) }
+    end
+
+    context 'when the depositor is an argument' do
+      it 'does not create an access control for the depositor' do
+        expect(resource.access_controls.map(&:agent)).to contain_exactly(user1, user2)
+        resource.edit_users = [user1, resource.depositor]
+        expect(resource.access_controls.map(&:agent)).to contain_exactly(user1)
+      end
+    end
+  end
+
+  describe '#edit_groups=' do
+    let(:group1) { build(:group) }
+    let(:group2) { build(:group) }
+
+    before { resource.edit_groups = [group1, group2] }
+
+    context 'when setting new groups' do
+      its(:edit_groups) { is_expected.to include(group1, group2) }
+    end
+
+    context 'when removing groups' do
+      before { resource.edit_groups = [group2] }
+
+      its(:edit_groups) { is_expected.not_to include(group1) }
     end
   end
 

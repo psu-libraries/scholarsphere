@@ -66,7 +66,7 @@ class DoiService
 
     def publish_doi(doi:, update_resource:)
       metadata = metadata_source
-        .call(work_version: work_version)
+        .call(work_version: work_version, public_identifier: resource.uuid)
         .tap(&:validate!)
         .attributes
 

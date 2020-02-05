@@ -5,15 +5,19 @@ module DataCite
     class Error < StandardError; end
     class ValidationError < Error; end
 
-    attr_reader :work_version
+    attr_reader :work_version,
+                :public_identifier
+
+    attr_writer :public_url_source
 
     RESOURCE_TYPES = {
       Work::Types::DATASET => 'Dataset'
     }.freeze
 
-    def initialize(work_version:)
+    def initialize(work_version:, public_identifier:)
       @work_version = work_version
       @work = work_version.work
+      @public_identifier = public_identifier
     end
 
     def attributes
@@ -44,6 +48,12 @@ module DataCite
       false
     end
 
+    def public_url_source
+      @public_url_source ||= ->(id) {
+        Rails.application.routes.url_helpers.resource_url(id)
+      }
+    end
+
     private
 
       attr_reader :work
@@ -71,7 +81,7 @@ module DataCite
       end
 
       def generate_url
-        'http://example.test'
+        public_url_source.call(public_identifier)
       end
   end
 end

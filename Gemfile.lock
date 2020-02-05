@@ -10,6 +10,15 @@ GIT
       kaminari (>= 0.15)
       rails (>= 5.1, < 7)
 
+GIT
+  remote: https://github.com/psu-stewardship/scholarsphere-client.git
+  revision: 34a4adb68443ada79d274737591b8d9ef2fab077
+  branch: master
+  specs:
+    scholarsphere-client (0.1.0)
+      aws-sdk-s3 (~> 1.49)
+      marcel (~> 0.3)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -114,7 +123,7 @@ GEM
       autoprefixer-rails (>= 9.1.0)
       popper_js (>= 1.14.3, < 2)
       sassc-rails (>= 2.0.0)
-    builder (3.2.3)
+    builder (3.2.4)
     byebug (11.0.1)
     capybara (3.29.0)
       addressable
@@ -132,7 +141,7 @@ GEM
     content_disposition (1.0.0)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
-    crass (1.0.5)
+    crass (1.0.6)
     database_cleaner (1.7.0)
     debug_inspector (0.0.3)
     deprecation (1.0.0)
@@ -148,12 +157,12 @@ GEM
     docile (1.3.2)
     down (5.0.0)
       addressable (~> 2.5)
-    erb_lint (0.0.30)
+    erb_lint (0.0.31)
       activesupport
       better_html (~> 1.0.7)
       html_tokenizer
       rainbow
-      rubocop (~> 0.51)
+      rubocop (~> 0.79.0)
       smart_properties
     erubi (1.9.0)
     execjs (2.7.0)
@@ -166,7 +175,7 @@ GEM
       i18n (>= 1.6, < 1.8)
     faraday (0.17.0)
       multipart-post (>= 1.2, < 3)
-    ffi (1.11.1)
+    ffi (1.12.1)
     figaro (1.1.1)
       thor (~> 0.14)
     flog (4.6.3)
@@ -178,9 +187,9 @@ GEM
     hashdiff (1.0.0)
     hashie (3.6.0)
     html_tokenizer (0.0.7)
-    i18n (1.7.0)
+    i18n (1.7.1)
       concurrent-ruby (~> 1.0)
-    jaro_winkler (1.5.3)
+    jaro_winkler (1.5.4)
     jbuilder (2.9.1)
       activesupport (>= 4.2.0)
     jmespath (1.4.0)
@@ -212,7 +221,7 @@ GEM
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
       ruby_dep (~> 1.2)
-    loofah (2.3.1)
+    loofah (2.4.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
@@ -223,21 +232,21 @@ GEM
     mimemagic (0.3.3)
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
-    minitest (5.12.2)
+    minitest (5.14.0)
     msgpack (1.3.1)
     multi_json (1.14.1)
     multi_xml (0.6.0)
     multipart-post (2.1.1)
-    niftany (0.5.1)
+    niftany (0.6.0)
       colorize (~> 0.8.1)
       erb_lint (~> 0.0.22)
-      rubocop (~> 0.61)
+      rubocop (~> 0.79)
       rubocop-performance (~> 1.1)
       rubocop-rails (~> 2.3)
       rubocop-rspec (~> 1.3)
       scss_lint (~> 0.55)
     nio4r (2.5.2)
-    nokogiri (1.10.4)
+    nokogiri (1.10.7)
       mini_portile2 (~> 2.4.0)
     oauth2 (1.4.2)
       faraday (>= 0.8, < 2.0)
@@ -256,8 +265,8 @@ GEM
     paper_trail (10.3.1)
       activerecord (>= 4.2)
       request_store (~> 1.1)
-    parallel (1.18.0)
-    parser (2.6.5.0)
+    parallel (1.19.1)
+    parser (2.7.0.2)
       ast (~> 2.4.0)
     path_expander (1.1.0)
     pg (1.1.4)
@@ -274,7 +283,7 @@ GEM
     puma (3.12.2)
     pundit (2.1.0)
       activesupport (>= 3.0.0)
-    rack (2.0.8)
+    rack (2.1.2)
     rack-protection (2.0.7)
       rack
     rack-proxy (0.6.5)
@@ -314,7 +323,7 @@ GEM
     rainbow (3.0.0)
     rake (13.0.0)
     rb-fsevent (0.10.3)
-    rb-inotify (0.10.0)
+    rb-inotify (0.10.1)
       ffi (~> 1.0)
     redis (4.1.3)
     regexp_parser (1.6.0)
@@ -352,19 +361,19 @@ GEM
       rspec-mocks (~> 3.8)
       rspec-support (~> 3.8)
     rspec-support (3.9.0)
-    rubocop (0.75.1)
+    rubocop (0.79.0)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
-      parser (>= 2.6)
+      parser (>= 2.7.0.1)
       rainbow (>= 2.2.2, < 4.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 1.7)
-    rubocop-performance (1.5.0)
+    rubocop-performance (1.5.2)
       rubocop (>= 0.71.0)
-    rubocop-rails (2.3.2)
+    rubocop-rails (2.4.2)
       rack (>= 1.1)
       rubocop (>= 0.72.0)
-    rubocop-rspec (1.36.0)
+    rubocop-rspec (1.37.1)
       rubocop (>= 0.68.1)
     ruby-progressbar (1.10.1)
     ruby_dep (1.5.0)
@@ -431,9 +440,9 @@ GEM
     thor (0.20.3)
     thread_safe (0.3.6)
     tilt (2.0.10)
-    tzinfo (1.2.5)
+    tzinfo (1.2.6)
       thread_safe (~> 0.1)
-    unicode-display_width (1.6.0)
+    unicode-display_width (1.6.1)
     uppy-s3_multipart (0.3.2)
       aws-sdk-s3 (~> 1.0)
       content_disposition (~> 1.0)
@@ -465,7 +474,7 @@ GEM
       nokogiri (~> 1.8)
     xray-rails (0.3.2)
       rails (>= 3.1.0)
-    zeitwerk (2.2.0)
+    zeitwerk (2.2.2)
 
 PLATFORMS
   ruby
@@ -509,6 +518,7 @@ DEPENDENCIES
   rspec-its
   rspec-rails (~> 4.0.0.beta3)
   sass-rails (~> 5)
+  scholarsphere-client!
   seedbank
   selenium-webdriver
   shoulda-matchers (~> 3.1)

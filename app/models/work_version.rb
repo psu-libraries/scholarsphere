@@ -28,6 +28,12 @@ class WorkVersion < ApplicationRecord
            dependent: :destroy
   has_many :file_resources,
            through: :file_version_memberships
+  has_many :creator_aliases,
+           class_name: 'WorkVersionCreation',
+           inverse_of: 'work_version',
+           dependent: :destroy
+  has_many :creators,
+           through: :creator_aliases
 
   accepts_nested_attributes_for :file_resources
 

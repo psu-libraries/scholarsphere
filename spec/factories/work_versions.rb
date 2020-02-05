@@ -10,6 +10,23 @@ FactoryBot.define do
     # Postgres does this for us, but for testing, we can do it here to save having to call create/reload.
     uuid { SecureRandom.uuid }
 
+    transient do
+      creator_count { 1 }
+    end
+
+    after(:build) do |work_version, evaluator|
+      creators = build_list(:creator, evaluator.creator_count)
+
+      creators.each do |creator|
+        # Alias "Pat Doe" to "Dr. Pat Doe"
+        creator_alias = "#{Faker::Name.prefix} #{creator.given_name} #{creator.surname}"
+        work_version.creator_aliases.build(
+          creator: creator,
+          alias: creator_alias
+        )
+      end
+    end
+
     trait :with_files do
       transient do
         file_count { 1 }
@@ -38,7 +55,7 @@ FactoryBot.define do
     end
 
     trait :with_complete_metadata do
-      title { Faker::Book.title }
+      title { generate(:work_title) }
       subtitle { FactoryBotHelpers.work_title }
       keywords { Faker::Science.element }
       rights { Faker::Lorem.sentence }
