@@ -33,12 +33,10 @@ bundle exec rake solr:init
 # Note: GIT_COMMITTED_AT is a guess since this isn't a real git repo. We don't know what kinds of effects this may have
 # on how Code Climate does its thing.
 if [ ! -d ".git" ]; then
-  GIT_COMMIT_SHA=$DRONE_COMMIT_SHA
+  GIT_COMMIT_SHA=$CIRCLE_SHA1
   export GIT_COMMIT_SHA
-  GIT_BRANCH=$DRONE_BRANCH
+  GIT_BRANCH=$CIRCLE_BRANCH
   export GIT_BRANCH
-  GIT_COMMITTED_AT=$DRONE_BUILD_STARTED
-  export GIT_COMMITTED_AT
 fi
 
 if [ ! -f ${REPORTER_BIN} ]; then
