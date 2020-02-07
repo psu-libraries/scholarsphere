@@ -5,6 +5,9 @@ x-web_env: &web_env
       REDIS_PASSWORD: redispassword
       OAUTH_APP_ID: ${OAUTH_APP_ID}
       OAUTH_APP_SECRET: ${OAUTH_APP_SECRET}
+      DEFAULT_URL_HOST: web
+      SELENIUM_URL: http://selenium:4444/wd/hub
+      APP_HOST: web
       OAUTH_APP_URL: ${OAUTH_APP_URL}
       POSTGRES_DB: scholarsphere
       POSTGRES_USER: scholarsphere
@@ -14,11 +17,13 @@ x-web_env: &web_env
       AWS_BUCKET: scholarsphere
       AWS_REGION: us-east-1
       S3_ENDPOINT: http://minio:9000
-      RAILS_ENV: development
+      RAILS_ENV: ${RAILS_ENV:-development}
       SOLR_HOST: solr
       SOLR_COLLECTION: scholarsphere
       POSTGRES_HOST: db
 services:
+  selenium:
+    image: selenium/standalone-chrome:3.141.59-xenon
   redis:
     image: redis:5.0.5
     command: redis-server --requirepass redispassword
@@ -32,7 +37,9 @@ services:
     <<: *web_env
     build:
       context: . 
-      target: sidekiq
+      target: base
+    command:
+      - /app/bin/sidekiq
     volumes:
     - bundle-data:/app/vendor/bundle
     - node-data:/app/node_modules
