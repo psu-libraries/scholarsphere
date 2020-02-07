@@ -4,6 +4,8 @@ en:
     attributes:
       creator:
         psu_id: PSU ID
+        default_alias: Display Name
+        orcid: ORCiD
       work_version_creation:
         alias: Display Name
       work_version:
@@ -31,6 +33,14 @@ en:
               different_extension: does not have the same filename extension as %{original}
 
   dashboard:
+    profiles:
+      edit:
+        heading: "Edit Profile"
+        error_message: "%{error} prohibited this work from being saved:"
+        default_alias:
+          help: 'When you create new works, this will be used as the initial value for the Creator field. For example, if your first and last name are Pat Researcher, you might wish to set this to "Dr. Pat Q. Researcher PhD."'
+      update:
+        success: 'Your profile was saved successfully.'
     works:
       index:
         heading: "Your ScholarSphere Deposits"

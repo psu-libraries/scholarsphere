@@ -44,7 +44,9 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
   namespace :dashboard do
-    resources :works, only: [:index, :new, :create, :destroy] do
+    resource :profile, only: %i[edit update]
+
+    resources :works, only: %i[index new create destroy] do
       resources :work_versions, except: [:new], shallow: true do
         get 'file_list', to: 'file_lists#edit'
         put 'file_list', to: 'file_lists#update'

@@ -17,6 +17,7 @@
           <%= current_user.name %> (<%= current_user.access_id %>)
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <%= link_to 'Profile', edit_dashboard_profile_path, class: 'dropdown-item' %>
           <%= link_to 'Works', dashboard_works_path, class: 'dropdown-item' %>
         </div>
       </li>
