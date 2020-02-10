@@ -12,7 +12,21 @@ RSpec.describe PublishNewWork do
 
     let(:service) do
       described_class.call(
-        metadata: work.metadata.merge(work_type: 'dataset', visibility: Permissions::Visibility::OPEN),
+        metadata: work.metadata.merge(
+          work_type: 'dataset',
+          visibility: Permissions::Visibility::OPEN,
+          creator_aliases_attributes: [
+            {
+              alias: "#{user.given_name} #{user.surname}",
+              creator_attributes: {
+                email: user.email,
+                given_name: user.given_name,
+                surname: user.surname,
+                psu_id: user.access_id
+              }
+            }
+          ]
+        ),
         depositor: user.access_id,
         content: [
           { file: fixture_file_upload(File.join(fixture_path, 'image.png')) },
@@ -25,7 +39,7 @@ RSpec.describe PublishNewWork do
       )
     end
 
-    pending 'creates a new work' do
+    it 'creates a new work' do
       expect { service }.to change(Work, :count).by(1)
       new_work = Work.last
       expect(new_work).to be_open_access

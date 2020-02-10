@@ -68,7 +68,16 @@ module Api::V1
             identifier: [],
             based_near: [],
             related_url: [],
-            source: []
+            source: [],
+            creator_aliases_attributes: [
+              :alias,
+              creator_attributes: [
+                :email,
+                :given_name,
+                :surname,
+                :psu_id
+              ]
+            ]
           )
       end
 
