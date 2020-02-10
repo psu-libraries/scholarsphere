@@ -1,0 +1,11 @@
+@import 'bootstrap/functions';
+@import 'bootstrap/variables';
+
+.form-group.required {
+  label {
+    &::after {
+      color: $red;
+      content: ' *';
+    }
+  }
+}

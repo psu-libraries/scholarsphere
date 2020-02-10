@@ -42,6 +42,7 @@ RSpec.describe WorkVersion, type: :model do
     it { is_expected.to be_versioned }
 
     it { is_expected.to accept_nested_attributes_for(:file_resources) }
+    it { is_expected.to accept_nested_attributes_for(:creator_aliases).allow_destroy(true) }
   end
 
   describe 'states' do
@@ -65,13 +66,22 @@ RSpec.describe WorkVersion, type: :model do
 
       it { is_expected.to validate_presence_of(:title) }
 
-      it 'validates the presence files' do
+      it 'validates the presence of files' do
         work_version.file_resources = []
         work_version.validate
         expect(work_version.errors[:file_resources]).not_to be_empty
         work_version.file_resources.build
         work_version.validate
         expect(work_version.errors[:file_resources]).to be_empty
+      end
+
+      it 'validates the presence of creators' do
+        work_version.creator_aliases = []
+        work_version.validate
+        expect(work_version.errors[:creator_aliases]).not_to be_empty
+        work_version.creator_aliases.build(attributes_for(:work_version_creation))
+        work_version.validate
+        expect(work_version.errors[:creator_aliases]).to be_empty
       end
 
       it 'validates the visibility of the work' do
@@ -121,6 +131,33 @@ RSpec.describe WorkVersion, type: :model do
     before { work_version.reload }
 
     its(:uuid) { is_expected.to match(/[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}/) }
+  end
+
+  describe '#build_creator_alias' do
+    let(:creator) { build_stubbed :creator }
+    let(:work_version) { build_stubbed :work_version, creator_count: 0 }
+
+    it 'builds a creator_alias for the given Creator but does not persist it' do
+      expect {
+        work_version.build_creator_alias(creator: creator)
+      }.to change {
+        work_version.creator_aliases.length
+      }.by(1)
+
+      work_version.creator_aliases.first.tap do |creator_alias|
+        expect(creator_alias).not_to be_persisted
+        expect(creator_alias.creator).to eq creator
+        expect(creator_alias.alias).to eq creator.default_alias
+      end
+    end
+
+    it 'is idempotent' do
+      expect {
+        2.times { work_version.build_creator_alias(creator: creator) }
+      }.to change {
+        work_version.creator_aliases.length
+      }.by(1)
+    end
   end
 
   describe '#latest_published_version?' do

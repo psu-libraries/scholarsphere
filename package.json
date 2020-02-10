@@ -12,6 +12,7 @@
     "@uppy/xhr-upload": "^1.4.2",
     "blacklight-frontend": "^7.5.0",
     "caniuse-lite": "^1.0.30001022",
+    "cocoon-js": "^0.0.5",
     "popper.js": "^1.16.1",
     "stimulus": "^1.1.1",
     "twitter-typeahead-rails": "https://github.com/yourabi/twitter-typeahead-rails.git#v0.11.1.pre.corejavascript"

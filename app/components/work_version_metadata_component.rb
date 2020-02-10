@@ -13,6 +13,7 @@ class WorkVersionMetadataComponent < ActionView::Component::Base
   ATTRIBUTES = [
     :title,
     :subtitle,
+    :creator_aliases,
     :version_number,
     :description,
     :keywords,
@@ -60,6 +61,8 @@ class WorkVersionMetadataComponent < ActionView::Component::Base
           .html_safe
       elsif value.respond_to?(:strftime) # Date/Time/DateTime/TimeWithZone etc
         value.to_formatted_s(:long)
+      elsif value.is_a? WorkVersionCreation
+        value.alias
       else
         value.to_s
       end

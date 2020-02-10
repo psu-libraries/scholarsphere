@@ -22,7 +22,7 @@ Lint/NonDeterministicRequireOrder:
 # Offense count: 1
 # Configuration parameters: CountComments.
 Metrics/ClassLength:
-  Max: 121
+  Max: 221
 
 # Offense count: 3
 # Configuration parameters: EnforcedStyle.
@@ -44,6 +44,10 @@ RSpec/SubjectStub:
 Rails/OutputSafety:
   Exclude:
     - 'app/components/work_version_metadata_component.rb'
+
+Style/CollectionMethods:
+  Exclude:
+    - 'app/models/work_version.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.

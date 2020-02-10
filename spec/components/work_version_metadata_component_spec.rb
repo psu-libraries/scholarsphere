@@ -56,12 +56,14 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
       expect(result.css('dt.work-version-related-url')).to be_present
       expect(result.css('dt.work-version-source')).to be_present
       expect(result.css('dt.work-version-created-at')).to be_present
+      expect(result.css('dt.work-version-creator-aliases')).to be_present
 
       # Test that the fields have the correct values. Please note that some of
       # the more exotic field type (multiples, dates, iso8601 strings) are only
       # rudimentarily tested here, because they're unit-tested in detail above.
       expect(result.css('dd.work-version-title').text).to eq work_version[:title]
       expect(result.css('dd.work-version-subtitle').text).to eq work_version[:subtitle]
+      expect(result.css('dd.work-version-creator-aliases').text).to include work_version.creator_aliases.map(&:alias).first
       expect(result.css('dd.work-version-version-number').text).to eq work_version[:version_number].to_s
       expect(result.css('dd.work-version-description').text).to include work_version[:description].first
       expect(result.css('dd.work-version-keywords').text).to include work_version[:keywords].first

@@ -24,23 +24,36 @@ class WorkVersion < ApplicationRecord
 
   belongs_to :work,
              inverse_of: :versions
+
   has_many :file_version_memberships,
            dependent: :destroy
+
   has_many :file_resources,
            through: :file_version_memberships
+
   has_many :creator_aliases,
            class_name: 'WorkVersionCreation',
-           inverse_of: 'work_version',
+           inverse_of: :work_version,
            dependent: :destroy
+
   has_many :creators,
-           through: :creator_aliases
+           through: :creator_aliases,
+           inverse_of: :work_versions
 
   accepts_nested_attributes_for :file_resources
+
+  accepts_nested_attributes_for :creator_aliases,
+                                reject_if: :all_blank,
+                                allow_destroy: true
 
   validates :title,
             presence: true
 
   validates :file_resources,
+            presence: true,
+            if: :published?
+
+  validates :creator_aliases,
             presence: true,
             if: :published?
 
@@ -102,6 +115,16 @@ class WorkVersion < ApplicationRecord
     define_method "#{field}=" do |val|
       super(val.presence)
     end
+  end
+
+  def build_creator_alias(creator:)
+    existing_creator_alias = creator_aliases.detect { |ca| ca.creator == creator }
+    return existing_creator_alias if existing_creator_alias.present?
+
+    creator_aliases.build(
+      alias: creator.default_alias,
+      creator: creator
+    )
   end
 
   def to_solr

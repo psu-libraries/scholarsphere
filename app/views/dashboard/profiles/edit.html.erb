@@ -1,0 +1,34 @@
+<h1><%= t 'dashboard.profiles.edit.heading' %></h1>
+
+<%= form_with(model: @creator, url: dashboard_profile_path, local: true) do |f| %>
+  <% if f.object.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= t('dashboard.profiles.edit.error_message', error: pluralize(f.object.errors.count, 'error')) %></h2>
+      <ul>
+      <% f.object.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :default_alias %>
+    <%= f.text_field :default_alias, class: 'form-control', 'aria-describedby': 'default_alias_help' %>
+    <small id="default_alias_help" class="form-text text-muted">
+      <%= t 'dashboard.profiles.edit.default_alias.help' %>
+    </small>
+  </div>
+
+  <div class="row">
+    <div class="col"><%= render 'form_fields/text', form: f, attribute: :given_name %></div>
+    <div class="col"><%= render 'form_fields/text', form: f, attribute: :surname %></div>
+  </div>
+  <%= render 'form_fields/text', form: f, attribute: :email %>
+  <%= render 'form_fields/text', form: f, attribute: :orcid %>
+
+  <div class="actions">
+    <%= f.submit 'Save', class: 'btn btn-primary' %>
+    <%= link_to 'Cancel', :back, class: 'btn btn-text' %>
+  </div>
+<% end %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_28_205514) do
+ActiveRecord::Schema.define(version: 2020_02_07_155145) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,6 +48,8 @@ ActiveRecord::Schema.define(version: 2020_01_28_205514) do
     t.string "orcid"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "default_alias"
+    t.index ["psu_id"], name: "index_creators_on_psu_id"
   end
 
   create_table "file_resources", force: :cascade do |t|

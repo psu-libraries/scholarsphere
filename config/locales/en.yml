@@ -2,12 +2,19 @@ en:
   application_name: "Scholarsphere"
   activerecord:
     attributes:
+      creator:
+        psu_id: PSU ID
+        default_alias: Display Name
+        orcid: ORCiD
+      work_version_creation:
+        alias: Display Name
       work_version:
         version_name: Version Name
         subtitle: Subtitle
         keywords: Keywords
         rights: Rights
-        Description: Description
+        description: Description
+        creator_aliases: Creator
         resource_type: Resource Type
         contributor: Contributor
         publisher: Publisher
@@ -26,6 +33,14 @@ en:
               different_extension: does not have the same filename extension as %{original}
 
   dashboard:
+    profiles:
+      edit:
+        heading: "Edit Profile"
+        error_message: "%{error} prohibited this work from being saved:"
+        default_alias:
+          help: 'When you create new works, this will be used as the initial value for the Creator field. For example, if your first and last name are Pat Researcher, you might wish to set this to "Dr. Pat Q. Researcher PhD."'
+      update:
+        success: 'Your profile was saved successfully.'
     works:
       index:
         heading: "Your ScholarSphere Deposits"
@@ -50,6 +65,9 @@ en:
         add_metadata: Add Metadata
         publish: Publish
         error_message: "%{error} prohibited this work from being saved:"
+        creator: Creator
+        add_creator: 'Add another Creator'
+        remove_creator: 'Remove'
       publish:
         heading: Publishing Work Version
         agreement: I agree to all the stuff I need to to make this work
