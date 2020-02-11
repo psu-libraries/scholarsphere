@@ -9,7 +9,7 @@ class Creator < ApplicationRecord
            through: :work_version_creations,
            inverse_of: :creators
 
-  validates :email,
+  validates :surname,
             presence: true
 
   def self.find_or_create_by_user(user)

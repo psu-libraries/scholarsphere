@@ -7,18 +7,29 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::IngestController, type: :controller do
   let(:user) { create(:user) }
+  let(:creator_alias) do
+    {
+      alias: "#{user.given_name} #{user.surname}",
+      creator_attributes: {
+        email: user.email,
+        given_name: user.given_name,
+        surname: user.surname,
+        psu_id: user.access_id
+      }
+    }
+  end
 
   describe 'POST #create' do
     context 'with valid input' do
       before do
         post :create, params: {
-          metadata: { title: FactoryBotHelpers.work_title },
+          metadata: { title: FactoryBotHelpers.work_title, creator_aliases_attributes: [creator_alias] },
           depositor: user.access_id,
           content: [{ file: fixture_file_upload(File.join(fixture_path, 'image.png')) }]
         }
       end
 
-      pending 'publishes a new work' do
+      it 'publishes a new work' do
         expect(response).to be_ok
         expect(response.body).to eq(
           "{\"message\":\"Work was successfully created\",\"url\":\"/resources/#{Work.last.uuid}\"}"
@@ -32,13 +43,13 @@ RSpec.describe Api::V1::IngestController, type: :controller do
         file = Scholarsphere::S3::UploadedFile.new(path)
         Scholarsphere::S3::Uploader.new.upload(file)
         post :create, params: {
-          metadata: { title: FactoryBotHelpers.work_title },
+          metadata: { title: FactoryBotHelpers.work_title, creator_aliases_attributes: [creator_alias] },
           content: [{ file: file.to_shrine.to_json }],
           depositor: user.access_id
         }
       end
 
-      pending 'publishes a new work' do
+      it 'publishes a new work' do
         expect(response).to be_ok
         expect(response.body).to eq(
           "{\"message\":\"Work was successfully created\",\"url\":\"/resources/#{Work.last.uuid}\"}"
@@ -71,10 +82,13 @@ RSpec.describe Api::V1::IngestController, type: :controller do
         }
       end
 
-      pending 'reports the error' do
+      it 'reports the error' do
         expect(response.status).to eq(422)
         expect(response.body).to eq(
-          "{\"message\":\"Unable to complete the request\",\"errors\":[\"Versions title can't be blank\"]}"
+          '{' \
+            '"message":"Unable to complete the request",' \
+            "\"errors\":[\"Versions title can't be blank\",\"Versions creator aliases can't be blank\"]" \
+          '}'
         )
       end
     end

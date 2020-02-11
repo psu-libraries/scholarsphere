@@ -15,7 +15,7 @@ RSpec.describe Dashboard::ProfilesController, type: :controller do
 
   let(:invalid_attributes) {
     {
-      'email' => ''
+      'surname' => ''
     }
   }
 
