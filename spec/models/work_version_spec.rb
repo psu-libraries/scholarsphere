@@ -14,7 +14,7 @@ RSpec.describe WorkVersion, type: :model do
     it { is_expected.to have_jsonb_accessor(:title).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:subtitle).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:version_name).of_type(:string) }
-    it { is_expected.to have_jsonb_accessor(:keywords).of_type(:string).is_array.with_default([]) }
+    it { is_expected.to have_jsonb_accessor(:keyword).of_type(:string).is_array.with_default([]) }
     it { is_expected.to have_jsonb_accessor(:rights).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:description).of_type(:string).is_array.with_default([]) }
     it { is_expected.to have_jsonb_accessor(:resource_type).of_type(:string).is_array.with_default([]) }
@@ -103,7 +103,7 @@ RSpec.describe WorkVersion, type: :model do
   end
 
   describe 'multivalued fields' do
-    it_behaves_like 'a multivalued json field', :keywords
+    it_behaves_like 'a multivalued json field', :keyword
     it_behaves_like 'a multivalued json field', :description
     it_behaves_like 'a multivalued json field', :resource_type
     it_behaves_like 'a multivalued json field', :contributor

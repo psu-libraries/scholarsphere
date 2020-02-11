@@ -19,37 +19,37 @@ RSpec.describe MetadataDiff do
   end
 
   context 'with the same titles and different keywords' do
-    let(:first) { build(:work_version, title: 'The Same Title', keywords: ['foo', 'bar']) }
-    let(:second) { build(:work_version, title: 'The Same Title', keywords: ['foo', 'baz']) }
+    let(:first) { build(:work_version, title: 'The Same Title', keyword: ['foo', 'bar']) }
+    let(:second) { build(:work_version, title: 'The Same Title', keyword: ['foo', 'baz']) }
 
-    its(:keys) { is_expected.to contain_exactly('keywords') }
+    its(:keys) { is_expected.to contain_exactly('keyword') }
 
     it 'returns only the terms that are different' do
       expect(diff[:title]).to be_nil
-      expect(diff[:keywords]).to eq(['foo, bar', 'foo, baz'])
+      expect(diff[:keyword]).to eq(['foo, bar', 'foo, baz'])
     end
   end
 
   context 'with a different number of values for the same term' do
-    let(:first) { build(:work_version, title: 'The Same Title', keywords: ['foo', 'bar']) }
-    let(:second) { build(:work_version, title: 'The Same Title', keywords: ['baz']) }
+    let(:first) { build(:work_version, title: 'The Same Title', keyword: ['foo', 'bar']) }
+    let(:second) { build(:work_version, title: 'The Same Title', keyword: ['baz']) }
 
-    its(:keys) { is_expected.to contain_exactly('keywords') }
+    its(:keys) { is_expected.to contain_exactly('keyword') }
 
     it 'returns diffs that include the deleted term' do
       expect(diff[:title]).to be_nil
-      expect(diff[:keywords]).to eq(['foo, bar', 'baz'])
+      expect(diff[:keyword]).to eq(['foo, bar', 'baz'])
     end
   end
 
   context 'with a custom separator' do
     subject(:diff) { described_class.call(first, second, separator: '; ') }
 
-    let(:first) { build(:work_version, title: 'The Same Title', keywords: ['foo', 'bar']) }
-    let(:second) { build(:work_version, title: 'The Same Title', keywords: ['foo', 'baz']) }
+    let(:first) { build(:work_version, title: 'The Same Title', keyword: ['foo', 'bar']) }
+    let(:second) { build(:work_version, title: 'The Same Title', keyword: ['foo', 'baz']) }
 
     it 'shows the diff with the separator' do
-      expect(diff[:keywords]).to eq(['foo; bar', 'foo; baz'])
+      expect(diff[:keyword]).to eq(['foo; bar', 'foo; baz'])
     end
   end
 end

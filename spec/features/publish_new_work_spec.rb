@@ -54,7 +54,7 @@ RSpec.describe 'Publishing a new work' do
     end
 
     fill_in('Subtitle', with: metadata[:subtitle])
-    fill_in('Keywords', with: metadata[:keywords].first)
+    fill_in('Keywords', with: metadata[:keyword].first)
     fill_in('Rights', with: metadata[:rights])
     fill_in('Description', with: metadata[:description])
     fill_in('Resource Type', with: metadata[:resource_type])
@@ -118,7 +118,7 @@ RSpec.describe 'Publishing a new work' do
     click_button('Save and Continue')
 
     expect(page).to have_field('Subtitle', with: metadata[:subtitle])
-    expect(page).to have_field('Keywords', with: metadata[:keywords].first)
+    expect(page).to have_field('Keywords', with: metadata[:keyword].first)
     expect(page).to have_field('Rights', with: metadata[:rights])
     expect(page).to have_field('Description', with: metadata[:description])
     expect(page).to have_field('Resource Type', with: metadata[:resource_type])

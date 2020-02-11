@@ -8,7 +8,7 @@ class WorkVersion < ApplicationRecord
                  title: :string,
                  subtitle: :string,
                  version_name: :string,
-                 keywords: [:string, array: true, default: []],
+                 keyword: [:string, array: true, default: []],
                  rights: :string,
                  description: [:string, array: true, default: []],
                  resource_type: [:string, array: true, default: []],
@@ -93,7 +93,7 @@ class WorkVersion < ApplicationRecord
 
   # Fields that can contain multiple values automatically remove blank values
   %i[
-    keywords
+    keyword
     description
     resource_type
     contributor

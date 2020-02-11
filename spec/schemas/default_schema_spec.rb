@@ -11,7 +11,7 @@ RSpec.describe DefaultSchema do
 
       its(:keys) { is_expected.not_to include('id', 'metadata') }
       it { is_expected.to include('title_tesim' => ['title']) }
-      it { is_expected.to include('keywords_tesim' => ['keywords']) }
+      it { is_expected.to include('keyword_tesim' => ['keyword']) }
       it { is_expected.to include('created_at_dtsi' => ['created_at']) }
       it { is_expected.to include('updated_at_dtsi' => ['updated_at']) }
       it { is_expected.to include('uuid_ssi' => ['uuid']) }

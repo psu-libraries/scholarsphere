@@ -11,7 +11,7 @@ en:
       work_version:
         version_name: Version Name
         subtitle: Subtitle
-        keywords: Keywords
+        keyword: Keywords
         rights: Rights
         description: Description
         creator_aliases: Creator

@@ -23,25 +23,25 @@ RSpec.describe DiffPresenter do
       end
     end
 
-    context 'with the same titles and different keyworks' do
-      let(:first) { build(:work_version, title: 'The Same Title', keywords: ['foo', 'bar']) }
-      let(:second) { build(:work_version, title: 'The Same Title', keywords: ['foo', 'baz']) }
+    context 'with the same titles and different keywords' do
+      let(:first) { build(:work_version, title: 'The Same Title', keyword: ['foo', 'bar']) }
+      let(:second) { build(:work_version, title: 'The Same Title', keyword: ['foo', 'baz']) }
 
       it 'returns diffs each term' do
         expect(presenter[:title].to_s).to be_empty
-        expect(presenter[:keywords].to_s).to eq(
+        expect(presenter[:keyword].to_s).to eq(
           "-foo, bar\n\\ No newline at end of file\n+foo, baz\n\\ No newline at end of file\n"
         )
       end
     end
 
     context 'with a different number of values for the same term' do
-      let(:first) { build(:work_version, title: 'The Same Title', keywords: ['foo', 'bar']) }
-      let(:second) { build(:work_version, title: 'The Same Title', keywords: ['baz']) }
+      let(:first) { build(:work_version, title: 'The Same Title', keyword: ['foo', 'bar']) }
+      let(:second) { build(:work_version, title: 'The Same Title', keyword: ['baz']) }
 
       it 'returns diffs that include the deleted term' do
         expect(presenter[:title].to_s).to be_empty
-        expect(presenter[:keywords].to_s).to eq(
+        expect(presenter[:keyword].to_s).to eq(
           "-foo, bar\n\\ No newline at end of file\n+baz\n\\ No newline at end of file\n"
         )
       end

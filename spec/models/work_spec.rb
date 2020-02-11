@@ -160,7 +160,7 @@ RSpec.describe Work, type: :model do
           'doi_tesim',
           'id',
           'identifier_tesim',
-          'keywords_tesim',
+          'keyword_tesim',
           'language_tesim',
           'model_ssi',
           'published_date_tesim',

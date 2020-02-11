@@ -124,7 +124,7 @@ module Dashboard
             :subtitle,
             :rights,
             :version_name,
-            keywords: [],
+            keyword: [],
             description: [],
             resource_type: [],
             contributor: [],

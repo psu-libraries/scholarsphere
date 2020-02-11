@@ -16,7 +16,7 @@ class WorkVersionMetadataComponent < ActionView::Component::Base
     :creator_aliases,
     :version_number,
     :description,
-    :keywords,
+    :keyword,
     :rights,
     :resource_type,
     :contributor,

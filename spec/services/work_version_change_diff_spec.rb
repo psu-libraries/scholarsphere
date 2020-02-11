@@ -25,28 +25,28 @@ RSpec.describe WorkVersionChangeDiff, versioning: true do
 
   context 'with the same titles and different keywords' do
     before do
-      work_version.update!(title: 'The Same Title', keywords: %w(foo bar))
-      work_version.update!(title: 'The Same Title', keywords: %w(foo baz))
+      work_version.update!(title: 'The Same Title', keyword: %w(foo bar))
+      work_version.update!(title: 'The Same Title', keyword: %w(foo baz))
     end
 
-    its(:keys) { is_expected.to contain_exactly('keywords') }
+    its(:keys) { is_expected.to contain_exactly('keyword') }
 
     it 'returns only the terms that are different' do
       expect(diff[:title]).to be_nil
-      expect(diff[:keywords]).to eq(['foo, bar', 'foo, baz'])
+      expect(diff[:keyword]).to eq(['foo, bar', 'foo, baz'])
     end
   end
 
   context 'with a different number of values for the same term' do
     before do
-      work_version.update!(keywords: %w(foo bar))
-      work_version.update!(keywords: %w(baz))
+      work_version.update!(keyword: %w(foo bar))
+      work_version.update!(keyword: %w(baz))
     end
 
-    its(:keys) { is_expected.to contain_exactly('keywords') }
+    its(:keys) { is_expected.to contain_exactly('keyword') }
 
     it 'returns diffs that include the deleted term' do
-      expect(diff[:keywords]).to eq(['foo, bar', 'baz'])
+      expect(diff[:keyword]).to eq(['foo, bar', 'baz'])
     end
   end
 
@@ -54,12 +54,12 @@ RSpec.describe WorkVersionChangeDiff, versioning: true do
     subject(:diff) { described_class.call(last_paper_trail_version, separator: '; ') }
 
     before do
-      work_version.update!(keywords: %w(foo bar))
-      work_version.update!(keywords: %w(foo baz))
+      work_version.update!(keyword: %w(foo bar))
+      work_version.update!(keyword: %w(foo baz))
     end
 
     it 'shows the diff with the separator' do
-      expect(diff[:keywords]).to eq(['foo; bar', 'foo; baz'])
+      expect(diff[:keyword]).to eq(['foo; bar', 'foo; baz'])
     end
   end
 end

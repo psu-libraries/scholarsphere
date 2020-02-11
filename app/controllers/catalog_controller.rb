@@ -86,7 +86,7 @@ class CatalogController < ApplicationController
     # case sensitive when searching values)
 
     config.add_facet_field 'aasm_state_tesim', label: 'Status'
-    config.add_facet_field 'keywords_tesim', label: 'Keywords'
+    config.add_facet_field 'keyword_tesim', label: 'Keywords'
     config.add_facet_field 'resouce_type_tesim', label: 'Resource Type'
     config.add_facet_field 'subject_tesim', label: 'Subject'
 
@@ -109,7 +109,7 @@ class CatalogController < ApplicationController
     #   The ordering of the field names is the order of the display
     config.add_index_field 'title_tesim', label: 'Title'
     config.add_index_field 'aasm_state_tesim', label: 'Status'
-    config.add_index_field 'keywords_tesim', label: 'Keywords'
+    config.add_index_field 'keyword_tesim', label: 'Keywords'
     config.add_index_field 'resource_type_tesim', label: 'Resource Type'
     config.add_index_field 'created_at_dtsi', label: 'Date Created'
 
@@ -117,7 +117,7 @@ class CatalogController < ApplicationController
     #   The ordering of the field names is the order of the display
     config.add_show_field 'title_tesim', label: 'Title'
     config.add_show_field 'aasm_state_tesim', label: 'Status'
-    config.add_show_field 'keywords_tesim', label: 'Keywords'
+    config.add_show_field 'keyword_tesim', label: 'Keywords'
     config.add_show_field 'subtitle_tesim', label: 'Subtitle'
     config.add_show_field 'rights_tesim', label: 'Rights'
     config.add_show_field 'description_tesim', label: 'Description'
