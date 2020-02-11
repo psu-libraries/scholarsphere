@@ -57,7 +57,7 @@ FactoryBot.define do
     trait :with_complete_metadata do
       title { generate(:work_title) }
       subtitle { FactoryBotHelpers.work_title }
-      keywords { Faker::Science.element }
+      keyword { Faker::Science.element }
       rights { Faker::Lorem.sentence }
       description { Faker::Lorem.paragraph }
       resource_type { Faker::House.furniture }

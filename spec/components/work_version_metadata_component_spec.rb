@@ -9,7 +9,7 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
     let(:work_version) { WorkVersion.new(
       subtitle: 'My subtitle',
       created_at: Time.zone.parse('2020-01-15 16:07'),
-      keywords: %w(one two),
+      keyword: %w(one two),
       description: nil
     ) }
 
@@ -23,10 +23,10 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
     end
 
     it 'renders a multi-value field' do
-      expect(result.css('dd.work-version-keywords .multiple-member').map(&:text))
+      expect(result.css('dd.work-version-keyword .multiple-member').map(&:text))
         .to contain_exactly('one', 'two')
 
-      expect(result.css('dd.work-version-keywords').text).to include('; ')
+      expect(result.css('dd.work-version-keyword').text).to include('; ')
     end
 
     it 'does not render any fields that are empty' do
@@ -43,7 +43,7 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
       expect(result.css('dt.work-version-subtitle')).to be_present
       expect(result.css('dt.work-version-version-number')).to be_present
       expect(result.css('dt.work-version-description')).to be_present
-      expect(result.css('dt.work-version-keywords')).to be_present
+      expect(result.css('dt.work-version-keyword')).to be_present
       expect(result.css('dt.work-version-rights')).to be_present
       expect(result.css('dt.work-version-resource-type')).to be_present
       expect(result.css('dt.work-version-contributor')).to be_present
@@ -66,7 +66,7 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
       expect(result.css('dd.work-version-creator-aliases').text).to include work_version.creator_aliases.map(&:alias).first
       expect(result.css('dd.work-version-version-number').text).to eq work_version[:version_number].to_s
       expect(result.css('dd.work-version-description').text).to include work_version[:description].first
-      expect(result.css('dd.work-version-keywords').text).to include work_version[:keywords].first
+      expect(result.css('dd.work-version-keyword').text).to include work_version[:keyword].first
       expect(result.css('dd.work-version-rights').text).to eq work_version[:rights]
       expect(result.css('dd.work-version-resource-type').text).to include work_version[:resource_type].first
       expect(result.css('dd.work-version-contributor').text).to include work_version[:contributor].first

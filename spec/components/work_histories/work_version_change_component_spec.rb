@@ -72,7 +72,7 @@ RSpec.describe WorkHistories::WorkVersionChangeComponent, type: :component do
       work_version.update!(
         title: 'change-many',
         subtitle: 'change-many',
-        keywords: %w(one two),
+        keyword: %w(one two),
         rights: 'change-many',
         description: 'change-many'
       )

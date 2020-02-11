@@ -44,13 +44,13 @@ RSpec.describe 'Blacklight catalog page' do
     click_link('100 per page')
     expect(page).to have_blacklight_label('title_tesim')
     expect(page).to have_blacklight_label('aasm_state_tesim')
-    expect(page).to have_blacklight_label('keywords_tesim')
+    expect(page).to have_blacklight_label('keyword_tesim')
     expect(page).to have_blacklight_label('resource_type_tesim')
     expect(page).to have_blacklight_label('created_at_dtsi')
     records.each do |work|
       expect(page).to have_blacklight_field('title_tesim').with(work[:title])
       expect(page).to have_blacklight_field('aasm_state_tesim').with(work[:status])
-      expect(page).to have_blacklight_field('keywords_tesim').with(work[:keywords].join(', '))
+      expect(page).to have_blacklight_field('keyword_tesim').with(work[:keyword].join(', '))
       expect(page).to have_blacklight_field('resource_type_tesim').with(work[:resource_type].join(', '))
       expect(page).to have_blacklight_field('created_at_dtsi').with(/^#{work[:created_at].strftime("%F")}/)
     end
