@@ -24,7 +24,7 @@ RSpec.describe Creator, type: :model do
   end
 
   describe 'validations' do
-    it { is_expected.to validate_presence_of(:email) }
+    it { is_expected.to validate_presence_of(:surname) }
   end
 
   describe '.find_or_create_by_user' do
