@@ -35,7 +35,7 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
   end
 
   describe 'fully loaded' do
-    let(:work_version) { build_stubbed :work_version, :with_complete_metadata }
+    let(:work_version) { build_stubbed :work_version, :with_complete_metadata, :with_creators }
 
     it 'renders every field' do
       # Titles

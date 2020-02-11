@@ -10,7 +10,7 @@ RSpec.describe DataCite::Metadata do
 
   let(:attributes) { metadata.attributes }
 
-  let(:work_version) { FactoryBot.build_stubbed :work_version, :with_complete_metadata, creator_count: 0, creators: [creator] }
+  let(:work_version) { FactoryBot.build_stubbed :work_version, :with_complete_metadata, creators: [creator] }
   let(:work) { work_version.work }
 
   let(:creator) { FactoryBot.build_stubbed :creator, orcid: nil }
