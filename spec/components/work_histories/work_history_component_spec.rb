@@ -30,9 +30,10 @@ RSpec.describe WorkHistories::WorkHistoryComponent, type: :component, versioning
       expect(result.css("#work_version_changes_#{draft.id} .work-history__change--work-version")).to be_present
       expect(result.css("#work_version_changes_#{draft.id} .work-history__change--file")).to be_empty
 
-      # Published version has work-version and file changes
+      # Published version has work-version, file, and creator changes
       expect(result.css("#work_version_changes_#{v1.id} .work-history__change--work-version")).to be_present
       expect(result.css("#work_version_changes_#{v1.id} .work-history__change--file")).to be_present
+      expect(result.css("#work_version_changes_#{v1.id} .work-history__change--creator")).to be_present
     end
 
     context 'when the user cannot be found' do

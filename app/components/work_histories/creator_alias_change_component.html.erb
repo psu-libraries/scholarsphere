@@ -1,0 +1,21 @@
+<div
+  id="<%= element_id %>"
+  class="work-history__change work-history__change--creator work-history__change--<%= event_class %>">
+
+  <strong class="work-history__change-event"><%= action %></strong>
+  <%= t 'dashboard.work_history.creator_alias.creator' %>
+
+  <small class="work-history__aliases">
+    <% if rename? %>
+      <strong><%= previous_alias %></strong>
+      <%= t 'dashboard.work_history.renamed_to.html' %>
+    <% end %>
+    <strong><%= current_alias %></strong>
+  </small>
+
+  <div class="work-history__change-metadata">
+    <span class="work-history__change-timestamp"><%= timestamp %></span>
+    <span class="text-secondary"><%= t 'dashboard.work_history.by' %></span>
+    <span class="work-history__change-user"><%= user_name %></span>
+  </div>
+</div>
