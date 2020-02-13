@@ -13,6 +13,10 @@
 Layout/LineLength:
   Max: 154
 
+Lint/ImplicitStringConcatenation:
+  Exclude:
+    - 'app/components/work_histories/paper_trail_change_base_component.rb'
+
 # Offense count: 1
 # Cop supports --auto-correct.
 Lint/NonDeterministicRequireOrder:
