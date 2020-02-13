@@ -21,6 +21,23 @@
       </p>
     <% end %>
 
+    <% if @presenter.creators.present? %>
+      <div>
+        <p><strong><%= WorkVersion.human_attribute_name(:creator_aliases) %></strong></p>
+
+        <% @presenter.renamed_creators.each do |alias_diff| %>
+          <p><%= alias_diff.to_s(:html).html_safe %></p>
+        <% end %>
+
+        <% @presenter.deleted_creators.each do |creator_alias| %>
+          <p class="text-danger"><%= creator_alias.alias %></p>
+        <% end %>
+
+        <% @presenter.added_creators.each do |creator_alias| %>
+          <p class="text-success"><%= creator_alias.alias %></p>
+        <% end %>
+    <% end %>
+
     <% if @presenter.files.present? %>
       <table class="table">
         <thead>

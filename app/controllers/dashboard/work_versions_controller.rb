@@ -76,7 +76,8 @@ module Dashboard
       @work = WorkDecorator.new(@work_version.work)
       @presenter = DiffPresenter.new(
         MetadataDiff.call(@previous_version, @work_version),
-        file_diff: FileVersionMembershipDiff.call(@previous_version, @work_version)
+        file_diff: FileVersionMembershipDiff.call(@previous_version, @work_version),
+        creator_diff: WorkVersionCreationDiff.call(@previous_version, @work_version)
       )
     end
 

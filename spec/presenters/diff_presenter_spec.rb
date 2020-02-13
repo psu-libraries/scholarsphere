@@ -111,4 +111,66 @@ RSpec.describe DiffPresenter do
       its(:added_files) { is_expected.to eq(['added_file']) }
     end
   end
+
+  describe '#renamed_creators' do
+    let(:metadata_diff) { {} }
+
+    context 'when no creator diff is provided' do
+      subject { described_class.new(metadata_diff) }
+
+      its(:renamed_creators) { is_expected.to be_empty }
+    end
+
+    context 'when the diff has renamed creators' do
+      let(:creator_1) { build(:work_version_creation) }
+      let(:creator_2) { build(:work_version_creation) }
+
+      let(:renamed_creators) do
+        described_class.new(
+          metadata_diff,
+          creator_diff: { renamed: [[creator_1, creator_2]] }
+        ).renamed_creators
+      end
+
+      it 'returns an array of Diffy Diffs' do
+        expect(renamed_creators.first).to be_a(Diffy::Diff)
+      end
+    end
+  end
+
+  describe '#deleted_creators' do
+    let(:metadata_diff) { {} }
+
+    context 'when no creator diff is provided' do
+      subject { described_class.new(metadata_diff) }
+
+      its(:deleted_creators) { is_expected.to be_empty }
+    end
+
+    context 'when the creator diff has deleted creators' do
+      subject { described_class.new(metadata_diff, creator_diff: creator_diff) }
+
+      let(:creator_diff) { { deleted: ['deleted_creator'] } }
+
+      its(:deleted_creators) { is_expected.to eq(['deleted_creator']) }
+    end
+  end
+
+  describe 'added_creators' do
+    let(:metadata_diff) { {} }
+
+    context 'when no creator diff is provided' do
+      subject { described_class.new(metadata_diff) }
+
+      its(:added_creators) { is_expected.to be_empty }
+    end
+
+    context 'when the creator diff has added creators' do
+      subject { described_class.new(metadata_diff, creator_diff: creator_diff) }
+
+      let(:creator_diff) { { added: ['added_creator'] } }
+
+      its(:added_creators) { is_expected.to eq(['added_creator']) }
+    end
+  end
 end
