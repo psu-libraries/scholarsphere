@@ -96,6 +96,12 @@ en:
       unknown_user: '[unknown user]'
       renamed_to:
         html: "&rarr;"
+      creator_alias:
+        creator: Creator
+        create: Added
+        rename: Renamed
+        update: Updated
+        destroy: Deleted
       file_membership:
         create: Added
         rename: Renamed

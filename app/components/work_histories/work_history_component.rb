@@ -46,7 +46,8 @@ module WorkHistories
 
             changes = (
               changes_to_work_version(work_version) +
-              changes_to_work_versions_files(work_version)
+              changes_to_work_versions_files(work_version) +
+              changes_to_creator_aliases(work_version)
             ).sort_by { |h| h.dig(:locals, :paper_trail_version).created_at }
 
             [decorated_work_version, changes]
@@ -83,6 +84,27 @@ module WorkHistories
           .map do |paper_trail_version|
             {
               component: FileMembershipChangeComponent,
+              locals: {
+                paper_trail_version: paper_trail_version,
+                user: lookup_user(paper_trail_version.whodunnit)
+              }
+            }
+          end
+      end
+
+      # Accepts a WorkVersion, queries the database for all the
+      # PaperTrail::Versions of that WorkVersion's WorkVersionCreations
+      # (some of which may have been deleted), and wraps each one in a
+      # Hash with everything we need to render the component.
+      #
+      # @param [WorkVersion]
+      # @return [Hash<CreatorAliasChangeComponent, PaperTrail::Version, User>]
+      def changes_to_creator_aliases(work_version)
+        PaperTrail::Version
+          .where(item_type: 'WorkVersionCreation', work_version_id: work_version.id)
+          .map do |paper_trail_version|
+            {
+              component: CreatorAliasChangeComponent,
               locals: {
                 paper_trail_version: paper_trail_version,
                 user: lookup_user(paper_trail_version.whodunnit)

@@ -10,20 +10,22 @@ FactoryBot.define do
     # Postgres does this for us, but for testing, we can do it here to save having to call create/reload.
     uuid { SecureRandom.uuid }
 
-    transient do
-      creator_count { 1 }
-    end
+    trait :with_creators do
+      transient do
+        creator_count { 1 }
+      end
 
-    after(:build, :stub) do |work_version, evaluator|
-      creators = build_list(:creator, evaluator.creator_count)
+      after(:build, :stub) do |work_version, evaluator|
+        creators = build_list(:creator, evaluator.creator_count)
 
-      creators.each do |creator|
-        # Alias "Pat Doe" to "Dr. Pat Doe"
-        creator_alias = "#{Faker::Name.prefix} #{creator.given_name} #{creator.surname}"
-        work_version.creator_aliases.build(
-          creator: creator,
-          alias: creator_alias
-        )
+        creators.each do |creator|
+          # Alias "Pat Doe" to "Dr. Pat Doe"
+          creator_alias = "#{Faker::Name.prefix} #{creator.given_name} #{creator.surname}"
+          work_version.creator_aliases.build(
+            creator: creator,
+            alias: creator_alias
+          )
+        end
       end
     end
 
@@ -46,6 +48,7 @@ FactoryBot.define do
     trait :able_to_be_published do
       draft
       with_files
+      with_creators
     end
 
     # A valid published work-version

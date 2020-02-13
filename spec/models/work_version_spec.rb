@@ -135,7 +135,7 @@ RSpec.describe WorkVersion, type: :model do
 
   describe '#build_creator_alias' do
     let(:creator) { build_stubbed :creator }
-    let(:work_version) { build_stubbed :work_version, creator_count: 0 }
+    let(:work_version) { build_stubbed :work_version, :with_creators, creator_count: 0 }
 
     it 'builds a creator_alias for the given Creator but does not persist it' do
       expect {
