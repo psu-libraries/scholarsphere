@@ -5,8 +5,8 @@ module Permissions
 
   class Visibility
     OPEN = 'open'
-    AUTHORIZED = 'authorized'
-    PRIVATE = 'private'
+    AUTHORIZED = 'authenticated'
+    PRIVATE = 'restricted'
 
     def self.all
       [OPEN, AUTHORIZED, PRIVATE]

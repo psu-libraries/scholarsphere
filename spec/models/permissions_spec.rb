@@ -27,10 +27,10 @@ RSpec.describe Permissions do
 
   describe Permissions::Visibility do
     specify { expect(Permissions::Visibility::OPEN).to eq('open') }
-    specify { expect(Permissions::Visibility::AUTHORIZED).to eq('authorized') }
-    specify { expect(Permissions::Visibility::PRIVATE).to eq('private') }
+    specify { expect(Permissions::Visibility::AUTHORIZED).to eq('authenticated') }
+    specify { expect(Permissions::Visibility::PRIVATE).to eq('restricted') }
     specify { expect(described_class.default).to eq('open') }
-    specify { expect(described_class.all).to contain_exactly('open', 'authorized', 'private') }
+    specify { expect(described_class.all).to contain_exactly('open', 'authenticated', 'restricted') }
   end
 
   describe '#grant_open_access' do

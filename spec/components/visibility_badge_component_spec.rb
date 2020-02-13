@@ -25,7 +25,7 @@ RSpec.describe VisibilityBadgeComponent, type: :component do
       expect(image.attributes['src'].value).to match(/visibility-authorized/)
       expect(image.classes).to contain_exactly('visibility')
       expect(badge.text).to include('Penn State')
-      expect(badge.classes).to include('badge', 'visibility', 'visibility--authorized')
+      expect(badge.classes).to include('badge', 'visibility', 'visibility--authenticated')
     end
   end
 
@@ -36,7 +36,7 @@ RSpec.describe VisibilityBadgeComponent, type: :component do
       expect(image.attributes['src'].value).to match(/visibility-private/)
       expect(image.classes).to contain_exactly('visibility')
       expect(badge.text).to include('Restricted')
-      expect(badge.classes).to include('badge', 'visibility', 'visibility--private')
+      expect(badge.classes).to include('badge', 'visibility', 'visibility--restricted')
     end
   end
 end
