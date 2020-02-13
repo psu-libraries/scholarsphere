@@ -92,5 +92,26 @@ RSpec.describe Api::V1::IngestController, type: :controller do
         )
       end
     end
+
+    context 'when there is an unexpected error' do
+      before do
+        allow(controller).to receive(:create).and_raise(NoMethodError, 'well, this is unexpected!')
+        post :create, params: {
+          metadata: { title: FactoryBotHelpers.work_title, creator_aliases_attributes: [creator_alias] },
+          depositor: user.access_id,
+          content: [{ file: fixture_file_upload(File.join(fixture_path, 'image.png')) }]
+        }
+      end
+
+      it 'reports the error' do
+        expect(response.status).to eq(500)
+        expect(response.body).to eq(
+          '{' \
+            "\"message\":\"We're sorry, but something went wrong\"," \
+            '"errors":["NoMethodError","well, this is unexpected!"]' \
+          '}'
+        )
+      end
+    end
   end
 end

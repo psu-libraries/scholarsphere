@@ -2,8 +2,13 @@
 
 module Api::V1
   class IngestController < RestController
-    rescue_from ActionController::ParameterMissing do |exception|
-      render json: { message: 'Bad request', errors: [exception.message] }, status: :bad_request
+    rescue_from StandardError do |exception|
+      if exception.is_a?(ActionController::ParameterMissing)
+        render json: { message: 'Bad request', errors: [exception.message] }, status: :bad_request
+      else
+        render json: { message: "We're sorry, but something went wrong", errors: [exception.class.to_s, exception] },
+               status: :internal_server_error
+      end
     end
 
     def create
