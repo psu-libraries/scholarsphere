@@ -407,6 +407,16 @@ RSpec.describe Permissions do
 
       its(:read_groups) { is_expected.to contain_exactly(group1, group2, Group.authorized_agent) }
     end
+
+    context 'with a private resource' do
+      let(:resource) { build(:work, visibility: Permissions::Visibility::PRIVATE) }
+
+      its(:read_groups) { is_expected.to contain_exactly(group1, group2) }
+
+      specify 'there is no nil access control from the null visibility agent' do
+        expect(resource.access_controls.length).to eq(2)
+      end
+    end
   end
 
   describe '#grant_edit_access' do

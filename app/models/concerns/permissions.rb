@@ -50,7 +50,7 @@ module Permissions
   # @note Always add the visibility group when setting the list of read groups. This avoids the problem of inadvertently
   # removing a visiliblity setting via the read groups setter.
   def read_groups=(list)
-    super(list.append(visibility_agent))
+    super(list.append(visibility_agent).compact)
   end
 
   def grant_open_access
