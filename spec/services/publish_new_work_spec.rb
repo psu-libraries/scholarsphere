@@ -53,7 +53,7 @@ RSpec.describe PublishNewWork do
     end
   end
 
-  context 'with incomplete metadata' do
+  context 'without a required title' do
     let(:service) do
       described_class.call(metadata: {}, depositor: user.access_id, content: [])
     end
@@ -63,10 +63,43 @@ RSpec.describe PublishNewWork do
     end
 
     it 'returns the work with errors' do
-      expect(service.errors.full_messages).to include(
-        "Versions title can't be blank",
-        "Versions file resources can't be blank"
+      expect(service.errors.full_messages).to contain_exactly("Versions title can't be blank")
+    end
+  end
+
+  context 'when the work has restricted visbility' do
+    let(:work) { build(:work_version, :with_complete_metadata) }
+    let(:service) do
+      described_class.call(
+        metadata: work.metadata.merge(
+          work_type: 'dataset',
+          visibility: Permissions::Visibility::PRIVATE,
+          creator_aliases_attributes: [
+            {
+              alias: "#{user.given_name} #{user.surname}",
+              creator_attributes: {
+                email: user.email,
+                given_name: user.given_name,
+                surname: user.surname,
+                psu_id: user.access_id
+              }
+            }
+          ]
+        ),
+        depositor: user.access_id,
+        content: [
+          { file: fixture_file_upload(File.join(fixture_path, 'image.png')) }
+        ]
       )
+    end
+
+    it 'creates a new draft work' do
+      expect { service }.to change(Work, :count).by(1)
+      new_work = Work.last
+      expect(new_work.visibility).to eq(Permissions::Visibility::PRIVATE)
+      expect(new_work.edit_users.map(&:uid)).to contain_exactly(user.uid)
+      expect(new_work.edit_groups.map(&:name)).to be_empty
+      expect(new_work.latest_version).to be_draft
     end
   end
 end

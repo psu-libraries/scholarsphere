@@ -87,7 +87,27 @@ RSpec.describe Api::V1::IngestController, type: :controller do
         expect(response.body).to eq(
           '{' \
             '"message":"Unable to complete the request",' \
-            "\"errors\":[\"Versions title can't be blank\",\"Versions creator aliases can't be blank\"]" \
+            "\"errors\":[\"Versions title can't be blank\"]" \
+          '}'
+        )
+      end
+    end
+
+    context 'when the work cannot be published' do
+      before do
+        post :create, params: {
+          metadata: { title: FactoryBotHelpers.work_title },
+          depositor: user.access_id,
+          content: [{ file: fixture_file_upload(File.join(fixture_path, 'image.png')) }]
+        }
+      end
+
+      it 'saves the work with errors' do
+        expect(response).to be_created
+        expect(response.body).to eq(
+          '{' \
+            '"message":"Work was created but cannot be published",' \
+            "\"errors\":[\"Creator can't be blank\"]" \
           '}'
         )
       end
