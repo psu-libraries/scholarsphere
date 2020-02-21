@@ -2,25 +2,53 @@
 
 module Api::V1
   class IngestController < RestController
-    rescue_from ActionController::ParameterMissing do |exception|
-      render json: { message: 'Bad request', errors: [exception.message] }, status: :bad_request
+    rescue_from StandardError do |exception|
+      if exception.is_a?(ActionController::ParameterMissing)
+        render json: { message: 'Bad request', errors: [exception.message] }, status: :bad_request
+      else
+        render json: { message: "We're sorry, but something went wrong", errors: [exception.class.to_s, exception] },
+               status: :internal_server_error
+      end
     end
 
     def create
       if work.errors.any?
         render json: unprocessable_entity_response, status: :unprocessable_entity
       else
-        render json: success_response, status: :ok
+        success_response
       end
     end
 
     private
 
       def success_response
+        if work.latest_version.published?
+          render json: published_response, status: :ok
+        else
+          render json: draft_response, status: :created
+        end
+      end
+
+      def published_response
         {
           message: 'Work was successfully created',
           url: resource_path(work.uuid)
         }
+      end
+
+      def draft_response
+        {
+          message: 'Work was created but cannot be published',
+          errors: publishing_errors
+        }
+      end
+
+      # @note Attempt to re-publish the work, then validate it to see what errors there are
+      def publishing_errors
+        work_version = work.latest_version
+        work_version.publish
+        work_version.validate
+        work_version.errors.full_messages
       end
 
       def unprocessable_entity_response

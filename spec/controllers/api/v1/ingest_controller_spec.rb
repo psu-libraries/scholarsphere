@@ -87,7 +87,48 @@ RSpec.describe Api::V1::IngestController, type: :controller do
         expect(response.body).to eq(
           '{' \
             '"message":"Unable to complete the request",' \
-            "\"errors\":[\"Versions title can't be blank\",\"Versions creator aliases can't be blank\"]" \
+            "\"errors\":[\"Versions title can't be blank\"]" \
+          '}'
+        )
+      end
+    end
+
+    context 'when the work cannot be published' do
+      before do
+        post :create, params: {
+          metadata: { title: FactoryBotHelpers.work_title },
+          depositor: user.access_id,
+          content: [{ file: fixture_file_upload(File.join(fixture_path, 'image.png')) }]
+        }
+      end
+
+      it 'saves the work with errors' do
+        expect(response).to be_created
+        expect(response.body).to eq(
+          '{' \
+            '"message":"Work was created but cannot be published",' \
+            "\"errors\":[\"Creator can't be blank\"]" \
+          '}'
+        )
+      end
+    end
+
+    context 'when there is an unexpected error' do
+      before do
+        allow(controller).to receive(:create).and_raise(NoMethodError, 'well, this is unexpected!')
+        post :create, params: {
+          metadata: { title: FactoryBotHelpers.work_title, creator_aliases_attributes: [creator_alias] },
+          depositor: user.access_id,
+          content: [{ file: fixture_file_upload(File.join(fixture_path, 'image.png')) }]
+        }
+      end
+
+      it 'reports the error' do
+        expect(response.status).to eq(500)
+        expect(response.body).to eq(
+          '{' \
+            "\"message\":\"We're sorry, but something went wrong\"," \
+            '"errors":["NoMethodError","well, this is unexpected!"]' \
           '}'
         )
       end
