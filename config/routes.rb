@@ -3,6 +3,8 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+  mount Qa::Engine => '/authorities'
+
   namespace :admin do
     authenticate :user do
       constraints ScholarsphereAdmin do

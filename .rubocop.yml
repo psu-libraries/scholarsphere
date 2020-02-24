@@ -39,3 +39,8 @@ RSpec/EmptyLineAfterSubject:
 RSpec/LeakyConstantDeclaration:
   Exclude:
     - 'spec/models/permissions_builder_spec.rb'
+
+RSpec/ExpectActual:
+  Exclude:
+    - 'spec/integration/qa/routing_spec.rb'
+
