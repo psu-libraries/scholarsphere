@@ -68,6 +68,10 @@ DEFAULT_URL_HOST: "localhost:3000"
 # Under normal circumstances, this shouldn't need changing
 # OAUTH_AUTHORIZE_URL: "/oauth/authorize"
 
+# Geonames
+# Username used to connect to the geonames api (https://sws.geonames.org)
+# GEONAMES_USER: "scholarsphere_test"
+
 development:
   POSTGRES_DB: "scholarsphere_4_development"
   OAUTH_APP_ID: ""
