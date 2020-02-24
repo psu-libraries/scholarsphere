@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_07_155145) do
+ActiveRecord::Schema.define(version: 2020_02_24_164256) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -73,6 +73,17 @@ ActiveRecord::Schema.define(version: 2020_02_07_155145) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["name"], name: "index_groups_on_name"
+  end
+
+  create_table "legacy_identifiers", force: :cascade do |t|
+    t.integer "version"
+    t.string "old_id"
+    t.string "resource_type", null: false
+    t.bigint "resource_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["resource_type", "resource_id"], name: "index_legacy_identifiers_on_resource_type_and_resource_id"
+    t.index ["version", "old_id"], name: "index_legacy_identifiers_on_version_and_old_id", unique: true
   end
 
   create_table "searches", id: :serial, force: :cascade do |t|

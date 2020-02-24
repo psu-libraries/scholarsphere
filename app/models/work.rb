@@ -14,6 +14,10 @@ class Work < ApplicationRecord
            inverse_of: 'work',
            dependent: :destroy
 
+  has_many :legacy_identifiers,
+           as: :resource,
+           dependent: :destroy
+
   accepts_nested_attributes_for :versions
 
   module Types
