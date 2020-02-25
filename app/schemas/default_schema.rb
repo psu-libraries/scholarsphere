@@ -1,25 +1,16 @@
 # frozen_string_literal: true
 
-class DefaultSchema
-  attr_reader :resource_klass
-
-  # @param [ActiveRecord::Base]
-  def initialize(resource_klass)
-    @resource_klass = resource_klass
-  end
-
-  def schema
-    solr_fields.map do |solr_field|
-      solr_field
+class DefaultSchema < BaseSchema
+  def document
+    attributes_for_indexing.map do |attribute|
+      [field_name(attribute).to_sym, field_values(attribute)]
     end.to_h
   end
 
   private
 
-    def solr_fields
-      (attribute_types.keys - ['id', 'metadata']).map do |attribute|
-        [field_name(attribute), Array.wrap(attribute)]
-      end
+    def attributes_for_indexing
+      attribute_types.keys - ['id', 'metadata']
     end
 
     def field_name(attribute)
@@ -32,7 +23,15 @@ class DefaultSchema
       end
     end
 
+    def field_values(attribute)
+      case attribute_types[attribute].type
+      when :string then Array.wrap(resource[attribute]).compact
+      else
+        resource[attribute]
+      end
+    end
+
     def attribute_types
-      @attribute_types ||= (resource_klass.try(:attribute_types) || {})
+      @attribute_types ||= (resource.class.try(:attribute_types) || {})
     end
 end

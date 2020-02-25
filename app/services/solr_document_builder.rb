@@ -3,38 +3,18 @@
 class SolrDocumentBuilder
   class Error < StandardError; end
 
-  def self.call(resource:, schema: nil)
-    return {} if resource.nil?
+  attr_reader :schemas
 
-    new(resource, schema).document
+  def initialize(*schemas)
+    @schemas = schemas
   end
 
-  attr_reader :schema, :resource
-
-  def initialize(resource, schema)
+  # @return [HashWithIndifferentAccess]
+  def generate(resource:)
     raise Error, "#{resource.class} has no uuid defined" unless resource.respond_to?(:uuid)
 
-    @resource = resource
-    @schema = schema || DefaultSchema.new(resource.class).schema
+    builders = schemas.map { |schema| schema.new(resource: resource) }
+    base_document = HashWithIndifferentAccess.new(id: resource.uuid, model_ssi: resource.class.to_s)
+    builders.map(&:document).inject(base_document, &:merge)
   end
-
-  def document
-    HashWithIndifferentAccess.new(
-      resource_document.merge(id: resource.uuid, model_ssi: resource.class.to_s)
-    )
-  end
-
-  private
-
-    def resource_document
-      schema.keys.map do |solr_field|
-        [solr_field.to_sym, document_values(solr_field)]
-      end.to_h
-    end
-
-    def document_values(field)
-      schema[field].map do |attribute|
-        resource.send(attribute) if resource.respond_to?(attribute)
-      end
-    end
 end
