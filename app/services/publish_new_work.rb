@@ -18,6 +18,7 @@ class PublishNewWork
   # @return [Work]
   def self.call(metadata:, depositor:, content:, permissions: {})
     user = UserRegistrationService.call(uid: depositor)
+    noid = metadata.delete(:noid)
 
     params = {
       work_type: metadata.delete(:work_type) { Work::Types::DATASET },
@@ -27,6 +28,12 @@ class PublishNewWork
     }
 
     work = Work.build_with_empty_version(params)
+    if noid.present?
+      work.legacy_identifiers.find_or_initialize_by(
+        version: 3,
+        old_id: noid
+      )
+    end
     UpdatePermissionsService.call(resource: work, permissions: permissions, create_agents: true)
     work_version = work.versions.first
 

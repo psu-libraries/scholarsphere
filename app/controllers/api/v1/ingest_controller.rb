@@ -85,6 +85,7 @@ module Api::V1
             :subtitle,
             :rights,
             :version_name,
+            :noid,
             keyword: [],
             description: [],
             resource_type: [],
