@@ -73,4 +73,7 @@ Rails.application.routes.draw do
       resources :ingest, only: [:create]
     end
   end
+
+  # Legacy URL support
+  get '/concern/generic_works/:id', to: 'legacy_urls#v3'
 end
