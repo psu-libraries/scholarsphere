@@ -150,40 +150,44 @@ RSpec.describe Work, type: :model do
     context 'when the work has a published version' do
       subject { create(:work, has_draft: false).to_solr }
 
-      its(:keys) do
-        is_expected.to contain_exactly(
-          'aasm_state_tesim',
-          'based_near_tesim',
-          'contributor_tesim',
-          'created_at_dtsi',
-          'depositor_id_isi',
-          'description_tesim',
-          'doi_tesim',
-          'id',
-          'identifier_tesim',
-          'keyword_tesim',
-          'language_tesim',
-          'model_ssi',
-          'published_date_tesim',
-          'publisher_tesim',
-          'related_url_tesim',
-          'resource_type_tesim',
-          'rights_tesim',
-          'source_tesim',
-          'subject_tesim',
-          'subtitle_tesim',
-          'title_tesim',
-          'updated_at_dtsi',
-          'uuid_ssi',
-          'version_name_tesim',
-          'version_number_isi',
-          'work_id_isi',
-          'work_type_tesim',
-          'discover_users_ssim',
-          'discover_groups_ssim',
-          'visibility_ssi'
+      let(:keys) do
+        %w(
+          aasm_state_tesim
+          based_near_tesim
+          contributor_tesim
+          created_at_dtsi
+          creator_aliases_tesim
+          creators_sim
+          depositor_id_isi
+          description_tesim
+          discover_groups_ssim
+          discover_users_ssim
+          doi_tesim
+          id
+          identifier_tesim
+          keyword_tesim
+          language_tesim
+          model_ssi
+          published_date_tesim
+          publisher_tesim
+          related_url_tesim
+          resource_type_tesim
+          rights_tesim
+          source_tesim
+          subject_tesim
+          subtitle_tesim
+          title_tesim
+          updated_at_dtsi
+          uuid_ssi
+          version_name_tesim
+          version_number_isi
+          visibility_ssi
+          work_id_isi
+          work_type_tesim
         )
       end
+
+      its(:keys) { is_expected.to contain_exactly(*keys) }
     end
   end
 

@@ -70,13 +70,16 @@ class Work < ApplicationRecord
   end
 
   def to_solr
-    SolrDocumentBuilder.call(resource: latest_published_version)
-      .merge(SolrDocumentBuilder.call(resource: self))
-      .merge(
-        'discover_users_ssim' => (discover_users + read_users).map(&:access_id).uniq,
-        'discover_groups_ssim' => (discover_groups + read_groups).map(&:name).uniq,
-        'visibility_ssi' => visibility
-      )
-      .except(:latest_version_bsi)
+    document_builder.generate(resource: self)
   end
+
+  private
+
+    def document_builder
+      SolrDocumentBuilder.new(
+        DefaultSchema,
+        LatestPublishedVersionSchema,
+        PermissionsSchema
+      )
+    end
 end

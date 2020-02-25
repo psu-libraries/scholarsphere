@@ -10,6 +10,7 @@ RSpec.describe 'Blacklight catalog page' do
   let(:records) do
     Work.all.map(&:latest_published_version).compact.map do |work_version|
       HashWithIndifferentAccess.new(work_version.attributes)
+        .merge(creator_aliases: work_version.creator_aliases.map(&:alias))
     end
   end
 
@@ -39,16 +40,19 @@ RSpec.describe 'Blacklight catalog page' do
     expect(page).to have_selector('h3', text: 'Status')
     expect(page).to have_selector('h3', text: 'Keywords')
     expect(page).to have_selector('h3', text: 'Subject')
+    expect(page).to have_selector('h3', text: 'Creators')
 
     # Display all records and check fields
     click_link('100 per page')
     expect(page).to have_blacklight_label('title_tesim')
+    expect(page).to have_blacklight_label('creator_aliases_tesim')
     expect(page).to have_blacklight_label('aasm_state_tesim')
     expect(page).to have_blacklight_label('keyword_tesim')
     expect(page).to have_blacklight_label('resource_type_tesim')
     expect(page).to have_blacklight_label('created_at_dtsi')
     records.each do |work|
       expect(page).to have_blacklight_field('title_tesim').with(work[:title])
+      expect(page).to have_blacklight_field('creator_aliases_tesim').with(work[:creator_aliases].join(', '))
       expect(page).to have_blacklight_field('aasm_state_tesim').with(work[:status])
       expect(page).to have_blacklight_field('keyword_tesim').with(work[:keyword].join(', '))
       expect(page).to have_blacklight_field('resource_type_tesim').with(work[:resource_type].join(', '))

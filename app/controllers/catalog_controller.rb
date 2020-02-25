@@ -89,6 +89,7 @@ class CatalogController < ApplicationController
     config.add_facet_field 'keyword_tesim', label: 'Keywords'
     config.add_facet_field 'resouce_type_tesim', label: 'Resource Type'
     config.add_facet_field 'subject_tesim', label: 'Subject'
+    config.add_facet_field 'creators_sim', label: 'Creators'
 
     # Example pivot facet
     # config.add_facet_field 'example_pivot_field', label: 'Pivot Field', pivot: ['format', 'language_ssim']
@@ -108,6 +109,7 @@ class CatalogController < ApplicationController
     # solr fields to be displayed in the index (search results) view
     #   The ordering of the field names is the order of the display
     config.add_index_field 'title_tesim', label: 'Title'
+    config.add_index_field 'creator_aliases_tesim', label: 'Creators'
     config.add_index_field 'aasm_state_tesim', label: 'Status'
     config.add_index_field 'keyword_tesim', label: 'Keywords'
     config.add_index_field 'resource_type_tesim', label: 'Resource Type'
@@ -135,6 +137,7 @@ class CatalogController < ApplicationController
     config.add_show_field 'version_name_tesim', label: 'Version Name'
     config.add_show_field 'created_at_dtsi', label: 'Date Created'
     config.add_show_field 'updated_at_dtsi', label: 'Last Updated'
+    config.add_show_field 'creator_aliases_tesim'
 
     # "fielded" search configuration. Used by pulldown among other places.
     # For supported keys in hash, see rdoc for Blacklight::SearchFields

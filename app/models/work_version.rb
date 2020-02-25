@@ -128,10 +128,7 @@ class WorkVersion < ApplicationRecord
   end
 
   def to_solr
-    SolrDocumentBuilder.call(resource: self).merge(
-      latest_version_bsi: latest_published_version?,
-      work_type_tesim: work.work_type
-    )
+    document_builder.generate(resource: self)
   end
 
   def latest_published_version?
@@ -154,5 +151,12 @@ class WorkVersion < ApplicationRecord
 
     def strip_blanks_from_array(arr)
       Array.wrap(arr).reject(&:blank?)
+    end
+
+    def document_builder
+      SolrDocumentBuilder.new(
+        WorkVersionSchema,
+        CreatorSchema
+      )
     end
 end
