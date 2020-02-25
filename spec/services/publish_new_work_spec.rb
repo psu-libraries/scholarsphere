@@ -102,4 +102,41 @@ RSpec.describe PublishNewWork do
       expect(new_work.latest_version).to be_draft
     end
   end
+
+  context 'when the work has a NOID from Scholarpshere 3' do
+    let(:work) { build(:work_version, :with_complete_metadata) }
+    let(:legacy_identifier) { build(:legacy_identifier) }
+
+    let(:service) do
+      described_class.call(
+        metadata: work.metadata.merge(
+          work_type: 'dataset',
+          visibility: Permissions::Visibility::OPEN,
+          creator_aliases_attributes: [
+            {
+              alias: "#{user.given_name} #{user.surname}",
+              creator_attributes: {
+                email: user.email,
+                given_name: user.given_name,
+                surname: user.surname,
+                psu_id: user.access_id
+              }
+            }
+          ],
+          noid: legacy_identifier.old_id
+        ),
+        depositor: user.access_id,
+        content: [
+          { file: fixture_file_upload(File.join(fixture_path, 'image.png')) }
+        ]
+      )
+    end
+
+    it 'creates a new work with a legacy identifier' do
+      expect { service }.to change(Work, :count).by(1)
+      new_work = Work.last
+      expect(new_work.legacy_identifiers.map(&:old_id)).to contain_exactly(legacy_identifier.old_id)
+      expect(new_work.legacy_identifiers.map(&:version)).to contain_exactly(3)
+    end
+  end
 end
