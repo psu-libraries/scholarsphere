@@ -1,5 +1,7 @@
 FROM psul/ruby:2.6.3-node-12 as base
 
+COPY bin/vaultshell /usr/local/bin/
+
 RUN useradd -u 2000 app -d /app
 RUN mkdir /app/tmp
 RUN chown -R app /app
