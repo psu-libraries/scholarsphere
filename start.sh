@@ -2,7 +2,6 @@ set -e
 
 if [ ${RAILS_ENV:-development} != "production" ]; then
   bundle check || bundle
-  yarn
 fi
 
 if [ ${APP_ROLE:-app} == "sidekiq" ]; then
