@@ -124,6 +124,7 @@ RSpec.describe WorkVersion, type: :model do
   end
 
   it { is_expected.to delegate_method(:depositor).to(:work) }
+  it { is_expected.to delegate_method(:embargoed?).to(:work) }
 
   describe '#uuid' do
     subject(:work_version) { create(:work_version) }

@@ -168,6 +168,7 @@ ActiveRecord::Schema.define(version: 2020_03_04_200754) do
     t.datetime "updated_at", precision: 6, null: false
     t.uuid "uuid", default: -> { "uuid_generate_v4()" }
     t.string "doi"
+    t.datetime "embargoed_until"
     t.index ["depositor_id"], name: "index_works_on_depositor_id"
   end
 

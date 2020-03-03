@@ -145,7 +145,7 @@ class WorkVersion < ApplicationRecord
     WorkIndexer.call(work, commit: true)
   end
 
-  delegate :depositor, :visibility, to: :work
+  delegate :depositor, :visibility, :embargoed?, to: :work
 
   private
 
