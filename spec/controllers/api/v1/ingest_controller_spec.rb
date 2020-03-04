@@ -6,6 +6,7 @@ require 'rails_helper'
 # feature test to ensure end-to-end functionality of our ingest API.
 
 RSpec.describe Api::V1::IngestController, type: :controller do
+  let(:api_token) { create(:api_token).token }
   let(:user) { create(:user) }
   let(:creator_alias) do
     {
@@ -18,6 +19,8 @@ RSpec.describe Api::V1::IngestController, type: :controller do
       }
     }
   end
+
+  before { request.headers[:'X-API-Key'] = api_token }
 
   describe 'POST #create' do
     context 'with valid input' do

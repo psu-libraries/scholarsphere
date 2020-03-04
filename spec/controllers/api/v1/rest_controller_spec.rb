@@ -16,9 +16,34 @@ RSpec.describe Api::V1::RestController, type: :controller do
   context 'with an unauthenticated request' do
     subject { response }
 
-    before { get :index }
+    context 'without providing an API token' do
+      before { get :index }
 
-    # @note Currently, any request will be allowed until we decide on an authentication framework for the API
-    its(:body) { is_expected.to eq('success') }
+      its(:status) { is_expected.to eq 401 }
+      its(:body) { is_expected.to include(I18n.t('api.errors.not_authorized')) }
+    end
+
+    context 'when providing a bad token' do
+      before do
+        request.headers[:'X-API-Key'] = 'bad-token'
+        get :index
+      end
+
+      its(:status) { is_expected.to eq 401 }
+    end
+  end
+
+  context 'with an authenticated request' do
+    subject { response }
+
+    let!(:api_key) { create :api_token }
+
+    before do
+      request.headers[:'X-API-Key'] = api_key.token
+      get :index
+    end
+
+    its(:status) { is_expected.to eq 200 }
+    its(:body) { is_expected.to eq 'success' }
   end
 end
