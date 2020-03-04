@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_24_164256) do
+ActiveRecord::Schema.define(version: 2020_03_04_200754) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,16 @@ ActiveRecord::Schema.define(version: 2020_02_24_164256) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["agent_type", "agent_id"], name: "index_access_controls_on_agent_type_and_agent_id"
     t.index ["resource_type", "resource_id"], name: "index_access_controls_on_resource_type_and_resource_id"
+  end
+
+  create_table "api_tokens", force: :cascade do |t|
+    t.string "token"
+    t.string "app_name"
+    t.string "admin_email"
+    t.datetime "last_used_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["token"], name: "index_api_tokens_on_token", unique: true
   end
 
   create_table "bookmarks", id: :serial, force: :cascade do |t|
