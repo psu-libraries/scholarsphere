@@ -72,6 +72,9 @@ DEFAULT_URL_HOST: "localhost:3000"
 # Username used to connect to the geonames api (https://sws.geonames.org)
 # GEONAMES_USER: "scholarsphere_test"
 
+# Time to live for presigned download links
+DOWNLOAD_URL_TTL: 6
+
 development:
   POSTGRES_DB: "scholarsphere_4_development"
   OAUTH_APP_ID: ""
