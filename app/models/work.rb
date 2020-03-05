@@ -73,6 +73,12 @@ class Work < ApplicationRecord
     document_builder.generate(resource: self)
   end
 
+  def embargoed?
+    return false if embargoed_until.blank?
+
+    embargoed_until > DateTime.now
+  end
+
   private
 
     def document_builder

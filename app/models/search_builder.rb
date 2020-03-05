@@ -6,6 +6,7 @@ class SearchBuilder < Blacklight::SearchBuilder
   self.default_processor_chain += %i(
     restrict_search_to_works
     apply_gated_discovery
+    exclude_embargoed_works
     log_solr_parameters
   )
 
@@ -23,6 +24,13 @@ class SearchBuilder < Blacklight::SearchBuilder
 
   def log_solr_parameters(solr_parameters)
     Rails.logger.debug("Solr parameters: #{solr_parameters.inspect}")
+  end
+
+  def exclude_embargoed_works(solr_parameters)
+    return if current_user.admin?
+
+    solr_parameters[:fq] ||= []
+    solr_parameters[:fq] << '-embargoed_until_dtsi:[NOW TO *]'
   end
 
   private

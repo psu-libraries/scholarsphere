@@ -14,6 +14,7 @@ RSpec.describe SearchBuilder do
       is_expected.to include(
         :restrict_search_to_works,
         :apply_gated_discovery,
+        :exclude_embargoed_works,
         :log_solr_parameters
       )
     end
@@ -48,6 +49,14 @@ RSpec.describe SearchBuilder do
 
       it 'shows all Works' do
         expect(parameters['fq']).to contain_exactly('model_ssi:Work')
+      end
+    end
+
+    context 'with an embargoed work' do
+      it 'excludes works whose embargo date is in the future' do
+        expect(parameters['fq']).to include(
+          '-embargoed_until_dtsi:[NOW TO *]'
+        )
       end
     end
   end

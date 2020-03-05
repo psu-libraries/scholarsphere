@@ -9,6 +9,7 @@ RSpec.describe Work, type: :model do
     it { is_expected.to have_db_index(:depositor_id) }
     it { is_expected.to have_db_column(:uuid).of_type(:uuid) }
     it { is_expected.to have_db_column(:doi).of_type(:string) }
+    it { is_expected.to have_db_column(:embargoed_until).of_type(:datetime) }
   end
 
   describe 'factories' do
@@ -130,21 +131,24 @@ RSpec.describe Work, type: :model do
     context 'when the work only has a draft version' do
       subject { build(:work).to_solr }
 
-      its(:keys) do
-        is_expected.to contain_exactly(
-          'created_at_dtsi',
-          'depositor_id_isi',
-          'doi_tesim',
-          'id',
-          'model_ssi',
-          'updated_at_dtsi',
-          'uuid_ssi',
-          'work_type_tesim',
-          'discover_users_ssim',
-          'discover_groups_ssim',
-          'visibility_ssi'
+      let(:keys) do
+        %w(
+          created_at_dtsi
+          depositor_id_isi
+          discover_groups_ssim
+          discover_users_ssim
+          doi_tesim
+          embargoed_until_dtsi
+          id
+          model_ssi
+          updated_at_dtsi
+          uuid_ssi
+          visibility_ssi
+          work_type_tesim
         )
       end
+
+      its(:keys) { is_expected.to contain_exactly(*keys) }
     end
 
     context 'when the work has a published version' do
@@ -163,6 +167,7 @@ RSpec.describe Work, type: :model do
           discover_groups_ssim
           discover_users_ssim
           doi_tesim
+          embargoed_until_dtsi
           id
           identifier_tesim
           keyword_tesim
@@ -210,6 +215,26 @@ RSpec.describe Work, type: :model do
       described_class.reindex_all
       expect(WorkIndexer).to have_received(:call).once
       expect(IndexingService).to have_received(:commit).once
+    end
+  end
+
+  describe 'embargoed?' do
+    context 'with an unembargoed public work' do
+      subject { build(:work, has_draft: false) }
+
+      it { is_expected.not_to be_embargoed }
+    end
+
+    context 'with an embargoed public work' do
+      subject { build(:work, has_draft: false, embargoed_until: (DateTime.now + 6.days)) }
+
+      it { is_expected.to be_embargoed }
+    end
+
+    context 'with an previously embargoed public work' do
+      subject { build(:work, has_draft: false, embargoed_until: (DateTime.now - 6.months)) }
+
+      it { is_expected.not_to be_embargoed }
     end
   end
 end

@@ -5,6 +5,8 @@ require 'rails_helper'
 RSpec.describe 'Searching discoverable resources' do
   let!(:public_work) { create(:work, has_draft: false) }
   let!(:authorized_work) { create(:work, visibility: Permissions::Visibility::AUTHORIZED, has_draft: false) }
+  let!(:current_embargoed_work) { create(:work, has_draft: false, embargoed_until: (DateTime.now + 6.days)) }
+  let!(:previous_embargoed_work) { create(:work, has_draft: false, embargoed_until: (DateTime.now - 6.days)) }
 
   context 'with a public user' do
     it 'searches only public works' do
@@ -12,6 +14,8 @@ RSpec.describe 'Searching discoverable resources' do
       click_button('Search')
 
       expect(page).to have_content(public_work.latest_published_version.title)
+      expect(page).to have_content(previous_embargoed_work.latest_published_version.title)
+      expect(page).not_to have_content(current_embargoed_work.latest_published_version.title)
       expect(page).not_to have_content(authorized_work.latest_published_version.title)
     end
   end
@@ -24,6 +28,8 @@ RSpec.describe 'Searching discoverable resources' do
       click_button('Search')
 
       expect(page).to have_content(public_work.latest_published_version.title)
+      expect(page).to have_content(previous_embargoed_work.latest_published_version.title)
+      expect(page).not_to have_content(current_embargoed_work.latest_published_version.title)
       expect(page).to have_content(authorized_work.latest_published_version.title)
     end
   end
