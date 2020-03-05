@@ -49,6 +49,11 @@ Rails/OutputSafety:
   Exclude:
     - 'app/components/work_version_metadata_component.rb'
 
+# Offense count: 1
+Rails/SkipsModelValidations:
+  Exclude:
+    - 'app/models/api_token.rb'
+
 Style/CollectionMethods:
   Exclude:
     - 'app/models/work_version.rb'

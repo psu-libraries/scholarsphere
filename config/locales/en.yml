@@ -32,6 +32,9 @@ en:
             title:
               different_extension: does not have the same filename extension as %{original}
 
+  api:
+    errors:
+      not_authorized: "401: Request not authorized. Please provide a valid API key for access."
   dashboard:
     profiles:
       edit:
