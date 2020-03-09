@@ -23,6 +23,7 @@ class PublishNewWork
     params = {
       work_type: metadata.delete(:work_type) { Work::Types::DATASET },
       visibility: metadata.delete(:visibility) { Permissions::Visibility::OPEN },
+      embargoed_until: metadata.delete(:embargoed_until),
       depositor: user,
       versions_attributes: [metadata.to_hash]
     }

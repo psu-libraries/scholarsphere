@@ -43,6 +43,7 @@ RSpec.describe PublishNewWork do
       expect { service }.to change(Work, :count).by(1)
       new_work = Work.last
       expect(new_work).to be_open_access
+      expect(new_work).not_to be_embargoed
       expect(new_work.edit_users.map(&:uid)).to contain_exactly(user.uid, edit_user.uid)
       expect(new_work.edit_groups.map(&:name)).to contain_exactly(edit_group.name)
       expect(new_work.work_type).to eq('dataset')
@@ -137,6 +138,41 @@ RSpec.describe PublishNewWork do
       new_work = Work.last
       expect(new_work.legacy_identifiers.map(&:old_id)).to contain_exactly(legacy_identifier.old_id)
       expect(new_work.legacy_identifiers.map(&:version)).to contain_exactly(3)
+    end
+  end
+
+  context 'when the work is embargoed' do
+    let(:work) { build(:work_version, :with_complete_metadata) }
+
+    let(:service) do
+      described_class.call(
+        metadata: work.metadata.merge(
+          work_type: 'dataset',
+          visibility: Permissions::Visibility::OPEN,
+          creator_aliases_attributes: [
+            {
+              alias: "#{user.given_name} #{user.surname}",
+              creator_attributes: {
+                email: user.email,
+                given_name: user.given_name,
+                surname: user.surname,
+                psu_id: user.access_id
+              }
+            }
+          ],
+          embargoed_until: (DateTime.now + 2.months)
+        ),
+        depositor: user.access_id,
+        content: [
+          { file: fixture_file_upload(File.join(fixture_path, 'image.png')) }
+        ]
+      )
+    end
+
+    it 'creates a new, embargoed work' do
+      expect { service }.to change(Work, :count).by(1)
+      new_work = Work.last
+      expect(new_work).to be_embargoed
     end
   end
 end
