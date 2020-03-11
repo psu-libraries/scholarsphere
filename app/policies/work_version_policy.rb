@@ -13,4 +13,24 @@ class WorkVersionPolicy < ApplicationPolicy
   def show?
     record.work.read_access? user
   end
+
+  def download?
+    return true if editable?
+    return download_published_version? if record.published?
+
+    false
+  end
+
+  private
+
+    # @todo There's a bug in the permissions because a depositor should have edit access by default
+    def editable?
+      record.work.edit_access?(user) || record.depositor == user
+    end
+
+    def download_published_version?
+      return false if record.embargoed?
+
+      record.work.read_access? user
+    end
 end

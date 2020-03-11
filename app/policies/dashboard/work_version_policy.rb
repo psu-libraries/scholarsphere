@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Dashboard::WorkVersionPolicy < ApplicationPolicy
+class Dashboard::WorkVersionPolicy < WorkVersionPolicy
   class Scope < Scope
     def resolve
       scope

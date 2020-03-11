@@ -10,6 +10,8 @@ RSpec.describe Dashboard::WorkVersionPolicy, type: :policy do
   let(:depositor) { instance_double('User', 'depositor') }
   let(:other_user) { instance_double('User', 'another user') }
 
+  it_behaves_like 'a downloadable work version'
+
   permissions '.scope' do
     let(:scoped_versions) { described_class::Scope.new(user, WorkVersion).resolve }
 

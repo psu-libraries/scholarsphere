@@ -1,4 +1,4 @@
-<% if work_version.file_resources.present? %>
+<% if policy(work_version).download? %>
   <table class="table table-striped">
     <thead>
       <tr>
