@@ -81,6 +81,7 @@ module Api::V1
           .permit(
             :work_type,
             :visibility,
+            :embargoed_until,
             :title,
             :subtitle,
             :rights,
