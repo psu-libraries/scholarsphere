@@ -35,6 +35,11 @@ en:
   api:
     errors:
       not_authorized: "401: Request not authorized. Please provide a valid API key for access."
+  embargo:
+    heading: "Embargoed until %{date}"
+    public_message: "Files are not available during the embargo."
+    edit_message: "You have permission to access the files during the embargo."
+    link_text: "Public link"
   dashboard:
     profiles:
       edit:
