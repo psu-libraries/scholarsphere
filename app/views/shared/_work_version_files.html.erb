@@ -1,3 +1,5 @@
+<%= render(EmbargoDetailComponent, work_version: work_version) if work_version.embargoed? %>
+
 <% if policy(work_version).download? %>
   <table class="table table-striped">
     <thead>
