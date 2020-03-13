@@ -116,7 +116,7 @@ module Api::V1
       end
 
       def content_params
-        params.require(:content).map do |content_parameter|
+        params.fetch(:content, []).map do |content_parameter|
           content_parameter.permit(:file)
         end
       end
