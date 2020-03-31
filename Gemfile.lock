@@ -1,16 +1,4 @@
 GIT
-  remote: https://github.com/projectblacklight/blacklight.git
-  revision: def0a6e9b40d8bc3da4067235e002fe737d6b0c0
-  branch: master
-  specs:
-    blacklight (7.2.0)
-      deprecation
-      globalid
-      jbuilder (~> 2.7)
-      kaminari (>= 0.15)
-      rails (>= 5.1, < 7)
-
-GIT
   remote: https://github.com/psu-stewardship/scholarsphere-client.git
   revision: 34a4adb68443ada79d274737591b8d9ef2fab077
   branch: master
@@ -119,6 +107,12 @@ GEM
     bindex (0.8.1)
     binding_of_caller (0.8.0)
       debug_inspector (>= 0.0.1)
+    blacklight (7.7.0)
+      deprecation
+      globalid
+      jbuilder (~> 2.7)
+      kaminari (>= 0.15)
+      rails (>= 5.1, < 7)
     bootsnap (1.4.5)
       msgpack (~> 1.0)
     bootstrap (4.3.1)
@@ -209,18 +203,18 @@ GEM
       activesupport (>= 5.0)
       pg (>= 0.18.1)
     jwt (2.2.1)
-    kaminari (1.1.1)
+    kaminari (1.2.0)
       activesupport (>= 4.1.0)
-      kaminari-actionview (= 1.1.1)
-      kaminari-activerecord (= 1.1.1)
-      kaminari-core (= 1.1.1)
-    kaminari-actionview (1.1.1)
+      kaminari-actionview (= 1.2.0)
+      kaminari-activerecord (= 1.2.0)
+      kaminari-core (= 1.2.0)
+    kaminari-actionview (1.2.0)
       actionview
-      kaminari-core (= 1.1.1)
-    kaminari-activerecord (1.1.1)
+      kaminari-core (= 1.2.0)
+    kaminari-activerecord (1.2.0)
       activerecord
-      kaminari-core (= 1.1.1)
-    kaminari-core (1.1.1)
+      kaminari-core (= 1.2.0)
+    kaminari-core (1.2.0)
     launchy (2.4.3)
       addressable (~> 2.3)
     ldpath (1.1.0)
@@ -508,7 +502,7 @@ DEPENDENCIES
   actionview-component
   better_errors
   binding_of_caller
-  blacklight!
+  blacklight (~> 7.7)
   bootsnap (>= 1.4.2)
   bootstrap (~> 4.0)
   byebug

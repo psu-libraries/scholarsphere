@@ -1657,10 +1657,10 @@ bindings@^1.5.0:
   dependencies:
     file-uri-to-path "1.0.0"
 
-blacklight-frontend@^7.5.0:
-  version "7.5.0"
-  resolved "https://registry.yarnpkg.com/blacklight-frontend/-/blacklight-frontend-7.5.0.tgz#4fc34aab543b21d25beb16ebbe1c9b7f213b72f2"
-  integrity sha512-MhtQQ4qf8lUCdWFMf9gGIZY1t8TLZED0vak+EZzNk0vj4bT3z0xe9nT7XEaGUQjMOq3bHVBDhnL9mA8XJiEJ6g==
+blacklight-frontend@^7.7.0:
+  version "7.7.0"
+  resolved "https://registry.yarnpkg.com/blacklight-frontend/-/blacklight-frontend-7.7.0.tgz#7f6f5953d1d723480b9977163ac8f4f7a0805e68"
+  integrity sha512-NZKIFmVMd9PcFSrywJBXD7rZG6v/6huokINK93iR881JrYRHzg51xJRMNk6jvTV30jY9gJxhX3rMHG1uSauYBg==
   dependencies:
     bloodhound-js "^1.2.3"
     bootstrap "^4.3.1"

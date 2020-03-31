@@ -10,7 +10,7 @@
     "@uppy/core": "^1.9.0",
     "@uppy/dashboard": "^1.7.0",
     "@uppy/xhr-upload": "^1.5.3",
-    "blacklight-frontend": "^7.5.0",
+    "blacklight-frontend": "^7.7.0",
     "caniuse-lite": "^1.0.30001038",
     "cocoon-js": "^0.0.5",
     "popper.js": "^1.16.1",
