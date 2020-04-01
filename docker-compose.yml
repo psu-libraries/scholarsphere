@@ -1,6 +1,7 @@
 version: '3.5'
 x-web_env: &web_env
   environment:
+      CI: "true"
       REDIS_HOST: redis
       REDIS_PASSWORD: redispassword
       OAUTH_APP_ID: ${OAUTH_APP_ID}
