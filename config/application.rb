@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'boot'
-require_relative '../lib/logging/json_formatter.rb'
+require 'json_formatter'
 
 require 'rails'
 # Pick the frameworks you want:

@@ -6,7 +6,7 @@ class JSONFormatter
   def parse_message(message)
     begin
       msg = JSON.parse(message)
-    rescue JSON::ParserError
+    rescue JSON::ParserError, TypeError
       msg = message
     end
     msg
