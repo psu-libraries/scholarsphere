@@ -4,12 +4,9 @@ require 'json'
 
 class JSONFormatter
   def parse_message(message)
-    begin
-      msg = JSON.parse(message)
-    rescue JSON::ParserError, TypeError
-      msg = message
-    end
-    msg
+    JSON.parse(message)
+  rescue JSON::ParserError, TypeError
+    message
   end
 
   def call(severity, timestamp, _progname, message)
