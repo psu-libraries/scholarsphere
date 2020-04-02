@@ -1,0 +1,56 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://identity.apps.psu.edu/search-service/resources/people?text=wead
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Security-Policy:
+      - frame-ancestors 'none'
+      Content-Type:
+      - application/vnd-psu.edu-v1+json
+      Date:
+      - Tue, 07 Apr 2020 13:35:49 GMT
+      Server:
+      - istio-envoy
+      Set-Cookie:
+      - JSESSIONID=ZJmPHDpdn-d9oF89dt8e1_-qAfUWfkUz527tCPvy.search-service-84d47874cb-k4g7m;
+        path=/search-service
+      Uniqueid:
+      - 47d307c7-7a4f-438b-a399-77337099f6be
+      Vary:
+      - Accept-Encoding
+      X-Content-Security-Policy:
+      - frame-ancestors 'none'
+      X-Envoy-Decorator-Operation:
+      - search-service.swe-production.svc.cluster.local:8080/*
+      X-Envoy-Upstream-Service-Time:
+      - '13'
+      X-Frame-Options:
+      - DENY
+      X-Request-Id:
+      - f81ea6a7-5530-43c3-8ac4-7595680e6b6c
+      Content-Length:
+      - '333'
+    body:
+      encoding: ASCII-8BIT
+      string: '[{"userid":"agw13","cprid":"2784093","givenName":"Adam","middleName":"Garner","familyName":"Wead","preferredGivenName":"Adam","preferredFamilyName":"Wead","active":true,"confHold":false,"universityEmail":"agw13@psu.edu","affiliation":["STAFF"],"displayName":"Adam
+        Wead","link":{"href":"https://dev.apps.psu.edu/cpr/resources/2784093"}},{"userid":"azw166","cprid":"6559108","givenName":"Amy","familyName":"Weader","active":true,"confHold":false,"universityEmail":"azw166@psu.edu","affiliation":[""],"displayName":"Amy
+        Weader","link":{"href":"https://dev.apps.psu.edu/cpr/resources/6559108"}},{"userid":"naw5384","cprid":"7363729","givenName":"Nathan","middleName":"Andrew","familyName":"Weader","active":true,"confHold":false,"universityEmail":"naw5384@psu.edu","affiliation":[""],"displayName":"Nathan
+        Andrew Weader","link":{"href":"https://dev.apps.psu.edu/cpr/resources/7363729"}}]'
+    http_version: 
+  recorded_at: Tue, 07 Apr 2020 13:35:49 GMT
+recorded_with: VCR 5.0.0

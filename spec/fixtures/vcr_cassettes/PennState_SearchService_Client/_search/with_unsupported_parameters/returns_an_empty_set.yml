@@ -1,0 +1,53 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://identity.apps.psu.edu/search-service/resources/people?bogus=bam!
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Length:
+      - '2'
+      Content-Security-Policy:
+      - frame-ancestors 'none'
+      Content-Type:
+      - application/vnd-psu.edu-v1+json
+      Date:
+      - Tue, 07 Apr 2020 13:35:49 GMT
+      Server:
+      - istio-envoy
+      Set-Cookie:
+      - JSESSIONID=GjLk53ZHGRiL7ewsWfyikvRGN-ec1YSM_JpxJ85_.search-service-84d47874cb-hzzvk;
+        path=/search-service
+      Uniqueid:
+      - 32af89fd-a880-4733-96a5-ce67c55a5b3b
+      Vary:
+      - Accept-Encoding
+      X-Content-Security-Policy:
+      - frame-ancestors 'none'
+      X-Envoy-Decorator-Operation:
+      - search-service.swe-production.svc.cluster.local:8080/*
+      X-Envoy-Upstream-Service-Time:
+      - '8'
+      X-Frame-Options:
+      - DENY
+      X-Request-Id:
+      - fdf56522-8a2b-41b4-9051-d742be3578e9
+    body:
+      encoding: UTF-8
+      string: "[]"
+    http_version: 
+  recorded_at: Tue, 07 Apr 2020 13:35:49 GMT
+recorded_with: VCR 5.0.0
