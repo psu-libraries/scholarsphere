@@ -62,16 +62,18 @@ RSpec.describe Api::V1::IngestController, type: :controller do
 
     context 'with missing parameters' do
       before do
+        path = Pathname.new(fixture_path).join('image.png')
+        file = Scholarsphere::S3::UploadedFile.new(path)
         post :create, params: {
           metadata: { title: FactoryBotHelpers.work_title },
-          depositor: user.access_id
+          content: [{ file: file.to_shrine.to_json }]
         }
       end
 
       it 'reports the error with the missing parameter' do
         expect(response).to be_bad_request
         expect(response.body).to eq(
-          '{"message":"Bad request","errors":["param is missing or the value is empty: content"]}'
+          '{"message":"Bad request","errors":["param is missing or the value is empty: depositor"]}'
         )
       end
     end
@@ -91,6 +93,25 @@ RSpec.describe Api::V1::IngestController, type: :controller do
           '{' \
             '"message":"Unable to complete the request",' \
             "\"errors\":[\"Versions title can't be blank\"]" \
+          '}'
+        )
+      end
+    end
+
+    context 'with missing files' do
+      before do
+        post :create, params: {
+          metadata: { title: FactoryBotHelpers.work_title, creator_aliases_attributes: [creator_alias] },
+          depositor: user.access_id
+        }
+      end
+
+      it 'saves the work with errors' do
+        expect(response).to be_created
+        expect(response.body).to eq(
+          '{' \
+            '"message":"Work was created but cannot be published",' \
+            "\"errors\":[\"File resources can't be blank\"]" \
           '}'
         )
       end
