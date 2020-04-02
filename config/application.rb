@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative 'boot'
-require 'json_formatter'
 
 require 'rails'
 # Pick the frameworks you want:
@@ -26,6 +25,7 @@ Bundler.require(*Rails.groups)
 module Scholarsphere
   class Application < Rails::Application
     require 'scholarsphere/redis_config'
+    require 'json_formatter'
 
     config.generators { |generator| generator.test_framework :rspec }
     # Initialize configuration defaults for originally generated Rails version.
