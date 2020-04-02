@@ -53,7 +53,7 @@ Rails.application.configure do
   config.log_level = :debug
 
   # Prepend all log lines with the following tags.
-  config.log_tags = [:request_id] unless ENV['RAILS_LOG_JSON'].present?
+  config.log_tags = [:request_id] if ENV['RAILS_LOG_JSON'].blank?
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store

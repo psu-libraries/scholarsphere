@@ -11,5 +11,4 @@ class ApplicationController < ActionController::Base
   def current_user
     super || User.guest
   end
-
 end
