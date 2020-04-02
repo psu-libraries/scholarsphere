@@ -6,7 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.6.3'
 
 gem 'aasm'
-gem 'blacklight', github: 'projectblacklight/blacklight', branch: 'master'
+gem 'blacklight', '~> 7.7'
 gem 'bootsnap', '>= 1.4.2', require: false
 gem 'bootstrap', '~> 4.0'
 gem 'cocoon'
