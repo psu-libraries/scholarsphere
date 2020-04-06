@@ -37,6 +37,10 @@
 # DATACITE_PASSWORD: ""
 #
 
+## Logging
+# LOGRAGE_ENABLED: 
+# RAILS_LOG_JSON: 
+
 
 ## ADMIN UMG
 ## protects the admin namespace 

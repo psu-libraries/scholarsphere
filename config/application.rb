@@ -25,6 +25,7 @@ Bundler.require(*Rails.groups)
 module Scholarsphere
   class Application < Rails::Application
     require 'scholarsphere/redis_config'
+    require 'json_formatter'
 
     config.generators { |generator| generator.test_framework :rspec }
     # Initialize configuration defaults for originally generated Rails version.
@@ -36,6 +37,16 @@ module Scholarsphere
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
+
+    # Logging.
+    config.lograge.enabled = true if ENV['LOGRAGE_ENABLED'].present?
+
+    if ENV['RAILS_LOG_JSON'].present?
+      config.lograge.formatter = Lograge::Formatters::Json.new
+      config.log_formatter = JSONFormatter.new
+    else
+      config.log_formatter = ::Logger::Formatter.new
+    end
 
     # Active Job Configurations
     redis_config = Scholarsphere::RedisConfig.new
