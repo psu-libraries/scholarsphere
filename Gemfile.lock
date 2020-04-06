@@ -140,6 +140,8 @@ GEM
       safe_yaml (~> 1.0.0)
     crass (1.0.6)
     database_cleaner (1.7.0)
+    ddtrace (0.34.1)
+      msgpack
     debug_inspector (0.0.3)
     deprecation (1.0.0)
       activesupport
@@ -518,6 +520,7 @@ DEPENDENCIES
   capybara
   cocoon
   database_cleaner
+  ddtrace (~> 0.34)
   devise (~> 4.7)
   diffy
   factory_bot_rails
