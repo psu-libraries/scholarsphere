@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'json_formatter'
+require 'json_log_formatter'
 
-RSpec.describe JSONFormatter do
+RSpec.describe JSONLogFormatter do
   describe '#parse_message' do
     it 'acccepts a string' do
       # json = described_class.new
