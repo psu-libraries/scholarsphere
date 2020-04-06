@@ -25,7 +25,7 @@ Bundler.require(*Rails.groups)
 module Scholarsphere
   class Application < Rails::Application
     require 'scholarsphere/redis_config'
-    require 'json_formatter'
+    require 'json_log_formatter'
 
     config.generators { |generator| generator.test_framework :rspec }
     # Initialize configuration defaults for originally generated Rails version.
@@ -43,7 +43,7 @@ module Scholarsphere
 
     if ENV['RAILS_LOG_JSON'].present?
       config.lograge.formatter = Lograge::Formatters::Json.new
-      config.log_formatter = JSONFormatter.new
+      config.log_formatter = JSONLogFormatter.new
     else
       config.log_formatter = ::Logger::Formatter.new
     end
