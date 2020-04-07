@@ -26,6 +26,7 @@ module Scholarsphere
   class Application < Rails::Application
     require 'scholarsphere/redis_config'
     require 'json_log_formatter'
+    require 'qa/authorities/persons'
 
     config.generators { |generator| generator.test_framework :rspec }
     # Initialize configuration defaults for originally generated Rails version.
