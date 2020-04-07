@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Editing multiple fields' do
   let(:user) { create(:user) }
-  let(:work) { create(:work, depositor: user, has_draft: true) }
+  let(:work) { create(:work, depositor: user.actor, has_draft: true) }
   let(:attributes_1) { attributes_for(:work_version, :with_complete_metadata) }
   let(:attributes_2) { attributes_for(:work_version, :with_complete_metadata) }
 

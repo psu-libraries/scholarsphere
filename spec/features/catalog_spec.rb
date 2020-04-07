@@ -27,7 +27,7 @@ RSpec.describe 'Blacklight catalog page' do
 
   before do
     Array.new(10).map do
-      FactoryBot.create(:work, depositor: user, versions_count: rand(1..5), has_draft: true)
+      FactoryBot.create(:work, depositor: user.actor, versions_count: rand(1..5), has_draft: true)
     end
   end
 

@@ -43,14 +43,14 @@ RSpec.describe 'Publishing a new work' do
 
     click_button('Save and Continue')
 
-    # Ensure one creator is pre-filled with the User
+    # Ensure one creator is pre-filled with the User's Actor
     within('#creator_aliases') do
-      user.reload
-      expect(find_field('Display Name').value).to eq user.name
-      expect(find_field('Email').value).to eq user.email
-      expect(find_field('Given name').value).to eq user.given_name
-      expect(find_field('Surname').value).to eq user.surname
-      expect(find_field('PSU ID').value).to eq user.access_id
+      actor = user.reload.actor
+      expect(find_field('Display Name').value).to eq actor.default_alias
+      expect(find_field('Email').value).to eq actor.email
+      expect(find_field('Given name').value).to eq actor.given_name
+      expect(find_field('Surname').value).to eq actor.surname
+      expect(find_field('PSU ID').value).to eq actor.psu_id
     end
 
     fill_in('Subtitle', with: metadata[:subtitle])

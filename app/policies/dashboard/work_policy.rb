@@ -3,7 +3,9 @@
 class Dashboard::WorkPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      scope.where(depositor: user).all
+      scope
+        .where(depositor: user.actor)
+        .or(scope.where(proxy_depositor: user.actor))
     end
   end
 
@@ -14,6 +16,9 @@ class Dashboard::WorkPolicy < ApplicationPolicy
   private
 
     def owner?
-      user == record.depositor
+      [
+        record.depositor,
+        record.proxy_depositor
+      ].include? user.actor
     end
 end

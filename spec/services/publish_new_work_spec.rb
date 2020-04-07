@@ -17,12 +17,12 @@ RSpec.describe PublishNewWork do
           visibility: Permissions::Visibility::OPEN,
           creator_aliases_attributes: [
             {
-              alias: "#{user.given_name} #{user.surname}",
-              creator_attributes: {
+              alias: user.name,
+              actor_attributes: {
                 email: user.email,
-                given_name: user.given_name,
-                surname: user.surname,
-                psu_id: user.access_id
+                given_name: user.actor.given_name,
+                surname: user.actor.surname,
+                psu_id: user.actor.psu_id
               }
             }
           ]
@@ -78,7 +78,7 @@ RSpec.describe PublishNewWork do
           creator_aliases_attributes: [
             {
               alias: "#{user.given_name} #{user.surname}",
-              creator_attributes: {
+              actor_attributes: {
                 email: user.email,
                 given_name: user.given_name,
                 surname: user.surname,
@@ -116,7 +116,7 @@ RSpec.describe PublishNewWork do
           creator_aliases_attributes: [
             {
               alias: "#{user.given_name} #{user.surname}",
-              creator_attributes: {
+              actor_attributes: {
                 email: user.email,
                 given_name: user.given_name,
                 surname: user.surname,
@@ -152,7 +152,7 @@ RSpec.describe PublishNewWork do
           creator_aliases_attributes: [
             {
               alias: "#{user.given_name} #{user.surname}",
-              creator_attributes: {
+              actor_attributes: {
                 email: user.email,
                 given_name: user.given_name,
                 surname: user.surname,

@@ -20,7 +20,7 @@ RSpec.describe Dashboard::ProfilesController, type: :controller do
   }
 
   let(:user) { create :user }
-  let(:creator) { Creator.find_or_create_by_user(user) }
+  let(:actor) { user.actor }
 
   describe 'GET #edit' do
     context 'when signed in' do
@@ -33,7 +33,7 @@ RSpec.describe Dashboard::ProfilesController, type: :controller do
 
       it 'shows my profile' do
         get :edit
-        expect(assigns(:creator).id).to eq creator.id
+        expect(assigns(:actor).id).to eq actor.id
       end
     end
 
@@ -52,25 +52,25 @@ RSpec.describe Dashboard::ProfilesController, type: :controller do
 
       context 'with valid params' do
         it 'updates the profile' do
-          put :update, params: { creator: valid_attributes }
+          put :update, params: { actor: valid_attributes }
 
-          creator.reload
-          expect(creator.default_alias).to eq 'Dr. Pat Q. Researcher PhD'
-          expect(creator.given_name).to eq 'Pat'
-          expect(creator.surname).to eq 'Researcher'
-          expect(creator.email).to eq 'pqr123@example.com'
-          expect(creator.orcid).to eq '0000-1234-5678-9101'
+          actor.reload
+          expect(actor.default_alias).to eq 'Dr. Pat Q. Researcher PhD'
+          expect(actor.given_name).to eq 'Pat'
+          expect(actor.surname).to eq 'Researcher'
+          expect(actor.email).to eq 'pqr123@example.com'
+          expect(actor.orcid).to eq '0000-1234-5678-9101'
         end
 
         it 'redirects to the dashboard works page' do
-          put :update, params: { creator: valid_attributes }
+          put :update, params: { actor: valid_attributes }
           expect(response).to redirect_to(dashboard_works_path) # WIP
         end
       end
 
       context 'with invalid params' do
         it "returns a success response (i.e. to display the 'edit' template)" do
-          put :update, params: { creator: invalid_attributes }
+          put :update, params: { actor: invalid_attributes }
           expect(response).to be_successful
         end
       end

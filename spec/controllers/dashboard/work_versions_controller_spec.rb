@@ -3,11 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe Dashboard::WorkVersionsController, type: :controller do
-  let(:user) { work_version.depositor }
+  let(:user) { work_version.depositor.user }
   let(:work_version) { create :work_version, :draft }
 
   describe 'POST #create' do
-    let(:user) { work.depositor }
+    let(:user) { work.depositor.user }
     let(:work) { create :work, versions_count: 1, has_draft: false }
     let(:perform_request) { post :create, params: { work_id: work.to_param } }
 

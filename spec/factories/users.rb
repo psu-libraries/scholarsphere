@@ -9,10 +9,9 @@ FactoryBot.define do
     end
     groups { User.default_groups }
     email { "#{access_id}@psu.edu" }
-    sequence(:access_id) { |n| FactoryBotHelpers.generate_access_id_from_name(given_name, surname, n) }
-    given_name { Faker::Name.first_name }
-    surname { Faker::Name.last_name }
+    sequence(:access_id) { |n| FactoryBotHelpers.generate_access_id_from_name(Faker::Name.first_name, Faker::Name.last_name, n) }
     provider { 'psu' }
     uid { access_id }
+    actor { build :actor, psu_id: access_id }
   end
 end

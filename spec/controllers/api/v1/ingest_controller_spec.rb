@@ -11,7 +11,7 @@ RSpec.describe Api::V1::IngestController, type: :controller do
   let(:creator_alias) do
     {
       alias: "#{user.given_name} #{user.surname}",
-      creator_attributes: {
+      actor_attributes: {
         email: user.email,
         given_name: user.given_name,
         surname: user.surname,

@@ -24,7 +24,7 @@
                                   form,
                                   :creator_aliases,
                                   # Ensure the associated Creator object exists, so its fields are rendered
-                                  wrap_object: ->(creator_alias) { creator_alias.tap(&:build_creator) },
+                                  wrap_object: ->(creator_alias) { creator_alias.tap(&:build_actor) },
                                   class: 'btn btn-outline-success btn-sm' %>
     </div>
   </div>

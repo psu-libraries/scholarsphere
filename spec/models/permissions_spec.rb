@@ -431,7 +431,7 @@ RSpec.describe Permissions do
     context 'with a user agent' do
       let(:agent) { build(:user) }
 
-      its(:edit_users) { is_expected.to contain_exactly(agent, resource.depositor) }
+      its(:edit_users) { is_expected.to contain_exactly(agent, resource.depositor.user) }
     end
 
     context 'when a user already has edit access' do
@@ -521,15 +521,15 @@ RSpec.describe Permissions do
     context 'when the depositor does NOT have edit access with an AccessControl object' do
       it 'is added to the list of users' do
         expect(resource.access_controls).to be_empty
-        expect(resource.edit_users).to contain_exactly(resource.depositor)
+        expect(resource.edit_users).to contain_exactly(resource.depositor.user)
       end
     end
 
     context 'when the depositor has edit access via an AccessControl object' do
-      before { resource.grant_edit_access(resource.depositor) }
+      before { resource.grant_edit_access(resource.depositor.user) }
 
       it 'is not duplicated in the list of edit users' do
-        expect(resource.edit_users).to contain_exactly(resource.depositor)
+        expect(resource.edit_users).to contain_exactly(resource.depositor.user)
       end
     end
   end
@@ -553,7 +553,7 @@ RSpec.describe Permissions do
     context 'when the depositor is an argument' do
       it 'does not create an access control for the depositor' do
         expect(resource.access_controls.map(&:agent)).to contain_exactly(user1, user2)
-        resource.edit_users = [user1, resource.depositor]
+        resource.edit_users = [user1, resource.depositor.user]
         expect(resource.access_controls.map(&:agent)).to contain_exactly(user1)
       end
     end

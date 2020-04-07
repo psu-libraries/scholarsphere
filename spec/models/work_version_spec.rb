@@ -124,6 +124,7 @@ RSpec.describe WorkVersion, type: :model do
   end
 
   it { is_expected.to delegate_method(:depositor).to(:work) }
+  it { is_expected.to delegate_method(:proxy_depositor).to(:work) }
   it { is_expected.to delegate_method(:embargoed?).to(:work) }
 
   describe '#uuid' do
@@ -135,26 +136,26 @@ RSpec.describe WorkVersion, type: :model do
   end
 
   describe '#build_creator_alias' do
-    let(:creator) { build_stubbed :creator }
+    let(:actor) { build_stubbed :actor }
     let(:work_version) { build_stubbed :work_version, :with_creators, creator_count: 0 }
 
-    it 'builds a creator_alias for the given Creator but does not persist it' do
+    it 'builds a creator_alias for the given Actor but does not persist it' do
       expect {
-        work_version.build_creator_alias(creator: creator)
+        work_version.build_creator_alias(actor: actor)
       }.to change {
         work_version.creator_aliases.length
       }.by(1)
 
       work_version.creator_aliases.first.tap do |creator_alias|
         expect(creator_alias).not_to be_persisted
-        expect(creator_alias.creator).to eq creator
-        expect(creator_alias.alias).to eq creator.default_alias
+        expect(creator_alias.actor).to eq actor
+        expect(creator_alias.alias).to eq actor.default_alias
       end
     end
 
     it 'is idempotent' do
       expect {
-        2.times { work_version.build_creator_alias(creator: creator) }
+        2.times { work_version.build_creator_alias(actor: actor) }
       }.to change {
         work_version.creator_aliases.length
       }.by(1)

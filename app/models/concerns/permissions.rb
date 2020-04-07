@@ -37,14 +37,14 @@ module Permissions
   # @note This does not create an access control granting the depositor edit access. The depositor is already linked to
   # the work by the User -> Work relationship.
   def edit_users
-    return super if edit_access?(depositor)
+    return super if edit_access?(depositor.user)
 
-    super.append(depositor)
+    super.append(depositor.user)
   end
 
   # @note Prevents the user from creating a unneeded access control object for the depositor.
   def edit_users=(list)
-    super(list.reject { |user| user == depositor })
+    super(list.reject { |user| user == depositor.user })
   end
 
   # @note Always add the visibility group when setting the list of read groups. This avoids the problem of inadvertently

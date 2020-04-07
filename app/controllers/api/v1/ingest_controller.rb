@@ -111,7 +111,7 @@ module Api::V1
             source: [],
             creator_aliases_attributes: [
               :alias,
-              creator_attributes: [
+              actor_attributes: [
                 :email,
                 :given_name,
                 :surname,

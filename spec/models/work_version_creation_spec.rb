@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe WorkVersionCreation, type: :model do
   describe 'table' do
     it { is_expected.to have_db_column(:work_version_id) }
-    it { is_expected.to have_db_column(:creator_id) }
+    it { is_expected.to have_db_column(:actor_id) }
     it { is_expected.to have_db_column(:alias).of_type(:string) }
     it { is_expected.to have_db_column(:created_at).of_type(:datetime) }
     it { is_expected.to have_db_column(:updated_at).of_type(:datetime) }
@@ -17,7 +17,7 @@ RSpec.describe WorkVersionCreation, type: :model do
 
   describe 'associations' do
     it { is_expected.to belong_to(:work_version) }
-    it { is_expected.to belong_to(:creator) }
+    it { is_expected.to belong_to(:actor) }
   end
 
   describe 'validations' do
@@ -50,20 +50,20 @@ RSpec.describe WorkVersionCreation, type: :model do
   end
 
   describe 'initialization' do
-    let(:creator) { build :creator, default_alias: 'Creator Default Alias' }
+    let(:actor) { build :actor, default_alias: 'Actor Default Alias' }
     let(:work_version) { build :work_version }
 
     context 'when an alias is not provided' do
-      subject(:wv_creation) { described_class.new creator: creator, work_version: work_version }
+      subject(:wv_creation) { described_class.new actor: actor, work_version: work_version }
 
-      it 'initializes itself with the given Creator#default_alias' do
+      it 'initializes itself with the given Actor#default_alias' do
         wv_creation.save!
-        expect(wv_creation.reload.alias).to eq 'Creator Default Alias'
+        expect(wv_creation.reload.alias).to eq 'Actor Default Alias'
       end
     end
 
     context 'when an alias is provided' do
-      subject(:wv_creation) { described_class.new alias: 'Provided Alias', creator: creator, work_version: work_version }
+      subject(:wv_creation) { described_class.new alias: 'Provided Alias', actor: actor, work_version: work_version }
 
       it 'uses the provided alias' do
         wv_creation.save!

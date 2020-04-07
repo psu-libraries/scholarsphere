@@ -13,7 +13,7 @@ RSpec.describe DataCite::Metadata do
   let(:work_version) { FactoryBot.build_stubbed :work_version, :with_complete_metadata, creators: [creator] }
   let(:work) { work_version.work }
 
-  let(:creator) { FactoryBot.build_stubbed :creator, orcid: nil }
+  let(:creator) { FactoryBot.build_stubbed :actor, orcid: nil }
 
   before do
     metadata.public_url_source = ->(id) { "http://example.test/resources/#{id}" }

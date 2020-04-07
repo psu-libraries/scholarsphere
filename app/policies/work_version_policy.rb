@@ -25,7 +25,7 @@ class WorkVersionPolicy < ApplicationPolicy
 
     # @todo There's a bug in the permissions because a depositor should have edit access by default
     def editable?
-      record.work.edit_access?(user) || record.depositor == user
+      record.work.edit_access?(user) || record.depositor == user.actor
     end
 
     def download_published_version?

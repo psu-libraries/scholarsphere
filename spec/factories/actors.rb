@@ -3,7 +3,7 @@
 require Rails.root.join('spec', 'support', 'factory_bot_helpers')
 
 FactoryBot.define do
-  factory :creator do
+  factory :actor do
     given_name { Faker::Name.first_name }
     surname { Faker::Name.last_name }
     email { "#{psu_id}@psu.edu" }
@@ -13,5 +13,9 @@ FactoryBot.define do
     # of 4, separated by '-'
     #   Example: 123 -> 0000-0000-0000-0123
     sequence(:orcid) { |n| format('%<n>016d', n: n).gsub(/(\d{4})(?!$)/, '\1-') }
+
+    trait :with_user do
+      user
+    end
   end
 end

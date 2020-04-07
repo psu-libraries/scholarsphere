@@ -2,7 +2,7 @@ en:
   application_name: "Scholarsphere"
   activerecord:
     attributes:
-      creator:
+      actor:
         psu_id: PSU ID
         default_alias: Display Name
         orcid: ORCiD

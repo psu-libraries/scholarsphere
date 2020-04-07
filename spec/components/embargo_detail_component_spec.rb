@@ -30,7 +30,7 @@ RSpec.describe EmbargoDetailComponent, type: :component do
 
   context 'when the user has edit access to the work' do
     let(:work_version) { build(:work_version, :published, work: work) }
-    let(:user) { work.depositor }
+    let(:user) { work.depositor.user }
 
     it 'displays a message' do
       expect(content).to include("Embargoed until #{embargo_date.strftime('%Y-%m-%d')}")
@@ -40,7 +40,7 @@ RSpec.describe EmbargoDetailComponent, type: :component do
 
   context 'when the user is viewing the work from their dashboard' do
     let(:work_version) { build(:work_version, :published, work: work) }
-    let(:user) { work.depositor }
+    let(:user) { work.depositor.user }
     let(:controller_name) { 'work_versions' }
 
     it 'displays a message' do

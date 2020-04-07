@@ -16,13 +16,13 @@ FactoryBot.define do
       end
 
       after(:build, :stub) do |work_version, evaluator|
-        creators = build_list(:creator, evaluator.creator_count)
+        actors = build_list(:actor, evaluator.creator_count)
 
-        creators.each do |creator|
+        actors.each do |actor|
           # Alias "Pat Doe" to "Dr. Pat Doe"
-          creator_alias = "#{Faker::Name.prefix} #{creator.given_name} #{creator.surname}"
+          creator_alias = "#{Faker::Name.prefix} #{actor.given_name} #{actor.surname}"
           work_version.creator_aliases.build(
-            creator: creator,
+            actor: actor,
             alias: creator_alias
           )
         end

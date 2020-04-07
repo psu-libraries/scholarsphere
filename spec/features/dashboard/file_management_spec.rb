@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Dashboard File Management', with_user: :user do
   let(:work_version) { create :work_version, :draft, :with_files }
-  let(:user) { work_version.depositor }
+  let(:user) { work_version.depositor.user }
   let(:file_membership) { work_version.file_version_memberships.first }
 
   it 'renames a file without JavaScript enabled' do

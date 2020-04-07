@@ -3,13 +3,13 @@
 module Dashboard
   class ProfilesController < BaseController
     def edit
-      @creator = Creator.find_or_create_by_user(current_user)
+      @actor = current_user.actor
     end
 
     def update
-      @creator = Creator.find_or_create_by_user(current_user)
+      @actor = current_user.actor
 
-      if @creator.update(creator_params)
+      if @actor.update(creator_params)
         redirect_to dashboard_works_path,
                     notice: t('dashboard.profiles.update.success')
       else
@@ -21,7 +21,7 @@ module Dashboard
 
       def creator_params
         params
-          .require(:creator)
+          .require(:actor)
           .permit(
             :given_name,
             :surname,
