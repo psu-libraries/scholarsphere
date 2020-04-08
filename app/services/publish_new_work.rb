@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# @abstract Used in conjuction with our REST API, this service publishes a new work with complete metadata and content.
-# It is encumbent upon the caller to provied the required metadata and binary content. There are three possible outcomes
+# @abstract Used in conjunction with our REST API, this service publishes a new work with complete metadata and content.
+# It is incumbent upon the caller to provide the required metadata and binary content. Here are the possible outcomes:
 # for the work:
 # 1. A work has valid metadata and can be published
 #      * a new, persisted work is returned in a published state

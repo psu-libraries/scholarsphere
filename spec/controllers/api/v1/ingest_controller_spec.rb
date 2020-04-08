@@ -137,6 +137,25 @@ RSpec.describe Api::V1::IngestController, type: :controller do
       end
     end
 
+    context 'when a work with the same noid already exists' do
+      let(:legacy_identifier) { create(:legacy_identifier, :with_work, version: 3) }
+
+      before do
+        post :create, params: {
+          metadata: { title: FactoryBotHelpers.work_title, noid: legacy_identifier.old_id },
+          depositor: user.access_id,
+          content: [{ file: fixture_file_upload(File.join(fixture_path, 'image.png')) }]
+        }
+      end
+
+      it 'returns the url of the previously migrated work' do
+        expect(response.status).to eq(303)
+        expect(response.body).to eq(
+          "{\"message\":\"Work has already been migrated\",\"url\":\"/resources/#{legacy_identifier.resource.uuid}\"}"
+        )
+      end
+    end
+
     context 'when there is an unexpected error' do
       before do
         allow(controller).to receive(:create).and_raise(NoMethodError, 'well, this is unexpected!')

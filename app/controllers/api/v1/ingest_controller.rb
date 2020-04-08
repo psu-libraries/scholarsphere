@@ -11,6 +11,8 @@ module Api::V1
       end
     end
 
+    before_action :return_migrated_work
+
     def create
       if work.errors.any?
         render json: unprocessable_entity_response, status: :unprocessable_entity
@@ -20,6 +22,14 @@ module Api::V1
     end
 
     private
+
+      def return_migrated_work
+        ids = LegacyIdentifier.where(old_id: metadata_params['noid'], version: 3, resource_type: 'Work')
+        return if ids.empty?
+
+        work = Work.find(ids.first.resource_id)
+        render json: { message: 'Work has already been migrated', url: resource_path(work.uuid) }, status: 303
+      end
 
       def success_response
         if work.latest_version.published?
