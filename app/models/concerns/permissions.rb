@@ -39,7 +39,7 @@ module Permissions
   def edit_users
     return super if edit_access?(depositor.user)
 
-    super.append(depositor.user)
+    super.append(depositor.user).compact
   end
 
   # @note Prevents the user from creating a unneeded access control object for the depositor.

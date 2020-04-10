@@ -532,6 +532,14 @@ RSpec.describe Permissions do
         expect(resource.edit_users).to contain_exactly(resource.depositor.user)
       end
     end
+
+    context 'when the depositor is not attached to a user' do
+      let(:resource) { build(:work, :with_no_access, depositor: build(:actor)) }
+
+      it 'is NOT added to the list of users' do
+        expect(resource.edit_users).to be_empty
+      end
+    end
   end
 
   describe '#edit_users=' do

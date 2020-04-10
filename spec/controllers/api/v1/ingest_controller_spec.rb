@@ -7,7 +7,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::IngestController, type: :controller do
   let(:api_token) { create(:api_token).token }
-  let(:user) { create(:user) }
+  let(:user) { build(:actor) }
   let(:creator_alias) do
     {
       alias: "#{user.given_name} #{user.surname}",
@@ -15,7 +15,7 @@ RSpec.describe Api::V1::IngestController, type: :controller do
         email: user.email,
         given_name: user.given_name,
         surname: user.surname,
-        psu_id: user.access_id
+        psu_id: user.psu_id
       }
     }
   end
@@ -27,7 +27,7 @@ RSpec.describe Api::V1::IngestController, type: :controller do
       before do
         post :create, params: {
           metadata: { title: FactoryBotHelpers.work_title, creator_aliases_attributes: [creator_alias] },
-          depositor: user.access_id,
+          depositor: { given_name: user.given_name, surname: user.surname, email: user.email, psu_id: user.psu_id },
           content: [{ file: fixture_file_upload(File.join(fixture_path, 'image.png')) }]
         }
       end
@@ -48,7 +48,7 @@ RSpec.describe Api::V1::IngestController, type: :controller do
         post :create, params: {
           metadata: { title: FactoryBotHelpers.work_title, creator_aliases_attributes: [creator_alias] },
           content: [{ file: file.to_shrine.to_json }],
-          depositor: user.access_id
+          depositor: { given_name: user.given_name, surname: user.surname, email: user.email, psu_id: user.psu_id }
         }
       end
 
@@ -82,7 +82,7 @@ RSpec.describe Api::V1::IngestController, type: :controller do
       before do
         post :create, params: {
           metadata: { title: nil },
-          depositor: user.access_id,
+          depositor: { given_name: user.given_name, surname: user.surname, email: user.email, psu_id: user.psu_id },
           content: [{ file: fixture_file_upload(File.join(fixture_path, 'image.png')) }]
         }
       end
@@ -102,7 +102,7 @@ RSpec.describe Api::V1::IngestController, type: :controller do
       before do
         post :create, params: {
           metadata: { title: FactoryBotHelpers.work_title, creator_aliases_attributes: [creator_alias] },
-          depositor: user.access_id
+          depositor: { given_name: user.given_name, surname: user.surname, email: user.email, psu_id: user.psu_id }
         }
       end
 
@@ -121,7 +121,7 @@ RSpec.describe Api::V1::IngestController, type: :controller do
       before do
         post :create, params: {
           metadata: { title: FactoryBotHelpers.work_title },
-          depositor: user.access_id,
+          depositor: { given_name: user.given_name, surname: user.surname, email: user.email, psu_id: user.psu_id },
           content: [{ file: fixture_file_upload(File.join(fixture_path, 'image.png')) }]
         }
       end
@@ -143,7 +143,7 @@ RSpec.describe Api::V1::IngestController, type: :controller do
       before do
         post :create, params: {
           metadata: { title: FactoryBotHelpers.work_title, noid: legacy_identifier.old_id },
-          depositor: user.access_id,
+          depositor: { given_name: user.given_name, surname: user.surname, email: user.email, psu_id: user.psu_id },
           content: [{ file: fixture_file_upload(File.join(fixture_path, 'image.png')) }]
         }
       end
@@ -161,7 +161,7 @@ RSpec.describe Api::V1::IngestController, type: :controller do
         allow(controller).to receive(:create).and_raise(NoMethodError, 'well, this is unexpected!')
         post :create, params: {
           metadata: { title: FactoryBotHelpers.work_title, creator_aliases_attributes: [creator_alias] },
-          depositor: user.access_id,
+          depositor: { given_name: user.given_name, surname: user.surname, email: user.email, psu_id: user.psu_id },
           content: [{ file: fixture_file_upload(File.join(fixture_path, 'image.png')) }]
         }
       end
