@@ -17,8 +17,8 @@ module Qa
 
       private
 
-        # @return Array<Creator, PennState::SearchService::Person>
-        # @note if the same person is in both sources, prefer the Creator over the PennState::SearchService::Person
+        # @return Array<Actor, PennState::SearchService::Person>
+        # @note if the same person is in both sources, prefer the Actor over the PennState::SearchService::Person
         def persons
           (creators + identities).reject do |person|
             person.is_a?(PennState::SearchService::Person) && creator_ids.include?(person.user_id)
@@ -26,7 +26,7 @@ module Qa
         end
 
         def creators
-          @creators ||= Creator.where('surname ILIKE :q OR given_name ILIKE :q OR psu_id ILIKE :q', q: "%#{term}%")
+          @creators ||= Actor.where('surname ILIKE :q OR given_name ILIKE :q OR psu_id ILIKE :q', q: "%#{term}%")
         end
 
         # @note using Set enables faster searching for a given id instead of iterating over the entire array.
@@ -40,7 +40,7 @@ module Qa
 
         def formatted_response(result)
           case result
-          when Creator
+          when Actor
             formatted_creator(result)
           when PennState::SearchService::Person
             formatted_person(result)
