@@ -39,10 +39,6 @@ class User < ApplicationRecord
   end
 
   def self.from_omniauth(auth)
-    # This service needs a complete overhaul. I'm going to un-factor it for now
-    # and then we can refactor once we figure out how the pieces fit together
-    # UserRegistrationService.call(auth: auth)
-
     user = find_or_initialize_by(provider: auth.provider, uid: auth.uid) do |new_user|
       new_user.access_id = auth.info.access_id
       new_user.actor = Actor.find_or_initialize_by(psu_id: new_user.access_id) do |new_actor|
