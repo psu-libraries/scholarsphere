@@ -24,6 +24,13 @@ class Work < ApplicationRecord
            as: :resource,
            dependent: :destroy
 
+  has_many :collection_work_memberships,
+           dependent: :destroy
+
+  has_many :collections,
+           through: :collection_work_memberships,
+           inverse_of: :work
+
   accepts_nested_attributes_for :versions
 
   module Types

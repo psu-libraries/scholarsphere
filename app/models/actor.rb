@@ -25,6 +25,14 @@ class Actor < ApplicationRecord
            through: :work_version_creations,
            inverse_of: :actors
 
+  has_many :collection_creations,
+           dependent: :restrict_with_exception,
+           inverse_of: :actor
+
+  has_many :collections,
+           through: :collection_creations,
+           inverse_of: :actors
+
   validates :surname,
             presence: true
 
