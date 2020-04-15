@@ -12,7 +12,7 @@ class DownloadsController < ApplicationController
 
     def s3_presigned_url(file)
       file.file_resource.file_url(
-        expires_in: ENV.fetch('DOWNLOAD_URL_TTL', 6),
+        expires_in: ENV.fetch('DOWNLOAD_URL_TTL', 6).to_i,
         response_content_disposition: ContentDisposition.inline(file.title)
       )
     end
