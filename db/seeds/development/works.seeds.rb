@@ -6,6 +6,6 @@ after 'development:users' do
   user_list = User.order('RANDOM()').limit(100)
 
   100.times do
-    FactoryBot.create(:work, depositor: user_list.sample, versions_count: rand(1..5), has_draft: has_draft?)
+    FactoryBot.create(:work, depositor: user_list.sample.actor, versions_count: rand(1..5), has_draft: has_draft?)
   end
 end
