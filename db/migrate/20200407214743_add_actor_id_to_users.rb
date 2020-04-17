@@ -9,8 +9,8 @@ class AddActorIdToUsers < ActiveRecord::Migration[6.0]
 
   def delete_database
     execute <<~SQL
-      DELETE from file_resources;
       DELETE from file_version_memberships;
+      DELETE from file_resources;
       DELETE from work_version_creations;
       DELETE from work_versions;
       DELETE from legacy_identifiers;
