@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Dashboard' do
-  let!(:work) { create(:work, depositor: user, versions_count: 4, has_draft: true) }
+  let!(:work) { create(:work, depositor: user.actor, versions_count: 4, has_draft: true) }
   let!(:user) { create(:user) }
 
   let(:work_version) { work.latest_version }
@@ -30,10 +30,10 @@ RSpec.describe 'Dashboard' do
       within(row) do
         expect(page).to have_link("Version #{index + 1}")
         if index < 3
-          expect(page).to have_content("Published #{work_version.created_at.strftime('%B %d, %Y')} by #{user.email}")
+          expect(page).to have_content("Published #{work_version.created_at.strftime('%B %d, %Y')} by #{user.actor.email}")
           within('.badge') { expect(page).to have_content('published') }
         else
-          expect(page).to have_content("Updated #{work_version.created_at.strftime('%B %d, %Y')} by #{user.email}")
+          expect(page).to have_content("Updated #{work_version.created_at.strftime('%B %d, %Y')} by #{user.actor.email}")
           within('.badge') { expect(page).to have_content('draft') }
           expect(page).to have_link('edit')
           expect(page).to have_link('delete')

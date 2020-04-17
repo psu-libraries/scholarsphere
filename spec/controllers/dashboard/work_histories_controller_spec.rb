@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Dashboard::WorkHistoriesController, type: :controller do
-  let(:user) { work.depositor }
+  let(:user) { work.depositor.user }
   let(:work) { create :work }
 
   describe 'GET #show' do

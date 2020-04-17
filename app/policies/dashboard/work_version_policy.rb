@@ -4,8 +4,9 @@ class Dashboard::WorkVersionPolicy < WorkVersionPolicy
   class Scope < Scope
     def resolve
       scope
+        .where(works: { depositor_id: user.actor_id })
+        .or(scope.where(works: { proxy_id: user.actor_id }))
         .includes(:work)
-        .where(works: { depositor_id: user.id })
     end
   end
 
@@ -28,6 +29,7 @@ class Dashboard::WorkVersionPolicy < WorkVersionPolicy
   private
 
     def owner?
-      user == record.depositor
+      [record.depositor,
+       record.proxy_depositor].include? user.actor
     end
 end

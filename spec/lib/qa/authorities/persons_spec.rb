@@ -30,21 +30,21 @@ RSpec.describe Qa::Authorities::Persons, type: :authority do
       let(:mock_identity_response) { [] }
 
       context 'when searching by surname (case insensitive)' do
-        let!(:creator) { create(:creator) }
+        let!(:creator) { create(:actor) }
         let(:search_term) { creator.surname.slice(0..3).downcase }
 
         it { is_expected.to include(formatted_result) }
       end
 
       context 'when searching by given name (case insensitive)' do
-        let!(:creator) { create(:creator) }
+        let!(:creator) { create(:actor) }
         let(:search_term) { creator.given_name.slice(0..3).downcase }
 
         it { is_expected.to include(formatted_result) }
       end
 
       context 'when searching by Penn State ID (case insensitive)' do
-        let!(:creator) { create(:creator) }
+        let!(:creator) { create(:actor) }
         let(:search_term) { creator.psu_id.capitalize }
 
         it { is_expected.to include(formatted_result) }
@@ -60,60 +60,39 @@ RSpec.describe Qa::Authorities::Persons, type: :authority do
     context "with results from Penn State's identity service" do
       let(:formatted_result) do
         {
-          given_name: creator.given_name,
-          surname: creator.surname,
-          psu_id: creator.psu_id,
-          default_alias: creator.default_alias,
-          email: creator.email,
+          given_name: person.given_name,
+          surname: person.surname,
+          psu_id: person.user_id,
+          default_alias: person.display_name,
+          email: person.university_email,
           orcid: '',
           source: 'penn state'
         }
       end
 
-      let(:mock_identity_response) do
-        [
-          PennState::SearchService::Person.new(
-            'givenName' => creator.given_name,
-            'familyName' => creator.surname,
-            'userid' => creator.psu_id,
-            'displayName' => creator.default_alias,
-            'universityEmail' => creator.email
-          )
-        ]
-      end
-
-      let(:creator) { build(:creator) }
+      let(:mock_identity_response) { [person] }
+      let(:person) { build(:person) }
       let(:search_term) { 'search query' }
 
       it { is_expected.to include(formatted_result) }
     end
 
     context 'with an unsupported person type' do
-      let(:user) { build(:user) }
-      let(:mock_identity_response) { [user] }
+      let(:bad_actor) { Struct.new('BadActor', :given_name).new('bad actor') }
+      let(:mock_identity_response) { [bad_actor] }
 
       it 'raises an error' do
         expect {
-          authority.search(user.given_name)
-        }.to raise_error(NotImplementedError, 'User is not a valid person')
+          authority.search(bad_actor.given_name)
+        }.to raise_error(NotImplementedError, 'Struct::BadActor is not a valid person')
       end
     end
 
     context 'when idential records exist from both sources' do
-      let!(:creator) { create(:creator) }
+      let!(:creator) { create(:actor) }
       let(:search_term) { creator.surname.slice(0..3) }
-
-      let(:mock_identity_response) do
-        [
-          PennState::SearchService::Person.new(
-            'givenName' => creator.given_name,
-            'familyName' => creator.surname,
-            'userid' => creator.psu_id,
-            'displayName' => creator.default_alias,
-            'universityEmail' => creator.email
-          )
-        ]
-      end
+      let(:person) { build(:person, access_id: creator.psu_id) }
+      let(:mock_identity_response) { [person] }
 
       it 'prefers the creator record over the Penn State record' do
         expect(results.count).to eq(1)

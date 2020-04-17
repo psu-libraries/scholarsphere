@@ -11,21 +11,41 @@
 #      * a new, UNPERSISTED work is returned with errors
 
 class PublishNewWork
-  # @param [Hash] metadata
-  # @param [String] depositor
-  # @param [Array] content
-  # @param [Hash] permissions
+  # @param [ActionController::Parameters] metadata
+  # @param [ActionController::Parameters] depositor
+  # @param [Array<ActionController::Parameters>] content
+  # @param [ActionController::Parameters] permissions
   # @return [Work]
   def self.call(metadata:, depositor:, content:, permissions: {})
-    user = UserRegistrationService.call(uid: depositor)
     noid = metadata.delete(:noid)
+
+    # @todo start a transaction here in case we need to rollback and remove any Actors we've created
+
+    depositor_actor = Actor.find_or_create_by(psu_id: depositor['psu_id']) do |actor|
+      actor.attributes = depositor
+    end
+
+    creator_aliases_attributes = metadata.to_hash.fetch('creator_aliases_attributes', []).map do |attributes|
+      actor_attributes = attributes['actor_attributes']
+      psu_id = actor_attributes['psu_id']
+
+      actor = if psu_id.present?
+                Actor.find_or_create_by(psu_id: psu_id) do |new_actor|
+                  new_actor.attributes = actor_attributes
+                end
+              else
+                Actor.find_or_create_by(actor_attributes)
+              end
+
+      { alias: attributes['alias'], actor: actor }
+    end
 
     params = {
       work_type: metadata.delete(:work_type) { Work::Types::DATASET },
       visibility: metadata.delete(:visibility) { Permissions::Visibility::OPEN },
       embargoed_until: metadata.delete(:embargoed_until),
-      depositor: user,
-      versions_attributes: [metadata.to_hash]
+      depositor: depositor_actor,
+      versions_attributes: [metadata.to_hash.merge!('creator_aliases_attributes' => creator_aliases_attributes)]
     }
 
     work = Work.build_with_empty_version(params)

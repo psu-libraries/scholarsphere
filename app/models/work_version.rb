@@ -37,6 +37,7 @@ class WorkVersion < ApplicationRecord
            dependent: :destroy
 
   has_many :creators,
+           source: :actor,
            through: :creator_aliases,
            inverse_of: :work_versions
 
@@ -117,13 +118,13 @@ class WorkVersion < ApplicationRecord
     end
   end
 
-  def build_creator_alias(creator:)
-    existing_creator_alias = creator_aliases.detect { |ca| ca.creator == creator }
+  def build_creator_alias(actor:)
+    existing_creator_alias = creator_aliases.detect { |ca| ca.actor == actor }
     return existing_creator_alias if existing_creator_alias.present?
 
     creator_aliases.build(
-      alias: creator.default_alias,
-      creator: creator
+      alias: actor.default_alias,
+      actor: actor
     )
   end
 
@@ -145,7 +146,7 @@ class WorkVersion < ApplicationRecord
     WorkIndexer.call(work, commit: true)
   end
 
-  delegate :depositor, :visibility, :embargoed?, to: :work
+  delegate :depositor, :proxy_depositor, :visibility, :embargoed?, to: :work
 
   private
 

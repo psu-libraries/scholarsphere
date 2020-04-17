@@ -1,86 +1,49 @@
 # frozen_string_literal: true
 
-# @abstract Correctly registers new and existing users whether they are coming from the user interface via our auth
-# proxy service, or their works are being migrated via the ingest API. Calls from the API will only include a uid and
-# will register a new user if non exists. API calls will NOT update existing users (see notes below). Call from the UI,
-# which provide a OmniAuth hash from our auth proxy, will update the user record.
+# @abstract Registers a user from the API by checking the provided Penn State user id against Penn State's identity
+# management service via our PennState::SearchService::Client. If the user exists, they are registered the same way as
+# if they had logged in, using User.from_omniauth. If the user does not exist, no changes are made and service returns
+# nil.
 
 class UserRegistrationService
-  # @param [OmniAuth::AuthHash] from our authproxy service
   # @param [String] uid or access_id of the user, such as jxd123
-  def self.call(auth: OmniAuth::AuthHash.new, uid: nil)
-    if uid.nil?
-      new(auth).register
-    else
-      new(uid).register(api: true)
-    end
+  # @return [User, nil]
+  def self.call(uid: nil)
+    new(uid).register
   end
 
-  attr_reader :auth
+  attr_reader :found_user, :existing_user
 
-  def initialize(arg)
-    @auth = if arg.is_a?(OmniAuth::AuthHash)
-              arg
-            else
-              build_authorization_hash(arg)
-            end
+  def initialize(uid)
+    @found_user = PennState::SearchService::Client.new.userid(uid)
+    @existing_user = User.find_by(access_id: uid)
   end
 
-  def register(api: false)
-    raise ArgumentError, 'cannot register a user without a uid' if auth.uid.nil?
+  def register
+    return if found_user.nil?
 
-    if api
-      register_for_api
-    else
-      update_user
-    end
-
-    user
+    existing_user || User.from_omniauth(authorization_hash)
   end
 
   private
 
-    def build_authorization_hash(access_id)
+    def authorization_hash
       OmniAuth::AuthHash.new.tap do |auth_hash|
-        auth_hash.uid = access_id
+        auth_hash.uid = found_user.user_id
         auth_hash.provider = 'psu'
-        auth_hash.info = build_info_hash(access_id)
+        auth_hash.info = info_hash
       end
     end
 
-    def build_info_hash(access_id)
-      OmniAuth::AuthHash::InfoHash.new(access_id: access_id, groups: [], email: "#{access_id}@psu.edu")
-    end
-
-    # @note In order to satisfy migration needs, API calls will create the user if needed, but otherwise it should
-    # not update existing users unless we integrate it with our auth proxy service.
-    def register_for_api
-      return user if user.persisted?
-
-      user.update(email: auth.info.email, groups: User.default_groups)
-    end
-
-    def user
-      @user ||= User.find_or_initialize_by(provider: auth.provider, uid: auth.uid) do |new_user|
-        new_user.access_id = auth.info.access_id
-      end
-    end
-
-    def update_user
-      user.update(
-        email: auth.info.email,
-        given_name: auth.info.given_name,
-        surname: auth.info.surname,
-        groups: psu_groups + User.default_groups
+    # @note PennState::SearchService does not return any group information, but this would be updated once the user logs
+    # into the application.
+    def info_hash
+      OmniAuth::AuthHash::InfoHash.new(
+        access_id: found_user.user_id,
+        groups: [],
+        email: found_user.university_email,
+        given_name: found_user.given_name,
+        surname: found_user.surname
       )
-    end
-
-    def psu_groups
-      auth.info.groups
-        .map { |ldap_group_name| LdapGroupCleaner.call(ldap_group_name) }
-        .compact
-        .map do |group_name|
-        Group.find_or_create_by(name: group_name)
-      end
     end
 end

@@ -36,8 +36,8 @@ class WorkVersionCreationDiff
   # @return [Array<[WorkVersionCreation, WorkVersionCreation]>]
   def renamed
     identical_work_version_membership_ids.map do |id|
-      original_creator_alias = base_version_creator_aliases.find { |creator_alias| creator_alias.creator_id == id }
-      renamed_creator_alias = comparison_version_creator_aliases.find { |creator_alias| creator_alias.creator_id == id }
+      original_creator_alias = base_version_creator_aliases.find { |creator_alias| creator_alias.actor_id == id }
+      renamed_creator_alias = comparison_version_creator_aliases.find { |creator_alias| creator_alias.actor_id == id }
       next if original_creator_alias.alias == renamed_creator_alias.alias
 
       [original_creator_alias, renamed_creator_alias]
@@ -47,14 +47,14 @@ class WorkVersionCreationDiff
   # @return [Array<WorkVersionCreation>]
   def deleted
     base_version_creator_aliases.reject do |work_version_creation|
-      identical_work_version_membership_ids.include?(work_version_creation.creator_id)
+      identical_work_version_membership_ids.include?(work_version_creation.actor_id)
     end
   end
 
   # @return [Array<WorkVersionCreation>]
   def added
     comparison_version_creator_aliases.reject do |work_version_creation|
-      identical_work_version_membership_ids.include?(work_version_creation.creator_id)
+      identical_work_version_membership_ids.include?(work_version_creation.actor_id)
     end
   end
 
@@ -70,8 +70,8 @@ class WorkVersionCreationDiff
 
     def identical_work_version_membership_ids
       @identical_work_version_membership_ids ||= begin
-        base = Set.new(base_version_creator_aliases.map(&:creator_id))
-        comparison = Set.new(comparison_version_creator_aliases.map(&:creator_id))
+        base = Set.new(base_version_creator_aliases.map(&:actor_id))
+        comparison = Set.new(comparison_version_creator_aliases.map(&:actor_id))
 
         base.intersection(comparison)
       end

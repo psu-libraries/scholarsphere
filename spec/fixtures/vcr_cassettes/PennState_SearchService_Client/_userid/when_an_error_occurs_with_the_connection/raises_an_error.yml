@@ -1,0 +1,53 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://identity.apps.psu.edu/search-service/resources/people/userid/
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 401
+      message: Unauthorized
+    headers:
+      Content-Length:
+      - '0'
+      Content-Security-Policy:
+      - frame-ancestors 'none'
+      Date:
+      - Tue, 14 Apr 2020 17:59:05 GMT
+      Server:
+      - istio-envoy
+      Set-Cookie:
+      - JSESSIONID=WkoQ6KagryXudtWWn40gvy5JO_IcQLbq8bEFWHdx.search-service-84d47874cb-hzzvk;
+        path=/search-service
+      Uniqueid:
+      - 75e272e9-27ef-42f6-b836-08e161eec132
+      Vary:
+      - Accept-Encoding
+      Www-Authenticate:
+      - Bearer
+      X-Content-Security-Policy:
+      - frame-ancestors 'none'
+      X-Envoy-Decorator-Operation:
+      - search-service.swe-production.svc.cluster.local:8080/*
+      X-Envoy-Upstream-Service-Time:
+      - '3'
+      X-Frame-Options:
+      - DENY
+      X-Request-Id:
+      - 72ff26e6-51f5-4703-8acf-49563d19369b
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Tue, 14 Apr 2020 17:59:05 GMT
+recorded_with: VCR 5.0.0

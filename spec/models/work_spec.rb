@@ -6,10 +6,13 @@ RSpec.describe Work, type: :model do
   describe 'table' do
     it { is_expected.to have_db_column(:work_type).of_type(:string) }
     it { is_expected.to have_db_column(:depositor_id) }
-    it { is_expected.to have_db_index(:depositor_id) }
+    it { is_expected.to have_db_column(:proxy_id) }
     it { is_expected.to have_db_column(:uuid).of_type(:uuid) }
     it { is_expected.to have_db_column(:doi).of_type(:string) }
     it { is_expected.to have_db_column(:embargoed_until).of_type(:datetime) }
+
+    it { is_expected.to have_db_index(:depositor_id) }
+    it { is_expected.to have_db_index(:proxy_id) }
   end
 
   describe 'factories' do
@@ -17,7 +20,8 @@ RSpec.describe Work, type: :model do
   end
 
   describe 'associations' do
-    it { is_expected.to belong_to(:depositor).class_name('User').with_foreign_key(:depositor_id) }
+    it { is_expected.to belong_to(:depositor).class_name('Actor').with_foreign_key(:depositor_id).inverse_of(:deposited_works) }
+    it { is_expected.to belong_to(:proxy_depositor).class_name('Actor').with_foreign_key(:proxy_id).inverse_of(:proxy_deposited_works) }
     it { is_expected.to have_many(:access_controls) }
     it { is_expected.to have_many(:versions).class_name('WorkVersion').inverse_of('work') }
     it { is_expected.to have_many(:legacy_identifiers) }
@@ -135,6 +139,7 @@ RSpec.describe Work, type: :model do
         %w(
           created_at_dtsi
           depositor_id_isi
+          proxy_id_isi
           discover_groups_ssim
           discover_users_ssim
           doi_tesim
@@ -163,6 +168,7 @@ RSpec.describe Work, type: :model do
           creator_aliases_tesim
           creators_sim
           depositor_id_isi
+          proxy_id_isi
           description_tesim
           discover_groups_ssim
           discover_users_ssim

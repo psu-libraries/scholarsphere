@@ -8,10 +8,7 @@ class User < ApplicationRecord
 
   attr_writer :guest
 
-  has_many :works,
-           foreign_key: 'depositor_id',
-           inverse_of: 'depositor',
-           dependent: :restrict_with_exception
+  belongs_to :actor
 
   has_many :access_controls,
            as: :agent,
@@ -27,6 +24,12 @@ class User < ApplicationRecord
             presence: true,
             uniqueness: true
 
+  def works
+    actor.deposited_works
+      .or(actor.proxy_deposited_works)
+      .distinct
+  end
+
   def self.guest
     new(guest: true, groups: [Group.public_agent]).tap(&:readonly!)
   end
@@ -36,18 +39,36 @@ class User < ApplicationRecord
   end
 
   def self.from_omniauth(auth)
-    UserRegistrationService.call(auth: auth)
+    user = find_or_initialize_by(provider: auth.provider, uid: auth.uid) do |new_user|
+      new_user.access_id = auth.info.access_id
+      new_user.actor = Actor.find_or_initialize_by(psu_id: new_user.access_id) do |new_actor|
+        new_actor.email = auth.info.email
+        new_actor.given_name = auth.info.given_name
+        new_actor.surname = auth.info.surname
+      end
+    end
+
+    psu_groups = auth.info.groups
+      .map { |ldap_group_name| LdapGroupCleaner.call(ldap_group_name) }
+      .compact
+      .map { |group_name| Group.find_or_create_by(name: group_name) }
+
+    user.groups = default_groups + psu_groups
+    user.email = auth.info.email
+
+    user.save!
+    user
   end
 
   def admin?
     groups.map(&:name).include? Scholarsphere::Application.config.admin_group
   end
 
-  def name
-    "#{given_name} #{surname}"
-  end
-
   def guest?
     @guest || false
+  end
+
+  def name
+    actor.default_alias
   end
 end

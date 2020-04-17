@@ -62,4 +62,44 @@ RSpec.describe PennState::SearchService::Client do
       end
     end
   end
+
+  describe '#userid', :vcr do
+    context 'when the person exists at Penn State' do
+      let(:results) { client.userid('agw13') }
+
+      it 'returns a first and last name' do
+        expect(results.given_name).to include('Adam')
+        expect(results.family_name).to include('Wead')
+      end
+    end
+
+    context 'when the person does NOT exist at Penn State' do
+      let(:results) { client.userid('cam156') }
+
+      it 'returns nil' do
+        expect(results).to be_nil
+      end
+    end
+
+    context 'with an unparsable response' do
+      let(:mock_connection) { instance_spy('Faraday::Connection') }
+      let(:mock_response) { instance_spy('Faraday::Response', body: 'this is not JSON') }
+      let(:results) { client.userid('asdf') }
+
+      before do
+        allow(client).to receive(:connection).and_return(mock_connection)
+        allow(mock_connection).to receive(:get).and_return(mock_response)
+      end
+
+      it 'returns nil' do
+        expect(results).to be_nil
+      end
+    end
+
+    context 'when an error occurs with the connection' do
+      it 'raises an error' do
+        expect { client.userid(nil) }.to raise_error(PennState::SearchService::Client::Error)
+      end
+    end
+  end
 end

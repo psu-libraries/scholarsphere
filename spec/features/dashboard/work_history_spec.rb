@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Dashboard Work History', with_user: :user, versioning: true do
   let(:user) { create :user }
-  let(:work) { create :work, versions_count: 1, has_draft: false, depositor: user }
+  let(:work) { create :work, versions_count: 1, has_draft: false, depositor: user.actor }
 
   before do
     # This is usually done in the controller, but we need to do it here to get

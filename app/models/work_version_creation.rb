@@ -4,10 +4,10 @@ class WorkVersionCreation < ApplicationRecord
   belongs_to :work_version,
              inverse_of: :creator_aliases
 
-  belongs_to :creator,
+  belongs_to :actor,
              inverse_of: :work_version_creations
 
-  accepts_nested_attributes_for :creator
+  accepts_nested_attributes_for :actor
 
   validates :alias,
             presence: true
@@ -24,6 +24,6 @@ class WorkVersionCreation < ApplicationRecord
   )
 
   def alias
-    super.presence || creator&.default_alias
+    super.presence || actor&.default_alias
   end
 end

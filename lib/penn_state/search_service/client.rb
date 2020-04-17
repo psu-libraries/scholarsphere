@@ -18,15 +18,31 @@ module PennState::SearchService
       process_response connection.get("#{base_url}/people", args)
     end
 
+    # @param [Hash] args of options to pass to the endpoint
+    # @option args [String] :userid of the person
+    def userid(userid)
+      process_userid_response connection.get("#{base_url}/people/userid/#{userid}")
+    end
+
     private
 
-      # @return Array<HashWithIndifferentAccess>
+      # @return Array<PennState::SearchService::Person>
       def process_response(response)
         raise Error.new(response.body) unless response.success?
 
         JSON.parse(response.body).map { |result| Person.new(result) }
       rescue JSON::ParserError
         []
+      end
+
+      # @return [PennState::SearchService::Person, nil]
+      def process_userid_response(response)
+        return if response.status == 404
+
+        raise Error.new(response.body) unless response.success?
+
+        Person.new(JSON.parse(response.body))
+      rescue JSON::ParserError
       end
 
       def connection

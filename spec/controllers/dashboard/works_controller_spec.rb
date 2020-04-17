@@ -23,7 +23,7 @@ RSpec.describe Dashboard::WorksController, type: :controller do
 
   describe 'GET #index' do
     context 'when signed in' do
-      let!(:my_work) { create :work, depositor: user }
+      let!(:my_work) { create :work, depositor: user.actor }
 
       before { log_in user }
 
@@ -114,7 +114,7 @@ RSpec.describe Dashboard::WorksController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    let(:users_work) { create :work, depositor: user }
+    let(:users_work) { create :work, depositor: user.actor }
     let(:someone_elses_work) { create :work }
 
     context 'when signed in' do

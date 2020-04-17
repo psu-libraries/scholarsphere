@@ -6,38 +6,38 @@
                                    class: 'btn btn-outline-danger btn-sm float-sm-right' %>
   </div>
   <div class="card-body">
-    <%= f.hidden_field :creator_id %>
+    <%= f.hidden_field :actor_id %>
 
     <div class="form-group required">
       <%= f.label :alias %>
       <%= f.text_field :alias, class: 'form-control', required: true %>
     </div>
 
-    <%= f.fields_for :creator do |creator_fields| %>
-      <%- readonly = creator_fields.object.psu_id.present? %>
+    <%= f.fields_for :actor do |actor_fields| %>
+      <%- readonly = actor_fields.object.psu_id.present? %>
 
       <div class="form-group">
-        <%= creator_fields.label :email %>
-        <%= creator_fields.text_field :email, class: 'form-control', readonly: readonly %>
+        <%= actor_fields.label :email %>
+        <%= actor_fields.text_field :email, class: 'form-control', readonly: readonly %>
       </div>
 
       <div class="row">
         <div class="col">
           <div class="form-group">
-            <%= creator_fields.label :given_name %>
-            <%= creator_fields.text_field :given_name, class: 'form-control', readonly: readonly %>
+            <%= actor_fields.label :given_name %>
+            <%= actor_fields.text_field :given_name, class: 'form-control', readonly: readonly %>
           </div>
         </div>
         <div class="col">
           <div class="form-group required">
-            <%= creator_fields.label :surname %>
-            <%= creator_fields.text_field :surname, class: 'form-control', readonly: readonly, required: true %>
+            <%= actor_fields.label :surname %>
+            <%= actor_fields.text_field :surname, class: 'form-control', readonly: readonly, required: true %>
           </div>
         </div>
         <div class="col">
           <div class="form-group">
-            <%= creator_fields.label :psu_id %>
-            <%= creator_fields.text_field :psu_id, class: 'form-control', readonly: readonly %>
+            <%= actor_fields.label :psu_id %>
+            <%= actor_fields.text_field :psu_id, class: 'form-control', readonly: readonly %>
           </div>
         </div>
       </div>

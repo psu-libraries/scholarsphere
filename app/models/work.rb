@@ -4,9 +4,15 @@ class Work < ApplicationRecord
   include Permissions
 
   belongs_to :depositor,
-             class_name: 'User',
+             class_name: 'Actor',
              foreign_key: 'depositor_id',
-             inverse_of: 'works'
+             inverse_of: 'deposited_works'
+
+  belongs_to :proxy_depositor,
+             class_name: 'Actor',
+             foreign_key: 'proxy_id',
+             inverse_of: 'proxy_deposited_works',
+             optional: true
 
   has_many :versions,
            -> { order(created_at: :asc) },

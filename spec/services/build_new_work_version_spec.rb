@@ -18,7 +18,7 @@ RSpec.describe BuildNewWorkVersion, type: :model do
   let(:file_resource) { initial_file_membership.file_resource }
 
   let(:initial_creation) { initial_work_version.creator_aliases.first }
-  let(:creator) { initial_creation.creator }
+  let(:creator) { initial_creation.actor }
 
   before do
     initial_file_membership.update!(title: 'overridden-title.png')
@@ -49,7 +49,7 @@ RSpec.describe BuildNewWorkVersion, type: :model do
 
       new_version.creator_aliases.first.tap do |creation|
         expect(creation.alias).to eq 'My Creator Alias'
-        expect(creation.creator).to eq creator
+        expect(creation.actor).to eq creator
       end
     end
 

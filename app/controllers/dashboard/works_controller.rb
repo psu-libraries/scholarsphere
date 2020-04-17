@@ -18,7 +18,7 @@ module Dashboard
     # POST /works
     # POST /works.json
     def create
-      @work = Work.build_with_empty_version(work_params.merge(depositor: current_user))
+      @work = Work.build_with_empty_version(work_params.merge(depositor: current_user.actor))
 
       respond_to do |format|
         if @work.save

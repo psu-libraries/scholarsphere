@@ -111,7 +111,7 @@ module Api::V1
             source: [],
             creator_aliases_attributes: [
               :alias,
-              creator_attributes: [
+              actor_attributes: [
                 :email,
                 :given_name,
                 :surname,
@@ -122,7 +122,14 @@ module Api::V1
       end
 
       def depositor_params
-        params.require(:depositor)
+        params
+          .require(:depositor)
+          .permit(
+            :email,
+            :given_name,
+            :surname,
+            :psu_id
+          )
       end
 
       def content_params
