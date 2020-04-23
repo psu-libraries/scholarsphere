@@ -39,4 +39,35 @@ RSpec.describe Collection, type: :model do
     it { is_expected.to have_many(:creator_aliases) }
     it { is_expected.to have_many(:creators).through(:creator_aliases) }
   end
+
+  describe 'validations' do
+    it { is_expected.to validate_presence_of(:title) }
+  end
+
+  describe '#build_creator_alias' do
+    let(:actor) { build_stubbed :actor }
+    let(:collection) { build_stubbed :collection }
+
+    it 'builds a creator_alias for the given Actor but does not persist it' do
+      expect {
+        collection.build_creator_alias(actor: actor)
+      }.to change {
+        collection.creator_aliases.length
+      }.by(1)
+
+      collection.creator_aliases.first.tap do |creator_alias|
+        expect(creator_alias).not_to be_persisted
+        expect(creator_alias.actor).to eq actor
+        expect(creator_alias.alias).to eq actor.default_alias
+      end
+    end
+
+    it 'is idempotent' do
+      expect {
+        2.times { collection.build_creator_alias(actor: actor) }
+      }.to change {
+        collection.creator_aliases.length
+      }.by(1)
+    end
+  end
 end

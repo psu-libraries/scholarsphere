@@ -68,6 +68,8 @@ Rails.application.routes.draw do
 
       get 'history', to: 'work_histories#show'
     end
+
+    resources :collections
   end
 
   namespace :api do

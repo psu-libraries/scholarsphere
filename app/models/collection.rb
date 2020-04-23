@@ -31,7 +31,7 @@ class Collection < ApplicationRecord
 
   has_many :works,
            through: :collection_work_memberships,
-           inverse_of: :collection
+           inverse_of: :collections
 
   has_many :creator_aliases,
            class_name: 'CollectionCreation',
@@ -43,7 +43,20 @@ class Collection < ApplicationRecord
            through: :creator_aliases,
            inverse_of: :collections
 
+  validates :title,
+            presence: true
+
   accepts_nested_attributes_for :creator_aliases,
                                 reject_if: :all_blank,
                                 allow_destroy: true
+
+  def build_creator_alias(actor:)
+    existing_creator_alias = creator_aliases.find { |ca| ca.actor == actor }
+    return existing_creator_alias if existing_creator_alias.present?
+
+    creator_aliases.build(
+      alias: actor.default_alias,
+      actor: actor
+    )
+  end
 end

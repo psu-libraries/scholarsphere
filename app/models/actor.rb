@@ -25,6 +25,12 @@ class Actor < ApplicationRecord
            through: :work_version_creations,
            inverse_of: :actors
 
+  has_many :deposited_collections,
+           class_name: 'Collection',
+           foreign_key: 'depositor_id',
+           inverse_of: 'depositor',
+           dependent: :restrict_with_exception
+
   has_many :collection_creations,
            dependent: :restrict_with_exception,
            inverse_of: :actor

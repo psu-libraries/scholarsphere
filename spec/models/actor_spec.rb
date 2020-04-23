@@ -26,6 +26,7 @@ RSpec.describe Actor, type: :model do
     it { is_expected.to have_many(:collections).through(:collection_creations) }
     it { is_expected.to have_many(:deposited_works).class_name('Work').inverse_of(:depositor) }
     it { is_expected.to have_many(:proxy_deposited_works).class_name('Work').inverse_of(:proxy_depositor) }
+    it { is_expected.to have_many(:deposited_collections).class_name('Collection').inverse_of(:depositor) }
   end
 
   describe 'validations' do

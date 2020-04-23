@@ -54,6 +54,7 @@ RSpec/SubjectStub:
 Rails/OutputSafety:
   Exclude:
     - 'app/components/work_version_metadata_component.rb'
+    - 'app/components/collection_metadata_component.rb'
 
 # Offense count: 1
 # Configuration parameters: Blacklist, Whitelist.

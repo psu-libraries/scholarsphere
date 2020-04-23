@@ -29,7 +29,7 @@ class Work < ApplicationRecord
 
   has_many :collections,
            through: :collection_work_memberships,
-           inverse_of: :work
+           inverse_of: :works
 
   accepts_nested_attributes_for :versions
 
