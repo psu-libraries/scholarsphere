@@ -25,6 +25,8 @@ RSpec.describe Work, type: :model do
     it { is_expected.to have_many(:access_controls) }
     it { is_expected.to have_many(:versions).class_name('WorkVersion').inverse_of('work') }
     it { is_expected.to have_many(:legacy_identifiers) }
+    it { is_expected.to have_many(:collection_work_memberships) }
+    it { is_expected.to have_many(:collections).through(:collection_work_memberships) }
 
     it { is_expected.to accept_nested_attributes_for(:versions) }
   end

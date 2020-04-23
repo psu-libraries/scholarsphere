@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_09_145829) do
+ActiveRecord::Schema.define(version: 2020_04_15_185641) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,6 +60,36 @@ ActiveRecord::Schema.define(version: 2020_04_09_145829) do
     t.datetime "updated_at", null: false
     t.index ["document_id"], name: "index_bookmarks_on_document_id"
     t.index ["user_id"], name: "index_bookmarks_on_user_id"
+  end
+
+  create_table "collection_creations", force: :cascade do |t|
+    t.bigint "collection_id", null: false
+    t.bigint "actor_id", null: false
+    t.string "alias"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["actor_id"], name: "index_collection_creations_on_actor_id"
+    t.index ["collection_id"], name: "index_collection_creations_on_collection_id"
+  end
+
+  create_table "collection_work_memberships", force: :cascade do |t|
+    t.bigint "collection_id", null: false
+    t.bigint "work_id", null: false
+    t.integer "position"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["collection_id"], name: "index_collection_work_memberships_on_collection_id"
+    t.index ["work_id"], name: "index_collection_work_memberships_on_work_id"
+  end
+
+  create_table "collections", force: :cascade do |t|
+    t.bigint "depositor_id", null: false
+    t.uuid "uuid"
+    t.string "doi"
+    t.jsonb "metadata"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["depositor_id"], name: "index_collections_on_depositor_id"
   end
 
   create_table "file_resources", force: :cascade do |t|
@@ -174,6 +204,11 @@ ActiveRecord::Schema.define(version: 2020_04_09_145829) do
     t.index ["proxy_id"], name: "index_works_on_proxy_id"
   end
 
+  add_foreign_key "collection_creations", "actors"
+  add_foreign_key "collection_creations", "collections"
+  add_foreign_key "collection_work_memberships", "collections"
+  add_foreign_key "collection_work_memberships", "works"
+  add_foreign_key "collections", "actors", column: "depositor_id"
   add_foreign_key "file_version_memberships", "file_resources"
   add_foreign_key "file_version_memberships", "work_versions"
   add_foreign_key "user_group_memberships", "groups"

@@ -6,6 +6,23 @@ en:
         psu_id: PSU ID
         default_alias: Display Name
         orcid: ORCiD
+      collection_creation:
+        alias: Display Name
+      collection:
+        subtitle: Subtitle
+        keyword: Keywords
+        description: Description
+        creator_aliases: Creator
+        resource_type: Resource Type
+        contributor: Contributor
+        publisher: Publisher
+        published_date: Published Date
+        subject: Subject
+        language: Language
+        identifier: Identifier
+        based_near: Based Near
+        related_url: Related URL
+        source: Source
       work_version_creation:
         alias: Display Name
       work_version:
@@ -41,6 +58,25 @@ en:
     edit_message: "You have permission to access the files during the embargo."
     link_text: "Public link"
   dashboard:
+    collections:
+      index:
+        heading: "Your Collections"
+        new: "New Collection"
+        delete_confirm: "Are you sure you want to delete this collection? This cannot be undone."
+        delete: "Delete"
+        edit: "Edit"
+        show: "Show"
+      new:
+        heading: "Create A New Collection"
+        error_message: "%{error} prohibited this collection from being saved:"
+      edit:
+        heading: Edit %{title}
+        add_creator: 'Add another Creator'
+        breadcrumb: Edit %{title}
+        creator: Creator
+        error_message: "%{error} prohibited this collection from being saved:"
+        remove_creator: 'Remove'
+      works: 'Works'
     profiles:
       edit:
         heading: "Edit Profile"
