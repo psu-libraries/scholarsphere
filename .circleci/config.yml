@@ -28,7 +28,7 @@ jobs:
         command: |
           docker build -t $REGISTRY_URL:$CIRCLE_SHA1 --target base .
     - run:
-        name: "Linting"
+        name: "Niftany"
         command: |
           export TAG=${CIRCLE_SHA1}
           RAILS_ENV=test docker-compose -f docker-compose.yml -f docker-compose.test.yml run --name=niftany --service-ports test /app/bin/ci-niftany -p lint
