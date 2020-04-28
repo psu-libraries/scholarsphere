@@ -8,10 +8,10 @@ class ResourcesController < ApplicationController
 
   private
 
-    # @todo probably a good idea to make this into a ResourceFinder class
     def find_resource(uuid)
       Work.where(uuid: uuid).first ||
         WorkVersion.where(uuid: uuid).first ||
+        Collection.where(uuid: uuid).first ||
         raise(ActiveRecord::RecordNotFound)
     end
 end

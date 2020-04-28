@@ -22,6 +22,15 @@ RSpec.describe ResourcesController, type: :controller do
       end
     end
 
+    context 'when requesting a Collection' do
+      let(:collection) { create :collection }
+
+      it 'loads the WorkVersion' do
+        get :show, params: { id: collection.uuid }
+        expect(assigns[:resource]).to eq collection
+      end
+    end
+
     context 'when requesting an unknown uuid' do
       it do
         expect {

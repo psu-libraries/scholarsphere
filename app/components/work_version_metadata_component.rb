@@ -3,7 +3,8 @@
 require 'action_view/component'
 
 class WorkVersionMetadataComponent < ActionView::Component::Base
-  attr_reader :work_version
+  attr_reader :work_version,
+              :mini
 
   validates :work_version,
             presence: true
@@ -31,14 +32,25 @@ class WorkVersionMetadataComponent < ActionView::Component::Base
     :created_at
   ].freeze
 
-  def initialize(work_version:)
+  MINI_ATTRIBUTES = [
+    :title,
+    :creator_aliases,
+    :created_at
+  ].freeze
+
+  def initialize(work_version:, mini: false)
     @work_version = work_version
+    @mini = mini
   end
 
   private
 
+    def attributes_list
+      mini ? MINI_ATTRIBUTES : ATTRIBUTES
+    end
+
     def attributes
-      ATTRIBUTES
+      attributes_list
         .map do |attr|
           label = format_label(attr)
           value = format_value(work_version.send(attr))
