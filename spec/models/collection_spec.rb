@@ -44,6 +44,25 @@ RSpec.describe Collection, type: :model do
     it { is_expected.to validate_presence_of(:title) }
   end
 
+  describe 'multivalued fields' do
+    it_behaves_like 'a multivalued json field', :keyword
+    it_behaves_like 'a multivalued json field', :description
+    it_behaves_like 'a multivalued json field', :resource_type
+    it_behaves_like 'a multivalued json field', :contributor
+    it_behaves_like 'a multivalued json field', :publisher
+    it_behaves_like 'a multivalued json field', :published_date
+    it_behaves_like 'a multivalued json field', :subject
+    it_behaves_like 'a multivalued json field', :language
+    it_behaves_like 'a multivalued json field', :identifier
+    it_behaves_like 'a multivalued json field', :based_near
+    it_behaves_like 'a multivalued json field', :related_url
+    it_behaves_like 'a multivalued json field', :source
+  end
+
+  describe 'singlevalued fields' do
+    it_behaves_like 'a singlevalued json field', :subtitle
+  end
+
   describe '#build_creator_alias' do
     let(:actor) { build_stubbed :actor }
     let(:collection) { build_stubbed :collection }

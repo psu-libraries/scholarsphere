@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_15_185641) do
+ActiveRecord::Schema.define(version: 2020_04_28_141801) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -84,7 +84,7 @@ ActiveRecord::Schema.define(version: 2020_04_15_185641) do
 
   create_table "collections", force: :cascade do |t|
     t.bigint "depositor_id", null: false
-    t.uuid "uuid"
+    t.uuid "uuid", default: -> { "uuid_generate_v4()" }
     t.string "doi"
     t.jsonb "metadata"
     t.datetime "created_at", precision: 6, null: false
