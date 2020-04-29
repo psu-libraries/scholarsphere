@@ -81,5 +81,31 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
       expect(result.css('dd.work-version-source').text).to include work_version[:source].first
       expect(result.css('dd.work-version-created-at').text).to include work_version[:created_at].year.to_s
     end
+
+    context 'when mini: true' do
+      let(:result) { render_inline(described_class, work_version: work_version, mini: true) }
+
+      it 'renders just the mini fields' do
+        # Titles
+        expect(result.css('dt.work-version-title')).to be_present
+        expect(result.css('dt.work-version-created-at')).to be_present
+        expect(result.css('dt.work-version-creator-aliases')).to be_present
+        expect(result.css('dt.work-version-subtitle')).not_to be_present
+        expect(result.css('dt.work-version-version-number')).not_to be_present
+        expect(result.css('dt.work-version-description')).not_to be_present
+        expect(result.css('dt.work-version-keyword')).not_to be_present
+        expect(result.css('dt.work-version-rights')).not_to be_present
+        expect(result.css('dt.work-version-resource-type')).not_to be_present
+        expect(result.css('dt.work-version-contributor')).not_to be_present
+        expect(result.css('dt.work-version-publisher')).not_to be_present
+        expect(result.css('dt.work-version-published-date')).not_to be_present
+        expect(result.css('dt.work-version-subject')).not_to be_present
+        expect(result.css('dt.work-version-language')).not_to be_present
+        expect(result.css('dt.work-version-identifier')).not_to be_present
+        expect(result.css('dt.work-version-based-near')).not_to be_present
+        expect(result.css('dt.work-version-related-url')).not_to be_present
+        expect(result.css('dt.work-version-source')).not_to be_present
+      end
+    end
   end
 end

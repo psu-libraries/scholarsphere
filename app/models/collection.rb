@@ -50,6 +50,32 @@ class Collection < ApplicationRecord
                                 reject_if: :all_blank,
                                 allow_destroy: true
 
+  # Fields that can contain multiple values automatically remove blank values
+  %i[
+    keyword
+    description
+    resource_type
+    contributor
+    publisher
+    published_date
+    subject
+    language
+    identifier
+    based_near
+    related_url
+    source
+  ].each do |array_field|
+    define_method "#{array_field}=" do |vals|
+      super(strip_blanks_from_array(vals))
+    end
+  end
+
+  %i[subtitle].each do |field|
+    define_method "#{field}=" do |val|
+      super(val.presence)
+    end
+  end
+
   def build_creator_alias(actor:)
     existing_creator_alias = creator_aliases.find { |ca| ca.actor == actor }
     return existing_creator_alias if existing_creator_alias.present?
@@ -59,4 +85,10 @@ class Collection < ApplicationRecord
       actor: actor
     )
   end
+
+  private
+
+    def strip_blanks_from_array(arr)
+      Array.wrap(arr).reject(&:blank?)
+    end
 end
