@@ -21,4 +21,13 @@ namespace :solr do
   task reindex_works: :environment do
     Work.reindex_all
   end
+
+  desc 'Reindexes all the collections into Solr'
+  task reindex_collections: :environment do
+    Collection.reindex_all
+  end
+
+  desc 'Reindexes all works and collections into Solr'
+  task reindex_all: [:environment, :reindex_works, :reindex_collections] do
+  end
 end

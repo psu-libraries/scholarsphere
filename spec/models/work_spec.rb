@@ -3,6 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe Work, type: :model do
+  it_behaves_like 'a resource with permissions' do
+    let(:factory_name) { :work }
+  end
+
   describe 'table' do
     it { is_expected.to have_db_column(:work_type).of_type(:string) }
     it { is_expected.to have_db_column(:depositor_id) }

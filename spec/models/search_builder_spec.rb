@@ -12,7 +12,7 @@ RSpec.describe SearchBuilder do
   describe '.default_processor_chain' do
     its(:default_processor_chain) do
       is_expected.to include(
-        :restrict_search_to_works,
+        :restrict_search_based_on_model_types,
         :apply_gated_discovery,
         :exclude_embargoed_works,
         :log_solr_parameters
@@ -27,7 +27,7 @@ RSpec.describe SearchBuilder do
       it 'restricts searches to public works' do
         expect(parameters['fq']).to include(
           "({!terms f=discover_groups_ssim}#{Group::PUBLIC_AGENT_NAME})",
-          'model_ssi:Work'
+          '{!terms f=model_ssi}Work,Collection'
         )
       end
     end
@@ -39,7 +39,7 @@ RSpec.describe SearchBuilder do
         expect(parameters['fq']).to include(
           "({!terms f=discover_groups_ssim}#{Group::PUBLIC_AGENT_NAME},#{Group::AUTHORIZED_AGENT_NAME}) " \
             "OR discover_users_ssim:#{user.access_id}",
-          'model_ssi:Work'
+          '{!terms f=model_ssi}Work,Collection'
         )
       end
     end
@@ -48,7 +48,7 @@ RSpec.describe SearchBuilder do
       let(:user) { build(:user, :admin) }
 
       it 'shows all Works' do
-        expect(parameters['fq']).to contain_exactly('model_ssi:Work')
+        expect(parameters['fq']).to contain_exactly('{!terms f=model_ssi}Work,Collection')
       end
     end
 

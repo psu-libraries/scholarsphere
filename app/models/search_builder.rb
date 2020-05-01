@@ -4,15 +4,15 @@ class SearchBuilder < Blacklight::SearchBuilder
   include Blacklight::Solr::SearchBuilderBehavior
 
   self.default_processor_chain += %i(
-    restrict_search_to_works
+    restrict_search_based_on_model_types
     apply_gated_discovery
     exclude_embargoed_works
     log_solr_parameters
   )
 
-  def restrict_search_to_works(solr_parameters)
+  def restrict_search_based_on_model_types(solr_parameters)
     solr_parameters[:fq] ||= []
-    solr_parameters[:fq] << 'model_ssi:Work'
+    solr_parameters[:fq] << '{!terms f=model_ssi}Work,Collection'
   end
 
   def apply_gated_discovery(solr_parameters)
