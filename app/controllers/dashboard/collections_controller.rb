@@ -3,7 +3,8 @@
 module Dashboard
   class CollectionsController < BaseController
     def index
-      @collections = policy_scope(Collection).includes(works: :versions)
+      @collections = policy_scope(Collection)
+        .includes(collection_work_memberships: { work: :versions })
     end
 
     def new
@@ -30,7 +31,9 @@ module Dashboard
     end
 
     def show
-      @collection = policy_scope(Collection).includes(works: :versions).find(params[:id])
+      @collection = policy_scope(Collection)
+        .includes(collection_work_memberships: { work: :versions })
+        .find(params[:id])
       authorize(@collection)
     end
 
