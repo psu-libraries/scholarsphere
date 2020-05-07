@@ -42,6 +42,35 @@ RSpec.describe Collection, type: :model do
     it { is_expected.to have_many(:works).through(:collection_work_memberships) }
     it { is_expected.to have_many(:creator_aliases) }
     it { is_expected.to have_many(:creators).through(:creator_aliases) }
+
+    describe 'default order of works' do
+      let(:collection) { build :collection }
+
+      # Note we create these records in the database "out of order"
+      let!(:work_3) { create :work }
+      let!(:work_1) { create :work }
+      let!(:work_2) { create :work }
+
+      before do
+        # Note we create these records in the database "out of order"
+        collection.collection_work_memberships.build(work: work_3, position: 3)
+        collection.collection_work_memberships.build(work: work_1, position: 1)
+        collection.collection_work_memberships.build(work: work_2, position: 2)
+
+        collection.save!
+      end
+
+      it 'orders works by their position field, if available' do
+        expect(collection.reload.works).to eq([work_1, work_2, work_3])
+
+        # Update position of work_1 and ensure that the ordering follows suit
+        collection.collection_work_memberships
+          .find { |c_w_m| c_w_m.work == work_1 }
+          .update!(position: 100)
+
+        expect(collection.reload.works).to eq([work_2, work_3, work_1])
+      end
+    end
   end
 
   describe 'validations' do
