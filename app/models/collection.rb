@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Collection < ApplicationRecord
+  include Permissions
+
   jsonb_accessor :metadata,
                  title: :string,
                  subtitle: :string,
@@ -50,6 +52,10 @@ class Collection < ApplicationRecord
                                 reject_if: :all_blank,
                                 allow_destroy: true
 
+  after_initialize :set_defaults
+
+  after_save :update_index
+
   # Fields that can contain multiple values automatically remove blank values
   %i[
     keyword
@@ -76,6 +82,11 @@ class Collection < ApplicationRecord
     end
   end
 
+  def self.reindex_all
+    find_each { |collection| CollectionIndexer.call(collection, commit: false) }
+    IndexingService.commit
+  end
+
   def build_creator_alias(actor:)
     existing_creator_alias = creator_aliases.find { |ca| ca.actor == actor }
     return existing_creator_alias if existing_creator_alias.present?
@@ -86,9 +97,35 @@ class Collection < ApplicationRecord
     )
   end
 
+  def to_solr
+    document_builder.generate(resource: self)
+  end
+
+  # @note Postgres mints uuids, but they are not present until the record is reloaded from the database.  In most cases,
+  # this won't present a problem because we only index published versions, and at that point, the version will have
+  # already been saved and reloaded from the database. However, there could be edge cases or other unforseen siutations
+  # where the uuid is nil and the version needs to be indexed. Reloading it from Postgres will avoid those problems.
+  def update_index
+    reload if uuid.nil?
+
+    CollectionIndexer.call(self, commit: true)
+  end
+
   private
+
+    def set_defaults
+      self.visibility = Permissions::Visibility::OPEN unless access_controls.any?
+    end
 
     def strip_blanks_from_array(arr)
       Array.wrap(arr).reject(&:blank?)
+    end
+
+    def document_builder
+      SolrDocumentBuilder.new(
+        DefaultSchema,
+        CreatorSchema,
+        PermissionsSchema
+      )
     end
 end

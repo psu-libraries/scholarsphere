@@ -3,11 +3,11 @@
 FactoryBot.define do
   factory :collection do
     association :depositor, :with_user, factory: :actor
+    title { generate(:work_title) }
+    visibility { Permissions::Visibility.default }
 
     # Postgres does this for us, but for testing, we can do it here to save having to call create/reload.
     uuid { SecureRandom.uuid }
-
-    title { generate(:work_title) }
 
     trait :with_creators do
       transient do
@@ -29,7 +29,7 @@ FactoryBot.define do
     end
 
     trait :with_complete_metadata do
-      title { generate(:work_title) }
+      title { "Collection #{generate(:work_title)}" }
       subtitle { FactoryBotHelpers.work_title }
       keyword { [Faker::Science.element] }
       description { [Faker::Lorem.paragraph] }

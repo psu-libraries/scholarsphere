@@ -3,6 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe Collection, type: :model do
+  it_behaves_like 'a resource with permissions' do
+    let(:factory_name) { :collection }
+  end
+
   describe 'table' do
     it { is_expected.to have_db_column(:depositor_id) }
     it { is_expected.to have_db_column(:metadata).of_type(:jsonb) }
@@ -63,6 +67,27 @@ RSpec.describe Collection, type: :model do
     it_behaves_like 'a singlevalued json field', :subtitle
   end
 
+  describe '::reindex_all' do
+    before do
+      create(:collection)
+      allow(IndexingService).to receive(:commit)
+      allow(CollectionIndexer).to receive(:call)
+    end
+
+    it 'reindexes all the works and their versions into solr' do
+      described_class.reindex_all
+      expect(CollectionIndexer).to have_received(:call).once
+      expect(IndexingService).to have_received(:commit).once
+    end
+  end
+
+  describe 'default attributes' do
+    it 'defaults #visibility to "OPEN"' do
+      expect(described_class.new.visibility).to eq Permissions::Visibility::OPEN
+      expect(described_class.new(visibility: Permissions::Visibility::AUTHORIZED).visibility).to eq Permissions::Visibility::AUTHORIZED
+    end
+  end
+
   describe '#build_creator_alias' do
     let(:actor) { build_stubbed :actor }
     let(:collection) { build_stubbed :collection }
@@ -87,6 +112,98 @@ RSpec.describe Collection, type: :model do
       }.to change {
         collection.creator_aliases.length
       }.by(1)
+    end
+  end
+
+  describe '#to_solr' do
+    context 'when the work only has a draft version' do
+      subject { build(:work).to_solr }
+
+      let(:keys) do
+        %w(
+          created_at_dtsi
+          depositor_id_isi
+          proxy_id_isi
+          discover_groups_ssim
+          discover_users_ssim
+          doi_tesim
+          embargoed_until_dtsi
+          id
+          model_ssi
+          updated_at_dtsi
+          uuid_ssi
+          visibility_ssi
+          work_type_tesim
+        )
+      end
+
+      its(:keys) { is_expected.to contain_exactly(*keys) }
+    end
+
+    context 'when the work has a published version' do
+      subject { create(:collection, :with_creators, :with_complete_metadata).to_solr }
+
+      let(:expected_keys) do
+        %w(
+          based_near_tesim
+          contributor_tesim
+          created_at_dtsi
+          creator_aliases_tesim
+          creators_sim
+          depositor_id_isi
+          description_tesim
+          discover_groups_ssim
+          discover_users_ssim
+          doi_tesim
+          id
+          identifier_tesim
+          keyword_tesim
+          language_tesim
+          model_ssi
+          published_date_tesim
+          publisher_tesim
+          related_url_tesim
+          resource_type_tesim
+          source_tesim
+          subject_tesim
+          subtitle_tesim
+          title_tesim
+          updated_at_dtsi
+          uuid_ssi
+          visibility_ssi
+        )
+      end
+
+      its(:keys) { is_expected.to contain_exactly(*expected_keys) }
+    end
+  end
+
+  describe '#update_index' do
+    let(:collection) { described_class.new }
+
+    before do
+      allow(CollectionIndexer).to receive(:call)
+      allow(collection).to receive(:reload)
+    end
+
+    context 'when the uuid is nil' do
+      before { allow(collection).to receive(:uuid).and_return(nil) }
+
+      it 'reloads the version and calls the CollectionIndexer' do
+        collection.update_index
+        expect(collection).to have_received(:reload)
+        expect(CollectionIndexer).to have_received(:call)
+      end
+    end
+
+    context 'when the uuid is present' do
+      before { allow(collection).to receive(:uuid).and_return(SecureRandom.uuid) }
+
+      it 'does NOT reload the version and calls the CollectionIndexer' do
+        collection.update_index
+        expect(collection).not_to have_received(:reload)
+        expect(CollectionIndexer).to have_received(:call)
+      end
     end
   end
 end
