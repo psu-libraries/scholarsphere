@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_28_141801) do
+ActiveRecord::Schema.define(version: 2020_05_08_201308) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 2020_04_28_141801) do
     t.bigint "resource_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["access_level", "agent_type", "resource_type", "agent_id", "resource_id"], name: "index_access_controls_on_access_level_agent_and_resource", unique: true
     t.index ["agent_type", "agent_id"], name: "index_access_controls_on_agent_type_and_agent_id"
     t.index ["resource_type", "resource_id"], name: "index_access_controls_on_resource_type_and_resource_id"
   end
@@ -105,6 +106,7 @@ ActiveRecord::Schema.define(version: 2020_04_28_141801) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["file_resource_id"], name: "index_file_version_memberships_on_file_resource_id"
+    t.index ["work_version_id", "title"], name: "index_file_version_memberships_on_work_version_id_and_title", unique: true
     t.index ["work_version_id"], name: "index_file_version_memberships_on_work_version_id"
   end
 
@@ -188,6 +190,7 @@ ActiveRecord::Schema.define(version: 2020_04_28_141801) do
     t.uuid "uuid", default: -> { "uuid_generate_v4()" }
     t.integer "version_number", null: false
     t.string "doi"
+    t.index ["work_id", "version_number"], name: "index_work_versions_on_work_id_and_version_number", unique: true
     t.index ["work_id"], name: "index_work_versions_on_work_id"
   end
 
