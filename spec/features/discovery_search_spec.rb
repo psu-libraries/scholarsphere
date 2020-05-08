@@ -8,6 +8,9 @@ RSpec.describe 'Searching discoverable resources' do
   let!(:current_embargoed_work) { create(:work, has_draft: false, embargoed_until: (DateTime.now + 6.days)) }
   let!(:previous_embargoed_work) { create(:work, has_draft: false, embargoed_until: (DateTime.now - 6.days)) }
 
+  let!(:public_collection) { create(:collection, visibility: Permissions::Visibility::OPEN) }
+  let!(:authorized_collection) { create(:collection, visibility: Permissions::Visibility::AUTHORIZED) }
+
   context 'with a public user' do
     it 'searches only public works' do
       visit search_catalog_path
@@ -15,8 +18,10 @@ RSpec.describe 'Searching discoverable resources' do
 
       expect(page).to have_content(public_work.latest_published_version.title)
       expect(page).to have_content(previous_embargoed_work.latest_published_version.title)
+      expect(page).to have_content(public_collection.title)
       expect(page).not_to have_content(current_embargoed_work.latest_published_version.title)
       expect(page).not_to have_content(authorized_work.latest_published_version.title)
+      expect(page).not_to have_content(authorized_collection.title)
     end
   end
 
@@ -31,6 +36,8 @@ RSpec.describe 'Searching discoverable resources' do
       expect(page).to have_content(previous_embargoed_work.latest_published_version.title)
       expect(page).not_to have_content(current_embargoed_work.latest_published_version.title)
       expect(page).to have_content(authorized_work.latest_published_version.title)
+      expect(page).to have_content(public_collection.title)
+      expect(page).to have_content(authorized_collection.title)
     end
   end
 
@@ -44,7 +51,8 @@ RSpec.describe 'Searching discoverable resources' do
         results['data'].map { |record| record['id'] }
       ).to contain_exactly(
         public_work.uuid,
-        previous_embargoed_work.uuid
+        previous_embargoed_work.uuid,
+        public_collection.uuid
       )
     end
   end
