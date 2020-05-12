@@ -30,57 +30,62 @@ module Permissions
              dependent: :destroy
   end
 
-  include PermissionsBuilder.new(level: AccessControl::Level::DISCOVER, agents: [User, Group])
-  include PermissionsBuilder.new(level: AccessControl::Level::READ, agents: [User, Group])
-  include PermissionsBuilder.new(level: AccessControl::Level::EDIT, agents: [User, Group])
-
-  # @note This does not create an access control granting the depositor edit access. The depositor is already linked to
-  # the work by the User -> Work relationship.
-  def edit_users
-    return super if edit_access?(depositor.user)
-
-    super.append(depositor.user).compact
+  # @note This is to exclude agents from the []= assigning process, and avoids the problem of removing visibility
+  # agents when setting permissions on a resource.
+  class GroupsToIgnore
+    def self.call
+      [Group.public_agent, Group.authorized_agent]
+    end
   end
 
-  # @note Prevents the user from creating a unneeded access control object for the depositor.
-  def edit_users=(list)
-    super(list.reject { |user| user == depositor.user })
-  end
+  include PermissionsBuilder.new(
+    level: AccessControl::Level::DISCOVER,
+    agents: [User, Group],
+    white_list: GroupsToIgnore
+  )
 
-  # @note Always add the visibility group when setting the list of read groups. This avoids the problem of inadvertently
-  # removing a visiliblity setting via the read groups setter.
-  def read_groups=(list)
-    super(list.append(visibility_agent).compact)
-  end
+  include PermissionsBuilder.new(
+    level: AccessControl::Level::READ,
+    agents: [User, Group],
+    inherit: AccessControl::Level::DISCOVER,
+    white_list: GroupsToIgnore
+  )
+
+  include PermissionsBuilder.new(
+    level: AccessControl::Level::EDIT,
+    agents: [User, Group],
+    inherit: [AccessControl::Level::DISCOVER, AccessControl::Level::READ],
+    white_list: GroupsToIgnore
+  )
 
   def grant_open_access
     return if open_access?
 
     revoke_authorized_access
-    access_controls.build(access_level: AccessControl::Level::READ, agent: Group.public_agent)
+    grant_read_access(Group.public_agent)
   end
 
   def revoke_open_access
-    self.access_controls = access_controls.reject(&:public?)
+    revoke_read_access(Group.public_agent)
   end
 
   def open_access?
-    access_controls.any?(&:public?)
+    discover_access?(Group.public_agent) && read_access?(Group.public_agent)
   end
 
   def grant_authorized_access
     return if authorized_access?
 
     revoke_open_access
-    access_controls.build(access_level: AccessControl::Level::READ, agent: Group.authorized_agent)
+    grant_read_access(Group.authorized_agent)
   end
 
   def revoke_authorized_access
-    self.access_controls = access_controls.reject(&:authorized?)
+    revoke_read_access(Group.authorized_agent)
   end
 
   def authorized_access?
-    access_controls.any?(&:authorized?)
+    discover_access?(Group.authorized_agent) && read_access?(Group.authorized_agent)
   end
 
   def visibility

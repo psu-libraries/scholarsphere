@@ -24,7 +24,7 @@
 #
 
 class PermissionsBuilder < Module
-  def initialize(level:, agents:)
+  def initialize(level:, agents:, inherit: [], white_list: nil)
     define_method "#{level}_agents" do
       access_controls.map do |control|
         control.agent if control.access_level == level
@@ -42,14 +42,18 @@ class PermissionsBuilder < Module
 
     define_method "grant_#{level}_access" do |*args|
       args.map do |agent|
-        access_controls.build(access_level: level, agent: agent) unless send("#{level}_access?", agent)
+        Array.wrap(inherit).push(level).map do |access_level|
+          access_controls.build(access_level: access_level, agent: agent) unless send("#{level}_access?", agent)
+        end
       end
     end
 
     define_method "revoke_#{level}_access" do |*args|
       args.map do |agent|
-        self.access_controls = access_controls.reject do |control|
-          control.access_level == level && control.agent == agent
+        Array.wrap(inherit).push(level).map do |access_level|
+          self.access_controls = access_controls.reject do |control|
+            control.access_level == access_level && control.agent == agent
+          end
         end
       end
     end
@@ -62,8 +66,8 @@ class PermissionsBuilder < Module
 
     agents.each do |agent|
       define_method "#{level}_#{agent.to_s.pluralize.downcase}=" do |list|
-        # Remove access to agents not in the list
-        revoke = send("#{level}_#{agent.to_s.pluralize.downcase}") - list
+        # Remove access to agents not in the list or in the white list function
+        revoke = send("#{level}_#{agent.to_s.pluralize.downcase}") - list - Array.wrap(white_list.try(:call))
         send("revoke_#{level}_access", *revoke)
 
         # Grant access to agents in the list
