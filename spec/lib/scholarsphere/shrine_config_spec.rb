@@ -8,9 +8,11 @@ RSpec.describe Scholarsphere::ShrineConfig do
   subject { described_class }
 
   describe '::storages' do
-    its(:storages) { is_expected.to have_key(:store) }
-    its(:storages) { is_expected.to have_key(:cache) }
-    its(:storages) { is_expected.to have_key(:derivatives) }
+    its(:storages) do
+      is_expected.to have_key(:store)
+      is_expected.to have_key(:cache)
+      is_expected.to have_key(:derivatives)
+    end
   end
 
   describe '::s3_options' do

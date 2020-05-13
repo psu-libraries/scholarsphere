@@ -95,8 +95,6 @@ RSpec.describe WorkVersion, type: :model do
     end
 
     context 'with the version number' do
-      before { work_version.version_number = 1 }
-
       it { is_expected.to validate_uniqueness_of(:version_number).scoped_to(:work_id) }
       it { is_expected.to validate_presence_of(:version_number) }
     end

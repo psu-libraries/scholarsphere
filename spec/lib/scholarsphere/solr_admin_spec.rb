@@ -66,7 +66,7 @@ RSpec.describe Scholarsphere::SolrAdmin do
       it { is_expected.to be_configset_exists }
     end
 
-    context 'when the config set is present' do
+    context 'when the config set is NOT present' do
       let(:body) { '{ "configSets": ["_default"] }' }
 
       it { is_expected.not_to be_configset_exists }
