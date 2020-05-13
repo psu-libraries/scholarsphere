@@ -11,6 +11,6 @@ class CollectionPolicy < ApplicationPolicy
   end
 
   def show?
-    true
+    record.read_access? user
   end
 end
