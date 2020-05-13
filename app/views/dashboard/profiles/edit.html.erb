@@ -1,6 +1,6 @@
 <h1><%= t 'dashboard.profiles.edit.heading' %></h1>
 
-<%= form_with(model: @creator, url: dashboard_profile_path, local: true) do |f| %>
+<%= form_with(model: @actor, url: dashboard_profile_path, local: true) do |f| %>
   <% if f.object.errors.any? %>
     <div id="error_explanation">
       <h2><%= t('dashboard.profiles.edit.error_message', error: pluralize(f.object.errors.count, 'error')) %></h2>
