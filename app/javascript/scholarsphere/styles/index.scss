@@ -1,0 +1,13 @@
+// Import Uppy styles for the uploader
+@import '@uppy/core/dist/style';
+@import '@uppy/dashboard/dist/style';
+
+// Local stylings
+@import 'forms';
+@import 'progress_indicator';
+@import 'version_status_badge';
+@import 'visibility_badge';
+@import 'work_history';
+@import 'work_versions';
+@import 'works';
+@import 'diffy';

@@ -6,7 +6,8 @@ scss_files: "**/*.scss"
 # Files to exclude
 exclude: [
   'vendor/*',
-  'node_modules/*'
+  'node_modules/*',
+  'app/javascript/blacklight/styles/*'
 ]
 
 # List of gem names to load custom linters from (make sure they are already
@@ -20,6 +21,6 @@ linters:
   SelectorFormat:
     convention: hyphenated_BEM
   NestingDepth:
-    exclude: app/assets/stylesheets/progress_indicator.scss
+    exclude: app/javascript/scholarsphere/styles/_progress_indicator.scss
   ImportantRule:
-    exclude: app/assets/stylesheets/progress_indicator.scss
+    exclude: app/javascript/scholarsphere/styles/_progress_indicator.scss

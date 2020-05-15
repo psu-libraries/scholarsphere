@@ -1,0 +1,22 @@
+// Import Bootstrap styles
+@import '~bootstrap/scss/bootstrap';
+
+// Import Blacklight styles
+@import '~blacklight-frontend/app/assets/stylesheets/blacklight/mixins';
+@import '~blacklight-frontend/app/assets/stylesheets/blacklight/blacklight_defaults';
+@import '~blacklight-frontend/app/assets/stylesheets/blacklight/bootstrap_overrides'; // Blacklight bootstrap overrides
+@import '~blacklight-frontend/app/assets/stylesheets/blacklight/layout';
+@import '~blacklight-frontend/app/assets/stylesheets/blacklight/search_form';
+@import '~blacklight-frontend/app/assets/stylesheets/blacklight/search_results';
+@import '~blacklight-frontend/app/assets/stylesheets/blacklight/group';
+@import '~blacklight-frontend/app/assets/stylesheets/blacklight/balanced_list';
+@import '~blacklight-frontend/app/assets/stylesheets/blacklight/pagination';
+@import '~blacklight-frontend/app/assets/stylesheets/blacklight/search_history';
+@import '~blacklight-frontend/app/assets/stylesheets/blacklight/modal';
+@import '~blacklight-frontend/app/assets/stylesheets/blacklight/icons';
+@import '~blacklight-frontend/app/assets/stylesheets/blacklight/facets';
+@import '~blacklight-frontend/app/assets/stylesheets/blacklight/constraints';
+
+
+// Overrides to Blacklight
+@import 'header';

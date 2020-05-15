@@ -8,7 +8,6 @@ ruby '2.6.3'
 gem 'aasm'
 gem 'blacklight', '~> 7.7'
 gem 'bootsnap', '>= 1.4.2', require: false
-gem 'bootstrap', '~> 4.0'
 gem 'cocoon'
 gem 'devise', '~> 4.7'
 gem 'diffy'

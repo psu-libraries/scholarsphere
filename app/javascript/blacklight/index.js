@@ -1,11 +1,12 @@
-// Load Blacklight javascript assets
+// Load Blacklight's stylesheet assets
+import './styles'
 
-// Dependencies: require these first before the Blacklights
+// Load Blacklight's dependencies. These must be required first.
 require('popper.js/dist/umd/popper')
 require('bootstrap/dist/js/bootstrap')
 require('twitter-typeahead-rails/vendor/assets/javascripts/twitter/typeahead/typeahead.bundle')
 
-// Blacklight javascripts
+// Load Blacklight's javascript assets
 // Require each one individually because each script may have its own
 // import, as opposed to:
 //   require('blacklight-frontend/app/assets/javascripts/blacklight/blacklight')
