@@ -13,7 +13,6 @@ en:
         keyword: Keywords
         description: Description
         creator_aliases: Creator
-        resource_type: Resource Type
         contributor: Contributor
         publisher: Publisher
         published_date: Published Date

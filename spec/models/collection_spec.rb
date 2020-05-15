@@ -16,7 +16,6 @@ RSpec.describe Collection, type: :model do
     it { is_expected.to have_jsonb_accessor(:subtitle).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:keyword).of_type(:string).is_array.with_default([]) }
     it { is_expected.to have_jsonb_accessor(:description).of_type(:string).is_array.with_default([]) }
-    it { is_expected.to have_jsonb_accessor(:resource_type).of_type(:string).is_array.with_default([]) }
     it { is_expected.to have_jsonb_accessor(:contributor).of_type(:string).is_array.with_default([]) }
     it { is_expected.to have_jsonb_accessor(:publisher).of_type(:string).is_array.with_default([]) }
     it { is_expected.to have_jsonb_accessor(:published_date).of_type(:string).is_array.with_default([]) }
@@ -80,7 +79,6 @@ RSpec.describe Collection, type: :model do
   describe 'multivalued fields' do
     it_behaves_like 'a multivalued json field', :keyword
     it_behaves_like 'a multivalued json field', :description
-    it_behaves_like 'a multivalued json field', :resource_type
     it_behaves_like 'a multivalued json field', :contributor
     it_behaves_like 'a multivalued json field', :publisher
     it_behaves_like 'a multivalued json field', :published_date
@@ -192,7 +190,6 @@ RSpec.describe Collection, type: :model do
           published_date_tesim
           publisher_tesim
           related_url_tesim
-          resource_type_tesim
           source_tesim
           subject_tesim
           subtitle_tesim

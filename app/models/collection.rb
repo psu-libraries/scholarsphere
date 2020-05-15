@@ -8,7 +8,6 @@ class Collection < ApplicationRecord
                  subtitle: :string,
                  keyword: [:string, array: true, default: []],
                  description: [:string, array: true, default: []],
-                 resource_type: [:string, array: true, default: []],
                  contributor: [:string, array: true, default: []],
                  publisher: [:string, array: true, default: []],
                  published_date: [:string, array: true, default: []],
@@ -63,7 +62,6 @@ class Collection < ApplicationRecord
   %i[
     keyword
     description
-    resource_type
     contributor
     publisher
     published_date

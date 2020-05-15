@@ -94,7 +94,6 @@ module Dashboard
             work_ids: [],
             keyword: [],
             description: [],
-            resource_type: [],
             contributor: [],
             publisher: [],
             published_date: [],

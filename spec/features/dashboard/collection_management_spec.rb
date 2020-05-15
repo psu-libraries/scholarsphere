@@ -30,7 +30,6 @@ RSpec.describe 'Creating and managing a collection' do
     fill_in('Subtitle', with: metadata[:subtitle])
     fill_in('Keywords', with: metadata[:keyword].first)
     fill_in('Description', with: metadata[:description].first)
-    fill_in('Resource Type', with: metadata[:resource_type].first)
     fill_in('Contributor', with: metadata[:contributor].first)
     fill_in('Publisher', with: metadata[:publisher].first)
     fill_in('Published Date', with: metadata[:published_date].first)
@@ -75,7 +74,6 @@ RSpec.describe 'Creating and managing a collection' do
       expect(collection.subtitle).to eq metadata[:subtitle]
       expect(collection.keyword).to eq [metadata[:keyword].first]
       expect(collection.description).to eq [metadata[:description].first]
-      expect(collection.resource_type).to eq [metadata[:resource_type].first]
       expect(collection.contributor).to eq [metadata[:contributor].first]
       expect(collection.publisher).to eq [metadata[:publisher].first]
       expect(collection.published_date).to eq [metadata[:published_date].first]

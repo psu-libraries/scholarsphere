@@ -33,7 +33,6 @@ FactoryBot.define do
       subtitle { FactoryBotHelpers.work_title }
       keyword { [Faker::Science.element] }
       description { [Faker::Lorem.paragraph] }
-      resource_type { [Faker::House.furniture] }
       contributor { [Faker::Artist.name] }
       publisher { [Faker::Book.publisher] }
       published_date { [Faker::Date.between(from: 2.years.ago, to: Date.today).iso8601] }
