@@ -34,7 +34,7 @@ class VisibilityBadgeComponent < ActionView::Component::Base
     end
 
     def image_source
-      details[visibility][:image]
+      "media/scholarsphere/images/#{details[visibility][:image]}"
     end
 
     def label
