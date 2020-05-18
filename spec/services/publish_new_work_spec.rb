@@ -161,7 +161,7 @@ RSpec.describe PublishNewWork do
     end
 
     it 'adds access controls for the two additional permissions as well as public visibility' do
-      expect { new_work }.to change(AccessControl, :count).from(0).to(3)
+      expect { new_work }.to change(AccessControl, :count).from(0).to(8)
     end
   end
 
