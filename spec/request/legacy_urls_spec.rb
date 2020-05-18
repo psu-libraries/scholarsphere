@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe LegacyUrlsController, type: :request do
-  let(:resource) { create :work_version }
+  describe 'Scholarsphere v3 legacy URLs to a Work/Version' do
+    let(:resource) { create :work_version }
 
-  describe 'Scholarsphere v3 legacy URLs' do
     before do
       create :legacy_identifier,
              version: 3,
@@ -39,6 +39,22 @@ RSpec.describe LegacyUrlsController, type: :request do
           get '/concern/generic_works/doesnt-exist'
         }.to raise_error(ActiveRecord::RecordNotFound)
       end
+    end
+  end
+
+  describe 'Scholarsphere v3 legacy URLs to a Collection' do
+    let(:resource) { create :collection }
+
+    before do
+      create :legacy_identifier,
+             version: 3,
+             old_id: 'old-v3-id-456',
+             resource: resource
+    end
+
+    it do
+      get '/collections/old-v3-id-456'
+      expect(response).to redirect_to resource_path(resource.uuid)
     end
   end
 end
