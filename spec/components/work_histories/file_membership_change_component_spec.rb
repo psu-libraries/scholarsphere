@@ -34,7 +34,7 @@ RSpec.describe WorkHistories::FileMembershipChangeComponent, type: :component do
       paper_trail_version = file_version_membership.versions.last
       allow(paper_trail_version).to receive(:created_at)
         .and_return(Time.zone.parse('2019-12-20 14:00:00'))
-      result = render_inline(described_class, paper_trail_version: paper_trail_version, user: user)
+      result = render_inline(described_class.new(paper_trail_version: paper_trail_version, user: user))
 
       #
       # It: renders the created state with properly formatted times
@@ -52,7 +52,7 @@ RSpec.describe WorkHistories::FileMembershipChangeComponent, type: :component do
       #
       ##########################################################################
       null_user = User.new
-      result = render_inline(described_class, paper_trail_version: paper_trail_version, user: null_user)
+      result = render_inline(described_class.new(paper_trail_version: paper_trail_version, user: null_user))
 
       #
       # It: renders the null-user properly
@@ -68,7 +68,7 @@ RSpec.describe WorkHistories::FileMembershipChangeComponent, type: :component do
       file_version_membership.update!(title: 'old.png')
       file_version_membership.update!(title: 'new.png')
       paper_trail_version = file_version_membership.versions.last
-      result = render_inline(described_class, paper_trail_version: paper_trail_version, user: user)
+      result = render_inline(described_class.new(paper_trail_version: paper_trail_version, user: user))
 
       #
       # It: shows both old a new filenames
@@ -85,7 +85,7 @@ RSpec.describe WorkHistories::FileMembershipChangeComponent, type: :component do
       file_version_membership.update!(title: 'destroy-test.png')
       file_version_membership.destroy
       paper_trail_version = file_version_membership.versions.last
-      result = render_inline(described_class, paper_trail_version: paper_trail_version, user: user)
+      result = render_inline(described_class.new(paper_trail_version: paper_trail_version, user: user))
 
       #
       # It: shows the delete event

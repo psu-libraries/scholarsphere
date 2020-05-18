@@ -17,7 +17,7 @@
       </span>
     <% end %>
     <%= link_to Array.wrap(document['title_tesim']).first, resource_path(document.id) %>
-    <%= render VisibilityBadgeComponent, work: document %>
+    <%= render VisibilityBadgeComponent.new(work: document) %>
   </h3>
 
   <%= document_actions %>

@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe WorkVersionMetadataComponent, type: :component do
-  let(:result) { render_inline(described_class, work_version: work_version) }
+  let(:result) { render_inline(described_class.new(work_version: work_version)) }
 
   describe 'rendering' do
     let(:work_version) { WorkVersion.new(
@@ -83,7 +83,7 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
     end
 
     context 'when mini: true' do
-      let(:result) { render_inline(described_class, work_version: work_version, mini: true) }
+      let(:result) { render_inline(described_class.new(work_version: work_version, mini: true)) }
 
       it 'renders just the mini fields' do
         # Titles

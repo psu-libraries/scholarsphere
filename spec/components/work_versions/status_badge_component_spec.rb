@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe WorkVersions::StatusBadgeComponent, type: :component do
-  subject { render_inline(described_class, work_version: work_version).to_html.strip }
+  subject { render_inline(described_class.new(work_version: work_version)).to_html.strip }
 
   context 'with a draft' do
     let(:work_version) { build_stubbed :work_version, :draft }

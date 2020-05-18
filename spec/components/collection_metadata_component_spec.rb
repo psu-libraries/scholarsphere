@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe CollectionMetadataComponent, type: :component do
-  let(:result) { render_inline(described_class, collection: collection) }
+  let(:result) { render_inline(described_class.new(collection: collection)) }
 
   describe 'rendering' do
     let(:collection) { Collection.new(

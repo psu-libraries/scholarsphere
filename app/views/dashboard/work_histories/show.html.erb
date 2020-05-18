@@ -9,4 +9,4 @@
 
 <h1><%= t('dashboard.work_history.heading', work: @latest_work_version.title) %></h1>
 
-<%= render WorkHistories::WorkHistoryComponent, work: @work %>
+<%= render WorkHistories::WorkHistoryComponent.new(work: @work) %>

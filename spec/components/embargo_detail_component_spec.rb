@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe EmbargoDetailComponent, type: :component do
-  let(:content) { render_inline(described_class, work_version: work_version).to_s }
+  let(:content) { render_inline(described_class.new(work_version: work_version)).to_s }
   let(:embargo_date) { DateTime.now + 6.days }
   let(:work) { build(:work, embargoed_until: embargo_date) }
   let(:user) { build(:user) }

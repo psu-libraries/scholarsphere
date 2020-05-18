@@ -18,7 +18,7 @@ RSpec.describe WorkHistories::WorkHistoryComponent, type: :component, versioning
 
   describe 'rendering' do
     it 'renders the work history' do
-      result = render_inline(described_class, work: work)
+      result = render_inline(described_class.new(work: work))
 
       expect(result.css('h3').text)
         .to include("Version #{draft.version_number}")
@@ -45,7 +45,7 @@ RSpec.describe WorkHistories::WorkHistoryComponent, type: :component, versioning
         # that doesn't exist :)
         v1.versions.last.update(whodunnit: '12345')
 
-        result = render_inline(described_class, work: work)
+        result = render_inline(described_class.new(work: work))
         expect(result.css("#work_version_changes_#{v1.id}").text).to include '[unknown user]'
       end
     end
