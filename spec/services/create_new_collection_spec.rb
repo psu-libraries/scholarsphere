@@ -154,7 +154,7 @@ RSpec.describe CreateNewCollection do
     end
 
     it 'adds two access controls for the additional permissions, and two more for work and collection visibility' do
-      expect { new_collection }.to change(AccessControl, :count).from(0).to(4)
+      expect { new_collection }.to change(AccessControl, :count).from(0).to(10)
     end
   end
 
