@@ -74,3 +74,7 @@ group :test do
   gem 'webdrivers'
   gem 'webmock'
 end
+
+group :production do
+  gem 'ddtrace', '~> 0.34'
+end
