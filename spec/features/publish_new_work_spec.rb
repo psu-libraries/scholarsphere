@@ -22,11 +22,11 @@ RSpec.describe 'Publishing a new work' do
     end
 
     # Wait for Uppy to load
-    while page.has_no_selector?('.uppy-DashboardAddFiles')
+    while page.has_no_selector?('.uppy-Dashboard-AddFiles')
       sleep 0.1
     end
 
-    within('.uppy-DashboardAddFiles') do
+    within('.uppy-Dashboard-AddFiles') do
       expect(page).to have_content('Drop files here, paste or browse')
     end
 
