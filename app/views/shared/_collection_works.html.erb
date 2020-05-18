@@ -4,10 +4,10 @@
     <header class="documentHeader row">
       <h3 class="index_title document-title-heading col-md-12 ">
         <%= link_to work_version.title, resource_path(work_version.uuid) %>
-        <%= render VisibilityBadgeComponent, work: work %>
+        <%= render VisibilityBadgeComponent.new(work: work) %>
       </h3>
     </header>
 
-    <%= render WorkVersionMetadataComponent, work_version: work_version, mini: true %>
+    <%= render WorkVersionMetadataComponent.new(work_version: work_version, mini: true) %>
   </article>
 <% end %>

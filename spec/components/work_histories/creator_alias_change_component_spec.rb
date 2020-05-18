@@ -34,7 +34,7 @@ RSpec.describe WorkHistories::CreatorAliasChangeComponent, type: :component do
       paper_trail_version = creator_alias.versions.last
       allow(paper_trail_version).to receive(:created_at)
         .and_return(Time.zone.parse('2019-12-20 14:00:00'))
-      result = render_inline(described_class, paper_trail_version: paper_trail_version, user: user)
+      result = render_inline(described_class.new(paper_trail_version: paper_trail_version, user: user))
 
       #
       # It: renders the created state with properly formatted times
@@ -52,7 +52,7 @@ RSpec.describe WorkHistories::CreatorAliasChangeComponent, type: :component do
       #
       ##########################################################################
       null_user = User.new
-      result = render_inline(described_class, paper_trail_version: paper_trail_version, user: null_user)
+      result = render_inline(described_class.new(paper_trail_version: paper_trail_version, user: null_user))
 
       #
       # It: renders the null-user properly
@@ -68,7 +68,7 @@ RSpec.describe WorkHistories::CreatorAliasChangeComponent, type: :component do
       creator_alias.update!(alias: 'Old Alias')
       creator_alias.update!(alias: 'New Alias')
       paper_trail_version = creator_alias.versions.last
-      result = render_inline(described_class, paper_trail_version: paper_trail_version, user: user)
+      result = render_inline(described_class.new(paper_trail_version: paper_trail_version, user: user))
 
       #
       # It: shows both old a new filenames
@@ -85,7 +85,7 @@ RSpec.describe WorkHistories::CreatorAliasChangeComponent, type: :component do
       creator_alias.update!(alias: 'Destroy Test')
       creator_alias.destroy
       paper_trail_version = creator_alias.versions.last
-      result = render_inline(described_class, paper_trail_version: paper_trail_version, user: user)
+      result = render_inline(described_class.new(paper_trail_version: paper_trail_version, user: user))
 
       #
       # It: shows the delete event
