@@ -80,5 +80,9 @@ Rails.application.routes.draw do
   end
 
   # Legacy URL support
+  # Note that collections and works go to the same place. This works because the
+  # legacy IDs are unique noids. It could lead to an extraordinarily unlikely
+  # false positive, but it would never lead to a false negative.
   get '/concern/generic_works/:id', to: 'legacy_urls#v3'
+  get '/collections/:id', to: 'legacy_urls#v3'
 end
