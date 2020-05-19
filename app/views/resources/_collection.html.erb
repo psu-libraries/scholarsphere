@@ -1,4 +1,4 @@
 <h1><%= collection.title %></h1>
 
-<%= render CollectionMetadataComponent, collection: collection %>
+<%= render CollectionMetadataComponent.new(collection: collection) %>
 <%= render 'shared/collection_works', collection: collection %>

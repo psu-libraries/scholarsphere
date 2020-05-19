@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe VisibilityBadgeComponent, type: :component do
-  let(:node) { render_inline(described_class, work: work) }
+  let(:node) { render_inline(described_class.new(work: work)) }
   let(:image) { node.css('img').first }
   let(:badge) { node.css('span').first }
 

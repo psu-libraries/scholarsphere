@@ -2,12 +2,12 @@
   <% changes_by_work_version.each do |work_version, changes| %>
     <h3>
       <%= work_version.display_name %>
-      <%= render WorkVersions::StatusBadgeComponent, work_version: work_version %>
+      <%= render WorkVersions::StatusBadgeComponent.new(work_version: work_version) %>
     </h3>
 
     <div id="work_version_changes_<%= work_version.id %>" class="work-history__changes">
       <% changes.each do |change_component_attributes| %>
-        <%= render change_component_attributes %>
+        <%= render change_component_attributes[:component].new(change_component_attributes[:locals]) %>
       <% end %>
     </div>
   <% end %>

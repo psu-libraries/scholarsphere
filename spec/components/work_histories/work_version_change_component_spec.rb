@@ -34,7 +34,7 @@ RSpec.describe WorkHistories::WorkVersionChangeComponent, type: :component do
       paper_trail_version = work_version.versions.last
       allow(paper_trail_version).to receive(:created_at)
         .and_return(Time.zone.parse('2019-12-20 14:00:00'))
-      result = render_inline(described_class, paper_trail_version: paper_trail_version, user: user)
+      result = render_inline(described_class.new(paper_trail_version: paper_trail_version, user: user))
 
       #
       # It: renders the created state with properly formatted timestamps
@@ -55,7 +55,7 @@ RSpec.describe WorkHistories::WorkVersionChangeComponent, type: :component do
       work_version.update!(title: 'old')
       work_version.update!(title: 'new')
       paper_trail_version = work_version.versions.last
-      result = render_inline(described_class, paper_trail_version: paper_trail_version, user: user)
+      result = render_inline(described_class.new(paper_trail_version: paper_trail_version, user: user))
 
       #
       # it: renders the updated state with a diff
@@ -77,7 +77,7 @@ RSpec.describe WorkHistories::WorkVersionChangeComponent, type: :component do
         description: 'change-many'
       )
       paper_trail_version = work_version.versions.last
-      result = render_inline(described_class, paper_trail_version: paper_trail_version, user: user)
+      result = render_inline(described_class.new(paper_trail_version: paper_trail_version, user: user))
 
       #
       # it: renders a truncated list of changed attributes
@@ -93,7 +93,7 @@ RSpec.describe WorkHistories::WorkVersionChangeComponent, type: :component do
       #
       ##########################################################################
       null_user = User.new
-      result = render_inline(described_class, paper_trail_version: paper_trail_version, user: null_user)
+      result = render_inline(described_class.new(paper_trail_version: paper_trail_version, user: null_user))
 
       #
       # It: renders the null-user properly
@@ -110,7 +110,7 @@ RSpec.describe WorkHistories::WorkVersionChangeComponent, type: :component do
       work_version.publish
       work_version.save!
       paper_trail_version = work_version.versions.last
-      result = render_inline(described_class, paper_trail_version: paper_trail_version, user: user)
+      result = render_inline(described_class.new(paper_trail_version: paper_trail_version, user: user))
 
       #
       # it: renders the published state
