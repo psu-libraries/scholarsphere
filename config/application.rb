@@ -15,7 +15,6 @@ require 'action_text/engine'
 require 'action_view/railtie'
 require 'action_cable/engine'
 require 'sprockets/railtie'
-# require "rails/test_unit/railtie"
 require 'action_view/component/railtie'
 
 # Require the gems listed in Gemfile, including any gems
@@ -38,16 +37,6 @@ module Scholarsphere
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
-
-    # Logging.
-    config.lograge.enabled = true if ENV['LOGRAGE_ENABLED'].present?
-
-    if ENV['RAILS_LOG_JSON'].present?
-      config.lograge.formatter = Lograge::Formatters::Json.new
-      config.log_formatter = JSONLogFormatter.new
-    else
-      config.log_formatter = ::Logger::Formatter.new
-    end
 
     # Active Job Configurations
     redis_config = Scholarsphere::RedisConfig.new
