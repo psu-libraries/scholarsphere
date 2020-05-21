@@ -11,7 +11,7 @@ RSpec.describe Api::V1::RestController, type: :controller do
   end
 
   it { is_expected.not_to be_a(ApplicationController) }
-  it { is_expected.to be_a(ActionController::Base) }
+  it { is_expected.to be_a(ActionController::API) }
 
   context 'with an unauthenticated request' do
     subject { response }
@@ -45,5 +45,25 @@ RSpec.describe Api::V1::RestController, type: :controller do
 
     its(:status) { is_expected.to eq 200 }
     its(:body) { is_expected.to eq 'success' }
+  end
+
+  context 'when there is an unexpected error' do
+    let!(:api_key) { create :api_token }
+
+    before do
+      allow(controller).to receive(:index).and_raise(NoMethodError, 'well, this is unexpected!')
+      request.headers[:'X-API-Key'] = api_key.token
+      get :index
+    end
+
+    it 'reports the error' do
+      expect(response.status).to eq(500)
+      expect(response.body).to eq(
+        '{' \
+        "\"message\":\"We're sorry, but something went wrong\"," \
+        '"errors":["NoMethodError","well, this is unexpected!"]' \
+        '}'
+      )
+    end
   end
 end

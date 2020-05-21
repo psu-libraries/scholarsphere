@@ -2,9 +2,19 @@
 
 module Api
   module V1
-    class RestController < ActionController::Base
-      skip_forgery_protection
+    class RestController < ActionController::API
       before_action :authenticate_request!
+
+      rescue_from StandardError do |exception|
+        logger.error("\n\n\n#{exception.class} (#{exception.message}):\n\n")
+        logger.error(exception.backtrace.join("\n"))
+        if exception.is_a?(ActionController::ParameterMissing)
+          render json: { message: 'Bad request', errors: [exception.message] }, status: :bad_request
+        else
+          render json: { message: "We're sorry, but something went wrong", errors: [exception.class.to_s, exception] },
+                 status: :internal_server_error
+        end
+      end
 
       private
 
