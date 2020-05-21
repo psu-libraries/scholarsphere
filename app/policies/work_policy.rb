@@ -11,6 +11,6 @@ class WorkPolicy < ApplicationPolicy
   end
 
   def show?
-    record.read_access? user
+    record.discover_access? user
   end
 end
