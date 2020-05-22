@@ -8,10 +8,10 @@ RSpec.describe WorkPolicy, type: :policy do
 
   describe '#show?' do
     it 'delegates to Work#read_access?' do
-      allow(work).to receive(:read_access?)
-        .with(user).and_return(:whatever_read_access_returns)
+      allow(work).to receive(:discover_access?)
+        .with(user).and_return(:whatever_discover_access_returns)
 
-      expect(described_class.new(user, work).show?).to eq :whatever_read_access_returns
+      expect(described_class.new(user, work).show?).to eq :whatever_discover_access_returns
     end
   end
 end

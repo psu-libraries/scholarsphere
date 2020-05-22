@@ -104,7 +104,8 @@ RSpec.shared_examples 'a resource with permissions' do
         resource.grant_authorized_access
         expect(resource.access_controls).to contain_exactly(
           an_access_control_for(agent: Group.authorized_agent, access_level: AccessControl::Level::READ),
-          an_access_control_for(agent: Group.authorized_agent, access_level: AccessControl::Level::DISCOVER)
+          an_access_control_for(agent: Group.authorized_agent, access_level: AccessControl::Level::DISCOVER),
+          an_access_control_for(agent: Group.public_agent, access_level: AccessControl::Level::DISCOVER)
         )
       end
     end
@@ -115,12 +116,14 @@ RSpec.shared_examples 'a resource with permissions' do
       it 'does not add any duplicate access controls' do
         expect(resource.access_controls).to contain_exactly(
           an_access_control_for(agent: Group.authorized_agent, access_level: AccessControl::Level::READ),
-          an_access_control_for(agent: Group.authorized_agent, access_level: AccessControl::Level::DISCOVER)
+          an_access_control_for(agent: Group.authorized_agent, access_level: AccessControl::Level::DISCOVER),
+          an_access_control_for(agent: Group.public_agent, access_level: AccessControl::Level::DISCOVER)
         )
         resource.grant_authorized_access
         expect(resource.access_controls).to contain_exactly(
           an_access_control_for(agent: Group.authorized_agent, access_level: AccessControl::Level::READ),
-          an_access_control_for(agent: Group.authorized_agent, access_level: AccessControl::Level::DISCOVER)
+          an_access_control_for(agent: Group.authorized_agent, access_level: AccessControl::Level::DISCOVER),
+          an_access_control_for(agent: Group.public_agent, access_level: AccessControl::Level::DISCOVER)
         )
       end
     end
@@ -132,7 +135,8 @@ RSpec.shared_examples 'a resource with permissions' do
     it 'removes authorized access' do
       expect(resource.access_controls).to contain_exactly(
         an_access_control_for(agent: Group.authorized_agent, access_level: AccessControl::Level::READ),
-        an_access_control_for(agent: Group.authorized_agent, access_level: AccessControl::Level::DISCOVER)
+        an_access_control_for(agent: Group.authorized_agent, access_level: AccessControl::Level::DISCOVER),
+        an_access_control_for(agent: Group.public_agent, access_level: AccessControl::Level::DISCOVER)
       )
       resource.revoke_authorized_access
       expect(resource.access_controls).to be_empty
@@ -504,7 +508,10 @@ RSpec.shared_examples 'a resource with permissions' do
       subject(:resource) { authorized_resource }
 
       its(:read_groups) { is_expected.to contain_exactly(group1, group2, Group.authorized_agent) }
-      its(:discover_groups) { is_expected.to contain_exactly(group1, group2, Group.authorized_agent) }
+
+      its(:discover_groups) do
+        is_expected.to contain_exactly(group1, group2, Group.authorized_agent, Group.public_agent)
+      end
     end
 
     context 'with a private resource' do

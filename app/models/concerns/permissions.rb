@@ -78,14 +78,18 @@ module Permissions
 
     revoke_open_access
     grant_read_access(Group.authorized_agent)
+    grant_discover_access(Group.public_agent)
   end
 
   def revoke_authorized_access
     revoke_read_access(Group.authorized_agent)
+    revoke_discover_access(Group.public_agent)
   end
 
   def authorized_access?
-    discover_access?(Group.authorized_agent) && read_access?(Group.authorized_agent)
+    discover_access?(Group.authorized_agent) &&
+      read_access?(Group.authorized_agent) &&
+      discover_access?(Group.public_agent)
   end
 
   def visibility

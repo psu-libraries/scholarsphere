@@ -12,7 +12,7 @@ RSpec.describe 'Searching discoverable resources' do
   let!(:authorized_collection) { create(:collection, visibility: Permissions::Visibility::AUTHORIZED) }
 
   context 'with a public user' do
-    it 'searches only public works' do
+    it 'searches public and Penn State works' do
       visit search_catalog_path
       click_button('Search')
 
@@ -20,8 +20,8 @@ RSpec.describe 'Searching discoverable resources' do
       expect(page).to have_content(previous_embargoed_work.latest_published_version.title)
       expect(page).to have_content(public_collection.title)
       expect(page).not_to have_content(current_embargoed_work.latest_published_version.title)
-      expect(page).not_to have_content(authorized_work.latest_published_version.title)
-      expect(page).not_to have_content(authorized_collection.title)
+      expect(page).to have_content(authorized_work.latest_published_version.title)
+      expect(page).to have_content(authorized_collection.title)
     end
   end
 
@@ -52,7 +52,9 @@ RSpec.describe 'Searching discoverable resources' do
       ).to contain_exactly(
         public_work.uuid,
         previous_embargoed_work.uuid,
-        public_collection.uuid
+        public_collection.uuid,
+        authorized_work.uuid,
+        authorized_collection.uuid
       )
     end
   end
