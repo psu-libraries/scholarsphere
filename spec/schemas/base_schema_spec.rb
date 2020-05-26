@@ -12,4 +12,8 @@ RSpec.describe BaseSchema do
       expect { schema.document }.to raise_error(ArgumentError, 'Inheriting class must implement #document')
     end
   end
+
+  describe '#reject' do
+    its(:reject) { is_expected.to be_empty }
+  end
 end

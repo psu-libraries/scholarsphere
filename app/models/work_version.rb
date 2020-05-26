@@ -157,6 +157,7 @@ class WorkVersion < ApplicationRecord
     def document_builder
       SolrDocumentBuilder.new(
         WorkVersionSchema,
+        WorkTypeSchema,
         CreatorSchema
       )
     end

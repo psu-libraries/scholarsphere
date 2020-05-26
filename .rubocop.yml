@@ -47,3 +47,5 @@ RSpec/ExpectActual:
   Exclude:
     - 'spec/integration/qa/routing_spec.rb'
 
+RSpec/AnyInstance:
+  Enabled: false

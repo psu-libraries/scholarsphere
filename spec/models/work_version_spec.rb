@@ -184,7 +184,7 @@ RSpec.describe WorkVersion, type: :model do
       is_expected.to include(
         title_tesim: [work_version.title],
         latest_version_bsi: false,
-        work_type_tesim: 'dataset'
+        work_type_ssim: Work::Types.display(work_version.work_type)
       )
     end
   end
