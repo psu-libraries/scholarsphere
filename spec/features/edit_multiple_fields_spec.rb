@@ -30,7 +30,6 @@ RSpec.describe 'Editing multiple fields' do
       visit(edit_dashboard_work_version_path(work.latest_version))
       check_field(:keyword)
       check_field(:description)
-      check_field(:resource_type)
       check_field(:contributor)
       check_field(:publisher)
       check_field(:published_date)
@@ -65,7 +64,6 @@ RSpec.describe 'Editing multiple fields' do
       visit(edit_dashboard_work_version_path(work.latest_version))
       fill_in_multiple(:keyword)
       fill_in_multiple(:description)
-      fill_in_multiple(:resource_type)
       fill_in_multiple(:contributor)
       fill_in_multiple(:publisher)
       fill_in_multiple(:published_date)
@@ -81,7 +79,6 @@ RSpec.describe 'Editing multiple fields' do
 
       verify_multiple(:keyword)
       verify_multiple(:description)
-      verify_multiple(:resource_type)
       verify_multiple(:contributor)
       verify_multiple(:publisher)
       verify_multiple(:published_date)

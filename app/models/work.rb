@@ -34,10 +34,56 @@ class Work < ApplicationRecord
   accepts_nested_attributes_for :versions
 
   module Types
+    ARTICLE = 'article'
+    AUDIO = 'audio'
+    BOOK = 'book'
+    CAPSTONE_PROJECT = 'capstone_project'
+    CONFERENCE_PROCEEDING = 'conference_proceeding'
     DATASET = 'dataset'
+    DISSERTATION = 'dissertation'
+    IMAGE = 'image'
+    JOURNAL = 'journal'
+    MAP_OR_CARTOGRAPHIC_MATERIAL = 'map_or_cartographic_material'
+    MASTERS_CULMINATING_EXPERIENCE = 'masters_culminating_experience'
+    MASTERS_THESIS = 'masters_thesis'
+    OTHER = 'other'
+    PART_OF_BOOK = 'part_of_book'
+    POSTER = 'poster'
+    PRESENTATION = 'presentation'
+    PROJECT = 'project'
+    REPORT = 'report'
+    RESEARCH_PAPER = 'research_paper'
+    SOFTWARE_OR_PROGRAM_CODE = 'software_or_program_code'
+    VIDEO = 'video'
 
     def self.all
-      [DATASET]
+      [
+        ARTICLE,
+        AUDIO,
+        BOOK,
+        CAPSTONE_PROJECT,
+        CONFERENCE_PROCEEDING,
+        DATASET,
+        DISSERTATION,
+        IMAGE,
+        JOURNAL,
+        MAP_OR_CARTOGRAPHIC_MATERIAL,
+        MASTERS_CULMINATING_EXPERIENCE,
+        MASTERS_THESIS,
+        OTHER,
+        PART_OF_BOOK,
+        POSTER,
+        PRESENTATION,
+        PROJECT,
+        REPORT,
+        RESEARCH_PAPER,
+        SOFTWARE_OR_PROGRAM_CODE,
+        VIDEO
+      ]
+    end
+
+    def self.default
+      DATASET
     end
 
     def self.display(type)
@@ -98,7 +144,8 @@ class Work < ApplicationRecord
       SolrDocumentBuilder.new(
         DefaultSchema,
         LatestPublishedVersionSchema,
-        PermissionsSchema
+        PermissionsSchema,
+        WorkTypeSchema
       )
     end
 end

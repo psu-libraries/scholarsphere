@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :work do
     association :depositor, :with_user, factory: :actor
-    work_type { Work::Types.all.first }
+    work_type { Work::Types.default }
     visibility { Permissions::Visibility.default }
 
     # Postgres does this for us, but for testing, we can do it here to save having to call create/reload.

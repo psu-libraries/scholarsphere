@@ -146,7 +146,7 @@ class WorkVersion < ApplicationRecord
     WorkIndexer.call(work, commit: true)
   end
 
-  delegate :depositor, :proxy_depositor, :visibility, :embargoed?, to: :work
+  delegate :depositor, :proxy_depositor, :visibility, :embargoed?, :work_type, to: :work
 
   private
 
@@ -157,6 +157,7 @@ class WorkVersion < ApplicationRecord
     def document_builder
       SolrDocumentBuilder.new(
         WorkVersionSchema,
+        WorkTypeSchema,
         CreatorSchema
       )
     end

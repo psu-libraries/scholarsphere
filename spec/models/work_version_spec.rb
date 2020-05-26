@@ -124,6 +124,7 @@ RSpec.describe WorkVersion, type: :model do
   it { is_expected.to delegate_method(:depositor).to(:work) }
   it { is_expected.to delegate_method(:proxy_depositor).to(:work) }
   it { is_expected.to delegate_method(:embargoed?).to(:work) }
+  it { is_expected.to delegate_method(:work_type).to(:work) }
 
   describe '#uuid' do
     subject(:work_version) { create(:work_version) }
@@ -183,7 +184,7 @@ RSpec.describe WorkVersion, type: :model do
       is_expected.to include(
         title_tesim: [work_version.title],
         latest_version_bsi: false,
-        work_type_tesim: 'dataset'
+        work_type_ssim: Work::Types.display(work_version.work_type)
       )
     end
   end

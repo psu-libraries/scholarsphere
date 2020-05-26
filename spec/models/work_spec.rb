@@ -46,19 +46,93 @@ RSpec.describe Work, type: :model do
     describe '.all' do
       subject(:all) { types.all }
 
-      it { is_expected.to match_array [types::DATASET] }
+      specify do
+        expect(all).to contain_exactly(
+          types::ARTICLE,
+          types::AUDIO,
+          types::BOOK,
+          types::CAPSTONE_PROJECT,
+          types::CONFERENCE_PROCEEDING,
+          types::DATASET,
+          types::DISSERTATION,
+          types::IMAGE,
+          types::JOURNAL,
+          types::MAP_OR_CARTOGRAPHIC_MATERIAL,
+          types::MASTERS_CULMINATING_EXPERIENCE,
+          types::MASTERS_THESIS,
+          types::OTHER,
+          types::PART_OF_BOOK,
+          types::POSTER,
+          types::PRESENTATION,
+          types::PROJECT,
+          types::REPORT,
+          types::RESEARCH_PAPER,
+          types::SOFTWARE_OR_PROGRAM_CODE,
+          types::VIDEO
+        )
+      end
+    end
+
+    describe '.default' do
+      subject { types.default }
+
+      it { is_expected.to eq(types::DATASET) }
     end
 
     describe '.options_for_select_box' do
       subject(:options) { types.options_for_select_box }
 
-      it { is_expected.to eq [['Dataset', types::DATASET]] }
+      specify do
+        expect(options).to contain_exactly(
+          ['Article', types::ARTICLE],
+          ['Audio', types::AUDIO],
+          ['Book', types::BOOK],
+          ['Capstone Project', types::CAPSTONE_PROJECT],
+          ['Conference Proceeding', types::CONFERENCE_PROCEEDING],
+          ['Dataset', types::DATASET],
+          ['Dissertation', types::DISSERTATION],
+          ['Image', types::IMAGE],
+          ['Journal', types::JOURNAL],
+          ['Map Or Cartographic Material', types::MAP_OR_CARTOGRAPHIC_MATERIAL],
+          ['Masters Culminating Experience', types::MASTERS_CULMINATING_EXPERIENCE],
+          ['Masters Thesis', types::MASTERS_THESIS],
+          ['Other', types::OTHER],
+          ['Part Of Book', types::PART_OF_BOOK],
+          ['Poster', types::POSTER],
+          ['Presentation', types::PRESENTATION],
+          ['Project', types::PROJECT],
+          ['Report', types::REPORT],
+          ['Research Paper', types::RESEARCH_PAPER],
+          ['Software Or Program Code', types::SOFTWARE_OR_PROGRAM_CODE],
+          ['Video', types::VIDEO]
+        )
+      end
     end
 
     describe '.display' do
       it 'returns a human-readable version of the type' do
         {
-          types::DATASET => 'Dataset'
+          types::ARTICLE => 'Article',
+          types::AUDIO => 'Audio',
+          types::BOOK => 'Book',
+          types::CAPSTONE_PROJECT => 'Capstone Project',
+          types::CONFERENCE_PROCEEDING => 'Conference Proceeding',
+          types::DATASET => 'Dataset',
+          types::DISSERTATION => 'Dissertation',
+          types::IMAGE => 'Image',
+          types::JOURNAL => 'Journal',
+          types::MAP_OR_CARTOGRAPHIC_MATERIAL => 'Map Or Cartographic Material',
+          types::MASTERS_CULMINATING_EXPERIENCE => 'Masters Culminating Experience',
+          types::MASTERS_THESIS => 'Masters Thesis',
+          types::OTHER => 'Other',
+          types::PART_OF_BOOK => 'Part Of Book',
+          types::POSTER => 'Poster',
+          types::PRESENTATION => 'Presentation',
+          types::PROJECT => 'Project',
+          types::REPORT => 'Report',
+          types::RESEARCH_PAPER => 'Research Paper',
+          types::SOFTWARE_OR_PROGRAM_CODE => 'Software Or Program Code',
+          types::VIDEO => 'Video'
         }.each do |type, expected_output|
           expect(types.display(type)).to eq expected_output
         end
@@ -155,7 +229,7 @@ RSpec.describe Work, type: :model do
           updated_at_dtsi
           uuid_ssi
           visibility_ssi
-          work_type_tesim
+          work_type_ssim
         )
       end
 
@@ -188,7 +262,6 @@ RSpec.describe Work, type: :model do
           published_date_tesim
           publisher_tesim
           related_url_tesim
-          resource_type_tesim
           rights_tesim
           source_tesim
           subject_tesim
@@ -200,7 +273,7 @@ RSpec.describe Work, type: :model do
           version_number_isi
           visibility_ssi
           work_id_isi
-          work_type_tesim
+          work_type_ssim
         )
       end
 

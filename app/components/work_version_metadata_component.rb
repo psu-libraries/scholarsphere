@@ -14,12 +14,12 @@ class WorkVersionMetadataComponent < ActionView::Component::Base
   ATTRIBUTES = [
     :title,
     :subtitle,
+    :work_type,
     :creator_aliases,
     :version_number,
     :description,
     :keyword,
     :rights,
-    :resource_type,
     :contributor,
     :publisher,
     :published_date,

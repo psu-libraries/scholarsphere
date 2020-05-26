@@ -27,5 +27,15 @@ RSpec.describe SolrDocumentBuilder do
         expect { document }.to raise_error(SolrDocumentBuilder::Error)
       end
     end
+
+    context 'when the schema has fields to reject' do
+      let(:resource) { build(:work_version) }
+
+      before { allow_any_instance_of(DefaultSchema).to receive(:reject).and_return([:title_tesim]) }
+
+      it 'removes the rejected fields' do
+        expect(document.keys).not_to include(:title_tesim)
+      end
+    end
   end
 end
