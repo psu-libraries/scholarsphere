@@ -75,13 +75,14 @@ Rails.application.configure do
   # Send deprecation notices to registered listeners.
   config.active_support.deprecation = :notify
 
-  # Use default logging formatter so that PID and timestamp are not suppressed.
-  # log_formatter has been promoted to application.rb
-  # config.log_formatter = ::Logger::Formatter.new
+  # Do not dump schema after migrations.
+  config.active_record.dump_schema_after_migration = false
 
-  # Use a different logger for distributed setups.
-  # require 'syslog/logger'
-  # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
+  # -------------------------------------------------------------------------------------------------
+  #
+  # Configure logging
+  #
+  # -------------------------------------------------------------------------------------------------
 
   if ENV['RAILS_LOG_TO_STDOUT'].present?
     logger           = ActiveSupport::Logger.new(STDOUT)
@@ -89,8 +90,40 @@ Rails.application.configure do
     config.logger    = ActiveSupport::TaggedLogging.new(logger)
   end
 
-  # Do not dump schema after migrations.
-  config.active_record.dump_schema_after_migration = false
+  if ENV['LOGRAGE_ENABLED'].present?
+    require 'lograge/sql/extension'
+    config.lograge.enabled = true
+  end
+
+  if ENV['RAILS_LOG_JSON'].present?
+    config.lograge.formatter = Lograge::Formatters::Json.new
+    config.log_formatter = JSONLogFormatter.new
+  else
+    config.log_formatter = ::Logger::Formatter.new
+  end
+
+  config.lograge.custom_payload do |controller|
+    {
+      request_id: controller.request.env['action_dispatch.request_id']
+    }
+  end
+
+  config.lograge.custom_options = lambda do |event|
+    {
+      remote_addr: event.payload[:headers][:REMOTE_ADDR],
+      x_forwarded_for: event.payload[:headers][:HTTP_X_FORWARDED_FOR]
+    }
+  end
+
+  # Instead of extracting event as Strings, extract as Hash. You can also extract
+  # additional fields to add to the formatter
+  config.lograge_sql.extract_event = Proc.new do |event|
+    { name: event.payload[:name], duration: event.duration.to_f.round(2), sql: event.payload[:sql] }
+  end
+  # Format the array of extracted events
+  config.lograge_sql.formatter = Proc.new do |sql_queries|
+    sql_queries
+  end
 
   # Inserts middleware to perform automatic connection switching.
   # The `database_selector` hash is used to pass options to the DatabaseSelector

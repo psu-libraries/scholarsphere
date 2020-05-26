@@ -19,6 +19,7 @@ Metrics/BlockLength:
     - 'app/controllers/catalog_controller.rb'
     - 'app/views/catalog/index.json.jbuilder'
     - 'config/routes.rb'
+    - 'config/environments/production.rb'
     - 'spec/**/*'
 
 Rails/FilePath:

@@ -16,8 +16,6 @@ gem 'figaro'
 gem 'jbuilder', '~> 2.7'
 gem 'jquery-rails'
 gem 'jsonb_accessor', '~> 1.0.0'
-gem 'lograge', '~> 0.11'
-gem 'lograge-sql', '~> 1.1'
 gem 'okcomputer', '~> 1.18.0'
 gem 'omniauth-oauth2', '~> 1.6'
 gem 'paper_trail'
@@ -77,4 +75,6 @@ end
 
 group :production do
   gem 'ddtrace', '~> 0.34'
+  gem 'lograge', '~> 0.11'
+  gem 'lograge-sql', '~> 1.1'
 end
