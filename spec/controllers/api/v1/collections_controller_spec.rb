@@ -152,23 +152,5 @@ RSpec.describe Api::V1::CollectionsController, type: :controller do
         )
       end
     end
-
-    context 'when there is an unexpected error' do
-      before do
-        allow(controller).to receive(:create).and_raise(NoMethodError, 'well, this is unexpected!')
-        post :create, params: {
-          metadata: { title: FactoryBotHelpers.work_title, creator_aliases_attributes: [creator_alias] },
-          depositor: { given_name: user.given_name, surname: user.surname, email: user.email, psu_id: user.psu_id }
-        }
-      end
-
-      it 'reports the error' do
-        expect(response.status).to eq(500)
-        expect(json_response).to include(
-          'message' => "We're sorry, but something went wrong",
-          'errors' => ['NoMethodError', 'well, this is unexpected!']
-        )
-      end
-    end
   end
 end
