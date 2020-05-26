@@ -1,25 +1,22 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-require 'webmock'
-require 'faraday'
-require_relative '../../../lib/scholarsphere/solr_config'
-require_relative '../../../lib/scholarsphere/solr_admin'
+require 'rails_helper'
 
 RSpec.describe Scholarsphere::SolrAdmin do
-  subject(:admin) { described_class.new }
-
-  before { WebMock.enable! }
-
-  after { WebMock.disable! }
+  subject(:admin) { described_class.new(config) }
 
   let(:config) { Scholarsphere::SolrConfig.new }
-  let(:headers) do
-    {
-      'Accept' => '*/*',
-      'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-      'User-Agent' => 'Faraday v0.17.0'
-    }
+
+  before(:all) do
+    VCR.configure do |c|
+      c.ignore_localhost = false
+    end
+  end
+
+  after(:all) do
+    VCR.configure do |c|
+      c.ignore_localhost = true
+    end
   end
 
   describe '.reset' do
@@ -52,37 +49,20 @@ RSpec.describe Scholarsphere::SolrAdmin do
   end
 
   describe '#configset_exists?' do
-    before do
-      WebMock.stub_request(
-        :get,
-        "#{config.config_url}" \
-          '?action=LIST' \
-      ).with(headers: headers).to_return(status: 200, body: body, headers: {})
-    end
-
     context 'when the config set is present' do
-      let(:body) { '{ "configSets": ["_default", "' + config.configset_name + '"] }' }
-
-      it { is_expected.to be_configset_exists }
+      it do
+        VCR.use_cassette('Scholarsphere_SolrAdmin/config_set_present', erb: { config: config }) do
+          expect(admin).to be_configset_exists
+        end
+      end
     end
 
-    context 'when the config set is NOT present' do
-      let(:body) { '{ "configSets": ["_default"] }' }
-
+    context 'when the config set is NOT present', :vcr do
       it { is_expected.not_to be_configset_exists }
     end
   end
 
-  describe '#delete_configset' do
-    before do
-      WebMock.stub_request(
-        :get,
-        "#{config.config_url}" \
-          '?action=DELETE' \
-          '&name=myconfigset'
-      ).with(headers: headers).to_return(status: 200, body: '', headers: {})
-    end
-
+  describe '#delete_configset', :vcr do
     it 'deletes a config set' do
       expect(admin.delete_configset('myconfigset')).to be_nil
     end
@@ -100,38 +80,21 @@ RSpec.describe Scholarsphere::SolrAdmin do
   end
 
   describe '#collection_exists?' do
-    before do
-      WebMock.stub_request(
-        :get,
-        "#{config.collection_url}" \
-          '?action=LIST' \
-      ).with(headers: headers).to_return(status: 200, body: body, headers: {})
-    end
-
     context 'when the collection is present' do
-      let(:body) { '{ "collections": ["' + config.collection_name + '"] }' }
-
-      it { is_expected.to be_collection_exists }
+      it do
+        VCR.use_cassette('Scholarsphere_SolrAdmin/collection_present', erb: { config: config }) do
+          expect(admin).to be_collection_exists
+        end
+      end
     end
 
-    context 'when the collection is NOT present' do
-      let(:body) { '{ "collections": ["foo_collection"] }' }
-
+    context 'when the collection is NOT present', :vcr do
       it { is_expected.not_to be_collection_exists }
     end
   end
 
-  describe '#delete_collection' do
-    before do
-      WebMock.stub_request(
-        :get,
-        "#{config.collection_url}" \
-          '?action=DELETE' \
-          '&name=mycollection'
-      ).with(headers: headers).to_return(status: 200, body: '', headers: {})
-    end
-
-    it 'deletes a config set' do
+  describe '#delete_collection', :vcr do
+    it 'deletes a collection' do
       expect(admin.delete_collection('mycollection')).to be_nil
     end
   end
@@ -149,50 +112,28 @@ RSpec.describe Scholarsphere::SolrAdmin do
   end
 
   describe '#create_collection' do
-    before do
-      WebMock.stub_request(
-        :get,
-        "#{config.collection_url}" \
-          '?action=CREATE' \
-          "&name=#{config.collection_name}" \
-          "&numShards=#{config.num_shards}" \
-          "&collection.configName=#{config.configset_name}"
-      ).with(headers: headers).to_return(status: 200, body: '', headers: {})
-    end
-
     it 'creates a new collection using defaults from ENV' do
-      expect(admin.create_collection).to be_nil
+      VCR.use_cassette('Scholarsphere_SolrAdmin/create_collection_using_defaults', erb: { config: config }) do
+        expect(admin.create_collection).to be_nil
+      end
     end
   end
 
   describe '#modify_collection' do
-    before do
-      WebMock.stub_request(
-        :get,
-        "#{config.collection_url}" \
-          '?action=MODIFYCOLLECTION' \
-          "&collection=#{config.collection_name}" \
-          "&collection.configName=#{config.configset_name}"
-      ).with(headers: headers).to_return(status: 200, body: '', headers: {})
-    end
-
     it 'modifies an existing collection using defaults from ENV' do
-      expect(admin.modify_collection).to be_nil
+      VCR.use_cassette('Scholarsphere_SolrAdmin/modify_collection_using_defaults', erb: { config: config }) do
+        expect(admin.modify_collection).to be_nil
+      end
     end
   end
 
   describe '#upload_config' do
-    before do
-      WebMock.stub_request(
-        :post,
-        "#{config.config_url}" \
-          '?action=UPLOAD' \
-          "&name=#{config.configset_name}"
-      ).with(headers: headers).to_return(status: 200, body: '', headers: {})
-    end
+    before { allow(admin).to receive(:raw_data).and_return('zipfile-data') }
 
     it 'uploads a configuration using defaults from ENV' do
-      expect(admin.upload_config).to be_nil
+      VCR.use_cassette('Scholarsphere_SolrAdmin/upload_collection_using_defaults', erb: { config: config }) do
+        expect(admin.upload_config).to be_nil
+      end
     end
   end
 end

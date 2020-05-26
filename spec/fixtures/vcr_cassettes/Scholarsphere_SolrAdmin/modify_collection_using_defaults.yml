@@ -1,0 +1,39 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: <%= config.url %>/solr/admin/collections?action=MODIFYCOLLECTION&collection=<%= config.collection_name %>&collection.configName=<%= config.configset_name %>
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.3
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json;charset=utf-8
+      Content-Length:
+      - '169'
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "responseHeader":{
+            "status":0,
+            "QTime":170},
+          "success":{
+            "172.19.0.2:8983_solr":{
+              "responseHeader":{
+                "status":0,
+                "QTime":146}}}}
+    http_version: 
+  recorded_at: Mon, 18 May 2020 18:57:35 GMT
+recorded_with: VCR 5.0.0
