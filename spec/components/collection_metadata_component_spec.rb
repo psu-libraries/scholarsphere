@@ -68,7 +68,7 @@ RSpec.describe CollectionMetadataComponent, type: :component do
       expect(result.css('dd.collection-contributor').text).to include collection[:contributor].first
       expect(result.css('dd.collection-publisher').text).to include collection[:publisher].first
       expect(result.css('dd.collection-published-date').text)
-        .to include Time.zone.parse(collection[:published_date].first).year.to_s
+        .to include Time.zone.parse(collection[:published_date]).year.to_s
       expect(result.css('dd.collection-subject').text).to include collection[:subject].first
       expect(result.css('dd.collection-language').text).to include collection[:language].first
       expect(result.css('dd.collection-identifier').text).to include collection[:identifier].first

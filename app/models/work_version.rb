@@ -14,7 +14,7 @@ class WorkVersion < ApplicationRecord
                  resource_type: [:string, array: true, default: []],
                  contributor: [:string, array: true, default: []],
                  publisher: [:string, array: true, default: []],
-                 published_date: [:string, array: true, default: []],
+                 published_date: :string,
                  subject: [:string, array: true, default: []],
                  language: [:string, array: true, default: []],
                  identifier: [:string, array: true, default: []],
@@ -99,7 +99,6 @@ class WorkVersion < ApplicationRecord
     resource_type
     contributor
     publisher
-    published_date
     subject
     language
     identifier
@@ -112,7 +111,13 @@ class WorkVersion < ApplicationRecord
     end
   end
 
-  %i[subtitle version_name rights].each do |field|
+  # Fields that contain single values automatically remove blank values
+  %i[
+    published_date
+    subtitle
+    version_name
+    rights
+  ].each do |field|
     define_method "#{field}=" do |val|
       super(val.presence)
     end

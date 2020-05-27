@@ -74,7 +74,7 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
       expect(result.css('dd.work-version-contributor').text).to include work_version[:contributor].first
       expect(result.css('dd.work-version-publisher').text).to include work_version[:publisher].first
       expect(result.css('dd.work-version-published-date').text)
-        .to include Time.zone.parse(work_version[:published_date].first).year.to_s
+        .to include Time.zone.parse(work_version[:published_date]).year.to_s
       expect(result.css('dd.work-version-subject').text).to include work_version[:subject].first
       expect(result.css('dd.work-version-language').text).to include work_version[:language].first
       expect(result.css('dd.work-version-identifier').text).to include work_version[:identifier].first

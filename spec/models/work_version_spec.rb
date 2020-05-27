@@ -20,7 +20,7 @@ RSpec.describe WorkVersion, type: :model do
     it { is_expected.to have_jsonb_accessor(:resource_type).of_type(:string).is_array.with_default([]) }
     it { is_expected.to have_jsonb_accessor(:contributor).of_type(:string).is_array.with_default([]) }
     it { is_expected.to have_jsonb_accessor(:publisher).of_type(:string).is_array.with_default([]) }
-    it { is_expected.to have_jsonb_accessor(:published_date).of_type(:string).is_array.with_default([]) }
+    it { is_expected.to have_jsonb_accessor(:published_date).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:subject).of_type(:string).is_array.with_default([]) }
     it { is_expected.to have_jsonb_accessor(:language).of_type(:string).is_array.with_default([]) }
     it { is_expected.to have_jsonb_accessor(:identifier).of_type(:string).is_array.with_default([]) }
@@ -106,7 +106,6 @@ RSpec.describe WorkVersion, type: :model do
     it_behaves_like 'a multivalued json field', :resource_type
     it_behaves_like 'a multivalued json field', :contributor
     it_behaves_like 'a multivalued json field', :publisher
-    it_behaves_like 'a multivalued json field', :published_date
     it_behaves_like 'a multivalued json field', :subject
     it_behaves_like 'a multivalued json field', :language
     it_behaves_like 'a multivalued json field', :identifier
@@ -116,8 +115,9 @@ RSpec.describe WorkVersion, type: :model do
   end
 
   describe 'singlevalued fields' do
-    it_behaves_like 'a singlevalued json field', :subtitle
+    it_behaves_like 'a singlevalued json field', :published_date
     it_behaves_like 'a singlevalued json field', :rights
+    it_behaves_like 'a singlevalued json field', :subtitle
     it_behaves_like 'a singlevalued json field', :version_name
   end
 
