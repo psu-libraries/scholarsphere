@@ -421,8 +421,8 @@ GEM
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
     sexp_processor (4.14.1)
-    shoulda-matchers (3.1.3)
-      activesupport (>= 4.0.0)
+    shoulda-matchers (4.3.0)
+      activesupport (>= 4.2.0)
     shrine (3.2.1)
       content_disposition (~> 1.0)
       down (~> 5.1)
@@ -537,7 +537,7 @@ DEPENDENCIES
   scholarsphere-client!
   seedbank
   selenium-webdriver
-  shoulda-matchers (~> 3.1)
+  shoulda-matchers (~> 4.3)
   shrine (~> 3.0)
   sidekiq (~> 6.0)
   simplecov

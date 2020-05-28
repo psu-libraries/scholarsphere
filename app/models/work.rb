@@ -34,10 +34,34 @@ class Work < ApplicationRecord
   accepts_nested_attributes_for :versions
 
   module Types
-    DATASET = 'dataset'
-
     def self.all
-      [DATASET]
+      %w[
+        article
+        audio
+        book
+        capstone_project
+        conference_proceeding
+        dataset
+        dissertation
+        image
+        journal
+        map_or_cartographic_material
+        masters_culminating_experience
+        masters_thesis
+        other
+        part_of_book
+        poster
+        presentation
+        project
+        report
+        research_paper
+        software_or_program_code
+        video
+      ].freeze
+    end
+
+    def self.default
+      'dataset'
     end
 
     def self.display(type)
@@ -51,9 +75,10 @@ class Work < ApplicationRecord
     end
   end
 
+  enum work_type: Types.all.zip(Types.all).to_h
+
   validates :work_type,
-            presence: true,
-            inclusion: { in: Types.all }
+            presence: true
 
   validates :versions,
             presence: true
