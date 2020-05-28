@@ -214,6 +214,7 @@ RSpec.describe Collection, type: :model do
           keyword_tesim
           language_tesim
           model_ssi
+          published_date_dtrsi
           published_date_tesim
           publisher_tesim
           related_url_tesim

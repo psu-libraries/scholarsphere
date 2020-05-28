@@ -169,7 +169,8 @@ class WorkVersion < ApplicationRecord
       SolrDocumentBuilder.new(
         WorkVersionSchema,
         WorkTypeSchema,
-        CreatorSchema
+        CreatorSchema,
+        PublishedDateSchema
       )
     end
 end

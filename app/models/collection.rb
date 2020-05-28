@@ -133,7 +133,8 @@ class Collection < ApplicationRecord
       SolrDocumentBuilder.new(
         DefaultSchema,
         CreatorSchema,
-        PermissionsSchema
+        PermissionsSchema,
+        PublishedDateSchema
       )
     end
 end

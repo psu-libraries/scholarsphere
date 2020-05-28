@@ -193,13 +193,14 @@ RSpec.describe WorkVersion, type: :model do
   end
 
   describe '#to_solr' do
-    subject(:work_version) { create(:work_version) }
+    subject(:work_version) { create(:work_version, published_date: '1999-uu-uu') }
 
     its(:to_solr) do
       is_expected.to include(
         title_tesim: [work_version.title],
         latest_version_bsi: false,
-        work_type_ssim: Work::Types.display(work_version.work_type)
+        work_type_ssim: Work::Types.display(work_version.work_type),
+        published_date_dtrsi: '1999'
       )
     end
   end
