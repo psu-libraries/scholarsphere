@@ -83,7 +83,7 @@ RSpec.describe CreateNewCollection do
     before { user.save }
 
     it 'creates a new collection' do
-      expect { new_collection }.to change(Work, :count).by(1)
+      expect { new_collection }.to change(Collection, :count).by(1)
     end
 
     it 'does NOT create an Actor record for the depositor' do
@@ -169,7 +169,7 @@ RSpec.describe CreateNewCollection do
 
     it 'does NOT create an Actor for the depositor' do
       pending('Need to implement transactions to rollback any changes to the database when works fail to save')
-      expect { new_collection }.not_to change(Actor, :count).by(1)
+      expect { new_collection }.not_to change(Actor, :count)
     end
 
     it 'does NOT create a User record for the depositor' do
@@ -208,6 +208,33 @@ RSpec.describe CreateNewCollection do
     it 'creates a new work with a legacy identifier' do
       expect(new_collection.legacy_identifiers.map(&:old_id)).to contain_exactly(legacy_identifier.old_id)
       expect(new_collection.legacy_identifiers.map(&:version)).to contain_exactly(3)
+    end
+  end
+
+  context "when the collection has attributes that wouldn't pass validation outside of a migration" do
+    let(:new_collection) do
+      described_class.call(
+        metadata: HashWithIndifferentAccess.new(collection.metadata.merge(
+                                                  work_ids: [work.id],
+                                                  published_date: 'not a valid EDTF',
+                                                  creator_aliases_attributes: [
+                                                    {
+                                                      alias: user.name,
+                                                      actor_attributes: {
+                                                        email: user.email,
+                                                        given_name: user.actor.given_name,
+                                                        surname: user.actor.surname,
+                                                        psu_id: user.actor.psu_id
+                                                      }
+                                                    }
+                                                  ]
+                                                )),
+        depositor: depositor
+      )
+    end
+
+    it 'creates a new collection' do
+      expect { new_collection }.to change(Collection, :count).by(1)
     end
   end
 end

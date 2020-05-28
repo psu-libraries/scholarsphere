@@ -59,6 +59,8 @@ RSpec.describe WorkVersion, type: :model do
 
     context 'when draft' do
       it { is_expected.to validate_presence_of(:title) }
+
+      it { is_expected.not_to validate_presence_of(:published_date) }
     end
 
     context 'when published' do
@@ -91,6 +93,19 @@ RSpec.describe WorkVersion, type: :model do
         work_version.work.grant_open_access
         work_version.validate
         expect(work_version.errors[:visibility]).to be_empty
+      end
+
+      it { is_expected.to validate_presence_of(:published_date) }
+
+      it 'validates published_date is in EDTF format' do
+        expect(work_version).to allow_value('1999-uu-uu').for(:published_date)
+        expect(work_version).not_to allow_value('not an EDTF formatted date').for(:published_date)
+      end
+
+      context 'with the :migration_api validation context' do
+        it { is_expected.to allow_value(nil).for(:published_date).on(:migration_api) }
+
+        it { is_expected.to allow_value('not an EDTF formatted date').for(:published_date).on(:migration_api) }
       end
     end
 

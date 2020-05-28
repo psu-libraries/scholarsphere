@@ -48,7 +48,6 @@ en:
           attributes:
             title:
               different_extension: does not have the same filename extension as %{original}
-
   api:
     errors:
       not_authorized: "401: Request not authorized. Please provide a valid API key for access."
@@ -57,6 +56,9 @@ en:
     public_message: "Files are not available during the embargo."
     edit_message: "You have permission to access the files during the embargo."
     link_text: "Public link"
+  errors:
+    messages:
+      invalid_edtf: is not a valid date in EDTF format
   dashboard:
     collections:
       index:

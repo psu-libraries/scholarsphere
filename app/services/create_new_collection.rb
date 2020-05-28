@@ -53,8 +53,10 @@ class CreateNewCollection
     end
     UpdatePermissionsService.call(resource: collection, permissions: permissions, create_agents: true)
 
-    return collection unless collection.valid?
-
-    collection.save && collection.reload
+    if collection.save(context: :migration_api)
+      collection.reload
+    else
+      collection
+    end
   end
 end

@@ -50,6 +50,11 @@ class Collection < ApplicationRecord
   validates :title,
             presence: true
 
+  validates :published_date,
+            edtf_date: true,
+            allow_blank: true,
+            unless: -> { validation_context == :migration_api }
+
   accepts_nested_attributes_for :creator_aliases,
                                 reject_if: :all_blank,
                                 allow_destroy: true

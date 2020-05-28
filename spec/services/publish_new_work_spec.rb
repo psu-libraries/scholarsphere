@@ -188,6 +188,39 @@ RSpec.describe PublishNewWork do
     end
   end
 
+  context "when the collection has attributes that wouldn't pass validation outside of a migration" do
+    let(:new_work) do
+      described_class.call(
+        metadata: HashWithIndifferentAccess.new(work.metadata.merge(
+                                                  work_type: 'dataset',
+                                                  published_date: 'not a valid EDTF date',
+                                                  creator_aliases_attributes: [
+                                                    {
+                                                      alias: user.name,
+                                                      actor_attributes: {
+                                                        email: user.email,
+                                                        given_name: user.actor.given_name,
+                                                        surname: user.actor.surname,
+                                                        psu_id: user.actor.psu_id
+                                                      }
+                                                    }
+                                                  ]
+                                                )),
+        depositor: depositor,
+        content: [
+          HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_path, 'image.png'))),
+          HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_path, 'ipsum.pdf')))
+        ]
+      )
+    end
+
+    it 'saves the work' do
+      expect(new_work).to be_persisted
+      expect(new_work.versions.count).to eq(1)
+      expect(new_work.latest_version).to be_persisted.and be_published
+    end
+  end
+
   context 'when the work has restricted visbility' do
     let(:new_work) do
       described_class.call(
@@ -220,6 +253,7 @@ RSpec.describe PublishNewWork do
       expect(new_work.visibility).to eq(Permissions::Visibility::PRIVATE)
       expect(new_work.work_type).to eq('dataset')
       expect(new_work.versions.count).to eq(1)
+      expect(new_work.latest_version).to be_persisted
       expect(new_work.latest_version).to be_draft
       expect(new_work.latest_version.metadata).to eq(work.metadata)
       expect(new_work.latest_version.file_version_memberships.map(&:title)).to contain_exactly('image.png')

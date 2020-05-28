@@ -73,6 +73,12 @@ class WorkVersion < ApplicationRecord
             },
             if: :published?
 
+  validates :published_date,
+            presence: true,
+            edtf_date: true,
+            if: :published?,
+            unless: -> { validation_context == :migration_api }
+
   after_save :update_index, if: :published?
 
   aasm do

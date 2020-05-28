@@ -64,7 +64,16 @@ class PublishNewWork
 
     return work unless work.valid?
 
-    work.save unless work_version.publish!
+    # Publish the work version (without saving), check if it's valid. If it's
+    # not valid, roll back to previous state
+    begin
+      work_version.publish
+      work_version.validate!(:migration_api)
+    rescue ActiveRecord::RecordInvalid
+      work_version.aasm_state = work_version.aasm.from_state
+    end
+
+    work.save(context: :migration_api)
     work.reload
   end
 end
