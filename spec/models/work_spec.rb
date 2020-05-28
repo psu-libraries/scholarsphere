@@ -25,7 +25,7 @@ RSpec.describe Work, type: :model do
 
   describe 'associations' do
     it { is_expected.to belong_to(:depositor).class_name('Actor').with_foreign_key(:depositor_id).inverse_of(:deposited_works) }
-    it { is_expected.to belong_to(:proxy_depositor).class_name('Actor').with_foreign_key(:proxy_id).inverse_of(:proxy_deposited_works) }
+    it { is_expected.to belong_to(:proxy_depositor).class_name('Actor').with_foreign_key(:proxy_id).inverse_of(:proxy_deposited_works).optional }
     it { is_expected.to have_many(:access_controls) }
     it { is_expected.to have_many(:versions).class_name('WorkVersion').inverse_of('work') }
     it { is_expected.to have_many(:legacy_identifiers) }
@@ -36,7 +36,7 @@ RSpec.describe Work, type: :model do
   end
 
   describe 'validations' do
-    it { is_expected.to validate_inclusion_of(:work_type).in_array(Work::Types.all) }
+    it { is_expected.to validate_presence_of(:work_type) }
     it { is_expected.to validate_presence_of(:versions) }
   end
 
@@ -46,23 +46,79 @@ RSpec.describe Work, type: :model do
     describe '.all' do
       subject(:all) { types.all }
 
-      it { is_expected.to match_array [types::DATASET] }
+      specify do
+        expect(all).to contain_exactly(
+          'article',
+          'audio',
+          'book',
+          'capstone_project',
+          'conference_proceeding',
+          'dataset',
+          'dissertation',
+          'image',
+          'journal',
+          'map_or_cartographic_material',
+          'masters_culminating_experience',
+          'masters_thesis',
+          'other',
+          'part_of_book',
+          'poster',
+          'presentation',
+          'project',
+          'report',
+          'research_paper',
+          'software_or_program_code',
+          'video'
+        )
+      end
+    end
+
+    describe '.default' do
+      subject { types.default }
+
+      it { is_expected.to eq('dataset') }
     end
 
     describe '.options_for_select_box' do
       subject(:options) { types.options_for_select_box }
 
-      it { is_expected.to eq [['Dataset', types::DATASET]] }
+      it { is_expected.to include(['Dataset', 'dataset'], ['Part Of Book', 'part_of_book']) }
     end
 
     describe '.display' do
       it 'returns a human-readable version of the type' do
-        {
-          types::DATASET => 'Dataset'
-        }.each do |type, expected_output|
-          expect(types.display(type)).to eq expected_output
-        end
+        expect(types.display(types.default)).to eq('Dataset')
       end
+    end
+  end
+
+  describe '#work_type' do
+    specify do
+      expect(described_class.new).to define_enum_for(:work_type)
+        .with_values(
+          article: 'article',
+          audio: 'audio',
+          book: 'book',
+          capstone_project: 'capstone_project',
+          conference_proceeding: 'conference_proceeding',
+          dataset: 'dataset',
+          dissertation: 'dissertation',
+          image: 'image',
+          journal: 'journal',
+          map_or_cartographic_material: 'map_or_cartographic_material',
+          masters_culminating_experience: 'masters_culminating_experience',
+          masters_thesis: 'masters_thesis',
+          other: 'other',
+          part_of_book: 'part_of_book',
+          poster: 'poster',
+          presentation: 'presentation',
+          project: 'project',
+          report: 'report',
+          research_paper: 'research_paper',
+          software_or_program_code: 'software_or_program_code',
+          video: 'video'
+        )
+        .backed_by_column_of_type(:string)
     end
   end
 

@@ -11,7 +11,7 @@ module DataCite
     attr_writer :public_url_source
 
     RESOURCE_TYPES = {
-      Work::Types::DATASET => 'Dataset'
+      'dataset' => 'Dataset'
     }.freeze
 
     def initialize(work_version:, public_identifier:)

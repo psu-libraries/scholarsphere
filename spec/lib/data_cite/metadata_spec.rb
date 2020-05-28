@@ -75,9 +75,7 @@ RSpec.describe DataCite::Metadata do
     end
 
     context 'when given variants of the work_type' do
-      context 'when work_type is DATASET' do
-        before { allow(work).to receive(:work_type).and_return(Work::Types::DATASET) }
-
+      context 'with the default work type' do
         it 'maps to the correct resource type' do
           expect(attributes.dig(:types, :resourceTypeGeneral)).to eq 'Dataset'
         end
