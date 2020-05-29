@@ -205,7 +205,7 @@ RSpec.describe CreateNewCollection do
       )
     end
 
-    it 'creates a new work with a legacy identifier' do
+    it 'creates a new collection with a legacy identifier' do
       expect(new_collection.legacy_identifiers.map(&:old_id)).to contain_exactly(legacy_identifier.old_id)
       expect(new_collection.legacy_identifiers.map(&:version)).to contain_exactly(3)
     end
@@ -235,6 +235,35 @@ RSpec.describe CreateNewCollection do
 
     it 'creates a new collection' do
       expect { new_collection }.to change(Collection, :count).by(1)
+    end
+  end
+
+  context 'with custom deposit dates' do
+    let(:new_collection) do
+      described_class.call(
+        metadata: HashWithIndifferentAccess.new(collection.metadata.merge(
+                                                  work_ids: [work.id],
+                                                  creator_aliases_attributes: [
+                                                    {
+                                                      alias: user.name,
+                                                      actor_attributes: {
+                                                        email: user.email,
+                                                        given_name: user.actor.given_name,
+                                                        surname: user.actor.surname,
+                                                        psu_id: user.actor.psu_id
+                                                      }
+                                                    }
+                                                  ],
+                                                  deposited_at: '2017-05-11T16:20:54Z'
+                                                )),
+        depositor: depositor
+      )
+    end
+
+    it 'creates a new collection with the specified deposit date' do
+      expect(new_collection.deposited_at.strftime('%Y-%m-%d')).to eq('2017-05-11')
+      expect(new_collection.deposited_at).to be_a(ActiveSupport::TimeWithZone)
+      expect(new_collection.deposited_at.zone).to eq('UTC')
     end
   end
 end
