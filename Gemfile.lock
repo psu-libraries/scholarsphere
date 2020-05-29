@@ -153,6 +153,9 @@ GEM
       addressable (~> 2.5)
     edtf (3.0.5)
       activesupport (>= 3.0, < 7.0)
+    edtf-humanize (1.0.0)
+      activesupport (>= 4)
+      edtf (>= 2.3, < 4)
     erb_lint (0.0.32)
       activesupport
       better_html (~> 1.0.7)
@@ -508,6 +511,7 @@ DEPENDENCIES
   devise (~> 4.7)
   diffy
   edtf
+  edtf-humanize
   factory_bot_rails
   faker
   faraday (~> 0.17.0)

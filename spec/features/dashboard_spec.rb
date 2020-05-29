@@ -26,14 +26,17 @@ RSpec.describe 'Dashboard' do
       expect(page).to have_selector('h3', text: work_version.title)
       expect(page).to have_selector('h5', text: work.work_type.capitalize)
     end
+
     page.all('.work-version').each_with_index do |row, index|
+      version = work.versions[index]
+
       within(row) do
         expect(page).to have_link("Version #{index + 1}")
         if index < 3
-          expect(page).to have_content("Published #{work_version.created_at.strftime('%B %d, %Y')} by #{user.actor.email}")
+          expect(page).to have_content("Published #{EdtfDate.humanize(version.published_date)} by #{user.actor.email}")
           within('.badge') { expect(page).to have_content('published') }
         else
-          expect(page).to have_content("Updated #{work_version.created_at.strftime('%B %d, %Y')} by #{user.actor.email}")
+          expect(page).to have_content("Updated #{version.created_at.strftime('%B %d, %Y')} by #{user.actor.email}")
           within('.badge') { expect(page).to have_content('draft') }
           expect(page).to have_link('edit')
           expect(page).to have_link('delete')

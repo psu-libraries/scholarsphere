@@ -24,4 +24,22 @@ RSpec.describe EdtfDate do
       end
     end
   end
+
+  describe '::humanize' do
+    { # GIVEN       => EXPECTED
+      '2019-05-01' => 'May 1, 2019',
+      '1981~' => 'circa 1981',
+      '1965/1975' => '1965 to 1975',
+
+      # Bogus data
+      'not a date' => 'not a date',
+      '' => '',
+      nil => '',
+      1 => '1'
+    }.each do |edtf_date, expected_output|
+      it "formats #{edtf_date.inspect} as #{expected_output.inspect}" do
+        expect(described_class.humanize(edtf_date)).to eq expected_output
+      end
+    end
+  end
 end

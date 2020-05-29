@@ -10,4 +10,10 @@ class ResourceDecorator < SimpleDelegator
 
     Work::Types.display(work_type)
   end
+
+  def display_published_date
+    return unless respond_to?(:published_date)
+
+    EdtfDate.humanize(published_date)
+  end
 end

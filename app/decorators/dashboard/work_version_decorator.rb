@@ -10,7 +10,7 @@ class Dashboard::WorkVersionDecorator < ResourceDecorator
     if draft?
       "Updated #{updated_at.to_date.to_s(:long)}"
     else
-      "Published #{updated_at.to_date.to_s(:long)}"
+      "Published #{display_published_date}"
     end
   end
 end

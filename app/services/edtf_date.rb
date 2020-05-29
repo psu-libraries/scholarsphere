@@ -12,4 +12,10 @@ module EdtfDate
 
     (regular_date || edtf_date).present?
   end
+
+  def self.humanize(str)
+    Date.edtf(str)&.humanize || str.to_s
+  rescue RuntimeError
+    str.to_s
+  end
 end

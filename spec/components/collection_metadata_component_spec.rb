@@ -34,6 +34,14 @@ RSpec.describe CollectionMetadataComponent, type: :component do
       expect(result.css('dd.collection-description')).to be_empty
       expect(result.css('dd.collection-subject')).to be_empty
     end
+
+    it 'accepts a decorated and non-decorated Collection' do
+      non_decorated_result = render_inline(described_class.new(collection: collection))
+      expect(non_decorated_result.css('dt.collection-subtitle')).to be_present
+
+      decorated_result = render_inline(described_class.new(collection: ResourceDecorator.new(collection)))
+      expect(decorated_result.css('dt.collection-subtitle')).to be_present
+    end
   end
 
   describe 'fully loaded' do
@@ -47,7 +55,7 @@ RSpec.describe CollectionMetadataComponent, type: :component do
       expect(result.css('dt.collection-keyword')).to be_present
       expect(result.css('dt.collection-contributor')).to be_present
       expect(result.css('dt.collection-publisher')).to be_present
-      expect(result.css('dt.collection-published-date')).to be_present
+      expect(result.css('dt.collection-display-published-date')).to be_present
       expect(result.css('dt.collection-subject')).to be_present
       expect(result.css('dt.collection-language')).to be_present
       expect(result.css('dt.collection-identifier')).to be_present
@@ -67,7 +75,7 @@ RSpec.describe CollectionMetadataComponent, type: :component do
       expect(result.css('dd.collection-keyword').text).to include collection[:keyword].first
       expect(result.css('dd.collection-contributor').text).to include collection[:contributor].first
       expect(result.css('dd.collection-publisher').text).to include collection[:publisher].first
-      expect(result.css('dd.collection-published-date').text)
+      expect(result.css('dd.collection-display-published-date').text)
         .to include Time.zone.parse(collection[:published_date]).year.to_s
       expect(result.css('dd.collection-subject').text).to include collection[:subject].first
       expect(result.css('dd.collection-language').text).to include collection[:language].first

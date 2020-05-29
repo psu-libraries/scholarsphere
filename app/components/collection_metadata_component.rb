@@ -20,7 +20,7 @@ class CollectionMetadataComponent < ActionView::Component::Base
     :keyword,
     :contributor,
     :publisher,
-    :published_date,
+    :display_published_date,
     :subject,
     :language,
     :identifier,
@@ -31,10 +31,16 @@ class CollectionMetadataComponent < ActionView::Component::Base
   ].freeze
 
   def initialize(collection:)
-    @collection = collection
+    @collection = decorate(collection)
   end
 
   private
+
+    def decorate(col)
+      return col if col.is_a? ResourceDecorator
+
+      ResourceDecorator.new(col)
+    end
 
     def attributes
       ATTRIBUTES

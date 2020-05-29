@@ -29,7 +29,7 @@ RSpec.describe Dashboard::WorkVersionDecorator do
 
   describe '#display_date' do
     let(:date) { Time.zone.parse('2019-11-04 12:03:00') }
-    let(:work_version) { instance_spy('WorkVersion', updated_at: date) }
+    let(:work_version) { instance_spy('WorkVersion', updated_at: date, published_date: '2020~') }
 
     context 'with a draft version' do
       before { allow(work_version).to receive(:draft?).and_return true }
@@ -40,7 +40,7 @@ RSpec.describe Dashboard::WorkVersionDecorator do
     context 'with a published version' do
       before { allow(work_version).to receive(:draft?).and_return false }
 
-      its(:display_date) { is_expected.to eq 'Published November 04, 2019' }
+      its(:display_date) { is_expected.to eq 'Published circa 2020' }
     end
   end
 end

@@ -15,7 +15,8 @@ en:
         creator_aliases: Creator
         contributor: Contributor
         publisher: Publisher
-        published_date: Published Date
+        published_date: &collection_published_date Published Date
+        display_published_date: *collection_published_date
         subject: Subject
         language: Language
         identifier: Identifier
@@ -34,7 +35,8 @@ en:
         resource_type: Resource Type
         contributor: Contributor
         publisher: Publisher
-        published_date: Published Date
+        published_date: &work_version_published_date Published Date
+        display_published_date: *work_version_published_date
         subject: Subject
         language: Language
         identifier: Identifier
