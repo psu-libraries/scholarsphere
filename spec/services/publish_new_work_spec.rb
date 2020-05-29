@@ -283,7 +283,7 @@ RSpec.describe PublishNewWork do
                                                       }
                                                     }
                                                   ],
-                                                  embargoed_until: (DateTime.now + 2.months)
+                                                  embargoed_until: (Time.zone.now + 2.months)
                                                 )),
         depositor: depositor,
         content: [

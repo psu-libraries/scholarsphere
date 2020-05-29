@@ -46,7 +46,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
       end
 
       context 'with an embargoed public work' do
-        let(:work) { create(:work, embargoed_until: (DateTime.now + 6.days), has_draft: false) }
+        let(:work) { create(:work, embargoed_until: (Time.zone.now + 6.days), has_draft: false) }
         let(:work_version) { work.versions[0] }
 
         it { is_expected.not_to permit(user, work_version) }
@@ -92,14 +92,14 @@ RSpec.describe WorkVersionPolicy, type: :policy do
       end
 
       context 'with an embargoed public work' do
-        let(:work) { create(:work, has_draft: false, depositor: someone_else.actor, embargoed_until: (DateTime.now + 6.days)) }
+        let(:work) { create(:work, has_draft: false, depositor: someone_else.actor, embargoed_until: (Time.zone.now + 6.days)) }
         let(:work_version) { work.versions[0] }
 
         it { is_expected.not_to permit(me, work_version) }
       end
 
       context 'with an embargoed work I deposited' do
-        let(:work) { create(:work, has_draft: false, depositor: me.actor, embargoed_until: (DateTime.now + 6.days)) }
+        let(:work) { create(:work, has_draft: false, depositor: me.actor, embargoed_until: (Time.zone.now + 6.days)) }
         let(:work_version) { work.versions[0] }
 
         it { is_expected.to permit(me, work_version) }
@@ -110,7 +110,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
           create :work,
                  has_draft: false,
                  depositor: someone_else.actor,
-                 embargoed_until: (DateTime.now + 6.days),
+                 embargoed_until: (Time.zone.now + 6.days),
                  edit_users: [me]
         end
         let(:work_version) { work.versions[0] }

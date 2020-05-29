@@ -114,7 +114,7 @@ class Work < ApplicationRecord
   def embargoed?
     return false if embargoed_until.blank?
 
-    embargoed_until > DateTime.now
+    embargoed_until > Time.zone.now
   end
 
   private
