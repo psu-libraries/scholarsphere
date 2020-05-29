@@ -1,4 +1,4 @@
-<% work_version = work.latest_published_version -%>
+<% work_version = ResourceDecorator.new(work.latest_published_version) -%>
 <h1><%= work_version.title %></h1>
 
 <%= render WorkVersionMetadataComponent.new(work_version: work_version) %>

@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe Dashboard::WorkDecorator do
-  it 'extends SimpleDelegator' do
-    expect(described_class).to be < SimpleDelegator
+  it 'extends ResourceDecorator' do
+    expect(described_class).to be < ResourceDecorator
   end
 
   describe '#versions' do

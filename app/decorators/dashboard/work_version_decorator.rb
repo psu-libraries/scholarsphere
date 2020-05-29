@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Dashboard::WorkVersionDecorator < SimpleDelegator
+class Dashboard::WorkVersionDecorator < ResourceDecorator
   def display_name
     "Version #{version_name.presence || version_number}"
   end

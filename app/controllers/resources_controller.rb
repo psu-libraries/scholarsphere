@@ -2,7 +2,7 @@
 
 class ResourcesController < ApplicationController
   def show
-    @resource = find_resource(params[:id])
+    @resource = ResourceDecorator.new(find_resource(params[:id]))
     authorize @resource
   end
 

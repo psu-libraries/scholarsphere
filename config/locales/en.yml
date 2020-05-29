@@ -41,6 +41,7 @@ en:
         based_near: Based Near
         related_url: Related URL
         source: Source
+        display_work_type: Work Type
     errors:
       models:
         file_version_membership:
