@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe FileResource, type: :model do
+  it_behaves_like 'a resource with a deposited at timestamp'
+
   describe 'table' do
     it { is_expected.to have_db_column(:file_data).of_type(:jsonb) }
   end

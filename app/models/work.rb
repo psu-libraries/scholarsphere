@@ -2,6 +2,7 @@
 
 class Work < ApplicationRecord
   include Permissions
+  include DepositedAtTimestamp
 
   belongs_to :depositor,
              class_name: 'Actor',

@@ -7,6 +7,8 @@ RSpec.describe Work, type: :model do
     let(:factory_name) { :work }
   end
 
+  it_behaves_like 'a resource with a deposited at timestamp'
+
   describe 'table' do
     it { is_expected.to have_db_column(:work_type).of_type(:string) }
     it { is_expected.to have_db_column(:depositor_id) }
@@ -200,14 +202,15 @@ RSpec.describe Work, type: :model do
       let(:keys) do
         %w(
           created_at_dtsi
+          deposited_at_dtsi
           depositor_id_isi
-          proxy_id_isi
           discover_groups_ssim
           discover_users_ssim
           doi_tesim
           embargoed_until_dtsi
           id
           model_ssi
+          proxy_id_isi
           updated_at_dtsi
           uuid_ssi
           visibility_ssi
@@ -229,8 +232,8 @@ RSpec.describe Work, type: :model do
           created_at_dtsi
           creator_aliases_tesim
           creators_sim
+          deposited_at_dtsi
           depositor_id_isi
-          proxy_id_isi
           description_tesim
           discover_groups_ssim
           discover_users_ssim
@@ -241,6 +244,7 @@ RSpec.describe Work, type: :model do
           keyword_tesim
           language_tesim
           model_ssi
+          proxy_id_isi
           published_date_tesim
           publisher_tesim
           related_url_tesim
