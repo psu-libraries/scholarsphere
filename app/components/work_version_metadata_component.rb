@@ -19,7 +19,7 @@ class WorkVersionMetadataComponent < ActionView::Component::Base
     :description,
     :keyword,
     :rights,
-    :resource_type,
+    :display_work_type,
     :contributor,
     :publisher,
     :published_date,

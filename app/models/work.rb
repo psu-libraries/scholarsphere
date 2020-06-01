@@ -123,7 +123,8 @@ class Work < ApplicationRecord
       SolrDocumentBuilder.new(
         DefaultSchema,
         LatestPublishedVersionSchema,
-        PermissionsSchema
+        PermissionsSchema,
+        WorkTypeSchema
       )
     end
 end

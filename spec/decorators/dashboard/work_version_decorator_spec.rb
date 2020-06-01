@@ -7,6 +7,10 @@ RSpec.describe Dashboard::WorkVersionDecorator do
 
   let(:work_version) { instance_spy('WorkVersion') }
 
+  it 'extends ResourceDecorator' do
+    expect(described_class).to be < ResourceDecorator
+  end
+
   describe '#display_name' do
     subject { decorator.display_name }
 

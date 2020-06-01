@@ -5,8 +5,7 @@ class WorkVersionSchema < BaseSchema
     DefaultSchema.new(resource: resource)
       .document
       .merge(
-        latest_version_bsi: resource.latest_published_version?,
-        work_type_tesim: resource.work.work_type
+        latest_version_bsi: resource.latest_published_version?
       )
   end
 end

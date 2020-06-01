@@ -144,23 +144,35 @@ RSpec.describe Collection, type: :model do
 
   describe '#to_solr' do
     context 'when the work only has a draft version' do
-      subject { build(:work).to_solr }
+      subject { build(:collection).to_solr }
 
       let(:keys) do
         %w(
+          based_near_tesim
+          contributor_tesim
           created_at_dtsi
+          creator_aliases_tesim
+          creators_sim
           depositor_id_isi
-          proxy_id_isi
+          description_tesim
           discover_groups_ssim
           discover_users_ssim
           doi_tesim
-          embargoed_until_dtsi
           id
+          identifier_tesim
+          keyword_tesim
+          language_tesim
           model_ssi
+          published_date_tesim
+          publisher_tesim
+          related_url_tesim
+          source_tesim
+          subject_tesim
+          subtitle_tesim
+          title_tesim
           updated_at_dtsi
           uuid_ssi
           visibility_ssi
-          work_type_tesim
         )
       end
 

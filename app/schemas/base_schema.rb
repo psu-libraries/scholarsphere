@@ -10,4 +10,9 @@ class BaseSchema
   def document
     raise ArgumentError, 'Inheriting class must implement #document'
   end
+
+  # @return [Array<Symbol>] list of Solr fields to remove from the document
+  def reject
+    []
+  end
 end

@@ -126,7 +126,6 @@ module Dashboard
             :version_name,
             keyword: [],
             description: [],
-            resource_type: [],
             contributor: [],
             publisher: [],
             published_date: [],

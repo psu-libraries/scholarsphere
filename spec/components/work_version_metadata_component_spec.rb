@@ -3,15 +3,16 @@
 require 'rails_helper'
 
 RSpec.describe WorkVersionMetadataComponent, type: :component do
-  let(:result) { render_inline(described_class.new(work_version: work_version)) }
+  let(:decorated_work_version) { ResourceDecorator.new(work_version) }
+  let(:result) { render_inline(described_class.new(work_version: decorated_work_version)) }
 
   describe 'rendering' do
-    let(:work_version) { WorkVersion.new(
-      subtitle: 'My subtitle',
-      created_at: Time.zone.parse('2020-01-15 16:07'),
-      keyword: %w(one two),
-      description: nil
-    ) }
+    let(:work_version) { build_stubbed :work_version,
+                                       subtitle: 'My subtitle',
+                                       created_at: Time.zone.parse('2020-01-15 16:07'),
+                                       keyword: %w(one two),
+                                       description: nil
+    }
 
     it 'renders a string with label' do
       expect(result.css('dt.work-version-subtitle').text).to eq 'Subtitle'
@@ -45,7 +46,8 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
       expect(result.css('dt.work-version-description')).to be_present
       expect(result.css('dt.work-version-keyword')).to be_present
       expect(result.css('dt.work-version-rights')).to be_present
-      expect(result.css('dt.work-version-resource-type')).to be_present
+      expect(result.css('dt.work-version-resource-type')).not_to be_present
+      expect(result.css('dt.work-version-display-work-type')).to be_present
       expect(result.css('dt.work-version-contributor')).to be_present
       expect(result.css('dt.work-version-publisher')).to be_present
       expect(result.css('dt.work-version-published-date')).to be_present
@@ -68,7 +70,7 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
       expect(result.css('dd.work-version-description').text).to include work_version[:description].first
       expect(result.css('dd.work-version-keyword').text).to include work_version[:keyword].first
       expect(result.css('dd.work-version-rights').text).to eq work_version[:rights]
-      expect(result.css('dd.work-version-resource-type').text).to include work_version[:resource_type].first
+      expect(result.css('dd.work-version-display-work-type').text).to eq decorated_work_version.display_work_type
       expect(result.css('dd.work-version-contributor').text).to include work_version[:contributor].first
       expect(result.css('dd.work-version-publisher').text).to include work_version[:publisher].first
       expect(result.css('dd.work-version-published-date').text)
@@ -95,7 +97,9 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
         expect(result.css('dt.work-version-description')).not_to be_present
         expect(result.css('dt.work-version-keyword')).not_to be_present
         expect(result.css('dt.work-version-rights')).not_to be_present
+        expect(result.css('dt.work-version-display-work-type')).not_to be_present
         expect(result.css('dt.work-version-resource-type')).not_to be_present
+        expect(result.css('dt.work-version-work-type')).not_to be_present
         expect(result.css('dt.work-version-contributor')).not_to be_present
         expect(result.css('dt.work-version-publisher')).not_to be_present
         expect(result.css('dt.work-version-published-date')).not_to be_present

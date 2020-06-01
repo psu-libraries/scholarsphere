@@ -211,7 +211,7 @@ RSpec.describe Work, type: :model do
           updated_at_dtsi
           uuid_ssi
           visibility_ssi
-          work_type_tesim
+          work_type_ssim
         )
       end
 
@@ -244,7 +244,6 @@ RSpec.describe Work, type: :model do
           published_date_tesim
           publisher_tesim
           related_url_tesim
-          resource_type_tesim
           rights_tesim
           source_tesim
           subject_tesim
@@ -256,7 +255,7 @@ RSpec.describe Work, type: :model do
           version_number_isi
           visibility_ssi
           work_id_isi
-          work_type_tesim
+          work_type_ssim
         )
       end
 

@@ -47,13 +47,14 @@ RSpec.describe 'Blacklight catalog page' do
     expect(page).to have_selector('h3', text: 'Keywords')
     expect(page).to have_selector('h3', text: 'Subject')
     expect(page).to have_selector('h3', text: 'Creators')
+    expect(page).to have_selector('h3', text: 'Work Type')
 
     # Display all indexed resources and check fields
     expect(page).to have_blacklight_label('title_tesim')
     expect(page).to have_blacklight_label('creator_aliases_tesim')
     expect(page).to have_blacklight_label('aasm_state_tesim')
     expect(page).to have_blacklight_label('keyword_tesim')
-    expect(page).to have_blacklight_label('resource_type_tesim')
+    expect(page).to have_blacklight_label('work_type_ssim')
     expect(page).to have_blacklight_label('created_at_dtsi')
     indexed_resources.each do |resource|
       expect(page).to have_blacklight_field('title_tesim').with(resource.title)
@@ -64,7 +65,7 @@ RSpec.describe 'Blacklight catalog page' do
       # The following fields are only valid for WorkVersions, not Collections
       if resource.is_a? WorkVersion
         expect(page).to have_blacklight_field('aasm_state_tesim').with(resource.aasm_state)
-        expect(page).to have_blacklight_field('resource_type_tesim').with(resource.resource_type.join(', '))
+        expect(page).to have_blacklight_field('work_type_ssim').with(Work::Types.display(resource.work_type))
       end
     end
 
