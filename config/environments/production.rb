@@ -91,8 +91,11 @@ Rails.application.configure do
   end
 
   if ENV['LOGRAGE_ENABLED'].present?
-    require 'lograge/sql/extension'
     config.lograge.enabled = true
+
+    config.after_initialize do
+      require 'lograge/sql/extension'
+    end
   end
 
   if ENV['RAILS_LOG_JSON'].present?
