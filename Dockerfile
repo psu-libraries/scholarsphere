@@ -9,7 +9,7 @@ USER app
 
 COPY Gemfile Gemfile.lock /app/
 COPY --chown=app vendor/ vendor/
-RUN gem install bundler:2.0.2
+RUN gem install bundler:2.1.4
 RUN bundle install --path vendor/bundle && \
   rm -rf /app/.bundle/cache && \
   rm -rf /app/vendor/bundle/ruby/*/cache
