@@ -114,7 +114,7 @@ class CatalogController < ApplicationController
     config.add_index_field 'aasm_state_tesim', label: 'Status'
     config.add_index_field 'keyword_tesim', label: 'Keywords'
     config.add_index_field 'work_type_ssim', label: 'Work Type'
-    config.add_index_field 'created_at_dtsi', label: 'Date Created'
+    config.add_index_field 'deposited_at_dtsi', label: 'Date Deposited', helper_method: :date_display
 
     # solr fields to be displayed in the show (single result) view
     #   The ordering of the field names is the order of the display
@@ -136,7 +136,7 @@ class CatalogController < ApplicationController
     config.add_show_field 'source_tesim', label: 'Source'
     config.add_show_field 'version_number_isi', label: 'Version Number'
     config.add_show_field 'version_name_tesim', label: 'Version Name'
-    config.add_show_field 'created_at_dtsi', label: 'Date Created'
+    config.add_show_field 'deposited_at_dtsi', label: 'Date Deposited'
     config.add_show_field 'updated_at_dtsi', label: 'Last Updated'
     config.add_show_field 'creator_aliases_tesim'
 

@@ -7,9 +7,10 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
   let(:result) { render_inline(described_class.new(work_version: decorated_work_version)) }
 
   describe 'rendering' do
+    let(:work) { build_stubbed :work, deposited_at: Time.zone.parse('2020-01-15 16:07') }
     let(:work_version) { build_stubbed :work_version,
+                                       work: work,
                                        subtitle: 'My subtitle',
-                                       created_at: Time.zone.parse('2020-01-15 16:07'),
                                        keyword: %w(one two),
                                        description: nil
     }
@@ -20,7 +21,7 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
     end
 
     it 'renders a date with a nice format' do
-      expect(result.css('dd.work-version-created-at').text).to eq 'January 15, 2020 16:07'
+      expect(result.css('dd.work-version-deposited-at').text).to eq 'January 15, 2020 16:07'
     end
 
     it 'renders a multi-value field' do
@@ -65,7 +66,7 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
       expect(result.css('dt.work-version-based-near')).to be_present
       expect(result.css('dt.work-version-related-url')).to be_present
       expect(result.css('dt.work-version-source')).to be_present
-      expect(result.css('dt.work-version-created-at')).to be_present
+      expect(result.css('dt.work-version-deposited-at')).to be_present
       expect(result.css('dt.work-version-creator-aliases')).to be_present
 
       # Test that the fields have the correct values. Please note that some of
@@ -89,7 +90,7 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
       expect(result.css('dd.work-version-based-near').text).to include work_version[:based_near].first
       expect(result.css('dd.work-version-related-url').text).to include work_version[:related_url].first
       expect(result.css('dd.work-version-source').text).to include work_version[:source].first
-      expect(result.css('dd.work-version-created-at').text).to include work_version[:created_at].year.to_s
+      expect(result.css('dd.work-version-deposited-at').text).to include work_version.deposited_at.year.to_s
     end
 
     context 'when mini: true' do
@@ -98,7 +99,7 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
       it 'renders just the mini fields' do
         # Titles
         expect(result.css('dt.work-version-title')).to be_present
-        expect(result.css('dt.work-version-created-at')).to be_present
+        expect(result.css('dt.work-version-deposited-at')).to be_present
         expect(result.css('dt.work-version-creator-aliases')).to be_present
         expect(result.css('dt.work-version-subtitle')).not_to be_present
         expect(result.css('dt.work-version-version-number')).not_to be_present

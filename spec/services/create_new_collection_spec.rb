@@ -263,7 +263,7 @@ RSpec.describe CreateNewCollection do
     it 'creates a new collection with the specified deposit date' do
       expect(new_collection.deposited_at.strftime('%Y-%m-%d')).to eq('2017-05-11')
       expect(new_collection.deposited_at).to be_a(ActiveSupport::TimeWithZone)
-      expect(new_collection.deposited_at.zone).to eq('UTC')
+      expect(new_collection.deposited_at.zone).to eq('EDT')
     end
   end
 end

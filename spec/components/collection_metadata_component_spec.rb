@@ -8,7 +8,7 @@ RSpec.describe CollectionMetadataComponent, type: :component do
   describe 'rendering' do
     let(:collection) { Collection.new(
       subtitle: 'My subtitle',
-      created_at: Time.zone.parse('2020-01-15 16:07'),
+      deposited_at: Time.zone.parse('2020-01-15 16:07'),
       keyword: %w(one two),
       description: nil,
       subject: []
@@ -20,7 +20,7 @@ RSpec.describe CollectionMetadataComponent, type: :component do
     end
 
     it 'renders a date with a nice format' do
-      expect(result.css('dd.collection-created-at').text).to eq 'January 15, 2020 16:07'
+      expect(result.css('dd.collection-deposited-at').text).to eq 'January 15, 2020 16:07'
     end
 
     it 'renders a multi-value field' do
@@ -62,7 +62,7 @@ RSpec.describe CollectionMetadataComponent, type: :component do
       expect(result.css('dt.collection-based-near')).to be_present
       expect(result.css('dt.collection-related-url')).to be_present
       expect(result.css('dt.collection-source')).to be_present
-      expect(result.css('dt.collection-created-at')).to be_present
+      expect(result.css('dt.collection-deposited-at')).to be_present
       expect(result.css('dt.collection-creator-aliases')).to be_present
 
       # Test that the fields have the correct values. Please note that some of
@@ -83,7 +83,7 @@ RSpec.describe CollectionMetadataComponent, type: :component do
       expect(result.css('dd.collection-based-near').text).to include collection[:based_near].first
       expect(result.css('dd.collection-related-url').text).to include collection[:related_url].first
       expect(result.css('dd.collection-source').text).to include collection[:source].first
-      expect(result.css('dd.collection-created-at').text).to include collection[:created_at].year.to_s
+      expect(result.css('dd.collection-deposited-at').text).to include collection[:deposited_at].year.to_s
     end
   end
 end

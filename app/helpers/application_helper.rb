@@ -6,4 +6,9 @@ module ApplicationHelper
   def new_session_path(*_)
     new_user_session_path
   end
+
+  def date_display(args)
+    Time.zone.parse(args[:document][args[:field]])
+      .to_formatted_s(:long)
+  end
 end

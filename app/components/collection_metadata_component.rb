@@ -27,7 +27,7 @@ class CollectionMetadataComponent < ActionView::Component::Base
     :based_near,
     :related_url,
     :source,
-    :created_at
+    :deposited_at
   ].freeze
 
   def initialize(collection:)

@@ -29,13 +29,13 @@ class WorkVersionMetadataComponent < ActionView::Component::Base
     :based_near,
     :related_url,
     :source,
-    :created_at
+    :deposited_at
   ].freeze
 
   MINI_ATTRIBUTES = [
     :title,
     :creator_aliases,
-    :created_at
+    :deposited_at
   ].freeze
 
   def initialize(work_version:, mini: false)
