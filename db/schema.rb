@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_08_201308) do
+ActiveRecord::Schema.define(version: 2020_05_29_134223) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -90,6 +90,7 @@ ActiveRecord::Schema.define(version: 2020_05_08_201308) do
     t.jsonb "metadata"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "deposited_at"
     t.index ["depositor_id"], name: "index_collections_on_depositor_id"
   end
 
@@ -97,6 +98,7 @@ ActiveRecord::Schema.define(version: 2020_05_08_201308) do
     t.jsonb "file_data"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "deposited_at"
   end
 
   create_table "file_version_memberships", force: :cascade do |t|
@@ -203,6 +205,7 @@ ActiveRecord::Schema.define(version: 2020_05_08_201308) do
     t.datetime "embargoed_until"
     t.bigint "depositor_id", null: false
     t.bigint "proxy_id"
+    t.datetime "deposited_at"
     t.index ["depositor_id"], name: "index_works_on_depositor_id"
     t.index ["proxy_id"], name: "index_works_on_proxy_id"
   end

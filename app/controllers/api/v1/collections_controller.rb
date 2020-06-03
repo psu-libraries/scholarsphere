@@ -67,6 +67,7 @@ module Api::V1
             :rights,
             :noid,
             :published_date,
+            :deposited_at,
             work_ids: [],
             keyword: [],
             description: [],

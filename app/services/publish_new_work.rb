@@ -18,6 +18,7 @@ class PublishNewWork
   # @return [Work]
   def self.call(metadata:, depositor:, content:, permissions: {})
     noid = metadata.delete(:noid)
+    deposited_at = metadata.delete(:deposited_at)
 
     # @todo start a transaction here in case we need to rollback and remove any Actors we've created
 
@@ -45,6 +46,7 @@ class PublishNewWork
       visibility: metadata.delete(:visibility) { Permissions::Visibility::OPEN },
       embargoed_until: metadata.delete(:embargoed_until),
       depositor: depositor_actor,
+      deposited_at: deposited_at,
       versions_attributes: [metadata.to_hash.merge!('creator_aliases_attributes' => creator_aliases_attributes)]
     }
 
@@ -59,7 +61,7 @@ class PublishNewWork
     work_version = work.versions.first
 
     content.map do |file|
-      work_version.file_resources.build(file: file[:file])
+      work_version.file_resources.build(file: file[:file], deposited_at: file[:deposited_at])
     end
 
     return work unless work.valid?

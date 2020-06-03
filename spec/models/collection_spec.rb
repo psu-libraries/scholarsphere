@@ -7,6 +7,8 @@ RSpec.describe Collection, type: :model do
     let(:factory_name) { :collection }
   end
 
+  it_behaves_like 'a resource with a deposited at timestamp'
+
   describe 'table' do
     it { is_expected.to have_db_column(:depositor_id) }
     it { is_expected.to have_db_column(:metadata).of_type(:jsonb) }
@@ -168,6 +170,7 @@ RSpec.describe Collection, type: :model do
           created_at_dtsi
           creator_aliases_tesim
           creators_sim
+          deposited_at_dtsi
           depositor_id_isi
           description_tesim
           discover_groups_ssim
@@ -204,6 +207,7 @@ RSpec.describe Collection, type: :model do
           created_at_dtsi
           creator_aliases_tesim
           creators_sim
+          deposited_at_dtsi
           depositor_id_isi
           description_tesim
           discover_groups_ssim

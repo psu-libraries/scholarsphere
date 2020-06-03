@@ -336,4 +336,48 @@ RSpec.describe PublishNewWork do
       expect(new_work.latest_published_version.file_version_memberships.map(&:title)).to contain_exactly('image.png')
     end
   end
+
+  context 'with custom deposit dates' do
+    let(:new_work) do
+      described_class.call(
+        metadata: HashWithIndifferentAccess.new(work.metadata.merge(
+                                                  work_type: 'dataset',
+                                                  creator_aliases_attributes: [
+                                                    {
+                                                      alias: user.name,
+                                                      actor_attributes: {
+                                                        email: user.email,
+                                                        given_name: user.actor.given_name,
+                                                        surname: user.actor.surname,
+                                                        psu_id: user.actor.psu_id
+                                                      }
+                                                    }
+                                                  ],
+                                                  deposited_at: '2018-02-28T15:12:54Z'
+                                                )),
+        depositor: depositor,
+        content: [
+          HashWithIndifferentAccess.new(
+            file: fixture_file_upload(File.join(fixture_path, 'image.png')),
+            deposited_at: '2018-03-01T10:13:00Z'
+          )
+        ]
+      )
+    end
+
+    it 'creates a work using the specified deposit dates' do
+      expect(new_work).to be_open_access
+      expect(new_work.deposited_at.strftime('%Y-%m-%d')).to eq('2018-02-28')
+      expect(new_work.deposited_at).to be_a(ActiveSupport::TimeWithZone)
+      expect(new_work.deposited_at.zone).to eq('UTC')
+      expect(new_work.versions.count).to eq(1)
+      expect(new_work.latest_version).to be_published
+      expect(new_work.work_type).to eq('dataset')
+      expect(new_work.latest_published_version.metadata).to eq(work.metadata)
+      expect(new_work.latest_published_version.file_version_memberships.map(&:title)).to contain_exactly('image.png')
+      expect(new_work.latest_published_version.file_resources.first.deposited_at.strftime('%Y-%m-%d')).to eq(
+        '2018-03-01'
+      )
+    end
+  end
 end

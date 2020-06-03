@@ -89,6 +89,7 @@ module Api::V1
             :version_name,
             :published_date,
             :noid,
+            :deposited_at,
             keyword: [],
             description: [],
             resource_type: [],
@@ -125,7 +126,11 @@ module Api::V1
 
       def content_params
         params.fetch(:content, []).map do |content_parameter|
-          content_parameter.permit(:file)
+          content_parameter
+            .permit(
+              :file,
+              :deposited_at
+            )
         end
       end
 
