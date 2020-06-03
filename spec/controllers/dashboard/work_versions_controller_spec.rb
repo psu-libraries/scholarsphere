@@ -250,6 +250,18 @@ RSpec.describe Dashboard::WorkVersionsController, type: :controller do
 
         it { is_expected.to render_template(:publish) }
       end
+
+      context 'when the work version does not have all attributes required to be published' do
+        let(:work_version) { create :work_version, :draft }
+
+        context 'with valid attributes' do
+          let(:attributes) { valid_attributes }
+
+          before { perform_request }
+
+          its(:response) { is_expected.to render_template(:publish) }
+        end
+      end
     end
   end
 end

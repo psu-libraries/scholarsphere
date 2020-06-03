@@ -86,7 +86,7 @@ module DataCite
       end
 
       def parsed_publication_date
-        Time.zone.parse(work_version.published_date.first)
+        Time.zone.parse(work_version.published_date)
       rescue ArgumentError, TypeError
         nil
       end

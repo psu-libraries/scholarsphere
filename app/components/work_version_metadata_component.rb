@@ -22,7 +22,7 @@ class WorkVersionMetadataComponent < ActionView::Component::Base
     :display_work_type,
     :contributor,
     :publisher,
-    :published_date,
+    :display_published_date,
     :subject,
     :language,
     :identifier,
@@ -39,11 +39,17 @@ class WorkVersionMetadataComponent < ActionView::Component::Base
   ].freeze
 
   def initialize(work_version:, mini: false)
-    @work_version = work_version
+    @work_version = decorate(work_version)
     @mini = mini
   end
 
   private
+
+    def decorate(work_ver)
+      return work_ver if work_ver.is_a? ResourceDecorator
+
+      ResourceDecorator.new(work_ver)
+    end
 
     def attributes_list
       mini ? MINI_ATTRIBUTES : ATTRIBUTES

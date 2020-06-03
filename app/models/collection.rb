@@ -10,7 +10,7 @@ class Collection < ApplicationRecord
                  description: [:string, array: true, default: []],
                  contributor: [:string, array: true, default: []],
                  publisher: [:string, array: true, default: []],
-                 published_date: [:string, array: true, default: []],
+                 published_date: :string,
                  subject: [:string, array: true, default: []],
                  language: [:string, array: true, default: []],
                  identifier: [:string, array: true, default: []],
@@ -50,6 +50,11 @@ class Collection < ApplicationRecord
   validates :title,
             presence: true
 
+  validates :published_date,
+            edtf_date: true,
+            allow_blank: true,
+            unless: -> { validation_context == :migration_api }
+
   accepts_nested_attributes_for :creator_aliases,
                                 reject_if: :all_blank,
                                 allow_destroy: true
@@ -64,7 +69,6 @@ class Collection < ApplicationRecord
     description
     contributor
     publisher
-    published_date
     subject
     language
     identifier
@@ -77,7 +81,10 @@ class Collection < ApplicationRecord
     end
   end
 
-  %i[subtitle].each do |field|
+  %i[
+    published_date
+    subtitle
+  ].each do |field|
     define_method "#{field}=" do |val|
       super(val.presence)
     end
@@ -126,7 +133,8 @@ class Collection < ApplicationRecord
       SolrDocumentBuilder.new(
         DefaultSchema,
         CreatorSchema,
-        PermissionsSchema
+        PermissionsSchema,
+        PublishedDateSchema
       )
     end
 end

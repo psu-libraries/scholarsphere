@@ -35,7 +35,7 @@ FactoryBot.define do
       description { [Faker::Lorem.paragraph] }
       contributor { [Faker::Artist.name] }
       publisher { [Faker::Book.publisher] }
-      published_date { [Faker::Date.between(from: 2.years.ago, to: Date.today).iso8601] }
+      published_date { Faker::Date.between(from: 2.years.ago, to: Date.today).iso8601 }
       subject { [Faker::Book.genre] }
 
       language { [Faker::Nation.language] }

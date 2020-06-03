@@ -18,7 +18,7 @@ RSpec.describe Collection, type: :model do
     it { is_expected.to have_jsonb_accessor(:description).of_type(:string).is_array.with_default([]) }
     it { is_expected.to have_jsonb_accessor(:contributor).of_type(:string).is_array.with_default([]) }
     it { is_expected.to have_jsonb_accessor(:publisher).of_type(:string).is_array.with_default([]) }
-    it { is_expected.to have_jsonb_accessor(:published_date).of_type(:string).is_array.with_default([]) }
+    it { is_expected.to have_jsonb_accessor(:published_date).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:subject).of_type(:string).is_array.with_default([]) }
     it { is_expected.to have_jsonb_accessor(:language).of_type(:string).is_array.with_default([]) }
     it { is_expected.to have_jsonb_accessor(:identifier).of_type(:string).is_array.with_default([]) }
@@ -74,6 +74,21 @@ RSpec.describe Collection, type: :model do
 
   describe 'validations' do
     it { is_expected.to validate_presence_of(:title) }
+
+    context 'with the :migration_api validation context' do
+      it { is_expected.to allow_value('').for(:published_date).on(:migration_api) }
+      it { is_expected.to allow_value('not an EDTF formatted date').for(:published_date).on(:migration_api) }
+    end
+
+    context 'without the :migration_api validation context' do
+      let(:collection) { subject }
+
+      it 'validates published_date is in EDTF format' do
+        expect(collection).to allow_value('').for(:published_date)
+        expect(collection).to allow_value('1999-uu-uu').for(:published_date)
+        expect(collection).not_to allow_value('not an EDTF formatted date').for(:published_date)
+      end
+    end
   end
 
   describe 'multivalued fields' do
@@ -81,7 +96,6 @@ RSpec.describe Collection, type: :model do
     it_behaves_like 'a multivalued json field', :description
     it_behaves_like 'a multivalued json field', :contributor
     it_behaves_like 'a multivalued json field', :publisher
-    it_behaves_like 'a multivalued json field', :published_date
     it_behaves_like 'a multivalued json field', :subject
     it_behaves_like 'a multivalued json field', :language
     it_behaves_like 'a multivalued json field', :identifier
@@ -91,6 +105,7 @@ RSpec.describe Collection, type: :model do
   end
 
   describe 'singlevalued fields' do
+    it_behaves_like 'a singlevalued json field', :published_date
     it_behaves_like 'a singlevalued json field', :subtitle
   end
 
@@ -199,6 +214,7 @@ RSpec.describe Collection, type: :model do
           keyword_tesim
           language_tesim
           model_ssi
+          published_date_dtrsi
           published_date_tesim
           publisher_tesim
           related_url_tesim

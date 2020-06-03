@@ -48,4 +48,34 @@ RSpec.describe ResourceDecorator do
       its(:display_work_type) { is_expected.to be_nil }
     end
   end
+
+  describe '#display_published_date' do
+    before do
+      allow(EdtfDate).to receive(:humanize).with('resource_published_date')
+        .and_return(:delegated_to_edtf_humanize)
+    end
+
+    context 'with a work' do
+      let(:resource) { build(:work) }
+
+      its(:display_published_date) { is_expected.to be_nil }
+    end
+
+    context 'with a work version' do
+      let(:resource) { build(:work_version, published_date: 'resource_published_date') }
+
+      its(:display_published_date) { is_expected.to eq(:delegated_to_edtf_humanize) }
+    end
+
+    context 'with a collection' do
+      let(:resource) { build(:collection, published_date: 'resource_published_date') }
+
+      before do
+        allow(EdtfDate).to receive(:humanize).with(resource.published_date)
+          .and_return(:delegated_to_edtf_humanize)
+      end
+
+      its(:display_published_date) { is_expected.to eq(:delegated_to_edtf_humanize) }
+    end
+  end
 end

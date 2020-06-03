@@ -55,7 +55,7 @@ RSpec.describe DataCite::Metadata do
       subject(:publicationYear) { attributes[:publicationYear] }
 
       context 'when the publication_date can be parsed' do
-        before { work_version.published_date = ['2019-12-16'] }
+        before { work_version.published_date = '2019-12-16' }
 
         it 'parses the publication_date and uses the year' do
           expect(publicationYear).to eq 2019
@@ -64,7 +64,7 @@ RSpec.describe DataCite::Metadata do
 
       context 'when the publication_date cannot be parsed' do
         before do
-          work_version.published_date = ['nonsense']
+          work_version.published_date = 'nonsense'
           work_version.created_at = Time.zone.parse('2019-12-16')
         end
 
@@ -124,7 +124,7 @@ RSpec.describe DataCite::Metadata do
 
     context 'when publication_date and created_at are empty/blank' do
       before do
-        work_version.published_date = []
+        work_version.published_date = nil
         work_version.created_at = nil
       end
 

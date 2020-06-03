@@ -33,6 +33,14 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
     it 'does not render any fields that are empty' do
       expect(result.css('dd.work-version-description')).to be_empty
     end
+
+    it 'accepts a decorated and non-decorated Work Version' do
+      non_decorated_result = render_inline(described_class.new(work_version: work_version))
+      expect(non_decorated_result.css('dt.work-version-subtitle')).to be_present
+
+      decorated_result = render_inline(described_class.new(work_version: ResourceDecorator.new(work_version)))
+      expect(decorated_result.css('dt.work-version-subtitle')).to be_present
+    end
   end
 
   describe 'fully loaded' do
@@ -50,7 +58,7 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
       expect(result.css('dt.work-version-display-work-type')).to be_present
       expect(result.css('dt.work-version-contributor')).to be_present
       expect(result.css('dt.work-version-publisher')).to be_present
-      expect(result.css('dt.work-version-published-date')).to be_present
+      expect(result.css('dt.work-version-display-published-date')).to be_present
       expect(result.css('dt.work-version-subject')).to be_present
       expect(result.css('dt.work-version-language')).to be_present
       expect(result.css('dt.work-version-identifier')).to be_present
@@ -73,8 +81,8 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
       expect(result.css('dd.work-version-display-work-type').text).to eq decorated_work_version.display_work_type
       expect(result.css('dd.work-version-contributor').text).to include work_version[:contributor].first
       expect(result.css('dd.work-version-publisher').text).to include work_version[:publisher].first
-      expect(result.css('dd.work-version-published-date').text)
-        .to include Time.zone.parse(work_version[:published_date].first).year.to_s
+      expect(result.css('dd.work-version-display-published-date').text)
+        .to include Time.zone.parse(work_version[:published_date]).year.to_s
       expect(result.css('dd.work-version-subject').text).to include work_version[:subject].first
       expect(result.css('dd.work-version-language').text).to include work_version[:language].first
       expect(result.css('dd.work-version-identifier').text).to include work_version[:identifier].first
@@ -102,7 +110,7 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
         expect(result.css('dt.work-version-work-type')).not_to be_present
         expect(result.css('dt.work-version-contributor')).not_to be_present
         expect(result.css('dt.work-version-publisher')).not_to be_present
-        expect(result.css('dt.work-version-published-date')).not_to be_present
+        expect(result.css('dt.work-version-display-published-date')).not_to be_present
         expect(result.css('dt.work-version-subject')).not_to be_present
         expect(result.css('dt.work-version-language')).not_to be_present
         expect(result.css('dt.work-version-identifier')).not_to be_present

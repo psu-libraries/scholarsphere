@@ -48,7 +48,7 @@ module Api::V1
       def publishing_errors
         work_version = work.latest_version
         work_version.publish
-        work_version.validate
+        work_version.validate(:migration_api)
         work_version.errors.full_messages
       end
 
@@ -87,13 +87,13 @@ module Api::V1
             :subtitle,
             :rights,
             :version_name,
+            :published_date,
             :noid,
             keyword: [],
             description: [],
             resource_type: [],
             contributor: [],
             publisher: [],
-            published_date: [],
             subject: [],
             language: [],
             identifier: [],

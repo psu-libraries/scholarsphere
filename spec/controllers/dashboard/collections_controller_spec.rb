@@ -6,13 +6,15 @@ RSpec.describe Dashboard::CollectionsController, type: :controller do
   let(:valid_attributes) {
     {
       'title' => 'My Collection',
-      'visibility' => Permissions::Visibility.default
+      'visibility' => Permissions::Visibility.default,
+      'published_date' => '2020-05-28'
     }
   }
 
   let(:invalid_attributes) {
     {
-      'title' => ''
+      'title' => 'My Collection',
+      'published_date' => 'not a date'
     }
   }
 
@@ -140,7 +142,7 @@ RSpec.describe Dashboard::CollectionsController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    let(:invalid_attributes) { { 'title' => '' } }
+    let(:invalid_attributes) { { 'published_date' => 'not a date' } }
     let(:valid_attributes) { { 'title' => 'My Edited Title' } }
     let(:attributes) { valid_attributes }
     let(:perform_request) { patch :update, params: { id: collection.to_param, collection: attributes } }

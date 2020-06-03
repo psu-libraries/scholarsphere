@@ -91,12 +91,12 @@ module Dashboard
           .permit(
             :title,
             :subtitle,
+            :published_date,
             work_ids: [],
             keyword: [],
             description: [],
             contributor: [],
             publisher: [],
-            published_date: [],
             subject: [],
             language: [],
             identifier: [],

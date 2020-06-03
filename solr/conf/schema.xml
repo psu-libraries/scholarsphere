@@ -103,6 +103,15 @@
     <dynamicField name="*_dttsi" type="tdate" stored="true" indexed="true" multiValued="false"/>
     <dynamicField name="*_dttsim" type="tdate" stored="true" indexed="true" multiValued="true"/>
 
+    <!-- DateRangeField (_dtr...) (for querying spans of time) -->
+
+    <dynamicField name="*_dtri" type="rdate" stored="false" indexed="true" multiValued="false"/>
+    <dynamicField name="*_dtrim" type="rdate" stored="false" indexed="true" multiValued="true"/>
+    <dynamicField name="*_dtrs" type="rdate" stored="true" indexed="false" multiValued="false"/>
+    <dynamicField name="*_dtrsm" type="rdate" stored="true" indexed="false" multiValued="true"/>
+    <dynamicField name="*_dtrsi" type="rdate" stored="true" indexed="true" multiValued="false"/>
+    <dynamicField name="*_dtrsim" type="rdate" stored="true" indexed="true" multiValued="true"/>
+
     <!-- long (_l...) -->
 
     <dynamicField name="*_li" type="long" stored="false" indexed="true" multiValued="false"/>
@@ -249,6 +258,10 @@
     <!-- A PointField based date field for faster date range queries and date faceting. -->
     <fieldType name="tdate" class="solr.DatePointField" docValues="true"/>
 
+    <!-- Supports the same point-in-time date syntax and more to express date ranges.
+      One class of examples is truncated dates, which represent the entire date span
+      to the precision indicated. -->
+    <fieldType name="rdate" class="solr.DateRangeField" />
 
     <!-- This point type indexes the coordinates as separate fields (subFields)
       If subFieldType is defined, it references a type, and a dynamic field

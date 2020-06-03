@@ -20,7 +20,7 @@ RSpec.describe WorkVersion, type: :model do
     it { is_expected.to have_jsonb_accessor(:resource_type).of_type(:string).is_array.with_default([]) }
     it { is_expected.to have_jsonb_accessor(:contributor).of_type(:string).is_array.with_default([]) }
     it { is_expected.to have_jsonb_accessor(:publisher).of_type(:string).is_array.with_default([]) }
-    it { is_expected.to have_jsonb_accessor(:published_date).of_type(:string).is_array.with_default([]) }
+    it { is_expected.to have_jsonb_accessor(:published_date).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:subject).of_type(:string).is_array.with_default([]) }
     it { is_expected.to have_jsonb_accessor(:language).of_type(:string).is_array.with_default([]) }
     it { is_expected.to have_jsonb_accessor(:identifier).of_type(:string).is_array.with_default([]) }
@@ -59,6 +59,8 @@ RSpec.describe WorkVersion, type: :model do
 
     context 'when draft' do
       it { is_expected.to validate_presence_of(:title) }
+
+      it { is_expected.not_to validate_presence_of(:published_date) }
     end
 
     context 'when published' do
@@ -92,6 +94,19 @@ RSpec.describe WorkVersion, type: :model do
         work_version.validate
         expect(work_version.errors[:visibility]).to be_empty
       end
+
+      it { is_expected.to validate_presence_of(:published_date) }
+
+      it 'validates published_date is in EDTF format' do
+        expect(work_version).to allow_value('1999-uu-uu').for(:published_date)
+        expect(work_version).not_to allow_value('not an EDTF formatted date').for(:published_date)
+      end
+
+      context 'with the :migration_api validation context' do
+        it { is_expected.to allow_value(nil).for(:published_date).on(:migration_api) }
+
+        it { is_expected.to allow_value('not an EDTF formatted date').for(:published_date).on(:migration_api) }
+      end
     end
 
     context 'with the version number' do
@@ -106,7 +121,6 @@ RSpec.describe WorkVersion, type: :model do
     it_behaves_like 'a multivalued json field', :resource_type
     it_behaves_like 'a multivalued json field', :contributor
     it_behaves_like 'a multivalued json field', :publisher
-    it_behaves_like 'a multivalued json field', :published_date
     it_behaves_like 'a multivalued json field', :subject
     it_behaves_like 'a multivalued json field', :language
     it_behaves_like 'a multivalued json field', :identifier
@@ -116,8 +130,9 @@ RSpec.describe WorkVersion, type: :model do
   end
 
   describe 'singlevalued fields' do
-    it_behaves_like 'a singlevalued json field', :subtitle
+    it_behaves_like 'a singlevalued json field', :published_date
     it_behaves_like 'a singlevalued json field', :rights
+    it_behaves_like 'a singlevalued json field', :subtitle
     it_behaves_like 'a singlevalued json field', :version_name
   end
 
@@ -178,13 +193,14 @@ RSpec.describe WorkVersion, type: :model do
   end
 
   describe '#to_solr' do
-    subject(:work_version) { create(:work_version) }
+    subject(:work_version) { create(:work_version, published_date: '1999-uu-uu') }
 
     its(:to_solr) do
       is_expected.to include(
         title_tesim: [work_version.title],
         latest_version_bsi: false,
-        work_type_ssim: Work::Types.display(work_version.work_type)
+        work_type_ssim: Work::Types.display(work_version.work_type),
+        published_date_dtrsi: '1999'
       )
     end
   end
