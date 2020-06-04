@@ -10,7 +10,7 @@ OkComputer::Registry.register 'solr', OkComputer::SolrCheck.new(Rails.applicatio
 ## sidekiq and redis checks
 if redis_config.valid?
   OkComputer::Registry.register 'redis', OkComputer::RedisCheck.new(redis_config.to_hash)
-  OkComputer::Registry.register 'sidekiq', HealthChecks::QueueLatencyCheck.new(threshold = ENV.fetch('SIDEKIQ_QUEUE_LATENCY_THRESHOLD', 30).to_i)
+  OkComputer::Registry.register 'sidekiq', HealthChecks::QueueLatencyCheck.new(ENV.fetch('SIDEKIQ_QUEUE_LATENCY_THRESHOLD', 30).to_i)
   OkComputer::Registry.register 'sidekiq_deadset', HealthChecks::QueueDeadSetCheck.new
   # Reports as Failed, but continues to return 200 status code.
   # This is so a POD won't get restarted just for latency checks.
