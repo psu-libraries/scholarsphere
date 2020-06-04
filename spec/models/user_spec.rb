@@ -14,7 +14,7 @@ RSpec.describe User, type: :model do
     it { is_expected.to have_db_column(:uid).of_type(:string) }
     it { is_expected.to have_db_column(:actor_id) }
 
-    it { is_expected.to have_db_index(:email).unique }
+    it { is_expected.to have_db_index(:access_id).unique }
     it { is_expected.to have_db_index(:actor_id) }
   end
 
@@ -32,8 +32,8 @@ RSpec.describe User, type: :model do
   describe 'validations' do
     subject { create :user } # validate_uniqueness_of really wants this, not sure why
 
-    it { is_expected.to validate_presence_of(:email) }
-    it { is_expected.to validate_uniqueness_of(:email).case_insensitive }
+    it { is_expected.to validate_presence_of(:access_id) }
+    it { is_expected.to validate_uniqueness_of(:access_id).case_insensitive }
   end
 
   describe 'Blacklight::User' do
