@@ -23,6 +23,7 @@ Bundler.require(*Rails.groups)
 
 module Scholarsphere
   class Application < Rails::Application
+    require 'healthchecks/healthchecks'
     require 'scholarsphere/redis_config'
     require 'json_log_formatter'
     require 'qa/authorities/persons'
@@ -31,7 +32,7 @@ module Scholarsphere
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.0
 
-    config.admin_group = ENV.fetch('ADMIN_GROUP', 'cn=umg/up.dlt.scholarsphere-admin,dc=psu,dc=edu')
+    config.admin_group = ENV.fetch('ADMIN_GROUP', 'umg/up.dlt.scholarsphere-admin')
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
