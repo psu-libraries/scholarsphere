@@ -45,17 +45,11 @@ module Api::V1
 
       def collection
         @collection ||= CreateNewCollection.call(
-          metadata: metadata_params.merge!(work_ids: work_ids),
+          metadata: metadata_params,
           depositor: depositor_params,
-          permissions: permission_params
+          permissions: permission_params,
+          work_noids: work_noid_params
         )
-      end
-
-      # @note Noids are globally unique in Scholarsphere 3, so limiting this query to collections isn't necessary.
-      def work_ids
-        work_noid_params.map { |noid| LegacyIdentifier.find_by!(old_id: noid).resource_id }
-          .concat(metadata_params.fetch(:work_ids, []))
-          .uniq
       end
 
       def metadata_params

@@ -49,11 +49,12 @@ RSpec.describe Api::V1::CollectionsController, type: :controller do
           'message' => 'Collection was successfully created',
           'url' => "/resources/#{new_collection.uuid}"
         )
+        expect(new_collection.work_ids).to contain_exactly(*works.map(&:id))
       end
     end
 
     context 'with a legacy identifiers' do
-      let(:works) do
+      let(:legacy_identifiers) do
         Array.new(3).map do
           create(:legacy_identifier, :with_work, version: 3)
         end
@@ -66,7 +67,7 @@ RSpec.describe Api::V1::CollectionsController, type: :controller do
             creator_aliases_attributes: [creator_alias]
           },
           depositor: { given_name: user.given_name, surname: user.surname, email: user.email, psu_id: user.psu_id },
-          work_noids: works.map(&:old_id)
+          work_noids: legacy_identifiers.map(&:old_id)
         }
       end
 
@@ -76,7 +77,7 @@ RSpec.describe Api::V1::CollectionsController, type: :controller do
           'message' => 'Collection was successfully created',
           'url' => "/resources/#{new_collection.uuid}"
         )
-        expect(new_collection.works.count).to eq(3)
+        expect(new_collection.work_ids).to contain_exactly(*legacy_identifiers.map(&:resource_id))
       end
     end
 
@@ -113,23 +114,23 @@ RSpec.describe Api::V1::CollectionsController, type: :controller do
       end
     end
 
-    context 'with missing works' do
+    context 'with missing legacy works' do
       before do
         post :create, params: {
           metadata: {
             title: FactoryBotHelpers.work_title,
-            creator_aliases_attributes: [creator_alias],
-            work_ids: ['idontexist']
+            creator_aliases_attributes: [creator_alias]
           },
-          depositor: { given_name: user.given_name, surname: user.surname, email: user.email, psu_id: user.psu_id }
+          depositor: { given_name: user.given_name, surname: user.surname, email: user.email, psu_id: user.psu_id },
+          work_noids: ['idontexist']
         }
       end
 
       it 'reports the error' do
-        expect(response.status).to eq(500)
+        expect(response.status).to eq(422)
         expect(json_response).to include(
-          'message' => "We're sorry, but something went wrong",
-          'errors' => ['ActiveRecord::RecordNotFound', "Couldn't find Work with 'id'=[0]"]
+          'message' => 'Unable to complete the request',
+          'errors' => ['Legacy identifiers idontexist were not found']
         )
       end
     end
