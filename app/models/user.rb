@@ -20,9 +20,9 @@ class User < ApplicationRecord
   has_many :groups,
            through: :user_group_memberships
 
-  validates :email,
+  validates :access_id,
             presence: true,
-            uniqueness: true
+            uniqueness: { case_sensitive: false }
 
   def works
     actor.deposited_works
