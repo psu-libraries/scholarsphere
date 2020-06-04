@@ -3,7 +3,7 @@
 require 'spec_helper'
 require 'sidekiq/testing'
 require 'okcomputer'
-require 'healthchecks/healthchecks'
+require 'healthchecks'
 require 'scholarsphere/redis_config'
 
 RSpec.describe HealthChecks::QueueDeadSetCheck do
