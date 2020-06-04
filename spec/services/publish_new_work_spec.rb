@@ -369,7 +369,7 @@ RSpec.describe PublishNewWork do
       expect(new_work).to be_open_access
       expect(new_work.deposited_at.strftime('%Y-%m-%d')).to eq('2018-02-28')
       expect(new_work.deposited_at).to be_a(ActiveSupport::TimeWithZone)
-      expect(new_work.deposited_at.zone).to eq('UTC')
+      expect(new_work.deposited_at.zone).to eq('EST')
       expect(new_work.versions.count).to eq(1)
       expect(new_work.latest_version).to be_published
       expect(new_work.work_type).to eq('dataset')

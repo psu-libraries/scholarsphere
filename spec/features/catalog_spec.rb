@@ -55,12 +55,17 @@ RSpec.describe 'Blacklight catalog page' do
     expect(page).to have_blacklight_label('aasm_state_tesim')
     expect(page).to have_blacklight_label('keyword_tesim')
     expect(page).to have_blacklight_label('work_type_ssim')
-    expect(page).to have_blacklight_label('created_at_dtsi')
+    expect(page).to have_blacklight_label('deposited_at_dtsi')
     indexed_resources.each do |resource|
       expect(page).to have_blacklight_field('title_tesim').with(resource.title)
       expect(page).to have_blacklight_field('creator_aliases_tesim').with(resource.creator_aliases.map(&:alias).join(', '))
       expect(page).to have_blacklight_field('keyword_tesim').with(resource.keyword.join(', '))
-      expect(page).to have_blacklight_field('created_at_dtsi').with(/^#{resource.created_at.strftime("%F")}/)
+      expect(page).to have_blacklight_field('deposited_at_dtsi').with(
+        resource
+          .deposited_at
+          .in_time_zone(Rails.configuration.time_zone)
+          .to_formatted_s(:long)
+      )
 
       # The following fields are only valid for WorkVersions, not Collections
       if resource.is_a? WorkVersion

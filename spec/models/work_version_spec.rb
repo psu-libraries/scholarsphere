@@ -140,6 +140,7 @@ RSpec.describe WorkVersion, type: :model do
   it { is_expected.to delegate_method(:proxy_depositor).to(:work) }
   it { is_expected.to delegate_method(:embargoed?).to(:work) }
   it { is_expected.to delegate_method(:work_type).to(:work) }
+  it { is_expected.to delegate_method(:deposited_at).to(:work) }
 
   describe '#uuid' do
     subject(:work_version) { create(:work_version) }
