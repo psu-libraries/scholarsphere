@@ -57,6 +57,7 @@ class Work < ApplicationRecord
         report
         research_paper
         software_or_program_code
+        unspecified
         video
       ].freeze
     end
@@ -65,12 +66,16 @@ class Work < ApplicationRecord
       'dataset'
     end
 
+    def self.unspecified
+      'unspecified'
+    end
+
     def self.display(type)
       type.humanize.titleize
     end
 
     def self.options_for_select_box
-      all
+      (all - [unspecified])
         .sort
         .map { |type| [display(type), type] }
     end

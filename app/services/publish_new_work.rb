@@ -42,7 +42,7 @@ class PublishNewWork
     end
 
     params = {
-      work_type: metadata.delete(:work_type) { Work::Types.default },
+      work_type: (metadata.delete(:work_type).presence || Work::Types.unspecified),
       visibility: metadata.delete(:visibility) { Permissions::Visibility::OPEN },
       embargoed_until: metadata.delete(:embargoed_until),
       depositor: depositor_actor,

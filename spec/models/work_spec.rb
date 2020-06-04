@@ -70,6 +70,7 @@ RSpec.describe Work, type: :model do
           'report',
           'research_paper',
           'software_or_program_code',
+          'unspecified',
           'video'
         )
       end
@@ -81,10 +82,17 @@ RSpec.describe Work, type: :model do
       it { is_expected.to eq('dataset') }
     end
 
+    describe '.unspecified' do
+      subject { types.unspecified }
+
+      it { is_expected.to eq('unspecified') }
+    end
+
     describe '.options_for_select_box' do
       subject(:options) { types.options_for_select_box }
 
       it { is_expected.to include(['Dataset', 'dataset'], ['Part Of Book', 'part_of_book']) }
+      it { is_expected.not_to include(['Unspecified', 'unspecified']) }
     end
 
     describe '.display' do
@@ -118,6 +126,7 @@ RSpec.describe Work, type: :model do
           report: 'report',
           research_paper: 'research_paper',
           software_or_program_code: 'software_or_program_code',
+          unspecified: 'unspecified',
           video: 'video'
         )
         .backed_by_column_of_type(:string)
