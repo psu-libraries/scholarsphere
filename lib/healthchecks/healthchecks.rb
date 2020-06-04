@@ -14,7 +14,7 @@ module HealthChecks
     attr_accessor :threshold
 
     def initialize(threshold = 30)
-      self.threshold = Integer(threshold)
+      self.threshold = threshold.to_i
     end
 
     def check
