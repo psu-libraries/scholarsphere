@@ -380,4 +380,34 @@ RSpec.describe PublishNewWork do
       )
     end
   end
+
+  context 'without a work type' do
+    let(:new_work) do
+      described_class.call(
+        metadata: HashWithIndifferentAccess.new(work.metadata.merge(
+                                                  work_type: '',
+                                                  creator_aliases_attributes: [
+                                                    {
+                                                      alias: user.name,
+                                                      actor_attributes: {
+                                                        email: user.email,
+                                                        given_name: user.actor.given_name,
+                                                        surname: user.actor.surname,
+                                                        psu_id: user.actor.psu_id
+                                                      }
+                                                    }
+                                                  ]
+                                                )),
+        depositor: depositor,
+        content: [
+          HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_path, 'image.png')))
+        ]
+      )
+    end
+
+    it 'creates a work using the specified deposit dates' do
+      expect(new_work.latest_version).to be_published
+      expect(new_work.work_type).to eq(Work::Types.unspecified)
+    end
+  end
 end
