@@ -6,20 +6,10 @@ require 'okcomputer'
 require 'healthchecks'
 require 'scholarsphere/redis_config'
 
-RSpec.describe HealthChecks::QueueDeadSetCheck do
+RSpec.describe HealthChecks::QueueDeadSetCheck, unless: !Scholarsphere::RedisConfig.new.valid? do
   before do
     Sidekiq::Testing.disable!
-    redis_config = Scholarsphere::RedisConfig.new
-    Sidekiq.configure_server do |config|
-      config.redis = redis_config.to_hash
-    end
-
-    Sidekiq.configure_client do |config|
-      config.redis = redis_config.to_hash
-    end
-
-    ds = Sidekiq::DeadSet.new
-    ds.clear
+    Sidekiq::DeadSet.new.clear
   end
 
   describe '#check' do
