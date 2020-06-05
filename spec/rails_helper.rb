@@ -8,6 +8,10 @@ def ci_build?
   ENV.key?('CIRCLECI') || ENV.key?('CI')
 end
 
+def redis?
+  Scholarsphere::RedisConfig.new.valid?
+end
+
 require File.expand_path('../config/environment', __dir__)
 
 # Prevent database truncation if the environment is production
