@@ -2,28 +2,21 @@
 
 module HealthChecks
   class QueueLatencyCheck < OkComputer::Check
-    attr_accessor :threshold
+    attr_reader :threshold
 
     def initialize(threshold = 30)
-      self.threshold = threshold.to_i
+      @threshold = threshold.to_i
     end
 
     def check
       @failures = nil
       @message = Hash.new
-      queues = Sidekiq::Queue.all
-      queues.each do |q|
-        latency(q.name, threshold)
+      Sidekiq::Queue.all.map do |q|
+        queue_latency = Sidekiq::Queue.new(q.name).latency
+        @message[q.name] = "has a latency of #{queue_latency} seconds"
+        mark_failure if queue_latency > threshold
       end
-
-      mark_failure if @failures
-      mark_message @message
     end
 
-    def latency(queue, threshold)
-      queue_latency = Sidekiq::Queue.new(queue).latency
-      @message[queue] = "has a latency of #{queue_latency} seconds"
-      @failures = true if queue_latency > threshold
-    end
   end
 end
