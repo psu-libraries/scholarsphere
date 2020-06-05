@@ -17,6 +17,5 @@ module HealthChecks
         mark_failure if queue_latency > threshold
       end
     end
-
   end
 end
