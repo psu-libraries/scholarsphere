@@ -42,6 +42,7 @@ RSpec/EmptyLineAfterSubject:
 RSpec/LeakyConstantDeclaration:
   Exclude:
     - 'spec/models/permissions_builder_spec.rb'
+    - 'spec/lib/healthchecks/queue_latency_check_spec.rb'
 
 RSpec/ExpectActual:
   Exclude:

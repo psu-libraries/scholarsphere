@@ -52,6 +52,10 @@
 # REDIS_PASSWORD:
 # REDIS_DATABASE:
 
+## Sidekiq Configuration
+# SIDEKIQ_QUEUE_LATENCY_THRESHOLD: 30
+# SIDEKIQ_MAX_RETRIES: 2
+
 POSTGRES_USER: "[username]" # This is typically $ whoami
 
 SOLR_HOST: localhost

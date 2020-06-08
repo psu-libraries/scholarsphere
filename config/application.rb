@@ -23,6 +23,7 @@ Bundler.require(*Rails.groups)
 
 module Scholarsphere
   class Application < Rails::Application
+    require 'healthchecks'
     require 'scholarsphere/redis_config'
     require 'json_log_formatter'
     require 'qa/authorities/persons'
