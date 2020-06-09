@@ -2,3 +2,4 @@
 :max_retries: <%= ENV.fetch("SIDEKIQ_MAX_RETRIES", 2) %>
 :queues:
   - shrine
+  - indexing
