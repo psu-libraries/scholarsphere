@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Blacklight catalog page' do
+RSpec.describe 'Blacklight catalog page', :inline_jobs do
   let(:user) { create(:user) }
 
   # Create an array of all the latest published work versions. Some works may only have a draft, so we want to exclude

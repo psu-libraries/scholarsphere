@@ -34,6 +34,7 @@ RSpec/DescribeClass:
   Exclude:
     - 'spec/features/**/*'
     - 'spec/integration/**/*'
+    - 'spec/system/**/*'
 
 RSpec/EmptyLineAfterSubject:
   Exclude:
@@ -43,6 +44,7 @@ RSpec/LeakyConstantDeclaration:
   Exclude:
     - 'spec/models/permissions_builder_spec.rb'
     - 'spec/lib/healthchecks/queue_latency_check_spec.rb'
+    - 'spec/system/active_job_system_spec.rb'
 
 RSpec/ExpectActual:
   Exclude:
@@ -50,3 +52,7 @@ RSpec/ExpectActual:
 
 RSpec/AnyInstance:
   Enabled: false
+
+Style/ClassVars:
+  Exclude:
+    - 'spec/system/active_job_system_spec.rb'

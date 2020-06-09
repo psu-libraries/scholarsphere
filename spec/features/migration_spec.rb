@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Migration', type: :feature do
+RSpec.describe 'Migration', :inline_jobs, type: :feature do
   let(:user) { build(:user) }
   let(:work) { build(:work_version, :with_complete_metadata) }
 

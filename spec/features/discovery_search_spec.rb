@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Searching discoverable resources' do
+RSpec.describe 'Searching discoverable resources', :inline_jobs do
   let!(:public_work) { create(:work, has_draft: false) }
   let!(:authorized_work) { create(:work, visibility: Permissions::Visibility::AUTHORIZED, has_draft: false) }
   let!(:current_embargoed_work) { create(:work, has_draft: false, embargoed_until: (Time.zone.now + 6.days)) }
