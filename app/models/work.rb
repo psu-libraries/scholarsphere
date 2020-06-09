@@ -57,6 +57,7 @@ class Work < ApplicationRecord
         report
         research_paper
         software_or_program_code
+        thesis
         unspecified
         video
       ].freeze
@@ -64,6 +65,10 @@ class Work < ApplicationRecord
 
     def self.default
       'dataset'
+    end
+
+    def self.thesis
+      'thesis'
     end
 
     def self.unspecified
@@ -75,7 +80,7 @@ class Work < ApplicationRecord
     end
 
     def self.options_for_select_box
-      (all - [unspecified])
+      (all - [unspecified, thesis])
         .sort
         .map { |type| [display(type), type] }
     end

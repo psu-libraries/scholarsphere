@@ -70,6 +70,7 @@ RSpec.describe Work, type: :model do
           'report',
           'research_paper',
           'software_or_program_code',
+          'thesis',
           'unspecified',
           'video'
         )
@@ -80,6 +81,12 @@ RSpec.describe Work, type: :model do
       subject { types.default }
 
       it { is_expected.to eq('dataset') }
+    end
+
+    describe '.thesis' do
+      subject { types.thesis }
+
+      it { is_expected.to eq('thesis') }
     end
 
     describe '.unspecified' do
@@ -126,6 +133,7 @@ RSpec.describe Work, type: :model do
           report: 'report',
           research_paper: 'research_paper',
           software_or_program_code: 'software_or_program_code',
+          thesis: 'thesis',
           unspecified: 'unspecified',
           video: 'video'
         )
