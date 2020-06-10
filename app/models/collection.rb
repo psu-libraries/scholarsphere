@@ -62,7 +62,7 @@ class Collection < ApplicationRecord
 
   after_initialize :set_defaults
 
-  after_save :update_index
+  after_save :update_index_async
 
   # Fields that can contain multiple values automatically remove blank values
   %i[
@@ -108,6 +108,10 @@ class Collection < ApplicationRecord
 
   def to_solr
     document_builder.generate(resource: self)
+  end
+
+  def update_index_async
+    SolrIndexingJob.perform_later(self)
   end
 
   # @note Postgres mints uuids, but they are not present until the record is reloaded from the database.  In most cases,

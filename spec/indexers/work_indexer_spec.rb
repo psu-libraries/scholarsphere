@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe WorkIndexer do
+RSpec.describe WorkIndexer, :inline_jobs do
   describe '::call' do
     before { described_class.call(work) }
 

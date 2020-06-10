@@ -79,7 +79,7 @@ class WorkVersion < ApplicationRecord
             if: :published?,
             unless: -> { validation_context == :migration_api }
 
-  after_save :update_index, if: :published?
+  after_save :update_index_async, if: :published?
 
   aasm do
     state :draft, intial: true
@@ -145,6 +145,10 @@ class WorkVersion < ApplicationRecord
 
   def latest_published_version?
     work.latest_published_version.try(:id) == id
+  end
+
+  def update_index_async
+    SolrIndexingJob.perform_later(self)
   end
 
   # @note Postgres mints uuids, but they are not present until the record is reloaded from the database.  In most cases,
