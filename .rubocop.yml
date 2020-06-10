@@ -56,3 +56,7 @@ RSpec/AnyInstance:
 Style/ClassVars:
   Exclude:
     - 'spec/system/active_job_system_spec.rb'
+
+Style/EmptyMethod:
+  Exclude:
+    - 'app/jobs/metadata_listener/job.rb'

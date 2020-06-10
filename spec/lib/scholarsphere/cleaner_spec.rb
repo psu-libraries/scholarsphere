@@ -29,4 +29,10 @@ RSpec.describe Scholarsphere::Cleaner do
       end
     end
   end
+
+  describe '#clean_redis' do
+    it 'removes all jobs from the queues' do
+      expect(described_class.clean_redis).to be_an(Array)
+    end
+  end
 end

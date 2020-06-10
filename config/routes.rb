@@ -79,6 +79,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :ingest, only: [:create]
       resources :collections, only: [:create]
+      resources :files, only: [:update]
     end
   end
 

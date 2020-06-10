@@ -10,6 +10,8 @@ module Api
         logger.error(exception.backtrace.join("\n"))
         if exception.is_a?(ActionController::ParameterMissing)
           render json: { message: 'Bad request', errors: [exception.message] }, status: :bad_request
+        elsif exception.is_a?(ActiveRecord::RecordNotFound)
+          render json: { message: 'Record not found' }, status: :not_found
         else
           render json: { message: "We're sorry, but something went wrong", errors: [exception.class.to_s, exception] },
                  status: :internal_server_error
