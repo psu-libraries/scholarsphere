@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe Actor, type: :model do
+  it_behaves_like 'an indexable resource'
+
   describe 'table' do
     it { is_expected.to have_db_column(:given_name).of_type(:string) }
     it { is_expected.to have_db_column(:surname).of_type(:string) }
@@ -21,9 +23,10 @@ RSpec.describe Actor, type: :model do
   describe 'associations' do
     it { is_expected.to have_one(:user) }
     it { is_expected.to have_many(:work_version_creations) }
-    it { is_expected.to have_many(:work_versions).through(:work_version_creations) }
+    it { is_expected.to have_many(:created_work_versions).through(:work_version_creations).source(:work_version) }
+    it { is_expected.to have_many(:created_works).through(:created_work_versions).source(:work) }
     it { is_expected.to have_many(:collection_creations) }
-    it { is_expected.to have_many(:collections).through(:collection_creations) }
+    it { is_expected.to have_many(:created_collections).through(:collection_creations) }
     it { is_expected.to have_many(:deposited_works).class_name('Work').inverse_of(:depositor) }
     it { is_expected.to have_many(:proxy_deposited_works).class_name('Work').inverse_of(:proxy_depositor) }
     it { is_expected.to have_many(:deposited_collections).class_name('Collection').inverse_of(:depositor) }
@@ -31,6 +34,27 @@ RSpec.describe Actor, type: :model do
 
   describe 'validations' do
     it { is_expected.to validate_presence_of(:surname) }
+  end
+
+  describe 'after_save' do
+    let(:actor) { create :actor }
+
+    before { allow(actor).to receive(:update_index_async) }
+
+    context 'when the default_alias has changed' do
+      it 'triggers update_index_async' do
+        actor.default_alias = "I'm a changed person"
+        actor.save
+        expect(actor).to have_received(:update_index_async)
+      end
+    end
+
+    context 'when the default_alias has NOT changed' do
+      it 'does not trigger update_index_async' do
+        actor.save
+        expect(actor).not_to have_received(:update_index_async)
+      end
+    end
   end
 
   describe '#default_alias' do
@@ -50,6 +74,31 @@ RSpec.describe Actor, type: :model do
       it 'returns the saved value' do
         expect(actor.default_alias).to eq 'Dr. Pat Q. Researcher PhD MD MLIS'
       end
+    end
+  end
+
+  describe '#update_index_async' do
+    let(:actor) { described_class.new }
+
+    before { allow(SolrIndexingJob).to receive(:perform_later) }
+
+    it 'provides itself to SolrIndexingJob.perform_later' do
+      actor.update_index_async
+      expect(SolrIndexingJob).to have_received(:perform_later).with(actor)
+    end
+  end
+
+  describe '#update_index' do
+    let(:actor) { create :actor }
+
+    it 'updates all Works and Collections that the actor has created' do
+      allow(Work).to receive(:reindex_all)
+      allow(Collection).to receive(:reindex_all)
+
+      actor.update_index
+
+      expect(Work).to have_received(:reindex_all).with(actor.created_works)
+      expect(Collection).to have_received(:reindex_all).with(actor.created_collections)
     end
   end
 end

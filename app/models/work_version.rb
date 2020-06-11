@@ -39,7 +39,7 @@ class WorkVersion < ApplicationRecord
   has_many :creators,
            source: :actor,
            through: :creator_aliases,
-           inverse_of: :work_versions
+           inverse_of: :created_work_versions
 
   accepts_nested_attributes_for :file_resources
 
