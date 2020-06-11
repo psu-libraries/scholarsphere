@@ -12,7 +12,11 @@ class CollectionCreation < ApplicationRecord
   validates :alias,
             presence: true
 
-  def alias
-    super.presence || actor&.default_alias
-  end
+  after_initialize :set_defaults
+
+  private
+
+    def set_defaults
+      self.alias ||= actor&.default_alias
+    end
 end
