@@ -120,10 +120,22 @@ RSpec.describe Collection, type: :model do
       allow(CollectionIndexer).to receive(:call)
     end
 
-    it 'reindexes all the works and their versions into solr' do
+    it 'reindexes all the collections and their versions into solr' do
       described_class.reindex_all
       expect(CollectionIndexer).to have_received(:call).once
       expect(IndexingService).to have_received(:commit).once
+    end
+
+    context 'when given a relation' do
+      let!(:special_collection) { create(:collection) }
+
+      let(:only_special_collections) { described_class.where(depositor: special_collection.depositor) }
+
+      it 'only reindexes collections within that relation' do
+        described_class.reindex_all(only_special_collections)
+        expect(CollectionIndexer).to have_received(:call).once
+        expect(CollectionIndexer).to have_received(:call).with(special_collection, anything)
+      end
     end
   end
 

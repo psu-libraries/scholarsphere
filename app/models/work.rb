@@ -101,8 +101,8 @@ class Work < ApplicationRecord
     work
   end
 
-  def self.reindex_all
-    find_each { |work| WorkIndexer.call(work, commit: false) }
+  def self.reindex_all(relation = all)
+    relation.find_each { |work| WorkIndexer.call(work, commit: false) }
     IndexingService.commit
   end
 

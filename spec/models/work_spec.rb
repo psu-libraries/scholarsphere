@@ -304,6 +304,18 @@ RSpec.describe Work, type: :model do
       expect(WorkIndexer).to have_received(:call).once
       expect(IndexingService).to have_received(:commit).once
     end
+
+    context 'when given a relation' do
+      let!(:special_work) { create(:work) }
+
+      let(:only_special_works) { described_class.where(depositor: special_work.depositor) }
+
+      it 'only reindexes works within that relation' do
+        described_class.reindex_all(only_special_works)
+        expect(WorkIndexer).to have_received(:call).once
+        expect(WorkIndexer).to have_received(:call).with(special_work, anything)
+      end
+    end
   end
 
   describe 'embargoed?' do

@@ -12,6 +12,8 @@ class WorkVersionCreation < ApplicationRecord
   validates :alias,
             presence: true
 
+  after_initialize :set_defaults
+
   attr_accessor :changed_by_system
 
   has_paper_trail(
@@ -23,7 +25,9 @@ class WorkVersionCreation < ApplicationRecord
     }
   )
 
-  def alias
-    super.presence || actor&.default_alias
-  end
+  private
+
+    def set_defaults
+      self.alias ||= actor&.default_alias
+    end
 end

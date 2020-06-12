@@ -46,7 +46,7 @@ class Collection < ApplicationRecord
   has_many :creators,
            source: :actor,
            through: :creator_aliases,
-           inverse_of: :collections
+           inverse_of: :created_collections
 
   validates :title,
             presence: true
@@ -91,8 +91,8 @@ class Collection < ApplicationRecord
     end
   end
 
-  def self.reindex_all
-    find_each { |collection| CollectionIndexer.call(collection, commit: false) }
+  def self.reindex_all(relation = all)
+    relation.find_each { |collection| CollectionIndexer.call(collection, commit: false) }
     IndexingService.commit
   end
 
