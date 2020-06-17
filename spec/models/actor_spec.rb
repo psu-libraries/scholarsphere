@@ -33,7 +33,15 @@ RSpec.describe Actor, type: :model do
   end
 
   describe 'validations' do
-    it { is_expected.to validate_presence_of(:surname) }
+    context 'when given no validation context' do
+      it { is_expected.to validate_presence_of(:surname) }
+      it { is_expected.not_to validate_presence_of(:psu_id) }
+    end
+
+    context 'when given the from_omniauth context' do
+      it { is_expected.not_to validate_presence_of(:surname).on(:from_omniauth) }
+      it { is_expected.to validate_presence_of(:psu_id).on(:from_omniauth) }
+    end
   end
 
   describe 'after_save' do

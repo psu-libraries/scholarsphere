@@ -123,20 +123,33 @@ RSpec.describe User, type: :model do
     context 'when the User record already exists' do
       let!(:existing_user) { create :user, provider: auth_params.provider, uid: auth_params.uid }
 
+      before do
+        # Manipulate the Actor record to test it being updated
+        existing_user.actor.surname = 'Different than OAuth'
+        existing_user.actor.email = ''
+        existing_user.actor.save!(validate: false)
+      end
+
       it 'does NOT create a new record' do
         expect { described_class.from_omniauth(auth_params) }.not_to change(described_class, :count)
       end
 
       it 'overwrites all user attributes, except access_id' do
         user_before = described_class.find(existing_user.id)
+        actor_before = user_before.actor
         described_class.from_omniauth(auth_params)
         user_after = described_class.find(existing_user.id)
+        actor_after = user_after.actor
 
         # OAuth does NOT overwrite these attributes:
         expect(user_after.access_id).to eq user_before.access_id
 
         # OAuth DOES overwrite these attributes:
         expect(user_after.email).not_to eq user_before.email
+
+        # OAuth will overwrite these attributes if and only if they are blank
+        expect(actor_after.surname).to eq actor_before.surname
+        expect(actor_after.email).not_to eq actor_before.email
       end
 
       it 'DOES update the group membership' do
@@ -153,6 +166,37 @@ RSpec.describe User, type: :model do
 
       it 'returns the User record' do
         expect(described_class.from_omniauth(auth_params)).to eq existing_user
+      end
+    end
+
+    context 'when OAuth response contains minimal user info' do
+      # This wouldn't pass validation in the web ui, but will pass here
+      let(:auth_params) { build :psu_oauth_response,
+                                given_name: nil,
+                                surname: nil,
+                                access_id: 'jd1',
+                                groups: []
+      }
+
+      it 'still creates the Author and User' do
+        expect { described_class.from_omniauth(auth_params) }
+          .to change(described_class, :count).by(1)
+          .and change(Actor, :count).by(1)
+      end
+    end
+
+    context 'when a validation error occurs' do
+      before { auth_params.info.access_id = nil }
+
+      it 'rolls back any database changes made' do
+        expect {
+          begin
+            described_class.from_omniauth(auth_params)
+          rescue ActiveRecord::RecordInvalid
+          end
+        }.to change(described_class, :count).by(0)
+          .and change(Actor, :count).by(0)
+          .and change(Group, :count).by(0)
       end
     end
   end
