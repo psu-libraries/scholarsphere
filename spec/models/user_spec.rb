@@ -188,15 +188,33 @@ RSpec.describe User, type: :model do
     context 'when a validation error occurs' do
       before { auth_params.info.access_id = nil }
 
+      it do
+        expect { described_class.from_omniauth(auth_params) }
+          .to raise_error(described_class::OAuthError)
+          .with_message(/Validation/)
+      end
+
       it 'rolls back any database changes made' do
         expect {
           begin
             described_class.from_omniauth(auth_params)
-          rescue ActiveRecord::RecordInvalid
+          rescue described_class::OAuthError
           end
         }.to change(described_class, :count).by(0)
           .and change(Actor, :count).by(0)
           .and change(Group, :count).by(0)
+      end
+    end
+
+    context 'when an unknown error occurs' do
+      before do
+        allow(LdapGroupCleaner).to receive(:call).and_raise(RuntimeError, 'ack!')
+      end
+
+      it do
+        expect { described_class.from_omniauth(auth_params) }
+          .to raise_error(described_class::OAuthError)
+          .with_message(/ack/)
       end
     end
   end

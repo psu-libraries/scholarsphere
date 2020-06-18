@@ -5,17 +5,16 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def psu
     @user = User.from_omniauth(request.env['omniauth.auth'])
 
-    if @user.persisted?
-      sign_in_and_redirect @user, event: :authentication
-      set_flash_message(:notice, :success, kind: 'Penn State') if is_navigational_format?
-    else
-      # TODO if OAuth fails, where do we went users?
-      session['devise.doorkeeper_data'] = request.env['omniauth.auth']
-      redirect_to root_path # new_user_registration_url
-    end
+    sign_in_and_redirect @user, event: :authentication
+    set_flash_message(:notice, :success, kind: 'Penn State') if is_navigational_format?
+  rescue User::OAuthError => e
+    logger.error("\n\n\n#{e.class} (#{e.message}):\n\n")
+    logger.error(e.backtrace.join("\n"))
+    session['devise.doorkeeper_data'] = request.env['omniauth.auth']
+    redirect_to root_path, alert: t('omniauth.login_error')
+  end
 
-    def failure
-      redirect_to root_path
-    end
+  def failure
+    redirect_to root_path, alert: t('omniauth.login_error')
   end
 end

@@ -161,3 +161,5 @@ en:
         update: Updated
         destroy: Deleted
         truncated_attributes: "and %{count} more"
+  omniauth:
+    login_error: 'There was a problem logging you in. We have been notified of the issue and will work to fix it. Please try again later.'

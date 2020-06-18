@@ -1,6 +1,19 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
+  class OAuthError < StandardError
+    attr_accessor :auth
+
+    def initialize(msg = nil, auth = nil)
+      super(msg)
+      @auth = auth
+    end
+
+    def message
+      "#{super}\nAuth: #{auth}"
+    end
+  end
+
   # Connects this user object to Blacklights Bookmarks.
   include Blacklight::User
 
@@ -66,6 +79,8 @@ class User < ApplicationRecord
     end
 
     user
+  rescue StandardError => e
+    raise OAuthError.new(e.message, auth)
   end
 
   def admin?

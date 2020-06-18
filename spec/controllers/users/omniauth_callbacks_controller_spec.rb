@@ -21,7 +21,6 @@ RSpec.describe Users::OmniauthCallbacksController, type: :controller do
   describe '#psu' do
     context 'when the user persists correctly' do
       before do
-        allow(user).to receive(:persisted?).and_return(true)
         get :psu
       end
 
@@ -36,7 +35,9 @@ RSpec.describe Users::OmniauthCallbacksController, type: :controller do
 
     context 'when the user does not persist' do
       before do
-        allow(user).to receive(:persisted?).and_return(false)
+        allow(User).to receive(:from_omniauth)
+          .with(oauth_response)
+          .and_raise(User::OAuthError)
         get :psu
       end
 
