@@ -126,6 +126,7 @@ en:
         name: Name
         size: Size
         mime_type: Mime Type
+        virus: Virus?
         actions: Actions
         rename: Rename
         delete: Delete

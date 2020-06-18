@@ -12,6 +12,14 @@ class FileUploader < Shrine
     ).to_s
   end
 
+  # @note This sets the default metadata when a file is uploaded. Virus information is nil until updated by our external
+  # metadata-listener service.
+  add_metadata do
+    {
+      virus: { status: nil, scanned_at: nil }
+    }
+  end
+
   Attacher.promote_block do
     Shrine::PromotionJob.perform_later(
       record: record,

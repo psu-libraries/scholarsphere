@@ -106,4 +106,20 @@ RSpec.describe FileVersionMembership, type: :model do
       end
     end
   end
+
+  describe '#virus' do
+    context 'when there is no metadata' do
+      subject { build(:file_version_membership) }
+
+      its(:virus) { is_expected.to eq('unknown') }
+    end
+
+    context 'when there is a status' do
+      subject { build(:file_version_membership, file_resource: file_resource) }
+
+      let(:file_resource) { build(:file_resource, file_data: { metadata: { virus: { status: 'virus-status' } } }) }
+
+      its(:virus) { is_expected.to eq('virus-status') }
+    end
+  end
 end
