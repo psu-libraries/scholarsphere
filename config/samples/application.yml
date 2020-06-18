@@ -71,6 +71,7 @@ SOLR_PORT: 8983
 # Required for all environments. For development, you can set it to
 # "localhost:3000" for `bin/rails s` or "scholarsphere-4.test" for puma-dev
 DEFAULT_URL_HOST: "localhost:3000"
+DEFAULT_URL_PROTOCOL: "http"
 
 # If the oauth servers authorize path differs from /oauth/authorize, you can set that value here
 # Under normal circumstances, this shouldn't need changing
