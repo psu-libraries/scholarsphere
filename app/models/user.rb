@@ -41,22 +41,30 @@ class User < ApplicationRecord
   def self.from_omniauth(auth)
     user = find_or_initialize_by(provider: auth.provider, uid: auth.uid) do |new_user|
       new_user.access_id = auth.info.access_id
-      new_user.actor = Actor.find_or_initialize_by(psu_id: new_user.access_id) do |new_actor|
-        new_actor.email = auth.info.email
-        new_actor.given_name = auth.info.given_name
-        new_actor.surname = auth.info.surname
-      end
+      new_user.actor = Actor.find_or_initialize_by(psu_id: new_user.access_id)
     end
 
-    psu_groups = auth.info.groups
-      .map { |ldap_group_name| LdapGroupCleaner.call(ldap_group_name) }
-      .compact
-      .map { |group_name| Group.find_or_create_by(name: group_name) }
-
-    user.groups = default_groups + psu_groups
     user.email = auth.info.email
 
-    user.save!
+    # Update Actor record's values if and only if they are blank
+    user.actor.tap do |actor|
+      actor.email = actor.email.presence || auth.info.email
+      actor.given_name = actor.given_name.presence || auth.info.given_name
+      actor.surname = actor.surname.presence || auth.info.surname
+    end
+
+    transaction do
+      psu_groups = auth.info.groups
+        .map { |ldap_group_name| LdapGroupCleaner.call(ldap_group_name) }
+        .compact
+        .map { |group_name| Group.find_or_create_by(name: group_name) }
+
+      user.groups = default_groups + psu_groups
+
+      user.actor.save!(context: :from_omniauth)
+      user.save!(context: :from_omniauth)
+    end
+
     user
   end
 

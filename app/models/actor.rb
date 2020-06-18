@@ -46,7 +46,12 @@ class Actor < ApplicationRecord
            inverse_of: :creators
 
   validates :surname,
-            presence: true
+            presence: true,
+            unless: -> { validation_context == :from_omniauth }
+
+  validates :psu_id,
+            presence: true,
+            on: :from_omniauth
 
   after_save :reindex_if_default_alias_changed
 
