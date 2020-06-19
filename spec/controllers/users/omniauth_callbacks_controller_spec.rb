@@ -41,10 +41,6 @@ RSpec.describe Users::OmniauthCallbacksController, type: :controller do
         get :psu
       end
 
-      it 'saves the oauth response to a session variable' do
-        expect(session['devise.doorkeeper_data']).to eq oauth_response
-      end
-
       it { is_expected.to redirect_to root_path }
     end
   end
