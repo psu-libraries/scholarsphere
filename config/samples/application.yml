@@ -36,63 +36,117 @@
 # DATACITE_USERNAME: ""
 # DATACITE_PASSWORD: ""
 #
-
-## Logging
+# --------------------------------------------------------------------------------------------------------------------
+#
+# Logging (production only)
+#
 # LOGRAGE_ENABLED: 
 # RAILS_LOG_JSON: 
-
-
-## ADMIN UMG
-## protects the admin namespace 
+#
+# --------------------------------------------------------------------------------------------------------------------
+#
+# Admins: all users in the given UMG are administrators
+#
 # ADMIN_GROUP: "umg/up.dlt.scholarsphere-admin"
-
-## Redis Configuration
+#
+# --------------------------------------------------------------------------------------------------------------------
+#
+# Redis Configuration (production only)
+#
+# Note: you can also add this to your development configuration to test integration with Sidekiq and other external
+# services that are run async, but it should NOT be in your test environment.
+#
 # REDIS_HOST:
 # REDIS_PORT:
 # REDIS_PASSWORD:
 # REDIS_DATABASE:
-
-## Sidekiq Configuration
+#
+# --------------------------------------------------------------------------------------------------------------------
+#
+# Sidekiq Configuration (production only)
+#
 # SIDEKIQ_QUEUE_LATENCY_THRESHOLD: 30
 # SIDEKIQ_MAX_RETRIES: 2
-
-POSTGRES_USER: "[username]" # This is typically $ whoami
-
-SOLR_HOST: localhost
-SOLR_COLLECTION: scholarsphere
-SOLR_PORT: 8983
+# 
+# --------------------------------------------------------------------------------------------------------------------
+# 
+# Solr
+#
+# SOLR_COLLECTION: scholarsphere-development
+# SOLR_HOST: localhost
+# SOLR_PORT: 8983
 # SOLR_CONFIG_DIR: solr/conf
 # SOLR_NUM_SHARDS: 1
+#
+# --------------------------------------------------------------------------------------------------------------------
+#
+# Minio: configuration used when starting minio with bin/minio
+#
 # MINIO_ACCESS_KEY: "asdf"
 # MINIO_SECRET_KEY: "asdfasdf"
 # MINIO_PORT: "9000"
-
-# Default URL host. answers the question "who am i?"
-# Required for all environments. For development, you can set it to
-# "localhost:3000" for `bin/rails s` or "scholarsphere-4.test" for puma-dev
-DEFAULT_URL_HOST: "localhost:3000"
-
+#
+# --------------------------------------------------------------------------------------------------------------------
+#
+# OAuth Server
+#
 # If the oauth servers authorize path differs from /oauth/authorize, you can set that value here
 # Under normal circumstances, this shouldn't need changing
+# 
 # OAUTH_AUTHORIZE_URL: "/oauth/authorize"
-
-# Geonames
-# Username used to connect to the geonames api (https://sws.geonames.org)
+#
+# --------------------------------------------------------------------------------------------------------------------
+# 
+# Geonames: username used to connect to the geonames api (https://sws.geonames.org)
+# 
 # GEONAMES_USER: "scholarsphere_test"
+#
+# --------------------------------------------------------------------------------------------------------------------
+#
+# URLs
+#
+# Used to construct the URI to the application:
+#
+# DEFAULT_URL_HOST: "localhost:3000
+# DEFAULT_URL_PROTOCOL: "http"
+#
+# In cases where the API endpoint might differ from the actual application, we can supply one here. This is used in
+# local development where external services, like metadata-listener, that run inside a docker container needed a
+# different url to access Scholarpshere. For typical production deployments, this variable will not be needed.
+# The protocol is the same.
+#
+# API_URL_HOST: "localhost:3000"
+#
+# --------------------------------------------------------------------------------------------------------------------
 
-# Time to live for presigned download links
+# Defaults for your local development environment
 DOWNLOAD_URL_TTL: 6
+POSTGRES_USER: "[username]" # This is typically $ whoami
+SOLR_HOST: localhost
+SOLR_PORT: 8983
 
 development:
   POSTGRES_DB: "scholarsphere_4_development"
   OAUTH_APP_ID: ""
   OAUTH_APP_URL: ""
   OAUTH_APP_SECRET: ""
-  # Configure uploading via S3 or Minio (see above)
+  SOLR_COLLECTION: scholarsphere-development
+
+  # Additional configurations, see above for details:
+  # Required:
+  #  * uploading via S3 or Minio
+  #  * OAuth server
+  # Optional:
+  #  * Redis
+  #  * Geonames 
 
 test:
   POSTGRES_DB: "scholarsphere_4_test"
   OAUTH_APP_ID: ""
   OAUTH_APP_URL: ""
   OAUTH_APP_SECRET: ""
-  # Configure uploading via Minio (see above)
+  SOLR_COLLECTION: scholarsphere-test
+
+  # Additional configurations, see above for details:
+  # Required:
+  #  * uploading via Minio ONLY

@@ -3,6 +3,9 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+  default_url_options protocol: ENV.fetch('DEFAULT_URL_PROTOCOL', 'http'),
+                      host: ENV.fetch('DEFAULT_URL_HOST', 'localhost')
+
   mount Qa::Engine => '/authorities'
 
   namespace :admin do
@@ -76,6 +79,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :ingest, only: [:create]
       resources :collections, only: [:create]
+      resources :files, only: [:update]
     end
   end
 

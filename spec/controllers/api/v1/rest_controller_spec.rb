@@ -47,6 +47,25 @@ RSpec.describe Api::V1::RestController, type: :controller do
     its(:body) { is_expected.to eq 'success' }
   end
 
+  context 'when a record is not found' do
+    let!(:api_key) { create :api_token }
+
+    before do
+      allow(controller).to receive(:index).and_raise(ActiveRecord::RecordNotFound)
+      request.headers[:'X-API-Key'] = api_key.token
+      get :index
+    end
+
+    it 'reports the error' do
+      expect(response.status).to eq(404)
+      expect(response.body).to eq(
+        '{' \
+        '"message":"Record not found"' \
+        '}'
+      )
+    end
+  end
+
   context 'when there is an unexpected error' do
     let!(:api_key) { create :api_token }
 

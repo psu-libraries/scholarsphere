@@ -4,8 +4,11 @@ Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Whitelisted hosts
+  # Used for local development when integrating with Docker-ized services like metadata-listener, or
+  # sending API requests via ngrok.
   config.hosts << 'localhost'
   config.hosts << /.*ngrok\.io$/
+  config.hosts << 'host.docker.internal'
 
   # In the development environment your application's code is reloaded on
   # every request. This slows down response time but is perfect for development

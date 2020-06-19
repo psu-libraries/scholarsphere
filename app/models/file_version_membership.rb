@@ -27,6 +27,15 @@ class FileVersionMembership < ApplicationRecord
     }
   )
 
+  # @todo It's probably a better idea to add make our own FileUploader::UploadedFile#virus and delegate to that as we're
+  # doing with size, mime_type, and original_filename.
+  def virus
+    status = file_resource.file_data.dig('metadata', 'virus', 'status')
+    return 'unknown' if status.nil?
+
+    status
+  end
+
   private
 
     def uploader
