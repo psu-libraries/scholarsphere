@@ -55,6 +55,11 @@ RSpec.describe FileVersionMembership, type: :model do
       membership.mime_type
       expect(mock_uploader).to have_received(:mime_type)
     end
+
+    it "delegates #virus to the FileResource's uploader" do
+      membership.virus
+      expect(mock_uploader).to have_received(:virus)
+    end
   end
 
   describe 'PaperTrail::Versions', versioning: true do
@@ -104,22 +109,6 @@ RSpec.describe FileVersionMembership, type: :model do
           .not_to change(membership, :title)
           .from('provided_a_filename.png')
       end
-    end
-  end
-
-  describe '#virus' do
-    context 'when there is no metadata' do
-      subject { build(:file_version_membership) }
-
-      its(:virus) { is_expected.to eq('unknown') }
-    end
-
-    context 'when there is a status' do
-      subject { build(:file_version_membership, file_resource: file_resource) }
-
-      let(:file_resource) { build(:file_resource, file_data: { metadata: { virus: { status: 'virus-status' } } }) }
-
-      its(:virus) { is_expected.to eq('virus-status') }
     end
   end
 end

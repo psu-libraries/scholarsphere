@@ -127,6 +127,7 @@ en:
         size: Size
         mime_type: Mime Type
         virus: Virus?
+        unknown_virus: unknown
         actions: Actions
         rename: Rename
         delete: Delete
