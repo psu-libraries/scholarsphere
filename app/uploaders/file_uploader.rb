@@ -43,4 +43,10 @@ class FileUploader < Shrine
       data: data
     )
   end
+
+  class UploadedFile
+    def virus
+      metadata.dig('virus', 'status')
+    end
+  end
 end

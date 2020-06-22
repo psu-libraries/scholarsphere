@@ -14,7 +14,7 @@ class FileVersionMembership < ApplicationRecord
 
   validate :filename_extentions_cannot_change
 
-  delegate :size, :mime_type, :original_filename, to: :uploader
+  delegate :size, :mime_type, :original_filename, :virus, to: :uploader
 
   attr_accessor :changed_by_system
 
@@ -26,15 +26,6 @@ class FileVersionMembership < ApplicationRecord
       work_version_id: :work_version_id
     }
   )
-
-  # @todo It's probably a better idea to add make our own FileUploader::UploadedFile#virus and delegate to that as we're
-  # doing with size, mime_type, and original_filename.
-  def virus
-    status = file_resource.file_data.dig('metadata', 'virus', 'status')
-    return 'unknown' if status.nil?
-
-    status
-  end
 
   private
 

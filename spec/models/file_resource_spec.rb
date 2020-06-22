@@ -46,4 +46,15 @@ RSpec.describe FileResource, type: :model do
       )
     end
   end
+
+  describe '#file' do
+    subject { file_resource.file }
+
+    let(:file_resource) { build(:file_resource, :with_processed_image) }
+
+    its(:virus) { is_expected.to be_nil }
+    its(:size) { is_expected.to eq(63960) }
+    its(:mime_type) { is_expected.to eq('image/png') }
+    its(:original_filename) { is_expected.to eq('image.png') }
+  end
 end
