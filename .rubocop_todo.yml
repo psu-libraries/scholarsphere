@@ -11,7 +11,7 @@
 # Configuration parameters: AutoCorrect, AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, IgnoredPatterns.
 # URISchemes: http, https
 Layout/LineLength:
-  Max: 154
+  Max: 174
 
 # Offense count: 2
 Lint/ImplicitStringConcatenation:
@@ -27,7 +27,7 @@ Lint/NonDeterministicRequireOrder:
 # Offense count: 4
 # Configuration parameters: CountComments.
 Metrics/ClassLength:
-  Max: 140
+  Max: 160
 
 # Offense count: 3
 # Configuration parameters: EnforcedStyle.

@@ -10,7 +10,7 @@ class WorkVersion < ApplicationRecord
                  version_name: :string,
                  keyword: [:string, array: true, default: []],
                  rights: :string,
-                 description: [:string, array: true, default: []],
+                 description: :string,
                  resource_type: [:string, array: true, default: []],
                  contributor: [:string, array: true, default: []],
                  publisher: [:string, array: true, default: []],
@@ -79,6 +79,11 @@ class WorkVersion < ApplicationRecord
             if: :published?,
             unless: -> { validation_context == :migration_api }
 
+  validates :description,
+            presence: true,
+            if: :published?,
+            unless: -> { validation_context == :migration_api }
+
   after_save :update_index_async, if: :published?
 
   aasm do
@@ -101,7 +106,6 @@ class WorkVersion < ApplicationRecord
   # Fields that can contain multiple values automatically remove blank values
   %i[
     keyword
-    description
     resource_type
     contributor
     publisher
@@ -119,10 +123,11 @@ class WorkVersion < ApplicationRecord
 
   # Fields that contain single values automatically remove blank values
   %i[
+    description
     published_date
+    rights
     subtitle
     version_name
-    rights
   ].each do |field|
     define_method "#{field}=" do |val|
       super(val.presence)
