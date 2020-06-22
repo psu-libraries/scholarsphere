@@ -19,7 +19,7 @@ RSpec.describe Collection, type: :model do
     it { is_expected.to have_jsonb_accessor(:title).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:subtitle).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:keyword).of_type(:string).is_array.with_default([]) }
-    it { is_expected.to have_jsonb_accessor(:description).of_type(:string).is_array.with_default([]) }
+    it { is_expected.to have_jsonb_accessor(:description).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:contributor).of_type(:string).is_array.with_default([]) }
     it { is_expected.to have_jsonb_accessor(:publisher).of_type(:string).is_array.with_default([]) }
     it { is_expected.to have_jsonb_accessor(:published_date).of_type(:string) }
@@ -78,8 +78,10 @@ RSpec.describe Collection, type: :model do
 
   describe 'validations' do
     it { is_expected.to validate_presence_of(:title) }
+    it { is_expected.to validate_presence_of(:description) }
 
     context 'with the :migration_api validation context' do
+      it { is_expected.not_to validate_presence_of(:description).on(:migration_api) }
       it { is_expected.to allow_value('').for(:published_date).on(:migration_api) }
       it { is_expected.to allow_value('not an EDTF formatted date').for(:published_date).on(:migration_api) }
     end
@@ -97,7 +99,6 @@ RSpec.describe Collection, type: :model do
 
   describe 'multivalued fields' do
     it_behaves_like 'a multivalued json field', :keyword
-    it_behaves_like 'a multivalued json field', :description
     it_behaves_like 'a multivalued json field', :contributor
     it_behaves_like 'a multivalued json field', :publisher
     it_behaves_like 'a multivalued json field', :subject
@@ -109,6 +110,7 @@ RSpec.describe Collection, type: :model do
   end
 
   describe 'singlevalued fields' do
+    it_behaves_like 'a singlevalued json field', :description
     it_behaves_like 'a singlevalued json field', :published_date
     it_behaves_like 'a singlevalued json field', :subtitle
   end
