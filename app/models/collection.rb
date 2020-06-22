@@ -8,7 +8,7 @@ class Collection < ApplicationRecord
                  title: :string,
                  subtitle: :string,
                  keyword: [:string, array: true, default: []],
-                 description: [:string, array: true, default: []],
+                 description: :string,
                  contributor: [:string, array: true, default: []],
                  publisher: [:string, array: true, default: []],
                  published_date: :string,
@@ -51,6 +51,10 @@ class Collection < ApplicationRecord
   validates :title,
             presence: true
 
+  validates :description,
+            presence: true,
+            unless: -> { validation_context == :migration_api }
+
   validates :published_date,
             edtf_date: true,
             allow_blank: true,
@@ -67,7 +71,6 @@ class Collection < ApplicationRecord
   # Fields that can contain multiple values automatically remove blank values
   %i[
     keyword
-    description
     contributor
     publisher
     subject
@@ -83,6 +86,7 @@ class Collection < ApplicationRecord
   end
 
   %i[
+    description
     published_date
     subtitle
   ].each do |field|

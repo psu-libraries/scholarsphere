@@ -90,11 +90,11 @@ module Dashboard
           .require(:collection)
           .permit(
             :title,
+            :description,
             :subtitle,
             :published_date,
             work_ids: [],
             keyword: [],
-            description: [],
             contributor: [],
             publisher: [],
             subject: [],

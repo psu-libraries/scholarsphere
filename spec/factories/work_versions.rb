@@ -49,6 +49,7 @@ FactoryBot.define do
       draft
       with_files
       with_creators
+      description { Faker::Lorem.paragraph }
       published_date { Faker::Date.between(from: 2.years.ago, to: Date.today).iso8601 }
     end
 

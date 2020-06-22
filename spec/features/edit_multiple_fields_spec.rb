@@ -29,7 +29,6 @@ RSpec.describe 'Editing multiple fields' do
     it 'inserts new inputs with remove buttons', with_user: :user, js: true do
       visit(edit_dashboard_work_version_path(work.latest_version))
       check_field(:keyword)
-      check_field(:description)
       check_field(:contributor)
       check_field(:publisher)
       check_field(:subject)
@@ -62,7 +61,6 @@ RSpec.describe 'Editing multiple fields' do
     it 'updates each field with the new information', with_user: :user, js: true do
       visit(edit_dashboard_work_version_path(work.latest_version))
       fill_in_multiple(:keyword)
-      fill_in_multiple(:description)
       fill_in_multiple(:contributor)
       fill_in_multiple(:publisher)
       fill_in_multiple(:subject)
@@ -76,7 +74,6 @@ RSpec.describe 'Editing multiple fields' do
       visit(edit_dashboard_work_version_path(work.latest_version))
 
       verify_multiple(:keyword)
-      verify_multiple(:description)
       verify_multiple(:contributor)
       verify_multiple(:publisher)
       verify_multiple(:subject)

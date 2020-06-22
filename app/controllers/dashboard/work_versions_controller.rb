@@ -121,12 +121,12 @@ module Dashboard
           .require(:work_version)
           .permit(
             :title,
+            :description,
             :subtitle,
             :rights,
             :version_name,
             :published_date,
             keyword: [],
-            description: [],
             contributor: [],
             publisher: [],
             subject: [],

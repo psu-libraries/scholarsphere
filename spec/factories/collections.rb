@@ -4,6 +4,7 @@ FactoryBot.define do
   factory :collection do
     association :depositor, :with_user, factory: :actor
     title { generate(:work_title) }
+    description { Faker::Lorem.paragraph }
     visibility { Permissions::Visibility.default }
 
     # Postgres does this for us, but for testing, we can do it here to save having to call create/reload.
@@ -32,7 +33,7 @@ FactoryBot.define do
       title { "Collection #{generate(:work_title)}" }
       subtitle { FactoryBotHelpers.work_title }
       keyword { [Faker::Science.element] }
-      description { [Faker::Lorem.paragraph] }
+      description { Faker::Lorem.paragraph }
       contributor { [Faker::Artist.name] }
       publisher { [Faker::Book.publisher] }
       published_date { Faker::Date.between(from: 2.years.ago, to: Date.today).iso8601 }

@@ -6,6 +6,7 @@ RSpec.describe Dashboard::CollectionsController, type: :controller do
   let(:valid_attributes) {
     {
       'title' => 'My Collection',
+      'description' => 'My collection is nice',
       'visibility' => Permissions::Visibility.default,
       'published_date' => '2020-05-28'
     }
