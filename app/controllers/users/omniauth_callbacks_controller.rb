@@ -10,7 +10,6 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   rescue User::OAuthError => e
     logger.error("\n\n\n#{e.class} (#{e.message}):\n\n")
     logger.error(e.backtrace.join("\n"))
-    session['devise.doorkeeper_data'] = request.env['omniauth.auth']
     redirect_to root_path, alert: t('omniauth.login_error')
   end
 
