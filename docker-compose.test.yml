@@ -30,4 +30,4 @@ services:
       POSTGRES_HOST: db
     tty: true
     stdin_open: true
-    image: harbor.dsrd.libraries.psu.edu/library/scholarsphere:$TAG
+    image: harbor.k8s.libraries.psu.edu/library/scholarsphere:$TAG
