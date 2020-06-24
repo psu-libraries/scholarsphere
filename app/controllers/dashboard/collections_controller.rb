@@ -9,7 +9,7 @@ module Dashboard
 
     def new
       @collection = new_collection
-      @works = load_users_works
+      load_form_dependencies
       @collection.build_creator_alias(actor: current_user.actor)
     end
 
@@ -24,7 +24,10 @@ module Dashboard
           end
           format.json { render :show, status: :created, location: @collection }
         else
-          format.html { render :new }
+          format.html do
+            load_form_dependencies
+            render :new
+          end
           format.json { render json: @collection.errors, status: :unprocessable_entity }
         end
       end
@@ -41,7 +44,7 @@ module Dashboard
       @collection = policy_scope(Collection).find(params[:id])
       authorize(@collection)
 
-      @works = load_users_works
+      load_form_dependencies
       @collection.build_creator_alias(actor: current_user.actor)
     end
 
@@ -59,7 +62,10 @@ module Dashboard
           end
           format.json { render :show, status: :ok, location: @collection }
         else
-          format.html { render :edit }
+          format.html do
+            render :edit
+            load_form_dependencies
+          end
           format.json { render json: @collection.errors, status: :unprocessable_entity }
         end
       end
@@ -81,8 +87,17 @@ module Dashboard
         current_user.actor.deposited_collections.build(attrs)
       end
 
+      def load_form_dependencies
+        @works = load_users_works
+      end
+
       def load_users_works
-        current_user.works.includes(:versions)
+        # @todo this will probably go away and be replaced with a solr searching
+        # mechanism in the form
+        current_user
+          .works
+          .includes(:versions)
+          .reject { |work| work.latest_published_version.blank? }
       end
 
       def collection_params
