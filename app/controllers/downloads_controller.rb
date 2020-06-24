@@ -3,9 +3,10 @@
 class DownloadsController < ApplicationController
   def content
     work_version = WorkVersion.find_by!(uuid: params[:resource_id])
-    file = work_version.file_version_memberships.find(params[:id])
-    authorize(file)
-    redirect_to s3_presigned_url(file)
+    file_version = work_version.file_version_memberships.find(params[:id])
+    authorize(file_version)
+    file_version.file_resource.count_view! unless browser.bot?
+    redirect_to s3_presigned_url(file_version)
   end
 
   private

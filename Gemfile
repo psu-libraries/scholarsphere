@@ -8,6 +8,7 @@ ruby '2.6.6'
 gem 'aasm'
 gem 'blacklight', '~> 7.7'
 gem 'bootsnap', '>= 1.4.2', require: false
+gem 'browser'
 gem 'cocoon'
 gem 'devise', '~> 4.7'
 gem 'diffy'

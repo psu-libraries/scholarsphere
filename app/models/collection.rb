@@ -3,6 +3,7 @@
 class Collection < ApplicationRecord
   include Permissions
   include DepositedAtTimestamp
+  include ViewStatistics
 
   jsonb_accessor :metadata,
                  title: :string,

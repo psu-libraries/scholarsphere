@@ -128,6 +128,12 @@ class Work < ApplicationRecord
     embargoed_until > Time.zone.now
   end
 
+  def count_view!
+    raise ArgumentError, 'work must have a published version' if latest_published_version.nil?
+
+    latest_published_version.count_view!
+  end
+
   private
 
     def document_builder

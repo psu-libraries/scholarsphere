@@ -4,6 +4,7 @@ class ResourcesController < ApplicationController
   def show
     @resource = ResourceDecorator.new(find_resource(params[:id]))
     authorize @resource
+    @resource.count_view! unless browser.bot?
   end
 
   private

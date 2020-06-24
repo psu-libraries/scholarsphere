@@ -5,11 +5,19 @@ require 'rails_helper'
 RSpec.describe ResourcesController, type: :controller do
   describe '#show' do
     context 'when requesting a Work' do
-      let(:work) { create(:work) }
+      let(:work) { create(:work, has_draft: false) }
 
       it 'loads the Work' do
         get :show, params: { id: work.uuid }
         expect(assigns[:resource]).to eq work
+      end
+
+      it "inserts a view statistic record for the work's latest published version" do
+        expect {
+          get :show, params: { id: work.uuid }
+        }.to change {
+          ViewStatistic.where(resource_type: 'WorkVersion', resource_id: work.latest_published_version).count
+        }.from(0).to(1)
       end
     end
 
@@ -46,6 +54,23 @@ RSpec.describe ResourcesController, type: :controller do
         expect {
           get :show, params: { id: work.uuid }
         }.to raise_error(Pundit::NotAuthorizedError)
+      end
+    end
+
+    context 'when a bot is requesting the resource' do
+      let(:work_version) { create :work_version }
+      let(:bot) { Browser.new('Bot') }
+
+      before { allow(controller).to receive(:browser).and_return(bot) }
+
+      it 'does NOT add a statistic record for the resource' do
+        expect {
+          get :show, params: { id: work_version.uuid }
+        }.not_to(
+          change {
+            ViewStatistic.where(resource_type: 'WorkVersion', resource_id: work_version).count
+          }
+        )
       end
     end
   end

@@ -2,6 +2,7 @@
 
 class WorkVersion < ApplicationRecord
   include AASM
+  include ViewStatistics
   has_paper_trail
 
   jsonb_accessor :metadata,

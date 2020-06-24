@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_04_125257) do
+ActiveRecord::Schema.define(version: 2020_06_24_134610) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -171,6 +171,17 @@ ActiveRecord::Schema.define(version: 2020_06_04_125257) do
     t.integer "work_version_id"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
     t.index ["work_version_id"], name: "index_versions_on_work_version_id"
+  end
+
+  create_table "view_statistics", force: :cascade do |t|
+    t.date "date", default: -> { "now()" }
+    t.integer "count", default: 0
+    t.string "resource_type", null: false
+    t.bigint "resource_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["resource_type", "resource_id", "date"], name: "index_view_statistics_on_resource_type_and_resource_id_and_date"
+    t.index ["resource_type", "resource_id"], name: "index_view_statistics_on_resource_type_and_resource_id"
   end
 
   create_table "work_version_creations", force: :cascade do |t|
