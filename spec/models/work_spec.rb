@@ -337,4 +337,28 @@ RSpec.describe Work, type: :model do
       it { is_expected.not_to be_embargoed }
     end
   end
+
+  describe '#count_view!' do
+    context 'when the work has a published version' do
+      let(:work) { build(:work) }
+      let(:version) { instance_spy('version') }
+
+      before { allow(work).to receive(:latest_published_version).and_return(version) }
+
+      it 'calls the method on the published version' do
+        work.count_view!
+        expect(version).to have_received(:count_view!)
+      end
+    end
+
+    context 'when the work does NOT have a published version' do
+      let(:work) { build(:work) }
+
+      it 'raises an error' do
+        expect {
+          work.count_view!
+        }.to raise_error(ArgumentError, 'work must have a published version')
+      end
+    end
+  end
 end

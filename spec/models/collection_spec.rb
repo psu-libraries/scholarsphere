@@ -9,6 +9,10 @@ RSpec.describe Collection, type: :model do
     let(:factory_name) { :collection }
   end
 
+  it_behaves_like 'a resource with view statistics' do
+    let(:resource) { create(:collection) }
+  end
+
   it_behaves_like 'a resource with a deposited at timestamp'
 
   describe 'table' do
@@ -45,6 +49,7 @@ RSpec.describe Collection, type: :model do
     it { is_expected.to have_many(:works).through(:collection_work_memberships) }
     it { is_expected.to have_many(:creator_aliases) }
     it { is_expected.to have_many(:creators).through(:creator_aliases) }
+    it { is_expected.to have_many(:view_statistics) }
 
     describe 'default order of works' do
       let(:collection) { build :collection }

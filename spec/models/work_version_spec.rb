@@ -5,6 +5,10 @@ require 'rails_helper'
 RSpec.describe WorkVersion, type: :model do
   it_behaves_like 'an indexable resource'
 
+  it_behaves_like 'a resource with view statistics' do
+    let(:resource) { create(:work_version) }
+  end
+
   describe 'table' do
     it { is_expected.to have_db_column(:work_id) }
     it { is_expected.to have_db_index(:work_id) }
@@ -41,6 +45,7 @@ RSpec.describe WorkVersion, type: :model do
     it { is_expected.to have_many(:file_resources).through(:file_version_memberships) }
     it { is_expected.to have_many(:creator_aliases) }
     it { is_expected.to have_many(:creators).through(:creator_aliases) }
+    it { is_expected.to have_many(:view_statistics) }
     it { is_expected.to be_versioned }
 
     it { is_expected.to accept_nested_attributes_for(:file_resources) }
