@@ -129,7 +129,8 @@ module Api::V1
           content_parameter
             .permit(
               :file,
-              :deposited_at
+              :deposited_at,
+              :noid
             )
         end
       end

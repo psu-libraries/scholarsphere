@@ -17,5 +17,9 @@ FactoryBot.define do
     trait :with_collection do
       association :resource, factory: :collection
     end
+
+    trait :with_file do
+      association :resource, factory: :file_resource
+    end
   end
 end

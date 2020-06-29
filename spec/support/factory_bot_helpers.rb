@@ -25,4 +25,9 @@ module FactoryBotHelpers
 
     %(#{a}: "#{b}; #{id} #{c}")
   end
+
+  # @note Generate a random Noid-like string to mimic Scholarsphere 3's noid identifiers
+  def self.noid
+    [*('a'..'z'), *('0'..'9')].shuffle[0, 10].join
+  end
 end

@@ -51,17 +51,13 @@ class PublishNewWork
     }
 
     work = Work.build_with_empty_version(params)
-    if noid.present?
-      work.legacy_identifiers.find_or_initialize_by(
-        version: 3,
-        old_id: noid
-      )
-    end
+    LegacyIdentifier.create_noid(resource: work, noid: noid)
     UpdatePermissionsService.call(resource: work, permissions: permissions, create_agents: true)
     work_version = work.versions.first
 
     content.map do |file|
-      work_version.file_resources.build(file: file[:file], deposited_at: file[:deposited_at])
+      file_resource = work_version.file_resources.build(file: file[:file], deposited_at: file[:deposited_at])
+      LegacyIdentifier.create_noid(resource: file_resource, noid: file[:noid])
     end
 
     return work unless work.valid?

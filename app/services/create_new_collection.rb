@@ -62,12 +62,7 @@ class CreateNewCollection
     )
 
     collection = Collection.new(params)
-    if noid.present?
-      collection.legacy_identifiers.find_or_initialize_by(
-        version: 3,
-        old_id: noid
-      )
-    end
+    LegacyIdentifier.create_noid(resource: collection, noid: noid)
     UpdatePermissionsService.call(resource: collection, permissions: permissions, create_agents: true)
 
     if collection.save(context: :migration_api)
