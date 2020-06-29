@@ -15,4 +15,8 @@ module ViewStatistics
       .increment(:count)
       .save
   end
+
+  def stats
+    @stats ||= LoadViewStatistics.call(model: self)
+  end
 end

@@ -134,6 +134,10 @@ class Work < ApplicationRecord
     latest_published_version.count_view!
   end
 
+  def stats
+    @stats ||= AggregateViewStatistics.call(models: versions.published)
+  end
+
   private
 
     def document_builder

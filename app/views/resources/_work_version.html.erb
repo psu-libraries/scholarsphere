@@ -1,4 +1,14 @@
-<h1><%= work_version.title %></h1>
-
-<%= render WorkVersionMetadataComponent.new(work_version: work_version) %>
-<%= render 'shared/work_version_files', work_version: work_version %>
+<div class="row">
+  <div class="col">
+    <h1><%= work_version.title %></h1>
+    <p><%= work_version.description %></p>
+    <h2><%= t('resources.files') %></h2>
+    <%= render 'shared/work_version_files', work_version: work_version %>
+  </div>
+  <div class="col-4">
+    <h3><%= t('resources.metadata') %></h3>
+    <%= render WorkVersionMetadataComponent.new(work_version: work_version) %>
+    <h3><%= t('resources.analytics') %></h3>
+    <div class='analytics-chart-container' data-url="<%= resource_analytics_path(work_version.uuid, format: :json) %>"></div>
+  </div>
+</div>

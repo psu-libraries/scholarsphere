@@ -5,7 +5,7 @@
 # The returned rows are ordered by date ascending, and have the structure:
 #   [Date, number of views that day, running total of all views through time]
 # @example
-#   > LoadViewStatistics.call(my_model)
+#   > LoadViewStatistics.call(model: my_model)
 #   => [
 #        [Date(2020-06-01), 1,     1],
 #        [Date(2020-06-02), 100, 101],

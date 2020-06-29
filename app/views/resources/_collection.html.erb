@@ -1,4 +1,14 @@
-<h1><%= collection.title %></h1>
-
-<%= render CollectionMetadataComponent.new(collection: collection) %>
-<%= render 'shared/collection_works', collection: collection %>
+<div class="row">
+  <div class="col">
+    <h1><%= collection.title %></h1>
+    <p><%= collection.description %></p>
+    <h2><%= t('resources.works') %></h2>
+    <%= render 'shared/collection_works', collection: collection %>
+  </div>
+  <div class="col-4">
+    <h3><%= t('resources.metadata') %></h3>
+    <%= render CollectionMetadataComponent.new(collection: collection) %>
+    <h3><%= t('resources.analytics') %></h3>
+    <div class='analytics-chart-container' data-url="<%= resource_analytics_path(collection.uuid, format: :json) %>"></div>
+  </div>
+</div>

@@ -16,7 +16,6 @@ class CollectionMetadataComponent < ActionView::Component::Base
     :title,
     :subtitle,
     :creator_aliases,
-    :description,
     :keyword,
     :contributor,
     :publisher,

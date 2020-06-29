@@ -10,9 +10,6 @@ class ResourcesController < ApplicationController
   private
 
     def find_resource(uuid)
-      Work.where(uuid: uuid).first ||
-        WorkVersion.where(uuid: uuid).first ||
-        Collection.where(uuid: uuid).first ||
-        raise(ActiveRecord::RecordNotFound)
+      FindResource.call(uuid)
     end
 end
