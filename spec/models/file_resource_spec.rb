@@ -22,6 +22,7 @@ RSpec.describe FileResource, type: :model do
     it { is_expected.to have_many(:file_version_memberships) }
     it { is_expected.to have_many(:work_versions).through(:file_version_memberships) }
     it { is_expected.to have_many(:view_statistics) }
+    it { is_expected.to have_many(:legacy_identifiers) }
   end
 
   describe '#save' do
