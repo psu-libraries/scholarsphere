@@ -102,24 +102,20 @@ function drawChart (selection, data) {
   svg.on('mousemove click touchmove', function () {
     const mouseCoords = d3.mouse(this)
     const mouseDate = x.invert(mouseCoords[0])
-    const nearestIndex = bisectDate.right(data, mouseDate)
+    const [nearestDate,, nearestValue] = findNearestDataPoint(bisectDate, data, mouseDate)
 
-    if (nearestIndex < data.length) {
-      const [nearestDate,, nearestValue] = data[nearestIndex]
+    viewCounts.text(`${nearestValue} views`)
+    viewDate.text(` by ${formatDate(nearestDate)}`)
 
-      viewCounts.text(`${nearestValue} views`)
-      viewDate.text(` by ${formatDate(nearestDate)}`)
+    pointMarker
+      .attr('display', null)
+      .attr('cx', x(nearestDate))
+      .attr('cy', y(nearestValue))
 
-      pointMarker
-        .attr('display', null)
-        .attr('cx', x(nearestDate))
-        .attr('cy', y(nearestValue))
-
-      pointMarkerBar
-        .attr('display', null)
-        .attr('x1', x(nearestDate))
-        .attr('x2', x(nearestDate))
-    }
+    pointMarkerBar
+      .attr('display', null)
+      .attr('x1', x(nearestDate))
+      .attr('x2', x(nearestDate))
   })
 
   svg.on('mouseleave', event => {
@@ -128,4 +124,11 @@ function drawChart (selection, data) {
     pointMarker.attr('display', 'none')
     pointMarkerBar.attr('display', 'none')
   })
+}
+
+function findNearestDataPoint (bisector, data, date) {
+  const i = bisector.left(data, date, 1, data.length - 1)
+  const a = data[i - 1]
+  const b = data[i]
+  return date - a[0] > b[0] - date ? b : a
 }
