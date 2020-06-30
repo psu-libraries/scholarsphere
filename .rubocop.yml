@@ -35,6 +35,7 @@ RSpec/DescribeClass:
     - 'spec/features/**/*'
     - 'spec/integration/**/*'
     - 'spec/system/**/*'
+    - 'spec/lib/tasks/**/*'
 
 RSpec/EmptyLineAfterSubject:
   Exclude:
