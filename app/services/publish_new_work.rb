@@ -71,7 +71,10 @@ class PublishNewWork
       work_version.aasm_state = work_version.aasm.from_state
     end
 
-    work.save(context: :migration_api)
-    work.reload
+    if work.save(context: :migration_api)
+      work.reload
+    else
+      work
+    end
   end
 end
