@@ -53,6 +53,9 @@ RSpec/ExpectActual:
 RSpec/AnyInstance:
   Enabled: false
 
+RSpec/NestedGroups:
+  Enabled: false
+
 Style/ClassVars:
   Exclude:
     - 'spec/system/active_job_system_spec.rb'
