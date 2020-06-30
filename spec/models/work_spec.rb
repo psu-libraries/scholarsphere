@@ -361,4 +361,15 @@ RSpec.describe Work, type: :model do
       end
     end
   end
+
+  describe '#stats' do
+    subject(:work) { create :work, versions_count: 3, has_draft: true }
+
+    before { allow(AggregateViewStatistics).to receive(:call).and_return(:returned_stats) }
+
+    it 'Passes all published works to AggregateViewStatistics' do
+      expect(work.stats).to eq :returned_stats
+      expect(AggregateViewStatistics).to have_received(:call).with(models: work.versions.published)
+    end
+  end
 end

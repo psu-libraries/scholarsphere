@@ -12,7 +12,7 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
                                        work: work,
                                        subtitle: 'My subtitle',
                                        keyword: %w(one two),
-                                       description: nil
+                                       published_date: nil
     }
 
     it 'renders a string with label' do
@@ -32,7 +32,7 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
     end
 
     it 'does not render any fields that are empty' do
-      expect(result.css('dd.work-version-description')).to be_empty
+      expect(result.css('dd.work-version-published-date')).to be_empty
     end
 
     it 'accepts a decorated and non-decorated Work Version' do
@@ -52,7 +52,6 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
       expect(result.css('dt.work-version-title')).to be_present
       expect(result.css('dt.work-version-subtitle')).to be_present
       expect(result.css('dt.work-version-version-number')).to be_present
-      expect(result.css('dt.work-version-description')).to be_present
       expect(result.css('dt.work-version-keyword')).to be_present
       expect(result.css('dt.work-version-rights')).to be_present
       expect(result.css('dt.work-version-resource-type')).not_to be_present
@@ -76,7 +75,6 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
       expect(result.css('dd.work-version-subtitle').text).to eq work_version[:subtitle]
       expect(result.css('dd.work-version-creator-aliases').text).to include work_version.creator_aliases.map(&:alias).first
       expect(result.css('dd.work-version-version-number').text).to eq work_version[:version_number].to_s
-      expect(result.css('dd.work-version-description').text).to include work_version[:description].first
       expect(result.css('dd.work-version-keyword').text).to include work_version[:keyword].first
       expect(result.css('dd.work-version-rights').text).to eq work_version[:rights]
       expect(result.css('dd.work-version-display-work-type').text).to eq decorated_work_version.display_work_type
@@ -103,7 +101,6 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
         expect(result.css('dt.work-version-creator-aliases')).to be_present
         expect(result.css('dt.work-version-subtitle')).not_to be_present
         expect(result.css('dt.work-version-version-number')).not_to be_present
-        expect(result.css('dt.work-version-description')).not_to be_present
         expect(result.css('dt.work-version-keyword')).not_to be_present
         expect(result.css('dt.work-version-rights')).not_to be_present
         expect(result.css('dt.work-version-display-work-type')).not_to be_present

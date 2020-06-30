@@ -1,0 +1,42 @@
+$chart-line-color: #1e407c;
+$axis-stroke-color: #afafaf;
+$axis-text-color: #444;
+$point-marker-color: #f00;
+
+.analytics--info {
+  .counts {
+    font-weight: 600;
+  }
+}
+
+.analytics--chart {
+  .line {
+    fill: none;
+    stroke: $chart-line-color;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.5px;
+  }
+
+  .point-marker {
+    fill: $point-marker-color;
+  }
+
+  .point-marker-bar {
+    shape-rendering: crispEdges;
+    stroke: $axis-stroke-color;
+    stroke-width: 1px;
+  }
+
+  .axis {
+    line,
+    path {
+      shape-rendering: crispEdges;
+      stroke: $axis-stroke-color;
+    }
+
+    text {
+      fill: $axis-text-color;
+    }
+  }
+}

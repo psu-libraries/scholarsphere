@@ -10,7 +10,6 @@ RSpec.describe CollectionMetadataComponent, type: :component do
       subtitle: 'My subtitle',
       deposited_at: Time.zone.parse('2020-01-15 16:07'),
       keyword: %w(one two),
-      description: nil,
       subject: []
     ) }
 
@@ -31,7 +30,6 @@ RSpec.describe CollectionMetadataComponent, type: :component do
     end
 
     it 'does not render any fields that are empty' do
-      expect(result.css('dd.collection-description')).to be_empty
       expect(result.css('dd.collection-subject')).to be_empty
     end
 
@@ -51,7 +49,6 @@ RSpec.describe CollectionMetadataComponent, type: :component do
       # Titles
       expect(result.css('dt.collection-title')).to be_present
       expect(result.css('dt.collection-subtitle')).to be_present
-      expect(result.css('dt.collection-description')).to be_present
       expect(result.css('dt.collection-keyword')).to be_present
       expect(result.css('dt.collection-contributor')).to be_present
       expect(result.css('dt.collection-publisher')).to be_present
@@ -71,7 +68,6 @@ RSpec.describe CollectionMetadataComponent, type: :component do
       expect(result.css('dd.collection-title').text).to eq collection[:title]
       expect(result.css('dd.collection-subtitle').text).to eq collection[:subtitle]
       expect(result.css('dd.collection-creator-aliases').text).to include collection.creator_aliases.map(&:alias).first
-      expect(result.css('dd.collection-description').text).to include collection[:description].first
       expect(result.css('dd.collection-keyword').text).to include collection[:keyword].first
       expect(result.css('dd.collection-contributor').text).to include collection[:contributor].first
       expect(result.css('dd.collection-publisher').text).to include collection[:publisher].first
