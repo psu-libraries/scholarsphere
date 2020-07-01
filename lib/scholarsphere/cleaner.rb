@@ -40,7 +40,7 @@ module Scholarsphere
       end
 
       def redis
-        @redis ||= Redis.new(RedisConfig.new.to_hash)
+        @redis ||= Redis.new(Rails.configuration.redis)
       end
     end
   end

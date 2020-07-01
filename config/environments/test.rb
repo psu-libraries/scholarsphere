@@ -10,6 +10,11 @@ Rails.application.configure do
 
   config.cache_classes = false
 
+  # ActiveJob config
+  # Use a queue name prefix so the test suite doesn't overrwrite anything in dev.
+  # We don't need to do this in production because we're using a dedicated Redis instance.
+  config.active_job.queue_name_prefix = 'ss_test'
+
   # Do not eager load code on boot. This avoids loading your whole application
   # just for the purpose of running a single test. If you are using a tool that
   # preloads Rails for running tests, you may have to set it to true.

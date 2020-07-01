@@ -1,16 +1,10 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 require 'sidekiq/testing'
-require 'okcomputer'
-require 'healthchecks'
-require 'scholarsphere/redis_config'
 
-RSpec.describe HealthChecks::QueueDeadSetCheck, unless: !Scholarsphere::RedisConfig.new.valid? do
-  before do
-    Sidekiq::Testing.disable!
-    Sidekiq::DeadSet.new.clear
-  end
+RSpec.describe HealthChecks::QueueDeadSetCheck, :sidekiq do
+  before { Sidekiq::DeadSet.new.clear }
 
   describe '#check' do
     context 'when there are no messages in deadset' do

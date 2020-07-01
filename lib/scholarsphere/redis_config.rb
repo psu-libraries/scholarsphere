@@ -3,7 +3,7 @@
 module Scholarsphere
   class RedisConfig
     def host
-      ENV.fetch('REDIS_HOST', nil)
+      ENV.fetch('REDIS_HOST', 'localhost')
     end
 
     def port
@@ -15,20 +15,21 @@ module Scholarsphere
     end
 
     def password
-      ENV.fetch('REDIS_PASSWORD', nil)
-    end
-
-    def valid?
-      return true if host
-
-      false
+      ENV['REDIS_PASSWORD']
     end
 
     def to_hash
-      {
-        url: "redis://#{host}:#{port}/#{database}",
-        password: password
-      }
+      return base_config.merge(password: password) if password
+
+      base_config
     end
+
+    private
+
+      def base_config
+        {
+          url: "redis://#{host}:#{port}/#{database}"
+        }
+      end
   end
 end

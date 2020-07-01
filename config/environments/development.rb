@@ -10,6 +10,11 @@ Rails.application.configure do
   config.hosts << /.*ngrok\.io$/
   config.hosts << 'host.docker.internal'
 
+  # ActiveJob config
+  # Comment this out if you want to test Sidekiq integration locally
+  config.active_job.queue_adapter = :async
+  config.active_job.queue_name_prefix = 'ss_dev'
+
   # In the development environment your application's code is reloaded on
   # every request. This slows down response time but is perfect for development
   # since you don't have to restart the web server when you make code changes.

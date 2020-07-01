@@ -1,13 +1,10 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 require 'sidekiq/testing'
-require 'okcomputer'
-require 'healthchecks'
-require 'scholarsphere/redis_config'
 
-RSpec.describe HealthChecks::QueueLatencyCheck, unless: !Scholarsphere::RedisConfig.new.valid? do
-  let(:queue_name) { 'test_queue' }
+RSpec.describe HealthChecks::QueueLatencyCheck, :sidekiq do
+  let(:queue_name) { "#{Rails.configuration.active_job.queue_name_prefix}_test_queue" }
 
   before(:all) do
     class TestJob < ApplicationJob
@@ -24,7 +21,6 @@ RSpec.describe HealthChecks::QueueLatencyCheck, unless: !Scholarsphere::RedisCon
   end
 
   before do
-    Sidekiq::Testing.disable!
     Sidekiq::Queue.all.map(&:clear)
     TestJob.perform_later
   end
