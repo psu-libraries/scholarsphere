@@ -66,7 +66,6 @@ group :development do
   gem 'xray-rails'
 end
 
-
 # Lock simplecov at 0.17 until issue with test-reporter is solved
 # https://github.com/codeclimate/test-reporter/issues/413
 group :test do
