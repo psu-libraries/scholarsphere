@@ -66,6 +66,9 @@ group :development do
   gem 'xray-rails'
 end
 
+
+# Lock simplecov at 0.17 until issue with test-reporter is solved
+# https://github.com/codeclimate/test-reporter/issues/413
 group :test do
   gem 'capybara'
   gem 'launchy'
@@ -75,7 +78,7 @@ group :test do
   gem 'rspec-rails', '~> 4.0.0.beta3'
   gem 'selenium-webdriver'
   gem 'shoulda-matchers', '~> 4.3'
-  gem 'simplecov', require: false
+  gem 'simplecov', '~> 0.17.1', require: false
   gem 'vcr'
   gem 'webdrivers'
   gem 'webmock'
