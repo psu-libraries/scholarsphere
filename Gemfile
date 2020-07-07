@@ -6,7 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.6.6'
 
 gem 'aasm'
-gem 'blacklight', '~> 7.7'
+gem 'blacklight', '~> 7.7.0'
 gem 'bootsnap', '>= 1.4.2', require: false
 gem 'browser'
 gem 'cocoon'
@@ -36,7 +36,8 @@ gem 'uppy-s3_multipart', '~> 0.3'
 gem 'webpacker', '~> 4.0'
 
 # Experimental
-gem 'actionview-component'
+# @todo upgrade to latest version that alters the implementation pattern
+gem 'actionview-component', '= 1.17.0'
 
 group :development, :test do
   gem 'byebug', platform: :mri
@@ -46,6 +47,10 @@ group :development, :test do
   gem 'niftany'
   gem 'pry-byebug'
   gem 'pry-rails'
+  gem 'rubocop', '= 0.83.0'
+  gem 'rubocop-performance', '= 1.5.2'
+  gem 'rubocop-rails', '= 2.5.2'
+  gem 'rubocop-rspec', '= 1.39.0'
 end
 
 group :development do
