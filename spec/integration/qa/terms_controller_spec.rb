@@ -12,7 +12,7 @@ RSpec.describe Qa::TermsController, type: :controller, skip: ci_build? do
       before { get :search, params: { q: 'oslo', vocab: 'geonames' } }
 
       it 'returns a set of search results as JSON' do
-        expect(search_results).to include('id' => 'http://sws.geonames.org/3143244/', 'label' => 'Oslo, Oslo, Norway')
+        expect(search_results).to include('id' => 'https://sws.geonames.org/3143244/', 'label' => 'Oslo, Oslo, Norway')
       end
     end
 
