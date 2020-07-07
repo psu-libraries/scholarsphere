@@ -3,6 +3,7 @@
 # 
 # Runs the rspec test suite in our CI environment using Code Climate to send coverage reporting data.
 #
+set -e
 
 # Local variables
 REPORTER_BIN="cc-test-reporter"
