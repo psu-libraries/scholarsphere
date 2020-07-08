@@ -1,11 +1,6 @@
 # frozen_string_literal: true
 
-require 'action_view/component'
-
-class VisibilityBadgeComponent < ActionView::Component::Base
-  validates :work,
-            presence: true
-
+class VisibilityBadgeComponent < ApplicationComponent
   # @param [Work, SolrDocument]
   def initialize(work:)
     @work = work

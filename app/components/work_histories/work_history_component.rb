@@ -1,12 +1,7 @@
 # frozen_string_literal: true
 
-require 'action_view/component'
-
 module WorkHistories
-  class WorkHistoryComponent < ActionView::Component::Base
-    validates :work,
-              presence: true
-
+  class WorkHistoryComponent < ApplicationComponent
     # @param work [Work]
     def initialize(work:)
       @work = work

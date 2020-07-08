@@ -1,13 +1,8 @@
 # frozen_string_literal: true
 
-require 'action_view/component'
-
-class WorkVersionMetadataComponent < ActionView::Component::Base
+class WorkVersionMetadataComponent < ApplicationComponent
   attr_reader :work_version,
               :mini
-
-  validates :work_version,
-            presence: true
 
   # A list of WorkVersion's attributes that you'd like rendered, in the order
   # that you want them to appear.

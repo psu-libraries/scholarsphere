@@ -2,13 +2,8 @@
 
 # @todo: this is a great candidate for refactoring with WorkVersionMetadataComponent
 
-require 'action_view/component'
-
-class CollectionMetadataComponent < ActionView::Component::Base
+class CollectionMetadataComponent < ApplicationComponent
   attr_reader :collection
-
-  validates :collection,
-            presence: true
 
   # A list of Collection's attributes that you'd like rendered, in the order
   # that you want them to appear.

@@ -33,11 +33,8 @@ gem 'scholarsphere-client', github: 'psu-stewardship/scholarsphere-client', bran
 gem 'shrine', '~> 3.0'
 gem 'sidekiq', '~> 6.0'
 gem 'uppy-s3_multipart', '~> 0.3'
+gem 'view_component'
 gem 'webpacker', '~> 4.0'
-
-# Experimental
-# @todo upgrade to latest version that alters the implementation pattern
-gem 'actionview-component', '= 1.17.0'
 
 group :development, :test do
   gem 'byebug', platform: :mri

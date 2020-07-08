@@ -1,12 +1,6 @@
 # frozen_string_literal: true
 
-require 'action_view/component'
-
-class WorkHistories::PaperTrailChangeBaseComponent < ActionView::Component::Base
-  validates :paper_trail_version,
-            :user,
-            presence: true
-
+class WorkHistories::PaperTrailChangeBaseComponent < ApplicationComponent
   # @param paper_trail_version [PaperTrail::Version] representing a change to a
   #        WorkVersionCreation
   # @param user [User]

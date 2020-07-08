@@ -1,11 +1,6 @@
 # frozen_string_literal: true
 
-require 'action_view/component'
-
-class WorkVersions::StatusBadgeComponent < ActionView::Component::Base
-  validates :work_version,
-            presence: true
-
+class WorkVersions::StatusBadgeComponent < ApplicationComponent
   def initialize(work_version:)
     @work_version = work_version
   end

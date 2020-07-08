@@ -15,7 +15,7 @@ abort('The Rails environment is running in production mode!') if Rails.env.produ
 require 'rspec/rails'
 require 'aasm/rspec'
 require 'paper_trail/frameworks/rspec'
-require 'action_view/component/test_helpers'
+require 'view_component/test_helpers'
 
 # Add additional requires below this line. Rails is not loaded until this point!
 
@@ -52,7 +52,7 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = true
 
   config.include Devise::Test::IntegrationHelpers, type: :request
-  config.include ActionView::Component::TestHelpers, type: :component
+  config.include ViewComponent::TestHelpers, type: :component
 
   # RSpec Rails can automatically mix in different behaviours to your tests
   # based on their file location, for example enabling you to call `get` and
