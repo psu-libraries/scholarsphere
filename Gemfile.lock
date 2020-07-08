@@ -104,12 +104,13 @@ GEM
     bindex (0.8.1)
     binding_of_caller (0.8.0)
       debug_inspector (>= 0.0.1)
-    blacklight (7.7.0)
+    blacklight (7.10.0)
       deprecation
       globalid
       jbuilder (~> 2.7)
       kaminari (>= 0.15)
       rails (>= 5.1, < 7)
+      view_component
     bootsnap (1.4.6)
       msgpack (~> 1.0)
     browser (4.2.0)
@@ -500,7 +501,7 @@ DEPENDENCIES
   aasm
   better_errors
   binding_of_caller
-  blacklight (~> 7.7.0)
+  blacklight (~> 7.10)
   bootsnap (>= 1.4.2)
   browser
   byebug
