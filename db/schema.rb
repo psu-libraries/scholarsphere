@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_24_134610) do
+ActiveRecord::Schema.define(version: 2020_07_08_021358) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -174,7 +174,7 @@ ActiveRecord::Schema.define(version: 2020_06_24_134610) do
   end
 
   create_table "view_statistics", force: :cascade do |t|
-    t.date "date", default: -> { "now()" }
+    t.date "date", null: false
     t.integer "count", default: 0
     t.string "resource_type", null: false
     t.bigint "resource_id", null: false

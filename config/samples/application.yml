@@ -51,10 +51,10 @@
 #
 # --------------------------------------------------------------------------------------------------------------------
 #
-# Redis Configuration (production only)
+# Redis Configuration
 #
-# Note: you can also add this to your development configuration to test integration with Sidekiq and other external
-# services that are run async, but it should NOT be in your test environment.
+# Note: Defaults to 'redis://127.0.0.1:6379/0' which should work for local development. Password is only required for
+# production instances.
 #
 # REDIS_HOST:
 # REDIS_PORT:
