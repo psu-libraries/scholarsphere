@@ -3,17 +3,23 @@
 require 'rails_helper'
 
 RSpec.describe WorkIndexer, :inline_jobs do
-  describe '::call' do
-    before { described_class.call(work) }
+  context 'when the work has only one published version' do
+    let(:work) { create(:work, has_draft: false) }
+    let(:current_published) { work.versions[0] }
 
-    context 'when the work has one published version' do
-      let(:work) { create(:work, has_draft: false) }
-      let(:current_published) { work.versions[0] }
+    it 'indexes both the work and the published version, marking it as the latest' do
+      expect(SolrDocument.find(current_published.uuid)[:latest_version_bsi]).to be(true)
+      expect(SolrDocument.find(work.uuid)[:title_tesim]).to eq([current_published.title])
+    end
+  end
 
-      it 'indexes the published version and the work' do
-        expect(SolrDocument.find(current_published.uuid)[:latest_version_bsi]).to be(true)
-        expect(SolrDocument.find(work.uuid)[:title_tesim]).to eq([current_published.title])
-      end
+  context 'when the work has only one draft version' do
+    let(:work) { create(:work, has_draft: true) }
+    let(:draft) { work.versions[0] }
+
+    it 'indexes ONLY the draft version and marks it as the latest' do
+      expect(SolrDocument.find(draft.uuid)[:latest_version_bsi]).to be(true)
+      expect { SolrDocument.find(work.uuid) }.to raise_error(Blacklight::Exceptions::RecordNotFound)
     end
   end
 
@@ -23,10 +29,10 @@ RSpec.describe WorkIndexer, :inline_jobs do
     let(:current_published) { work.versions[1] }
     let(:draft) { work.versions[2] }
 
-    it 'indexes only the published versions and work, marking the latest version' do
-      expect(SolrDocument.find(current_published.uuid)[:latest_version_bsi]).to be(true)
+    it 'indexes ALL versions and work, marking the draft as the latest version' do
+      expect(SolrDocument.find(current_published.uuid)[:latest_version_bsi]).to be(false)
       expect(SolrDocument.find(previous_published.uuid)[:latest_version_bsi]).to be(false)
-      expect { SolrDocument.find(draft.uuid) }.to raise_error(Blacklight::Exceptions::RecordNotFound)
+      expect(SolrDocument.find(draft.uuid)[:latest_version_bsi]).to be(true)
       expect(SolrDocument.find(work.uuid)[:title_tesim]).to eq([current_published.title])
     end
   end
