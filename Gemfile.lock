@@ -48,8 +48,6 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
-    actionview-component (1.17.0)
-      capybara (~> 3)
     activejob (6.0.3.2)
       activesupport (= 6.0.3.2)
       globalid (>= 0.3.6)
@@ -106,12 +104,13 @@ GEM
     bindex (0.8.1)
     binding_of_caller (0.8.0)
       debug_inspector (>= 0.0.1)
-    blacklight (7.7.0)
+    blacklight (7.10.0)
       deprecation
       globalid
       jbuilder (~> 2.7)
       kaminari (>= 0.15)
       rails (>= 5.1, < 7)
+      view_component
     bootsnap (1.4.6)
       msgpack (~> 1.0)
     browser (4.2.0)
@@ -465,6 +464,8 @@ GEM
       content_disposition (~> 1.0)
       roda (>= 2.27, < 4)
     vcr (6.0.0)
+    view_component (2.14.0)
+      activesupport (>= 5.0.0, < 7.0)
     warden (1.2.8)
       rack (>= 2.0.6)
     web-console (4.0.3)
@@ -498,10 +499,9 @@ PLATFORMS
 
 DEPENDENCIES
   aasm
-  actionview-component (= 1.17.0)
   better_errors
   binding_of_caller
-  blacklight (~> 7.7.0)
+  blacklight (~> 7.10)
   bootsnap (>= 1.4.2)
   browser
   byebug
@@ -558,6 +558,7 @@ DEPENDENCIES
   spring-watcher-listen (~> 2.0.0)
   uppy-s3_multipart (~> 0.3)
   vcr
+  view_component
   web-console (>= 3.3.0)
   webdrivers
   webmock

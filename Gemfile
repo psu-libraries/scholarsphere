@@ -6,7 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.6.6'
 
 gem 'aasm'
-gem 'blacklight', '~> 7.7.0'
+gem 'blacklight', '~> 7.10'
 gem 'bootsnap', '>= 1.4.2', require: false
 gem 'browser'
 gem 'cocoon'
@@ -33,11 +33,8 @@ gem 'scholarsphere-client', github: 'psu-stewardship/scholarsphere-client', bran
 gem 'shrine', '~> 3.0'
 gem 'sidekiq', '~> 6.0'
 gem 'uppy-s3_multipart', '~> 0.3'
+gem 'view_component'
 gem 'webpacker', '~> 4.0'
-
-# Experimental
-# @todo upgrade to latest version that alters the implementation pattern
-gem 'actionview-component', '= 1.17.0'
 
 group :development, :test do
   gem 'byebug', platform: :mri

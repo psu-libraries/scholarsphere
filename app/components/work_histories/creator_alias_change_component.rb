@@ -1,12 +1,6 @@
 # frozen_string_literal: true
 
 class WorkHistories::CreatorAliasChangeComponent < WorkHistories::PaperTrailChangeBaseComponent
-  # This apparently is a little quirk of ActionView::Component, and requires an
-  # explicit #initialize method on each class.
-  def initialize(**args)
-    super
-  end
-
   private
 
     def i18n_key

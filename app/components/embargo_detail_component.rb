@@ -1,11 +1,6 @@
 # frozen_string_literal: true
 
-require 'action_view/component'
-
-class EmbargoDetailComponent < ActionView::Component::Base
-  validates :work_version,
-            presence: true
-
+class EmbargoDetailComponent < ApplicationComponent
   attr_reader :work_version
 
   # @param [WorkVersion]
