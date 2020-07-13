@@ -8,7 +8,7 @@ RSpec.describe 'Logging in using OAuth' do
 
   before do
     OmniAuth.config.test_mode = true
-    OmniAuth.config.mock_auth[:psu] = oauth_response
+    OmniAuth.config.mock_auth[:azure_oauth] = oauth_response
   end
 
   it 'uses OAuth to authenticate to the application' do

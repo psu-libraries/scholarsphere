@@ -10,7 +10,7 @@ FactoryBot.define do
     groups { User.default_groups }
     email { "#{access_id}@psu.edu" }
     sequence(:access_id) { |n| FactoryBotHelpers.generate_access_id_from_name(Faker::Name.first_name, Faker::Name.last_name, n) }
-    provider { 'psu' }
+    provider { 'azure_oauth' }
     uid { access_id }
     actor { build :actor, psu_id: access_id }
   end

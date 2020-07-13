@@ -37,6 +37,14 @@ RSpec/DescribeClass:
     - 'spec/system/**/*'
     - 'spec/lib/tasks/**/*'
 
+RSpec/DescribedClass:
+  Exclude:
+    - 'spec/lib/omniauth/strategies/azure_oauth_spec.rb'
+
+RSpec/RepeatedExampleGroupBody:
+  Exclude:
+    - 'spec/lib/omniauth/strategies/azure_oauth_spec.rb'
+
 RSpec/EmptyLineAfterSubject:
   Exclude:
     - 'spec/factories/work_versions.rb'

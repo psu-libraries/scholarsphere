@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'omniauth/strategies/psu'
+require 'omniauth/strategies/azure_oauth'
 
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
@@ -261,7 +261,7 @@ Devise.setup do |config|
   # ==> OmniAuth
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
-  config.omniauth :psu, ENV['OAUTH_APP_ID'], ENV['OAUTH_APP_SECRET'], scope: 'public'
+  config.omniauth :azure_oauth, ENV['OAUTH_APP_ID'], ENV['OAUTH_APP_SECRET'], scope: 'openid profile email offline_access user.read'
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or

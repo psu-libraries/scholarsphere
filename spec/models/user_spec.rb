@@ -54,9 +54,10 @@ RSpec.describe User, type: :model do
                               surname: 'Developer',
                               access_id: 'jd1',
                               groups: [
-                                'cn=admin,dc=psu,dc=edu',
-                                'cn=reporter,dc=psu,dc=edu',
-                                'cn=totally invalid with spaces,dc=psu,dc=edu'
+                                'umg-admin',
+                                'umg-reporter',
+                                'Invalid With Spaces',
+                                'umg-With Spaces'
                               ]
     }
 
@@ -87,8 +88,8 @@ RSpec.describe User, type: :model do
 
           expect(new_user.groups.length).to eq 4
           expect(new_user.groups.map(&:name)).to contain_exactly(
-            'admin',
-            'reporter',
+            'umg-admin',
+            'umg-reporter',
             Group::AUTHORIZED_AGENT_NAME,
             Group::PUBLIC_AGENT_NAME
           )
@@ -157,8 +158,8 @@ RSpec.describe User, type: :model do
         described_class.from_omniauth(auth_params)
 
         expect(existing_user.reload.groups.map(&:name)).to contain_exactly(
-          'admin',
-          'reporter',
+          'umg-admin',
+          'umg-reporter',
           Group::AUTHORIZED_AGENT_NAME,
           Group::PUBLIC_AGENT_NAME
         )
@@ -186,7 +187,7 @@ RSpec.describe User, type: :model do
     end
 
     context 'when a validation error occurs' do
-      before { auth_params.info.access_id = nil }
+      before { auth_params.uid = nil }
 
       it do
         expect { described_class.from_omniauth(auth_params) }
@@ -212,6 +213,7 @@ RSpec.describe User, type: :model do
       end
 
       it do
+        pending('djb44 - LdapGroupCleaner I dont think is needed')
         expect { described_class.from_omniauth(auth_params) }
           .to raise_error(described_class::OAuthError)
           .with_message(/ack/)

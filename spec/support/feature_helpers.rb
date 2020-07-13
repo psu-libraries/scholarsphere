@@ -3,7 +3,7 @@
 module FeatureHelpers
   def setup_oauth(user: nil)
     OmniAuth.config.test_mode = true
-    OmniAuth.config.mock_auth[:psu] = mock_auth_hash(user) if user.present?
+    OmniAuth.config.mock_auth[:azure_oauth] = mock_auth_hash(user) if user.present?
   end
 
   def retry_click(count: 0)

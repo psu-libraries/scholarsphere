@@ -2,7 +2,7 @@
 
 # https://github.com/plataformatec/devise/wiki/OmniAuth:-Overview
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
-  def psu
+  def azure_oauth
     @user = User.from_omniauth(request.env['omniauth.auth'])
 
     sign_in_and_redirect @user, event: :authentication

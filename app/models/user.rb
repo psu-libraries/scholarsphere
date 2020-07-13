@@ -17,7 +17,7 @@ class User < ApplicationRecord
   # Connects this user object to Blacklights Bookmarks.
   include Blacklight::User
 
-  devise :omniauthable, omniauth_providers: %i[psu]
+  devise :omniauthable, omniauth_providers: %i[azure_oauth]
 
   attr_writer :guest
 
@@ -53,7 +53,7 @@ class User < ApplicationRecord
 
   def self.from_omniauth(auth)
     user = find_or_initialize_by(provider: auth.provider, uid: auth.uid) do |new_user|
-      new_user.access_id = auth.info.access_id
+      new_user.access_id = auth.uid
       new_user.actor = Actor.find_or_initialize_by(psu_id: new_user.access_id)
     end
 
@@ -63,13 +63,14 @@ class User < ApplicationRecord
     user.actor.tap do |actor|
       actor.email = actor.email.presence || auth.info.email
       actor.given_name = actor.given_name.presence || auth.info.given_name
-      actor.surname = actor.surname.presence || auth.info.surname
+      actor.surname = actor.surname.presence || auth.info.surname || auth.info.family_name
     end
 
     transaction do
       psu_groups = auth.info.groups
-        .map { |ldap_group_name| LdapGroupCleaner.call(ldap_group_name) }
         .compact
+        .select { |group_name| group_name.start_with?('umg') }
+        .reject { |group_name| group_name.include?(' ') }
         .map { |group_name| Group.find_or_create_by(name: group_name) }
 
       user.groups = default_groups + psu_groups

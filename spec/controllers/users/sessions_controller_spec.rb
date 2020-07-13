@@ -11,9 +11,9 @@ RSpec.describe Users::SessionsController, type: :controller do
   end
 
   describe '#new' do
-    it 'redirects to PSU Oauth' do
+    it 'redirects to Azure Oauth' do
       get(:new)
-      expect(response).to redirect_to(user_psu_omniauth_authorize_path)
+      expect(response).to redirect_to(user_azure_oauth_omniauth_authorize_path)
     end
   end
 end
