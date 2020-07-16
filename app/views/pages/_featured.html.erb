@@ -1,0 +1,11 @@
+<div class="col-xl">
+  <div class="surface ft-work">
+    <h3><%= link_to work_version.title, resource_path(work_version.uuid) %></h3>
+    <div class="row">
+      <div class="col-xxl-6 ft-work__img">
+        <a href="#"><img src="http://placehold.it/1000x1200" alt=""></a>
+      </div>
+      <%= render FeaturedWorkMetadataComponent.new(work_version: work_version) %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Internet Explorer use the highest version available -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title><%= render_page_title %></title>
+    <%= favicon_link_tag %>
+    <%= javascript_pack_tag 'frontend' %>
+    <%= stylesheet_pack_tag 'frontend', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= csrf_meta_tags %>
+    <%= content_for(:head) %>
+
+    <!-- Matomo -->
+    <script type="text/javascript">
+      var _paq = window._paq || [];
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      _paq.push(['trackPageView']);
+      _paq.push(['enableLinkTracking']);
+      (function() {
+        var u = "<%= ENV.fetch('MATOMO_URL', 'https://analytics.libraries.psu.edu/matomo/') %>";
+        _paq.push(['setTrackerUrl', u+'matomo.php']);
+        _paq.push(['setSiteId', '<%= ENV.fetch('MATOMO_SITE_ID', '15') %>']);
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+      })();
+    </script>
+    <!-- End Matomo Code -->
+  </head>
+
+  <body>
+    <header>
+      <nav class="navbar navbar-light navbar-expand-lg topbar">
+        <%= link_to 'ScholarSphere', root_path, class: 'navbar-brand slab-font' %>
+        <%= link_to image_pack_tag(
+              'media/frontend/img/logo-penn_state_university_libraries.png',
+              alt: 'Penn State – University Libraries'
+            ),
+                    'https://libraries.psu.edu/' %>
+        <button class="navbar-toggler ml-auto"
+                type="button"
+                data-toggle="collapse"
+                data-target="#topbar"
+                aria-controls="topbar"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="topbar">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <%= link_to 'About', '#', class: 'nav-link' %>
+            </li>
+            <li class="nav-item">
+              <%= link_to 'Help', '#', class: 'nav-link' %>
+            </li>
+            <li class="nav-item">
+              <%= link_to 'Contact', '#', class: 'nav-link' %>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <%= render NavbarComponent.new(current_user: current_user) %>
+    </header>
+
+    <main class="main">
+      <%= render FlashMessageComponent.new(flash: flash) if flash.present? %>
+      <%= content_for?(:content) ? yield(:content) : yield %>
+    </main>
+
+    <footer class="footer footer--landing">
+      <nav class="navbar navbar-light footer__nav">
+        <div>
+          <h3><%= t('footer.heading') %></h3>
+          <p><%= t('footer.description') %></p>
+        </div>
+        <div class="ml-auto">
+          <p><%= t('footer.copyright_statement') %></p>
+          <p>
+            <%= link_to 'Penn State', 'https://www.psu.edu' %> |
+            <%= link_to 'University Libraries', 'https://libraries.psu.edu/' %> |
+            <%= link_to 'Accessibility', 'https://accessibility.psu.edu/' %>
+          </p>
+        </div>
+      </nav>
+    </footer>
+  </body>
+</html>

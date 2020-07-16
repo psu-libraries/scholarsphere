@@ -1,0 +1,41 @@
+:root {
+  --mdc-theme-primary: var(--blue);
+  --mdc-theme-secondary: var(--blue);
+  --mdc-typography-font-family: var(--font-family-sans-serif);
+}
+
+// Text field
+.mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-floating-label {
+  color: var(--mdc-theme-primary);
+}
+
+.mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-floating-label {
+  color: var(--mdc-theme-error);
+}
+
+.mdc-text-field {
+  width: 100%;
+}
+
+.mdc-text-field-helper-text {
+  letter-spacing: normal;
+  font-style: italic;
+}
+
+
+// Select
+.mdc-select:not(.mdc-select--disabled).mdc-select--focused .mdc-floating-label {
+  color: var(--mdc-theme-primary);
+}
+
+.mdc-select,
+.mdc-select__menu {
+  width: 100%;
+}
+
+
+// Radio
+.mdc-radio {
+  position: relative;
+  bottom: -4px;
+}

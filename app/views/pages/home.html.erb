@@ -1,0 +1,40 @@
+<div class="container-fluid">
+  <div class="row row--md-mb-3">
+    <div class="col-md">
+      <h4 class="mb-2"><%= t('home.intro.heading') %></h4>
+      <div class="surface"><%= t('home.intro.content') %></div>
+    </div>
+
+    <div class="col-md">
+      <h4 class="mb-2"><%= t('home.search.heading') %></h4>
+      <div class="surface search">
+        <%= form_tag search_action_url, method: :get do %>
+          <div class="input-group input-group--icon mb-2">
+            <%= text_field_tag :q, params[:q], placeholder: t('home.search.placeholder'), class: 'form-control' %>
+            <div class="input-group-append">
+              <button class="btn btn-primary" type="submit">
+                <i class="material-icons"><%= t('home.search.submit') %></i>
+              </button>
+            </div>
+          </div>
+        <% end %>
+        <div class="keyline keyline--center">
+          <h4><%= t('home.search.subheading') %></h4>
+        </div>
+        <div class="mt-2 text-center">
+          <%= link_to t('home.search.browse'), search_catalog_path, class: 'btn btn-primary' %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid mt-4">
+  <div class="row row--lg-mb-3">
+    <div class="col-12 mb-0">
+      <h4 class="mb-2"><%= t('home.featured.heading') %></h4>
+    </div>
+
+    <%= render partial: 'featured', collection: @featured_works, as: :work_version %>
+  </div>
+</div>
