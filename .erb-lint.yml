@@ -16,6 +16,7 @@ linters:
     enabled: true
     exclude:
       - '*app/components/flash_message_component.html.erb'
+      - '*app/views/catalog/_search_form.html.erb'
   RightTrim:
     enabled: true
     enforced_style: '-'

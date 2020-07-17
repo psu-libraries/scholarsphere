@@ -4,17 +4,15 @@ require 'rails_helper'
 
 RSpec.describe VisibilityBadgeComponent, type: :component do
   let(:node) { render_inline(described_class.new(work: work)) }
-  let(:image) { node.css('img').first }
-  let(:badge) { node.css('span').first }
+  let(:badge) { node.css('div').first }
 
   context 'when a work is open access' do
     let(:work) { build(:work) }
 
     specify do
-      expect(image.attributes['src'].value).to match(/visibility-open/)
-      expect(image.classes).to contain_exactly('visibility')
       expect(badge.text).to include('Open Access')
-      expect(badge.classes).to include('badge', 'visibility', 'visibility--open')
+      expect(badge.attributes['data-before'].value).to eq('lock_open')
+      expect(badge.classes).to contain_exactly('badge', 'badge--icon', 'badge--icon-orange')
     end
   end
 
@@ -22,10 +20,9 @@ RSpec.describe VisibilityBadgeComponent, type: :component do
     let(:work) { build(:work, visibility: Permissions::Visibility::AUTHORIZED) }
 
     specify do
-      expect(image.attributes['src'].value).to match(/visibility-authorized/)
-      expect(image.classes).to contain_exactly('visibility')
       expect(badge.text).to include('Penn State')
-      expect(badge.classes).to include('badge', 'visibility', 'visibility--authenticated')
+      expect(badge.attributes['data-before'].value).to eq('pets')
+      expect(badge.classes).to contain_exactly('badge', 'badge--icon', 'badge--icon-blue')
     end
   end
 
@@ -33,10 +30,9 @@ RSpec.describe VisibilityBadgeComponent, type: :component do
     let(:work) { build(:work, visibility: Permissions::Visibility::PRIVATE) }
 
     specify do
-      expect(image.attributes['src'].value).to match(/visibility-private/)
-      expect(image.classes).to contain_exactly('visibility')
       expect(badge.text).to include('Restricted')
-      expect(badge.classes).to include('badge', 'visibility', 'visibility--restricted')
+      expect(badge.attributes['data-before'].value).to eq('lock')
+      expect(badge.classes).to contain_exactly('badge', 'badge--icon', 'badge--icon-red')
     end
   end
 end

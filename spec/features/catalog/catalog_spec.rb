@@ -37,7 +37,6 @@ RSpec.describe 'Blacklight catalog page', :inline_jobs do
 
   it 'displays the search form and facets' do
     visit search_catalog_path
-    click_button('Search')
     click_link('100 per page')
 
     expect(page).to have_content("1 - #{indexed_resources.count} of #{indexed_resources.count}")
@@ -50,27 +49,20 @@ RSpec.describe 'Blacklight catalog page', :inline_jobs do
     expect(page).to have_selector('h3', text: 'Work Type')
 
     # Display all indexed resources and check fields
-    expect(page).to have_blacklight_label('title_tesim')
-    expect(page).to have_blacklight_label('creator_aliases_tesim')
-    expect(page).to have_blacklight_label('aasm_state_tesim')
-    expect(page).to have_blacklight_label('keyword_tesim')
-    expect(page).to have_blacklight_label('work_type_ssim')
-    expect(page).to have_blacklight_label('deposited_at_dtsi')
     indexed_resources.each do |resource|
-      expect(page).to have_blacklight_field('title_tesim').with(resource.title)
-      expect(page).to have_blacklight_field('creator_aliases_tesim').with(resource.creator_aliases.map(&:alias).join(', '))
-      expect(page).to have_blacklight_field('keyword_tesim').with(resource.keyword.join(', '))
-      expect(page).to have_blacklight_field('deposited_at_dtsi').with(
-        resource
-          .deposited_at
-          .in_time_zone(Rails.configuration.time_zone)
-          .to_formatted_s(:long)
-      )
+      within("##{document_id(resource)}") do
+        expect(page).to have_link(resource.title)
 
-      # The following fields are only valid for WorkVersions, not Collections
-      if resource.is_a? WorkVersion
-        expect(page).to have_blacklight_field('aasm_state_tesim').with(resource.aasm_state)
-        expect(page).to have_blacklight_field('work_type_ssim').with(Work::Types.display(resource.work_type))
+        # The following fields are only valid for WorkVersions, not Collections
+        if resource.is_a? WorkVersion
+          expect(page).to have_content(Work::Types.display(resource.work_type))
+          within('.badge--text') do
+            expect(page).to have_content(resource.aasm_state)
+          end
+          within('.meta') do
+            expect(page).to have_content("Published Date #{resource.published_date}")
+          end
+        end
       end
     end
 
@@ -86,5 +78,13 @@ RSpec.describe 'Blacklight catalog page', :inline_jobs do
     expect(page).to have_content(work_version.title)
     expect(page).to have_css('dt.work-version-subtitle')
     expect(page).to have_css('dd.work-version-subtitle', text: work_version.subtitle)
+  end
+
+  def document_id(resource)
+    if resource.is_a? WorkVersion
+      "document-#{resource.work.uuid}"
+    else
+      "document-#{resource.uuid}"
+    end
   end
 end

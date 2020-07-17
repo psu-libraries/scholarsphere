@@ -10,15 +10,25 @@ class WorkVersions::StatusBadgeComponent < ApplicationComponent
     attr_reader :work_version
 
     def html_class
-      normalized_state = work_version.aasm_state.parameterize.dasherize
       [
         'badge',
-        'version-status',
-        "version-status--#{normalized_state}"
+        'badge--text',
+        "badge--#{color.fetch(content, 'red')}"
       ].join(' ')
     end
 
     def content
-      work_version.aasm_state.downcase
+      work_version.aasm_state
+    end
+
+    def version
+      "V#{work_version.version_number}"
+    end
+
+    def color
+      HashWithIndifferentAccess.new({
+                                      WorkVersion::STATE_DRAFT => 'gray-800',
+                                      WorkVersion::STATE_PUBLISHED => 'dark-blue'
+                                    })
     end
 end

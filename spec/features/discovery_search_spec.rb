@@ -14,7 +14,6 @@ RSpec.describe 'Searching discoverable resources', :inline_jobs do
   context 'with a public user' do
     it 'searches public and Penn State works' do
       visit search_catalog_path
-      click_button('Search')
 
       expect(page).to have_content(public_work.latest_published_version.title)
       expect(page).to have_content(previous_embargoed_work.latest_published_version.title)
@@ -30,7 +29,6 @@ RSpec.describe 'Searching discoverable resources', :inline_jobs do
 
     it 'searches public and Penn State works', with_user: :user do
       visit search_catalog_path
-      click_button('Search')
 
       expect(page).to have_content(public_work.latest_published_version.title)
       expect(page).to have_content(previous_embargoed_work.latest_published_version.title)

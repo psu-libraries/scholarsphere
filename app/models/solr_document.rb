@@ -21,4 +21,24 @@ class SolrDocument
   def visibility
     self[:visibility_ssi]
   end
+
+  def title
+    Array.wrap(self[:title_tesim]).first
+  end
+
+  def published_date
+    Array.wrap(self[:published_date_tesim]).first
+  end
+
+  def work_type
+    Array.wrap(self[:work_type_ssim]).first
+  end
+
+  def aasm_state
+    Array.wrap(self[:aasm_state_tesim]).first
+  end
+
+  def version_number
+    self[:version_number_isi].to_s
+  end
 end

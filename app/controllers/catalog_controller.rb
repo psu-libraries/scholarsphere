@@ -213,4 +213,10 @@ class CatalogController < ApplicationController
     # default 'mySuggester', uncomment and provide it below
     # config.autocomplete_suggester = 'mySuggester'
   end
+
+  private
+
+    def determine_layout
+      'frontend'
+    end
 end
