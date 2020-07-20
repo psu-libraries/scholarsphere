@@ -1,14 +1,17 @@
 $gray-100: #fafafa;
 $gray-300: #dbdbdb;
 $gray-800: #4e4e4e;
+$gray-85: #d9d9d9;
 $black: #444;
-$blue: #2C76C7;
+$blue: #2c76c7;
 $mid-blue: #095498;
-$dark-blue: #1E407C;
-$light-green: #DDFFDD;
-$red: #DE5D51;
-$light_red: #FFEEEE;
-$orange: #F88223;
+$dark-blue: #1e407c;
+$light-green: #dfd;
+$dark-green: #025d04;
+$red: #de5d51;
+$light-red: #fee;
+$dark-red: #aa1a1c;
+$orange: #f88223;
 $secondary: $orange;
 
 $font-size-lg: 18px;
@@ -21,7 +24,7 @@ $headings-font-weight: 600;
 $slab-font-family: "Roboto Slab", "Rockwell", serif;
 $h3-font-size: 1.5rem;
 $h4-font-size: 1rem;
-$h5-font-size: 0.7rem;
+$h5-font-size: .7rem;
 $spacer: 1rem !default;
 $spacers: () !default;
 $spacers: map-merge(
@@ -71,16 +74,16 @@ $input-btn-padding-y: .65rem;
 $input-btn-padding-x: 1rem;
 
 $badge-font-size: 60%;
-$badge-padding-y: 0.3rem;
-$badge-padding-x: 0.5rem;   
+$badge-padding-y: .3rem;
+$badge-padding-x: .5rem;
 
 $tooltip-font-size: 12px;
 
 $table-border-width: 0;
-$table-cell-padding: 0.4rem 0.5rem;
+$table-cell-padding: .4rem .5rem;
 
 $nav-tabs-border-width: 0;
-$nav-tabs-link-active-color: white;
+$nav-tabs-link-active-color: #fff;
 $nav-tabs-link-active-bg: $blue;
 
 $modal-inner-padding: 1.5rem;

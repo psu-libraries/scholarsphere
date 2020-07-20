@@ -1,6 +1,6 @@
-/**
-** Common
-**/
+//
+// Common
+//
 
 *:focus {
   box-shadow: none !important;
@@ -31,10 +31,11 @@ main {
   font-size: $font-size-lg;
 }
 
-/**
-** Typography
-**/
-h4, .h4 {
+//
+// Typography
+//
+h4,
+.h4 {
   text-transform: uppercase;
   letter-spacing: 1px;
   font-weight: $font-weight-bolder;
@@ -102,9 +103,9 @@ h4, .h4 {
   }
 }
 
-/**
-** Utility Classes
-**/
+//
+// Utility Classes
+//
 
 .added,
 .removed {
@@ -113,32 +114,34 @@ h4, .h4 {
 }
 
 .added {
-  background: #DDFFDD;
+  background: $light-green;
   padding: $spacer;
 
   p {
-    color: #025D04;
+    color: $dark-green;
     margin-bottom: 0;
   }
 }
 
 .removed {
-  background: #FFEEEE;
+  background: $light-red;
   padding: $spacer;
 
   p {
-    color: #AA1A1C;
+    color: $dark-red;
     margin-bottom: 0;
   }
 }
 
 .bg-dark-blue {
-  background: $dark_blue;
+  background: $dark-blue;
 }
+
 .slab-font {
   font-family: $slab-font-family;
   font-weight: $font-weight-normal;
 }
+
 .row { // Margin bottom for all child columns at a certain breakpoint
   &--md-mb-3 {
     @include media-breakpoint-down(md) {
@@ -147,6 +150,7 @@ h4, .h4 {
       }
     }
   }
+
   &--lg-mb-3 {
     @include media-breakpoint-down(lg) {
       [class*='col-']:not(:last-of-type) {
@@ -156,48 +160,21 @@ h4, .h4 {
   }
 }
 
-/**
-** Navigation
-**/
+//
+// Navigation
+//
 
 .topbar {
   justify-content: flex-start;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-
-  .navbar-brand {
-    position: relative;
-    margin-right: map-get($spacers, 3);
-    color: $mid-blue;    
-    
-    &::after {
-      content: '';
-      width: 1px;
-      height: 100%;
-      position: absolute;
-      background: $gray-300;
-      right: -1.25rem;
-    }
-  }
-  
-  img {
-    height: 40px;
-  }
-
-  .navbar-collapse {
-    justify-content: flex-end;
-
-    a {
-      font-weight: $font-weight-bold;
-    }
-  }
+  padding-top: .5rem;
+  padding-bottom: .5rem;
 
   @include media-breakpoint-down(md) {
     .dropdown-menu {
-      border: none;
-      
+      border: 0;
+
       .dropdown-item {
-        padding: 0.5rem 0;
+        padding: .5rem 0;
       }
     }
   }
@@ -211,6 +188,34 @@ h4, .h4 {
       height: 30px;
     }
   }
+
+  .navbar-brand {
+    position: relative;
+    margin-right: map-get($spacers, 3);
+    color: $mid-blue;
+
+    &::after {
+      content: '';
+      width: 1px;
+      height: 100%;
+      position: absolute;
+      background: $gray-300;
+      right: -1.25rem;
+    }
+  }
+
+  img {
+    height: 40px;
+  }
+
+  .navbar-collapse {
+    justify-content: flex-end;
+
+    a {
+      font-weight: $font-weight-bold;
+    }
+  }
+
 }
 
 .navbar-brand {
@@ -230,7 +235,7 @@ h4, .h4 {
 .sidebar {
   ul {
     li.nav-item {
-      margin: $spacer * 0.5 0;
+      margin: $spacer * .5 0;
 
       a.nav-link {
         color: $dark-blue;
@@ -274,7 +279,7 @@ h4, .h4 {
     .btn {
       width: 100%;
       text-align: left;
-      border: none;
+      border: 0;
 
       &-outline-light:hover {
         background: transparent;
@@ -287,7 +292,7 @@ h4, .h4 {
     .collapse {
       justify-content: flex-end;
     }
-  
+
     .navbar-nav {
       align-items: center;
     }
@@ -295,9 +300,9 @@ h4, .h4 {
 }
 
 
-/**
-** Custom Components
-**/
+//
+// Custom Components
+//
 
 .label {
   position: relative;
@@ -307,7 +312,7 @@ h4, .h4 {
     font-size: 12px;
     font-style: italic;
     left: 0;
-    bottom: -0.5rem;
+    bottom: -.5rem;
     transform: translateY(100%);
     width: 150px;
 
@@ -319,7 +324,7 @@ h4, .h4 {
 
 .custom-helper-text {
   box-sizing: border-box;
-  padding: 0.5rem 1rem 0;
+  padding: .5rem 1rem 0;
   font-size: 12px;
   font-style: italic;
   color: $gray-800;
@@ -336,21 +341,22 @@ h4, .h4 {
   &__header {
     font-size: $font-size-sm;
     font-weight: $font-weight-bold;
-    margin-bottom: 0.5rem;
+    margin-bottom: .5rem;
+
+    @include media-breakpoint-down(sm) {
+      display: none;
+    }
 
     [class^='col-']:first-of-type {
       padding-left: 1rem;
     }
 
-    @include media-breakpoint-down(sm) {
-      display: none;
-    }
   }
 
   &__file {
     background: $gray-100;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
     border: 1px solid $gray-300;
     border-radius: $border-radius;
 
@@ -363,7 +369,7 @@ h4, .h4 {
     [class^='col-']:last-of-type {
       text-align: right;
       font-size: $font-size-sm;
-    }    
+    }
   }
 }
 
@@ -379,9 +385,10 @@ h4, .h4 {
       right: -60px;
       top: -152px;
     }
+
     @include media-breakpoint-up(lg) {
       top: -112px;
-    }    
+    }
   }
 }
 
@@ -420,6 +427,7 @@ h4, .h4 {
 
   &--wide {
     max-width: 960px;
+
     [class^="col-"] {
       padding: 0 15px;
     }
@@ -433,12 +441,6 @@ h4, .h4 {
 .action-bar {
   display: flex;
   align-items: center;
-  
-  .search {
-    min-width: 75%;
-    width: 100%;
-    margin-right: 5%;
-  }
 
   @include media-breakpoint-down(sm) {
     flex-wrap: wrap;
@@ -453,6 +455,13 @@ h4, .h4 {
       margin-top: $spacer;
     }
   }
+
+  .search {
+    min-width: 75%;
+    width: 100%;
+    margin-right: 5%;
+  }
+
 }
 
 .search .input-group-append .btn i {
@@ -491,7 +500,8 @@ h4, .h4 {
 }
 
 .meta-table {
-  th, td {
+  th,
+  td {
     line-height: 1.2;
     word-break: break-word;
   }
@@ -510,7 +520,7 @@ h4, .h4 {
   width: 100%;
 
   &--landing {
-    box-shadow: 0 -3px 3px rgba($black, 0.1);
+    box-shadow: 0 -3px 3px rgba($black, .1);
 
     @include media-breakpoint-down(md) {
       div:nth-of-type(2) {
@@ -521,10 +531,6 @@ h4, .h4 {
 
   &--actions {
     padding: $spacer;
-
-    > button:first-of-type {
-      margin-right: $spacer;
-    }
 
     @include media-breakpoint-up(md) {
       > button:first-of-type {
@@ -539,6 +545,10 @@ h4, .h4 {
         padding-left: $spacer;
         padding-right: $spacer;
       }
+    }
+
+    > button:first-of-type {
+      margin-right: $spacer;
     }
   }
 
@@ -580,7 +590,7 @@ h4, .h4 {
     align-items: center;
     margin: ($spacer * .5) 0;
     justify-content: flex-end;
-    
+
     > * {
       margin-right: $spacer * .5;
       margin-bottom: $spacer * .5;
@@ -588,11 +598,7 @@ h4, .h4 {
   }
 
   &--horizontal {
-    .card-actions {
-      justify-content: flex-start;
-    }
-
-    @include media-breakpoint-down(sm) { 
+    @include media-breakpoint-down(sm) {
       > img {
         width: 100%;
       }
@@ -603,11 +609,15 @@ h4, .h4 {
       max-width: 940px;
       margin-left: auto;
       margin-right: auto;
-      
+
       > img {
         height: 225px;
         max-height: 100%;
       }
+    }
+
+    .card-actions {
+      justify-content: flex-start;
     }
   }
 }
@@ -631,9 +641,9 @@ h4, .h4 {
 
     h5 {
       font-size: 18px;
-      margin-bottom: 0.15rem;
+      margin-bottom: .15rem;
     }
-    
+
     .meta {
       font-weight: $font-weight-bold;
     }
@@ -659,10 +669,6 @@ h4, .h4 {
   flex-wrap: wrap;
 
   &__version {
-    &:not(:first-of-type) {
-      margin-top: $spacer * 3;
-    }
-
     @include media-breakpoint-up(md) {
       &:not(:first-of-type) {
         margin-top: 0;
@@ -674,7 +680,7 @@ h4, .h4 {
 
           &::before {
             content: '';
-            background: #d9d9d9;
+            background: $gray-85;
             height: 2px;
             width: 40%;
             position: absolute;
@@ -694,7 +700,7 @@ h4, .h4 {
 
           &::before {
             content: '';
-            background: #d9d9d9;
+            background: $gray-85;
             height: 2px;
             width: 40%;
             position: absolute;
@@ -714,7 +720,7 @@ h4, .h4 {
 
           &::before {
             content: '';
-            background: #d9d9d9;
+            background: $gray-85;
             height: 2px;
             width: 40%;
             position: absolute;
@@ -726,6 +732,10 @@ h4, .h4 {
         }
       }
     }
+
+    &:not(:first-of-type) {
+      margin-top: $spacer * 3;
+    }
   }
 
   &__list {
@@ -736,7 +746,7 @@ h4, .h4 {
 
     &::before {
       content: '';
-      background-color: #d9d9d9;
+      background-color: $gray-85;
       width: 2px;
       height: 110%;
       position: absolute;
@@ -746,7 +756,7 @@ h4, .h4 {
 
     h5 {
       font-size: $font-size-base;
-      margin-bottom: 0.25rem;
+      margin-bottom: .25rem;
     }
 
     > li {
@@ -754,7 +764,7 @@ h4, .h4 {
 
       &::before {
         content: '';
-        background-image: url(../img/timeline_circle.png);
+        background-image: url('../img/timeline_circle.png');
         background-size: 12px 12px;
         width: 12px;
         height: 12px;
@@ -766,14 +776,14 @@ h4, .h4 {
   }
 }
 
-/**
-** Extended Bootstrap Components
-**/
+//
+// Extended Bootstrap Components
+//
 
 .row {
   &--md-reduce {
     margin-left: -15px;
-    
+
     @include media-breakpoint-up(md) {
       width: 92%;
     }
@@ -795,7 +805,7 @@ h4, .h4 {
     &--sm-stack-btn {
       @include media-breakpoint-down(sm) {
         .btn {
-          margin-left: 0.5rem !important;
+          margin-left: .5rem !important;
         }
       }
     }
@@ -810,14 +820,16 @@ h4, .h4 {
 
 .table {
   &--align-middle {
-    th, td {
+    th,
+    td {
       vertical-align: middle;
     }
   }
 
   &--spacious {
-    th, td {
-      padding: 0.75rem 1rem;
+    th,
+    td {
+      padding: .75rem 1rem;
     }
   }
 
@@ -837,7 +849,7 @@ h4, .h4 {
 .input-group {
   &--icon {
     .btn {
-      padding: 0.25rem 0.5rem 0;
+      padding: .25rem .5rem 0;
     }
   }
 }
@@ -867,8 +879,8 @@ h4, .h4 {
   }
 
   &--icon {
-    padding: 0.125rem 0.35rem 0 !important;
-    
+    padding: .125rem .35rem 0 !important;
+
     i {
       font-size: 16px;
       line-height: 0;
@@ -885,8 +897,8 @@ h4, .h4 {
   }
 
   &--squish {
-    padding-left: 0.85rem;
-    padding-right: 0.85rem;
+    padding-left: .85rem;
+    padding-right: .85rem;
   }
 
   &--settings i {
@@ -915,7 +927,7 @@ h4, .h4 {
 
     .dropdown-menu {
       border-radius: 0;
-      border: none;
+      border: 0;
       box-shadow: $box-shadow;
     }
 
@@ -928,10 +940,10 @@ h4, .h4 {
     .dropdown-toggle,
     .dropdown-item {
       font-size: $font-size-sm;
-      padding-left: 0.5rem;
+      padding-left: .5rem;
       text-transform: uppercase;
       font-weight: $font-weight-bold;
-      
+
       @include media-breakpoint-up(md) {
         min-width: 225px;
       }
@@ -940,7 +952,7 @@ h4, .h4 {
     .dropdown-toggle {
       text-align: left;
       position: relative;
-      
+
       &::after {
         right: 1rem;
         position: absolute;
@@ -949,7 +961,7 @@ h4, .h4 {
       }
 
     }
-    
+
     i {
       font-size: 16px;
       position: relative;
@@ -968,7 +980,7 @@ h4, .h4 {
       font-weight: $font-weight-bold;
 
       .badge {
-        margin-left: 0.25rem;
+        margin-left: .25rem;
         position: relative;
         bottom: 2px;
       }
@@ -986,7 +998,7 @@ h4, .h4 {
   &--spacious {
     .dropdown-toggle,
     .dropdown-item {
-      padding: 0.75rem 1rem;
+      padding: .75rem 1rem;
     }
   }
 
@@ -1021,7 +1033,7 @@ h4, .h4 {
   &.badge-pill {
     text-transform: none;
     letter-spacing: normal;
-    padding: 0.3rem 0.75rem;
+    padding: .3rem .75rem;
   }
 
   &--dark-blue {
@@ -1049,10 +1061,10 @@ h4, .h4 {
       color: $body-color;
     }
   }
-  
+
   &--icon {
     position: relative;
-    padding: 0.55rem 0.5rem 0.55rem 2.25rem;
+    padding: .55rem .5rem .55rem 2.25rem;
 
     &::before {
       content: attr(data-before);
@@ -1070,7 +1082,7 @@ h4, .h4 {
       -webkit-font-feature-settings: 'liga';
       -webkit-font-smoothing: antialiased;
       padding: 0 6px;
-    } 
+    }
 
     &-orange {
       border: 1px solid $orange;
@@ -1095,8 +1107,8 @@ h4, .h4 {
 
   &--text {
     position: relative;
-    padding: 0.65rem 0.5rem 0.65rem 2.5rem;
-    
+    padding: .65rem .5rem .65rem 2.5rem;
+
     &::before {
       content: attr(data-before);
       font-size: 13px;
@@ -1137,41 +1149,18 @@ h4, .h4 {
     letter-spacing: normal;
     cursor: pointer;
     font-size: 12px;
-    
-    &::before {
-      line-height: 1.8;
-    }
 
     @include media-breakpoint-down(sm) {
-      margin-bottom: $spacer * 0.5;
+      margin-bottom: $spacer * .5;
+    }
+
+    &::before {
+      line-height: 1.8;
     }
   }
 }
 
 .nav-tabs {
-  .nav-item {
-    padding: 1rem 3rem;
-    font-family: $slab-font-family;
-    letter-spacing: 0.5px;
-    
-    &.active {
-      position: relative;
-
-      &::after {
-        content: '';
-        width: 0;
-        height: 0;
-        border-style: solid;
-        border-width: 12px 20px 0 20px;
-        border-color: $blue transparent transparent transparent;
-        position: absolute;
-        transform: translateX(-50%);
-        left: 50%;
-        bottom: -11px;
-      }
-    }
-  }
-
   @include media-breakpoint-down(md) {
     .nav-item {
       padding-left: 2rem;
@@ -1186,7 +1175,30 @@ h4, .h4 {
       border-radius: $border-radius;
 
       &.active::after {
-        border: none;
+        border: 0;
+      }
+    }
+  }
+
+  .nav-item {
+    padding: 1rem 3rem;
+    font-family: $slab-font-family;
+    letter-spacing: .5px;
+
+    &.active {
+      position: relative;
+
+      &::after {
+        content: '';
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 13px 20px 0;
+        border-color: $blue transparent transparent;
+        position: absolute;
+        transform: translateX(-50%);
+        left: 50%;
+        bottom: -11px;
       }
     }
   }
@@ -1194,7 +1206,7 @@ h4, .h4 {
 
 .tab-pane {
   padding: ($spacer * 2) $spacer;
-  
+
   @include media-breakpoint-up(md) {
     box-shadow: $box-shadow;
     border-radius: $border-radius;
