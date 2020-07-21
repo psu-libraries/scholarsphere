@@ -61,6 +61,10 @@ en:
   errors:
     messages:
       invalid_edtf: is not a valid date in EDTF format
+  footer:
+    heading: 'Scholarsphere'
+    description: 'A service of the University Libraries.'
+    copyright_statement: 'Copyright © 2020 The Pennsylvania State University'
   dashboard:
     collections:
       index:
@@ -165,6 +169,25 @@ en:
         truncated_attributes: "and %{count} more"
   omniauth:
     login_error: 'There was a problem logging you in. We have been notified of the issue and will work to fix it. Please try again later.'
+  home:
+    navbar:
+      heading: 'Welcome to ScholarSphere'
+    intro:
+      heading: 'What is ScholarSphere?'
+      content: >
+        ScholarSphere is Penn State’s institutional repository - a repository service for research and scholarly work
+        produced by the university community. Through ScholarSphere, Penn State researchers - faculty, students, and
+        staff alike - are able to share their work on a worldwide scale and be assured of its long-term preservation
+        and thus ongoing access. ScholarSphere is Penn State’s institutional repository - a repository service for
+        research and scholarly work produced by the university community. 
+    search:
+      heading: 'Browse and search for works'
+      placeholder: 'Search for titles, keywords, resource types, creators, etc.'
+      submit: 'search' 
+      subheading: Or
+      browse: 'Browse & Filter All Works'
+    featured:
+      heading: 'Featured Works'
   resources:
     works: Works
     files: Files

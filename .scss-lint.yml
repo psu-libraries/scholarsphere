@@ -20,7 +20,33 @@ severity: warning
 linters:
   SelectorFormat:
     convention: hyphenated_BEM
+  SelectorDepth:
+    exclude:
+      - app/javascript/frontend/styles/_common.scss
   NestingDepth:
-    exclude: app/javascript/scholarsphere/styles/_progress_indicator.scss
+    exclude:
+      - app/javascript/scholarsphere/styles/_progress_indicator.scss
+      - app/javascript/frontend/styles/_common.scss
   ImportantRule:
-    exclude: app/javascript/scholarsphere/styles/_progress_indicator.scss
+    exclude:
+      - app/javascript/scholarsphere/styles/_progress_indicator.scss
+      - app/javascript/frontend/styles/_common.scss
+  PropertySortOrder:
+    exclude: 
+      - app/javascript/frontend/styles/_common.scss
+      - app/javascript/frontend/styles/_mdc-theme.scss
+  QualifyingElement:
+    exclude:
+      - app/javascript/frontend/styles/_common.scss
+  PlaceholderInExtend:
+    exclude:
+      - app/javascript/frontend/styles/_common.scss
+  MergeableSelector:
+    exclude:
+      - app/javascript/frontend/styles/_common.scss
+  VendorPrefix:
+    exclude:
+      - app/javascript/frontend/styles/_common.scss
+
+    
+

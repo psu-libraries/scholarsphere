@@ -14,6 +14,8 @@ linters:
     enabled: true
   HardCodedString:
     enabled: true
+    exclude:
+      - '*app/components/flash_message_component.html.erb'
   RightTrim:
     enabled: true
     enforced_style: '-'
