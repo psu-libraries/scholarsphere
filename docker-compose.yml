@@ -98,7 +98,7 @@ services:
       POSTGRES_PASSWORD: scholarsphere
       POSTGRES_USER: scholarsphere
       POSTGRES_DB: scholarsphere
-    image: postgres:10
+    image: postgres:11.8
     ports:
     - "5432:5432"
     volumes:
