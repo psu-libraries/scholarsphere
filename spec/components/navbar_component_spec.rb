@@ -32,8 +32,7 @@ RSpec.describe NavbarComponent, type: :component do
       it 'displays a dropdown menu for the user' do
         expect(result.css('a.dropdown-item').map(&:text)).to include(
           'Profile',
-          'Works',
-          'Collections',
+          'Dashboard',
           'Logout'
         )
       end

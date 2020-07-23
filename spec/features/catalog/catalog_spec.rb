@@ -42,7 +42,6 @@ RSpec.describe 'Blacklight catalog page', :inline_jobs do
     expect(page).to have_content("1 - #{indexed_resources.count} of #{indexed_resources.count}")
 
     # Check facets
-    expect(page).to have_selector('h3', text: 'Status')
     expect(page).to have_selector('h3', text: 'Keywords')
     expect(page).to have_selector('h3', text: 'Subject')
     expect(page).to have_selector('h3', text: 'Creators')

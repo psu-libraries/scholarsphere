@@ -23,8 +23,7 @@
           </button>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="settings">
             <%= link_to 'Profile', edit_dashboard_profile_path, class: 'dropdown-item' %>
-            <%= link_to 'Works', dashboard_works_path, class: 'dropdown-item' %>
-            <%= link_to 'Collections', dashboard_collections_path, class: 'dropdown-item' %>
+            <%= link_to 'Dashboard', dashboard_root_path, class: 'dropdown-item' %>
             <div class="dropdown-divider"></div>
             <%= link_to 'Logout', destroy_user_session_path, class: 'dropdown-item' %>
           </div>

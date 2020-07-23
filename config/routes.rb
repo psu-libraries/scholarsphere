@@ -53,6 +53,12 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
   namespace :dashboard do
+    root to: 'catalog#index'
+
+    resource :catalog, only: [:index], as: 'catalog', path: 'catalog', controller: 'catalog' do
+      concerns :searchable
+    end
+
     resource :profile, only: %i[edit update]
 
     resources :works, only: %i[index new create destroy] do
