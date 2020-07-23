@@ -71,7 +71,13 @@
 
     <main class="main">
       <%= render FlashMessageComponent.new(flash: flash) if flash.present? %>
-      <%= content_for?(:content) ? yield(:content) : yield %>
+      <% if content_for? :sidebar %>
+        <%= render '/layouts/with_sidebar' %>
+      <% elsif content_for? :content %>
+        <%= yield(:content) %>
+      <% else %>
+        <%= yield %>
+      <% end %>
     </main>
 
     <footer class="footer footer--landing">

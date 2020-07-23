@@ -13,14 +13,8 @@ class VisibilityBadgeComponent < ApplicationComponent
     def html_class
       [
         'badge',
-        'visibility',
-        "visibility--#{visibility}"
-      ].join(' ')
-    end
-
-    def image_class
-      [
-        'visibility'
+        'badge--icon',
+        "badge--icon-#{details[visibility][:color]}"
       ].join(' ')
     end
 
@@ -28,27 +22,30 @@ class VisibilityBadgeComponent < ApplicationComponent
       work.visibility || Permissions::Visibility::PRIVATE
     end
 
-    def image_source
-      "media/scholarsphere/images/#{details[visibility][:image]}"
-    end
-
     def label
       details[visibility][:label]
+    end
+
+    def icon
+      details[visibility][:icon]
     end
 
     def details
       {
         Permissions::Visibility::OPEN => {
           label: 'Open Access',
-          image: 'visibility-open.png'
+          color: 'orange',
+          icon: 'lock_open'
         },
         Permissions::Visibility::AUTHORIZED => {
           label: 'Penn State',
-          image: 'visibility-authorized.png'
+          color: 'blue',
+          icon: 'pets'
         },
         Permissions::Visibility::PRIVATE => {
           label: 'Restricted',
-          image: 'visibility-private.png'
+          color: 'red',
+          icon: 'lock'
         }
       }
     end

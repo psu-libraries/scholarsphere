@@ -48,7 +48,6 @@ RSpec.describe 'Migration', :inline_jobs, type: :feature do
   context 'when logged in as a public user' do
     it 'shows the migrated work in a search result' do
       visit search_catalog_path
-      click_button('Search')
       expect(page).to have_content(work.title)
     end
   end

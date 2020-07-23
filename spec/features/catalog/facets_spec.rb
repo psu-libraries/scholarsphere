@@ -20,6 +20,7 @@ RSpec.describe 'Search Facets', :inline_jobs do
     end
 
     it 'updates the facet (but not the resource) when an actor changes their default alias' do
+      pending('Requires further input from stakeholders on design and metadata changes')
       visit search_catalog_path
       click_button('Search')
 
