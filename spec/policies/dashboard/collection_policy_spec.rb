@@ -7,6 +7,7 @@ RSpec.describe Dashboard::CollectionPolicy, type: :policy do
 
   let(:user) { create :user }
   let(:other_user) { create :user }
+  let(:admin) { create :user, :admin }
 
   let!(:my_collection) { create :collection, depositor: user.actor }
 
@@ -25,5 +26,6 @@ RSpec.describe Dashboard::CollectionPolicy, type: :policy do
   permissions :show?, :edit?, :update?, :destroy? do
     it { is_expected.to permit(user, my_collection) }
     it { is_expected.not_to permit(other_user, my_collection) }
+    it { is_expected.to permit(admin, my_collection) }
   end
 end

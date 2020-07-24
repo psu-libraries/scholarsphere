@@ -2,7 +2,7 @@
 
 class Dashboard::WorkPolicy < ApplicationPolicy
   class Scope < Scope
-    def resolve
+    def limit
       scope
         .where(depositor: user.actor)
         .or(scope.where(proxy_depositor: user.actor))
@@ -10,7 +10,7 @@ class Dashboard::WorkPolicy < ApplicationPolicy
   end
 
   def create_version?
-    owner? && record.draft_version.blank?
+    (owner? && record.draft_version.blank?) || user.admin?
   end
 
   private

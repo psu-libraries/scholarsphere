@@ -10,6 +10,8 @@ RSpec.describe Dashboard::WorkPolicy, type: :policy do
 
   let(:other_user) { build_stubbed :user }
 
+  let(:admin) { create(:user, :admin) }
+
   permissions '.scope' do
     let(:scoped_works) { described_class::Scope.new(user, Work).resolve }
 
@@ -31,6 +33,7 @@ RSpec.describe Dashboard::WorkPolicy, type: :policy do
     context 'when a draft exists' do
       it { is_expected.not_to permit(user, work) }
       it { is_expected.not_to permit(other_user, work) }
+      it { is_expected.to permit(admin, work) }
     end
 
     context 'when no draft exists' do
@@ -38,6 +41,7 @@ RSpec.describe Dashboard::WorkPolicy, type: :policy do
 
       it { is_expected.to permit(user, work) }
       it { is_expected.not_to permit(other_user, work) }
+      it { is_expected.to permit(admin, work) }
     end
   end
 end

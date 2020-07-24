@@ -5,12 +5,12 @@
 # some point we may combine the two, but don't want to prefactor
 class WorkPolicy < ApplicationPolicy
   class Scope < Scope
-    def resolve
+    def limit
       scope.all
     end
   end
 
   def show?
-    record.discover_access? user
+    record.discover_access?(user) || user.admin?
   end
 end
