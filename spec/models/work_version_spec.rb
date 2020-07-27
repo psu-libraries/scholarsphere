@@ -216,6 +216,14 @@ RSpec.describe WorkVersion, type: :model do
     end
   end
 
+  describe '#latest_version?' do
+    subject { work.versions.last }
+
+    let(:work) { create(:work) }
+
+    it { is_expected.to be_latest_version }
+  end
+
   describe '#to_solr' do
     subject(:work_version) { create(:work_version, published_date: '1999-uu-uu') }
 
@@ -224,7 +232,13 @@ RSpec.describe WorkVersion, type: :model do
         title_tesim: [work_version.title],
         latest_version_bsi: false,
         work_type_ssim: Work::Types.display(work_version.work_type),
-        published_date_dtrsi: '1999'
+        published_date_dtrsi: '1999',
+        embargoed_until_dtsi: nil,
+        depositor_id_isi: work_version.work.depositor.id,
+        proxy_id_isi: nil,
+        discover_users_ssim: [],
+        discover_groups_ssim: [Group::PUBLIC_AGENT_NAME],
+        visibility_ssi: Permissions::Visibility::OPEN
       )
     end
   end

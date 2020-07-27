@@ -1038,11 +1038,23 @@ h4,
 
   &--dark-blue {
     background: $dark-blue;
+    color: $white;
 
     &.badge--outline {
       background: transparent;
       border: 1px solid $dark-blue;
       color: $dark-blue;
+    }
+  }
+
+  &--gray-800 {
+    background: $gray-800;
+    color: $white;
+
+    &.badge--outline {
+      background: transparent;
+      border: 1px solid $gray-800;
+      color: $gray-800;
     }
   }
 
@@ -1103,6 +1115,16 @@ h4,
         color: $white;
       }
     }
+
+    &-red {
+      border: 1px solid $red;
+      color: $red !important;
+
+      &::before {
+        background: $red;
+        color: $white;
+      }
+    }
   }
 
   &--text {
@@ -1123,11 +1145,6 @@ h4,
       padding: 8px 7px 8px 8px;
       border-right: 1px solid $white;
     }
-  }
-
-  &--dark-blue {
-    background: $dark-blue;
-    color: $white;
   }
 
   &--nudge-up {

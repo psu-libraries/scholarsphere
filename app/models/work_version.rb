@@ -85,7 +85,7 @@ class WorkVersion < ApplicationRecord
             if: :published?,
             unless: -> { validation_context == :migration_api }
 
-  after_save :update_index_async, if: :published?
+  after_save :update_index_async
 
   aasm do
     state :draft, intial: true
@@ -151,6 +151,10 @@ class WorkVersion < ApplicationRecord
 
   def latest_published_version?
     work.latest_published_version.try(:id) == id
+  end
+
+  def latest_version?
+    work.latest_version.try(:id) == id
   end
 
   def update_index_async
