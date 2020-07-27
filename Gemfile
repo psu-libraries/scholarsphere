@@ -28,7 +28,6 @@ gem 'pundit'
 gem 'qa'
 gem 'rails', '~> 6.0.0'
 gem 'rsolr', '>= 1.0', '< 3'
-gem 'sass-rails', '~> 5'
 gem 'scholarsphere-client', github: 'psu-stewardship/scholarsphere-client', branch: 'master'
 gem 'shrine', '~> 3.0'
 gem 'sidekiq', '~> 6.0'
@@ -60,7 +59,6 @@ group :development do
   gem 'spring-commands-rspec'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'web-console', '>= 3.3.0'
-  gem 'xray-rails'
 end
 
 # Lock simplecov at 0.17 until issue with test-reporter is solved
