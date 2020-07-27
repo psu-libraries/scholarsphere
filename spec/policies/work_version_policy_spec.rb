@@ -5,16 +5,28 @@ require 'rails_helper'
 RSpec.describe WorkVersionPolicy, type: :policy do
   subject { described_class }
 
-  let(:user) { instance_double 'User' }
+  let(:user) { build(:user) }
+  let(:admin) { build(:user, :admin) }
   let(:work) { instance_double 'Work' }
   let(:work_version) { instance_double 'WorkVersion', work: work }
 
-  describe '#show?' do
-    it 'delegates to Work#read_access?' do
-      allow(work).to receive(:read_access?)
-        .with(user).and_return(:whatever_read_access_returns)
+  permissions :show? do
+    context 'when the user has access to the work version' do
+      before { allow(work).to receive(:read_access?).with(user).and_return(true) }
 
-      expect(described_class.new(user, work_version).show?).to eq :whatever_read_access_returns
+      it { is_expected.to permit(user, work_version) }
+    end
+
+    context 'when the user does NOT have access to the work version' do
+      before { allow(work).to receive(:read_access?).with(user).and_return(false) }
+
+      it { is_expected.not_to permit(user, work_version) }
+    end
+
+    context 'when the user is an admin' do
+      before { allow(work).to receive(:read_access?).with(admin).and_return(false) }
+
+      it { is_expected.to permit(admin, work_version) }
     end
   end
 
@@ -28,6 +40,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
         let(:work_version) { build(:work_version, :published) }
 
         it { is_expected.to permit(user, work_version) }
+        it { is_expected.to permit(admin, work_version) }
       end
 
       context 'with a publicly discoverable work' do
@@ -36,6 +49,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
         let(:work_version) { work.versions[0] }
 
         it { is_expected.not_to permit(user, work_version) }
+        it { is_expected.to permit(admin, work_version) }
       end
 
       context 'with a Penn State work' do
@@ -43,6 +57,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
         let(:work_version) { work.versions[0] }
 
         it { is_expected.not_to permit(user, work_version) }
+        it { is_expected.to permit(admin, work_version) }
       end
 
       context 'with an embargoed public work' do
@@ -50,12 +65,14 @@ RSpec.describe WorkVersionPolicy, type: :policy do
         let(:work_version) { work.versions[0] }
 
         it { is_expected.not_to permit(user, work_version) }
+        it { is_expected.to permit(admin, work_version) }
       end
 
       context 'with a draft work' do
         let(:work_version) { build(:work_version) }
 
         it { is_expected.not_to permit(user, work_version) }
+        it { is_expected.to permit(admin, work_version) }
       end
     end
 
@@ -68,6 +85,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
         let(:work_version) { work.versions[0] }
 
         it { is_expected.to permit(me, work_version) }
+        it { is_expected.to permit(admin, work_version) }
       end
 
       context 'with a Penn State work' do
@@ -75,6 +93,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
         let(:work_version) { work.versions[0] }
 
         it { is_expected.to permit(me, work_version) }
+        it { is_expected.to permit(admin, work_version) }
       end
 
       context 'with a draft version I deposited' do
@@ -82,6 +101,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
         let(:work_version) { work.versions[0] }
 
         it { is_expected.to permit(me, work_version) }
+        it { is_expected.to permit(admin, work_version) }
       end
 
       context 'with a draft version I did NOT deposit' do
@@ -89,6 +109,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
         let(:work_version) { work.versions[0] }
 
         it { is_expected.not_to permit(me, work_version) }
+        it { is_expected.to permit(admin, work_version) }
       end
 
       context 'with an embargoed public work' do
@@ -96,6 +117,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
         let(:work_version) { work.versions[0] }
 
         it { is_expected.not_to permit(me, work_version) }
+        it { is_expected.to permit(admin, work_version) }
       end
 
       context 'with an embargoed work I deposited' do
@@ -103,6 +125,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
         let(:work_version) { work.versions[0] }
 
         it { is_expected.to permit(me, work_version) }
+        it { is_expected.to permit(admin, work_version) }
       end
 
       context 'with an embargoed work editable by me' do
@@ -116,6 +139,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
         let(:work_version) { work.versions[0] }
 
         it { is_expected.to permit(me, work_version) }
+        it { is_expected.to permit(admin, work_version) }
       end
     end
   end

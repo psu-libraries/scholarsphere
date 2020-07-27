@@ -14,28 +14,39 @@ RSpec.describe Dashboard::WorkVersionPolicy, type: :policy do
   let(:other_user) { instance_double('User', 'another user', actor: other_actor) }
   let(:other_actor) { instance_double('Actor', 'another actor') }
 
+  let(:admin) { instance_double('User', 'admin user', actor: admin_actor) }
+  let(:admin_actor) { instance_double('Actor', 'admin actor') }
+
+  before do
+    allow(user).to receive(:admin?).and_return(false)
+    allow(other_user).to receive(:admin?).and_return(false)
+    allow(admin).to receive(:admin?).and_return(true)
+  end
+
   it_behaves_like 'a downloadable work version'
 
-  permissions '.scope' do
-    let(:scoped_versions) { described_class::Scope.new(user, WorkVersion).resolve }
+  context 'when authorizing my own versions' do
+    permissions '.scope' do
+      let(:scoped_versions) { described_class::Scope.new(user, WorkVersion).resolve }
 
-    let(:user) { create(:user) }
-    let(:user_actor) { user.actor }
+      let(:user) { create(:user) }
+      let(:user_actor) { user.actor }
 
-    let!(:deposited_work_version) { create :work_version, title: 'My Deposited Work' }
-    let!(:proxied_work_version) { create :work_version, title: 'My Proxy Deposited Work' }
+      let!(:deposited_work_version) { create :work_version, title: 'My Deposited Work' }
+      let!(:proxied_work_version) { create :work_version, title: 'My Proxy Deposited Work' }
 
-    before do
-      deposited_work_version.work.update!(depositor: user_actor)
-      proxied_work_version.work.update!(proxy_depositor: user_actor)
+      before do
+        deposited_work_version.work.update!(depositor: user_actor)
+        proxied_work_version.work.update!(proxy_depositor: user_actor)
 
-      create :work_version, title: "Other User's Version"
-    end
+        create :work_version, title: "Other User's Version"
+      end
 
-    it 'only finds my work versions' do
-      expect(scoped_versions.map(&:title)).to include('My Deposited Work')
-        .and include('My Proxy Deposited Work')
-      expect(scoped_versions.map(&:title)).not_to include("Other User's Version")
+      it 'only finds my work versions' do
+        expect(scoped_versions.map(&:title)).to include('My Deposited Work')
+          .and include('My Proxy Deposited Work')
+        expect(scoped_versions.map(&:title)).not_to include("Other User's Version")
+      end
     end
   end
 
@@ -43,6 +54,8 @@ RSpec.describe Dashboard::WorkVersionPolicy, type: :policy do
     it { is_expected.to permit(user, deposited_work_version) }
     it { is_expected.to permit(user, proxy_deposited_work_version) }
     it { is_expected.not_to permit(other_user, deposited_work_version) }
+    it { is_expected.to permit(admin, deposited_work_version) }
+    it { is_expected.to permit(admin, proxy_deposited_work_version) }
   end
 
   permissions :edit?, :update?, :destroy?, :publish? do
@@ -55,6 +68,8 @@ RSpec.describe Dashboard::WorkVersionPolicy, type: :policy do
       it { is_expected.to permit(user, deposited_work_version) }
       it { is_expected.to permit(user, proxy_deposited_work_version) }
       it { is_expected.not_to permit(other_user, deposited_work_version) }
+      it { is_expected.to permit(admin, deposited_work_version) }
+      it { is_expected.to permit(admin, proxy_deposited_work_version) }
     end
 
     context 'when work version is published' do
@@ -66,6 +81,8 @@ RSpec.describe Dashboard::WorkVersionPolicy, type: :policy do
       it { is_expected.not_to permit(user, deposited_work_version) }
       it { is_expected.not_to permit(user, proxy_deposited_work_version) }
       it { is_expected.not_to permit(other_user, deposited_work_version) }
+      it { is_expected.to permit(admin, deposited_work_version) }
+      it { is_expected.to permit(admin, proxy_deposited_work_version) }
     end
   end
 

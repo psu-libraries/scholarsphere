@@ -2,7 +2,7 @@
 
 class Dashboard::WorkVersionPolicy < WorkVersionPolicy
   class Scope < Scope
-    def resolve
+    def limit
       scope
         .where(works: { depositor_id: user.actor_id })
         .or(scope.where(works: { proxy_id: user.actor_id }))
@@ -11,11 +11,11 @@ class Dashboard::WorkVersionPolicy < WorkVersionPolicy
   end
 
   def show?
-    owner?
+    owner? || user.admin?
   end
 
   def edit?
-    record.draft? && owner?
+    (record.draft? && owner?) || user.admin?
   end
 
   alias_method :update?, :edit?

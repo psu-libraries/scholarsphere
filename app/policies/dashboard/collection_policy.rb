@@ -2,13 +2,13 @@
 
 class Dashboard::CollectionPolicy < ApplicationPolicy
   class Scope < Scope
-    def resolve
+    def limit
       scope.where(depositor: user.actor)
     end
   end
 
   def show?
-    owner?
+    owner? || user.admin?
   end
 
   alias_method :edit?, :show?

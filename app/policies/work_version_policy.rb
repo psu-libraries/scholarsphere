@@ -5,13 +5,13 @@
 # some point we may combine the two, but don't want to prefactor
 class WorkVersionPolicy < ApplicationPolicy
   class Scope < Scope
-    def resolve
+    def limit
       scope.all
     end
   end
 
   def show?
-    record.work.read_access? user
+    record.work.read_access?(user) || user.admin?
   end
 
   def download?
@@ -25,7 +25,7 @@ class WorkVersionPolicy < ApplicationPolicy
 
     # @todo There's a bug in the permissions because a depositor should have edit access by default
     def editable?
-      record.work.edit_access?(user) || record.depositor == user.actor
+      record.work.edit_access?(user) || record.depositor == user.actor || user.admin?
     end
 
     def download_published_version?

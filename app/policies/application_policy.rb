@@ -9,15 +9,15 @@ class ApplicationPolicy
   end
 
   def index?
-    false
+    user.admin?
   end
 
   def show?
-    false
+    user.admin?
   end
 
   def create?
-    false
+    user.admin?
   end
 
   def new?
@@ -25,7 +25,7 @@ class ApplicationPolicy
   end
 
   def update?
-    false
+    user.admin?
   end
 
   def edit?
@@ -33,19 +33,23 @@ class ApplicationPolicy
   end
 
   def destroy?
-    false
+    user.admin?
   end
 
   class Scope
     attr_reader :user, :scope
 
     def initialize(user, scope)
+      raise NoMethodError, "#{self.class}#limit must be defined instead of #resolve" unless respond_to?(:limit)
+
       @user = user
       @scope = scope
     end
 
     def resolve
-      scope.all
+      return scope.all if user.admin?
+
+      limit
     end
   end
 end
