@@ -7,6 +7,14 @@ module Scholarsphere
     CONFIG_PATH = '/solr/admin/configs'
     COLLECTION_PATH = '/solr/admin/collections'
 
+    def solr_username
+      ENV.fetch('SOLR_USERNAME', nil)
+    end
+
+    def solr_password
+      ENV.fetch('SOLR_PASSWORD', nil)
+    end
+
     def solr_host
       ENV.fetch('SOLR_HOST', 'localhost')
     end

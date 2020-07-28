@@ -8,6 +8,8 @@ services:
       CC_TEST_REPORTER_ID: ${CC_TEST_REPORTER_ID}
       CI: ${CI}
       CIRCLECI: ${CIRCLECI}
+      SOLR_USERNAME: scholarsphere
+      SOLR_PASSWORD: scholarsphere
       CIRCLE_SHA1: ${CIRCLE_SHA1}
       CIRCLE_BRANCH: ${CIRCLE_BRANCH}
       GIT_COMMITTED_AT: ${GIT_COMMITED_AT}

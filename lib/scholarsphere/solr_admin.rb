@@ -89,6 +89,9 @@ module Scholarsphere
 
       def connection
         @connection ||= Faraday.new(config.url) do |faraday|
+          if config.solr_username && config.solr_password
+            faraday.request :basic_auth, config.solr_username, config.solr_password
+          end
           faraday.request :multipart
           faraday.adapter :net_http
         end

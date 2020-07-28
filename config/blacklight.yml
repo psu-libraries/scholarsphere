@@ -1,9 +1,21 @@
 development: 
   adapter: solr
+  <% if ENV.fetch('SOLR_USERNAME', nil) and ENV.fetch('SOLR_PASSWORD', nil) %>
+  url: http://<%= ENV.fetch("SOLR_USERNAME", "solr") %>:<%= ENV.fetch("SOLR_PASSWORD", "solr") %>@<%= ENV.fetch("SOLR_HOST", "localhost") %>:<%= ENV.fetch("SOLR_PORT", "8983") %>/solr/<%= ENV.fetch("SOLR_COLLECTION", "blacklight-core") %>
+  <% else %>
   url: http://<%= ENV.fetch("SOLR_HOST", "localhost") %>:<%= ENV.fetch("SOLR_PORT", "8983") %>/solr/<%= ENV.fetch("SOLR_COLLECTION", "blacklight-core") %>
+  <% end %>
 test:
   adapter: solr
+  <% if ENV.fetch('SOLR_USERNAME', nil) and ENV.fetch('SOLR_PASSWORD', nil) %>
+  url: http://<%= ENV.fetch("SOLR_USERNAME", "solr") %>:<%= ENV.fetch("SOLR_PASSWORD", "solr") %>@<%= ENV.fetch("SOLR_HOST", "localhost") %>:<%= ENV.fetch("SOLR_PORT", "8983") %>/solr/<%= ENV.fetch("SOLR_COLLECTION", "blacklight-core") %>
+  <% else %>
   url: http://<%= ENV.fetch("SOLR_HOST", "localhost") %>:<%= ENV.fetch("SOLR_PORT", "8983") %>/solr/<%= ENV.fetch("SOLR_COLLECTION", "blacklight-core") %>
+  <% end %>
 production:
   adapter: solr
+  <% if ENV.fetch('SOLR_USERNAME', nil) and ENV.fetch('SOLR_PASSWORD', nil) %>
+  url: http://<%= ENV.fetch("SOLR_USERNAME", "solr") %>:<%= ENV.fetch("SOLR_PASSWORD", "solr") %>@<%= ENV.fetch("SOLR_HOST", "localhost") %>:<%= ENV.fetch("SOLR_PORT", "8983") %>/solr/<%= ENV.fetch("SOLR_COLLECTION", "blacklight-core") %>
+  <% else %>
   url: http://<%= ENV.fetch("SOLR_HOST", "localhost") %>:<%= ENV.fetch("SOLR_PORT", "8983") %>/solr/<%= ENV.fetch("SOLR_COLLECTION", "blacklight-core") %>
+  <% end %>

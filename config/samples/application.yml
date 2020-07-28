@@ -77,6 +77,8 @@
 # SOLR_PORT: 8983
 # SOLR_CONFIG_DIR: solr/conf
 # SOLR_NUM_SHARDS: 1
+# SOLR_USERNAME: solr
+# SOLR_PASSWORD: solr
 #
 # --------------------------------------------------------------------------------------------------------------------
 #
