@@ -15,7 +15,7 @@ services:
       DEFAULT_URL_HOST: web
       SELENIUM_URL: http://selenium:4444/wd/hub
       APP_HOST: test
-      OAUTH_APP_URL: ${OAUTH_APP_URL}
+      OAUTH_APP_URL: "https://oauth.url"
       POSTGRES_DB: scholarsphere
       POSTGRES_USER: scholarsphere
       POSTGRES_PASSWORD: scholarsphere

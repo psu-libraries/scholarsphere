@@ -30,7 +30,7 @@ class UserRegistrationService
     def authorization_hash
       OmniAuth::AuthHash.new.tap do |auth_hash|
         auth_hash.uid = found_user.user_id
-        auth_hash.provider = 'psu'
+        auth_hash.provider = 'azure_oauth'
         auth_hash.info = info_hash
       end
     end

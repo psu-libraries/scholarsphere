@@ -94,7 +94,8 @@
 # Under normal circumstances, this shouldn't need changing
 # 
 # OAUTH_AUTHORIZE_URL: "/oauth/authorize"
-#
+# OAUTH_TOKEN_URL: "/oauth/token"
+
 # --------------------------------------------------------------------------------------------------------------------
 # 
 # Geonames: username used to connect to the geonames api (https://sws.geonames.org)

@@ -8,20 +8,20 @@ RSpec.describe Users::OmniauthCallbacksController, type: :controller do
 
   before do
     OmniAuth.config.test_mode = true
-    OmniAuth.config.mock_auth[:psu] = oauth_response
+    OmniAuth.config.mock_auth[:azure_oauth] = oauth_response
 
     request.env['devise.mapping'] = Devise.mappings[:user]
-    request.env['omniauth.auth'] = OmniAuth.config.mock_auth[:psu]
+    request.env['omniauth.auth'] = OmniAuth.config.mock_auth[:azure_oauth]
 
     allow(User).to receive(:from_omniauth)
       .with(oauth_response)
       .and_return(user)
   end
 
-  describe '#psu' do
+  describe '#azure_oauth' do
     context 'when the user persists correctly' do
       before do
-        get :psu
+        get :azure_oauth
       end
 
       it 'signs in the user' do
@@ -38,7 +38,7 @@ RSpec.describe Users::OmniauthCallbacksController, type: :controller do
         allow(User).to receive(:from_omniauth)
           .with(oauth_response)
           .and_raise(User::OAuthError)
-        get :psu
+        get :azure_oauth
       end
 
       it { is_expected.to redirect_to root_path }
