@@ -87,6 +87,8 @@ class WorkVersion < ApplicationRecord
 
   after_save :update_index_async
 
+  after_destroy { SolrDeleteJob.perform_later(uuid) }
+
   aasm do
     state :draft, intial: true
     state :published, :withdrawn, :removed

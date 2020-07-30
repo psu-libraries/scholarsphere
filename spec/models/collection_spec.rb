@@ -3,7 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe Collection, type: :model do
-  it_behaves_like 'an indexable resource'
+  it_behaves_like 'an indexable resource' do
+    let(:resource) { create(:collection) }
+  end
 
   it_behaves_like 'a resource with permissions' do
     let(:factory_name) { :collection }

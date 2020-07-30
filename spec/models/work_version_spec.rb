@@ -3,7 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe WorkVersion, type: :model do
-  it_behaves_like 'an indexable resource'
+  it_behaves_like 'an indexable resource' do
+    let(:resource) { build(:work_version) }
+  end
 
   it_behaves_like 'a resource with view statistics' do
     let(:resource) { create(:work_version) }

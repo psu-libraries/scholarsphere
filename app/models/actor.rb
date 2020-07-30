@@ -55,6 +55,8 @@ class Actor < ApplicationRecord
 
   after_save :reindex_if_default_alias_changed
 
+  after_destroy :update_index_async
+
   def default_alias
     super.presence || "#{given_name} #{surname}"
   end

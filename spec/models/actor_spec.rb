@@ -3,8 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe Actor, type: :model do
-  it_behaves_like 'an indexable resource'
-
   describe 'table' do
     it { is_expected.to have_db_column(:given_name).of_type(:string) }
     it { is_expected.to have_db_column(:surname).of_type(:string) }
@@ -62,6 +60,17 @@ RSpec.describe Actor, type: :model do
         actor.save
         expect(actor).not_to have_received(:update_index_async)
       end
+    end
+  end
+
+  describe 'after destroy' do
+    let(:actor) { create :actor }
+
+    before { allow(actor).to receive(:update_index_async) }
+
+    it 'reindexes its former works and collections' do
+      actor.destroy
+      expect(actor).to have_received(:update_index_async)
     end
   end
 
