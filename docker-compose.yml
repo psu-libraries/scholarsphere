@@ -3,6 +3,8 @@ x-web_env: &web_env
   environment:
       CI: "true"
       REDIS_HOST: redis
+      SOLR_USERNAME: scholarsphere
+      SOLR_PASSWORD: scholarsphere
       REDIS_PASSWORD: redispassword
       OAUTH_APP_ID: ${OAUTH_APP_ID}
       OAUTH_APP_SECRET: ${OAUTH_APP_SECRET}
@@ -79,15 +81,17 @@ services:
     - -c 
     - mkdir -p /data/scholarsphere; minio --compat server --address ':9000' /data
   solr:
-    image: solr:8.2.0-slim
+    image: psul/solr:8.5.2-slim
     restart: always
+    environment:
+      SOLR_USERNAME: scholarsphere
+      SOLR_PASSWORD: scholarsphere
     volumes:
     - solr-data:/var/solr
     ports:
     - ${SOLR_PORT:-8983}:8983
     command: [
-      "solr-foreground",
-      "-DzkRun"
+      "/usr/local/bin/start-solr.sh"
     ]
 
   adminer:

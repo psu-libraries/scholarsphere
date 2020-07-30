@@ -24,6 +24,7 @@ module Scholarsphere
   class Application < Rails::Application
     require 'healthchecks'
     require 'scholarsphere/redis_config'
+    require 'scholarsphere/solr_config'
     require 'json_log_formatter'
     require 'qa/authorities/persons'
 
@@ -39,6 +40,7 @@ module Scholarsphere
     # the framework and any gems in your application.
 
     config.redis = Scholarsphere::RedisConfig.new.to_hash
+    config.solr = Scholarsphere::SolrConfig.new
 
     # ActiveJob config
     config.active_job.queue_adapter = :sidekiq

@@ -1,9 +1,9 @@
 development: 
   adapter: solr
-  url: http://<%= ENV.fetch("SOLR_HOST", "localhost") %>:<%= ENV.fetch("SOLR_PORT", "8983") %>/solr/<%= ENV.fetch("SOLR_COLLECTION", "blacklight-core") %>
+  url: <%= Rails.configuration.solr.query_url %>
 test:
   adapter: solr
-  url: http://<%= ENV.fetch("SOLR_HOST", "localhost") %>:<%= ENV.fetch("SOLR_PORT", "8983") %>/solr/<%= ENV.fetch("SOLR_COLLECTION", "blacklight-core") %>
+  url: <%= Rails.configuration.solr.query_url %>
 production:
   adapter: solr
-  url: http://<%= ENV.fetch("SOLR_HOST", "localhost") %>:<%= ENV.fetch("SOLR_PORT", "8983") %>/solr/<%= ENV.fetch("SOLR_COLLECTION", "blacklight-core") %>
+  url: <%= Rails.configuration.solr.query_url %>
