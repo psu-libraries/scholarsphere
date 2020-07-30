@@ -3,26 +3,53 @@
 require 'rails_helper'
 
 RSpec.describe IndexingService, type: :service do
-  before { allow(Blacklight.default_index.connection).to receive(:commit) }
+  def index_count
+    Blacklight.default_index.connection.get('select', params: { q: '*:*' })['response']['numFound']
+  end
 
   describe '.add_document' do
     context 'without calling commit' do
       it 'indexes a document into Solr and does NOT commit' do
-        described_class.add_document(id: SecureRandom.uuid)
-        expect(Blacklight.default_index.connection).not_to have_received(:commit)
+        expect {
+          described_class.add_document({ id: SecureRandom.uuid })
+        }.not_to(change { index_count })
       end
     end
 
     context 'when calling commit' do
-      it 'indexes the document into Solr and calls commit' do
-        described_class.add_document({ id: SecureRandom.uuid }, commit: true)
-        expect(Blacklight.default_index.connection).to have_received(:commit)
+      it 'indexes the document into Solr' do
+        expect {
+          described_class.add_document({ id: SecureRandom.uuid }, commit: true)
+        }.to change { index_count }.by(1)
+      end
+    end
+  end
+
+  describe '.delete_document' do
+    let(:id) { SecureRandom.uuid }
+
+    before { described_class.add_document({ id: id }, commit: true) }
+
+    context 'without calling commit' do
+      it 'removes the document from the index and does NOT commit' do
+        expect {
+          described_class.delete_document({ id: id })
+        }.not_to(change { index_count })
+      end
+    end
+
+    context 'when calling commit' do
+      it 'removes the document from Solr' do
+        expect {
+          described_class.delete_document({ id: id }, commit: true)
+        }.to change { index_count }.by(-1)
       end
     end
   end
 
   describe '.commit' do
-    it 'calls commit on the Solr index' do
+    it 'calls Blacklight.default_index.connection' do
+      allow(Blacklight.default_index.connection).to receive(:commit)
       described_class.commit
       expect(Blacklight.default_index.connection).to have_received(:commit)
     end
