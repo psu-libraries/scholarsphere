@@ -84,7 +84,7 @@ workflows:
           filters:
             branches:
               only:
-              - '*'
+              - /.*/
               ignore:
               - master
               - /preview\/.*/
