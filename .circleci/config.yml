@@ -87,10 +87,7 @@ workflows:
           filters:
             branches:
               only:
-              - /.*/
-              ignore:
-              - master
-              - /preview\/.*/
+              - /^((?!preview|master).)*$/
       - test:
           name: test-publish
           publish: true
