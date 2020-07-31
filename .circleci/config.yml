@@ -6,7 +6,7 @@ orbs:
 jobs:
   test:
     docker:
-      - image: devago/docker-compose
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:latest
     environment:
       REGISTRY_HOST: harbor.k8s.libraries.psu.edu
       REGISTRY_URL: harbor.k8s.libraries.psu.edu/library/scholarsphere
@@ -52,7 +52,7 @@ jobs:
           docker push $REGISTRY_URL:$CIRCLE_SHA1
   deploy-qa:
     docker:
-      - image: harbor.k8s.libraries.psu.edu/public/drone-utils:latest
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:latest
     environment:
       CONFIG_REPO: git@github.com:psu-stewardship/scholarsphere-config.git
       CONFIG_ENV: qa
@@ -68,7 +68,7 @@ jobs:
             ./generate_circle_application.sh
   deploy-preview:
     docker:
-      - image: harbor.k8s.libraries.psu.edu/public/drone-utils:latest
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:latest
     environment:
       CONFIG_REPO: git@github.com:psu-stewardship/scholarsphere-config.git
       IMAGE_REPOSITORY: harbor.k8s.libraries.psu.edu/library/scholarsphere
