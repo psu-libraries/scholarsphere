@@ -79,7 +79,7 @@ jobs:
             cd scholarsphere-config
             ./generate_circle_application.sh
     - slack/status:
-        success_message: ":tada: Applied manifests for $CIRCLE_BRANCH"
+        success_message: ":tada: Applied manifests for $CIRCLE_BRANCH. Check the Status: https://argocd.dev.k8s.libraries.psu.edu/applications/scholarsphere-apps"
 
 workflows:
   version: 2
