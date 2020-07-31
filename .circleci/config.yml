@@ -57,6 +57,8 @@ jobs:
                 docker build -t $REGISTRY_URL:$CIRCLE_SHA1 .
                 docker login -u $DOCKER_USERNAME -p $HARBOR_PASSWORD $REGISTRY_HOST
                 docker push $REGISTRY_URL:$CIRCLE_SHA1
+    - slack/status:
+        fail_only: true
   deploy:
     docker:
       - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v0.0.2
@@ -76,6 +78,8 @@ jobs:
             git clone $CONFIG_REPO
             cd scholarsphere-config
             ./generate_circle_application.sh
+    - slack/status:
+        success_message: ":tada: Applied manifests for $CIRCLE_BRANCH"
 
 workflows:
   version: 2
