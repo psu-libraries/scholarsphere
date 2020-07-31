@@ -47,7 +47,7 @@
 #
 # Admins: all users in the given UMG are administrators
 #
-# ADMIN_GROUP: "umg/up.dlt.scholarsphere-admin"
+# ADMIN_GROUP: "umg-up.dlt.scholarsphere-admin"
 #
 # --------------------------------------------------------------------------------------------------------------------
 #
