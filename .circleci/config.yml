@@ -11,6 +11,10 @@ jobs:
       REGISTRY_HOST: harbor.k8s.libraries.psu.edu
       REGISTRY_URL: harbor.k8s.libraries.psu.edu/library/scholarsphere
       DOCKER_USERNAME: 'robot$circleci'
+    parameters:
+      publish: 
+        type: boolean
+        default: true
     steps:
     - setup_remote_docker
     - checkout
@@ -50,53 +54,60 @@ jobs:
           docker build -t $REGISTRY_URL:$CIRCLE_SHA1 .
           docker login -u $DOCKER_USERNAME -p $HARBOR_PASSWORD $REGISTRY_HOST
           docker push $REGISTRY_URL:$CIRCLE_SHA1
-  deploy-qa:
+  deploy:
     docker:
       - image: harbor.k8s.libraries.psu.edu/library/ci-utils:latest
     environment:
       CONFIG_REPO: git@github.com:psu-stewardship/scholarsphere-config.git
-      CONFIG_ENV: qa
       IMAGE_REPOSITORY: harbor.k8s.libraries.psu.edu/library/scholarsphere
+    parameters:
+      config_env:
+        type: string
     steps:
     - add_ssh_keys
     - run:
         name: "Updating Config Repo"
         command: |
+            export CONFIG_ENV=<< parameters.config_env >>
             ssh-keyscan github.com > ~/.ssh/known_hosts
             git clone $CONFIG_REPO
             cd scholarsphere-config
             ./generate_circle_application.sh
-  deploy-preview:
-    docker:
-      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:latest
-    environment:
-      CONFIG_REPO: git@github.com:psu-stewardship/scholarsphere-config.git
-      IMAGE_REPOSITORY: harbor.k8s.libraries.psu.edu/library/scholarsphere
-    steps:
-    - add_ssh_keys
-    - run:
-        name: "Updating Config Repo"
-        command: |
-           ssh-keyscan github.com > ~/.ssh/known_hosts
-           git clone $CONFIG_REPO
-           cd scholarsphere-config
-           ./generate_circle_application.sh
 
 workflows:
   version: 2
   scholarsphere:
     jobs:
-      - test
-      - deploy-qa:
+      - test:
+          name: test-no-publish
+          publish: false
+          filters:
+            branches:
+              only:
+              - '*'
+              ignore:
+              - master
+              - /preview\/.*/
+      - test:
+          name: test-publish
+          publish: true
+          filters:
+            branches:
+              only:
+              - master
+              - /preview\/.*/
+      - deploy:
+          config_env: qa
           requires:
-            - test
+            - test-publish
           filters:
             branches:
                only:
                 - master
-      - deploy-preview:
+      - deploy:
+          config_env: dev
           requires:
-            - test
+            - test-publish
           filters:
             branches:
               only:
