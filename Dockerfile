@@ -1,4 +1,4 @@
-FROM psul/ruby-2.6.6-node-12:20200624 as base
+FROM psul/ruby-2.7.1-node-12:20200803 as base
 
 COPY bin/vaultshell /usr/local/bin/
 
@@ -10,7 +10,8 @@ USER app
 COPY Gemfile Gemfile.lock /app/
 COPY --chown=app vendor/ vendor/
 RUN gem install bundler:2.1.4
-RUN bundle install --path vendor/bundle && \
+RUN bundle config set path 'vendor/bundle'
+RUN bundle install && \
   rm -rf /app/.bundle/cache && \
   rm -rf /app/vendor/bundle/ruby/*/cache
 
