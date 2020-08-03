@@ -3,7 +3,8 @@
 class WorkTypeSchema < BaseSchema
   def document
     {
-      work_type_ssim: Work::Types.display(resource.work_type)
+      display_work_type_ssi: Work::Types.display(resource.work_type),
+      work_type_ss: resource.work_type
     }
   end
 

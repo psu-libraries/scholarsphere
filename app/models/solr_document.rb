@@ -30,8 +30,12 @@ class SolrDocument
     Array.wrap(self[:published_date_tesim]).first
   end
 
+  def display_work_type
+    self[:display_work_type_ssi]
+  end
+
   def work_type
-    Array.wrap(self[:work_type_ssim]).first
+    self[:work_type_ss]
   end
 
   def aasm_state

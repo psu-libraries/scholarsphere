@@ -2,7 +2,7 @@
      class="card card--horizontal mb-3"
      data-document-counter="<%= document_counter %>"
      itemscope itemtype="<%= document.itemtype %>">
-  <img src="http://placehold.it/500x500">
+  <%= render ThumbnailComponent.new(resource: document) %>
   <div class="card-body">
     <h2 class="card-title">
       <%= link_to document.title, resource_path(document.id) %>
@@ -12,7 +12,7 @@
       <%= t('activerecord.attributes.work_version.published_date') %>
       <time><%= document.published_date %></time>
     </p>
-    <p><%= document.work_type %></p>
+    <p><%= document.display_work_type %></p>
     <div class="card-actions">
       <%= render VisibilityBadgeComponent.new(work: document) %>
       <%= render WorkVersions::StatusBadgeComponent.new(work_version: document) if document.aasm_state.present? %>

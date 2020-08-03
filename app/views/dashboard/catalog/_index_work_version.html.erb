@@ -1,7 +1,7 @@
 <div id="document-<%= index_work_version.uuid %>"
      class="card card--horizontal mb-3"
      data-document-counter="<%= index_work_version_counter %>">
-  <img src="http://placehold.it/500x500">
+  <%= render ThumbnailComponent.new(resource: index_work_version) %>
   <div class="card-body">
     <h2 class="card-title">
       <%= link_to index_work_version.title, dashboard_work_version_path(index_work_version) %>
