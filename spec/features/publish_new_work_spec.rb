@@ -27,10 +27,14 @@ RSpec.describe 'Publishing a new work' do
     end
 
     within('.uppy-Dashboard-AddFiles') do
-      expect(page).to have_content('Drop files here, paste or browse')
+      expect(page).to have_content('Drop files here')
     end
 
-    attach_file 'files[]', (Rails.root + 'spec/fixtures/image.png').to_s, make_visible: true
+    # @note For some reason there are two 'files[]' hidden inputs, but it's only happens in the test environment.
+    page
+      .all('.uppy-Dashboard-input', visible: false)
+      .first
+      .attach_file(Rails.root.join('spec', 'fixtures', 'image.png'))
 
     # Wait for file to finish uploading
     while page.has_no_selector?('.uppy-DashboardContent-title', text: 'Upload complete')
@@ -106,7 +110,10 @@ RSpec.describe 'Publishing a new work' do
     end
 
     # Re-upload the same file again
-    attach_file 'files[]', (Rails.root + 'spec/fixtures/image.png').to_s, make_visible: true
+    page
+      .all('.uppy-Dashboard-input', visible: false)
+      .first
+      .attach_file(Rails.root.join('spec', 'fixtures', 'image.png'))
 
     within('.uppy-Informer') do
       until page.has_content?('Error: image.png already exists in this version')
