@@ -11,4 +11,8 @@ module ApplicationHelper
     Time.zone.parse(args[:document][args[:field]])
       .to_formatted_s(:long)
   end
+
+  def home?
+    current_page?('/')
+  end
 end

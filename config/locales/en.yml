@@ -172,6 +172,7 @@ en:
   home:
     navbar:
       heading: 'Welcome to ScholarSphere'
+      guest_name: 'Guest'
     intro:
       heading: 'What is ScholarSphere?'
       content: >

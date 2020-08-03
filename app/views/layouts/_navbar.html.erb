@@ -9,6 +9,9 @@
 
   <div class="collapse navbar-collapse" id="navbar-toggle">
     <ul class="navbar-nav">
+
+      <%= yield :navbar_items %>
+
       <% if current_user.guest? %>
 
         <li class="nav-item">
@@ -19,7 +22,7 @@
 
         <li class="nav-item dropdown dropdown--navbar-action">
           <button class="btn btn-primary dropdown-toggle btn--square btn--expand btn--settings" type="button" id="settings" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <%= display_name %>
+            <%= current_user.display_name %>
           </button>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="settings">
             <%= link_to 'Profile', edit_dashboard_profile_path, class: 'dropdown-item' %>

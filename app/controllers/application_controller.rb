@@ -9,6 +9,6 @@ class ApplicationController < ActionController::Base
   include Pundit
 
   def current_user
-    super || User.guest
+    UserDecorator.new(super || User.guest)
   end
 end
