@@ -31,6 +31,6 @@ FileUtils.chdir APP_ROOT do
       -e MINIO_ACCESS_KEY=#{MINIO_ACCESS_KEY}
       -e MINIO_SECRET_KEY=#{MINIO_SECRET_KEY}
       -p #{MINIO_PORT}:#{MINIO_PORT}
-      minio/minio:latest server --compat /data
+      minio/minio:RELEASE.2020-07-31T03-39-05Z server --compat /data
   }
 end
