@@ -1,3 +1,4 @@
+---
 version: 2.1
 
 orbs:
@@ -6,97 +7,110 @@ orbs:
 jobs:
   test:
     docker:
-      - image: devago/docker-compose
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v0.0.3
     environment:
       REGISTRY_HOST: harbor.k8s.libraries.psu.edu
       REGISTRY_URL: harbor.k8s.libraries.psu.edu/library/scholarsphere
       DOCKER_USERNAME: 'robot$circleci'
+    parameters:
+      publish:
+        type: boolean
+        default: true
     steps:
-    - setup_remote_docker
-    - checkout
-    - run:
-        name: "Start Dependencies"
-        background: true
-        command: |
-          docker-compose pull solr minio selenium redis db
-          docker-compose up -d solr minio selenium redis db
-    - restore_cache:
-        keys:
-          - bundle-{{ checksum "Gemfile.lock" }}
-    - run:
-        name: "Build Docker Container"
-        command: |
-          docker build -t $REGISTRY_URL:$CIRCLE_SHA1 --target base .
-    - run:
-        name: "Niftany"
-        command: |
-          export TAG=${CIRCLE_SHA1}
-          RAILS_ENV=test docker-compose -f docker-compose.yml -f docker-compose.test.yml run --name=niftany --service-ports test /app/bin/ci-niftany -p lint
-          docker-compose -f docker-compose.yml -f docker-compose.test.yml run --name=eslint --service-ports test /app/bin/ci-eslint -p eslint
-    - run:
-        name: "Test"
-        command: |
-          export TAG=${CIRCLE_SHA1}
-          export GIT_COMMITED_AT=$(git log -1 --date=short --pretty=format:%ct)
-          RAILS_ENV=test docker-compose -f docker-compose.yml -f docker-compose.test.yml run --name=test --service-ports test /app/bin/ci-rspec
-          docker cp test:/app/vendor .
-    - save_cache:
-        paths:
-          - vendor/bundle
-        key: bundle-{{ checksum "Gemfile.lock" }} 
-    - run:
-        name: "Publishing the image"
-        command: |
-          docker build -t $REGISTRY_URL:$CIRCLE_SHA1 .
-          docker login -u $DOCKER_USERNAME -p $HARBOR_PASSWORD $REGISTRY_HOST
-          docker push $REGISTRY_URL:$CIRCLE_SHA1
-  deploy-qa:
+      - setup_remote_docker
+      - checkout
+      - run:
+          name: "Start Dependencies"
+          background: true
+          command: |
+            docker-compose pull solr minio selenium redis db
+            docker-compose up -d solr minio selenium redis db
+      - restore_cache:
+          keys:
+            - bundle-{{ checksum "Gemfile.lock" }}
+      - run:
+          name: "Build Docker Container"
+          command: |
+            docker build -t $REGISTRY_URL:$CIRCLE_SHA1 --target base .
+      - run:
+          name: "Niftany"
+          command: |
+            export TAG=${CIRCLE_SHA1}
+            RAILS_ENV=test docker-compose -f docker-compose.yml -f docker-compose.test.yml run --name=niftany --service-ports test /app/bin/ci-niftany -p lint
+            docker-compose -f docker-compose.yml -f docker-compose.test.yml run --name=eslint --service-ports test /app/bin/ci-eslint -p eslint
+      - run:
+          name: "Test"
+          command: |
+            export TAG=${CIRCLE_SHA1}
+            export GIT_COMMITED_AT=$(git log -1 --date=short --pretty=format:%ct)
+            RAILS_ENV=test docker-compose -f docker-compose.yml -f docker-compose.test.yml run --name=test --service-ports test /app/bin/ci-rspec
+            docker cp test:/app/vendor .
+      - save_cache:
+          paths:
+            - vendor/bundle
+          key: bundle-{{ checksum "Gemfile.lock" }}
+      - when:
+          condition: << parameters.publish >>
+          steps:
+            - run:
+                name: "Publishing the image"
+                command: |
+                  docker build -t $REGISTRY_URL:$CIRCLE_SHA1 .
+                  docker login -u $DOCKER_USERNAME -p $HARBOR_PASSWORD $REGISTRY_HOST
+                  docker push $REGISTRY_URL:$CIRCLE_SHA1
+      - slack/status:
+          fail_only: true
+  deploy:
     docker:
-      - image: harbor.k8s.libraries.psu.edu/public/drone-utils:latest
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v0.0.3
     environment:
       CONFIG_REPO: git@github.com:psu-stewardship/scholarsphere-config.git
-      CONFIG_ENV: qa
       IMAGE_REPOSITORY: harbor.k8s.libraries.psu.edu/library/scholarsphere
+    parameters:
+      config_env:
+        type: string
     steps:
-    - add_ssh_keys
-    - run:
-        name: "Updating Config Repo"
-        command: |
+      - add_ssh_keys
+      - run:
+          name: "Updating Config Repo"
+          command: |
+            export CONFIG_ENV=<< parameters.config_env >>
             ssh-keyscan github.com > ~/.ssh/known_hosts
             git clone $CONFIG_REPO
             cd scholarsphere-config
             ./generate_circle_application.sh
-  deploy-preview:
-    docker:
-      - image: harbor.k8s.libraries.psu.edu/public/drone-utils:latest
-    environment:
-      CONFIG_REPO: git@github.com:psu-stewardship/scholarsphere-config.git
-      IMAGE_REPOSITORY: harbor.k8s.libraries.psu.edu/library/scholarsphere
-    steps:
-    - add_ssh_keys
-    - run:
-        name: "Updating Config Repo"
-        command: |
-           ssh-keyscan github.com > ~/.ssh/known_hosts
-           git clone $CONFIG_REPO
-           cd scholarsphere-config
-           ./generate_circle_application.sh
 
 workflows:
   version: 2
   scholarsphere:
     jobs:
-      - test
-      - deploy-qa:
-          requires:
-            - test
+      - test:
+          name: test-no-publish
+          publish: false
           filters:
             branches:
-               only:
+              only:
+                - /^((?!preview|master).)*$/
+      - test:
+          name: test-publish
+          publish: true
+          filters:
+            branches:
+              only:
                 - master
-      - deploy-preview:
+                - /preview\/.*/
+      - deploy:
+          config_env: qa
           requires:
-            - test
+            - test-publish
+          filters:
+            branches:
+              only:
+                - master
+      - deploy:
+          config_env: dev
+          requires:
+            - test-publish
           filters:
             branches:
               only:
