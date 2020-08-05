@@ -1,0 +1,15 @@
+<div class="row row--md-mb-3">
+  <div class="col-md">
+    <h4 class="mb-2"><%= t('catalog.zero_results.info.heading') %></h4>
+    <div class="surface"><%= t('catalog.zero_results.info.content') %></div>
+  </div>
+
+  <div class="col-md">
+    <h4 class="mb-2"><%= t('catalog.zero_results.options.heading') %></h4>
+    <div class="surface search">
+        <div class="mt-2 text-center">
+          <%= link_to t('catalog.zero_results.options.browse'), search_catalog_path, class: 'btn btn-primary' %>
+        </div>
+    </div>
+  </div>
+</div>

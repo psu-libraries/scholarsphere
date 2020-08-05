@@ -53,6 +53,15 @@ en:
   api:
     errors:
       not_authorized: "401: Request not authorized. Please provide a valid API key for access."
+  catalog:
+    zero_results:
+      info:
+        heading: 'No Results'
+        content: > 
+          There were no results in your search. You can change your search terms or browse works using facets.
+      options:
+        heading: 'Search Alternatives'
+        browse: "Browse & Filter All Works"
   embargo:
     heading: "Embargoed until %{date}"
     public_message: "Files are not available during the embargo."
