@@ -49,5 +49,7 @@ module Scholarsphere
     config.generators.system_tests = nil
 
     config.time_zone = 'Eastern Time (US & Canada)'
+
+    config.view_component.default_preview_layout = 'component_preview'
   end
 end

@@ -91,3 +91,22 @@ $modal-header-padding-y: $modal-inner-padding;
 $modal-header-padding-x: $modal-inner-padding;
 
 $hr-margin-y: $spacer * 2;
+
+$badge-colors: (
+  "gray-100": $gray-100,
+  "gray-300": $gray-300,
+  "gray-800": $gray-800,
+  "gray-85": $gray-85,
+  "black": $black,
+  "blue": $blue,
+  "mid-blue": $mid-blue,
+  "dark-blue": $dark-blue,
+  "light-green": $light-green,
+  "dark-green": $dark-green,
+  "red": $red,
+  "light-red": $light-red,
+  "dark-red": $dark-red,
+  "orange": $orange,
+  "secondary": $secondary
+);
+

@@ -1074,6 +1074,14 @@ h4,
     }
   }
 
+  &-light {
+    &.badge--outline {
+      background: transparent;
+      border: 1px solid $light;
+      color: $light;
+    }
+  }
+
   &--icon {
     position: relative;
     padding: .55rem .5rem .55rem 2.25rem;
@@ -1128,22 +1136,30 @@ h4,
   }
 
   &--text {
-    position: relative;
-    padding: .65rem .5rem .65rem 2.5rem;
+    display: inline-flex;
+    padding: 0;
 
-    &::before {
-      content: attr(data-before);
-      font-size: 13px;
-      position: absolute;
-      left: 0;
-      top: 0;
-      height: 100%;
+    .badge--prepend {
+      flex: 0 0;
       display: inline-block;
+      padding: .65rem .5rem;
       text-transform: none;
       white-space: nowrap;
       word-wrap: normal;
-      padding: 8px 7px 8px 8px;
       border-right: 1px solid $white;
+    }
+
+    .badge--content {
+      flex: 1;
+      padding: .65rem .5rem;
+    }
+
+    @each $color, $value in $badge-colors {
+      &.badge--outline.badge--#{$color} {
+        .badge--prepend {
+          border-right-color: $value;
+        }
+      }
     }
   }
 
