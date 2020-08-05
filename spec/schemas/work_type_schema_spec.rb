@@ -9,13 +9,23 @@ RSpec.describe WorkTypeSchema do
     context 'with a work' do
       let(:resource) { build(:work) }
 
-      its(:document) { is_expected.to eq(work_type_ssim: Work::Types.display(Work::Types.default)) }
+      its(:document) do
+        is_expected.to eq(
+          display_work_type_ssi: Work::Types.display(Work::Types.default),
+          work_type_ss: Work::Types.default
+        )
+      end
     end
 
     context 'with a work version' do
       let(:resource) { build(:work_version) }
 
-      its(:document) { is_expected.to eq(work_type_ssim: Work::Types.display(Work::Types.default)) }
+      its(:document) do
+        is_expected.to eq(
+          display_work_type_ssi: Work::Types.display(Work::Types.default),
+          work_type_ss: Work::Types.default
+        )
+      end
     end
   end
 

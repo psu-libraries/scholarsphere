@@ -1230,3 +1230,20 @@ h4,
     padding: $spacer * 3;
   }
 }
+
+.material-icons {
+
+  &--thumbnail {
+    font-size: 200px;
+    height: 200px;
+    width: 200px;
+    color: $black;
+    background: $gray-85;
+  }
+
+}
+
+.thumbnail {
+  background: $gray-85;
+}
+

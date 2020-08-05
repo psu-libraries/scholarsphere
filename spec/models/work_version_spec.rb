@@ -233,7 +233,8 @@ RSpec.describe WorkVersion, type: :model do
       is_expected.to include(
         title_tesim: [work_version.title],
         latest_version_bsi: false,
-        work_type_ssim: Work::Types.display(work_version.work_type),
+        display_work_type_ssi: Work::Types.display(work_version.work_type),
+        work_type_ss: work_version.work_type,
         published_date_dtrsi: '1999',
         embargoed_until_dtsi: nil,
         depositor_id_isi: work_version.work.depositor.id,

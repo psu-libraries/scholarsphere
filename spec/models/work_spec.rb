@@ -223,6 +223,7 @@ RSpec.describe Work, type: :model do
           depositor_id_isi
           discover_groups_ssim
           discover_users_ssim
+          display_work_type_ssi
           doi_tesim
           embargoed_until_dtsi
           id
@@ -231,7 +232,7 @@ RSpec.describe Work, type: :model do
           updated_at_dtsi
           uuid_ssi
           visibility_ssi
-          work_type_ssim
+          work_type_ss
         )
       end
 
@@ -254,6 +255,7 @@ RSpec.describe Work, type: :model do
           description_tesim
           discover_groups_ssim
           discover_users_ssim
+          display_work_type_ssi
           doi_tesim
           embargoed_until_dtsi
           id
@@ -276,7 +278,7 @@ RSpec.describe Work, type: :model do
           version_number_isi
           visibility_ssi
           work_id_isi
-          work_type_ssim
+          work_type_ss
         )
       end
 
