@@ -3,9 +3,7 @@
     <span class="navbar-toggler-icon"></span>
   </button>
 
-  <% if home? %>
-    <span class="navbar-brand navbar-brand--center slab-font"><%= t('home.navbar.heading') %></span>
-  <% end %>
+  <%= yield :navbar_heading %>
 
   <div class="collapse navbar-collapse" id="navbar-toggle">
     <ul class="navbar-nav">

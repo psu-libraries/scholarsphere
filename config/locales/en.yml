@@ -85,6 +85,18 @@ en:
         error_message: "%{error} prohibited this collection from being saved:"
         remove_creator: 'Remove'
       works: 'Works'
+    home:
+      intro:
+        heading: 'What is my dashboard?'
+        content: >
+          I'm baby gluten-free chambray neutra squid freegan DIY selfies bespoke cloud bread ramps etsy occupy tumblr
+          shaman. VHS echo park typewriter etsy messenger bag fingerstache retro venmo jianbing viral flannel hella
+          vape. Umami gentrify YOLO, slow-carb mixtape unicorn austin farm-to-table street art food truck organic mlkshk
+          keffiyeh cronut taxidermy. Roof party ethical hell of squid poutine authentic quinoa polaroid VHS williamsburg
+          plaid.
+      start:
+        heading: 'Get Started'
+
     profiles:
       edit:
         heading: "Edit Profile"
@@ -170,9 +182,6 @@ en:
   omniauth:
     login_error: 'There was a problem logging you in. We have been notified of the issue and will work to fix it. Please try again later.'
   home:
-    navbar:
-      heading: 'Welcome to ScholarSphere'
-      guest_name: 'Guest'
     intro:
       heading: 'What is ScholarSphere?'
       content: >
@@ -189,6 +198,11 @@ en:
       browse: 'Browse & Filter All Works'
     featured:
       heading: 'Featured Works'
+  navbar:
+    guest_name: 'Guest'
+    heading:
+      home: 'Welcome to ScholarSphere'
+      dashboard: 'Your Dashboard'
   resources:
     works: Works
     files: Files
