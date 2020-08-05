@@ -15,7 +15,7 @@ RSpec.describe UserDecorator do
     context 'when user is a guest' do
       before { allow(user).to receive(:guest?).and_return(true) }
 
-      its(:display_name) { is_expected.to eq I18n.t('home.navbar.guest_name') }
+      its(:display_name) { is_expected.to eq I18n.t('navbar.guest_name') }
     end
 
     context 'when user is not a guest' do
