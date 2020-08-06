@@ -7,7 +7,7 @@ orbs:
 jobs:
   test:
     docker:
-      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v0.1.3
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v0.1.5
     environment:
       REGISTRY_HOST: harbor.k8s.libraries.psu.edu
       REGISTRY_URL: harbor.k8s.libraries.psu.edu/library/scholarsphere
@@ -62,7 +62,7 @@ jobs:
           fail_only: true
   deploy:
     docker:
-      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v0.1.3
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v0.1.5
     environment:
       CONFIG_REPO: git@github.com:psu-stewardship/scholarsphere-config.git
       IMAGE_REPOSITORY: harbor.k8s.libraries.psu.edu/library/scholarsphere
