@@ -17,7 +17,7 @@
     </p>
     <div class="card-actions">
       <%= render VisibilityBadgeComponent.new(work: index_work_version) %>
-      <%= render WorkVersions::StatusBadgeComponent.new(work_version: index_work_version) if index_work_version.aasm_state.present? %>
+      <%= render WorkVersions::VersionStatusBadgeComponent.new(work_version: index_work_version) if index_work_version.aasm_state.present? %>
 
       <% if policy(index_work_version).edit? %>
         <%= link_to edit_dashboard_work_version_path(index_work_version), class: 'btn btn-primary btn--icon' do %>

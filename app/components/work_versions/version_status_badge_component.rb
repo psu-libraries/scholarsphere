@@ -26,8 +26,13 @@ class WorkVersions::VersionStatusBadgeComponent < ApplicationComponent
     # TODO we need to extract this logic out into a decorator. It's already
     # duplicated in Dashboard::WorkVersionDecorator but once we're done with the
     # redesign I think it would be smart to factor them all into the same place.
+    #
+    # Likewise, version_name is not currently indexed in Solr, hence why we need
+    # to do the test below. Once we sort out the decorator as mentioned above,
+    # then we should index that in solr and eliminate all this logic below.
     def version
-      "V#{work_version.version_name.presence || work_version.version_number}"
+      version_name = work_version.respond_to?(:version_name) && work_version.version_name
+      "V#{version_name.presence || work_version.version_number}"
     end
 
     def state_classes
