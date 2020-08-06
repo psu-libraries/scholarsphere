@@ -6,13 +6,28 @@ RSpec.describe WorkVersions::StatusBadgeComponent, type: :component do
   let(:node) { render_inline(described_class.new(work_version: work_version)) }
   let(:badge) { node.css('div').first }
 
+  let(:common_expected_classes) { %w(badge badge--nudge-up ml-1) }
+
   context 'with a draft' do
     let(:work_version) { build_stubbed :work_version, :draft }
 
     specify do
       expect(badge.text).to include('draft')
-      expect(badge.attributes['data-before'].value).to eq('V1')
-      expect(badge.classes).to contain_exactly('badge', 'badge--text', 'badge--gray-800')
+      expect(badge.classes).to contain_exactly(
+        *common_expected_classes,
+        'badge--dark-blue', 'badge--outline'
+      )
+    end
+
+    context 'when inverted' do
+      let(:node) { render_inline(described_class.new(work_version: work_version, invert: true)) }
+
+      specify do
+        expect(badge.classes).to contain_exactly(
+          *common_expected_classes,
+          'badge-light', 'badge--outline'
+        )
+      end
     end
   end
 
@@ -21,8 +36,21 @@ RSpec.describe WorkVersions::StatusBadgeComponent, type: :component do
 
     specify do
       expect(badge.text).to include('published')
-      expect(badge.attributes['data-before'].value).to eq('V3')
-      expect(badge.classes).to contain_exactly('badge', 'badge--text', 'badge--dark-blue')
+      expect(badge.classes).to contain_exactly(
+        *common_expected_classes,
+        'badge--dark-blue'
+      )
+    end
+
+    context 'when inverted' do
+      let(:node) { render_inline(described_class.new(work_version: work_version, invert: true)) }
+
+      specify do
+        expect(badge.classes).to contain_exactly(
+          *common_expected_classes,
+          'badge-light'
+        )
+      end
     end
   end
 end

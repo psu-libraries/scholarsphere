@@ -1,0 +1,16 @@
+<h1>Status Badge Component Variations</h1>
+
+<h2>With Version</h2>
+
+<%= render WorkVersions::VersionStatusBadgeComponent.new(work_version: draft) %><br><br>
+<%= render WorkVersions::VersionStatusBadgeComponent.new(work_version: published) %><br><br>
+<%= render WorkVersions::VersionStatusBadgeComponent.new(work_version: fancy_version_name) %><br><br>
+
+<h2>Sans-Version</h2>
+
+<%= render WorkVersions::StatusBadgeComponent.new(work_version: draft) %><br><br>
+<%= render WorkVersions::StatusBadgeComponent.new(work_version: published) %><br><br>
+<div style="background: rgb(44, 118, 199); padding-top: 1em">
+  <%= render WorkVersions::StatusBadgeComponent.new(work_version: draft, invert: true) %><br><br>
+  <%= render WorkVersions::StatusBadgeComponent.new(work_version: published, invert: true) %><br><br>
+</div>

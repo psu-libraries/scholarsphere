@@ -15,7 +15,7 @@
     <p><%= document.display_work_type %></p>
     <div class="card-actions">
       <%= render VisibilityBadgeComponent.new(work: document) %>
-      <%= render WorkVersions::StatusBadgeComponent.new(work_version: document) if document.aasm_state.present? %>
+      <%= render WorkVersions::VersionStatusBadgeComponent.new(work_version: document) if document.aasm_state.present? %>
     </div>
   </div>
 </div>
