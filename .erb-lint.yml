@@ -18,6 +18,8 @@ linters:
       - '*app/components/flash_message_component.html.erb'
       - '*app/views/catalog/_search_form.html.erb'
       - '*app/views/dashboard/catalog/_index_work_version.html.erb'
+      - '*test/*'
+      - '*app/views/layouts/component_preview.html.erb'
   RightTrim:
     enabled: true
     enforced_style: '-'
