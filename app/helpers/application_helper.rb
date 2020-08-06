@@ -11,4 +11,12 @@ module ApplicationHelper
     Time.zone.parse(args[:document][args[:field]])
       .to_formatted_s(:long)
   end
+
+  def link_to_dropdown_item(link, path)
+    if request.path == path
+      link_to link, path, class: 'dropdown-item disabled'
+    else
+      link_to link, path, class: 'dropdown-item'
+    end
+  end
 end
