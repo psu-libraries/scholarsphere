@@ -1,7 +1,7 @@
 <div class="work-history">
   <% changes_by_work_version.each do |work_version, changes| %>
     <h3>
-      <%= work_version.display_name %>
+      <%= work_version.display_version_long %>
       <%= render WorkVersions::StatusBadgeComponent.new(work_version: work_version) %>
     </h3>
 

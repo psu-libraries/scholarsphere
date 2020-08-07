@@ -9,6 +9,28 @@ RSpec.describe ResourceDecorator do
     expect(described_class).to be < SimpleDelegator
   end
 
+  describe '::decorate' do
+    subject { described_class.decorate(resource) }
+
+    context 'when given a WorkVersion' do
+      let(:resource) { WorkVersion.new }
+
+      it { is_expected.to be_a WorkVersionDecorator }
+    end
+
+    context 'when given a Work' do
+      let(:resource) { Work.new }
+
+      it { is_expected.to be_a WorkDecorator }
+    end
+
+    context 'when given a Collection' do
+      let(:resource) { Collection.new }
+
+      it { is_expected.to be_a described_class }
+    end
+  end
+
   describe '#partial_name' do
     context 'with a work' do
       let(:resource) { build(:work) }

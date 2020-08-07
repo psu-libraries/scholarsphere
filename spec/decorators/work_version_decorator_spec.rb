@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Dashboard::WorkVersionDecorator do
+RSpec.describe WorkVersionDecorator do
   subject(:decorator) { described_class.new(work_version) }
 
   let(:work_version) { instance_spy('WorkVersion') }
@@ -11,8 +11,24 @@ RSpec.describe Dashboard::WorkVersionDecorator do
     expect(described_class).to be < ResourceDecorator
   end
 
-  describe '#display_name' do
-    subject { decorator.display_name }
+  describe '#display_version_short' do
+    subject { decorator.display_version_short }
+
+    context 'when no version_name exists' do
+      let(:work_version) { instance_spy('WorkVersion', version_name: nil, version_number: 3) }
+
+      it { is_expected.to eq 'V3' }
+    end
+
+    context 'when there is a version_name' do
+      let(:work_version) { instance_spy('WorkVersion', version_name: '1.2.3') }
+
+      it { is_expected.to eq 'V1.2.3' }
+    end
+  end
+
+  describe '#display_version_long' do
+    subject { decorator.display_version_long }
 
     context 'when no version_name exists' do
       let(:work_version) { instance_spy('WorkVersion', version_name: nil, version_number: 3) }
@@ -21,9 +37,9 @@ RSpec.describe Dashboard::WorkVersionDecorator do
     end
 
     context 'when there is a version_name' do
-      let(:work_version) { instance_spy('WorkVersion', version_name: 'v1.2.3') }
+      let(:work_version) { instance_spy('WorkVersion', version_name: '1.2.3') }
 
-      it { is_expected.to eq 'Version v1.2.3' }
+      it { is_expected.to eq 'Version 1.2.3' }
     end
   end
 
