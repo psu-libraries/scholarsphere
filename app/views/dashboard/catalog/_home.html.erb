@@ -10,6 +10,12 @@
       <div class="mt-2 text-center">
         <%= link_to 'Create New Work', new_dashboard_work_path, class: 'btn btn-primary' %>
       </div>
+      <div class="keyline keyline--center">
+        <h4><%= t('dashboard.home.start.subheading') %></h4>
+      </div>
+      <div class="mt-2 text-center">
+        <%= link_to t('dashboard.home.start.browse'), search_catalog_path, class: 'btn btn-primary' %>
+      </div>
     </div>
   </div>
 </div>
