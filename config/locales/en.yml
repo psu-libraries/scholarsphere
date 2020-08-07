@@ -210,6 +210,11 @@ en:
       browse: 'Browse & Filter All Works'
     featured:
       heading: 'Featured Works'
+  mailers:
+    actor:
+      monthly_stats:
+        subject: "ScholarSphere - Reporting Monthly Downloads and Views"
+        heading: "Latest Report for the Month of %{date}"
   navbar:
     guest_name: 'Guest'
     heading:

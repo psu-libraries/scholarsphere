@@ -34,6 +34,9 @@ require 'view_component/test_helpers'
 #
 Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
 
+# Load Rake tasks so we can test them
+Rails.application.load_tasks
+
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove these lines.
 begin

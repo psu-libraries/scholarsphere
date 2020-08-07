@@ -20,6 +20,7 @@ linters:
       - '*app/views/dashboard/catalog/_index_work_version.html.erb'
       - '*test/*'
       - '*app/views/layouts/component_preview.html.erb'
+      - '*app/views/actor_mailer/*'
   RightTrim:
     enabled: true
     enforced_style: '-'
