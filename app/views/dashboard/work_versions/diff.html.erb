@@ -1,13 +1,13 @@
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><%= link_to t('dashboard.works.index.heading'), dashboard_works_path %></li>
-    <li class="breadcrumb-item active" aria-current="page"><%= truncate @work_version.title %> (<%= @work_version.display_name %>)</li>
+    <li class="breadcrumb-item active" aria-current="page"><%= truncate @work_version.title %> (<%= @work_version.display_version_long %>)</li>
   </ol>
 </nav>
 
 <h1><%= t('dashboard.diff.heading', work_version: @work_version.title) %></h1>
 <h2>
-  <%= @work_version.display_name %>
+  <%= @work_version.display_version_long %>
   <%= render WorkVersions::StatusBadgeComponent.new(work_version: @work_version) %>
 </h2>
 

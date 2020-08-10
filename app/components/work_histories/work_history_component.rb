@@ -37,7 +37,7 @@ module WorkHistories
         work
           .versions
           .map do |work_version|
-            decorated_work_version = Dashboard::WorkVersionDecorator.new(work_version)
+            decorated_work_version = WorkVersionDecorator.new(work_version)
 
             changes = (
               changes_to_work_version(work_version) +

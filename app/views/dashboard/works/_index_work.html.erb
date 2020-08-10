@@ -11,7 +11,7 @@
     <% index_work.versions.unshift(nil).each_cons(2) do |previous_version, version| %>
       <div class="work-version row">
         <div class="work-version__metadata col">
-          <%= link_to version.display_name, dashboard_work_version_path(version) %>
+          <%= link_to version.display_version_long, dashboard_work_version_path(version) %>
           <%= version.display_date %>
           <%= t('dashboard.works.index.by') %> <%= version.work.depositor.email %>
           <%= if previous_version

@@ -9,6 +9,6 @@
     <h3><%= t('resources.metadata') %></h3>
     <%= render CollectionMetadataComponent.new(collection: collection) %>
     <h3><%= t('resources.analytics') %></h3>
-    <div class='analytics-chart-container' data-url="<%= resource_analytics_path(collection.uuid, format: :json) %>"></div>
+    <div class='analytics-chart-container' data-url="<%= analytics_path %>"></div>
   </div>
 </div>

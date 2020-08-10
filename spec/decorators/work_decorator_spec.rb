@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Dashboard::WorkDecorator do
+RSpec.describe WorkDecorator do
   it 'extends ResourceDecorator' do
     expect(described_class).to be < ResourceDecorator
   end
@@ -13,10 +13,10 @@ RSpec.describe Dashboard::WorkDecorator do
     let(:work) { create :work, versions_count: 2, has_draft: true }
 
     it 'creates version decorators with their indices' do
-      allow(Dashboard::WorkVersionDecorator).to receive(:new)
+      allow(WorkVersionDecorator).to receive(:new)
       decorator.versions
-      expect(Dashboard::WorkVersionDecorator).to have_received(:new).with(work.versions[0])
-      expect(Dashboard::WorkVersionDecorator).to have_received(:new).with(work.versions[1])
+      expect(WorkVersionDecorator).to have_received(:new).with(work.versions[0])
+      expect(WorkVersionDecorator).to have_received(:new).with(work.versions[1])
     end
   end
 end
