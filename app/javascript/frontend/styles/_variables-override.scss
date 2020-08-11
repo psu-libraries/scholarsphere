@@ -90,6 +90,12 @@ $modal-inner-padding: 1.5rem;
 $modal-header-padding-y: $modal-inner-padding;
 $modal-header-padding-x: $modal-inner-padding;
 
+// Analytics chart
+$chart-line-color: $dark-blue;
+$axis-stroke-color: $gray-300;
+$axis-text-color: $gray-800;
+$point-marker-color: $red;
+
 $hr-margin-y: $spacer * 2;
 
 $badge-colors: (
