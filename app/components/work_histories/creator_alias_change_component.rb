@@ -44,4 +44,19 @@ class WorkHistories::CreatorAliasChangeComponent < WorkHistories::PaperTrailChan
     def rename?
       paper_trail_version.event == 'update' && paper_trail_object_changes.key?('alias')
     end
+
+    def diff_id
+      "change_diff_#{paper_trail_version.id}"
+    end
+
+    def diff_presenter
+      @diff_presenter ||= DiffPresenter.new(diff)
+    end
+
+    def diff
+      @diff ||= MetadataDiff.call(
+        OpenStruct.new(metadata: { name: previous_alias }),
+        OpenStruct.new(metadata: { name: current_alias })
+      )
+    end
 end

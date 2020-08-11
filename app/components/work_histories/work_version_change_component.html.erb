@@ -1,27 +1,27 @@
-<div id="<%= element_id %>" class="work-history__change work-history__change--work-version">
-  <strong class="work-history__change-event"><%= action %></strong>
+<li id="<%= element_id %>" class="version-timeline__change version-timeline__change--work-version">
+  <h5>
+    <%= action %>
+    <% if changed_attributes.any? %>
+      <span class="version-timeline__change-changed-attributes"><%= changed_attributes_truncated %></span>
+
+      <span class="badge badge-pill badge-primary badge--nudge-up"><a data-toggle="collapse" href="#<%= diff_id %>"><%= t 'dashboard.work_history.show_diff' %></a></span>
+    <% end %>
+  </h5>
+
+  <p class="version-timeline__change-metadata">
+    <span class="version-timeline__change-timestamp"><%= timestamp %></span>
+    <%= t 'dashboard.work_history.by' %>
+    <span class="version-timeline__change-user"><%= user_name %></span>
+  </p>
 
   <% if changed_attributes.any? %>
-    <span class="work-history__change-changed-attributes"><%= changed_attributes_truncated %></span>
-    <a class="btn btn-outline-primary btn-xs" data-toggle="collapse" href="#<%= diff_id %>" role="button" aria-expanded="false" aria-controls="collapseExample"><%= t 'dashboard.work_history.show_diff' %></a>
-  <% end %>
-
-  <div class="work-history__change-metadata">
-    <span class="work-history__change-timestamp"><%= timestamp %></span>
-    <span class="text-secondary"><%= t 'dashboard.work_history.by' %></span>
-    <span class="work-history__change-user"><%= user_name %></span>
-  </div>
-
-  <% if changed_attributes.any? %>
-    <div id="<%= diff_id %>" class="work-history__diff collapse">
+    <div id="<%= diff_id %>" class="version-timeline__diff collapse">
       <%# @todo make the diff its own component? %>
       <% diff_presenter.hash.each do |term, value| %>
-        <p>
-        <strong><%= WorkVersion.human_attribute_name(term) %>:</strong>
+        <h6 class="font-size-lg"><%= WorkVersion.human_attribute_name(term) %></h6>
         <%= value.to_s(:html).html_safe %>
-        </p>
       <% end %>
     </div>
 
   <% end %>
-</div>
+</li>
