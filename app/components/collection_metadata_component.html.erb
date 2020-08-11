@@ -1,6 +1,10 @@
-<dl class="row dl-invert document-metadata">
+<table class="table meta-table">
+  <tbody>
   <% attributes.each do |attr, label, value| %>
-    <dt class="<%= css_class attr %> col-md-3"><%= label %></dt>
-    <dd class="<%= css_class attr %> col-md-9"><%= value %></dd>
+    <tr>
+      <th scope="row" class="<%= css_class attr %>"><%= label %></th>
+      <td class="<%= css_class attr %>"><%= value %></td>
+    </tr>
   <% end %>
-</dl>
+  </tbody>
+</table>

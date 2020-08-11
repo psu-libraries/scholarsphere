@@ -75,8 +75,8 @@ RSpec.describe 'Blacklight catalog page', :inline_jobs do
     # Note this is rudimentary because it's fully tested in the WorkVersionMetadataComponent
     click_link(work_version.title)
     expect(page).to have_content(work_version.title)
-    expect(page).to have_css('dt.work-version-subtitle')
-    expect(page).to have_css('dd.work-version-subtitle', text: work_version.subtitle)
+    expect(page).to have_css('th.work-version-subtitle')
+    expect(page).to have_css('td.work-version-subtitle', text: work_version.subtitle)
   end
 
   def document_id(resource)
