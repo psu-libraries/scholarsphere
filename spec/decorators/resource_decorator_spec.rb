@@ -27,7 +27,11 @@ RSpec.describe ResourceDecorator do
     context 'when given a Collection' do
       let(:resource) { Collection.new }
 
-      it { is_expected.to be_a described_class }
+      it { is_expected.to be_a CollectionDecorator }
+    end
+
+    context 'when given some other model' do
+      specify { expect { described_class.decorate(User.new) }.to raise_error(ArgumentError) }
     end
   end
 
