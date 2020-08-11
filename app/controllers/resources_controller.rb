@@ -9,6 +9,10 @@ class ResourcesController < ApplicationController
 
   private
 
+    def determine_layout
+      'frontend'
+    end
+
     def find_resource(uuid)
       FindResource.call(uuid)
     end

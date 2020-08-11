@@ -1,14 +1,71 @@
-<div class="row">
-  <div class="col">
-    <h1><%= work_version.title %></h1>
-    <p><%= work_version.description %></p>
-    <h2><%= t('resources.files') %></h2>
-    <%= render 'shared/work_version_files', work_version: work_version %>
-  </div>
-  <div class="col-4">
-    <h3><%= t('resources.metadata') %></h3>
-    <%= render WorkVersionMetadataComponent.new(work_version: work_version) %>
-    <h3><%= t('resources.analytics') %></h3>
-    <div class='analytics-chart-container' data-url="<%= resource_analytics_path(work_version.uuid, format: :json) %>"></div>
+<%= content_for :navbar_items do %>
+  <li class="nav-item dropdown dropdown--navbar-action dropdown--versions mr-lg-4">
+    <button class="btn btn-primary dropdown-toggle btn--square btn--expand" type="button" id="settings" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <%= work_version.display_version_short %> <%= render WorkVersions::StatusBadgeComponent.new(work_version: work_version, invert: true) %>
+    </button>
+    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="settings">
+      <% work_version.work.versions.reverse.each do |v| %>
+        <%- disabled_class = v.uuid == work_version.uuid ? 'disabled' : '' %>
+        <%= link_to resource_path(v.uuid), class: "dropdown-item #{disabled_class}" do %>
+          <%= v.display_version_short %> <%= render WorkVersions::StatusBadgeComponent.new(work_version: v) %>
+        <% end %>
+      <% end %>
+    </div>
+  </li>
+<% end %>
+
+<div class="container-fluid">
+  <article class="row">
+    <div class="col-lg-7">
+      <h1 class="h2 mb-3"><%= work_version.title %></h1>
+      <p><%= work_version.description %></p>
+
+      <div class="keyline keyline--left mb-3">
+        <h4><%= t('resources.files') %></h4>
+      </div>
+      <%= render 'shared/work_version_files', work_version: work_version %>
+
+    </div>
+    <div class="col-lg-5">
+      <div class="keyline keyline--left">
+        <h4><%= t('resources.metadata') %></h4>
+      </div>
+
+      <%= render WorkVersionMetadataComponent.new(work_version: work_version) %>
+
+      <div class="keyline keyline--left">
+        <h4><%= t('resources.analytics') %></h4>
+      </div>
+      <div class='analytics-chart-container' data-url="<%= analytics_path %>"></div>
+
+      <div class="keyline keyline--left mb-3">
+        <h4><%= t 'resources.collections' %></h4>
+      </div>
+      <p><%= t 'resources.not_in_collections' %></p>
+    </div>
+  </article>
+
+  <div class="row mt-3">
+    <div class="col">
+      <div class="keyline keyline--left mb-3">
+        <h4><%= t 'resources.work_history' %></h4>
+      </div>
+      <nav>
+        <div class="nav nav-tabs" role="tablist">
+          <a class="nav-item nav-link active" id="nav-summary-tab" data-toggle="tab" href="#nav-summary" role="tab" aria-controls="nav-summary" aria-selected="true"><%= t('resources.work_history_summary') %></a>
+          <a class="nav-item nav-link" id="nav-version-tab" data-toggle="tab" href="#nav-version" role="tab" aria-controls="nav-version" aria-selected="false"><%= t('resources.work_history_diff') %></a>
+        </div>
+      </nav>
+      <div class="tab-content">
+        <div class="tab-pane fade active show" id="nav-summary" role="tabpanel" aria-labelledby="nav-summary-tab">
+          <div class="row">
+            <%= render WorkHistories::WorkHistoryComponent.new(work: work_version.work) %>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="nav-version" role="tabpanel" aria-labelledby="nav-version-tab">
+          <p><%= t('resources.work_history_diff_content') %></p>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
