@@ -1,0 +1,72 @@
+# frozen_string_literal: true
+
+require 'rails_helper'
+
+RSpec.describe ActorStatsPresenter do
+  let(:work_version) { create(:work_version, :with_files) }
+  let(:another_work) { create(:work_version, :with_files) }
+  let(:actor) { work_version.depositor }
+
+  before do
+    ViewStatistic.create(
+      date: (Time.zone.now - 5.days).to_date,
+      count: 1,
+      resource_type: 'FileResource',
+      resource_id: work_version.file_resources.first.id
+    )
+
+    ViewStatistic.create(
+      date: (Time.zone.now - 10.days).to_date,
+      count: 2,
+      resource_type: 'FileResource',
+      resource_id: work_version.file_resources.first.id
+    )
+
+    ViewStatistic.create(
+      date: (Time.zone.now - 20.days).to_date,
+      count: 3,
+      resource_type: 'FileResource',
+      resource_id: work_version.file_resources.first.id
+    )
+
+    ViewStatistic.create(
+      date: (Time.zone.now - 30.days).to_date,
+      count: 4,
+      resource_type: 'FileResource',
+      resource_id: work_version.file_resources.first.id
+    )
+
+    ViewStatistic.create(
+      date: (Time.zone.now - 5.days).to_date,
+      count: 1,
+      resource_type: 'FileResource',
+      resource_id: another_work.file_resources.first.id
+    )
+  end
+
+  describe '#file_downloads' do
+    context 'when specifying a start date' do
+      subject { described_class.new(actor: actor, beginning_at: (Time.zone.now - 20.days).to_date) }
+
+      its(:file_downloads) { is_expected.to eq(6) }
+    end
+
+    context 'when specifying an end date' do
+      subject { described_class.new(actor: actor, ending_at: (Time.zone.now - 10.days).to_date) }
+
+      its(:file_downloads) { is_expected.to eq(9) }
+    end
+
+    context 'with no date restrictions' do
+      subject { described_class.new(actor: actor) }
+
+      its(:file_downloads) { is_expected.to eq(10) }
+    end
+  end
+
+  describe '#total_files' do
+    subject { described_class.new(actor: actor) }
+
+    its(:total_files) { is_expected.to eq(1) }
+  end
+end

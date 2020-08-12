@@ -3,8 +3,6 @@
 require 'rails_helper'
 
 describe 'migration' do
-  before(:all) { Rails.application.load_tasks }
-
   after { Rake::Task['migration:statistics'].reenable }
 
   describe ':statistics' do

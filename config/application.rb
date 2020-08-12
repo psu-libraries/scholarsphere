@@ -51,5 +51,7 @@ module Scholarsphere
     config.time_zone = 'Eastern Time (US & Canada)'
 
     config.view_component.default_preview_layout = 'component_preview'
+
+    config.no_reply_email = ENV.fetch('NO_REPLY_EMAIL', 'no_reply@scholarsphere.psu.edu')
   end
 end
