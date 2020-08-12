@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 class WorkDecorator < ResourceDecorator
-  def versions
-    super.map { |version| WorkVersionDecorator.new(version) }
+  def decorated_versions
+    versions.map { |version| WorkVersionDecorator.new(version) }
   end
 
-  def latest_published_version
-    WorkVersionDecorator.new(super)
+  def decorated_latest_published_version
+    WorkVersionDecorator.new(latest_published_version)
   end
 end

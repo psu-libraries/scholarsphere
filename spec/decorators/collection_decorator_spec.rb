@@ -9,7 +9,7 @@ RSpec.describe CollectionDecorator do
     expect(described_class).to be < ResourceDecorator
   end
 
-  describe '#work_versions_for_display' do
+  describe '#decorated_work_versions' do
     let(:work_1) { create :work, versions_count: 2, has_draft: true }
     let(:work_1_published_version) { work_1.latest_published_version }
 
@@ -22,7 +22,7 @@ RSpec.describe CollectionDecorator do
     let(:collection) { create :collection, works: [work_1, work_2, work_3] }
 
     it 'returns an array of the latest published versions of all works in the collection, decorated' do
-      work_versions = decorator.work_versions_for_display
+      work_versions = decorator.decorated_work_versions
 
       expect(work_versions.map(&:id)).to contain_exactly(
         work_1_published_version.uuid,

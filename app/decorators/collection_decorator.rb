@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class CollectionDecorator < ResourceDecorator
-  def work_versions_for_display
+  def decorated_work_versions
     works
       .includes(versions: :creator_aliases)
       .map(&:latest_published_version)

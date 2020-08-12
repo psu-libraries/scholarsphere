@@ -60,14 +60,14 @@ RSpec.describe WorkVersionDecorator do
     end
   end
 
-  describe '#work' do
+  describe '#decorated_work' do
     let(:work) { instance_double 'Work' }
     let(:work_version) { instance_double 'WorkVersion', work: work }
 
     it 'returns a decorated work' do
       allow(WorkDecorator).to receive(:new).with(work).and_return(:decorated_work)
 
-      expect(decorator.work).to eq :decorated_work
+      expect(decorator.decorated_work).to eq :decorated_work
     end
   end
 end

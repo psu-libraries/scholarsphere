@@ -4,7 +4,7 @@
       <%= work_version.display_version_short %> <%= render WorkVersions::StatusBadgeComponent.new(work_version: work_version, invert: true) %>
     </button>
     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="settings">
-      <% work_version.work.versions.reverse.each do |v| %>
+      <% work_version.decorated_work.decorated_versions.reverse.each do |v| %>
         <%- disabled_class = v.uuid == work_version.uuid ? 'disabled' : '' %>
         <%= link_to resource_path(v.uuid), class: "dropdown-item #{disabled_class}" do %>
           <%= v.display_version_short %> <%= render WorkVersions::StatusBadgeComponent.new(work_version: v) %>

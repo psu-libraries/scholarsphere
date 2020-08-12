@@ -8,7 +8,7 @@
         <h4><%= t('resources.works') %></h4>
       </div>
 
-      <% collection.work_versions_for_display.each_with_index do |work_version, index| %>
+      <% collection.decorated_work_versions.each_with_index do |work_version, index| %>
         <%= render partial: 'catalog/document', locals: { document: work_version, document_counter: index } %>
       <% end %>
     </div>
