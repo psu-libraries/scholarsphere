@@ -31,8 +31,10 @@ class ActorStatsPresenter
 
   private
 
-    # @note Probably ought to look at optimizing this query
     def file_resource_ids
-      @file_resource_ids ||= actor.deposited_works.flat_map(&:versions).flat_map(&:file_resource_ids)
+      @file_resource_ids ||= FileVersionMembership
+        .joins(work_version: [:work])
+        .where(works: { depositor_id: actor.id })
+        .pluck(:file_resource_id)
     end
 end
