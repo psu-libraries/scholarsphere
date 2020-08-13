@@ -34,11 +34,29 @@ main {
 //
 // Typography
 //
+
+.h1 {
+  $font-size: $h1-font-size;
+}
+
+.h2 {
+  $font-size: $h2-font-size;
+}
+
+.h3 {
+  $font-size: $h3-font-size;
+}
+
 h4,
 .h4 {
   text-transform: uppercase;
   letter-spacing: 1px;
   font-weight: $font-weight-bolder;
+  font-size: $h4-font-size;
+}
+
+.h5 {
+  $font-size: $h5-font-size;
 }
 
 .keyline {
@@ -50,7 +68,12 @@ h4,
   position: relative;
   overflow: hidden;
 
-  h4 {
+  p {
+    @extend .h4;
+  }
+
+  h4,
+  .h4 {
     padding: $spacer;
     display: inline-block;
     margin: 0;
@@ -58,7 +81,8 @@ h4,
   }
 
   &--left {
-    h4 {
+    h4,
+    .h4 {
       padding-left: 0;
     }
 
@@ -224,6 +248,14 @@ h4,
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
+
+    a {
+      color: $white;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
 
     @include media-breakpoint-down(xs) {
       font-size: 16px;
@@ -484,7 +516,12 @@ h4,
     @extend .mb-2;
   }
 
-  p {
+  dt {
+    font-size: $h5-font-size;
+    margin: .75rem 0 .25rem;
+  }
+
+  dd {
     color: $mid-blue;
   }
 
@@ -584,6 +621,11 @@ h4,
 }
 
 .card {
+
+  h3 {
+    font-size: $font-size-lg;
+  }
+
   .card-actions {
     display: flex;
     flex-wrap: wrap;
@@ -639,7 +681,7 @@ h4,
     border: 1px solid $gray-200;
     border-radius: $border-radius;
 
-    h5 {
+    h3 {
       font-size: 18px;
       margin-bottom: .15rem;
     }
@@ -682,10 +724,9 @@ h4,
     @include media-breakpoint-up(md) {
       &:not(:first-of-type) {
         margin-top: 0;
-      }
 
-      &:not(:first-of-type) {
-        h4 {
+        h4,
+        .h4 {
           position: relative;
 
           &::before {
@@ -720,9 +761,10 @@ h4,
       top: 10px;
     }
 
-    h5 {
+    .version-timeline__change-action {
       font-size: $font-size-base;
       margin-bottom: .25rem;
+      font-weight: 600;
     }
 
     > li {
@@ -814,12 +856,6 @@ h4,
     tr {
       border-bottom: 1px solid $gray-300;
     }
-  }
-}
-
-.card {
-  h2 {
-    font-size: $font-size-lg;
   }
 }
 

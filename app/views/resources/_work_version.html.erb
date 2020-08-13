@@ -21,25 +21,25 @@
       <p><%= work_version.description %></p>
 
       <div class="keyline keyline--left mb-3">
-        <h4><%= t('resources.files') %></h4>
+        <h2 class="h4"><%= t('resources.files') %></h2>
       </div>
       <%= render 'shared/work_version_files', work_version: work_version %>
 
     </div>
     <div class="col-lg-5">
       <div class="keyline keyline--left">
-        <h4><%= t('resources.metadata') %></h4>
+        <h2 class="h4"><%= t('resources.metadata') %></h2>
       </div>
 
       <%= render WorkVersionMetadataComponent.new(work_version: work_version) %>
 
       <div class="keyline keyline--left">
-        <h4><%= t('resources.analytics') %></h4>
+        <h2 class="h4"><%= t('resources.analytics') %></h2>
       </div>
       <div class='analytics-chart-container' data-url="<%= analytics_path %>"></div>
 
       <div class="keyline keyline--left mb-3">
-        <h4><%= t 'resources.collections' %></h4>
+        <h2 class="h4"><%= t 'resources.collections' %></h2>
       </div>
       <p><%= t 'resources.not_in_collections' %></p>
     </div>
@@ -48,7 +48,7 @@
   <div class="row mt-3">
     <div class="col">
       <div class="keyline keyline--left mb-3">
-        <h4><%= t 'resources.work_history' %></h4>
+        <h2 class="h4"><%= t 'resources.work_history' %></h2>
       </div>
       <nav>
         <div class="nav nav-tabs" role="tablist">

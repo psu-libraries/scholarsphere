@@ -5,7 +5,7 @@
     <% work_version.file_version_memberships.includes(:file_resource).each do |file| %>
       <li class="file-card__item">
         <div class="file-card__content">
-          <h5><%= link_to file.title, resource_download_path(file.id, resource_id: work_version.uuid) %></h5>
+          <h3><%= link_to file.title, resource_download_path(file.id, resource_id: work_version.uuid) %></h3>
           <p class="meta mb-0"><span class="meta__size"><%= number_to_human_size file.size %></span> | <span class="meta__type"><%= file.mime_type %></span> | <span class="meta__date"><%= file.file_resource.deposited_at.to_s(:short_date) %></span></p>
         </div>
         <%= link_to resource_download_path(file.id, resource_id: work_version.uuid) do %>

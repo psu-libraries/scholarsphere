@@ -40,7 +40,7 @@ RSpec.describe WorkHistories::WorkVersionChangeComponent, type: :component do
       # It: renders the created state with properly formatted timestamps
       #
       expect(result.at('li').attr('id')).to eq "change_#{paper_trail_version.id}"
-      expect(result.css('h5').text).to include 'Created'
+      expect(result.css('.version-timeline__change-action').text).to include 'Created'
 
       expect(result.css('.version-timeline__change-timestamp').text).to eq 'December 20, 2019 14:00'
       expect(result.css('.version-timeline__change-user').text).to eq user.access_id
@@ -60,7 +60,7 @@ RSpec.describe WorkHistories::WorkVersionChangeComponent, type: :component do
       #
       # it: renders the updated state with a diff
       #
-      expect(result.css('h5').text).to include 'Updated'
+      expect(result.css('.version-timeline__change-action').text).to include 'Updated'
       expect(result.css('.version-timeline__change-changed-attributes').text).to eq 'Title'
       expect(result.css('.version-timeline__diff').text).to include('old').and include('new')
 
@@ -115,7 +115,7 @@ RSpec.describe WorkHistories::WorkVersionChangeComponent, type: :component do
       #
       # it: renders the published state
       #
-      expect(result.css('h5').text).to include 'Published'
+      expect(result.css('.version-timeline__change-action').text).to include 'Published'
     end
   end
 end

@@ -20,7 +20,7 @@ RSpec.describe WorkHistories::WorkHistoryComponent, type: :component, versioning
     it 'renders the work history' do
       result = render_inline(described_class.new(work: work))
 
-      expect(result.css('h4').text)
+      expect(result.css('h3').text)
         .to include("Version #{draft.version_number}")
         .and include("Version #{v1.version_number}")
 

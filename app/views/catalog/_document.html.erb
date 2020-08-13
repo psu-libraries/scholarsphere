@@ -4,9 +4,9 @@
      itemscope itemtype="<%= document.itemtype %>">
   <%= render ThumbnailComponent.new(resource: document) %>
   <div class="card-body">
-    <h2 class="card-title">
+    <h3 class="card-title">
       <%= link_to document.title, resource_path(document.id) %>
-    </h2>
+    </h3>
 
     <p class="meta">
       <%= t('activerecord.attributes.work_version.published_date') %>

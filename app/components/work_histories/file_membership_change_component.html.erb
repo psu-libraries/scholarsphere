@@ -2,7 +2,7 @@
   id="<%= element_id %>"
   class="version-timeline__change version-timeline__change--file version-timeline__change--<%= event_class %>">
 
-  <h5>
+  <div class="version-timeline__change-action">
     <%= action %>
     <small class="work-history__files">
       <% if rename? %>
@@ -11,7 +11,7 @@
       <% end %>
       <code><%= current_filename %></code>
     </small>
-  </h5>
+  </div>
 
   <p class="version-timeline__change-metadata">
     <span class="version-timeline__change-timestamp"><%= timestamp %></span>

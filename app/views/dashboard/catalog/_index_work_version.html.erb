@@ -3,9 +3,9 @@
      data-document-counter="<%= index_work_version_counter %>">
   <%= render ThumbnailComponent.new(resource: index_work_version) %>
   <div class="card-body">
-    <h2 class="card-title">
+    <h3 class="card-title">
       <%= link_to index_work_version.title, dashboard_work_version_path(index_work_version) %>
-    </h2>
+    </h3>
 
     <p class="meta">
       <%= index_work_version.display_date %>

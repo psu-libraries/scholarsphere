@@ -41,7 +41,7 @@ RSpec.describe WorkHistories::FileMembershipChangeComponent, type: :component do
       #
       expect(result.at('li').attr('id')).to eq "change_#{paper_trail_version.id}"
       expect(result.css('.version-timeline__change--create')).to be_present
-      expect(result.css('h5').text).to include 'Added'
+      expect(result.css('.version-timeline__change-action').text).to include 'Added'
       expect(result.css('.version-timeline__change-timestamp').text).to eq 'December 20, 2019 14:00'
       expect(result.css('.version-timeline__change-user').text).to eq user.access_id
       expect(result.css('.work-history__files').text).to include file_version_membership.title
@@ -74,7 +74,7 @@ RSpec.describe WorkHistories::FileMembershipChangeComponent, type: :component do
       # It: shows both old a new filenames
       #
       expect(result.css('.version-timeline__change--rename')).to be_present
-      expect(result.css('h5').text).to include 'Renamed'
+      expect(result.css('.version-timeline__change-action').text).to include 'Renamed'
       expect(result.css('.work-history__files').text).to include('old.png').and include('new.png')
 
       ##########################################################################
@@ -91,7 +91,7 @@ RSpec.describe WorkHistories::FileMembershipChangeComponent, type: :component do
       # It: shows the delete event
       #
       expect(result.css('.version-timeline__change--delete')).to be_present
-      expect(result.css('h5').text).to include 'Deleted'
+      expect(result.css('.version-timeline__change-action').text).to include 'Deleted'
       expect(result.css('.work-history__files').text).to include('destroy-test.png')
     end
   end

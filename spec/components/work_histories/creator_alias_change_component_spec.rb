@@ -41,7 +41,7 @@ RSpec.describe WorkHistories::CreatorAliasChangeComponent, type: :component do
       #
       expect(result.at('li').attr('id')).to eq "change_#{paper_trail_version.id}"
       expect(result.css('.version-timeline__change--create')).to be_present
-      expect(result.css('h5').text).to include('Added').and include(creator_alias.alias)
+      expect(result.css('.version-timeline__change-action').text).to include('Added').and include(creator_alias.alias)
       expect(result.css('.version-timeline__change-timestamp').text).to eq 'December 20, 2019 14:00'
       expect(result.css('.version-timeline__change-user').text).to eq user.access_id
 
@@ -73,7 +73,7 @@ RSpec.describe WorkHistories::CreatorAliasChangeComponent, type: :component do
       # It: shows both old a new filenames
       #
       expect(result.css('.version-timeline__change--rename')).to be_present
-      expect(result.css('h5').text).to include('Renamed').and include('New Alias')
+      expect(result.css('.version-timeline__change-action').text).to include('Renamed').and include('New Alias')
 
       ##########################################################################
       #
@@ -89,7 +89,7 @@ RSpec.describe WorkHistories::CreatorAliasChangeComponent, type: :component do
       # It: shows the delete event
       #
       expect(result.css('.version-timeline__change--delete')).to be_present
-      expect(result.css('h5').text).to include('Deleted').and include('Destroy Test')
+      expect(result.css('.version-timeline__change-action').text).to include('Deleted').and include('Destroy Test')
     end
   end
 end
