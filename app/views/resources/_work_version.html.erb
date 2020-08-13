@@ -1,17 +1,8 @@
 <%= content_for :navbar_items do %>
-  <li class="nav-item dropdown dropdown--navbar-action dropdown--versions mr-lg-4">
-    <button class="btn btn-primary dropdown-toggle btn--square btn--expand" type="button" id="settings" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <%= work_version.display_version_short %> <%= render WorkVersions::StatusBadgeComponent.new(work_version: work_version, invert: true) %>
-    </button>
-    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="settings">
-      <% work_version.decorated_work.decorated_versions.reverse.each do |v| %>
-        <%- disabled_class = v.uuid == work_version.uuid ? 'disabled' : '' %>
-        <%= link_to resource_path(v.uuid), class: "dropdown-item #{disabled_class}" do %>
-          <%= v.display_version_short %> <%= render WorkVersions::StatusBadgeComponent.new(work_version: v) %>
-        <% end %>
-      <% end %>
-    </div>
-  </li>
+  <%= render WorkVersions::VersionNavigationDropdownComponent.new(
+        current_version: work_version,
+        work: work_version.decorated_work
+      ) %>
 <% end %>
 
 <div class="container-fluid">
