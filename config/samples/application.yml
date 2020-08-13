@@ -121,6 +121,18 @@
 # API_URL_HOST: "localhost:3000"
 #
 # --------------------------------------------------------------------------------------------------------------------
+# 
+# Email
+#
+# 
+# MAIL_DELIVERY_METHOD: 'test' # set to 'smtp' to turn on the mailer
+# SMTP_ADDRESS: 'localhost'
+# SMTP_PORT: 25
+# SMTP_USERNAME: nil
+# SMTP_PASSWORD: nil
+# 'plain', 'login', 'cram_md5'
+# SMTP_AUTHENTICATION_TYPE: nil
+# --------------------------------------------------------------------------------------------------------------------
 
 # Defaults for your local development environment
 DOWNLOAD_URL_TTL: 6
