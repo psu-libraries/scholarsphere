@@ -2,4 +2,11 @@
 :max_retries: <%= ENV.fetch("SIDEKIQ_MAX_RETRIES", 2) %>
 :queues:
   - shrine
+  - mailers
   - indexing
+:schedule:
+  monthly_email:
+    cron: <%= ENV.fetch("MONTHLY_EMAIL_CRON", "0 0 1 * *") %>
+    class: Mailers::MonthlyStats
+    queue: mailers
+    description: 'Start the Monthly Stats email job'

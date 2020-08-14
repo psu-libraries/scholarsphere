@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'sidekiq/web'
+require 'sidekiq-scheduler/web'
 
 Rails.application.routes.draw do
   default_url_options protocol: ENV.fetch('DEFAULT_URL_PROTOCOL', 'http'),
