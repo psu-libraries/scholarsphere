@@ -5,8 +5,9 @@ class ResourceDecorator < SimpleDelegator
   def self.decorate(resource)
     return WorkVersionDecorator.new(resource) if resource.is_a? WorkVersion
     return WorkDecorator.new(resource) if resource.is_a? Work
+    return CollectionDecorator.new(resource) if resource.is_a? Collection
 
-    ResourceDecorator.new(resource)
+    raise ArgumentError, "I don't know how to decorate a #{resource.class.name}"
   end
 
   def partial_name

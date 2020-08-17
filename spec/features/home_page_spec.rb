@@ -20,9 +20,9 @@ RSpec.describe 'Home page', type: :feature do
       expect(page).to have_content('Welcome to ScholarSphere')
     end
 
-    expect(page).to have_selector('h4', text: 'What is ScholarSphere?')
-    expect(page).to have_selector('h4', text: 'Browse and search for works')
-    expect(page).to have_selector('h4', text: 'Featured Works')
+    expect(page).to have_selector('h2', text: 'What is ScholarSphere?')
+    expect(page).to have_selector('h2', text: 'Browse and search for works')
+    expect(page).to have_selector('h2', text: 'Featured Works')
 
     within('div.search') do
       expect(page).to have_selector('form')

@@ -1,14 +1,28 @@
-<div class="row">
-  <div class="col">
-    <h1><%= collection.title %></h1>
-    <p><%= collection.description %></p>
-    <h2><%= t('resources.works') %></h2>
-    <%= render 'shared/collection_works', collection: collection %>
-  </div>
-  <div class="col-4">
-    <h3><%= t('resources.metadata') %></h3>
-    <%= render CollectionMetadataComponent.new(collection: collection) %>
-    <h3><%= t('resources.analytics') %></h3>
-    <div class='analytics-chart-container' data-url="<%= analytics_path %>"></div>
-  </div>
+<div class="container-fluid">
+  <article class="row">
+    <div class="col-lg-7">
+      <h1 class="h2 mb-3"><%= collection.title %></h1>
+      <p><%= collection.description %></p>
+
+      <div class="keyline keyline--left mb-3">
+        <h2 class="h4"><%= t('resources.works') %></h2>
+      </div>
+
+      <% collection.decorated_work_versions.each_with_index do |work_version, index| %>
+        <%= render partial: 'catalog/document', locals: { document: work_version, document_counter: index } %>
+      <% end %>
+    </div>
+
+    <div class="col-lg-5">
+      <div class="keyline keyline--left">
+        <h2 class="h4"><%= t('resources.metadata') %></h2>
+      </div>
+      <%= render CollectionMetadataComponent.new(collection: collection) %>
+
+      <div class="keyline keyline--left">
+        <h2 class="h4"><%= t('resources.analytics') %></h2>
+      </div>
+      <div class='analytics-chart-container' data-url="<%= analytics_path %>"></div>
+    </div>
+  </article>
 </div>

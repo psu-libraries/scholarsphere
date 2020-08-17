@@ -30,7 +30,7 @@ RSpec.describe 'Dashboard Work History', with_user: :user, versioning: true do
   it 'shows the edit history of the work' do
     visit dashboard_work_history_path(work)
 
-    within '.work-history' do
+    within '.version-timeline' do
       expect(page).to have_content 'Version 1'
       expect(page).to have_content 'Version 2'
     end

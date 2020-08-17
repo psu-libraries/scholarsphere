@@ -27,6 +27,9 @@ linters:
     exclude:
       - app/javascript/scholarsphere/styles/_progress_indicator.scss
       - app/javascript/frontend/styles/_common.scss
+  DeclarationOrder:
+    exclude:
+      - app/javascript/frontend/styles/_common.scss
   ImportantRule:
     exclude:
       - app/javascript/scholarsphere/styles/_progress_indicator.scss

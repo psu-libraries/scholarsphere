@@ -8,7 +8,7 @@
     <%= link_to 'History', dashboard_work_history_path(index_work) %>
   </h5>
   <div class="work-list__versions">
-    <% index_work.versions.unshift(nil).each_cons(2) do |previous_version, version| %>
+    <% index_work.decorated_versions.unshift(nil).each_cons(2) do |previous_version, version| %>
       <div class="work-version row">
         <div class="work-version__metadata col">
           <%= link_to version.display_version_long, dashboard_work_version_path(version) %>

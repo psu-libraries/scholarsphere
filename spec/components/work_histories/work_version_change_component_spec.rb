@@ -39,13 +39,13 @@ RSpec.describe WorkHistories::WorkVersionChangeComponent, type: :component do
       #
       # It: renders the created state with properly formatted timestamps
       #
-      expect(result.at('div').attr('id')).to eq "change_#{paper_trail_version.id}"
-      expect(result.css('.work-history__change-event').text).to eq 'Created'
+      expect(result.at('li').attr('id')).to eq "change_#{paper_trail_version.id}"
+      expect(result.css('.version-timeline__change-action').text).to include 'Created'
 
-      expect(result.css('.work-history__change-timestamp').text).to eq 'December 20, 2019 14:00'
-      expect(result.css('.work-history__change-user').text).to eq user.access_id
+      expect(result.css('.version-timeline__change-timestamp').text).to eq 'December 20, 2019 14:00'
+      expect(result.css('.version-timeline__change-user').text).to eq user.access_id
 
-      expect(result.css('.work-history__diff')).to be_empty
+      expect(result.css('.version-timeline__diff')).to be_empty
 
       ##########################################################################
       #
@@ -60,9 +60,9 @@ RSpec.describe WorkHistories::WorkVersionChangeComponent, type: :component do
       #
       # it: renders the updated state with a diff
       #
-      expect(result.css('.work-history__change-event').text).to eq 'Updated'
-      expect(result.css('.work-history__change-changed-attributes').text).to eq 'Title'
-      expect(result.css('.work-history__diff').text).to include('old').and include('new')
+      expect(result.css('.version-timeline__change-action').text).to include 'Updated'
+      expect(result.css('.version-timeline__change-changed-attributes').text).to eq 'Title'
+      expect(result.css('.version-timeline__diff').text).to include('old').and include('new')
 
       ##########################################################################
       #
@@ -84,7 +84,7 @@ RSpec.describe WorkHistories::WorkVersionChangeComponent, type: :component do
       #
       # Using regex here because the order of the attributes above doesn't seem
       # to come out the other side with Papertrail and I don't want random fails
-      expect(result.css('.work-history__change-changed-attributes').text)
+      expect(result.css('.version-timeline__change-changed-attributes').text)
         .to match(/Title, \w+, \w+, and 2 more/)
 
       ##########################################################################
@@ -98,7 +98,7 @@ RSpec.describe WorkHistories::WorkVersionChangeComponent, type: :component do
       #
       # It: renders the null-user properly
       #
-      expect(result.css('.work-history__change-user').text)
+      expect(result.css('.version-timeline__change-user').text)
         .to eq I18n.t('dashboard.work_history.unknown_user')
 
       ##########################################################################
@@ -115,7 +115,7 @@ RSpec.describe WorkHistories::WorkVersionChangeComponent, type: :component do
       #
       # it: renders the published state
       #
-      expect(result.css('.work-history__change-event').text).to eq 'Published'
+      expect(result.css('.version-timeline__change-action').text).to include 'Published'
     end
   end
 end

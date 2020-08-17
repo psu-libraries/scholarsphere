@@ -1,6 +1,6 @@
-<div class="col-xxl-6">
+<dl class="col-xxl-6">
   <% attributes.each do |attr, label, value| %>
-    <h5 class="<%= attr %>"><%= label %></h5>
-    <p class="<%= attr %>"><%= value %></p>
+    <dt class="<%= attr %>"><%= label %></dt>
+    <dd class="<%= attr %>"><%= value %></dd>
   <% end %>
-</div>
+</dl>

@@ -1,0 +1,66 @@
+.diff {
+  overflow: auto;
+
+  ul {
+    display: table;
+    list-style: none;
+    margin: 0;
+    overflow: auto;
+    padding: 0;
+    width: 100%;
+  }
+
+  del,
+  ins {
+    display: block;
+    padding: .5rem;
+    text-decoration: none;
+  }
+
+  li {
+    display: table-row;
+    height: 1em;
+    margin: 0;
+    padding: 0;
+
+    &.ins {
+      background: $diff-ins-bg;
+      color: $diff-ins-text;
+    }
+
+    &.del {
+      background: $diff-del-bg;
+      color: $diff-del-text;
+    }
+
+    &.diff-comment {
+      display: none;
+    }
+
+    &.diff-block-info {
+      background: none repeat scroll 0 0 $gray-85;
+    }
+
+    &:hover {
+      // background: $diff-hover-bg;
+    }
+  }
+
+  // try 'whitespace:pre;' if you don't want lines to wrap
+  del,
+  ins,
+  span {
+    font-family: courier;
+    white-space: pre-wrap;
+  }
+
+  del strong {
+    background: $diff-del-highlight;
+    font-weight: normal;
+  }
+
+  ins strong {
+    background: $diff-ins-highlight;
+    font-weight: normal;
+  }
+}

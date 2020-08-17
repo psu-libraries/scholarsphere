@@ -2,6 +2,9 @@
 // Load styles
 import './styles'
 
+// View statistics
+import './scripts/view_statistics_chart'
+
 require('jquery/dist/jquery')
 require('bootstrap/dist/js/bootstrap')
 

@@ -59,4 +59,15 @@ RSpec.describe WorkVersionDecorator do
       its(:display_date) { is_expected.to eq 'Published circa 2020' }
     end
   end
+
+  describe '#decorated_work' do
+    let(:work) { instance_double 'Work' }
+    let(:work_version) { instance_double 'WorkVersion', work: work }
+
+    it 'returns a decorated work' do
+      allow(WorkDecorator).to receive(:new).with(work).and_return(:decorated_work)
+
+      expect(decorator.decorated_work).to eq :decorated_work
+    end
+  end
 end

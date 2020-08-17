@@ -1,2 +1,3 @@
 <%= render partial: @resource.partial_name,
-           object: @resource %>
+           object: @resource,
+           locals: { analytics_path: resource_analytics_path(@resource.uuid, format: :json) } %>

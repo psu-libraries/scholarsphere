@@ -90,6 +90,20 @@ $modal-inner-padding: 1.5rem;
 $modal-header-padding-y: $modal-inner-padding;
 $modal-header-padding-x: $modal-inner-padding;
 
+// Diffs
+$diff-del-bg: $light-red;
+$diff-del-text: $dark-red;
+$diff-del-highlight: #fcc;
+$diff-ins-bg: $light-green;
+$diff-ins-text: $dark-green;
+$diff-ins-highlight: #a6f9a6;
+
+// Analytics chart
+$chart-line-color: $dark-blue;
+$axis-stroke-color: $gray-300;
+$axis-text-color: $gray-800;
+$point-marker-color: $red;
+
 $hr-margin-y: $spacer * 2;
 
 $badge-colors: (

@@ -9,6 +9,10 @@ class WorkVersionDecorator < ResourceDecorator
     "V#{version_name_or_number}"
   end
 
+  def decorated_work
+    WorkDecorator.new(work)
+  end
+
   # @todo store dates for specific workflow actions such as published and withdrawn
   def display_date
     if draft?
