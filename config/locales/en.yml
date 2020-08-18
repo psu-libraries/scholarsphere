@@ -1,5 +1,5 @@
 en:
-  application_name: "Scholarsphere"
+  application_name: "ScholarSphere"
   activerecord:
     attributes:
       actor:
@@ -205,6 +205,7 @@ en:
     search:
       heading: 'Browse and search for works'
       placeholder: 'Search for titles, keywords, resource types, creators, etc.'
+      label: 'Search ScholarSphere'
       submit: 'search' 
       subheading: Or
       browse: 'Browse & Filter All Works'
