@@ -222,16 +222,17 @@ en:
       home: 'Welcome to ScholarSphere'
       dashboard: 'Your Dashboard'
   resources:
-    collections: Collections
-    works: Works
-    files: Files
     analytics: Analytics
+    collections: Collections
+    download: "Download %{name}"
+    files: Files
     metadata: Metadata
     not_in_collections: 'This Work is not currently in any collections. TODO: we need to make the collection functionality actually work.'
+    old_version:
+      link: View the current version.
+      message: This is an older version of the work.
     work_history: Work History
-    work_history_summary: Summary
     work_history_diff: Version Comparison
     work_history_diff_content: 'TODO: coming soon'
-    old_version:
-      message: This is an older version of the work.
-      link: View the current version.
+    work_history_summary: Summary
+    works: Works
