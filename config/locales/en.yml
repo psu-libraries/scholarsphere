@@ -71,7 +71,7 @@ en:
     messages:
       invalid_edtf: is not a valid date in EDTF format
   footer:
-    heading: 'Scholarsphere'
+    heading: 'ScholarSphere'
     description: 'A service of the University Libraries.'
     copyright_statement: 'Copyright © 2020 The Pennsylvania State University'
   dashboard:
