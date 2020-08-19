@@ -6,6 +6,16 @@
 <% end %>
 
 <div class="container-fluid">
+
+  <% unless work_version.latest_published_version? %>
+    <div class="alert alert-warning" role="alert">
+      <%= t 'resources.old_version.message' %>
+      <%= link_to t('resources.old_version.link'),
+                  resource_path(work_version.work.uuid),
+                  class: 'alert-link' %>
+    </div>
+  <% end %>
+
   <article class="row">
     <div class="col-lg-7">
       <h1 class="h2 mb-3"><%= work_version.title %></h1>

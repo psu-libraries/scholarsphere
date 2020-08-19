@@ -231,3 +231,6 @@ en:
     work_history_summary: Summary
     work_history_diff: Version Comparison
     work_history_diff_content: 'TODO: coming soon'
+    old_version:
+      message: This is an older version of the work.
+      link: View the current version.
