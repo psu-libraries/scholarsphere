@@ -54,6 +54,15 @@ Rails.application.configure do
   # config.active_job.queue_name_prefix = "scholarsphere_production"
 
   config.action_mailer.perform_caching = false
+  config.action_mailer.logger = nil
+  config.action_mailer.delivery_method = ENV.fetch('MAIL_DELIVERY_METHOD', 'test').to_sym
+  config.action_mailer.smtp_settings = {
+    address: ENV.fetch('SMTP_ADDRESS', 'localhost'),
+    port: ENV.fetch('SMTP_PORT', 25),
+    user_name: ENV.fetch('SMTP_USERNAME', nil),
+    password: ENV.fetch('SMTP_PASSWORD', nil),
+    authentication: ENV.fetch('SMTP_AUTHENTICATION_TYPE', nil)
+  }
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
