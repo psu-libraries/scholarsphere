@@ -285,4 +285,18 @@ RSpec.describe WorkVersion, type: :model do
       end
     end
   end
+
+  describe '#publish' do
+    let(:work_version) { build :work_version, :able_to_be_published }
+    let(:work) { work_version.work }
+
+    it "updates the work's deposit agreement" do
+      expect(work.deposit_agreement_version).to be_nil
+      expect(work.deposit_agreed_at).to be_nil
+      work_version.publish
+      work.reload
+      expect(work.deposit_agreement_version).to eq(Work::DepositAgreement::CURRENT_VERSION)
+      expect(work.deposit_agreed_at).to be_within(1.minute).of(Time.zone.now)
+    end
+  end
 end

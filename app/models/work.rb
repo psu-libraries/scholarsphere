@@ -86,6 +86,10 @@ class Work < ApplicationRecord
     end
   end
 
+  module DepositAgreement
+    CURRENT_VERSION = '1.0'
+  end
+
   enum work_type: Types.all.zip(Types.all).to_h
 
   validates :work_type,
@@ -136,6 +140,15 @@ class Work < ApplicationRecord
 
   def stats
     @stats ||= AggregateViewStatistics.call(models: versions.published)
+  end
+
+  def update_deposit_agreement
+    return if deposit_agreement_version == DepositAgreement::CURRENT_VERSION
+
+    update(
+      deposit_agreement_version: DepositAgreement::CURRENT_VERSION,
+      deposit_agreed_at: Time.zone.now
+    )
   end
 
   private

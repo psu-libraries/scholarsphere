@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_10_144750) do
+ActiveRecord::Schema.define(version: 2020_08_18_193712) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -219,6 +219,8 @@ ActiveRecord::Schema.define(version: 2020_08_10_144750) do
     t.bigint "depositor_id", null: false
     t.bigint "proxy_id"
     t.datetime "deposited_at"
+    t.string "deposit_agreement_version"
+    t.datetime "deposit_agreed_at"
     t.index ["depositor_id"], name: "index_works_on_depositor_id"
     t.index ["proxy_id"], name: "index_works_on_proxy_id"
   end
