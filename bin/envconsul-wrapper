@@ -34,3 +34,5 @@ function start_envconsul() {
         -once \
         -exec="${cmd}"
 }
+
+start "$*"

@@ -24,7 +24,9 @@ RUN yarn --frozen-lockfile && \
 
 COPY --chown=app . /app
 
-CMD ["./entrypoint.sh"]
+ENTRYPOINT [ "/app/bin/envconsul-wrapper" ]
+
+CMD ["/app/bin/startup"]
 
 # Final Target
 FROM base as production
@@ -42,5 +44,6 @@ RUN RAILS_ENV=production \
   rm -rf /app/tmp/
 
 
+ENTRYPOINT [ "/app/bin/envconsul-wrapper" ]
 
-CMD ["./entrypoint.sh"]
+CMD ["/app/bin/startup"]

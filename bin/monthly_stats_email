@@ -1,4 +1,0 @@
-#!/bin/bash
-source "$(dirname "$0")/envconsul-wrapper"
-
-start "bundle exec rake user:monthly_stats_email"
