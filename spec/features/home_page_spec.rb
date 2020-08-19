@@ -34,7 +34,7 @@ RSpec.describe 'Home page', type: :feature do
     end
 
     within('footer') do
-      expect(page).to have_selector('h3', text: 'Scholarsphere')
+      expect(page).to have_selector('h3', text: 'ScholarSphere')
       expect(page).to have_content('A service of the University Libraries.')
       expect(page).to have_content('Copyright')
       expect(page).to have_link('Penn State')
