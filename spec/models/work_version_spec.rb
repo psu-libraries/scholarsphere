@@ -124,6 +124,15 @@ RSpec.describe WorkVersion, type: :model do
       it { is_expected.to validate_uniqueness_of(:version_number).scoped_to(:work_id) }
       it { is_expected.to validate_presence_of(:version_number) }
     end
+
+    context 'with a version name' do
+      it { is_expected.to allow_value(nil).for(:version_name) }
+      it { is_expected.to allow_value('1.0.1').for(:version_name) }
+      it { is_expected.to allow_value('1.2.3-beta').for(:version_name) }
+      it { is_expected.not_to allow_value('1').for(:version_name) }
+      it { is_expected.not_to allow_value('1.0').for(:version_name) }
+      it { is_expected.not_to allow_value('v1').for(:version_name) }
+    end
   end
 
   describe 'multivalued fields' do
