@@ -103,7 +103,7 @@ class WorkVersion < ApplicationRecord
     state :published, :withdrawn, :removed
 
     event :publish do
-      transitions from: [:draft, :withdrawn], to: :published
+      transitions from: [:draft, :withdrawn], to: :published, after: Proc.new { work.try(:update_deposit_agreement) }
     end
 
     event :withdraw do

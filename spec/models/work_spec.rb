@@ -16,6 +16,8 @@ RSpec.describe Work, type: :model do
     it { is_expected.to have_db_column(:uuid).of_type(:uuid) }
     it { is_expected.to have_db_column(:doi).of_type(:string) }
     it { is_expected.to have_db_column(:embargoed_until).of_type(:datetime) }
+    it { is_expected.to have_db_column(:deposit_agreed_at).of_type(:datetime) }
+    it { is_expected.to have_db_column(:deposit_agreement_version) }
 
     it { is_expected.to have_db_index(:depositor_id) }
     it { is_expected.to have_db_index(:proxy_id) }
@@ -105,6 +107,34 @@ RSpec.describe Work, type: :model do
     describe '.display' do
       it 'returns a human-readable version of the type' do
         expect(types.display(types.default)).to eq('Dataset')
+      end
+    end
+  end
+
+  describe '::DepositAgreement::CURRENT_VERSION' do
+    subject { described_class::DepositAgreement::CURRENT_VERSION }
+
+    it { is_expected.to eq('1.0') }
+  end
+
+  describe '#update_deposit_agreement' do
+    context 'when the deposit agreement version is nil' do
+      let(:work) { build(:work) }
+
+      it 'updates the agreement version' do
+        expect {
+          work.update_deposit_agreement
+        }.to change(work, :deposit_agreement_version).from(nil).to(described_class::DepositAgreement::CURRENT_VERSION)
+      end
+    end
+
+    context 'when the work has the current deposit agreement version' do
+      let(:work) { build(:work, deposit_agreement_version: described_class::DepositAgreement::CURRENT_VERSION) }
+
+      it 'does NOT update the agreement version timestamp' do
+        expect {
+          work.update_deposit_agreement
+        }.not_to(change(work, :deposit_agreed_at))
       end
     end
   end
@@ -219,6 +249,8 @@ RSpec.describe Work, type: :model do
       let(:keys) do
         %w(
           created_at_dtsi
+          deposit_agreed_at_dtsi
+          deposit_agreement_version_tesim
           deposited_at_dtsi
           depositor_id_isi
           discover_groups_ssim
@@ -250,6 +282,8 @@ RSpec.describe Work, type: :model do
           created_at_dtsi
           creator_aliases_tesim
           creators_sim
+          deposit_agreed_at_dtsi
+          deposit_agreement_version_tesim
           deposited_at_dtsi
           depositor_id_isi
           description_tesim
