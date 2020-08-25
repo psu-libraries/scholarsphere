@@ -88,6 +88,7 @@ Rails.application.routes.draw do
       resources :ingest, only: [:create]
       resources :collections, only: [:create]
       resources :files, only: [:update]
+      resources :featured_resources, only: [:create]
     end
   end
 

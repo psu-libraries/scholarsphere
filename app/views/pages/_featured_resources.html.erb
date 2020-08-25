@@ -1,0 +1,11 @@
+<div class="container-fluid mt-4">
+  <div class="row row--lg-mb-3">
+    <div class="col-12 mb-0">
+      <h2 class="h4 mb-2"><%= t('home.featured.heading') %></h2>
+    </div>
+
+    <% resources.each do |resource| %>
+      <%= render partial: "featured_resources/#{resource.partial_name}", object: resource %>
+    <% end %>
+  </div>
+</div>

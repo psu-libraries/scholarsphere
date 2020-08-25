@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_18_193712) do
+ActiveRecord::Schema.define(version: 2020_08_20_194017) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -92,6 +92,16 @@ ActiveRecord::Schema.define(version: 2020_08_18_193712) do
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "deposited_at"
     t.index ["depositor_id"], name: "index_collections_on_depositor_id"
+  end
+
+  create_table "featured_resources", force: :cascade do |t|
+    t.uuid "resource_uuid"
+    t.string "resource_type"
+    t.bigint "resource_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["resource_type", "resource_id"], name: "index_featured_resources_on_resource_type_and_resource_id"
+    t.index ["resource_uuid", "resource_type", "resource_id"], name: "index_featured_resources_on_uuid_and_resource", unique: true
   end
 
   create_table "file_resources", force: :cascade do |t|

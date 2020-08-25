@@ -6,13 +6,13 @@ RSpec.describe PagesController, type: :controller do
   describe 'GET #home' do
     before do
       Array.new(3).map do
-        FactoryBot.create(:work, has_draft: false)
+        FactoryBot.create(:featured_resource)
       end
     end
 
-    it 'sets the number of featured works' do
+    it 'sets an array of featured resources' do
       get :home
-      expect(assigns(:featured_works)).to be_present
+      expect(assigns(:featured_resources)).not_to be_empty
     end
   end
 end

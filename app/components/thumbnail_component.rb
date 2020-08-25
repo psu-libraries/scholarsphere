@@ -3,14 +3,14 @@
 class ThumbnailComponent < ApplicationComponent
   attr_reader :resource, :featured
 
-  # @param [SolrDocument, WorkVersion] resource
+  # @param [SolrDocument, WorkVersion, Collection] resource
   def initialize(resource:, featured: false)
     @resource = resource
     @featured = featured
   end
 
   def icon
-    icon_map.fetch(resource.work_type, 'bar_chart')
+    icon_map.fetch(icon_key, 'bar_chart')
   end
 
   def html_classes
@@ -27,13 +27,23 @@ class ThumbnailComponent < ApplicationComponent
       @featured != false
     end
 
-    # @note Maps a work type with an icon from https://material.io/resources/icons
+    def icon_key
+      resource.try(:work_type) || resource.class.to_s.underscore
+    end
+
+    # @note Maps a work type or class with an icon from https://material.io/resources/icons
     def icon_map
       HashWithIndifferentAccess.new({
+                                      # part_of_book: nil,
+                                      # poster: nil,
+                                      # project: nil,
+                                      # software_or_program_code: nil,
                                       article: 'article',
                                       audio: 'headset',
                                       book: 'book',
                                       capstone_project: 'landscape',
+                                      collection: 'view_carousel',
+                                      collection_decorator: 'view_carousel',
                                       conference_proceeding: 'groups',
                                       dataset: 'analytics',
                                       dissertation: 'subject',
@@ -43,13 +53,9 @@ class ThumbnailComponent < ApplicationComponent
                                       masters_culminating_experience: 'landscape',
                                       masters_thesis: 'subject',
                                       other: 'bar_chart',
-                                      # part_of_book: nil,
-                                      # poster: nil,
                                       presentation: 'stacked_line_chart',
-                                      # project: nil,
                                       report: 'stacked_line_chart',
                                       research_paper: 'biotech',
-                                      # software_or_program_code: nil,
                                       thesis: 'subject',
                                       unspecified: 'bar_chart',
                                       video: 'movie'
