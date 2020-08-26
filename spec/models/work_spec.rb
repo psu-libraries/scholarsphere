@@ -294,15 +294,18 @@ RSpec.describe Work, type: :model do
           embargoed_until_dtsi
           id
           identifier_tesim
+          keyword_sim
           keyword_tesim
           language_tesim
           model_ssi
           proxy_id_isi
+          published_date_dtrsi
           published_date_tesim
           publisher_tesim
           related_url_tesim
           rights_tesim
           source_tesim
+          subject_sim
           subject_tesim
           subtitle_tesim
           title_tesim

@@ -17,6 +17,27 @@ RSpec.describe LatestPublishedVersionSchema do
       end
     end
 
+    context 'with keyword and subject facets' do
+      let(:resource) { create(:work, has_draft: false) }
+
+      its(:document) do
+        is_expected.to include(
+          keyword_sim: resource.latest_published_version.keyword,
+          subject_sim: resource.latest_published_version.subject
+        )
+      end
+    end
+
+    context 'with an indexed published date' do
+      let(:resource) { create(:work, has_draft: false) }
+
+      its(:document) do
+        is_expected.to include(
+          published_date_dtrsi: kind_of(String)
+        )
+      end
+    end
+
     context 'when the resource does not have a published version' do
       let(:resource) { create(:work, has_draft: true) }
 

@@ -37,9 +37,9 @@ module Dashboard
         year_more: { label: 'beyond 10 years', fq: 'embargoed_until_dtsi:[NOW+10YEAR TO *]' }
       }, collapse: false
 
-      config.add_facet_field 'work_type_ssim', label: 'Work Type'
-      config.add_facet_field 'keyword_tesim', label: 'Keywords'
-      config.add_facet_field 'subject_tesim', label: 'Subject'
+      config.add_facet_field 'display_work_type_ssi', label: 'Work Type'
+      config.add_facet_field 'keyword_sim', label: 'Keywords'
+      config.add_facet_field 'subject_sim', label: 'Subject'
       config.add_facet_field 'creators_sim', label: 'Creators'
     end
 
