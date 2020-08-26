@@ -7,11 +7,21 @@ class LatestPublishedVersionSchema < BaseSchema
     DefaultSchema.new(resource: resource.latest_published_version)
       .document
       .merge(creator_schema.document)
+      .merge(published_date_schema.document)
+      .merge(facet_schema.document)
   end
 
   private
 
     def creator_schema
       CreatorSchema.new(resource: resource.latest_published_version)
+    end
+
+    def published_date_schema
+      PublishedDateSchema.new(resource: resource.latest_published_version)
+    end
+
+    def facet_schema
+      FacetSchema.new(resource: resource.latest_published_version)
     end
 end

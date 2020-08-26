@@ -86,8 +86,8 @@ class CatalogController < ApplicationController
     # case sensitive when searching values)
 
     config.add_facet_field 'display_work_type_ssi', label: 'Work Type'
-    config.add_facet_field 'keyword_tesim', label: 'Keywords'
-    config.add_facet_field 'subject_tesim', label: 'Subject'
+    config.add_facet_field 'keyword_sim', label: 'Keywords'
+    config.add_facet_field 'subject_sim', label: 'Subject'
     config.add_facet_field 'creators_sim', label: 'Creators'
 
     # Example pivot facet

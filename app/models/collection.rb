@@ -146,7 +146,8 @@ class Collection < ApplicationRecord
         DefaultSchema,
         CreatorSchema,
         PermissionsSchema,
-        PublishedDateSchema
+        PublishedDateSchema,
+        FacetSchema
       )
     end
 end
