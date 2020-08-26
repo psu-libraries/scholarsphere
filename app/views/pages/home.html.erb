@@ -34,12 +34,4 @@
   </div>
 </div>
 
-<div class="container-fluid mt-4">
-  <div class="row row--lg-mb-3">
-    <div class="col-12 mb-0">
-      <h2 class="h4 mb-2"><%= t('home.featured.heading') %></h2>
-    </div>
-
-    <%= render partial: 'featured', collection: @featured_works, as: :work_version %>
-  </div>
-</div>
+<%= render 'featured_resources', resources: @featured_resources if @featured_resources.present? %>
