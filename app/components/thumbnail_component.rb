@@ -28,7 +28,7 @@ class ThumbnailComponent < ApplicationComponent
     end
 
     def icon_key
-      resource.try(:work_type) || resource.class.to_s.underscore
+      resource.try(:work_type)
     end
 
     # @note Maps a work type or class with an icon from https://material.io/resources/icons
@@ -43,7 +43,6 @@ class ThumbnailComponent < ApplicationComponent
                                       book: 'book',
                                       capstone_project: 'landscape',
                                       collection: 'view_carousel',
-                                      collection_decorator: 'view_carousel',
                                       conference_proceeding: 'groups',
                                       dataset: 'analytics',
                                       dissertation: 'subject',

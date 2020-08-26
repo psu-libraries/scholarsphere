@@ -71,7 +71,7 @@ RSpec.describe ResourceDecorator do
     context 'with a collection' do
       let(:resource) { build(:collection) }
 
-      its(:display_work_type) { is_expected.to be_nil }
+      its(:display_work_type) { is_expected.to eq('Collection') }
     end
   end
 
