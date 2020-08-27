@@ -22,6 +22,7 @@ linters:
       - '*test/*'
       - '*app/views/layouts/component_preview.html.erb'
       - '*app/views/actor_mailer/*'
+      - '*app/views/catalog/facet.html.erb'
   RightTrim:
     enabled: true
     enforced_style: '-'
