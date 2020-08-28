@@ -183,80 +183,43 @@ RSpec.describe Collection, type: :model do
   end
 
   describe '#to_solr' do
-    context 'when the work only has a draft version' do
-      subject { build(:collection).to_solr }
+    subject { create(:collection, :with_creators, :with_complete_metadata).to_solr }
 
-      let(:keys) do
-        %w(
-          based_near_tesim
-          contributor_tesim
-          created_at_dtsi
-          creator_aliases_tesim
-          creators_sim
-          deposited_at_dtsi
-          depositor_id_isi
-          description_tesim
-          discover_groups_ssim
-          discover_users_ssim
-          doi_tesim
-          id
-          identifier_tesim
-          keyword_tesim
-          language_tesim
-          model_ssi
-          published_date_tesim
-          publisher_tesim
-          related_url_tesim
-          source_tesim
-          subject_tesim
-          subtitle_tesim
-          title_tesim
-          updated_at_dtsi
-          uuid_ssi
-          visibility_ssi
-        )
-      end
-
-      its(:keys) { is_expected.to contain_exactly(*keys) }
+    let(:expected_keys) do
+      %w(
+        based_near_tesim
+        contributor_tesim
+        created_at_dtsi
+        creator_aliases_tesim
+        creators_sim
+        deposited_at_dtsi
+        depositor_id_isi
+        description_tesim
+        discover_groups_ssim
+        discover_users_ssim
+        doi_tesim
+        id
+        identifier_tesim
+        keyword_sim
+        keyword_tesim
+        language_tesim
+        model_ssi
+        published_date_dtrsi
+        published_date_tesim
+        publisher_tesim
+        related_url_tesim
+        source_tesim
+        subject_sim
+        subject_tesim
+        subtitle_tesim
+        title_tesim
+        updated_at_dtsi
+        uuid_ssi
+        visibility_ssi
+      )
     end
 
-    context 'when the work has a published version' do
-      subject { create(:collection, :with_creators, :with_complete_metadata).to_solr }
-
-      let(:expected_keys) do
-        %w(
-          based_near_tesim
-          contributor_tesim
-          created_at_dtsi
-          creator_aliases_tesim
-          creators_sim
-          deposited_at_dtsi
-          depositor_id_isi
-          description_tesim
-          discover_groups_ssim
-          discover_users_ssim
-          doi_tesim
-          id
-          identifier_tesim
-          keyword_tesim
-          language_tesim
-          model_ssi
-          published_date_dtrsi
-          published_date_tesim
-          publisher_tesim
-          related_url_tesim
-          source_tesim
-          subject_tesim
-          subtitle_tesim
-          title_tesim
-          updated_at_dtsi
-          uuid_ssi
-          visibility_ssi
-        )
-      end
-
-      its(:keys) { is_expected.to contain_exactly(*expected_keys) }
-    end
+    its(:keys) { is_expected.to contain_exactly(*expected_keys) }
   end
 
   describe 'after save' do
