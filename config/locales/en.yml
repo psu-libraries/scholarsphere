@@ -78,6 +78,16 @@ en:
   errors:
     messages:
       invalid_edtf: is not a valid date in EDTF format
+    not_found:
+      heading: Resource not found or unavailable
+      content: >
+        The page you are trying to access is either not available or not in ScholarSphere. Please contact us if you
+        believe this is a problem.
+    server_error:
+      heading: Unable to process request
+      content: >
+        We're sorry, something unexpected happened and we're unable to continue. We've been notified of the problem
+        and will work to resolve it.
   footer:
     heading: 'ScholarSphere'
     description: 'A service of the University Libraries.'
@@ -268,6 +278,8 @@ en:
     heading:
       home: 'Welcome to ScholarSphere'
       dashboard: 'Your Dashboard'
+      not_found: 'Page Not Found'
+      server_error: 'Server Error'
   resources:
     analytics: Analytics
     collections: Collections
@@ -287,3 +299,11 @@ en:
       valid: 'This is a valid DOI and can be used to reference this page'
       invalid: 'This DOI has formatting errors. Please contact us to have it fixed'
       unmanaged: 'This is a valid DOI, but we cannot manage nor update it. Please contact us if to have it fixed'
+  shared:
+    search:
+      heading: 'Browse and search for works'
+      placeholder: 'Search for titles, keywords, resource types, creators, etc.'
+      label: 'Search ScholarSphere'
+      submit: 'search' 
+      subheading: Or
+      browse: 'Browse & Filter All Works'
