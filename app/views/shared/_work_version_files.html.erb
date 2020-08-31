@@ -5,17 +5,17 @@
     <% work_version.file_version_memberships.includes(:file_resource).each do |file| %>
       <li class="file-card__item">
         <div class="file-card__content">
-          <h3><%= file.title %></h3>
+          <h3>
+            <%= link_to resource_download_path(file.id, resource_id: work_version.uuid), title: t('resources.download', name: file.title) do %>
+              <%= file.title %>
+            <% end %>
+          </h3>
           <p class="meta mb-0">
             <span class="meta__size"><%= number_to_human_size file.size %></span> |
             <span class="meta__type"><%= file.mime_type %></span> |
             <span class="meta__date"><%= file.file_resource.deposited_at.to_s(:short_date) %></span>
           </p>
         </div>
-        <%= link_to resource_download_path(file.id, resource_id: work_version.uuid) do %>
-          <span class="sr-only"><%= t('resources.download', name: file.title) %></span>
-          <i class="file-card__icon material-icons" aria-hidden="true">get_app</i>
-        <% end %>
       </li>
     <% end %>
   </ul>
