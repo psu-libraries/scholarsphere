@@ -47,6 +47,7 @@ class PublishNewWork
       embargoed_until: metadata.delete(:embargoed_until),
       depositor: depositor_actor,
       deposited_at: deposited_at,
+      doi: metadata.delete(:doi),
       versions_attributes: [metadata.to_hash.merge!('creator_aliases_attributes' => creator_aliases_attributes)]
     }
 

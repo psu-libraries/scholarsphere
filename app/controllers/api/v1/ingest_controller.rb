@@ -91,6 +91,7 @@ module Api::V1
             :noid,
             :deposited_at,
             :description,
+            :doi,
             keyword: [],
             resource_type: [],
             contributor: [],
