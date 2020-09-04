@@ -19,6 +19,7 @@ class WorkVersionMetadataComponent < ApplicationComponent
     :display_published_date,
     :subject,
     :language,
+    :display_doi,
     :identifier,
     :based_near,
     :related_url,
@@ -75,6 +76,8 @@ class WorkVersionMetadataComponent < ApplicationComponent
         value.to_formatted_s(:long)
       elsif value.is_a? WorkVersionCreation
         value.alias
+      elsif value.is_a? ApplicationComponent
+        render value
       else
         value.to_s
       end
