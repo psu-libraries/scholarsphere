@@ -1,10 +1,12 @@
 <% terms = form.object.send(attribute).empty? ? [''] : form.object.send(attribute) %>
 
-<div class="form-group" data-controller="multiple-fields">
-  <%= form.label attribute %>
-  <% terms.map do |term| %>
-    <div class="input-group">
-      <%= form.text_field attribute, multiple: true, value: term, class: 'form-control' %>
+<div class="mb-3" data-controller="multiple-fields">
+  <% terms.each_with_index do |term, index| %>
+    <div class="removable-input js-multiple-field-group mb-1">
+      <label class="has-float-label">
+        <%= form.text_field attribute, multiple: true, placeholder: true, value: term, class: 'form-control' %>
+        <span><%= form.object.class.human_attribute_name(attribute) %></span>
+      </label>
     </div>
   <% end %>
 </div>

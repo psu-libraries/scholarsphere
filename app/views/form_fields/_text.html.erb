@@ -1,4 +1,16 @@
-<div class="form-group">
+<%- field_id = form_field_id(form, attribute) %>
+<%- hint_id = "#{field_id}-hint" %>
+<%- hint_i18n_key = ['helpers', 'hint', form.object.class.model_name.i18n_key, attribute].join('.') %>
+<%- has_hint = I18n.exists?(hint_i18n_key) %>
+
+<div class="form-group has-float-label mb-3">
+  <%= form.text_field attribute,
+                      class: 'form-control',
+                      placeholder: true,
+                      required: local_assigns[:required].presence,
+                      aria: { describedby: (has_hint && hint_id).presence } %>
   <%= form.label attribute %>
-  <%= form.text_field attribute, class: 'form-control' %>
+  <% if has_hint %>
+    <small id="<%= hint_id %>" class="form-text text-muted"><%= t hint_i18n_key %></small>
+  <% end %>
 </div>

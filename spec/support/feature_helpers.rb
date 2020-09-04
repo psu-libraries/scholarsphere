@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative './feature_helpers/work_form'
+
 module FeatureHelpers
   def setup_oauth(user: nil)
     OmniAuth.config.test_mode = true

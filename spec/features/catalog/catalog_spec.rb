@@ -59,7 +59,7 @@ RSpec.describe 'Blacklight catalog page', :inline_jobs do
             expect(page).to have_content(resource.aasm_state)
           end
           within('.meta') do
-            expect(page).to have_content("Published Date #{resource.published_date}")
+            expect(page).to have_content("#{WorkVersion.human_attribute_name(:published_date)} #{resource.published_date}")
           end
         end
       end

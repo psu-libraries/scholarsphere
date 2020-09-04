@@ -1,0 +1,31 @@
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h4 class="text-center mb-4"><%= t 'dashboard.work_form.heading.edit' %></h4>
+      <%= render WorkFormTabsComponent.new(work_version: @work_version, current_controller: controller_name) %>
+
+      <div class="tab-content">
+        <div class="tab-pane active show">
+
+          <%= form_with(model: @work_version, url: dashboard_work_form_contributors_path(@work_version), local: true) do |form| %>
+            <% if form.object.errors.any? %>
+              <div id="error_explanation">
+                <h2><%= t('dashboard.work_versions.edit.error_message', error: pluralize(form.object.errors.count, 'error')) %></h2>
+
+                <ul>
+                <% form.object.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
+                <% end %>
+                </ul>
+              </div>
+            <% end %>
+
+            <%= render 'fields', form: form %>
+
+            <%= render 'dashboard/work_form/shared/action_footer', form: form, publish: false %>
+          <% end %>
+
+        </div>
+      </div>
+    </div>
+</div>

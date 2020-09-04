@@ -1,0 +1,14 @@
+<div id="creator_aliases" class="mb-3">
+  <%= form.fields_for :creator_aliases do |creator_alias| %>
+    <%= render 'dashboard/work_form/contributors/creator_alias_fields', f: creator_alias %>
+  <% end %>
+  <div class="links">
+    <%= link_to_add_association t('dashboard.work_versions.edit.add_creator'),
+                                form,
+                                :creator_aliases,
+                                # Ensure the associated Creator object exists, so its fields are rendered
+                                wrap_object: ->(creator_alias) { creator_alias.tap(&:build_actor) },
+                                class: 'btn btn-outline-success btn-sm',
+                                partial: 'dashboard/work_form/contributors/creator_alias_fields' %>
+  </div>
+</div>

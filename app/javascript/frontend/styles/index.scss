@@ -8,6 +8,9 @@
 // Import Material Icons
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
+// Import floating label styles for bootstrap forms
+@import 'vendor/bootstrap-float-label';
+
 // Import Bootstrap with our own variables
 @import 'variables-override';
 @import 'bootstrap-loader';
@@ -30,7 +33,6 @@
 //@import '~blacklight-frontend/app/assets/stylesheets/blacklight/constraints';
 
 // Import our stuff
-@import 'mdc-theme';
 @import 'common';
 @import 'view-statistics-chart';
 @import 'diff';

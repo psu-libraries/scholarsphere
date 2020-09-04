@@ -10,12 +10,12 @@ en:
         alias: Display Name
       collection:
         subtitle: Subtitle
-        keyword: Keywords
+        keyword: Keyword
         description: Description
         creator_aliases: Creator
         contributor: Contributor
         publisher: Publisher
-        published_date: &collection_published_date Published Date
+        published_date: &collection_published_date Publication Date
         display_published_date: *collection_published_date
         subject: Subject
         language: Language
@@ -23,19 +23,25 @@ en:
         based_near: Based Near
         related_url: Related URL
         source: Source
+      permissions:
+        visibility:
+          open: Public
+          authenticated: Penn State Only
+          restricted: Private
       work_version_creation:
         alias: Display Name
       work_version:
-        version_name: Version Name
+        title: Work Title
+        version_name: Semantic Version (optional)
         subtitle: Subtitle
-        keyword: Keywords
+        keyword: Keyword
         rights: Rights
         description: Description
         creator_aliases: Creator
         resource_type: Resource Type
         contributor: Contributor
         publisher: Publisher
-        published_date: &work_version_published_date Published Date
+        published_date: &work_version_published_date Publication Date
         display_published_date: *work_version_published_date
         subject: Subject
         language: Language
@@ -57,7 +63,7 @@ en:
     zero_results:
       info:
         heading: 'No Results'
-        content: > 
+        content: >
           There were no results in your search. You can change your search terms or browse works using facets.
       options:
         heading: 'Search Alternatives'
@@ -74,6 +80,23 @@ en:
     heading: 'ScholarSphere'
     description: 'A service of the University Libraries.'
     copyright_statement: 'Copyright © 2020 The Pennsylvania State University'
+  helpers:
+    hint:
+      permissions:
+        visibility:
+          authenticated: 'By choosing Penn State Only, files can only be accessed by users with a Penn State Access ID.'
+      work_version:
+        title: The title as would appear in a bibliographic reference to the work (not a filename).
+        description: Include the work abstract if available.
+        published_date: The publication date can be specific to the year (2020), month (2020-11), or day (2020-11-22).
+        subject: This is a hint for the subject
+      work:
+        work_type: This is a hint for the work type
+    placeholder:
+      work_version:
+        version_name: x.y.z
+        published_date: yyyy-mm-dd
+
   dashboard:
     collections:
       index:
@@ -107,8 +130,6 @@ en:
         heading: 'Get Started'
         subheading: Or
         browse: 'Browse & Filter All Works'
-        
-
     profiles:
       edit:
         heading: "Edit Profile"
@@ -129,11 +150,35 @@ en:
       new:
         heading: "Create A New Work"
         error_message: "%{error} prohibited this work from being saved:"
+    work_form:
+      heading:
+        new: Add New Work
+        edit: Edit Draft Work
+      tabs:
+        details: Work Details
+        contributors: Contributors
+        files: Files
+        publish: Review & Publish
+      actions:
+        save_and_exit: Save as Draft & Exit
+        save_and_continue: Save and Continue
+        cancel: Cancel
+        publish: Publish
+      details:
+        required_metadata: Required Metadata
+        required_to_publish_metadata: Needed to Publish
+        additional_metadata: Additional Metadata
+      publish:
+        edit:
+          error_message: "There are %{error} that need to be fixed before this work can be published"
+          contributors: Contributors
+          files: Files
+          publishing_details: Publishing Details
     work_versions:
       files:
         name: Name
         size: Size
-        mime_type: Mime Type
+        mime_type: Type
       edit:
         breadcrumb: Edit %{title}
         create: Create
@@ -153,12 +198,12 @@ en:
         heading: File Listing
         name: Name
         size: Size
-        mime_type: Mime Type
+        mime_type: Type
         virus: Virus?
         unknown_virus: unknown
-        actions: Actions
+        actions: ''
         rename: Rename
-        delete: Delete
+        delete: Remove
     file_version_memberships:
       edit:
         heading: Editing %{title}
@@ -201,12 +246,12 @@ en:
         produced by the university community. Through ScholarSphere, Penn State researchers - faculty, students, and
         staff alike - are able to share their work on a worldwide scale and be assured of its long-term preservation
         and thus ongoing access. ScholarSphere is Penn State’s institutional repository - a repository service for
-        research and scholarly work produced by the university community. 
+        research and scholarly work produced by the university community.
     search:
       heading: 'Browse and search for works'
       placeholder: 'Search for titles, keywords, resource types, creators, etc.'
       label: 'Search ScholarSphere'
-      submit: 'search' 
+      submit: 'search'
       subheading: Or
       browse: 'Browse & Filter All Works'
     featured:
