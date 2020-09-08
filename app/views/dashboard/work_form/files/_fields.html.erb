@@ -1,0 +1,12 @@
+<div
+  data-controller="uppy"
+  data-uppy-input-name="work_version[file_resources_attributes][][file]"
+  data-uppy-blacklist="<%= form.object.file_version_memberships.map(&:title).to_json %>"
+  data-uppy-parent-form="file-uploader">
+</div>
+
+<%# Dude what? In order for Save and Continue to work as a "next" button, i.e.
+    without the user having uploaded any files, our controller requires
+    params[:work_version] to be present. That's what this does. It's hacky but
+    good enough for now %>
+<%= form.hidden_field :id %>

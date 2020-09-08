@@ -1,0 +1,13 @@
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h4 class="text-center mb-4"><%= t 'dashboard.work_form.heading.edit' %></h4>
+      <%= render WorkFormTabsComponent.new(work_version: @work_version, current_controller: controller_name) %>
+
+      <div class="tab-content">
+        <div class="tab-pane active show">
+          <%= render 'form', work_version: @work_version, url: dashboard_work_form_details_path(@work_version) %>
+        </div>
+      </div>
+    </div>
+</div>

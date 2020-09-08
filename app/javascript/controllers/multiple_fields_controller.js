@@ -17,57 +17,79 @@ import { Controller } from 'stimulus'
 
 export default class extends Controller {
   connect () {
-    const label = this.element.getElementsByTagName('label').item(0).innerText
+    this.baseLabelText = this.element.getElementsByTagName('label').item(0).innerText
+    this.firstInput = this.cloneFirstInput()
+
     for (let count = 1; count < this.inputGroups.length; count++) {
       this.inputGroups.item(count).appendChild(this.removeButton)
     }
-    this.element.appendChild(this.addButton(label))
+    this.inputGroups.item(0).appendChild(this.addButton())
   }
 
   // By default, Stimulus listens to click events on buttons and will execute this method.
   add (event) {
     event.preventDefault()
-    this.element.insertBefore(this.newField, this.element.lastElementChild)
+    this.element.appendChild(this.newField)
   }
 
   // By default, Stimulus listens to click events on buttons and will execute this method.
   remove (event) {
     event.preventDefault()
-    event.target.parentElement.remove()
+    event.target.parentElement.parentElement.remove()
   }
 
   // @return [HTMLElement] cloned field taken from the first input group.
   get newField () {
-    const clone = this.inputGroups.item(0).cloneNode(true)
-    Array.from(clone.getElementsByClassName('form-control')).forEach((input) => {
-      input.value = ''
-    })
+    const clone = this.firstInput.cloneNode(true)
     clone.appendChild(this.removeButton)
     return clone
   }
 
   // @return [HTMLElement]
-  addButton (label) {
-    const node = document.createElement('button')
+  addButton () {
+    const node = document.createElement('a')
+    node.setAttribute('href', '#')
     node.setAttribute('data-action', 'multiple-fields#add')
-    node.classList.add('btn', 'btn-outline-success', 'btn-sm')
-    const content = document.createTextNode('Add another ' + label)
-    node.appendChild(content)
+    node.classList.add('add')
+
+    const icon = this.materialIcon('add_circle_outline')
+    node.appendChild(icon)
+
     return node
   }
 
   // @return [HTMLElement]
   get removeButton () {
-    const node = document.createElement('button')
+    const node = document.createElement('a')
+    node.setAttribute('href', '#')
     node.setAttribute('data-action', 'multiple-fields#remove')
-    node.classList.add('btn', 'btn-outline-danger', 'btn-sm')
-    const content = document.createTextNode('Remove')
-    node.appendChild(content)
+    node.classList.add('remove')
+
+    const icon = this.materialIcon('highlight_off')
+    node.appendChild(icon)
+
     return node
+  }
+
+  // @return [HTMLElement]
+  materialIcon (text) {
+    const icon = document.createElement('i')
+    icon.classList.add('material-icons')
+    icon.appendChild(document.createTextNode(text))
+    return icon
   }
 
   // @return [HTMLCollection]
   get inputGroups () {
-    return this.element.getElementsByClassName('input-group')
+    return this.element.getElementsByClassName('js-multiple-field-group')
+  }
+
+  // @return [HTMLElement]
+  cloneFirstInput () {
+    const firstInput = this.inputGroups.item(0).cloneNode(true)
+    Array.from(firstInput.getElementsByClassName('form-control')).forEach((input) => {
+      input.value = ''
+    })
+    return firstInput
   }
 }

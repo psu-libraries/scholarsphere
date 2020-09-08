@@ -16,11 +16,13 @@ module Permissions
       OPEN
     end
 
+    def self.display(visibility)
+      I18n.t("activerecord.attributes.permissions.visibility.#{visibility}")
+    end
+
     def self.options_for_select_box
-      {
-        'Open Access' => OPEN,
-        'Penn State' => AUTHORIZED
-      }
+      [OPEN, AUTHORIZED]
+        .map { |vis| [display(vis), vis] }
     end
   end
 

@@ -4,13 +4,14 @@
 <%- has_hint = I18n.exists?(hint_i18n_key) %>
 
 <div class="form-group has-float-label mb-3">
-  <%= form.text_area attribute,
-                     class: 'form-control',
-                     rows: 8,
-                     cols: 40,
-                     placeholder: true,
-                     required: local_assigns[:required].presence,
-                     aria: { describedby: (has_hint && hint_id).presence } %>
+  <%= form.select attribute,
+                  options_for_select,
+                  { include_blank: false },
+                  {
+                    class: 'form-control custom-select',
+                    required: local_assigns[:required].presence,
+                    aria: { describedby: (has_hint && hint_id).presence }
+                  } %>
   <%= form.label attribute %>
   <% if has_hint %>
     <small id="<%= hint_id %>" class="form-text text-muted"><%= t hint_i18n_key %></small>

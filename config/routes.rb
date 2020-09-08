@@ -80,6 +80,23 @@ Rails.application.routes.draw do
       get 'history', to: 'work_histories#show'
     end
 
+    namespace :work_form, path: 'work-form' do # @todo change `path:` key once all of dashboard is converted
+      get   'new', to: 'details#new'
+      post  '/', to: 'details#create'
+
+      get   ':work_version_id/details', to: 'details#edit', as: 'details'
+      match ':work_version_id/details', to: 'details#update', via: %i[patch put], as: nil
+
+      get   ':work_version_id/contributors', to: 'contributors#edit', as: 'contributors'
+      match ':work_version_id/contributors', to: 'contributors#update', via: %i[patch put], as: nil
+
+      get   ':work_version_id/files', to: 'files#edit', as: 'files'
+      match ':work_version_id/files', to: 'files#update', via: %i[patch put], as: nil
+
+      get   ':work_version_id/publish', to: 'publish#edit', as: 'publish'
+      match ':work_version_id/publish', to: 'publish#update', via: %i[patch put], as: nil
+    end
+
     resources :collections
   end
 

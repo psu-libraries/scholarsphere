@@ -9,20 +9,19 @@ RSpec.describe 'Editing multiple fields' do
   let(:attributes_2) { attributes_for(:work_version, :with_complete_metadata) }
 
   def parent_div(field)
-    find("label[for='work_version_#{field}']").first(:xpath, './/..')
+    find_all("input#work_version_#{field}").first.ancestor('[data-controller="multiple-fields"]')
   end
 
   context 'when adding new fields for entry' do
-    def check_field(field, label: nil)
-      label ||= field.to_s.titleize
+    def check_field(field)
       within(parent_div(field)) do
-        expect(page).to have_selector('button', text: /Add another/)
-        expect(page).not_to have_selector('button', text: 'Remove')
-        expect(page).to have_selector('div', class: 'input-group', count: 1)
-        retry_click { click_button(label) }
-        expect(page).to have_selector('div', class: 'input-group', count: 2)
-        retry_click { click_button('Remove') }
-        expect(page).to have_selector('div', class: 'input-group', count: 1)
+        expect(page).to have_selector('a.add', text: /add_circle_outline/)
+        expect(page).not_to have_selector('a.remove', text: /highlight_off/)
+        expect(page).to have_selector('div', class: 'removable-input', count: 1)
+        retry_click { click_on 'add_circle_outline' }
+        expect(page).to have_selector('div', class: 'removable-input', count: 2)
+        retry_click { click_on('highlight_off') }
+        expect(page).to have_selector('div', class: 'removable-input', count: 1)
       end
     end
 
@@ -35,7 +34,7 @@ RSpec.describe 'Editing multiple fields' do
       check_field(:language)
       check_field(:identifier)
       check_field(:based_near)
-      check_field(:related_url, label: 'Related URL')
+      check_field(:related_url)
       check_field(:source)
     end
   end
@@ -44,7 +43,7 @@ RSpec.describe 'Editing multiple fields' do
     def fill_in_multiple(field)
       within(parent_div(field)) do
         fill_in("work_version[#{field}][]", with: attributes_1[field])
-        retry_click { find('button').click }
+        retry_click { click_on 'add_circle_outline' }
         expect(page.all('.form-control').last.value).to be_empty
         page.all('.form-control').last.set(attributes_2[field])
       end

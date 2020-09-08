@@ -176,6 +176,71 @@ RSpec.describe WorkVersion, type: :model do
     end
   end
 
+  describe '.build_with_empty_work' do
+    let(:depositor) { build :actor, surname: 'Expected Depositor' }
+
+    it 'builds a WorkVersion with an initialized work' do
+      wv = described_class.build_with_empty_work(depositor: depositor)
+      expect(wv.work).to be_present
+    end
+
+    it 'forces the version number to 1' do
+      wv = described_class.build_with_empty_work(depositor: depositor)
+      expect(wv.version_number).to eq 1
+
+      wv = described_class.build_with_empty_work({ version_number: 1000 }, depositor: depositor)
+      expect(wv.version_number).to eq 1
+    end
+
+    it 'defaults the visiblity to OPEN' do
+      wv = described_class.build_with_empty_work(depositor: depositor)
+      expect(wv.work.visibility).to eq Permissions::Visibility::OPEN
+    end
+
+    it 'forces the depositor to the one provided' do
+      depositor.save
+      wv = described_class.build_with_empty_work(depositor: depositor)
+      expect(wv.work.depositor).to eq depositor
+
+      # Try to provide our own depositor as an object
+      wv = described_class.build_with_empty_work({
+                                                   work_attributes: { depositor: create(:actor) }
+                                                 }, depositor: depositor)
+      expect(wv.work.depositor).to eq depositor
+
+      # Try to provide our own depositor as an id
+      wv = described_class.build_with_empty_work({
+                                                   work_attributes: { depositor_id: create(:actor).id }
+                                                 }, depositor: depositor)
+      expect(wv.work.depositor).to eq depositor
+    end
+
+    it 'initializes the Work with the Version that its just built' do
+      wv = described_class.build_with_empty_work({
+                                                   title: 'My work',
+                                                   work_attributes: {
+                                                     work_type: Work::Types.all.first
+                                                   }
+                                                 },
+                                                 depositor: depositor)
+
+      expect(wv.work.versions).to contain_exactly(wv)
+    end
+
+    it 'passes through attributes provided' do
+      wv = described_class.build_with_empty_work({
+                                                   title: 'my title',
+                                                   work_attributes: {
+                                                     work_type: Work::Types.all.first
+                                                   }
+                                                 },
+                                                 depositor: depositor)
+
+      expect(wv.title).to eq 'my title'
+      expect(wv.work.work_type).to eq Work::Types.all.first
+    end
+  end
+
   describe '#uuid' do
     subject(:work_version) { create(:work_version) }
 

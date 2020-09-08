@@ -42,6 +42,8 @@ class WorkVersion < ApplicationRecord
            through: :creator_aliases,
            inverse_of: :created_work_versions
 
+  accepts_nested_attributes_for :work
+
   accepts_nested_attributes_for :file_resources
 
   accepts_nested_attributes_for :creator_aliases,
@@ -144,6 +146,16 @@ class WorkVersion < ApplicationRecord
     define_method "#{field}=" do |val|
       super(val.presence)
     end
+  end
+
+  def self.build_with_empty_work(attributes = {}, depositor:)
+    work_version = new(attributes)
+    work_version.version_number = 1
+    work_version.build_work if work_version.work.blank?
+    work_version.work.depositor = depositor
+    work_version.work.versions = [work_version]
+    work_version.work.visibility = Permissions::Visibility::OPEN
+    work_version
   end
 
   def build_creator_alias(actor:)

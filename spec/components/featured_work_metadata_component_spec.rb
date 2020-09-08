@@ -10,12 +10,12 @@ RSpec.describe FeaturedWorkMetadataComponent, type: :component do
     let(:work_version) { build_stubbed :work_version, :with_complete_metadata, :with_creators }
 
     it 'renders creators' do
-      expect(result.css('dt.creator_aliases').text).to eq 'Creator'
+      expect(result.css('dt.creator_aliases').text).to eq WorkVersion.human_attribute_name(:creator_aliases)
       expect(result.css('dd.creator_aliases').text).to eq work_version.creator_aliases.first.alias
     end
 
     it 'renders keywords' do
-      expect(result.css('dt.keyword').text).to eq 'Keywords'
+      expect(result.css('dt.keyword').text).to eq WorkVersion.human_attribute_name(:keyword)
       expect(result.css('dd.keyword').text).to eq work_version.keyword.first
     end
   end

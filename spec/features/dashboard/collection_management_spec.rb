@@ -27,18 +27,18 @@ RSpec.describe 'Creating and managing a collection' do
     expect(page).not_to have_checked_field(other_work.latest_version.title)
     check user_work_1.latest_version.title
 
-    fill_in('Subtitle', with: metadata[:subtitle])
-    fill_in('Keywords', with: metadata[:keyword].first)
-    fill_in('Description', with: metadata[:description])
-    fill_in('Contributor', with: metadata[:contributor].first)
-    fill_in('Publisher', with: metadata[:publisher].first)
-    fill_in('Published Date', with: metadata[:published_date])
-    fill_in('Subject', with: metadata[:subject].first)
-    fill_in('Language', with: metadata[:language].first)
-    fill_in('Identifier', with: metadata[:identifier].first)
-    fill_in('Based Near', with: metadata[:based_near].first)
-    fill_in('Related URL', with: metadata[:related_url].first)
-    fill_in('Source', with: metadata[:source].first)
+    fill_in('collection_subtitle', with: metadata[:subtitle])
+    fill_in('collection_keyword', with: metadata[:keyword].first)
+    fill_in('collection_description', with: metadata[:description])
+    fill_in('collection_contributor', with: metadata[:contributor].first)
+    fill_in('collection_publisher', with: metadata[:publisher].first)
+    fill_in('collection_published_date', with: metadata[:published_date])
+    fill_in('collection_subject', with: metadata[:subject].first)
+    fill_in('collection_language', with: metadata[:language].first)
+    fill_in('collection_identifier', with: metadata[:identifier].first)
+    fill_in('collection_based_near', with: metadata[:based_near].first)
+    fill_in('collection_related_url', with: metadata[:related_url].first)
+    fill_in('collection_source', with: metadata[:source].first)
 
     # Ensure one creator is pre-filled with the User's Actor
     within('#creator_aliases') do

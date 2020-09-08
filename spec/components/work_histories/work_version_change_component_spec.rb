@@ -61,7 +61,8 @@ RSpec.describe WorkHistories::WorkVersionChangeComponent, type: :component do
       # it: renders the updated state with a diff
       #
       expect(result.css('.version-timeline__change-action').text).to include 'Updated'
-      expect(result.css('.version-timeline__change-changed-attributes').text).to eq 'Title'
+      expect(result.css('.version-timeline__change-changed-attributes').text)
+        .to eq WorkVersion.human_attribute_name(:title)
       expect(result.css('.version-timeline__diff').text).to include('old').and include('new')
 
       ##########################################################################

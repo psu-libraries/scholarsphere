@@ -20,7 +20,7 @@
       <%= render WorkVersions::VersionStatusBadgeComponent.new(work_version: index_work_version) if index_work_version.aasm_state.present? %>
 
       <% if policy(index_work_version).edit? %>
-        <%= link_to edit_dashboard_work_version_path(index_work_version), class: 'btn btn-primary btn--icon' do %>
+        <%= link_to dashboard_work_form_details_path(index_work_version), class: 'btn btn-primary btn--icon' do %>
           <i class="material-icons">edit</i>
         <% end %>
       <% end %>
