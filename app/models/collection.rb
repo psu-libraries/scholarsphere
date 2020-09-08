@@ -131,6 +131,10 @@ class Collection < ApplicationRecord
     CollectionIndexer.call(self, commit: true)
   end
 
+  def work_type
+    'collection'
+  end
+
   private
 
     def set_defaults
@@ -147,7 +151,8 @@ class Collection < ApplicationRecord
         CreatorSchema,
         PermissionsSchema,
         PublishedDateSchema,
-        FacetSchema
+        FacetSchema,
+        WorkTypeSchema
       )
     end
 end

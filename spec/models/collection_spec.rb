@@ -197,6 +197,7 @@ RSpec.describe Collection, type: :model do
         description_tesim
         discover_groups_ssim
         discover_users_ssim
+        display_work_type_ssi
         doi_tesim
         id
         identifier_tesim
@@ -216,6 +217,7 @@ RSpec.describe Collection, type: :model do
         updated_at_dtsi
         uuid_ssi
         visibility_ssi
+        work_type_ss
       )
     end
 
