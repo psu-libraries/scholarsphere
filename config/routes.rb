@@ -109,6 +109,10 @@ Rails.application.routes.draw do
     end
   end
 
+  get '/404', to: 'errors#not_found'
+  get '/401', to: 'errors#not_found'
+  get '/500', to: 'errors#server_error'
+
   # Legacy URL support
   # Note that collections and works go to the same place. This works because the
   # legacy IDs are unique noids. It could lead to an extraordinarily unlikely

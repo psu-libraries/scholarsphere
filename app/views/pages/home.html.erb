@@ -9,28 +9,8 @@
       <div class="surface"><%= t('home.intro.content') %></div>
     </div>
 
-    <div class="col-md">
-      <h2 class="h4 mb-2"><%= t('home.search.heading') %></h2>
-      <div class="surface search">
-        <%= form_tag search_action_url, method: :get do %>
-          <div class="input-group input-group--icon mb-2">
-            <label class="sr-only" for="q"><%= t('home.search.label') %></label>
-            <%= text_field_tag :q, params[:q], placeholder: t('home.search.placeholder'), class: 'form-control' %>
-            <div class="input-group-append">
-              <button class="btn btn-primary" type="submit">
-                <i class="material-icons"><%= t('home.search.submit') %></i>
-              </button>
-            </div>
-          </div>
-        <% end %>
-        <div class="keyline keyline--center">
-          <p><%= t('home.search.subheading') %></p>
-        </div>
-        <div class="mt-2 text-center">
-          <%= link_to t('home.search.browse'), search_catalog_path, class: 'btn btn-primary' %>
-        </div>
-      </div>
-    </div>
+    <%= render 'shared/search_or_browse' %>
+
   </div>
 </div>
 
