@@ -23,6 +23,7 @@ en:
         based_near: Based Near
         related_url: Related URL
         source: Source
+        display_doi: DOI
       permissions:
         visibility:
           open: Public
@@ -50,6 +51,7 @@ en:
         related_url: Related URL
         source: Source
         display_work_type: Work Type
+        display_doi: DOI
     errors:
       models:
         file_version_membership:
@@ -281,3 +283,7 @@ en:
     work_history_diff_content: 'TODO: coming soon'
     work_history_summary: Summary
     works: Works
+    doi:
+      valid: 'This is a valid DOI and can be used to reference this page'
+      invalid: 'This DOI has formatting errors. Please contact us to have it fixed'
+      unmanaged: 'This is a valid DOI, but we cannot manage nor update it. Please contact us if to have it fixed'

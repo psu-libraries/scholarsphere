@@ -30,4 +30,16 @@ module FactoryBotHelpers
   def self.noid
     [*('a'..'z'), *('0'..'9')].shuffle[0, 10].join
   end
+
+  def self.valid_doi
+    "doi:#{Doi::MANAGED_PREFIXES.sample}/#{Faker::Alphanumeric.alphanumeric(number: 8).insert(4, '-')}"
+  end
+
+  def self.invalid_doi
+    "doi:#{Faker::Alphanumeric.alphanumeric(number: 8).insert(4, '-')}"
+  end
+
+  def self.unmanaged_doi
+    "doi:10.#{Faker::Number.number(digits: 5)}/#{Faker::Alphanumeric.alphanumeric(number: 8).insert(4, '-')}"
+  end
 end
