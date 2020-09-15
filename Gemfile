@@ -6,6 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.7.1'
 
 gem 'aasm'
+gem 'after_commit_everywhere', '~> 0.1', '>= 0.1.5'
 gem 'blacklight', '~> 7.10'
 gem 'bootsnap', '>= 1.4.2', require: false
 gem 'browser'
