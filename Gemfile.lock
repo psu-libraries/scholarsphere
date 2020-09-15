@@ -538,6 +538,7 @@ DEPENDENCIES
   rubocop-performance (= 1.5.2)
   rubocop-rails (= 2.5.2)
   rubocop-rspec (= 1.39.0)
+  rubyzip (~> 2.3.0)
   scholarsphere-client!
   seedbank
   selenium-webdriver
