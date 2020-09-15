@@ -11,7 +11,7 @@ RSpec.describe 'Profile', type: :feature, with_user: :user do
     visit edit_dashboard_profile_path
     expect(page).to have_content('Edit Profile')
     fill_in 'Display Name', with: updated_display_name
-    fill_in 'Given name', with: updated_user.given_name
+    fill_in 'Given Name', with: updated_user.given_name
     fill_in 'Surname', with: updated_user.surname
     fill_in 'Email', with: updated_user.email
     fill_in 'ORCiD', with: updated_user.orcid

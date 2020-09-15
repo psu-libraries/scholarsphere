@@ -51,6 +51,7 @@ linters:
   MergeableSelector:
     exclude:
       - app/javascript/frontend/styles/_common.scss
+      - app/javascript/frontend/styles/_autocomplete.scss
   VendorPrefix:
     exclude:
       - app/javascript/frontend/styles/_common.scss

@@ -10,8 +10,12 @@ module Qa
       def search(term)
         @term = term
 
-        persons.map do |person|
+        persons.map.with_index do |person, index|
           formatted_response(person)
+            .merge(
+              result_number: index + 1,
+              total_results: persons.count
+            )
         end
       end
 

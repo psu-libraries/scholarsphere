@@ -3,9 +3,10 @@ en:
   activerecord:
     attributes:
       actor:
-        psu_id: PSU ID
+        psu_id: Access Account
         default_alias: Display Name
         orcid: ORCiD
+        given_name: Given Name
       collection_creation:
         alias: Display Name
       collection:
@@ -117,6 +118,14 @@ en:
         published_date: yyyy-mm-dd
 
   dashboard:
+    actors:
+      new:
+        error_message: "%{error} prohibited this person from being saved:"
+        required_metadata: 'Required Metadata'
+        additional_metadata: 'Additional Metadata'
+        actions:
+          save: 'Save'
+
     collections:
       index:
         heading: "Your Collections"
@@ -188,6 +197,26 @@ en:
         required_metadata: Required Metadata
         required_to_publish_metadata: Needed to Publish
         additional_metadata: Additional Metadata
+      contributors:
+        edit:
+          badge: Creator
+          empty_result: No results found. Choose this option to create a new creator.
+          fields_heading: Creators
+          last_option: Not finding what you're looking for? Choose this option to create your own...
+          new: Create New Contributor
+          no_results: No results
+          placeholder: "Search for an existing creator"
+          reader_hint: >
+            When autocomplete results are available use up and down arrows to review and enter to select.
+            Touch device users, explore by touch or with swipe gestures.
+          remove: "Remove creator %{name}"
+          search: "You can search for creators by Access Account ID (abc123 or abc1234) or by name"
+          search_heading: Add another creator
+          search_label: Search creators
+          search_results: Search Results
+        new:
+          heading: New Creator
+          cancel: Cancel
       publish:
         edit:
           error_message: "There are %{error} that need to be fixed before this work can be published"
@@ -282,6 +311,9 @@ en:
       monthly_stats:
         subject: "ScholarSphere - Reporting Monthly Downloads and Views"
         heading: "Latest Report for the Month of %{date}"
+  modal:
+    close:
+      icon: "\u00D7"
   navbar:
     guest_name: 'Guest'
     heading:

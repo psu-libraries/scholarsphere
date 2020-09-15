@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require 'support/vcr'
 
 RSpec.describe 'Publishing a work', with_user: :user do
   let(:user) { create(:user) }
@@ -123,7 +124,136 @@ RSpec.describe 'Publishing a work', with_user: :user do
   end
 
   describe 'The Contributors tab', js: true do
-    pending
+    let(:work_version) { create :work_version, :draft }
+    let(:user) { work_version.work.depositor.user }
+    let(:actor) { work_version.work.depositor }
+
+    context 'with an initial draft version' do
+      it 'includes the current user as a creator' do
+        visit dashboard_work_form_contributors_path(work_version)
+
+        expect(work_version.creators).to be_empty
+
+        within('#creator_aliases') do
+          expect(page).to have_content('CREATOR 1')
+          expect(find_field('Display Name').value).to eq("#{actor.given_name} #{actor.surname}")
+          expect(page).to have_content('Given Name')
+          expect(page).to have_content('Surname')
+          expect(page).to have_content('Email')
+          expect(page).to have_content('Access Account')
+          expect(page).to have_content(actor.email)
+          expect(page).to have_content(actor.given_name)
+          expect(page).to have_content(actor.surname)
+          expect(page).to have_content(actor.psu_id)
+        end
+
+        FeatureHelpers::WorkForm.save_and_continue
+
+        expect(work_version.creators).to contain_exactly(actor)
+
+        expect(page).to have_current_path(dashboard_work_form_files_path(work_version))
+      end
+    end
+
+    context 'when adding additional users from Penn State' do
+      it 'inserts the creator into the form' do
+        visit dashboard_work_form_contributors_path(work_version)
+
+        expect(work_version.creators).to be_empty
+        within('#creator_aliases') do
+          expect(page).to have_content('CREATOR 1')
+          expect(page).to have_field('Display Name', count: 1)
+        end
+
+        FeatureHelpers::WorkForm.search_creators('wead')
+
+        within('.algolia-autocomplete') do
+          expect(page).to have_content('Adam Wead')
+          expect(page).to have_content('Amy Weader')
+          expect(page).to have_content('Nathan Andrew Weader')
+        end
+
+        find_all('.aa-suggestion').first.click
+
+        within('#creator_aliases') do
+          expect(page).to have_content('CREATOR 1')
+          expect(page).to have_content('CREATOR 2')
+          expect(page).to have_field('Display Name', count: 2)
+        end
+
+        FeatureHelpers::WorkForm.save_and_continue
+
+        expect(work_version.creators.map(&:surname)).to include('Wead')
+        expect(page).to have_current_path(dashboard_work_form_files_path(work_version))
+      end
+    end
+
+    context 'when the creaor is not found' do
+      let(:metadata) { attributes_for(:actor) }
+
+      it 'creates a new one and enters it into the form' do
+        visit dashboard_work_form_contributors_path(work_version)
+
+        expect(work_version.creators).to be_empty
+        within('#creator_aliases') do
+          expect(page).to have_content('CREATOR 1')
+          expect(page).to have_field('Display Name', count: 1)
+        end
+
+        FeatureHelpers::WorkForm.search_creators('nobody')
+
+        within('.algolia-autocomplete') do
+          expect(page).to have_content('No results')
+        end
+
+        expect(page).not_to have_selector('.modal-body')
+        find_all('.aa-suggestion').first.click
+        expect(page).to have_selector('.modal-body')
+
+        within('.modal-content') do
+          fill_in('Surname', with: metadata[:surname])
+          fill_in('Given Name', with: metadata[:given_name])
+          fill_in('Email', with: metadata[:email])
+          click_button('Save')
+        end
+
+        within('#creator_aliases') do
+          expect(page).to have_content('CREATOR 1')
+          expect(page).to have_content('CREATOR 2')
+          expect(page).to have_field('Display Name', count: 2)
+        end
+        FeatureHelpers::WorkForm.save_and_continue
+
+        expect(work_version.creators.map(&:surname)).to include(metadata[:surname])
+        expect(page).to have_current_path(dashboard_work_form_files_path(work_version))
+      end
+    end
+
+    context 'when removing creators from an existing draft' do
+      let(:work_version) { create :work_version, :draft, :with_creators, creator_count: 2 }
+      let(:creators) { work_version.creators }
+
+      it 'removes the creator from the work' do
+        visit dashboard_work_form_contributors_path(work_version)
+
+        expect(work_version.creators.map(&:surname)).to eq(creators.map(&:surname))
+        within('#creator_aliases') do
+          expect(page).to have_content('CREATOR 1')
+          expect(page).to have_content('CREATOR 2')
+          expect(page).to have_field('Display Name', count: 2)
+        end
+        page.find_all('.remove_fields').first.click
+        within('#creator_aliases') do
+          expect(page).to have_content('CREATOR 1')
+          expect(page).not_to have_content('CREATOR 2')
+          expect(page).to have_field('Display Name', count: 1)
+        end
+        FeatureHelpers::WorkForm.save_and_continue
+
+        expect(work_version.reload.creators.map(&:surname)).to contain_exactly(creators.last.surname)
+        expect(page).to have_current_path(dashboard_work_form_files_path(work_version))
+      end
+    end
   end
 
   describe 'The Files tab', js: true do
@@ -175,11 +305,15 @@ RSpec.describe 'Publishing a work', with_user: :user do
       # Ensure one creator is pre-filled with the User's Actor
       within('#creator_aliases') do
         actor = user.reload.actor
-        expect(find_field('Display Name').value).to eq actor.default_alias
-        expect(find_field('Email').value).to eq actor.email
-        expect(find_field('Given name').value).to eq actor.given_name
-        expect(find_field('Surname').value).to eq actor.surname
-        expect(find_field('PSU ID').value).to eq actor.psu_id
+        expect(find_field('Display Name').value).to eq("#{actor.given_name} #{actor.surname}")
+        expect(page).to have_content('Given Name')
+        expect(page).to have_content('Surname')
+        expect(page).to have_content('Email')
+        expect(page).to have_content('Access Account')
+        expect(page).to have_content(actor.email)
+        expect(page).to have_content(actor.given_name)
+        expect(page).to have_content(actor.surname)
+        expect(page).to have_content(actor.psu_id)
       end
       FeatureHelpers::WorkForm.fill_in_contributors(metadata)
       FeatureHelpers::WorkForm.save_and_continue

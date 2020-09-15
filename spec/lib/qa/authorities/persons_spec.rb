@@ -23,7 +23,9 @@ RSpec.describe Qa::Authorities::Persons, type: :authority do
           default_alias: creator.default_alias,
           email: creator.email,
           orcid: creator.orcid,
-          source: 'scholarsphere'
+          source: 'scholarsphere',
+          result_number: 1,
+          total_results: 1
         }
       end
 
@@ -66,7 +68,9 @@ RSpec.describe Qa::Authorities::Persons, type: :authority do
           default_alias: person.display_name,
           email: person.university_email,
           orcid: '',
-          source: 'penn state'
+          source: 'penn state',
+          result_number: 1,
+          total_results: 1
         }
       end
 

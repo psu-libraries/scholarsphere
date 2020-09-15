@@ -45,9 +45,9 @@ RSpec.describe 'Creating and managing a collection' do
       actor = user.reload.actor
       expect(find_field('Display Name').value).to eq actor.default_alias
       expect(find_field('Email').value).to eq actor.email
-      expect(find_field('Given name').value).to eq actor.given_name
+      expect(find_field('Given Name').value).to eq actor.given_name
       expect(find_field('Surname').value).to eq actor.surname
-      expect(find_field('PSU ID').value).to eq actor.psu_id
+      expect(find_field('Access Account').value).to eq actor.psu_id
     end
 
     # Rename "my" creator
@@ -61,7 +61,7 @@ RSpec.describe 'Creating and managing a collection' do
     within('#creator_aliases .nested-fields:nth-of-type(2)') do
       fill_in('Display Name', with: 'Dr. Second Creator, PhD.')
       fill_in('Email', with: '2nd.creator@example.com')
-      fill_in('Given name', with: 'Second')
+      fill_in('Given Name', with: 'Second')
       fill_in('Surname', with: 'Creator')
     end
 

@@ -70,5 +70,12 @@ module FeatureHelpers
       Capybara.current_session.current_window.resize_to(1000, 1000)
     rescue Capybara::NotSupportedByDriverError
     end
+
+    # @note In theory, #assert_selector should be AJAX-aware
+    def self.search_creators(query)
+      fill_in('search-creators', with: query)
+
+      page.assert_selector('.aa-dataset-1')
+    end
   end
 end
