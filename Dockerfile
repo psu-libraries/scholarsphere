@@ -31,9 +31,15 @@ CMD ["/app/bin/startup"]
 # Final Target
 FROM base as production
 
+# Clean up Bundle
+RUN bundle install --without development test && \
+  bundle clean && \
+  rm -rf /app/.bundle/cache && \
+  rm -rf /app/vendor/bundle/ruby/*/cache
+
 RUN RAILS_ENV=production \
   DEFAULT_URL_HOST=localhost \
-  SECRET_KEY_BASE=$(bundle exec rails secret) \
+  SECRET_KEY_BASE=rails_bogus_key \
   AWS_BUCKET=bucket \
   AWS_ACCESS_KEY_ID=key \
   AWS_SECRET_ACCESS_KEY=secret \
