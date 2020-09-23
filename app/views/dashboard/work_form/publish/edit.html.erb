@@ -9,9 +9,10 @@
 
           <%= form_with(model: @work_version, url: dashboard_work_form_publish_path(@work_version), local: true, id: 'file-uploader') do |form| %>
 
-            <%= render 'dashboard/work_form/shared/form_error_message',
-                       form: form,
-                       heading: t('.error_message', error: pluralize(form.object.errors.count, 'issue')) %>
+            <%= render FormErrorMessageComponent.new(
+                  form: form,
+                  heading: t('.error_message', error: pluralize(form.object.errors.count, 'issue'))
+                ) %>
 
             <%= render 'dashboard/work_form/details/fields', form: form %>
 

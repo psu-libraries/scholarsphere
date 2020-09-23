@@ -173,6 +173,7 @@ en:
       heading:
         new: Add New Work
         edit: Edit Draft Work
+        error_message: "%{error} prohibited this work from being saved:"
       tabs:
         details: Work Details
         contributors: Contributors

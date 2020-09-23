@@ -8,9 +8,7 @@
         <div class="tab-pane active show">
 
           <%= form_with(model: @work_version, url: dashboard_work_form_contributors_path(@work_version), local: true) do |form| %>
-            <%= render 'dashboard/work_form/shared/form_error_message',
-                       form: form,
-                       heading: t('dashboard.work_versions.edit.error_message', error: pluralize(form.object.errors.count, 'error')) %>
+            <%= render FormErrorMessageComponent.new(form: form) %>
 
             <%= render 'fields', form: form %>
 

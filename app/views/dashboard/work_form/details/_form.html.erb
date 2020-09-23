@@ -1,8 +1,6 @@
 <%= form_with(model: @work_version, url: url, local: true) do |form| %>
 
-  <%= render 'dashboard/work_form/shared/form_error_message',
-             form: form,
-             heading: t('dashboard.work_versions.edit.error_message', error: pluralize(work_version.errors.count, 'error')) %>
+  <%= render FormErrorMessageComponent.new(form: form) %>
 
   <%= render 'fields', form: form %>
 
