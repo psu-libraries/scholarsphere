@@ -12,6 +12,11 @@
                      required: local_assigns[:required].presence,
                      aria: { describedby: (has_hint && hint_id).presence } %>
   <%= form.label attribute %>
+
+  <% if form.object.errors.include?(attribute) %>
+    <small class="form-text feedback-invalid"><%= form.object.errors[attribute].join('; ') %></small>
+  <% end %>
+
   <% if has_hint %>
     <small id="<%= hint_id %>" class="form-text text-muted"><%= t hint_i18n_key %></small>
   <% end %>

@@ -38,7 +38,7 @@ en:
         keyword: Keyword
         rights: Rights
         description: Description
-        creator_aliases: Creator
+        creator_aliases: Creators
         resource_type: Resource Type
         contributor: Contributor
         publisher: Publisher
@@ -52,12 +52,19 @@ en:
         source: Source
         display_work_type: Work Type
         display_doi: DOI
+        file_resources: Files
     errors:
       models:
         file_version_membership:
           attributes:
             title:
               different_extension: does not have the same filename extension as %{original}
+        work_version:
+          attributes:
+            description:
+              blank: is required to publish the work
+            published_date:
+              blank: is required to publish the work
   api:
     errors:
       not_authorized: "401: Request not authorized. Please provide a valid API key for access."
@@ -304,6 +311,6 @@ en:
       heading: 'Browse and search for works'
       placeholder: 'Search for titles, keywords, resource types, creators, etc.'
       label: 'Search ScholarSphere'
-      submit: 'search' 
+      submit: 'search'
       subheading: Or
       browse: 'Browse & Filter All Works'
