@@ -1,0 +1,21 @@
+.field_with_errors {
+  input,
+  textarea {
+    background-color: $light-red;
+    border-color: $dark-red;
+
+    &:focus {
+      background-color: $light-red;
+      border-color: $dark-red;
+    }
+  }
+
+  label,
+  .label {
+    color: $dark-red;
+  }
+}
+
+.form-text.feedback-invalid {
+  color: $dark-red;
+}

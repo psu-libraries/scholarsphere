@@ -111,7 +111,7 @@ RSpec.describe Api::V1::IngestController, type: :controller do
         expect(response.body).to eq(
           '{' \
             '"message":"Work was created but cannot be published",' \
-            "\"errors\":[\"File resources can't be blank\"]" \
+            "\"errors\":[\"#{i18n_error_message(:file_resources, :blank)}\"]" \
           '}'
         )
       end
@@ -131,7 +131,7 @@ RSpec.describe Api::V1::IngestController, type: :controller do
         expect(response.body).to eq(
           '{' \
             '"message":"Work was created but cannot be published",' \
-            "\"errors\":[\"Creator can't be blank\"]" \
+            "\"errors\":[\"#{i18n_error_message(:creator_aliases, :blank)}\"]" \
           '}'
         )
       end
@@ -155,5 +155,13 @@ RSpec.describe Api::V1::IngestController, type: :controller do
         )
       end
     end
+  end
+
+  def i18n_error_message(attr, validation)
+    wv = WorkVersion.new
+    wv.errors.full_message(
+      attr,
+      wv.errors.generate_message(attr, validation)
+    )
   end
 end

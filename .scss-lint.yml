@@ -20,6 +20,8 @@ severity: warning
 linters:
   SelectorFormat:
     convention: hyphenated_BEM
+    exclude:
+      - app/javascript/frontend/styles/_form_errors.scss
   SelectorDepth:
     exclude:
       - app/javascript/frontend/styles/_common.scss

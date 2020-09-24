@@ -8,17 +8,7 @@
         <div class="tab-pane active show">
 
           <%= form_with(model: @work_version, url: dashboard_work_form_contributors_path(@work_version), local: true) do |form| %>
-            <% if form.object.errors.any? %>
-              <div id="error_explanation">
-                <h2><%= t('dashboard.work_versions.edit.error_message', error: pluralize(form.object.errors.count, 'error')) %></h2>
-
-                <ul>
-                <% form.object.errors.full_messages.each do |message| %>
-                  <li><%= message %></li>
-                <% end %>
-                </ul>
-              </div>
-            <% end %>
+            <%= render FormErrorMessageComponent.new(form: form) %>
 
             <%= render 'fields', form: form %>
 
