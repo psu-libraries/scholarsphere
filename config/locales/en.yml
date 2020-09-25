@@ -194,6 +194,7 @@ en:
           contributors: Contributors
           files: Files
           publishing_details: Publishing Details
+      unsaved_changes_prompt: You have unsaved changes on this page. Are you sure you want to leave and discard these changes?
     work_versions:
       files:
         name: Name

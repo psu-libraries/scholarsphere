@@ -100,6 +100,26 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).to have_current_path(dashboard_work_form_contributors_path(work_version))
       end
     end
+
+    context 'when navigating away from unsaved changes', js: true do
+      it 'warns the user' do
+        visit dashboard_work_form_details_path(work_version)
+
+        fill_in 'work_version_title', with: "Changed #{metadata[:title]}"
+
+        dismiss_confirm(I18n.t('dashboard.work_form.unsaved_changes_prompt')) do
+          click_on I18n.t('dashboard.work_form.tabs.contributors')
+        end
+
+        expect(page).to have_current_path(dashboard_work_form_details_path(work_version))
+
+        accept_confirm(I18n.t('dashboard.work_form.unsaved_changes_prompt')) do
+          click_on I18n.t('dashboard.work_form.tabs.contributors')
+        end
+
+        expect(page).to have_current_path(dashboard_work_form_contributors_path(work_version))
+      end
+    end
   end
 
   describe 'The Contributors tab', js: true do
