@@ -1,4 +1,4 @@
-<%= form_with(model: @work_version, url: url, local: true) do |form| %>
+<%= form_with(model: @work_version, url: url, local: true, data: { target: 'unsaved-changes.form' }) do |form| %>
 
   <%= render FormErrorMessageComponent.new(form: form) %>
 
