@@ -8,7 +8,7 @@
       <th><%= t('dashboard.file_list.edit.actions') %></th>
     </tr>
   </thead>
-  <tbody>
+  <tbody class="work-files__file">
     <% file_version_memberships.each do |membership| %>
       <tr id="<%= dom_id membership %>" data-controller="filename-editor">
         <td>

@@ -22,6 +22,7 @@ linters:
     convention: hyphenated_BEM
     exclude:
       - app/javascript/frontend/styles/_form_errors.scss
+      - app/javascript/frontend/styles/_uppy.scss
   SelectorDepth:
     exclude:
       - app/javascript/frontend/styles/_common.scss
@@ -37,7 +38,7 @@ linters:
       - app/javascript/scholarsphere/styles/_progress_indicator.scss
       - app/javascript/frontend/styles/_common.scss
   PropertySortOrder:
-    exclude: 
+    exclude:
       - app/javascript/frontend/styles/_common.scss
       - app/javascript/frontend/styles/_mdc-theme.scss
   QualifyingElement:
@@ -46,12 +47,10 @@ linters:
   PlaceholderInExtend:
     exclude:
       - app/javascript/frontend/styles/_common.scss
+      - app/javascript/frontend/styles/_uppy.scss
   MergeableSelector:
     exclude:
       - app/javascript/frontend/styles/_common.scss
   VendorPrefix:
     exclude:
       - app/javascript/frontend/styles/_common.scss
-
-    
-
