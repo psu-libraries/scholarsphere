@@ -52,15 +52,23 @@ module FeatureHelpers
     end
 
     def self.save_as_draft_and_exit
+      fix_sticky_footer
       click_on I18n.t('dashboard.work_form.actions.save_and_exit')
     end
 
     def self.save_and_continue
+      fix_sticky_footer
       click_on I18n.t('dashboard.work_form.actions.save_and_continue')
     end
 
     def self.publish
+      fix_sticky_footer
       click_on I18n.t('dashboard.work_form.actions.publish')
+    end
+
+    def self.fix_sticky_footer
+      Capybara.current_session.current_window.resize_to(1000, 1000)
+    rescue Capybara::NotSupportedByDriverError
     end
   end
 end
