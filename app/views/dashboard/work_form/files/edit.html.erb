@@ -10,10 +10,6 @@
           <%= form_with(model: @work_version, url: dashboard_work_form_files_path(@work_version), local: true, id: 'file-uploader', data: { target: 'unsaved-changes.form' }) do |form| %>
             <%= render 'fields', form: form %>
 
-            <% if form.object.file_version_memberships.any? %>
-              <%= render 'uploaded_file_list', file_version_memberships: form.object.file_version_memberships %>
-            <% end %>
-
             <%= render 'dashboard/work_form/shared/action_footer', form: form, publish: false %>
           <% end %>
 

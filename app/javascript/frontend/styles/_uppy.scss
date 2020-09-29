@@ -1,0 +1,19 @@
+//
+// Overrides for default Uppy styling
+//
+.uppy-Dashboard-inner {
+  background-color: transparent;
+  border: 5px dashed $gray-300;
+}
+
+.uppy-Dashboard-AddFiles,
+[data-uppy-drag-drop-supported="true"] .uppy-Dashboard-AddFiles {
+  border: 0;
+}
+
+.uppy-Dashboard-browse {
+  // using @extend is kind of an antipattern, but I can't figure out a cleaner way to do it in this instance.
+  @extend .btn;
+  @extend .btn--rounded;
+  @include button-outline-variant($primary);
+}

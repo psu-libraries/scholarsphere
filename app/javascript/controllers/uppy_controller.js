@@ -31,7 +31,8 @@ export default class extends Controller {
         id: 'dashboard',
         target: this.element,
         inline: 'true',
-        showProgressDetails: true
+        showProgressDetails: true,
+        height: 350
       }).use(AwsS3Multipart, {
         companionUrl: '/'
       })
