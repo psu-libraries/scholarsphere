@@ -16,6 +16,23 @@ module FeatureHelpers
     raise e
   end
 
+  def console_errors
+    errors = page.driver.browser.manage.logs.get(:browser)
+    if errors.present?
+      message = errors.map(&:message).join("\n")
+      puts 'JS Errors:'
+      puts message
+    else
+      puts 'JS Errors: none'
+    end
+  end
+
+  def print_html(selector)
+    puts "HTML for #{selector}:"
+    puts page.find(selector)['innerHTML']
+    puts ''
+  end
+
   private
 
     def mock_auth_hash(user)

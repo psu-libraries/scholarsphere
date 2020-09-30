@@ -7,7 +7,7 @@ module Dashboard
         @work_version = policy_scope(WorkVersion).find(params[:work_version_id])
         authorize(@work_version)
 
-        @work_version.build_creator_alias(actor: current_user.actor)
+        @work_version.build_creator_alias(actor: current_user.actor) if @work_version.creators.empty?
       end
 
       def update

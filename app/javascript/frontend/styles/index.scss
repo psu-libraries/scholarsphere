@@ -33,8 +33,9 @@
 //@import '~blacklight-frontend/app/assets/stylesheets/blacklight/constraints';
 
 // Import our stuff
+@import 'autocomplete';
 @import 'common';
-@import 'view-statistics-chart';
 @import 'diff';
 @import 'form_errors';
 @import 'uppy';
+@import 'view-statistics-chart';

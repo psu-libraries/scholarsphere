@@ -23,6 +23,8 @@ linters:
       - '*app/views/layouts/component_preview.html.erb'
       - '*app/views/actor_mailer/*'
       - '*app/views/catalog/facet.html.erb'
+      - '*app/views/dashboard/work_form/contributors/_search.html.erb'
+      - '*app/views/dashboard/work_form/contributors/_creator_alias_fields.html.erb'
   RightTrim:
     enabled: true
     enforced_style: '-'

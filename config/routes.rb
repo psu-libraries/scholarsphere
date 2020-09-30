@@ -95,9 +95,12 @@ Rails.application.routes.draw do
 
       get   ':work_version_id/publish', to: 'publish#edit', as: 'publish'
       match ':work_version_id/publish', to: 'publish#update', via: %i[patch put], as: nil
+
+      post 'aliases/new', to: 'aliases#new'
     end
 
     resources :collections
+    resources :actors, only: [:new, :create]
   end
 
   namespace :api do

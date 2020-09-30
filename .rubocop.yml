@@ -58,6 +58,7 @@ RSpec/LeakyConstantDeclaration:
 RSpec/ExpectActual:
   Exclude:
     - 'spec/integration/qa/routing_spec.rb'
+    - 'spec/routes/dashboard/actors_routing_spec.rb'
 
 RSpec/AnyInstance:
   Enabled: false

@@ -1,0 +1,29 @@
+.algolia-autocomplete {
+  width: 100%;
+
+  .aa-hint {
+    color: $primary;
+  }
+
+  .aa-dropdown-menu {
+    background-color: $white;
+    border: 1px solid $gray-800;
+    border-top: 0;
+    width: 100%;
+
+    .aa-suggestion {
+      cursor: pointer;
+      padding: 5px 4px;
+    }
+
+    .aa-suggestion.aa-cursor {
+      background-color: $gray-300;
+    }
+  }
+}
+
+.algolia-autocomplete .aa-input,
+.algolia-autocomplete .aa-hint {
+  width: 100%;
+}
+
