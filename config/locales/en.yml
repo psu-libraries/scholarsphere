@@ -86,6 +86,7 @@ en:
   errors:
     messages:
       invalid_edtf: is not a valid date in EDTF format
+      invalid_orcid: is not a valid ORCiD id
     not_found:
       heading: Resource not found or unavailable
       content: >
@@ -112,6 +113,8 @@ en:
         subject: This is a hint for the subject
       work:
         work_type: This is a hint for the work type
+      actor:
+        orcid: "This is a 16-digit identifier in the format ####-####-####-####"
     placeholder:
       work_version:
         version_name: x.y.z

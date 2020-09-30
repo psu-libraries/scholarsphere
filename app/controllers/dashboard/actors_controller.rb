@@ -15,10 +15,10 @@ module Dashboard
       @actor = Actor.new(actor_params)
       authorize(@actor)
 
-      if @actor.save
+      if @actor.save(context: :from_user)
         render json: { actor_id: @actor.id }
       else
-        render :new
+        render :new, status: :unprocessable_entity, layout: false
       end
     end
 
@@ -31,7 +31,7 @@ module Dashboard
             :surname,
             :given_name,
             :email,
-            :psu_id
+            :orcid
           )
       end
 

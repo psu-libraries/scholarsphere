@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_20_194017) do
+ActiveRecord::Schema.define(version: 2020_09_30_174811) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,7 +38,8 @@ ActiveRecord::Schema.define(version: 2020_08_20_194017) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "default_alias"
-    t.index ["psu_id"], name: "index_actors_on_psu_id"
+    t.index ["orcid"], name: "index_actors_on_orcid", unique: true
+    t.index ["psu_id"], name: "index_actors_on_psu_id", unique: true
   end
 
   create_table "api_tokens", force: :cascade do |t|

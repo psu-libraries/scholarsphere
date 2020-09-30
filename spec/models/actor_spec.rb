@@ -34,11 +34,25 @@ RSpec.describe Actor, type: :model do
     context 'when given no validation context' do
       it { is_expected.to validate_presence_of(:surname) }
       it { is_expected.not_to validate_presence_of(:psu_id) }
+      it { is_expected.to validate_uniqueness_of(:psu_id).case_insensitive }
+      it { is_expected.not_to validate_presence_of(:orcid) }
+      it { is_expected.to validate_uniqueness_of(:orcid).case_insensitive }
     end
 
     context 'when given the from_omniauth context' do
       it { is_expected.not_to validate_presence_of(:surname).on(:from_omniauth) }
       it { is_expected.to validate_presence_of(:psu_id).on(:from_omniauth) }
+      it { is_expected.to validate_uniqueness_of(:psu_id).on(:from_omniauth).case_insensitive }
+      it { is_expected.not_to validate_presence_of(:orcid).on(:from_omniauth) }
+      it { is_expected.to validate_uniqueness_of(:orcid).on(:from_omniauth).case_insensitive }
+    end
+
+    context 'when given the from_user context' do
+      it { is_expected.to validate_presence_of(:surname).on(:from_user) }
+      it { is_expected.not_to validate_presence_of(:psu_id).on(:from_user) }
+      it { is_expected.to validate_uniqueness_of(:psu_id).on(:from_user).case_insensitive }
+      it { is_expected.to validate_presence_of(:orcid).on(:from_user) }
+      it { is_expected.to validate_uniqueness_of(:orcid).on(:from_user).case_insensitive }
     end
   end
 

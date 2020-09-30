@@ -50,8 +50,25 @@ class Actor < ApplicationRecord
             unless: -> { validation_context == :from_omniauth }
 
   validates :psu_id,
+            uniqueness: {
+              case_sensitive: false,
+              allow_nil: true
+            }
+
+  validates :psu_id,
             presence: true,
             on: :from_omniauth
+
+  validates :orcid,
+            orcid: true,
+            uniqueness: {
+              case_sensitive: false,
+              allow_nil: true
+            }
+
+  validates :orcid,
+            presence: true,
+            on: :from_user
 
   after_save :reindex_if_default_alias_changed
 
