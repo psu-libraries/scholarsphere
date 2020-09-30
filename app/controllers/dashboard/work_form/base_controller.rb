@@ -9,6 +9,10 @@ module Dashboard
           'frontend'
         end
 
+        def show_footer?
+          false
+        end
+
         def save_and_exit?
           params.key?(:save_and_exit)
         end

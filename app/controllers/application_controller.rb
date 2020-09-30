@@ -11,4 +11,9 @@ class ApplicationController < ActionController::Base
   def current_user
     UserDecorator.new(super || User.guest)
   end
+
+  helper_method :show_footer?
+  def show_footer?
+    true
+  end
 end

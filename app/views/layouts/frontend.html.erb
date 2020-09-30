@@ -78,22 +78,24 @@
       <% end %>
     </main>
 
-    <footer class="footer footer--landing">
-      <nav class="navbar navbar-light footer__nav">
-        <div>
-          <h3><%= t('footer.heading') %></h3>
-          <p><%= t('footer.description') %></p>
-        </div>
-        <div class="ml-auto">
-          <p><%= t('footer.copyright_statement') %></p>
-          <p>
-            <%= link_to 'Penn State', 'https://www.psu.edu' %> |
-            <%= link_to 'University Libraries', 'https://libraries.psu.edu/' %> |
-            <%= link_to 'Accessibility', 'https://accessibility.psu.edu/' %>
-          </p>
-        </div>
-      </nav>
-    </footer>
+    <% if show_footer? %>
+      <footer class="footer footer--landing">
+        <nav class="navbar navbar-light footer__nav">
+          <div>
+            <h3><%= t('footer.heading') %></h3>
+            <p><%= t('footer.description') %></p>
+          </div>
+          <div class="ml-auto">
+            <p><%= t('footer.copyright_statement') %></p>
+            <p>
+              <%= link_to 'Penn State', 'https://www.psu.edu' %> |
+              <%= link_to 'University Libraries', 'https://libraries.psu.edu/' %> |
+              <%= link_to 'Accessibility', 'https://accessibility.psu.edu/' %>
+            </p>
+          </div>
+        </nav>
+      </footer>
+    <% end %>
 
     <%= render partial: 'shared/modal' %>
   </body>
