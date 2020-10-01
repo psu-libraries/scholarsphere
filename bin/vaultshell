@@ -1,35 +1,10 @@
 #!/bin/bash
-# runs envconsul, then drops you into a shell. This allows us run bundle commands 
-# just as the server would. (populated with environment from vault)
+# if we have vault config from the agent injector, source those values before dropping into a shell
 set -e 
 
-# Vault init container will drop the token in /vault/token; alternatively we can set the VAULT_TOKEN env variable 
-if [ -f /vault/token ]; then
-    export VAULT_TOKEN=$(cat /vault/token)
-fi
-
-# New versions of vault-init calls the file something slightly different. export vault token if that file is found
-if [ -f /vault/.vault-token ]; then 
-    export VAULT_TOKEN=$(cat /vault/.vault-token)
-
-fi
-
-function start_envconsul() {
-    set -u 
-    envconsul \
-        -vault-addr=${VAULT_ADDR} \
-        -secret=${VAULT_PATH} \
-        -no-prefix=true \
-        -vault-renew-token=true \
-        -once \
-        -exec='bash'
-}
-
-
-if [ -n "${VAULT_TOKEN}" ]; then
-    echo "have token. starting envconsul"
-    start_envconsul
-else
-    echo "No vault token available. Nothing to do"
-fi
+# vault agent injector gives us the env at a deterministic path
+if [ -f /vault/secrets/config ]; then 
+    . /vault/secrets/config
+    bash
+fi 
 
