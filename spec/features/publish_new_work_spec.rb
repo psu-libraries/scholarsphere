@@ -188,7 +188,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       end
     end
 
-    context 'when the creaor is not found' do
+    context 'when the creator is not found' do
       let(:metadata) { attributes_for(:actor) }
 
       it 'creates a new one and enters it into the form' do
@@ -214,6 +214,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
           fill_in('Surname', with: metadata[:surname])
           fill_in('Given Name', with: metadata[:given_name])
           fill_in('Email', with: metadata[:email])
+          fill_in('ORCiD', with: metadata[:orcid])
           click_button('Save')
         end
 
@@ -226,6 +227,38 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         expect(work_version.creators.map(&:surname)).to include(metadata[:surname])
         expect(page).to have_current_path(dashboard_work_form_files_path(work_version))
+      end
+    end
+
+    context 'when providing an incorrect ORCiD id' do
+      let(:metadata) { attributes_for(:actor) }
+
+      it 'prevents the actor from being added' do
+        visit dashboard_work_form_contributors_path(work_version)
+
+        FeatureHelpers::WorkForm.search_creators('nobody')
+
+        within('.algolia-autocomplete') do
+          expect(page).to have_content('No results')
+        end
+
+        expect(page).not_to have_selector('.modal-body')
+        find_all('.aa-suggestion').first.click
+        expect(page).to have_selector('.modal-body')
+
+        within('.modal-content') do
+          fill_in('Surname', with: metadata[:surname])
+          fill_in('ORCiD', with: Faker::Number.leading_zero_number(digits: 15))
+          click_button('Save')
+        end
+
+        within('#creator_aliases') do
+          expect(page).not_to have_content('CREATOR 2')
+        end
+
+        within('.modal-content') do
+          expect(page).to have_content('ORCiD is not a valid ORCiD id')
+        end
       end
     end
 

@@ -13,6 +13,10 @@ module FactoryBotHelpers
     format("#{initials}%<n>03d", n: sequence_number)
   end
 
+  def self.generate_orcid
+    "0000-0000-#{Faker::Number.leading_zero_number(digits: 4)}-#{Faker::Number.leading_zero_number(digits: 4)}"
+  end
+
   def self.fancy_geo_location
     "#{Faker::Address.city_prefix} #{Faker::Address.city_suffix}, #{Faker::Address.country}"
   end

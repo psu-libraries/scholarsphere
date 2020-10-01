@@ -8,18 +8,15 @@ RSpec.describe Dashboard::ActorsController, type: :controller do
   let(:valid_attributes) do
     {
       surname: actor.surname,
+      orcid: actor.orcid,
       given_name: actor.given_name,
-      email: actor.email,
-      psu_id: actor.psu_id
+      email: actor.email
     }
   end
 
   let(:invalid_attributes) do
     {
-      surname: nil,
-      given_name: actor.given_name,
-      email: actor.email,
-      psu_id: actor.psu_id
+      surname: nil
     }
   end
 
@@ -69,9 +66,9 @@ RSpec.describe Dashboard::ActorsController, type: :controller do
           }.to change(Actor, :count).by(0)
         end
 
-        it "renders a successful response (i.e. to display the 'new' template)" do
+        it 'returns an unprocessable entity response' do
           post :create, params: { actor: invalid_attributes }
-          expect(response).to be_successful
+          expect(response).to be_unprocessable
         end
       end
     end
