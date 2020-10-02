@@ -132,4 +132,12 @@ RSpec.describe Actor, type: :model do
       expect(Collection).to have_received(:reindex_all).with(actor.created_collections)
     end
   end
+
+  describe 'singlevalued fields' do
+    it_behaves_like 'a singlevalued field', :surname
+    it_behaves_like 'a singlevalued field', :given_name
+    it_behaves_like 'a singlevalued field', :email
+    it_behaves_like 'a singlevalued field', :psu_id
+    it_behaves_like 'a singlevalued field', :orcid
+  end
 end

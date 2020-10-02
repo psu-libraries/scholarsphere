@@ -12,3 +12,8 @@ RSpec.shared_examples 'a singlevalued json field' do |field|
     expect(record[field]).to be_nil
   end
 end
+
+# This effectively aliases the name of the shared example because the tests apply to json and non-json fields alike
+RSpec.shared_examples 'a singlevalued field' do |field|
+  it_behaves_like 'a singlevalued json field', field
+end

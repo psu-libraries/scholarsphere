@@ -92,6 +92,19 @@ class Actor < ApplicationRecord
     Collection.reindex_all(created_collections)
   end
 
+  # Fields that contain single values automatically remove blank values
+  %i[
+    surname
+    given_name
+    email
+    orcid
+    psu_id
+  ].each do |field|
+    define_method "#{field}=" do |val|
+      super(val.presence)
+    end
+  end
+
   private
 
     def reindex_if_default_alias_changed
