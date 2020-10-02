@@ -24,7 +24,7 @@ RUN yarn --frozen-lockfile && \
 
 COPY --chown=app . /app
 
-ENTRYPOINT [ "/app/bin/envconsul-wrapper" ]
+ENTRYPOINT [ "/app/bin/entrypoint" ]
 
 CMD ["/app/bin/startup"]
 
@@ -50,6 +50,6 @@ RUN RAILS_ENV=production \
   rm -rf /app/tmp/
 
 
-ENTRYPOINT [ "/app/bin/envconsul-wrapper" ]
+ENTRYPOINT [ "/app/bin/entrypoint" ]
 
 CMD ["/app/bin/startup"]

@@ -33,6 +33,10 @@ module FeatureHelpers
     puts ''
   end
 
+  def wait_until(timeout = Capybara.default_max_wait_time)
+    Capybara.send(:timeout, timeout, Capybara.current_driver) { yield }
+  end
+
   private
 
     def mock_auth_hash(user)
