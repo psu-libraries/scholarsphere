@@ -4,7 +4,7 @@
   <%= render ThumbnailComponent.new(resource: index_work_version) %>
   <div class="card-body">
     <h3 class="card-title">
-      <%= link_to index_work_version.title, dashboard_work_version_path(index_work_version) %>
+      <%= link_to index_work_version.title, resource_path(index_work_version.uuid) %>
     </h3>
 
     <p class="meta">

@@ -73,3 +73,7 @@ Style/ClassVars:
 Style/EmptyMethod:
   Exclude:
     - 'app/jobs/metadata_listener/job.rb'
+
+Style/MethodMissingSuper:
+  Exclude:
+   - 'app/models/null_work_version.rb'

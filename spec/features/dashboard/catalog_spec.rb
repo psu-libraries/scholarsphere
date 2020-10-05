@@ -39,6 +39,8 @@ RSpec.describe 'Dashboard catalog page', :inline_jobs do
       click_link('100 per page')
 
       expect(page).to have_content("1 - #{work_versions.count} of #{work_versions.count}")
+      click_link(work_versions.first.title)
+      expect(page).to have_content(work_versions.first.title)
     end
   end
 end

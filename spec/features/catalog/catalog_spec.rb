@@ -5,10 +5,14 @@ require 'rails_helper'
 RSpec.describe 'Blacklight catalog page', :inline_jobs do
   let(:user) { create(:user) }
 
-  # Create an array of all the latest published work versions. Some works may only have a draft, so we want to exclude
-  # those. Using `compact` removes them because `latest_published_version` returns nil.
+  # Creates an array of all the published work versions.
+  # those.
   let(:published_work_versions) do
-    Work.all.includes(versions: :creator_aliases).map(&:latest_published_version).compact
+    Work
+      .all
+      .includes(versions: :creator_aliases)
+      .map(&:latest_published_version)
+      .reject(&:blank?)
   end
 
   let(:collections) do
