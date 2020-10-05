@@ -45,6 +45,8 @@ class Actor < ApplicationRecord
            through: :collection_creations,
            inverse_of: :creators
 
+  accepts_nested_attributes_for :user
+
   validates :surname,
             presence: true,
             unless: -> { validation_context == :from_omniauth }

@@ -3,7 +3,7 @@
 # @abstract A wrapper to ActiveRecordize Orcid.valid?
 class OrcidValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
-    return if value.nil?
+    return if value.blank?
 
     record.errors.add(attribute, (options[:message] || :invalid_orcid)) unless Orcid.valid?(value)
   end

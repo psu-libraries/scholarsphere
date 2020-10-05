@@ -13,6 +13,7 @@ RSpec.describe User, type: :model do
     it { is_expected.to have_db_column(:provider).of_type(:string) }
     it { is_expected.to have_db_column(:uid).of_type(:string) }
     it { is_expected.to have_db_column(:actor_id) }
+    it { is_expected.to have_db_column(:admin_enabled).of_type(:boolean) }
 
     it { is_expected.to have_db_index(:access_id).unique }
     it { is_expected.to have_db_index(:actor_id) }
@@ -241,15 +242,40 @@ RSpec.describe User, type: :model do
   end
 
   describe '#admin?' do
-    let(:user) { build_stubbed :user }
-    let(:admin_user) { create(:user, :admin) }
+    subject { user }
 
-    it 'is false when user is not an admin' do
-      expect(user.admin?).to be false
+    context 'when the user is not an admin' do
+      let(:user) { build_stubbed :user }
+
+      it { is_expected.not_to be_admin }
     end
 
-    it 'is true when user is an admin' do
-      expect(admin_user.admin?).to be true
+    context 'when the user is an admin and enabled' do
+      let(:user) { build(:user, :admin, admin_enabled: true) }
+
+      it { is_expected.to be_admin }
+    end
+
+    context 'when the user is an admin but not enabled' do
+      let(:user) { build(:user, :admin, admin_enabled: false) }
+
+      it { is_expected.not_to be_admin }
+    end
+  end
+
+  describe '#admin_available?' do
+    subject { user }
+
+    context 'when the user is not an admin' do
+      let(:user) { build_stubbed :user }
+
+      it { is_expected.not_to be_admin_available }
+    end
+
+    context 'when the user is an admin' do
+      let(:user) { build(:user, :admin) }
+
+      it { is_expected.to be_admin_available }
     end
   end
 

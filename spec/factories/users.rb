@@ -6,6 +6,7 @@ FactoryBot.define do
   factory :user do
     trait :admin do
       groups { User.default_groups + [Group.new(name: Rails.application.config.admin_group)] }
+      admin_enabled { true }
     end
     groups { User.default_groups }
     email { "#{access_id}@psu.edu" }

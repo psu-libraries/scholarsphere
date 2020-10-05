@@ -10,7 +10,7 @@ module Dashboard
       @actor = current_user.actor
 
       if @actor.update(creator_params)
-        redirect_to dashboard_works_path,
+        redirect_to dashboard_root_path,
                     notice: t('dashboard.profiles.update.success')
       else
         render :edit
@@ -27,8 +27,16 @@ module Dashboard
             :surname,
             :default_alias,
             :email,
-            :orcid
+            :orcid,
+            user_attributes: [
+              :id,
+              :admin_enabled
+            ]
           )
+      end
+
+      def determine_layout
+        'frontend'
       end
   end
 end
