@@ -261,7 +261,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         end
 
         within('.modal-content') do
-          expect(page).to have_content('ORCiD is not a valid ORCiD id')
+          expect(page).to have_content('ORCiD must be 16 digits only')
         end
       end
     end

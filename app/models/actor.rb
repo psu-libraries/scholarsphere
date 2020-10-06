@@ -62,9 +62,13 @@ class Actor < ApplicationRecord
             on: :from_omniauth
 
   validates :orcid,
-            orcid: true,
             uniqueness: {
               case_sensitive: false,
+              allow_nil: true
+            },
+            format: {
+              with: /\A\d{16,16}\z/,
+              message: 'must be 16 digits only',
               allow_nil: true
             }
 

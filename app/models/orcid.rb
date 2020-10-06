@@ -1,34 +1,34 @@
 # frozen_string_literal: true
 
+# @abstract Class for parsing and validating ORCiD ids. Accepts either a numeric or formatted string, as well as a URI,
+# and can return any of those formats. The unformatted numeric string is preferred for database storage, but this
+# class be used to present the id in alternative, human-readable formats.
+
 class Orcid
   def self.valid?(value)
     new(value).valid?
   end
 
-  # @param [String] id
+  attr_reader :id
+
+  # @param [String, URI] id
   def initialize(id)
-    @id = URI(id.gsub(/\s/, ''))
+    @id = URI(id.to_s).path.gsub(/^\//, '').delete('-')
   end
 
   def valid?
-    parsed_id.match?(/^\d{4,4}-\d{4,4}-\d{4,4}-\d{4,4}$/)
+    id.match?(/^\d{16,16}$/)
   end
 
   def to_s
-    "https://orcid.org/#{parsed_id}"
+    id
+  end
+
+  def to_human
+    id.gsub(/(\d{4})(?!$)/, '\1-')
   end
 
   def uri
-    URI(to_s)
+    URI("https://orcid.org/#{to_human}")
   end
-
-  private
-
-    def parsed_id
-      if @id.path
-        @id.path.gsub(/^\//, '')
-      else
-        @id.opaque
-      end
-    end
 end

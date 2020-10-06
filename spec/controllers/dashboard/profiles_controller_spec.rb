@@ -3,13 +3,15 @@
 require 'rails_helper'
 
 RSpec.describe Dashboard::ProfilesController, type: :controller do
+  let(:actor_attrs) { attributes_for(:actor) }
+
   let(:valid_attributes) {
     {
-      'default_alias' => 'Dr. Pat Q. Researcher PhD',
-      'given_name' => 'Pat',
-      'surname' => 'Researcher',
-      'email' => 'pqr123@example.com',
-      'orcid' => '0000-1234-5678-9101'
+      'default_alias' => "Dr. #{actor_attrs[:given_name]} #{actor_attrs[:surname]} PhD",
+      'given_name' => actor_attrs[:given_name],
+      'surname' => actor_attrs[:surname],
+      'email' => actor_attrs[:email],
+      'orcid' => actor_attrs[:orcid]
     }
   }
 
@@ -55,11 +57,11 @@ RSpec.describe Dashboard::ProfilesController, type: :controller do
           put :update, params: { actor: valid_attributes }
 
           actor.reload
-          expect(actor.default_alias).to eq 'Dr. Pat Q. Researcher PhD'
-          expect(actor.given_name).to eq 'Pat'
-          expect(actor.surname).to eq 'Researcher'
-          expect(actor.email).to eq 'pqr123@example.com'
-          expect(actor.orcid).to eq '0000-1234-5678-9101'
+          expect(actor.default_alias).to eq "Dr. #{actor_attrs[:given_name]} #{actor_attrs[:surname]} PhD"
+          expect(actor.given_name).to eq actor_attrs[:given_name]
+          expect(actor.surname).to eq actor_attrs[:surname]
+          expect(actor.email).to eq actor_attrs[:email]
+          expect(actor.orcid).to eq actor_attrs[:orcid]
         end
 
         it "redirects to the user's dashboard" do
