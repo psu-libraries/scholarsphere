@@ -116,7 +116,7 @@ class Work < ApplicationRecord
   end
 
   def latest_published_version
-    versions.published.last
+    versions.published.last || NullWorkVersion.new
   end
 
   def draft_version

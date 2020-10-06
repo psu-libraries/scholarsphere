@@ -49,5 +49,11 @@ RSpec.describe LatestPublishedVersionSchema do
 
       its(:document) { is_expected.to be_empty }
     end
+
+    context 'when the resource is a NullWorkVersion' do
+      let(:resource) { NullWorkVersion.new }
+
+      its(:document) { is_expected.to be_empty }
+    end
   end
 end
