@@ -14,7 +14,7 @@ module FactoryBotHelpers
   end
 
   def self.generate_orcid
-    "0000-0000-#{Faker::Number.leading_zero_number(digits: 4)}-#{Faker::Number.leading_zero_number(digits: 4)}"
+    Faker::Number.leading_zero_number(digits: 16)
   end
 
   def self.fancy_geo_location

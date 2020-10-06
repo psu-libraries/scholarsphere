@@ -3,30 +3,39 @@
 require 'spec_helper'
 
 RSpec.describe Orcid, type: :model do
-  subject { described_class.new(id) }
+  let(:id) { FactoryBotHelpers.generate_orcid }
+  let(:formatted_id) { id.gsub(/(\d{4})(?!$)/, '\1-') }
+  let(:uri) { URI("https://orcid.org/#{formatted_id}") }
 
-  context 'with a properly formatted string' do
-    let(:id) { FactoryBotHelpers.generate_orcid }
-
-    it { is_expected.to be_valid }
-    its(:to_s) { is_expected.to eq("https://orcid.org/#{id}") }
-    its(:uri) { is_expected.to eq(URI("https://orcid.org/#{id}")) }
-  end
-
-  context 'when verifying an existing id' do
-    let(:id) { described_class.new(FactoryBotHelpers.generate_orcid).to_s }
+  context 'with a string of 16 numbers' do
+    subject { described_class.new(id) }
 
     it { is_expected.to be_valid }
+    its(:to_s) { is_expected.to eq(id) }               # returns 1234123412341234
+    its(:to_human) { is_expected.to eq(formatted_id) } # returns 1234-1234-1234-1234
+    its(:uri) { is_expected.to eq(uri) }               # returns https://orcid.org/1234-1234-1234-1234
   end
 
-  context 'with unformatted numbers' do
-    let(:id) { Faker::Number.leading_zero_number(digits: 16) }
+  context 'with a formatted string such as 1234-1234-1234-1234' do
+    subject { described_class.new(formatted_id) }
 
-    it { is_expected.not_to be_valid }
+    it { is_expected.to be_valid }
+    its(:to_s) { is_expected.to eq(id) }               # returns 1234123412341234
+    its(:to_human) { is_expected.to eq(formatted_id) } # returns 1234-1234-1234-1234
+    its(:uri) { is_expected.to eq(uri) }               # returns https://orcid.org/1234-1234-1234-1234
+  end
+
+  context 'with a uri such as https://orcid.org/1234-1234-1234-1234' do
+    subject { described_class.new(uri.to_s) }
+
+    it { is_expected.to be_valid }
+    its(:to_s) { is_expected.to eq(id) }               # returns 1234123412341234
+    its(:to_human) { is_expected.to eq(formatted_id) } # returns 1234-1234-1234-1234
+    its(:uri) { is_expected.to eq(uri) }               # returns https://orcid.org/1234-1234-1234-1234
   end
 
   context 'with junk' do
-    let(:id) { Faker::Alphanumeric.alphanumeric(number: 10) }
+    subject { described_class.new(Faker::Alphanumeric.alphanumeric(number: 10)) }
 
     it { is_expected.not_to be_valid }
   end
