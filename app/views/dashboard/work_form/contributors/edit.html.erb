@@ -19,9 +19,11 @@
 
             <%= render FormErrorMessageComponent.new(form: form) %>
 
-            <%= render 'fields', form: form %>
+            <%= render 'creators', form: form %>
 
             <%= render 'search' %>
+
+            <%= render 'contributors', form: form %>
 
             <%= render 'dashboard/work_form/shared/action_footer', form: form, publish: false %>
           <% end %>

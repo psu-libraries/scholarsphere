@@ -14,7 +14,7 @@ en:
         keyword: Keyword
         description: Description
         creator_aliases: Creator
-        contributor: Contributor
+        contributor: Acknowledgments
         publisher: Publisher
         published_date: &collection_published_date Publication Date
         display_published_date: *collection_published_date
@@ -41,7 +41,7 @@ en:
         description: Description
         creator_aliases: Creators
         resource_type: Resource Type
-        contributor: Contributor
+        contributor: Acknowledgments
         publisher: Publisher
         published_date: &work_version_published_date Publication Date
         display_published_date: *work_version_published_date
@@ -207,16 +207,18 @@ en:
         edit:
           badge: Creator
           empty_result: No results found. Choose this option to create a new creator.
-          fields_heading: Creators
+          creators_heading: Creators
+          contributors_heading: Additional Acknowledgments
           last_option: Not finding what you're looking for? Choose this option to create your own...
           new: Create New Contributor
           no_results: No results
-          placeholder: "Search for an existing creator"
+          placeholder: "Search..."
           reader_hint: >
             When autocomplete results are available use up and down arrows to review and enter to select.
             Touch device users, explore by touch or with swipe gestures.
           remove: "Remove creator %{name}"
-          search: "You can search for creators by Access Account ID (abc123 or abc1234) or by name"
+          search: >
+            You can search for creators using their Penn State Access Account, email, or name
           search_heading: Add another creator
           search_label: Search creators
           search_results: Search Results
