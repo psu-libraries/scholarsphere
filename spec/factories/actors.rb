@@ -17,5 +17,9 @@ FactoryBot.define do
     trait :with_user do
       user
     end
+
+    trait :without_an_orcid do
+      orcid { nil }
+    end
   end
 end

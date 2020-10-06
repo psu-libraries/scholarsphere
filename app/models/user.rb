@@ -85,6 +85,10 @@ class User < ApplicationRecord
   end
 
   def admin?
+    admin_available? && admin_enabled
+  end
+
+  def admin_available?
     groups.map(&:name).include? Scholarsphere::Application.config.admin_group
   end
 

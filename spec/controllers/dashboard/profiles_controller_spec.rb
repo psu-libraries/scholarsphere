@@ -62,9 +62,9 @@ RSpec.describe Dashboard::ProfilesController, type: :controller do
           expect(actor.orcid).to eq '0000-1234-5678-9101'
         end
 
-        it 'redirects to the dashboard works page' do
+        it "redirects to the user's dashboard" do
           put :update, params: { actor: valid_attributes }
-          expect(response).to redirect_to(dashboard_works_path) # WIP
+          expect(response).to redirect_to(dashboard_root_path)
         end
       end
 

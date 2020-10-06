@@ -54,6 +54,8 @@ en:
         display_work_type: Work Type
         display_doi: DOI
         file_resources: Files
+      user:
+        admin_enabled: Administrative privleges enabled
     errors:
       models:
         file_version_membership:
@@ -115,6 +117,9 @@ en:
         work_type: This is a hint for the work type
       actor:
         orcid: "This is a 16-digit identifier in the format ####-####-####-####"
+        default_alias: >
+          When you create new works, this will be used as the initial value for the Creator field. For example, if your
+          first and last name are Pat Researcher, you might wish to set this to "Dr. Pat Q. Researcher PhD."
     placeholder:
       work_version:
         version_name: x.y.z
@@ -164,9 +169,7 @@ en:
     profiles:
       edit:
         heading: "Edit Profile"
-        error_message: "%{error} prohibited this work from being saved:"
-        default_alias:
-          help: 'When you create new works, this will be used as the initial value for the Creator field. For example, if your first and last name are Pat Researcher, you might wish to set this to "Dr. Pat Q. Researcher PhD."'
+        error_message: "%{error} prohibited your profile from being saved:"
       update:
         success: 'Your profile was saved successfully.'
     works:
