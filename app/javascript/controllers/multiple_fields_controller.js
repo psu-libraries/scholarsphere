@@ -52,6 +52,9 @@ export default class extends Controller {
     node.setAttribute('data-action', 'multiple-fields#add')
     node.classList.add('add')
 
+    const description = this.descriptionText('add another')
+    node.appendChild(description)
+
     const icon = this.materialIcon('add_circle_outline')
     node.appendChild(icon)
 
@@ -65,6 +68,9 @@ export default class extends Controller {
     node.setAttribute('data-action', 'multiple-fields#remove')
     node.classList.add('remove')
 
+    const description = this.descriptionText('remove')
+    node.appendChild(description)
+
     const icon = this.materialIcon('highlight_off')
     node.appendChild(icon)
 
@@ -75,8 +81,17 @@ export default class extends Controller {
   materialIcon (text) {
     const icon = document.createElement('i')
     icon.classList.add('material-icons')
+    icon.setAttribute('aria-hidden', 'true')
     icon.appendChild(document.createTextNode(text))
     return icon
+  }
+
+  // @return [HTMLElement]
+  descriptionText (text) {
+    const element = document.createElement('span')
+    element.classList.add('sr-only')
+    element.appendChild(document.createTextNode(text))
+    return element
   }
 
   // @return [HTMLCollection]
