@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require 'spec_helper'
 
 RSpec.describe EdtfDate do
   describe '::valid?' do
@@ -9,8 +9,10 @@ RSpec.describe EdtfDate do
       '1999-uu-uu' => true,
       '1984?-01~' => true,
 
-      # Valid Ruby dates
-      'January 21, 2019' => true,
+      # Valid Ruby dates, but invalid EDTF dates
+      'January 21, 2019' => false,
+      'January' => false,
+      '17th Century' => false,
 
       # Invalid values
       'asdf' => false,
