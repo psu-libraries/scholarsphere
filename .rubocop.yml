@@ -66,6 +66,11 @@ RSpec/AnyInstance:
 RSpec/NestedGroups:
   Enabled: false
 
+RSpec/MessageSpies:
+  Exclude:
+    - 'spec/jobs/doi_minting_job_spec.rb'
+    - 'spec/lib/scholarsphere/solr_admin_spec.rb'
+
 Style/ClassVars:
   Exclude:
     - 'spec/system/active_job_system_spec.rb'
