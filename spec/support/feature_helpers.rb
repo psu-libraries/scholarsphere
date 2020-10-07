@@ -33,8 +33,13 @@ module FeatureHelpers
     puts ''
   end
 
-  def wait_until(timeout = Capybara.default_max_wait_time)
-    Capybara.send(:timeout, timeout, Capybara.current_driver) { yield }
+  def wait_for_modal(limit = Capybara.default_max_wait_time)
+    count = 1
+    while page.has_selector?('body.modal-open')
+      sleep 1
+      count = count + 1
+      raise StandardError, "modal failed to close after #{limit} seconds" if count == limit
+    end
   end
 
   private

@@ -218,14 +218,14 @@ RSpec.describe 'Publishing a work', with_user: :user do
           click_button('Save')
         end
 
-        wait_until(Capybara.default_max_wait_time * 4) do
-          within('#creator_aliases') do
-            expect(page).to have_content('CREATOR 1')
-            expect(page).to have_content('CREATOR 2')
-            expect(page).to have_content(metadata[:surname])
-            expect(page).to have_content(metadata[:given_name])
-            expect(page).to have_field('Display Name', count: 2)
-          end
+        wait_for_modal(5)
+
+        within('#creator_aliases') do
+          expect(page).to have_content('CREATOR 1')
+          expect(page).to have_content('CREATOR 2')
+          expect(page).to have_content(metadata[:surname])
+          expect(page).to have_content(metadata[:given_name])
+          expect(page).to have_field('Display Name', count: 2)
         end
         FeatureHelpers::WorkForm.save_and_continue
 
