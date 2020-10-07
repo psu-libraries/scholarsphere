@@ -218,7 +218,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
           click_button('Save')
         end
 
-        wait_until(Capybara.default_max_wait_time) do
+        wait_until(Capybara.default_max_wait_time * 4) do
           within('#creator_aliases') do
             expect(page).to have_content('CREATOR 1')
             expect(page).to have_content('CREATOR 2')
