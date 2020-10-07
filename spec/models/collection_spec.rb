@@ -3,9 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Collection, type: :model do
-  it_behaves_like 'an indexable resource' do
-    let(:resource) { create(:collection) }
-  end
+  it_behaves_like 'an indexable resource'
 
   it_behaves_like 'a resource with permissions' do
     let(:factory_name) { :collection }
@@ -275,6 +273,17 @@ RSpec.describe Collection, type: :model do
         expect(collection).not_to have_received(:reload)
         expect(CollectionIndexer).to have_received(:call)
       end
+    end
+  end
+
+  describe 'after destroy' do
+    let(:collection) { create(:collection) }
+
+    before { allow(SolrDeleteJob).to receive(:perform_later) }
+
+    it 'removes the collection from the index' do
+      collection.destroy
+      expect(SolrDeleteJob).to have_received(:perform_later).with(collection.uuid)
     end
   end
 end

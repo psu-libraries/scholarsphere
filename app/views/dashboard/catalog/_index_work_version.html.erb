@@ -35,7 +35,7 @@
       <% end %>
 
       <% if policy(index_work_version).new?(index_work_version) %>
-        <%= link_to dashboard_work_work_versions_path(index_work_version),
+        <%= link_to dashboard_work_work_versions_path(index_work_version.work),
                     method: :post,
                     class: 'btn btn-primary btn--icon' do %>
           <i class="material-icons">create_new_folder</i>
