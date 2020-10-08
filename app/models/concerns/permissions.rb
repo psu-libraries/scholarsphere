@@ -29,7 +29,8 @@ module Permissions
   included do
     has_many :access_controls,
              as: :resource,
-             dependent: :destroy
+             dependent: :destroy,
+             autosave: true
   end
 
   # @note This is to exclude agents from the []= assigning process, and avoids the problem of removing visibility
