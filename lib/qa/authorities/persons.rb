@@ -61,6 +61,7 @@ module Qa
             email: result.email,
             orcid: result.orcid,
             default_alias: result.default_alias,
+            actor_id: result.id,
             source: 'scholarsphere'
           }
         end
