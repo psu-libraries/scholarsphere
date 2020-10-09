@@ -5,22 +5,21 @@ require 'rails_helper'
 RSpec.describe ApiToken, type: :model do
   describe 'table' do
     it { is_expected.to have_db_column(:token).of_type(:string) }
-    it { is_expected.to have_db_column(:app_name).of_type(:string) }
-    it { is_expected.to have_db_column(:admin_email).of_type(:string) }
     it { is_expected.to have_db_column(:last_used_at).of_type(:datetime) }
     it { is_expected.to have_db_column(:created_at).of_type(:datetime) }
     it { is_expected.to have_db_column(:updated_at).of_type(:datetime) }
+    it { is_expected.to have_db_column(:application_id).of_type(:integer) }
 
     it { is_expected.to have_db_index(:token).unique(true) }
+    it { is_expected.to have_db_index(:application_id) }
   end
 
   describe 'factory' do
     it { is_expected.to have_valid_factory(:api_token) }
   end
 
-  describe 'validations' do
-    it { is_expected.to validate_presence_of(:app_name) }
-    it { is_expected.to validate_presence_of(:admin_email) }
+  describe 'associations' do
+    it { is_expected.to belong_to(:application).class_name('ExternalApp').with_foreign_key(:application_id) }
   end
 
   describe 'creating a new token' do

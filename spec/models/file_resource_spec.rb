@@ -48,7 +48,7 @@ RSpec.describe FileResource, type: :model do
       expect(MetadataListener::Job).to have_received(:perform_later).with(
         path: "#{file_data['storage']}/#{file_data['id']}",
         endpoint: "http://#{Rails.application.routes.default_url_options[:host]}/api/v1/files/#{file_resource.id}",
-        api_token: ApiToken.metadata_listener.token
+        api_token: ExternalApp.metadata_listener.token
       )
     end
   end
