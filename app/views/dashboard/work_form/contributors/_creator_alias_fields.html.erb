@@ -1,46 +1,38 @@
 <%# @note Builds a form object when the partial is called async, such as appending new creators to the work form %>
-<% f ||= ActionView::Helpers::FormBuilder.new("work_version[creator_aliases_attributes][#{Time.zone.now.to_i}]", creator_alias, self, {}) %>
-<% index = f.try(:index) || 0 %>
+<%- form ||= ActionView::Helpers::FormBuilder.new("work_version[creator_aliases_attributes][#{Time.zone.now.to_i}]", creator_alias, self, {}) %>
+<%- index = form.try(:index) || 0 %>
 
 <div class="nested-fields">
-  <% if index > 0 || f.try(:index).blank? %>
+  <% if index > 0 || form.try(:index).blank? %>
     <hr>
   <% end %>
 
-  <div class="row row--md-reduce">
+  <div class="row">
     <div class="col-2">
       <span class="badge badge-dark badge--outline">
         <%= t('dashboard.work_form.contributors.edit.badge') %>
         <span class="badge--index"><%= index + 1 %></span>
       </span>
-
     </div>
 
-    <div class="col-7">
-      <div class="form-wrapper">
-        <%= f.hidden_field :actor_id %>
-        <%= render 'form_fields/text', form: f, attribute: :alias, required: true %>
+    <div class="col-8 pr-2">
+      <%= form.hidden_field :actor_id %>
+      <div class="form-group has-float-label">
+        <%= form.text_field :alias, class: 'form-control', placeholder: true, required: true %>
+        <%= form.label :alias %>
       </div>
     </div>
 
-    <div class="col-3">
-      <%= link_to_remove_association f, class: 'btn btn-outline-danger btn-sm float-sm-right' do %>
-        <span class="sr-only"><%= t('dashboard.work_form.contributors.edit.remove', name: f.object.alias) %></span>
+    <div class="col-2 pl-0">
+      <%= link_to_remove_association form, class: 'remove' do %>
+        <span class="sr-only"><%= t('dashboard.work_form.contributors.edit.remove', name: form.object.alias) %></span>
         <i class="material-icons" aria-hidden="true">highlight_off</i>
-      <% end %>
-
-      <%= link_to '#', class: 'btn btn-outline-info btn-sm float-sm-right' do %>
-        <i class="material-icons" aria-hidden="true">arrow_circle_down</i>
-      <% end %>
-
-      <%= link_to '#', class: 'btn btn-outline-info btn-sm float-sm-right' do %>
-        <i class="material-icons" aria-hidden="true">arrow_circle_up</i>
       <% end %>
     </div>
   </div>
 
-  <div class="row row--md-reduce">
-    <div class="col-12 offset-2">
+  <div class="row">
+    <div class="col-10 offset-2">
       <table class="table table-sm">
         <thead>
           <tr>
@@ -52,15 +44,15 @@
         </thead>
         <tbody>
           <tr>
-            <td><%= f.object.actor.given_name %></td>
-            <td><%= f.object.actor.surname %></td>
-            <td><%= f.object.actor.email %></td>
-            <td><%= f.object.actor.psu_id %></td>
+            <td><%= form.object.actor.given_name %></td>
+            <td><%= form.object.actor.surname %></td>
+            <td><%= form.object.actor.email %></td>
+            <td><%= form.object.actor.psu_id %></td>
           </tr>
         </tbody>
       </table>
 
-      <%= f.fields_for :actor do |actor_fields| %>
+      <%= form.fields_for :actor do |actor_fields| %>
         <%= actor_fields.hidden_field :email %>
         <%= actor_fields.hidden_field :given_name %>
         <%= actor_fields.hidden_field :surname %>

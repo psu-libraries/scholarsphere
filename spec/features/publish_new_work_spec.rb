@@ -50,10 +50,15 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(new_work_version.description).to eq metadata[:description]
         expect(new_work_version.published_date).to eq metadata[:published_date]
         expect(new_work_version.keyword).to eq [metadata[:keyword]]
+        expect(new_work_version.subtitle).to eq metadata[:subtitle]
+        expect(new_work_version.version_name).to eq metadata[:version_name]
         expect(new_work_version.publisher).to eq [metadata[:publisher]]
         expect(new_work_version.subject).to eq [metadata[:subject]]
         expect(new_work_version.language).to eq [metadata[:language]]
         expect(new_work_version.related_url).to eq [metadata[:related_url]]
+        expect(new_work_version.identifier).to eq [metadata[:identifier]]
+        expect(new_work_version.based_near).to eq [metadata[:based_near]]
+        expect(new_work_version.source).to eq [metadata[:source]]
 
         expect(page).to have_current_path(dashboard_work_form_contributors_path(new_work_version))
       end
@@ -89,14 +94,20 @@ RSpec.describe 'Publishing a work', with_user: :user do
         FeatureHelpers::WorkForm.save_and_continue
 
         work_version.reload
+        expect(work_version.version_number).to eq 2
         expect(work_version.title).to eq metadata[:title]
         expect(work_version.description).to eq metadata[:description]
         expect(work_version.published_date).to eq metadata[:published_date]
         expect(work_version.keyword).to eq [metadata[:keyword]]
+        expect(work_version.subtitle).to eq metadata[:subtitle]
+        expect(work_version.version_name).to eq metadata[:version_name]
         expect(work_version.publisher).to eq [metadata[:publisher]]
         expect(work_version.subject).to eq [metadata[:subject]]
         expect(work_version.language).to eq [metadata[:language]]
         expect(work_version.related_url).to eq [metadata[:related_url]]
+        expect(work_version.identifier).to eq [metadata[:identifier]]
+        expect(work_version.based_near).to eq [metadata[:based_near]]
+        expect(work_version.source).to eq [metadata[:source]]
 
         expect(page).to have_current_path(dashboard_work_form_contributors_path(work_version))
       end
@@ -129,7 +140,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
     let(:actor) { work_version.work.depositor }
 
     context 'with an initial draft version' do
-      it 'includes the current user as a creator' do
+      it 'includes the current user as a creator and adds additional contributors' do
         visit dashboard_work_form_contributors_path(work_version)
 
         expect(work_version.creators).to be_empty
@@ -147,9 +158,13 @@ RSpec.describe 'Publishing a work', with_user: :user do
           expect(page).to have_content(actor.psu_id)
         end
 
+        fill_in 'work_version_contributor', with: metadata[:contributor]
+
         FeatureHelpers::WorkForm.save_and_continue
 
+        work_version.reload
         expect(work_version.creators).to contain_exactly(actor)
+        expect(work_version.contributor).to eq [metadata[:contributor]]
 
         expect(page).to have_current_path(dashboard_work_form_files_path(work_version))
       end

@@ -35,6 +35,7 @@ module Dashboard
           params
             .require(:work_version)
             .permit(
+              contributor: [],
               creator_aliases_attributes: [
                 :id,
                 :actor_id,

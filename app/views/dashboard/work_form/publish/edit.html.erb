@@ -16,12 +16,8 @@
 
             <%= render 'dashboard/work_form/details/fields', form: form %>
 
-            <div class="form-wrapper form-wrapper--wide">
-              <div class="keyline keyline--left mb-3">
-                <h4><%= t '.contributors' %></h4>
-              </div>
-            </div>
-            <%= render 'dashboard/work_form/contributors/fields', form: form %>
+            <%= render 'dashboard/work_form/contributors/creators', form: form %>
+            <%= render 'dashboard/work_form/contributors/contributors', form: form %>
 
             <div class="form-wrapper form-wrapper--wide">
               <div class="keyline keyline--left mb-3">
