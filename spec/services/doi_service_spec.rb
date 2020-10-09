@@ -222,7 +222,7 @@ RSpec.describe DoiService do
     end
 
     context 'when the metadata mapper cannot build valid metadata' do
-      let(:resource) { FactoryBot.build_stubbed :work_version, doi: nil }
+      let(:resource) { FactoryBot.create :work_version, doi: nil }
 
       before do
         allow(resource).to receive(:draft?).and_return(false)
@@ -237,7 +237,7 @@ RSpec.describe DoiService do
     end
 
     context 'when the doi client raises an error' do
-      let(:resource) { FactoryBot.build_stubbed :work_version, doi: nil }
+      let(:resource) { FactoryBot.create :work_version, doi: nil }
 
       before do
         allow(resource).to receive(:draft?).and_return(true)
