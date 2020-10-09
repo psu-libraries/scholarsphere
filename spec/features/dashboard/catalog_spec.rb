@@ -43,4 +43,75 @@ RSpec.describe 'Dashboard catalog page', :inline_jobs do
       expect(page).to have_content(work_versions.first.title)
     end
   end
+
+  context 'when the user has a published work' do
+    let!(:work) { create(:work, depositor: user.actor, versions_count: 3, has_draft: false) }
+
+    it 'enables them to create a new version', with_user: :user do
+      visit(dashboard_root_path)
+
+      within('.card-actions') do
+        expect(page).to have_content('V3')
+        expect(page).to have_content('published')
+        expect(page).not_to have_link('delete')
+        expect(page).not_to have_link('edit')
+        click_link('create_new_folder')
+      end
+
+      expect(page).to have_content('Edit Draft Work')
+      expect(page).to have_content('Work version was successfully created')
+      expect(work.versions.count).to eq(4)
+    end
+  end
+
+  context 'when deleting draft versions WITH previous published versions' do
+    let!(:work) { create(:work, depositor: user.actor, versions_count: 3, has_draft: true) }
+
+    it 'deletes the draft version and returns to the dashboard', with_user: :user do
+      visit(dashboard_root_path)
+
+      expect(work.versions.count).to eq(3)
+
+      within('.card-actions') do
+        expect(page).to have_content('V3')
+        expect(page).to have_content('draft')
+        expect(page).to have_link('edit')
+        expect(page).not_to have_link('create_new_folder')
+        click_link('delete')
+      end
+
+      expect(page).to have_content('Work version was successfully destroyed.')
+      expect(work.versions.count).to eq(2)
+
+      within('.card-actions') do
+        expect(page).to have_content('V2')
+        expect(page).to have_content('published')
+        expect(page).not_to have_link('delete')
+        expect(page).not_to have_link('edit')
+        click_link('create_new_folder')
+      end
+    end
+  end
+
+  context 'when deleting draft versions WITHOUT previous published versions' do
+    let!(:work) { create(:work, depositor: user.actor, has_draft: true) }
+
+    it 'deletes the draft version, as well as the work, and returns to the dashboard', with_user: :user do
+      visit(dashboard_root_path)
+
+      expect(work.versions.count).to eq(1)
+
+      within('.card-actions') do
+        expect(page).to have_content('V1')
+        expect(page).to have_content('draft')
+        expect(page).to have_link('edit')
+        expect(page).not_to have_link('create_new_folder')
+        click_link('delete')
+      end
+
+      expect(page).to have_content('Work version was successfully destroyed.')
+      expect(page).not_to have_selector('.card-title')
+      expect(Work.exists?(work.id)).to be(false)
+    end
+  end
 end

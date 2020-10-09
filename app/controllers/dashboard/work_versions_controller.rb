@@ -12,7 +12,7 @@ module Dashboard
       respond_to do |format|
         if @work_version.save
           format.html do
-            redirect_to dashboard_work_version_file_list_path(@work_version),
+            redirect_to dashboard_work_form_details_path(@work_version),
                         notice: 'Work version was successfully created.'
           end
           format.json { render :show, status: :created, location: @work_version }
@@ -59,7 +59,7 @@ module Dashboard
       DestroyWorkVersion.call(@work_version)
 
       respond_to do |format|
-        format.html { redirect_to dashboard_works_path, notice: 'Work version was successfully destroyed.' }
+        format.html { redirect_to dashboard_root_path, notice: 'Work version was successfully destroyed.' }
         format.json { head :no_content }
       end
     end
