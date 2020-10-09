@@ -171,7 +171,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
 
     context 'when adding additional users from Penn State' do
-      it 'inserts the creator into the form' do
+      it 'inserts the Penn State person as a creator into the form' do
         visit dashboard_work_form_contributors_path(work_version)
 
         expect(work_version.creators).to be_empty
@@ -199,6 +199,39 @@ RSpec.describe 'Publishing a work', with_user: :user do
         FeatureHelpers::WorkForm.save_and_continue
 
         expect(work_version.creators.map(&:surname)).to include('Wead')
+        expect(page).to have_current_path(dashboard_work_form_files_path(work_version))
+      end
+    end
+
+    context 'when add existing actors from Scholarsphere' do
+      let!(:actor) { create(:actor) }
+
+      it 'inserts the local Scholarsphere actor as a creator into the form' do
+        visit dashboard_work_form_contributors_path(work_version)
+
+        expect(work_version.creators).to be_empty
+        within('#creator_aliases') do
+          expect(page).to have_content('CREATOR 1')
+          expect(page).to have_field('Display Name', count: 1)
+        end
+
+        FeatureHelpers::WorkForm.search_creators(actor.surname)
+
+        within('.algolia-autocomplete') do
+          expect(page).to have_content(actor.default_alias)
+        end
+
+        find_all('.aa-suggestion').first.click
+
+        within('#creator_aliases') do
+          expect(page).to have_content('CREATOR 1')
+          expect(page).to have_content('CREATOR 2')
+          expect(page).to have_field('Display Name', count: 2)
+        end
+
+        FeatureHelpers::WorkForm.save_and_continue
+
+        expect(work_version.creators.map(&:surname)).to include(actor.surname)
         expect(page).to have_current_path(dashboard_work_form_files_path(work_version))
       end
     end

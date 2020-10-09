@@ -24,6 +24,7 @@ RSpec.describe Qa::Authorities::Persons, type: :authority do
           email: creator.email,
           orcid: creator.orcid,
           source: 'scholarsphere',
+          actor_id: creator.id,
           result_number: 1,
           total_results: 1
         }
