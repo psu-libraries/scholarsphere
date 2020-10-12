@@ -85,4 +85,22 @@ RSpec.describe Api::V1::RestController, type: :controller do
       )
     end
   end
+
+  describe '#current_user' do
+    subject { controller.current_user }
+
+    let(:api_key) { create :api_token }
+
+    before { request.headers[:'X-API-Key'] = api_key.token }
+
+    it { is_expected.to be_an(ExternalApp) }
+  end
+
+  describe '#user_for_paper_trail' do
+    let(:api_key) { create :api_token }
+
+    before { request.headers[:'X-API-Key'] = api_key.token }
+
+    its(:user_for_paper_trail) { is_expected.to eq(api_key.application.to_gid) }
+  end
 end

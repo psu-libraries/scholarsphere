@@ -31,4 +31,10 @@ class ExternalApp < ApplicationRecord
   def token
     api_tokens.first.token
   end
+
+  # @note This is used in work histories, which (typically) display the names of users who have made changes to a work.
+  # If this pattern goes beyond here, it would be a good idea to refactor it into a decorator.
+  def access_id
+    name
+  end
 end
