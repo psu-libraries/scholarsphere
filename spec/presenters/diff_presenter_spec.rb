@@ -9,7 +9,7 @@ RSpec.describe DiffPresenter do
   let(:second) { build(:work_version) }
 
   describe '#terms' do
-    its(:terms) { is_expected.to contain_exactly('title') }
+    its(:terms) { is_expected.to include('title') }
   end
 
   describe '#hash' do

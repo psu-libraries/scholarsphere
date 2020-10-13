@@ -371,4 +371,70 @@ RSpec.describe WorkVersion, type: :model do
       expect(work.deposit_agreed_at).to be_within(1.minute).of(Time.zone.now)
     end
   end
+
+  describe WorkVersion::Licenses do
+    let(:active_license) do
+      {
+        id: 'https://creativecommons.org/licenses/by/4.0/',
+        label: 'Attribution 4.0 International',
+        active: true
+      }
+    end
+
+    let(:inactive_license) do
+      {
+        id: 'http://creativecommons.org/licenses/by/3.0/us/',
+        label: 'Attribution 3.0 United States',
+        active: false
+      }
+    end
+
+    describe '::DEFAULT' do
+      subject { described_class::DEFAULT }
+
+      it { is_expected.to eq('http://www.europeana.eu/portal/rights/rr-r.html') }
+    end
+
+    describe '::all' do
+      subject { described_class.all }
+
+      it { is_expected.to include(inactive_license) }
+      it { is_expected.to include(active_license) }
+    end
+
+    describe '::active' do
+      subject { described_class.active }
+
+      it { is_expected.not_to include(inactive_license) }
+      it { is_expected.to include(active_license) }
+    end
+
+    describe '::options_for_select_box' do
+      subject(:options) { described_class.options_for_select_box }
+
+      specify do
+        expect(options).to contain_exactly(
+          ['Attribution 4.0 International', 'https://creativecommons.org/licenses/by/4.0/'],
+          ['Attribution-ShareAlike 4.0 International', 'https://creativecommons.org/licenses/by-sa/4.0/'],
+          ['Attribution-NonCommercial 4.0 International', 'https://creativecommons.org/licenses/by-nc/4.0/'],
+          ['Attribution-NoDerivatives 4.0 International', 'https://creativecommons.org/licenses/by-nd/4.0/'],
+          [
+            'Attribution-NonCommercial-NoDerivatives 4.0 International',
+            'https://creativecommons.org/licenses/by-nc-nd/4.0/'
+          ],
+          [
+            'Attribution-NonCommercial-ShareAlike 4.0 International',
+            'https://creativecommons.org/licenses/by-nc-sa/4.0/'
+          ],
+          ['Public Domain Mark 1.0', 'http://creativecommons.org/publicdomain/mark/1.0/'],
+          ['CC0 1.0 Universal', 'http://creativecommons.org/publicdomain/zero/1.0/'],
+          ['All rights reserved', 'http://www.europeana.eu/portal/rights/rr-r.html'],
+          ['Apache 2.0', 'http://www.apache.org/licenses/LICENSE-2.0'],
+          ['GNU General Public License', 'https://www.gnu.org/licenses/gpl.html'],
+          ['MIT License', 'https://opensource.org/licenses/MIT'],
+          ['BSD License', 'https://opensource.org/licenses/BSD-3-Clause']
+        )
+      end
+    end
+  end
 end

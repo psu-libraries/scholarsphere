@@ -6,6 +6,7 @@ FactoryBot.define do
     aasm_state { WorkVersion::STATE_DRAFT }
     title { generate(:work_title) }
     sequence(:version_number) { |n| work.present? ? work.versions.length + 1 : n }
+    rights { WorkVersion::Licenses.active.sample[:id] }
 
     # Postgres does this for us, but for testing, we can do it here to save having to call create/reload.
     uuid { SecureRandom.uuid }
@@ -63,7 +64,6 @@ FactoryBot.define do
       title { generate(:work_title) }
       subtitle { FactoryBotHelpers.work_title }
       keyword { Faker::Science.element }
-      rights { Faker::Lorem.sentence }
       description { Faker::Lorem.paragraph }
       resource_type { Faker::House.furniture }
       contributor { Faker::Artist.name }
