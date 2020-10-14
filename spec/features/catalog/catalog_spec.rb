@@ -6,7 +6,6 @@ RSpec.describe 'Blacklight catalog page', :inline_jobs do
   let(:user) { create(:user) }
 
   # Creates an array of all the published work versions.
-  # those.
   let(:published_work_versions) do
     Work
       .all
@@ -31,12 +30,41 @@ RSpec.describe 'Blacklight catalog page', :inline_jobs do
     collections.sample
   end
 
+  let(:title_cards) do
+    page.find_all('.card-title')
+  end
+
+  let(:ordered_titles) do
+    Blacklight
+      .default_index
+      .connection
+      .get(
+        'select',
+        params: {
+          q: '*:*',
+          fq: ['{!terms f=model_ssi}Work,Collection'],
+          sort: 'deposited_at_dtsi desc',
+          fl: ['title_tesim']
+        }
+      )['response']['docs'].map do |doc|
+      doc['title_tesim']
+    end.flatten
+  end
+
   before do
     Array.new(10).map do
-      FactoryBot.create(:work, depositor: user.actor, versions_count: rand(1..5), has_draft: true)
+      FactoryBot.create(:work,
+                        depositor: user.actor,
+                        versions_count: rand(1..5),
+                        has_draft: true,
+                        deposited_at: Faker::Date.between(from: 1.year.ago, to: Time.zone.now))
     end
 
-    FactoryBot.create_list(:collection, 2, :with_creators, :with_complete_metadata)
+    FactoryBot.create_list(:collection,
+                           2,
+                           :with_creators,
+                           :with_complete_metadata,
+                           deposited_at: Faker::Date.between(from: 1.year.ago, to: Time.zone.now))
   end
 
   it 'displays the search form and facets' do
@@ -67,6 +95,11 @@ RSpec.describe 'Blacklight catalog page', :inline_jobs do
           end
         end
       end
+    end
+
+    # Ensure titles are ordered according to deposit date
+    ordered_titles.each_with_index do |title, index|
+      expect(title_cards[index].text).to eq(title)
     end
 
     # Ensure a random work version has a link to the resource page
