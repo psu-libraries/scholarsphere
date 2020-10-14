@@ -29,6 +29,16 @@ module Dashboard
         def next_page_path
           raise NotImplementedError, 'You must implement this method in your controller subclass'
         end
+
+        def update_or_save_work_version(attributes: nil)
+          @work_version.indexing_source = SolrIndexingJob.public_method(:perform_now)
+
+          if attributes
+            @work_version.update(attributes)
+          else
+            @work_version.save
+          end
+        end
     end
   end
 end

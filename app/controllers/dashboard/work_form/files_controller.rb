@@ -13,7 +13,7 @@ module Dashboard
       def update
         @work_version = policy_scope(WorkVersion).find(params[:work_version_id])
         authorize(@work_version)
-        if @work_version.update(work_version_params)
+        if update_or_save_work_version(attributes: work_version_params)
           redirect_upon_success
         else
           render :edit

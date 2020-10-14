@@ -5,6 +5,8 @@ class WorkVersion < ApplicationRecord
   include ViewStatistics
   has_paper_trail
 
+  attr_writer :indexing_source
+
   jsonb_accessor :metadata,
                  title: :string,
                  subtitle: :string,
@@ -96,7 +98,7 @@ class WorkVersion < ApplicationRecord
             if: :published?,
             unless: -> { validation_context == :migration_api }
 
-  after_save :update_index_async
+  after_save :perform_update_index
 
   aasm do
     state :draft, intial: true
@@ -178,10 +180,6 @@ class WorkVersion < ApplicationRecord
     work.latest_version.try(:id) == id
   end
 
-  def update_index_async
-    SolrIndexingJob.perform_later(self)
-  end
-
   # @note Postgres mints uuids, but they are not present until the record is reloaded from the database.  In most cases,
   # this won't present a problem because we only index published versions, and at that point, the version will have
   # already been saved and reloaded from the database. However, there could be edge cases or other unforseen siutations
@@ -192,9 +190,17 @@ class WorkVersion < ApplicationRecord
     WorkIndexer.call(work, commit: true)
   end
 
+  def indexing_source
+    @indexing_source ||= SolrIndexingJob.public_method(:perform_later)
+  end
+
   delegate :depositor, :proxy_depositor, :visibility, :embargoed?, :work_type, :deposited_at, to: :work
 
   private
+
+    def perform_update_index
+      indexing_source.call(self)
+    end
 
     def strip_blanks_from_array(arr)
       Array.wrap(arr).reject(&:blank?)

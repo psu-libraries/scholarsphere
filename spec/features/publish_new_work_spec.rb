@@ -25,6 +25,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(new_work.versions.length).to eq 1
 
         new_work_version = new_work.versions.last
+        expect(page).to have_content(metadata[:title])
         expect(new_work_version.title).to eq metadata[:title]
         expect(new_work_version.version_number).to eq 1
       end
@@ -420,6 +421,10 @@ RSpec.describe 'Publishing a work', with_user: :user do
       #
       work = Work.last
       version = work.versions.first
+
+      within('.work-list__work') do
+        expect(page).to have_content(version.title)
+      end
 
       expect(version).to be_published
 

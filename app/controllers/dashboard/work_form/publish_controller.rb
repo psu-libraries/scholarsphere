@@ -22,7 +22,7 @@ module Dashboard
         @work_version.publish if publish_work?
 
         respond_to do |format|
-          if @work_version.save
+          if update_or_save_work_version
             format.html do
               notice = if publish_work?
                          'Successfully published work!'

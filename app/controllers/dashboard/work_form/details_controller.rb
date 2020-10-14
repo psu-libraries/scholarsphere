@@ -11,7 +11,7 @@ module Dashboard
         @work_version = WorkVersion.build_with_empty_work(work_version_params, depositor: current_user.actor)
 
         respond_to do |format|
-          if @work_version.save
+          if update_or_save_work_version
             format.html do
               redirect_upon_success
             end
@@ -35,7 +35,7 @@ module Dashboard
         @work_version.attributes = work_version_params
 
         respond_to do |format|
-          if @work_version.save
+          if update_or_save_work_version
             format.html do
               redirect_upon_success
             end
