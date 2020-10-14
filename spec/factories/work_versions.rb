@@ -29,6 +29,9 @@ FactoryBot.define do
       end
     end
 
+    # @note A Dashboard::WorkVersion is the same as a WorkVersion so there are no changes to attributes at this time.
+    factory :dashboard_work_version, class: 'Dashboard::WorkVersion' do; end
+
     trait :with_files do
       transient do
         file_count { 1 }

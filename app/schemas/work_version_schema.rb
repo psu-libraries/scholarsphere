@@ -9,7 +9,8 @@ class WorkVersionSchema < BaseSchema
         latest_version_bsi: resource.latest_version?,
         embargoed_until_dtsi: work.embargoed_until,
         depositor_id_isi: work.depositor.id,
-        proxy_id_isi: work.proxy_id
+        proxy_id_isi: work.proxy_id,
+        model_ssi: 'WorkVersion'
       )
   end
 

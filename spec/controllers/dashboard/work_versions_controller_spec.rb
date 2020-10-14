@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Dashboard::WorkVersionsController, type: :controller do
   let(:user) { work_version.depositor.user }
-  let(:work_version) { create :work_version, :draft }
+  let(:work_version) { create :dashboard_work_version, :draft }
 
   describe 'POST #create' do
     let(:user) { work.depositor.user }

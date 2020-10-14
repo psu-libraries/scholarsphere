@@ -421,6 +421,10 @@ RSpec.describe 'Publishing a work', with_user: :user do
       work = Work.last
       version = work.versions.first
 
+      within('.work-list__work') do
+        expect(page).to have_content(version.title)
+      end
+
       expect(version).to be_published
 
       expect(version.version_number).to eq 1
