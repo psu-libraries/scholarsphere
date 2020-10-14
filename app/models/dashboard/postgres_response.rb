@@ -13,6 +13,7 @@ module Dashboard
 
       def work_versions
         WorkVersion.where(uuid: work_version_uuids)
+          .order(updated_at: :desc)
           .compact
           .map { |work_version| WorkVersionDecorator.new(work_version) }
       end
