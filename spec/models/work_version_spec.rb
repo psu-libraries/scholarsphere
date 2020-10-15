@@ -3,8 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe WorkVersion, type: :model do
-  it_behaves_like 'an indexable resource'
-
   it_behaves_like 'a resource with view statistics' do
     let(:resource) { create(:work_version) }
   end
@@ -165,12 +163,12 @@ RSpec.describe WorkVersion, type: :model do
 
     # I've heard it's bad practice to mock the object under test, but I can't
     # think of a better way to do this without testing the contents of
-    # update_index_async twice.
+    # perform_update_index twice.
 
-    it 'calls #update_index_async' do
-      allow(work_version).to receive(:update_index_async)
+    it 'calls #perform_update_index' do
+      allow(work_version).to receive(:perform_update_index)
       work_version.save!
-      expect(work_version).to have_received(:update_index_async)
+      expect(work_version).to have_received(:perform_update_index)
     end
   end
 
@@ -318,13 +316,13 @@ RSpec.describe WorkVersion, type: :model do
     end
   end
 
-  describe '#update_index_async' do
+  describe '#perform_update_index' do
     let(:work_version) { described_class.new }
 
     before { allow(SolrIndexingJob).to receive(:perform_later) }
 
     it 'provides itself to SolrIndexingJob.perform_later' do
-      work_version.update_index_async
+      work_version.send(:perform_update_index)
       expect(SolrIndexingJob).to have_received(:perform_later).with(work_version)
     end
   end

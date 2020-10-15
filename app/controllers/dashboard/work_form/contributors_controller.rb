@@ -17,7 +17,7 @@ module Dashboard
         @work_version.attributes = work_version_params
 
         respond_to do |format|
-          if @work_version.save
+          if update_or_save_work_version
             format.html do
               redirect_upon_success
             end
