@@ -1,3 +1,11 @@
+<div class="form-wrapper">
+  <%= render 'form_fields/select',
+             form: form,
+             attribute: :rights,
+             options_for_select: WorkVersion::Licenses.options_for_select_box,
+             include_blank: true %>
+</div>
+
 <%= form.fields_for :work do |work_form| %>
   <div class="form-wrapper">
 

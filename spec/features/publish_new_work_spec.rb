@@ -432,6 +432,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       expect(version.subject).to eq [different_metadata[:subject]]
       expect(version.language).to eq [different_metadata[:language]]
       expect(version.related_url).to eq [different_metadata[:related_url]]
+      expect(version.rights).to eq metadata[:rights]
 
       expect(version.creator_aliases.length).to eq 1
       expect(version.creator_aliases.first.alias).to eq user.actor.default_alias

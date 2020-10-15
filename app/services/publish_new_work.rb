@@ -19,6 +19,7 @@ class PublishNewWork
   def self.call(metadata:, depositor:, content:, permissions: {})
     noid = metadata.delete(:noid)
     deposited_at = metadata.delete(:deposited_at)
+    metadata[:rights] ||= WorkVersion::Licenses::DEFAULT
 
     # @todo start a transaction here in case we need to rollback and remove any Actors we've created
 

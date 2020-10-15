@@ -11,7 +11,7 @@ RSpec.describe MetadataDiff do
   it { is_expected.to be_a(HashWithIndifferentAccess) }
 
   context 'when the titles are different' do
-    its(:keys) { is_expected.to contain_exactly('title') }
+    its(:keys) { is_expected.to include('title') }
 
     it 'returns a diff of the titles' do
       expect(diff[:title]).to eq([first.title, second.title])
@@ -22,7 +22,7 @@ RSpec.describe MetadataDiff do
     let(:first) { build(:work_version, title: 'The Same Title', keyword: ['foo', 'bar']) }
     let(:second) { build(:work_version, title: 'The Same Title', keyword: ['foo', 'baz']) }
 
-    its(:keys) { is_expected.to contain_exactly('keyword') }
+    its(:keys) { is_expected.to include('keyword') }
 
     it 'returns only the terms that are different' do
       expect(diff[:title]).to be_nil
@@ -34,7 +34,7 @@ RSpec.describe MetadataDiff do
     let(:first) { build(:work_version, title: 'The Same Title', keyword: ['foo', 'bar']) }
     let(:second) { build(:work_version, title: 'The Same Title', keyword: ['baz']) }
 
-    its(:keys) { is_expected.to contain_exactly('keyword') }
+    its(:keys) { is_expected.to include('keyword') }
 
     it 'returns diffs that include the deleted term' do
       expect(diff[:title]).to be_nil

@@ -50,6 +50,36 @@ class WorkVersion < ApplicationRecord
                                 reject_if: :all_blank,
                                 allow_destroy: true
 
+  module Licenses
+    # @note This is when we are unable to determine a license. It should not be used as a default option for the user.
+    DEFAULT = 'http://www.europeana.eu/portal/rights/rr-r.html'
+
+    class << self
+      def all
+        Qa::Authorities::Local::FileBasedAuthority.new(:licenses).all
+      end
+
+      def ids
+        all.map { |license| license[:id] }
+      end
+
+      def active
+        all.map.select do |license|
+          license[:active] == true
+        end
+      end
+
+      def options_for_select_box
+        active
+          .map { |license| [license[:label], license[:id]] }
+      end
+
+      def label(id)
+        all.select { |license| license[:id] == id }.first[:label]
+      end
+    end
+  end
+
   validates :title,
             presence: true
 
@@ -83,6 +113,11 @@ class WorkVersion < ApplicationRecord
               in: [Permissions::Visibility::OPEN, Permissions::Visibility::AUTHORIZED],
               message: 'cannot be private'
             },
+            if: :published?
+
+  validates :rights,
+            presence: true,
+            inclusion: { in: WorkVersion::Licenses.ids },
             if: :published?
 
   validates :published_date,
