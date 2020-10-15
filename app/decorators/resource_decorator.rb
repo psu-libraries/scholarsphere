@@ -29,10 +29,4 @@ class ResourceDecorator < SimpleDelegator
   def display_doi
     MintableDoiComponent.new(resource: resource_with_doi)
   end
-
-  # @note this is overloaded by WorkVersionDecorator because we do not currently
-  # support DOIs on Verisons, only Works
-  def resource_with_doi
-    self
-  end
 end

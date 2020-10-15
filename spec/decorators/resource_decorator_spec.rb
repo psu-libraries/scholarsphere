@@ -105,16 +105,8 @@ RSpec.describe ResourceDecorator do
     end
   end
 
-  describe '#resource_with_doi' do
-    let(:resource) { instance_double 'Work' }
-
-    it 'returns `self` by default' do
-      expect(decorator.resource_with_doi).to eq decorator
-    end
-  end
-
   describe '#display_doi' do
-    let(:resource) { instance_double 'Work' }
+    let(:resource) { build_stubbed :work }
 
     before do
       allow(MintableDoiComponent).to receive(:new).and_return(:mintable_doi_component)
@@ -122,7 +114,7 @@ RSpec.describe ResourceDecorator do
 
     it 'returns a new doi component, initialized with #resource_with_doi' do
       expect(decorator.display_doi).to eq :mintable_doi_component
-      expect(MintableDoiComponent).to have_received(:new).with(resource: decorator)
+      expect(MintableDoiComponent).to have_received(:new).with(resource: resource)
     end
   end
 end

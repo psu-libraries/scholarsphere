@@ -180,6 +180,14 @@ RSpec.describe Collection, type: :model do
     end
   end
 
+  describe '#resource_with_doi' do
+    let(:collection) { described_class.new }
+
+    it 'returns `self`' do
+      expect(collection.resource_with_doi).to eq collection
+    end
+  end
+
   describe '#to_solr' do
     subject { create(:collection, :with_creators, :with_complete_metadata).to_solr }
 

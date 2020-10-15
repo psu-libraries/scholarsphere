@@ -70,13 +70,4 @@ RSpec.describe WorkVersionDecorator do
       expect(decorator.decorated_work).to eq :decorated_work
     end
   end
-
-  describe '#resource_with_doi' do
-    let(:work) { instance_double 'Work' }
-    let(:work_version) { instance_double 'WorkVersion', work: work }
-
-    it 'returns the parent work' do
-      expect(decorator.resource_with_doi).to eq work
-    end
-  end
 end
