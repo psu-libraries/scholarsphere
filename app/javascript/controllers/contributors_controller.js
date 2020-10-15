@@ -11,8 +11,6 @@ export default class extends Controller {
     this.badgeClass = this.data.get('badge-class')
 
     // @todo This uses jQuery. We might want to put these in a separate location for better organization
-
-    /* eslint-disable no-undef */
     this.renumberBadges = () => {
       $(this.element)
         .find(`.${this.badgeClass}:visible`)
@@ -22,7 +20,6 @@ export default class extends Controller {
     }
 
     $(this.element).on('cocoon:after-remove', () => this.renumberBadges())
-    /* eslint-enable no-undef */
   }
 
   post (url) {

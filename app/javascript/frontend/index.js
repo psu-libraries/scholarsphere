@@ -6,7 +6,7 @@ import './styles'
 import './scripts/view_statistics_chart'
 
 // Load dependencies
-var $ = require('jquery/dist/jquery')
+require('jquery/dist/jquery')
 require('bootstrap/dist/js/bootstrap')
 
 // Load Blacklight dependencies
