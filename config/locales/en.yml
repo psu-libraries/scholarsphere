@@ -37,7 +37,7 @@ en:
         version_name: Semantic Version (optional)
         subtitle: Subtitle
         keyword: Keyword
-        rights: Rights
+        rights: License
         description: Description
         creator_aliases: Creators
         resource_type: Resource Type
@@ -67,6 +67,8 @@ en:
             description:
               blank: is required to publish the work
             published_date:
+              blank: is required to publish the work
+            rights:
               blank: is required to publish the work
   api:
     errors:

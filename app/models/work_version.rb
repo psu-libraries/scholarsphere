@@ -117,7 +117,10 @@ class WorkVersion < ApplicationRecord
 
   validates :rights,
             presence: true,
-            inclusion: { in: WorkVersion::Licenses.ids },
+            inclusion: {
+              in: WorkVersion::Licenses.ids,
+              allow_nil: true # Avoid duplicating the above presence validation
+            },
             if: :published?
 
   validates :published_date,
