@@ -1,0 +1,17 @@
+<div class="row row--md-mb-3">
+  <div class="col-md">
+    <h4 class="mb-2"><%= t('dashboard.catalog.zero_results.info.heading') %></h4>
+    <div class="surface"><%= t('dashboard.catalog.zero_results.info.content') %></div>
+  </div>
+
+  <div class="col-md">
+    <h4 class="mb-2"><%= t('dashboard.catalog.zero_results.options.heading') %></h4>
+    <div class="surface search">
+        <div class="mt-2 text-center">
+          <%= link_to t('dashboard.catalog.zero_results.options.browse'),
+                      dashboard_root_path,
+                      class: 'btn btn-primary' %>
+        </div>
+    </div>
+  </div>
+</div>

@@ -83,6 +83,15 @@ RSpec.describe 'Blacklight catalog page', :inline_jobs do
     expect(page).to have_css('td.work-version-subtitle', text: work_version.subtitle)
   end
 
+  context 'when the search returns no results' do
+    it 'displays no search results', with_user: :user do
+      visit(search_catalog_path(q: 'asdfasdfasdfasdfasdfasdfasdf'))
+
+      expect(page).to have_selector('h4', text: I18n.t('catalog.zero_results.info.heading'))
+      expect(page).to have_content(I18n.t('catalog.zero_results.info.content'))
+    end
+  end
+
   def document_id(resource)
     if resource.is_a? WorkVersion
       "document-#{resource.work.uuid}"

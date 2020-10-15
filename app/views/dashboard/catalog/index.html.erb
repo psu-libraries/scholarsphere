@@ -14,33 +14,11 @@
 <% end %>
 
 <div class="container-fluid">
-
   <h1 class="sr-only"><%= t('blacklight.search.header') %></h1>
 
-  <h2 class="sr-only"><%= t('blacklight.search.search_results') %></h2>
-
-  <%- if @response.empty? %>
-
+  <%- if current_user.works.empty? %>
     <%= render 'home' %>
-
   <%- else %>
-
-    <div class="action-bar mb-3">
-      <%= render_search_bar %>
-    </div>
-    <div class="action-bar mb-3">
-      <%= render 'constraints' %>
-    </div>
-    <div class="action-bar mb-3">
-      <%= render 'did_you_mean' %>
-      <%= render partial: 'paginate_compact', object: @response if show_pagination? %>
-      <%= render_results_collection_tools wrapping_class: 'search-widgets' %>
-    </div>
-
-    <%= render_document_index %>
-
-    <div class="action-bar mb-3">
-      <%= render 'results_pagination' %>
-    </div>
+    <%= render 'search_results' %>
   <%- end %>
 </div>

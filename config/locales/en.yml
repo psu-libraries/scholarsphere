@@ -133,7 +133,16 @@ en:
         additional_metadata: 'Additional Metadata'
         actions:
           save: 'Save'
-
+    catalog:
+      zero_results:
+        info:
+          heading: 'No Works Found'
+          content: >
+            None of your works match the search. You can change your search terms or browse all of your works using
+            facets.
+        options:
+          heading: 'Dashboard Search Alternatives'
+          browse: "Browse & Filter All Your Works"
     collections:
       index:
         heading: "Your Collections"
