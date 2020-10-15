@@ -22,34 +22,5 @@
 <div class="container-fluid">
   <h1 class="sr-only top-content-title"><%= t('blacklight.search.header') %></h1>
 
-  <div class="action-bar mb-3">
-    <%= render_search_bar %>
-  </div>
-
-  <div class="action-bar mb-3">
-    <%= render 'constraints' %>
-  </div>
-
-  <div class="action-bar mb-3">
-    <%= render 'did_you_mean' %>
-    <% if show_pagination? and @response.present? %>
-      <%= render partial: 'paginate_compact', object: @response %>
-    <% end %>
-    <%= render_results_collection_tools wrapping_class: 'search-widgets' %>
-  </div>
-
-  <h2 class="sr-only"><%= t('blacklight.search.search_results') %></h2>
-
-  <%- if @response.empty? %>
-    <%= render 'zero_results' %>
-  <%- elsif render_grouped_response? %>
-    <%= render_grouped_document_index %>
-  <%- else %>
-    <%= render_document_index %>
-  <%- end %>
-
-  <div class="action-bar mb-3">
-    <%= render 'results_pagination' %>
-  </div>
-
+  <%= render 'search_results' %>
 </div>

@@ -55,6 +55,17 @@ RSpec.describe 'Dashboard catalog page', :inline_jobs do
     end
   end
 
+  context "when the user's search returns no results" do
+    before { create(:work, depositor: user.actor, has_draft: true) }
+
+    it 'displays no search results', with_user: :user do
+      visit(dashboard_root_path(q: 'asdfasdfasdfasdfasdfasdfasdf'))
+
+      expect(page).to have_selector('h4', text: I18n.t('dashboard.catalog.zero_results.info.heading'))
+      expect(page).to have_content(I18n.t('dashboard.catalog.zero_results.info.content'))
+    end
+  end
+
   context 'when the user has a published work' do
     let!(:work) { create(:work, depositor: user.actor, versions_count: 3, has_draft: false) }
 
