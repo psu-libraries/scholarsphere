@@ -31,6 +31,8 @@ Rails.application.routes.draw do
   resources :resources, only: [:show] do
     get 'downloads/:id', to: 'downloads#content', as: :download
     get 'analytics', to: 'analytics#show', as: :analytics
+
+    resource :doi, only: %i[create show]
   end
 
   resources :bookmarks do
