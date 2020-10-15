@@ -23,17 +23,25 @@ RSpec.describe DoiMintingJob, type: :job do
       described_class.perform_now(resource)
     end
 
-    context 'when an error occurrs' do
-      before do
-        allow(DoiService).to receive(:call).with(resource).and_raise(DoiService::Error)
-      end
+    describe 'error handling' do
+      [
+        DoiService::Error,
+        DataCite::Client::Error,
+        DataCite::Metadata::Error
+      ].each do |potential_error|
+        context "When a #{potential_error} is thrown" do
+          before do
+            allow(DoiService).to receive(:call).and_raise(potential_error)
+          end
 
-      it 'reports the error to the status, then raises' do
-        expect {
-          described_class.perform_now(resource)
-        }.to raise_error(DoiService::Error)
+          it 'reports the error to the status, then raises the original error' do
+            expect {
+              described_class.perform_now(resource)
+            }.to raise_error(potential_error)
 
-        expect(mock_doi_status).to have_received(:error!)
+            expect(mock_doi_status).to have_received(:error!)
+          end
+        end
       end
     end
   end
