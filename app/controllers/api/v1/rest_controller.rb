@@ -3,6 +3,8 @@
 module Api
   module V1
     class RestController < ActionController::API
+      include WithAuditing
+
       before_action :authenticate_request!
 
       rescue_from StandardError do |exception|
@@ -16,6 +18,10 @@ module Api
           render json: { message: "We're sorry, but something went wrong", errors: [exception.class.to_s, exception] },
                  status: :internal_server_error
         end
+      end
+
+      def current_user
+        api_token.application
       end
 
       private

@@ -15,8 +15,7 @@ RSpec.describe Api::V1::FilesController, type: :controller do
       before do
         patch :update, params: {
           id: file.id,
-          metadata: { virus: { status: false, scanned_at: scan_time } },
-          key: ApiToken.metadata_listener
+          metadata: { virus: { status: false, scanned_at: scan_time } }
         }
       end
 
@@ -35,8 +34,7 @@ RSpec.describe Api::V1::FilesController, type: :controller do
         allow(file).to receive(:save).and_return(false)
         patch :update, params: {
           id: file.id,
-          metadata: { virus: { status: false, scanned_at: scan_time } },
-          key: ApiToken.metadata_listener
+          metadata: { virus: { status: false, scanned_at: scan_time } }
         }
       end
 

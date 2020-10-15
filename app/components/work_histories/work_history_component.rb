@@ -108,12 +108,13 @@ module WorkHistories
           end
       end
 
-      def lookup_user(user_id)
-        user_lookup_cache[user_id] ||= find_user(user_id)
+      def lookup_user(global_id)
+        user_lookup_cache[global_id] ||= find_user_or_app(global_id)
       end
 
-      def find_user(user_id)
-        User.find(user_id)
+      # @return [User, ExternalApp]
+      def find_user_or_app(global_id)
+        GlobalID::Locator.locate(global_id) || null_user
       rescue ActiveRecord::RecordNotFound
         null_user
       end

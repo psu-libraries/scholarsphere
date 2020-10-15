@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_05_132540) do
+ActiveRecord::Schema.define(version: 2020_10_09_190932) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,11 +44,11 @@ ActiveRecord::Schema.define(version: 2020_10_05_132540) do
 
   create_table "api_tokens", force: :cascade do |t|
     t.string "token"
-    t.string "app_name"
-    t.string "admin_email"
     t.datetime "last_used_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "application_id"
+    t.index ["application_id"], name: "index_api_tokens_on_application_id"
     t.index ["token"], name: "index_api_tokens_on_token", unique: true
   end
 
@@ -93,6 +93,14 @@ ActiveRecord::Schema.define(version: 2020_10_05_132540) do
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "deposited_at"
     t.index ["depositor_id"], name: "index_collections_on_depositor_id"
+  end
+
+  create_table "external_apps", force: :cascade do |t|
+    t.string "name"
+    t.string "contact_email"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["name"], name: "index_external_apps_on_name", unique: true
   end
 
   create_table "featured_resources", force: :cascade do |t|
@@ -237,6 +245,7 @@ ActiveRecord::Schema.define(version: 2020_10_05_132540) do
     t.index ["proxy_id"], name: "index_works_on_proxy_id"
   end
 
+  add_foreign_key "api_tokens", "external_apps", column: "application_id"
   add_foreign_key "collection_creations", "actors"
   add_foreign_key "collection_creations", "collections"
   add_foreign_key "collection_work_memberships", "collections"

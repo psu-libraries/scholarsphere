@@ -2,8 +2,7 @@
 
 FactoryBot.define do
   factory :api_token do
+    association :application
     token { nil } # Typically generated in an after_initialize
-    app_name { 'My Client Application' }
-    admin_email { 'admin@client.app' }
   end
 end

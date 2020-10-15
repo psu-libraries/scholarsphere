@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 class Dashboard::BaseController < ApplicationController
+  include WithAuditing
+
   before_action :authenticate_user!
-  before_action :set_paper_trail_whodunnit
 
   private
 

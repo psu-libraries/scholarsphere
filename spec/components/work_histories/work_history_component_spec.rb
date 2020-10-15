@@ -13,37 +13,52 @@ RSpec.describe WorkHistories::WorkHistoryComponent, type: :component, versioning
   # This is normally done automatically in the controller, but we need to do it
   # here to get our user on the changes above
   before do
-    PaperTrail.request.whodunnit = user.id
+    PaperTrail.request.whodunnit = editor.to_gid
   end
 
   describe 'rendering' do
-    it 'renders the work history' do
-      result = render_inline(described_class.new(work: work))
+    context 'with a standard user' do
+      let(:editor) { create(:user) }
 
-      expect(result.css('h3').text)
-        .to include("Version #{draft.version_number}")
-        .and include("Version #{v1.version_number}")
+      it 'renders the work history' do
+        result = render_inline(described_class.new(work: work))
 
-      expect(result.css('.version-timeline__list').length).to eq 2
+        expect(result.css('h3').text)
+          .to include("Version #{draft.version_number}")
+          .and include("Version #{v1.version_number}")
 
-      # Draft version has work-version changes but no files
-      expect(result.css("#work_version_changes_#{draft.id} .version-timeline__change--work-version")).to be_present
-      expect(result.css("#work_version_changes_#{draft.id} .version-timeline__change--file")).to be_empty
+        expect(result.css('.version-timeline__list').length).to eq 2
 
-      # Published version has work-version, file, and creator changes
-      expect(result.css("#work_version_changes_#{v1.id} .version-timeline__change--work-version")).to be_present
-      expect(result.css("#work_version_changes_#{v1.id} .version-timeline__change--file")).to be_present
-      expect(result.css("#work_version_changes_#{v1.id} .version-timeline__change--creator")).to be_present
+        # Draft version has work-version changes but no files
+        expect(result.css("#work_version_changes_#{draft.id} .version-timeline__change--work-version")).to be_present
+        expect(result.css("#work_version_changes_#{draft.id} .version-timeline__change--file")).to be_empty
+
+        # Published version has work-version, file, and creator changes
+        expect(result.css("#work_version_changes_#{v1.id} .version-timeline__change--work-version")).to be_present
+        expect(result.css("#work_version_changes_#{v1.id} .version-timeline__change--file")).to be_present
+        expect(result.css("#work_version_changes_#{v1.id} .version-timeline__change--creator")).to be_present
+
+        # User's access is displayed
+        expect(result.css("#work_version_changes_#{v1.id}").text).to include editor.access_id
+      end
+    end
+
+    context 'with an external application' do
+      let(:editor) { create(:external_app) }
+
+      it 'renders the work history using the name of the application' do
+        work # Implicitly create all user records via the `let`s
+
+        result = render_inline(described_class.new(work: work))
+        expect(result.css("#work_version_changes_#{v1.id}").text).to include editor.name
+      end
     end
 
     context 'when the user cannot be found' do
+      let(:editor) { build(:user, id: '12345') }
+
       it 'renders a null user' do
         work # Implicitly create all user records via the `let`s
-
-        # We can't actually delete a user due to FK constraints, but we can
-        # artificially alter one of the PaperTrail::Versions to link to a user
-        # that doesn't exist :)
-        v1.versions.last.update(whodunnit: '12345')
 
         result = render_inline(described_class.new(work: work))
         expect(result.css("#work_version_changes_#{v1.id}").text).to include '[unknown user]'

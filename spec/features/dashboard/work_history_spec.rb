@@ -9,7 +9,7 @@ RSpec.describe 'Dashboard Work History', with_user: :user, versioning: true do
   before do
     # This is usually done in the controller, but we need to do it here to get
     # our user on the changes both made in the factory and below
-    PaperTrail.request.whodunnit = user.id
+    PaperTrail.request.whodunnit = user.to_gid
 
     # Create a new draft version
     draft_version = BuildNewWorkVersion.call(work.latest_published_version)
