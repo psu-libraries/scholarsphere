@@ -4,16 +4,16 @@ require 'rails_helper'
 
 RSpec.describe DoiMintingJob, type: :job do
   let(:resource) { instance_spy('Work') }
-  let(:mock_doi_status) { instance_spy('DoiStatus') }
+  let(:mock_doi_status) { instance_spy('DoiMintingStatus') }
 
   describe '#perform' do
     before do
       allow(DoiService).to receive(:call)
-      allow(DoiStatus).to receive(:new).and_return(mock_doi_status)
+      allow(DoiMintingStatus).to receive(:new).and_return(mock_doi_status)
     end
 
     it 'calls DoiService while reporting status' do
-      expect(DoiStatus).to receive(:new).with(resource)
+      expect(DoiMintingStatus).to receive(:new).with(resource)
 
       # Order of these calls matters
       expect(mock_doi_status).to receive(:minting!).ordered

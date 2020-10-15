@@ -4,7 +4,7 @@ class DoiMintingJob < ApplicationJob
   queue_as :doi
 
   def perform(resource)
-    status = DoiStatus.new(resource)
+    status = DoiMintingStatus.new(resource)
 
     status.minting!
     DoiService.call(resource)
