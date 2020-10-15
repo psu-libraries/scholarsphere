@@ -11,7 +11,30 @@ module DataCite
     attr_writer :public_url_source
 
     RESOURCE_TYPES = {
-      'dataset' => 'Dataset'
+      'article' => 'Text',
+      'audio' => 'Sound',
+      'book' => 'Text',
+      'capstone_project' => 'Text',
+      'collection' => 'Collection',
+      'conference_proceeding' => 'Text',
+      'dataset' => 'Dataset',
+      'dissertation' => 'Text',
+      'image' => 'Image',
+      'journal' => 'Text',
+      'map_or_cartographic_material' => 'Image',
+      'masters_culminating_experience' => 'Text',
+      'masters_thesis' => 'Text',
+      'other' => 'Other',
+      'part_of_book' => 'Text',
+      'poster' => 'Audiovisual',
+      'presentation' => 'Text',
+      'project' => 'Other',
+      'report' => 'Text',
+      'research_paper' => 'Text',
+      'software_or_program_code' => 'Software',
+      'thesis' => 'Text',
+      'unspecified' => 'Other',
+      'video' => 'Audiovisual'
     }.freeze
 
     def initialize(work_version:, public_identifier:)

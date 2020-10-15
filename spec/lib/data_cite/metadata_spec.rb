@@ -19,6 +19,12 @@ RSpec.describe DataCite::Metadata do
     metadata.public_url_source = ->(id) { "http://example.test/resources/#{id}" }
   end
 
+  describe '::RESOURCE_TYPES' do
+    it 'maps each of our Work::Types to a corresponding one in DataCite' do
+      expect(described_class::RESOURCE_TYPES.keys).to match_array Work::Types.all
+    end
+  end
+
   describe '#initialize' do
     it 'accepts a WorkVersion and public identifier (uuid)' do
       metadata = described_class.new(work_version: work_version, public_identifier: uuid)
