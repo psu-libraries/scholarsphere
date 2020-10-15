@@ -1,0 +1,5 @@
+<% if resource_is_minting_doi? %>
+  <span class="badge <%= css_class %>"><%= display_content %></span>
+<% else %>
+  <%= render display_doi_component %>
+<% end %>

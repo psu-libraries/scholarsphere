@@ -21,6 +21,10 @@ class WorkVersionPolicy < ApplicationPolicy
     false
   end
 
+  def edit?
+    editable?
+  end
+
   private
 
     # @todo There's a bug in the permissions because a depositor should have edit access by default

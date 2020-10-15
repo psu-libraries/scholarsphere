@@ -6,6 +6,22 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
   let(:decorated_work_version) { ResourceDecorator.new(work_version) }
   let(:result) { render_inline(described_class.new(work_version: decorated_work_version)) }
 
+  # MintableDoiComponent uses the `helpers` method to access a Pundit policy, to
+  # determine whether the `current_user` has the ability to mint a doi. This is
+  # entirely too much setup for this unit test.
+  #
+  # Instead, MintableDoiComponent also has the ability to inject our own
+  # "policy" using the minting_policy_source method. Below, we intercept any
+  # calls to MintableDoiComponent.new, allow them to execute as normal, then
+  # inject our own policy, so that we don't have to set up the Pundit one
+  before do
+    allow(MintableDoiComponent).to(receive(:new)).and_wrap_original do |method, *args|
+      method
+        .call(*args)
+        .tap { |new_component_instance| new_component_instance.minting_policy_source = ->(_) { true } }
+    end
+  end
+
   describe 'rendering' do
     let(:work) { build_stubbed :work, deposited_at: Time.zone.parse('2020-01-15 16:07') }
     let(:work_version) { build_stubbed :work_version,

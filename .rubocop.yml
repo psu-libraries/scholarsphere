@@ -71,6 +71,10 @@ RSpec/MessageSpies:
     - 'spec/jobs/doi_minting_job_spec.rb'
     - 'spec/lib/scholarsphere/solr_admin_spec.rb'
 
+RSpec/VerifiedDoubles:
+  Exclude:
+    - 'spec/components/mintable_doi_component_spec.rb'
+
 Style/ClassVars:
   Exclude:
     - 'spec/system/active_job_system_spec.rb'

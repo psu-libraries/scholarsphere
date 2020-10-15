@@ -348,6 +348,12 @@ en:
       valid: 'This is a valid DOI and can be used to reference this page'
       invalid: 'This DOI has formatting errors. Please contact us to have it fixed'
       unmanaged: 'This is a valid DOI, but we cannot manage nor update it. Please contact us if to have it fixed'
+      waiting: 'Waiting to be created'
+      minting: 'Being created right now'
+      error: 'There was an error creating this doi. Please contact us.'
+      create: 'Create a DOI for this work'
+      confirm: 'Do you want to create a DOI? This DOI will always resolve to the most recently published version of this work.'
+      disable_with: 'Creating...'
   shared:
     search:
       heading: 'Browse and search for works'

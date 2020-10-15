@@ -22,6 +22,11 @@ class WorkVersionDecorator < ResourceDecorator
     end
   end
 
+  # @note at this time we only support DOIs on Works, not Versions
+  def resource_with_doi
+    work
+  end
+
   private
 
     def version_name_or_number
