@@ -4,14 +4,22 @@ class DoiMintingJob < ApplicationJob
   queue_as :doi
 
   def perform(resource)
-    status = DoiStatus.new(resource)
+    status = DoiMintingStatus.new(resource)
 
     status.minting!
     DoiService.call(resource)
     status.delete!
   rescue DoiService::Error => e
+    handle_error(e, status)
+  rescue DataCite::Client::Error => e
+    handle_error(e, status)
+  rescue DataCite::Metadata::Error => e
+    handle_error(e, status)
+  end
+
+  def handle_error(err, status)
     status.error!
     # @todo more error handling here?
-    raise e
+    raise err
   end
 end

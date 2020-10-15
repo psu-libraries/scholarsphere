@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe ResourceDecorator do
-  subject { described_class.new(resource) }
+  subject(:decorator) { described_class.new(resource) }
 
   it 'extends SimpleDelegator' do
     expect(described_class).to be < SimpleDelegator
@@ -102,6 +102,19 @@ RSpec.describe ResourceDecorator do
       end
 
       its(:display_published_date) { is_expected.to eq(:delegated_to_edtf_humanize) }
+    end
+  end
+
+  describe '#display_doi' do
+    let(:resource) { build_stubbed :work }
+
+    before do
+      allow(MintableDoiComponent).to receive(:new).and_return(:mintable_doi_component)
+    end
+
+    it 'returns a new doi component, initialized with #resource_with_doi' do
+      expect(decorator.display_doi).to eq :mintable_doi_component
+      expect(MintableDoiComponent).to have_received(:new).with(resource: resource)
     end
   end
 end

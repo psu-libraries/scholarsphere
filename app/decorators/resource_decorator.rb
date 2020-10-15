@@ -27,16 +27,6 @@ class ResourceDecorator < SimpleDelegator
   end
 
   def display_doi
-    DisplayDoiComponent.new(doi: work_doi)
+    MintableDoiComponent.new(resource: resource_with_doi)
   end
-
-  private
-
-    def work_doi
-      if try(:latest_published_version?)
-        work.doi
-      else
-        doi
-      end
-    end
 end

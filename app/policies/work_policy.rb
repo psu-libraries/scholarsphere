@@ -13,4 +13,15 @@ class WorkPolicy < ApplicationPolicy
   def show?
     record.discover_access?(user) || user.admin?
   end
+
+  def edit?
+    editable?
+  end
+
+  private
+
+    # @todo There's a bug in the permissions because a depositor should have edit access by default
+    def editable?
+      record.edit_access?(user) || record.depositor == user.actor || user.admin?
+    end
 end

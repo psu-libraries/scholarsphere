@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe DoiStatus do
+describe DoiMintingStatus do
   subject(:status) { described_class.new(resource) }
 
   let(:resource) { build_stubbed :work }

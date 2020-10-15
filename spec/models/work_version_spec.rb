@@ -245,6 +245,15 @@ RSpec.describe WorkVersion, type: :model do
     its(:uuid) { is_expected.to match(/[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}/) }
   end
 
+  describe '#resource_with_doi' do
+    let(:work) { build_stubbed :work }
+    let(:work_version) { described_class.new(work: work) }
+
+    it 'returns the parent work' do
+      expect(work_version.resource_with_doi).to eq work
+    end
+  end
+
   describe '#build_creator_alias' do
     let(:actor) { build_stubbed :actor }
     let(:work_version) { build_stubbed :work_version, :with_creators, creator_count: 0 }

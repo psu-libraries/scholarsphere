@@ -65,6 +65,7 @@ RSpec/MessageSpies:
 RSpec/SubjectStub:
   Exclude:
     - 'spec/lib/scholarsphere/solr_admin_spec.rb'
+    - 'spec/components/mintable_doi_component_spec.rb'
 
 # Offense count: 2
 Rails/OutputSafety:

@@ -113,6 +113,10 @@ class Collection < ApplicationRecord
     )
   end
 
+  def resource_with_doi
+    self
+  end
+
   def to_solr
     document_builder.generate(resource: self)
   end

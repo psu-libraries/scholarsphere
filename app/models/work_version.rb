@@ -206,6 +206,10 @@ class WorkVersion < ApplicationRecord
     )
   end
 
+  def resource_with_doi
+    work
+  end
+
   def to_solr
     document_builder.generate(resource: self)
   end

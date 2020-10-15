@@ -244,6 +244,14 @@ RSpec.describe Work, type: :model do
     end
   end
 
+  describe '#resource_with_doi' do
+    let(:work) { described_class.new }
+
+    it 'returns `self`' do
+      expect(work.resource_with_doi).to eq work
+    end
+  end
+
   describe '#to_solr' do
     context 'when the work only has a draft version' do
       subject { build(:work).to_solr }

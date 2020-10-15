@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 class DisplayDoiComponent < ApplicationComponent
-  attr_reader :doi
+  attr_reader :raw_doi,
+              :doi
 
   def initialize(doi:)
+    @raw_doi = doi
     @doi = Doi.new(doi) if doi.present?
   end
 
@@ -13,16 +15,14 @@ class DisplayDoiComponent < ApplicationComponent
 
   def css_class
     {
-      valid: 'btn-primary',
-      invalid: 'btn-danger',
-      unmanaged: 'btn-warning'
+      valid: 'text-primary',
+      invalid: 'text-danger',
+      unmanaged: 'text-secondary'
     }[status]
   end
 
-  def display_content
-    return doi if status == :valid
-
-    "#{status.capitalize} DOI: #{doi}"
+  def tooltip
+    I18n.t("resources.doi.#{status}")
   end
 
   def status

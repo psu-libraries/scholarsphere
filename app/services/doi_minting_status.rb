@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class DoiStatus
+class DoiMintingStatus
   STATUSES = %i(
     waiting
     minting
@@ -22,7 +22,7 @@ class DoiStatus
   end
 
   def present?
-    current_status.present?
+    resource.present? && current_status.present?
   end
 
   def delete!

@@ -2,7 +2,7 @@
 
 class MintDoiAsync
   def self.call(resource)
-    status = DoiStatus.new(resource)
+    status = DoiMintingStatus.new(resource)
 
     status.waiting!
     DoiMintingJob.perform_later(resource)
