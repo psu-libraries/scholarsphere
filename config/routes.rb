@@ -32,7 +32,7 @@ Rails.application.routes.draw do
     get 'downloads/:id', to: 'downloads#content', as: :download
     get 'analytics', to: 'analytics#show', as: :analytics
 
-    resource :doi, only: %i[create show]
+    resource :doi, only: %i[create]
   end
 
   resources :bookmarks do

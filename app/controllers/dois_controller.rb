@@ -17,11 +17,6 @@ class DoisController < ApplicationController
     redirect_to resource_path(params[:resource_id])
   end
 
-  def show
-    @resource = find_resource
-    render :show, layout: false
-  end
-
   private
 
     # @note We have some ridiculous hoops to jump through here.
