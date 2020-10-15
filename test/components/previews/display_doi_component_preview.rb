@@ -26,7 +26,7 @@ class DisplayDoiComponentPreview < ViewComponent::Preview
       FactoryBot.build_stubbed(:work, doi: FactoryBotHelpers.valid_doi))
 
     invalid = MintingStatusDoiComponent.new(resource:
-      FactoryBot.build_stubbed(:work, doi: FactoryBotHelpers.invalid_doi))
+      FactoryBot.build_stubbed(:work, doi: 'abc123badbad'))
 
     unmanaged = MintingStatusDoiComponent.new(resource:
       FactoryBot.build_stubbed(:work, doi: FactoryBotHelpers.unmanaged_doi))

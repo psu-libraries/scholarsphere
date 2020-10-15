@@ -1,7 +1,13 @@
-<button class="btn btn-sm <%= css_class %>"
-        type="button"
-        data-toggle="tooltip"
-        data-placement="bottom"
-        title="<%= t("resources.doi.#{status}") %>">
-  <%= display_content %>
-</button>
+<span class="doi text-monospace">
+  <%- if status == :invalid -%>
+    <span class="<%= css_class %>"
+          data-toggle="tooltip"
+          data-placement="bottom"
+          title="<%= tooltip %>"><%= raw_doi %></span>
+  <% else %>
+    <%= t 'resources.doi.doi' %><span class="doi-prefix <%= css_class %>"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="<%= tooltip %>"><%= doi.prefix %></span>/<span class="doi-suffix"><%= doi.suffix %></span>
+  <%- end -%>
+</span>

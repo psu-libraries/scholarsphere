@@ -54,7 +54,7 @@ RSpec.describe MintingStatusDoiComponent, type: :component do
         allow(mock_minting_status).to receive(:error?).and_return(false)
       end
 
-      its(:css_class) { is_expected.to eq('badge-light') }
+      its(:css_class) { is_expected.to eq('badge badge-light') }
       specify { expect(html.text).to include(I18n.t('resources.doi.waiting')) }
     end
 
@@ -65,7 +65,7 @@ RSpec.describe MintingStatusDoiComponent, type: :component do
         allow(mock_minting_status).to receive(:error?).and_return(false)
       end
 
-      its(:css_class) { is_expected.to eq('badge-light') }
+      its(:css_class) { is_expected.to eq('badge badge-light') }
       specify { expect(html.text).to include(I18n.t('resources.doi.minting')) }
     end
 
@@ -76,7 +76,7 @@ RSpec.describe MintingStatusDoiComponent, type: :component do
         allow(mock_minting_status).to receive(:error?).and_return(true)
       end
 
-      its(:css_class) { is_expected.to eq('badge-danger') }
+      its(:css_class) { is_expected.to eq('text-danger') }
       specify { expect(html.text).to include(I18n.t('resources.doi.error')) }
     end
   end

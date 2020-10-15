@@ -345,6 +345,7 @@ en:
     work_history_summary: Summary
     works: Works
     doi:
+      doi: 'doi:'
       valid: 'This is a valid DOI and can be used to reference this page'
       invalid: 'This DOI has formatting errors. Please contact us to have it fixed'
       unmanaged: 'This is a valid DOI, but we cannot manage nor update it. Please contact us if to have it fixed'

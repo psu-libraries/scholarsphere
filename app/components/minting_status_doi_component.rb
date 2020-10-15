@@ -19,9 +19,9 @@ class MintingStatusDoiComponent < ApplicationComponent
 
   def css_class
     {
-      waiting: 'badge-light',
-      minting: 'badge-light',
-      error: 'badge-danger'
+      waiting: 'badge badge-light',
+      minting: 'badge badge-light',
+      error: 'text-danger'
     }[status]
   end
 

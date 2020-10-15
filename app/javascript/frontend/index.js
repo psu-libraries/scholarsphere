@@ -6,7 +6,7 @@ import './styles'
 import './scripts/view_statistics_chart'
 
 // Load dependencies
-require('jquery/dist/jquery')
+var $ = require('jquery/dist/jquery')
 require('bootstrap/dist/js/bootstrap')
 
 // Load Blacklight dependencies
@@ -18,3 +18,8 @@ require('blacklight-frontend/app/javascript/blacklight/facet_load')
 // Load images
 // Retrieve the path to the image via <%= image_pack_tag('image.png') %>
 require.context('./img/', true)
+
+// Initialize tooltips
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
