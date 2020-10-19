@@ -1,40 +1,32 @@
 <html>
   <head>
-    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   </head>
-<body>
-  <h1><%= t('mailers.actor.monthly_stats.heading', date: @presenter.ending_at.strftime('%B')) %></h1>
-   <p>Dear <%= @presenter.display_name %>, <br>
-      You had <%= @presenter.file_downloads %> new downloads last month across your <%= @presenter.total_files %> files
-      in <%= t('application_name') %>.
-      You can
-      <a href="https://scholarsphere.psu.edu/dashboard/">view your overall statistics in <%= t('application_name') %></a>
-      by accessing your dashboard.
-   </p>
-  <p>Interested in sharing, archiving, and preserving other work? Consider depositing any of the following in
-    <a href="https://scholarsphere.psu.edu/"><%= t('application_name') %></a></p>
-  <ul>
-    <li>Articles: Check <a href="http://www.sherpa.ac.uk/romeo/index.php">SHERPA/RoMEO</a> to determine which version of
-        an article you can archive.
-    </li>
-    <li>Datasets</li>
-    <li>Videos</li>
-    <li>Software and analysis code</li>
-    <li>Book chapters: Check your publishing agreement to see if you can deposit a contributed chapter.</li>
-    <li>Books: Consider
-      <a href="https://www.authorsalliance.org/resources/rights-reversion-portal/">regaining copyright</a>
-      from your publisher so you can deposit an out-of-print book. You can also deposit any book that is openly licensed,
-      such as an open access monograph bearing one of the Creative Commons licenses.
-    </li>
-  </ul>
-  <p>If you have questions please <a href="https://scholarsphere.psu.edu/contact">contact us!</a></p>
-  <p>If you'd like to opt out of receiving these emails, follow these steps:</p>
-    <ol>
-      <li>Login</li>
-      <li>Once directed to the dashboard, or from any page if you are already logged in, select "Edit Profile" from the
-          top right menu with your name listed.</li>
-      <li>Under the "Edit Profile" heading, select the first checkbox to "Opt out of monthly statistics via email"</li>
-      <li>Click the "Save Profile" button to save your choice to opt out of monthly statistics via email.</li>
-    </ol>
-</body>
+  <body>
+    <h1><%= t('mailers.actor.monthly_stats.heading', date: @presenter.ending_at.strftime('%B')) %></h1>
+    <p>
+      Dear <%= @presenter.display_name %>, <br> You had <%= @presenter.file_downloads %> new downloads last month across
+      your <%= @presenter.total_files %> files in <%= t('application_name') %>.
+    </p>
+    <p>
+      Interested in sharing, archiving, and preserving other work? Consider depositing any of the following in
+      <%= link_to t('sufia.product_name'), 'https://scholarsphere.psu.edu/' %>
+    </p>
+    <ul>
+      <li>
+        Articles: Check <%= link_to 'SHERPA/RoMEO', 'http://www.sherpa.ac.uk/romeo/index.php' %> to determine which
+        version of an article you can archive.
+      </li>
+      <li>Datasets</li>
+      <li>Videos</li>
+      <li>Software and analysis code</li>
+      <li>Book chapters: Check your publishing agreement to see if you can deposit a contributed chapter.</li>
+      <li>
+        Books: Consider
+        <%= link_to 'regaining copyright', 'https://www.authorsalliance.org/resources/rights-reversion-portal/' %>
+        from your publisher so you can deposit an out-of-print book. You can also deposit any book that is openly
+        licensed, such as an open access monograph bearing one of the Creative Commons licenses.
+      </li>
+    </ul>
+  </body>
 </html>
