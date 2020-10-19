@@ -25,6 +25,15 @@ RSpec.describe Doi do
     it { is_expected.to be_managed }
   end
 
+  context 'with a configured prefix' do
+    let(:doi) { "doi:#{ENV['DATACITE_PREFIX']}/fvr2-yw38" }
+
+    before { ENV['DATACITE_PREFIX'] = "10.#{Faker::Number.number(digits: 5)}" }
+
+    it { is_expected.to be_valid }
+    it { is_expected.to be_managed }
+  end
+
   context 'with https://doi.org/10.1515/pol-2020-2011' do
     let(:doi) { 'https://doi.org/10.1515/pol-2020-2011' }
 
