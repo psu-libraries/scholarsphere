@@ -19,7 +19,18 @@ module Dashboard
 
         @work_version.attributes = work_version_params
 
-        @work_version.publish if publish_work?
+        # If the user clicks the "Publish" button, *and* there are validation
+        # errors, we still want to persist any changes to the draft version's
+        # db record, while at the same time showing the publish validation errors
+        #
+        # The easiest way to do this is to immediately save all the form changes
+        # against the draft validations, then mark the record as published and
+        # save again--this time using the published validations. That way the
+        # approriate error messages will appear on the form when it's re-rendered
+        if publish_work?
+          update_or_save_work_version
+          @work_version.publish
+        end
 
         respond_to do |format|
           if update_or_save_work_version
