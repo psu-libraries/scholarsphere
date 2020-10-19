@@ -55,7 +55,7 @@ en:
         display_doi: DOI
         file_resources: Files
       user:
-        admin_enabled: Administrative privleges enabled
+        admin_enabled: Administrative privileges enabled
     errors:
       models:
         file_version_membership:
@@ -359,7 +359,7 @@ en:
       doi: 'doi:'
       valid: 'This is a valid DOI and can be used to reference this page'
       invalid: 'This DOI has formatting errors. Please contact us to have it fixed'
-      unmanaged: 'This is a valid DOI, but we cannot manage nor update it. Please contact us if to have it fixed'
+      unmanaged: 'This is a valid DOI, but we cannot manage or update it. Please contact us to have it fixed'
       waiting: 'Waiting to be created'
       minting: 'Being created right now'
       error: 'There was an error creating this doi. Please contact us.'
