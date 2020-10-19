@@ -17,7 +17,7 @@ RSpec.describe 'Profile', type: :feature, with_user: :user do
       fill_in 'Surname', with: attributes[:surname]
       fill_in 'Email', with: attributes[:email]
       fill_in 'ORCiD', with: attributes[:orcid]
-      expect(page).not_to have_content('Administrative privleges enabled')
+      expect(page).not_to have_content('Administrative privileges enabled')
       click_button 'Save'
       user.actor.reload
       expect(user.actor.given_name).to eq(attributes[:given_name])
@@ -46,11 +46,11 @@ RSpec.describe 'Profile', type: :feature, with_user: :user do
   context 'with an admin user' do
     let(:user) { create(:user, :admin) }
 
-    it 'offers the option to enable admin privledges' do
+    it 'offers the option to enable admin privileges' do
       visit edit_dashboard_profile_path
       expect(page).to have_content('Edit Profile')
-      expect(page).to have_field('Administrative privleges enabled', checked: true)
-      uncheck('Administrative privleges enabled')
+      expect(page).to have_field('Administrative privileges enabled', checked: true)
+      uncheck('Administrative privileges enabled')
       click_button 'Save'
       user.reload
       expect(user.admin_enabled).to be(false)
