@@ -13,7 +13,7 @@ class Doi
   end
 
   def managed?
-    MANAGED_PREFIXES.include?(prefix)
+    MANAGED_PREFIXES.include?(prefix) || prefix == ENV['DATACITE_PREFIX']
   end
 
   def prefix
