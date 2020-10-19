@@ -379,6 +379,30 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
   end
 
+  describe 'The Publish tab' do
+    let(:work_version) { create :work_version, :draft }
+    let(:user) { work_version.work.depositor.user }
+
+    context 'when submitting the form with publication errors' do
+      it 'does NOT publish the work, but DOES save the changes to the draft' do
+        visit dashboard_work_form_publish_path(work_version)
+
+        fill_in 'work_version_published_date', with: 'this is not a valid date'
+        FeatureHelpers::WorkForm.publish
+
+        expect(page).to have_current_path(dashboard_work_form_publish_path(work_version))
+
+        within '#error_explanation' do
+          expect(page).to have_content(I18n.t('errors.messages.invalid_edtf'))
+        end
+
+        work_version.reload
+        expect(work_version).not_to be_published
+        expect(work_version.published_date).to eq 'this is not a valid date'
+      end
+    end
+  end
+
   describe 'Publising a new work from end-to-end', js: true do
     let(:different_metadata) { attributes_for(:work_version, :with_complete_metadata) }
 
