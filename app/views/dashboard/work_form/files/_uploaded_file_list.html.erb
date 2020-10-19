@@ -4,7 +4,6 @@
       <th><%= t('dashboard.file_list.edit.name') %></th>
       <th><%= t('dashboard.file_list.edit.mime_type') %></th>
       <th><%= t('dashboard.file_list.edit.size') %></th>
-      <th><%= t('dashboard.file_list.edit.virus') %></th>
       <th><%= t('dashboard.file_list.edit.actions') %></th>
     </tr>
   </thead>
@@ -17,7 +16,6 @@
         </td>
         <td><%= membership.mime_type %></td>
         <td><%= number_to_human_size membership.size %></td>
-        <td><%= membership.virus.nil? ? t('dashboard.file_list.edit.unknown_virus') : membership.virus %></td>
         <td>
           <%# link_to t('dashboard.file_list.edit.rename'),
                       edit_dashboard_file_path(membership),
