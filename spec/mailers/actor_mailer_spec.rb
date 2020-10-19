@@ -24,7 +24,7 @@ RSpec.describe ActorMailer, type: :mailer do
       it "sends an email with the depositor's monthly download statistics" do
         expect(mail.subject).to eq('ScholarSphere - Reporting Monthly Downloads and Views')
         expect(mail.to).to contain_exactly(actor.email)
-        expect(mail.body.raw_source).to match(/You had 3 new downloads last month across your 0 files/)
+        expect(mail.body.raw_source).to match(/You had 3 new downloads last month/)
       end
     end
   end
