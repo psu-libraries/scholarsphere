@@ -17,6 +17,7 @@ class CollectionMetadataComponent < ApplicationComponent
     :display_published_date,
     :subject,
     :language,
+    :display_doi,
     :identifier,
     :based_near,
     :related_url,
@@ -62,6 +63,8 @@ class CollectionMetadataComponent < ApplicationComponent
         value.to_formatted_s(:long)
       elsif value.is_a? CollectionCreation
         value.alias
+      elsif value.is_a? ApplicationComponent
+        render value
       else
         value.to_s
       end

@@ -45,5 +45,9 @@ FactoryBot.define do
       related_url { [Faker::Internet.url] }
       source { [Faker::SlackEmoji.emoji] }
     end
+
+    trait :with_a_doi do
+      doi { FactoryBotHelpers.valid_doi }
+    end
   end
 end

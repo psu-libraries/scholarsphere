@@ -3,15 +3,32 @@
 require 'rails_helper'
 
 RSpec.describe CollectionMetadataComponent, type: :component do
-  let(:result) { render_inline(described_class.new(collection: collection)) }
+  let(:decorated_collection) { ResourceDecorator.new(collection) }
+  let(:result) { render_inline(described_class.new(collection: decorated_collection)) }
+
+  # MintableDoiComponent uses the `helpers` method to access a Pundit policy, to
+  # determine whether the `current_user` has the ability to mint a doi. This is
+  # entirely too much setup for this unit test.
+  #
+  # Instead, MintableDoiComponent also has the ability to inject our own
+  # "policy" using the minting_policy_source method. Below, we intercept any
+  # calls to MintableDoiComponent.new, allow them to execute as normal, then
+  # inject our own policy, so that we don't have to set up the Pundit one
+  before do
+    allow(MintableDoiComponent).to(receive(:new)).and_wrap_original do |method, *args|
+      method
+        .call(*args)
+        .tap { |new_component_instance| new_component_instance.minting_policy_source = ->(_) { true } }
+    end
+  end
 
   describe 'rendering' do
-    let(:collection) { Collection.new(
-      subtitle: 'My subtitle',
-      deposited_at: Time.zone.parse('2020-01-15 16:07'),
-      keyword: %w(one two),
-      subject: []
-    ) }
+    let(:collection) { build_stubbed :collection,
+                                     subtitle: 'My subtitle',
+                                     deposited_at: Time.zone.parse('2020-01-15 16:07'),
+                                     keyword: %w(one two),
+                                     subject: []
+    }
 
     it 'renders a string with label' do
       expect(result.css('th.collection-subtitle').text).to eq 'Subtitle'
