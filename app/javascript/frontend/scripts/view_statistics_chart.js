@@ -22,7 +22,7 @@ function parseData (data) {
 }
 
 function drawChart (selection, data) {
-  const margin = { top: 2, right: 10, bottom: 20, left: 10 }
+  const margin = { top: 2, right: 25, bottom: 20, left: 25 }
   const width = 350
   const height = 80
 
@@ -73,6 +73,7 @@ function drawChart (selection, data) {
     .attr('class', 'axis axis--x')
     .attr('transform', `translate(0,${height - margin.bottom + 2})`)
     .call(xAxis)
+    .call(g => hideOverflowingTickLabels(svg, g.selectAll('.tick text')))
 
   const chartGroup = svg.append('g')
     .attr('class', 'chart')
@@ -131,4 +132,21 @@ function findNearestDataPoint (bisector, data, date) {
   const a = data[i - 1]
   const b = data[i]
   return date - a[0] > b[0] - date ? b : a
+}
+
+function hideOverflowingTickLabels (svg, tickTextSelection) {
+  const svgBounds = svg.node().getBoundingClientRect()
+  const svgLeft = svgBounds.x
+  const svgRight = svgBounds.x + svgBounds.width
+
+  tickTextSelection
+    .filter(function () {
+      // Note in d3, `this` is set to the element that we're filtering
+      const tickBounds = this.getBoundingClientRect()
+      const tickLeft = tickBounds.x
+      const tickRight = tickBounds.x + tickBounds.width
+
+      return (tickLeft < svgLeft || svgRight < tickRight)
+    })
+    .style('visibility', 'hidden')
 }
