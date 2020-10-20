@@ -63,6 +63,7 @@ module Api::V1
             :published_date,
             :deposited_at,
             :description,
+            :doi,
             work_ids: [],
             keyword: [],
             contributor: [],
