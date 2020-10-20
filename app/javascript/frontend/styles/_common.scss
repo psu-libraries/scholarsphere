@@ -721,6 +721,7 @@ h4,
 .version-timeline {
   display: flex !important;
   flex-wrap: wrap;
+  width: 100%;
 
   @include media-breakpoint-up(md) {
     flex-wrap: nowrap;
