@@ -84,6 +84,7 @@ services:
     image: psul/solr:8.5.2-slim
     restart: always
     environment:
+      SOLR_STOP_WAIT: 5
       SOLR_USERNAME: scholarsphere
       SOLR_PASSWORD: scholarsphere
     volumes:
