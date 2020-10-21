@@ -7,13 +7,26 @@
 
   .aa-dropdown-menu {
     background-color: $white;
-    border: 1px solid $gray-800;
+    border: $input-border-width solid $input-border-color;
     border-top: 0;
     width: 100%;
 
+    // We need a margin-bottom on the dropdown menu to clear the sticky footer
+    // on the work form. However, you cannot do margin-bottom on absolute
+    // positioned elements like .aa-dropdown-menu. The following is a hack that
+    // simulates what `margin-bottom: 100px` would do, if it worked.
+    &::after {
+      bottom: -100px;
+      content: '';
+      height: 100px;
+      position: absolute;
+      width: 1px;
+    }
+
     .aa-suggestion {
+      border-top: 1px solid $gray-200;
       cursor: pointer;
-      padding: 5px 4px;
+      padding: $input-padding-y $input-padding-x;
     }
 
     .aa-suggestion.aa-cursor {
