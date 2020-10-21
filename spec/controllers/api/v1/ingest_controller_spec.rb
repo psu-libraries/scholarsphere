@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require 'scholarsphere/client'
 
 # @note While this is technically a controller test, because it's testing our REST API, we're really using it as a
 # feature test to ensure end-to-end functionality of our ingest API.
