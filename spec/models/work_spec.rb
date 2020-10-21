@@ -401,13 +401,11 @@ RSpec.describe Work, type: :model do
     end
 
     context 'when the work does NOT have a published version' do
+      subject { work.count_view! }
+
       let(:work) { build(:work) }
 
-      it 'raises an error' do
-        expect {
-          work.count_view!
-        }.to raise_error(ArgumentError, 'work must have a published version')
-      end
+      it { is_expected.to be_nil }
     end
   end
 
