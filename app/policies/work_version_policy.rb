@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-# @note this is a policy used by the public-facing side of the app. The
-# Dashboard (where users work on their own stuff) has a different policy. At
-# some point we may combine the two, but don't want to prefactor
 class WorkVersionPolicy < ApplicationPolicy
   class Scope < Scope
     def limit
@@ -11,30 +8,33 @@ class WorkVersionPolicy < ApplicationPolicy
   end
 
   def show?
-    record.work.read_access?(user) || user.admin?
+    Pundit.policy(user, record.work).show?
   end
+  alias_method :diff?, :show?
+
+  def edit?
+    return false if record.published?
+
+    editable?
+  end
+  alias_method :update?, :edit?
+  alias_method :destroy?, :edit?
+  alias_method :publish?, :edit?
 
   def download?
     return true if editable?
-    return download_published_version? if record.published?
+    return false if record.embargoed?
 
-    false
+    record.work.read_access?(user)
   end
 
-  def edit?
-    editable?
+  def new?(latest_version)
+    record.published? && record == latest_version
   end
 
   private
 
-    # @todo There's a bug in the permissions because a depositor should have edit access by default
     def editable?
-      record.work.edit_access?(user) || record.depositor == user.actor || user.admin?
-    end
-
-    def download_published_version?
-      return false if record.embargoed?
-
-      record.work.read_access? user
+      Pundit.policy(user, record.work).edit?
     end
 end

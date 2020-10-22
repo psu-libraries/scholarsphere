@@ -4,7 +4,7 @@ module Dashboard
   module WorkForm
     class PublishController < BaseController
       def edit
-        @work_version = policy_scope(WorkVersion)
+        @work_version = WorkVersion
           .includes(file_version_memberships: [:file_resource])
           .find(params[:work_version_id])
         authorize(@work_version)
@@ -14,7 +14,7 @@ module Dashboard
       end
 
       def update
-        @work_version = policy_scope(WorkVersion).find(params[:work_version_id])
+        @work_version = WorkVersion.find(params[:work_version_id])
         authorize(@work_version)
 
         @work_version.attributes = work_version_params

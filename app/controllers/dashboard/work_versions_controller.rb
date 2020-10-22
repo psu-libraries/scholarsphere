@@ -3,11 +3,10 @@
 module Dashboard
   class WorkVersionsController < BaseController
     def create
-      work = policy_scope(Work).find(params[:work_id])
-      latest_work_version = work.latest_version
-      raise Pundit::NotAuthorizedError unless policy(latest_work_version).new?(latest_work_version)
+      work = Work.find(params[:work_id])
+      authorize(work, :create_version?)
 
-      @work_version = BuildNewWorkVersion.call(latest_work_version)
+      @work_version = BuildNewWorkVersion.call(work.latest_version)
 
       respond_to do |format|
         if @work_version.save
@@ -18,7 +17,7 @@ module Dashboard
           format.json { render :show, status: :created, location: @work_version }
         else
           # _Highly_ unlikely this branch could ever be hit, since
-          # latest_work_version needs to be valid in order to be published
+          # the latest version needs to be valid in order to be published
           format.html do
             redirect_to dashboard_works_path,
                         error: 'Work version could not be created: ' +
@@ -30,19 +29,20 @@ module Dashboard
     end
 
     def show
-      @work_version = WorkVersionDecorator.new(policy_scope(WorkVersion).find(params[:id]))
+      @work_version = WorkVersionDecorator.new(WorkVersion.find(params[:id]))
+      authorize(@work_version)
       @work = WorkDecorator.new(@work_version.work)
     end
 
     def edit
-      @work_version = policy_scope(WorkVersion).find(params[:id])
+      @work_version = WorkVersion.find(params[:id])
       authorize(@work_version)
 
       @work_version.build_creator_alias(actor: current_user.actor)
     end
 
     def update
-      @work_version = policy_scope(WorkVersion).find(params[:id])
+      @work_version = WorkVersion.find(params[:id])
       authorize(@work_version)
 
       # There is be a better way to do this, but I think it's decent enough for now
@@ -54,7 +54,7 @@ module Dashboard
     end
 
     def destroy
-      @work_version = policy_scope(WorkVersion).find(params[:id])
+      @work_version = WorkVersion.find(params[:id])
       authorize(@work_version)
       DestroyWorkVersion.call(@work_version)
 
@@ -65,13 +65,17 @@ module Dashboard
     end
 
     def publish
-      @work_version = policy_scope(WorkVersion).find(params[:work_version_id])
+      @work_version = WorkVersion.find(params[:work_version_id])
       authorize(@work_version)
     end
 
     def diff
-      @work_version = WorkVersionDecorator.new(policy_scope(WorkVersion).find(params[:work_version_id]))
-      @previous_version = WorkVersionDecorator.new(policy_scope(WorkVersion).find(params[:previous_version_id]))
+      current_version = WorkVersion.find(params[:work_version_id])
+      previous_version = WorkVersion.find(params[:previous_version_id])
+      authorize(current_version) && authorize(previous_version)
+
+      @work_version = WorkVersionDecorator.new(current_version)
+      @previous_version = WorkVersionDecorator.new(previous_version)
       @work = WorkDecorator.new(@work_version.work)
       @presenter = DiffPresenter.new(
         MetadataDiff.call(@previous_version, @work_version),

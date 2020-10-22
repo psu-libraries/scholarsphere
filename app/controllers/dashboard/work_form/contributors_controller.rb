@@ -4,14 +4,14 @@ module Dashboard
   module WorkForm
     class ContributorsController < BaseController
       def edit
-        @work_version = policy_scope(WorkVersion).find(params[:work_version_id])
+        @work_version = WorkVersion.find(params[:work_version_id])
         authorize(@work_version)
 
         @work_version.build_creator_alias(actor: current_user.actor) if @work_version.creators.empty?
       end
 
       def update
-        @work_version = policy_scope(WorkVersion).find(params[:work_version_id])
+        @work_version = WorkVersion.find(params[:work_version_id])
         authorize(@work_version)
 
         @work_version.attributes = work_version_params

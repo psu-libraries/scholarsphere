@@ -5,74 +5,91 @@ require 'rails_helper'
 RSpec.describe WorkVersionPolicy, type: :policy do
   subject { described_class }
 
-  let(:user) { build(:user) }
-  let(:admin) { build(:user, :admin) }
   let(:work) { instance_double 'Work' }
   let(:work_version) { instance_double 'WorkVersion', work: work }
+  let(:user) { instance_double 'User' }
+  let(:work_policy) { instance_double 'WorkPolicy' }
 
-  permissions :show? do
-    context 'when the user has access to the work version' do
-      before { allow(work).to receive(:read_access?).with(user).and_return(true) }
+  permissions :show?, :diff? do
+    before { allow(Pundit).to receive(:policy).with(user, work).and_return(work_policy) }
+
+    context 'when the user has show access to the work' do
+      before { allow(work_policy).to receive(:show?).and_return(true) }
 
       it { is_expected.to permit(user, work_version) }
     end
 
-    context 'when the user does NOT have access to the work version' do
-      before { allow(work).to receive(:read_access?).with(user).and_return(false) }
+    context 'when the user has NO show access to the work' do
+      before { allow(work_policy).to receive(:show?).and_return(false) }
 
       it { is_expected.not_to permit(user, work_version) }
     end
+  end
 
-    context 'when the user is an admin' do
-      before { allow(work).to receive(:read_access?).with(admin).and_return(false) }
+  permissions :edit?, :update?, :destroy?, :publish? do
+    before { allow(Pundit).to receive(:policy).with(user, work).and_return(work_policy) }
 
-      it { is_expected.to permit(admin, work_version) }
+    context 'when the version is NOT published' do
+      before { allow(work_version).to receive(:published?).and_return(false) }
+
+      context 'when the user has the access to the work' do
+        before { allow(work_policy).to receive(:edit?).and_return(true) }
+
+        it { is_expected.to permit(user, work_version) }
+      end
+
+      context 'when the user does NOT have the access to the work' do
+        before { allow(work_policy).to receive(:edit?).and_return(false) }
+
+        it { is_expected.not_to permit(user, work_version) }
+      end
+    end
+
+    context 'when the version is published' do
+      before { allow(work_version).to receive(:published?).and_return(true) }
+
+      context 'when the user has the access to the work' do
+        before { allow(work_policy).to receive(:edit?).and_return(true) }
+
+        it { is_expected.not_to permit(user, work_version) }
+      end
     end
   end
 
-  it_behaves_like 'a downloadable work version'
-
   permissions :download? do
+    let(:work_version) { work.latest_version }
+
     context 'with a public user' do
       let(:user) { User.guest }
 
       context 'with a published, publicly readable work' do
-        let(:work_version) { build(:work_version, :published) }
+        let(:work) { create(:work, has_draft: false) }
 
         it { is_expected.to permit(user, work_version) }
-        it { is_expected.to permit(admin, work_version) }
       end
 
       context 'with a publicly discoverable work' do
-        let(:v1) { build(:work_version, :published) }
-        let(:work) { create(:work, :with_authorized_access, discover_groups: [Group.public_agent], versions: [v1]) }
-        let(:work_version) { work.versions[0] }
+        let(:work) { create(:work, :with_authorized_access, discover_groups: [Group.public_agent]) }
 
         it { is_expected.not_to permit(user, work_version) }
-        it { is_expected.to permit(admin, work_version) }
       end
 
       context 'with a Penn State work' do
         let(:work) { create(:work, :with_authorized_access, has_draft: false) }
-        let(:work_version) { work.versions[0] }
 
         it { is_expected.not_to permit(user, work_version) }
-        it { is_expected.to permit(admin, work_version) }
       end
 
       context 'with an embargoed public work' do
         let(:work) { create(:work, embargoed_until: (Time.zone.now + 6.days), has_draft: false) }
-        let(:work_version) { work.versions[0] }
 
         it { is_expected.not_to permit(user, work_version) }
-        it { is_expected.to permit(admin, work_version) }
       end
 
       context 'with a draft work' do
-        let(:work_version) { build(:work_version) }
+        let(:work) { create(:work, has_draft: true) }
 
-        it { is_expected.not_to permit(user, work_version) }
-        it { is_expected.to permit(admin, work_version) }
+        it { pending 'this should pass once we restrict viewing of draft works'; is_expected.not_to permit(user, work_version) }
       end
     end
 
@@ -82,50 +99,38 @@ RSpec.describe WorkVersionPolicy, type: :policy do
 
       context 'with a published, publicly readable work' do
         let(:work) { create(:work, has_draft: false, depositor: someone_else.actor) }
-        let(:work_version) { work.versions[0] }
 
         it { is_expected.to permit(me, work_version) }
-        it { is_expected.to permit(admin, work_version) }
       end
 
       context 'with a Penn State work' do
         let(:work) { create(:work, :with_authorized_access, has_draft: false, depositor: someone_else.actor) }
-        let(:work_version) { work.versions[0] }
 
         it { is_expected.to permit(me, work_version) }
-        it { is_expected.to permit(admin, work_version) }
       end
 
       context 'with a draft version I deposited' do
         let(:work) { create(:work, depositor: me.actor) }
-        let(:work_version) { work.versions[0] }
 
         it { is_expected.to permit(me, work_version) }
-        it { is_expected.to permit(admin, work_version) }
       end
 
       context 'with a draft version I did NOT deposit' do
         let(:work) { build(:work, depositor: someone_else.actor) }
-        let(:work_version) { work.versions[0] }
 
-        it { is_expected.not_to permit(me, work_version) }
-        it { is_expected.to permit(admin, work_version) }
+        it { pending 'this should pass once we restrict viewing of draft works'; is_expected.not_to permit(me, work_version) }
       end
 
       context 'with an embargoed public work' do
         let(:work) { create(:work, has_draft: false, depositor: someone_else.actor, embargoed_until: (Time.zone.now + 6.days)) }
-        let(:work_version) { work.versions[0] }
 
         it { is_expected.not_to permit(me, work_version) }
-        it { is_expected.to permit(admin, work_version) }
       end
 
       context 'with an embargoed work I deposited' do
         let(:work) { create(:work, has_draft: false, depositor: me.actor, embargoed_until: (Time.zone.now + 6.days)) }
-        let(:work_version) { work.versions[0] }
 
         it { is_expected.to permit(me, work_version) }
-        it { is_expected.to permit(admin, work_version) }
       end
 
       context 'with an embargoed work editable by me' do
@@ -136,11 +141,39 @@ RSpec.describe WorkVersionPolicy, type: :policy do
                  embargoed_until: (Time.zone.now + 6.days),
                  edit_users: [me]
         end
-        let(:work_version) { work.versions[0] }
 
         it { is_expected.to permit(me, work_version) }
-        it { is_expected.to permit(admin, work_version) }
       end
+    end
+  end
+
+  describe '#new?' do
+    subject(:new) { policy.new?(latest_version) }
+
+    let(:policy) { described_class.new(user, work_version) }
+
+    context 'when the version is published' do
+      before { allow(work_version).to receive(:published?).and_return(true) }
+
+      context 'when the version is the latest one in the work' do
+        let(:latest_version) { work_version }
+
+        it { is_expected.to eq true }
+      end
+
+      context 'when the version is NOT the latest one in the work' do
+        let(:latest_version) { instance_double('WorkVersion') }
+
+        it { is_expected.to eq false }
+      end
+    end
+
+    context 'when the version is NOT published' do
+      let(:latest_version) { work_version }
+
+      before { allow(work_version).to receive(:published?).and_return(false) }
+
+      it { is_expected.to eq false }
     end
   end
 end

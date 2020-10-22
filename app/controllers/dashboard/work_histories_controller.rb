@@ -3,7 +3,8 @@
 module Dashboard
   class WorkHistoriesController < BaseController
     def show
-      @work = policy_scope(Work).find(params[:work_id])
+      @work = Work.find(params[:work_id])
+      authorize(@work)
       @latest_work_version = WorkVersionDecorator.new(@work.latest_version)
     end
   end

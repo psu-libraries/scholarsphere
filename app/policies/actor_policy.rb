@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Dashboard::ActorPolicy < ApplicationPolicy
+class ActorPolicy < ApplicationPolicy
   class Scope < Scope
     def limit
       scope.all
