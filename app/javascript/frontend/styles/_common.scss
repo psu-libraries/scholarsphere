@@ -329,6 +329,11 @@ h4,
       align-items: center;
     }
   }
+
+  .navbar-filler {
+    display: inline-block;
+    padding: ($spacer * 1.5) 0;
+  }
 }
 
 

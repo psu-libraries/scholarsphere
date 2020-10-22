@@ -14,36 +14,16 @@
   <div class="collapse navbar-collapse" id="navbar-toggle">
     <ul class="navbar-nav">
 
-      <%= yield :navbar_items %>
-
-      <% if current_user.guest? %>
-
-        <li class="nav-item">
-          <%= link_to t('blacklight.header_links.login'), new_user_session_path,
-                      class: 'btn btn-primary btn--collapse-normal btn--square btn--expand' %>
-        </li>
-
+      <% if content_for? :navbar_items %>
+        <%= yield :navbar_items %>
       <% else %>
 
-        <li class="nav-item dropdown dropdown--navbar-action">
-          <button class="btn btn-primary dropdown-toggle btn--square btn--expand btn--settings"
-                  type="button"
-                  id="settings"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false">
-            <%= current_user.display_name %>
-          </button>
-          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="settings">
-            <%= link_to_dropdown_item('Profile', edit_dashboard_profile_path) %>
-            <%= link_to_dropdown_item('Dashboard', dashboard_root_path) %>
-            <%= link_to_dropdown_item('Create New Work', dashboard_work_form_new_path) %>
-            <div class="dropdown-divider"></div>
-            <%= link_to_dropdown_item('Logout', destroy_user_session_path) %>
-          </div>
+        <%# Fill-out the navbar with empty space so that the headings will appear %>
+        <li class="nav-item">
+          <span class='navbar-filler' />
         </li>
-
       <% end %>
+
     </ul>
   </div>
 </nav>
