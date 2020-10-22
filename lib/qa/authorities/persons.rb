@@ -43,14 +43,16 @@ module Qa
         end
 
         def formatted_response(result)
-          case result
-          when Actor
-            formatted_creator(result)
-          when PennState::SearchService::Person
-            formatted_person(result)
-          else
-            raise NotImplementedError, "#{result.class} is not a valid person"
-          end
+          formatted = case result
+                      when Actor
+                        formatted_creator(result)
+                      when PennState::SearchService::Person
+                        formatted_person(result)
+                      else
+                        raise NotImplementedError, "#{result.class} is not a valid person"
+                      end
+
+          add_additional_metadata(formatted)
         end
 
         def formatted_creator(result)
@@ -76,6 +78,22 @@ module Qa
             default_alias: result.display_name,
             source: 'penn state'
           }
+        end
+
+        def add_additional_metadata(result)
+          additional_metadata = nil
+
+          if psu_id = result[:psu_id].presence
+            label = Actor.human_attribute_name(:psu_id)
+            value = psu_id
+            additional_metadata = "#{label}: #{value}"
+          elsif orcid = result[:orcid].presence
+            label = Actor.human_attribute_name(:orcid)
+            value = Orcid.new(orcid).to_human
+            additional_metadata = "#{label}: #{value}"
+          end
+
+          result.merge(additional_metadata: additional_metadata)
         end
     end
   end

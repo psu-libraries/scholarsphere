@@ -26,7 +26,8 @@ RSpec.describe Qa::Authorities::Persons, type: :authority do
           source: 'scholarsphere',
           actor_id: creator.id,
           result_number: 1,
-          total_results: 1
+          total_results: 1,
+          additional_metadata: "#{Actor.human_attribute_name(:psu_id)}: #{creator.psu_id}"
         }
       end
 
@@ -53,6 +54,17 @@ RSpec.describe Qa::Authorities::Persons, type: :authority do
         it { is_expected.to include(formatted_result) }
       end
 
+      context 'when PSU ID is not present, but ORCiD is' do
+        let!(:creator) { create :actor, psu_id: nil }
+        let(:search_term) { creator.surname.slice(0..3).downcase }
+
+        let(:expected_result) { formatted_result.merge(
+          additional_metadata: "#{Actor.human_attribute_name(:orcid)}: #{Orcid.new(creator.orcid).to_human}"
+        ) }
+
+        it { is_expected.to include(expected_result) }
+      end
+
       context 'when no results are returned' do
         let(:search_term) { 'nothing' }
 
@@ -71,7 +83,8 @@ RSpec.describe Qa::Authorities::Persons, type: :authority do
           orcid: '',
           source: 'penn state',
           result_number: 1,
-          total_results: 1
+          total_results: 1,
+          additional_metadata: "#{Actor.human_attribute_name(:psu_id)}: #{person.user_id}"
         }
       end
 
