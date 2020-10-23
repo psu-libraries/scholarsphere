@@ -89,7 +89,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
       context 'with a draft work' do
         let(:work) { create(:work, has_draft: true) }
 
-        it { pending 'this should pass once we restrict viewing of draft works'; is_expected.not_to permit(user, work_version) }
+        it { is_expected.not_to permit(user, work_version) }
       end
     end
 
@@ -118,7 +118,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
       context 'with a draft version I did NOT deposit' do
         let(:work) { build(:work, depositor: someone_else.actor) }
 
-        it { pending 'this should pass once we restrict viewing of draft works'; is_expected.not_to permit(me, work_version) }
+        it { is_expected.not_to permit(me, work_version) }
       end
 
       context 'with an embargoed public work' do

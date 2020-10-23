@@ -25,7 +25,7 @@ class WorkVersionPolicy < ApplicationPolicy
     return true if editable?
     return false if record.embargoed?
 
-    record.work.read_access?(user)
+    record.work.read_access?(user) && record.published?
   end
 
   def new?(latest_version)

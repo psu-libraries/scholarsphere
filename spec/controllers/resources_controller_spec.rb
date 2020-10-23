@@ -47,12 +47,23 @@ RSpec.describe ResourcesController, type: :controller do
       end
     end
 
-    context 'when requesting a WorkVersion' do
-      let(:work_version) { create :work_version }
 
+    context 'when requesting a published WorkVersion' do
+      let(:work_version) { create :work_version, :published }
+      
       it 'loads the WorkVersion' do
         get :show, params: { id: work_version.uuid }
         expect(assigns[:resource]).to eq work_version
+      end
+    end
+
+    context 'when requesting a draft WorkVersion' do
+      let(:work_version) { create :work_version, :draft }
+
+      it do
+        expect {
+          get :show, params: { id: work_version.uuid }
+        }.to raise_error(Pundit::NotAuthorizedError)
       end
     end
 
@@ -84,7 +95,7 @@ RSpec.describe ResourcesController, type: :controller do
     end
 
     context 'when a bot is requesting the resource' do
-      let(:work_version) { create :work_version }
+      let(:work_version) { create :work_version, :published }
       let(:bot) { Browser.new('Bot') }
 
       before { allow(controller).to receive(:browser).and_return(bot) }

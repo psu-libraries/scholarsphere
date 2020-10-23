@@ -18,9 +18,11 @@ RSpec.describe WorkPolicy, type: :policy do
   permissions :show? do
     context 'with a public work' do
       let(:work) do
-        create :work,
+        create :work, has_draft: false,
                depositor: depositor_actor,
-               proxy_depositor: proxy_actor
+               proxy_depositor: proxy_actor,
+               discover_users: [discover_user],
+               edit_users: [edit_user]
       end
 
       it { is_expected.to permit(depositor, work) }
@@ -36,7 +38,9 @@ RSpec.describe WorkPolicy, type: :policy do
       let(:work) do
         create :work, :with_no_access,
                depositor: depositor_actor,
-               proxy_depositor: proxy_actor
+               proxy_depositor: proxy_actor,
+               discover_users: [discover_user],
+               edit_users: [edit_user]
       end
 
       it { is_expected.to permit(depositor, work) }
@@ -48,19 +52,19 @@ RSpec.describe WorkPolicy, type: :policy do
       it { is_expected.to permit(admin, work) }
     end
 
-    context 'when granting discover access to a specific user' do
+    context 'with a draft work' do
       let(:work) do
-        create :work, :with_no_access,
+        create :work, has_draft: true,
                depositor: depositor_actor,
-               proxy_depositor: proxy_actor
+               proxy_depositor: proxy_actor,
+               discover_users: [discover_user],
+               edit_users: [edit_user]
       end
-
-      before { work.discover_users = [discover_user] }
 
       it { is_expected.to permit(depositor, work) }
       it { is_expected.to permit(proxy, work) }
-      it { is_expected.not_to permit(edit_user, work) }
-      it { is_expected.to permit(discover_user, work) }
+      it { is_expected.to permit(edit_user, work) }
+      it { is_expected.not_to permit(discover_user, work) }
       it { is_expected.not_to permit(other_user, work) }
       it { is_expected.not_to permit(public, work) }
       it { is_expected.to permit(admin, work) }
@@ -72,6 +76,7 @@ RSpec.describe WorkPolicy, type: :policy do
       create :work,
              depositor: depositor_actor,
              proxy_depositor: proxy_actor,
+             discover_users: [discover_user],
              edit_users: [edit_user]
     end
 
@@ -90,6 +95,7 @@ RSpec.describe WorkPolicy, type: :policy do
         create :work, has_draft: true,
                       depositor: depositor_actor,
                       proxy_depositor: proxy_actor,
+                      discover_users: [discover_user],
                       edit_users: [edit_user]
       end
 
@@ -107,6 +113,7 @@ RSpec.describe WorkPolicy, type: :policy do
         create :work, has_draft: false,
                       depositor: depositor_actor,
                       proxy_depositor: proxy_actor,
+                      discover_users: [discover_user],
                       edit_users: [edit_user]
       end
 

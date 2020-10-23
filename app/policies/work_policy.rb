@@ -8,7 +8,7 @@ class WorkPolicy < ApplicationPolicy
   end
 
   def show?
-    record.discover_access?(user) || edit?
+    (record.discover_access?(user) && published?) || edit?
   end
 
   def edit?
@@ -35,5 +35,9 @@ class WorkPolicy < ApplicationPolicy
       return false if record.proxy_depositor.nil?
 
       record.proxy_depositor == user.actor
+    end
+
+    def published?
+      record.latest_published_version.present?
     end
 end
