@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-# @note this is a policy used by the public-facing side of the app. The
-# Dashboard (where users work on their own stuff) has a different policy. At
-# some point we may combine the two, but don't want to prefactor
 class WorkPolicy < ApplicationPolicy
   class Scope < Scope
     def limit
@@ -11,17 +8,36 @@ class WorkPolicy < ApplicationPolicy
   end
 
   def show?
-    record.discover_access?(user) || user.admin?
+    (record.discover_access?(user) && published?) || edit?
   end
 
   def edit?
     editable?
   end
 
+  # @note Even though this is not imposed at the database level, no one should be able to create a
+  # new version if a draft one already exists.
+  def create_version?
+    editable? && record.draft_version.blank?
+  end
+
   private
 
-    # @todo There's a bug in the permissions because a depositor should have edit access by default
     def editable?
-      record.edit_access?(user) || record.depositor == user.actor || user.admin?
+      owner? || proxy? || record.edit_access?(user) || user.admin?
+    end
+
+    def owner?
+      record.depositor == user.actor
+    end
+
+    def proxy?
+      return false if record.proxy_depositor.nil?
+
+      record.proxy_depositor == user.actor
+    end
+
+    def published?
+      record.latest_published_version.present?
     end
 end

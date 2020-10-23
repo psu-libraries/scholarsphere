@@ -21,7 +21,7 @@ module Dashboard
     private
 
       def load_work_version
-        @work_version = policy_scope(WorkVersion).find(params[:work_version_id])
+        @work_version = WorkVersion.find(params[:work_version_id])
       end
 
       def work_version_params

@@ -24,12 +24,12 @@ module Dashboard
       end
 
       def edit
-        @work_version = policy_scope(WorkVersion).includes(:work).find(params[:work_version_id])
+        @work_version = WorkVersion.includes(:work).find(params[:work_version_id])
         authorize(@work_version)
       end
 
       def update
-        @work_version = policy_scope(WorkVersion).includes(:work).find(params[:work_version_id])
+        @work_version = WorkVersion.includes(:work).find(params[:work_version_id])
         authorize(@work_version)
 
         @work_version.attributes = work_version_params

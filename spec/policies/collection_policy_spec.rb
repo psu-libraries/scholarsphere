@@ -5,28 +5,82 @@ require 'rails_helper'
 RSpec.describe CollectionPolicy, type: :policy do
   subject { described_class }
 
-  let(:collection) { instance_double 'Collection' }
-  let(:user) { build(:user) }
+  let(:depositor) { create(:user) }
+  let(:depositor_actor) { depositor.actor }
+  let(:edit_user) { build_stubbed :user }
+  let(:discover_user) { build_stubbed :user }
+  let(:other_user) { build_stubbed :user }
+  let(:public) { User.guest }
+  let(:admin) { create(:user, :admin) }
+
+  permissions '.scope' do
+    subject(:scoped_collections) { described_class::Scope.new(depositor, Collection).resolve }
+
+    let(:depositors_collection) { create(:collection, depositor: depositor_actor) }
+
+    before { create :collection }
+
+    it { is_expected.to contain_exactly(depositors_collection) }
+  end
 
   permissions :show? do
-    context 'when the user has read access' do
-      before { allow(collection).to receive(:read_access?).with(user).and_return(true) }
+    context 'with a public collection' do
+      let(:collection) do
+        create :collection,
+               depositor: depositor_actor
+      end
 
-      it { is_expected.to permit(user, collection) }
+      it { is_expected.to permit(depositor, collection) }
+      it { is_expected.to permit(edit_user, collection) }
+      it { is_expected.to permit(discover_user, collection) }
+      it { is_expected.to permit(other_user, collection) }
+      it { is_expected.to permit(public, collection) }
+      it { is_expected.to permit(admin, collection) }
     end
 
-    context 'when the user does NOT have read access' do
-      before { allow(collection).to receive(:read_access?).with(user).and_return(false) }
+    context 'with a restricted collection' do
+      let(:collection) do
+        create :collection, :with_no_access,
+               depositor: depositor_actor
+      end
 
-      it { is_expected.not_to permit(user, collection) }
+      it { is_expected.to permit(depositor, collection) }
+      it { is_expected.not_to permit(edit_user, collection) }
+      it { is_expected.not_to permit(discover_user, collection) }
+      it { is_expected.not_to permit(other_user, collection) }
+      it { is_expected.not_to permit(public, collection) }
+      it { is_expected.to permit(admin, collection) }
     end
 
-    context 'when the user is an admin' do
-      let(:user) { build(:user, :admin) }
+    context 'when granting discover access to a specific user' do
+      let(:collection) do
+        create :collection, :with_no_access,
+               depositor: depositor_actor
+      end
 
-      before { allow(collection).to receive(:read_access?).with(user).and_return(false) }
+      before { collection.discover_users = [discover_user] }
 
-      it { is_expected.to permit(user, collection) }
+      it { is_expected.to permit(depositor, collection) }
+      it { is_expected.not_to permit(edit_user, collection) }
+      it { is_expected.to permit(discover_user, collection) }
+      it { is_expected.not_to permit(other_user, collection) }
+      it { is_expected.not_to permit(public, collection) }
+      it { is_expected.to permit(admin, collection) }
     end
+  end
+
+  permissions :edit? do
+    let(:collection) do
+      create :collection,
+             depositor: depositor_actor,
+             edit_users: [edit_user]
+    end
+
+    it { is_expected.to permit(depositor, collection) }
+    it { is_expected.to permit(edit_user, collection) }
+    it { is_expected.not_to permit(discover_user, collection) }
+    it { is_expected.not_to permit(other_user, collection) }
+    it { is_expected.not_to permit(public, collection) }
+    it { is_expected.to permit(admin, collection) }
   end
 end

@@ -40,22 +40,6 @@ RSpec.describe Dashboard::WorkVersionsController, type: :controller do
         end
       end
 
-      context 'when I am not authorized' do
-        let(:mock_policy) { instance_spy 'Dashboard::WorkVersionPolicy' }
-        let(:latest_version) { work.latest_version }
-
-        before do
-          allow(controller).to receive(:policy).with(latest_version).and_return(mock_policy)
-          allow(mock_policy).to receive(:new?).with(latest_version).and_return(false)
-        end
-
-        it 'returns not authorized' do
-          expect {
-            perform_request
-          }.to raise_error(Pundit::NotAuthorizedError)
-        end
-      end
-
       context 'when the newly built draft version is invalid (highly unlikely)' do
         let(:bad_draft) { build_stubbed :work_version }
 
@@ -75,16 +59,17 @@ RSpec.describe Dashboard::WorkVersionsController, type: :controller do
   describe 'GET #show' do
     let(:perform_request) { get :show, params: { id: work_version.to_param } }
 
-    it_behaves_like 'an authorized dashboard controller'
+    context "when requesting a version of another users's work" do
+      # Pending: when we disallow viewing of draft versions
+      # it_behaves_like 'an authorized dashboard controller'
+    end
 
-    context 'when signed in' do
+    context 'when requesting a version of my own work' do
       before { sign_in user }
 
-      context 'when requesting a version of my own work' do
-        it 'returns a success response' do
-          perform_request
-          expect(response).to be_successful
-        end
+      it 'returns a success response' do
+        perform_request
+        expect(response).to be_successful
       end
     end
   end
@@ -153,7 +138,6 @@ RSpec.describe Dashboard::WorkVersionsController, type: :controller do
   end
 
   describe 'GET #diff' do
-    let(:work) { create(:work, versions_count: 2, has_draft: false) }
     let(:work_version) { work.latest_version }
     let(:previous_version) { work.versions.first }
 
@@ -161,29 +145,20 @@ RSpec.describe Dashboard::WorkVersionsController, type: :controller do
       get :diff, params: { work_version_id: work_version.to_param, previous_version_id: previous_version.to_param }
     end
 
-    it_behaves_like 'an authorized dashboard controller'
+    context 'with a restricted work' do
+      let(:work) { create :work, :with_no_access }
 
-    context 'when signed in' do
+      it_behaves_like 'an authorized dashboard controller'
+    end
+
+    context 'with a public work' do
+      let(:work) { create(:work, versions_count: 2, has_draft: false) }
+
       before { sign_in user }
 
-      context 'when requesting a diff of two versions that I own' do
-        it 'returns a success response' do
-          perform_request
-          expect(response).to be_successful
-        end
-      end
-
-      context 'when requesting a diff from a version I do not own' do
-        let(:previous_version) { create(:work_version) }
-
-        it do
-          expect {
-            perform_request
-          }.to raise_error(
-            an_instance_of(ActiveRecord::RecordNotFound)
-            .or(an_instance_of(Pundit::NotAuthorizedError))
-          )
-        end
+      it 'returns a success response' do
+        perform_request
+        expect(response).to be_successful
       end
     end
   end

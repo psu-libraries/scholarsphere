@@ -3,22 +3,24 @@
 require 'rails_helper'
 
 RSpec.describe Dashboard::WorkHistoriesController, type: :controller do
-  let(:user) { work.depositor.user }
-  let(:work) { create :work }
-
   describe 'GET #show' do
     let(:perform_request) { get :show, params: { work_id: work.to_param } }
 
-    it_behaves_like 'an authorized dashboard controller'
+    context 'with a work the user does NOT have access to' do
+      let(:work) { create :work, :with_no_access }
 
-    context 'when signed in' do
-      before { sign_in user }
+      it_behaves_like 'an authorized dashboard controller'
+    end
 
-      context "when I'm authorized to view this work" do
-        before { perform_request }
+    context 'with a work the user has access to' do
+      let(:work) { create :work }
 
-        its(:response) { is_expected.to be_successful }
+      before do
+        sign_in work.depositor.user
+        perform_request
       end
+
+      its(:response) { is_expected.to be_successful }
     end
   end
 end

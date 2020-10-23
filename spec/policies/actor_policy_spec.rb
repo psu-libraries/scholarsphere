@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Dashboard::ActorPolicy, type: :policy do
+RSpec.describe ActorPolicy, type: :policy do
   subject { described_class }
 
   let(:user) { build(:user) }
