@@ -29,7 +29,7 @@ class WorkVersionPolicy < ApplicationPolicy
   end
 
   def new?(latest_version)
-    record.published? && record == latest_version
+    record.published? && record == latest_version && editable?
   end
 
   private

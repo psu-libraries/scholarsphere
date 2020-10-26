@@ -152,26 +152,45 @@ RSpec.describe WorkVersionPolicy, type: :policy do
 
     let(:policy) { described_class.new(user, work_version) }
 
-    context 'when the version is published' do
-      before { allow(work_version).to receive(:published?).and_return(true) }
-
-      context 'when the version is the latest one in the work' do
-        let(:latest_version) { work_version }
-
-        it { is_expected.to eq true }
+    context 'when the user has edit access to the work' do
+      before do
+        allow(Pundit).to receive(:policy).with(user, work).and_return(work_policy)
+        allow(work_policy).to receive(:edit?).and_return(true)
       end
 
-      context 'when the version is NOT the latest one in the work' do
-        let(:latest_version) { instance_double('WorkVersion') }
+      context 'when the version is published' do
+        before { allow(work_version).to receive(:published?).and_return(true) }
+
+        context 'when the version is the latest one in the work' do
+          let(:latest_version) { work_version }
+
+          it { is_expected.to eq true }
+        end
+
+        context 'when the version is NOT the latest one in the work' do
+          let(:latest_version) { instance_double('WorkVersion') }
+
+          it { is_expected.to eq false }
+        end
+      end
+
+      context 'when the version is NOT published' do
+        let(:latest_version) { work_version }
+
+        before { allow(work_version).to receive(:published?).and_return(false) }
 
         it { is_expected.to eq false }
       end
     end
 
-    context 'when the version is NOT published' do
+    context 'when the user does not have edit access' do
       let(:latest_version) { work_version }
 
-      before { allow(work_version).to receive(:published?).and_return(false) }
+      before do
+        allow(work_version).to receive(:published?).and_return(true)
+        allow(Pundit).to receive(:policy).with(user, work).and_return(work_policy)
+        allow(work_policy).to receive(:edit?).and_return(false)
+      end
 
       it { is_expected.to eq false }
     end
