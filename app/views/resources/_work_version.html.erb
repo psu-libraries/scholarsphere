@@ -3,11 +3,35 @@
         current_version: work_version,
         work: work_version.decorated_work
       ) %>
+
+  <% if policy(work_version.work).edit? %>
+    <li class="nav-item">
+      <%= render LinkDisabledByTooltipComponent.new(
+            enabled: policy(work_version).edit?,
+            text: I18n.t('resources.edit_button.text', version: work_version.display_version_short),
+            path: dashboard_work_form_details_path(work_version),
+            tooltip: I18n.t('resources.edit_button.tooltip'),
+            class_list: 'btn btn-outline-light btn--squish mr-lg-2 qa-edit-version'
+          ) %>
+    </li>
+
+    <li class="nav-item">
+      <%= render LinkDisabledByTooltipComponent.new(
+            enabled: policy(work_version).new?(work_version.work.latest_version),
+            text: I18n.t('resources.create_button.text', version: work_version.display_version_short),
+            path: dashboard_work_work_versions_path(work_version.work),
+            method: :post,
+            tooltip: I18n.t('resources.create_button.tooltip'),
+            class_list: 'btn btn-outline-light btn--squish mr-lg-4 qa-create-draft'
+          ) %>
+    </li>
+
+  <% end %>
 <% end %>
 
 <div class="container-fluid">
 
-  <% unless work_version.latest_published_version? %>
+  <% unless (work_version.latest_published_version? || work_version.draft?) %>
     <div class="alert alert-warning" role="alert">
       <%= t 'resources.old_version.message' %>
       <%= link_to t('resources.old_version.link'),
