@@ -107,7 +107,8 @@ Rails.application.configure do
 
   config.lograge.custom_payload do |controller|
     {
-      request_id: controller.request.env['action_dispatch.request_id']
+      request_id: controller.request.env['action_dispatch.request_id'],
+      user_id: controller.current_user.try(:access_id)
     }
   end
 
