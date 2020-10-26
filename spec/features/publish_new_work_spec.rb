@@ -17,7 +17,6 @@ RSpec.describe 'Publishing a work', with_user: :user do
         FeatureHelpers::WorkForm.fill_in_minimal_work_details_for_draft(metadata)
         FeatureHelpers::WorkForm.save_as_draft_and_exit
 
-        expect(page).to have_current_path(dashboard_root_path)
         expect(Work.count).to eq(initial_work_count + 1)
 
         new_work = Work.last
@@ -28,6 +27,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).to have_content(metadata[:title])
         expect(new_work_version.title).to eq metadata[:title]
         expect(new_work_version.version_number).to eq 1
+
+        expect(page).to have_current_path(resource_path(new_work_version.uuid))
       end
     end
 
@@ -79,7 +80,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         FeatureHelpers::WorkForm.fill_in_minimal_work_details_for_draft(metadata)
         FeatureHelpers::WorkForm.save_as_draft_and_exit
 
-        expect(page).to have_current_path(dashboard_root_path)
+        expect(page).to have_current_path(resource_path(work_version.uuid))
         expect(Work.count).to eq(initial_work_count)
 
         work_version.reload

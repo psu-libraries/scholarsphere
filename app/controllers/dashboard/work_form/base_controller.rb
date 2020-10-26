@@ -19,7 +19,7 @@ module Dashboard
 
         def redirect_upon_success
           if save_and_exit?
-            redirect_to dashboard_root_path,
+            redirect_to resource_path(@work_version&.uuid),
                         notice: 'Work version was successfully updated.'
           else
             redirect_to next_page_path
@@ -28,6 +28,15 @@ module Dashboard
 
         def next_page_path
           raise NotImplementedError, 'You must implement this method in your controller subclass'
+        end
+
+        helper_method :cancel_path
+        def cancel_path
+          if @work_version.present? && @work_version.persisted?
+            resource_path(@work_version&.uuid)
+          else
+            dashboard_root_path
+          end
         end
 
         def update_or_save_work_version(attributes: nil)
