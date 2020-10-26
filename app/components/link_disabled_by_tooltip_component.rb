@@ -23,38 +23,24 @@ class LinkDisabledByTooltipComponent < ApplicationComponent
       enabled
     end
 
-    def disabled?
-      !enabled?
+    def html_options_enabled
+      {
+        class: class_list,
+        method: method
+      }
     end
 
-    def html_options
-      { class: classes }
-        .deep_merge(tooltip_options)
-        .deep_merge(link_options)
-    end
-
-    def classes
-      klasses = Array.wrap(class_list).dup
-      klasses << 'disabled' if disabled?
-      klasses
-    end
-
-    def tooltip_options
-      return {} if enabled?
+    def html_options_disabled
+      classes = Array.wrap(class_list) + ['disabled']
 
       {
+        class: classes,
         data: {
           toggle: 'tooltip',
           placement: 'bottom'
         },
         title: tooltip
       }
-    end
-
-    def link_options
-      return {} if disabled?
-
-      { method: method }
     end
 
     def default_classes
