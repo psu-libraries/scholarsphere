@@ -19,7 +19,7 @@ module Dashboard
 
         def redirect_upon_success
           if save_and_exit?
-            redirect_to resource_path(@work_version&.uuid),
+            redirect_to resource_path(@work_version.uuid),
                         notice: 'Work version was successfully updated.'
           else
             redirect_to next_page_path
@@ -33,7 +33,7 @@ module Dashboard
         helper_method :cancel_path
         def cancel_path
           if @work_version.present? && @work_version.persisted?
-            resource_path(@work_version&.uuid)
+            resource_path(@work_version.uuid)
           else
             dashboard_root_path
           end
