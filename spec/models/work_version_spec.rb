@@ -379,6 +379,28 @@ RSpec.describe WorkVersion, type: :model do
     end
   end
 
+  describe '#destroy' do
+    context 'with a published version' do
+      let(:work_version) { create(:work_version, :published) }
+
+      it 'raises an error' do
+        expect {
+          work_version.destroy
+        }.to raise_error(ArgumentError, 'cannot delete published versions')
+      end
+    end
+
+    context 'with a draft version' do
+      let(:work_version) { create(:work_version, :draft) }
+
+      it 'deletes the version' do
+        expect {
+          work_version.destroy
+        }.to change(described_class, :count).by(1)
+      end
+    end
+  end
+
   describe WorkVersion::Licenses do
     let(:active_license) do
       {
