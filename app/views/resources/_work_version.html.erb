@@ -17,7 +17,7 @@
 
     <li class="nav-item">
       <%= render LinkDisabledByTooltipComponent.new(
-            enabled: policy(work_version).new?(work_version.work.latest_version),
+            enabled: policy(work_version).new?,
             text: I18n.t('resources.create_button.text', version: work_version.display_version_short),
             path: dashboard_work_work_versions_path(work_version.work),
             method: :post,
