@@ -267,10 +267,14 @@ RSpec.describe Work, type: :model do
           discover_users_ssim
           display_work_type_ssi
           doi_tesim
+          edit_groups_ssim
+          edit_users_ssim
           embargoed_until_dtsi
           id
           model_ssi
           proxy_id_isi
+          read_groups_ssim
+          read_users_ssim
           updated_at_dtsi
           uuid_ssi
           visibility_ssi
@@ -301,6 +305,8 @@ RSpec.describe Work, type: :model do
           discover_users_ssim
           display_work_type_ssi
           doi_tesim
+          edit_groups_ssim
+          edit_users_ssim
           embargoed_until_dtsi
           id
           identifier_tesim
@@ -312,6 +318,8 @@ RSpec.describe Work, type: :model do
           published_date_dtrsi
           published_date_tesim
           publisher_tesim
+          read_groups_ssim
+          read_users_ssim
           related_url_tesim
           rights_tesim
           source_tesim

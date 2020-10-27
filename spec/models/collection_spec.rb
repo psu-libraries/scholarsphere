@@ -205,6 +205,8 @@ RSpec.describe Collection, type: :model do
         discover_users_ssim
         display_work_type_ssi
         doi_tesim
+        edit_groups_ssim
+        edit_users_ssim
         id
         identifier_tesim
         keyword_sim
@@ -214,6 +216,8 @@ RSpec.describe Collection, type: :model do
         published_date_dtrsi
         published_date_tesim
         publisher_tesim
+        read_groups_ssim
+        read_users_ssim
         related_url_tesim
         source_tesim
         subject_sim

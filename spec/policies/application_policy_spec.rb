@@ -21,6 +21,22 @@ RSpec.describe ApplicationPolicy, type: :policy do
     end
   end
 
+  describe '::initialize' do
+    subject { described_class.new(user, record) }
+
+    context 'with a User' do
+      let(:user) { build(:user) }
+
+      its(:user) { is_expected.to be_a(User) }
+    end
+
+    context 'with a UserDecorator' do
+      let(:user) { UserDecorator.new(build(:user)) }
+
+      its(:user) { is_expected.to be_a(User) }
+    end
+  end
+
   describe ApplicationPolicy::Scope do
     it 'raises an error if #limit is not defined' do
       expect {

@@ -3,8 +3,10 @@
 class ApplicationPolicy
   attr_reader :user, :record
 
+  # @param [User, UserDecorator] user
+  # @param [ActiveRecord::Base] record
   def initialize(user, record)
-    @user = user
+    @user = user.try(:__getobj__) || user
     @record = record
   end
 

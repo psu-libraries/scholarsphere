@@ -55,6 +55,25 @@ RSpec.describe 'Dashboard catalog page', :inline_jobs do
     end
   end
 
+  context 'when the user has only editable works, and none that they own or have deposited' do
+    let!(:restricted_work) { create(:work, has_draft: true, depositor: outsider.actor) }
+    let!(:editable_work) { create(:work, has_draft: true, depositor: outsider.actor, edit_users: [user]) }
+
+    it "displays the user's editable works", with_user: :user do
+      visit(dashboard_root_path)
+
+      expect(user.actor.deposited_works).to be_empty
+      expect(page).to have_link('Dashboard', class: 'disabled')
+      expect(page).not_to have_text('What is my dashboard?')
+      expect(page).not_to have_text('Get Started')
+
+      expect(page.first('.card-title').text).to eq(editable_work.versions.first.title)
+      expect(page).not_to have_text(restricted_work.versions.first.title)
+      click_link(editable_work.versions.first.title)
+      expect(page).to have_link('Edit V1')
+    end
+  end
+
   context "when the user's search returns no results" do
     before { create(:work, depositor: user.actor, has_draft: true) }
 
