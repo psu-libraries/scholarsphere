@@ -34,7 +34,7 @@
                         data: { confirm: t('dashboard.works.index.delete_confirm') },
                         class: 'text-danger'
               end %>
-          <%= if policy(version).new?(index_work.latest_version)
+          <%= if policy(version).new?
                 link_to t('dashboard.works.index.new_version'),
                         dashboard_work_work_versions_path(index_work),
                         method: :post

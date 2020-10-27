@@ -34,7 +34,7 @@
         <% end %>
       <% end %>
 
-      <% if policy(index_work_version).new?(index_work_version) %>
+      <% if policy(index_work_version).new? %>
         <%= link_to dashboard_work_work_versions_path(index_work_version.work),
                     method: :post,
                     class: 'btn btn-primary btn--icon' do %>
