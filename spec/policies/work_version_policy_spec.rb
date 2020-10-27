@@ -147,33 +147,39 @@ RSpec.describe WorkVersionPolicy, type: :policy do
     end
   end
 
-  describe '#new?' do
-    subject(:new) { policy.new?(latest_version) }
+  permissions :new? do
+    before { allow(Pundit).to receive(:policy).with(user, work).and_return(work_policy) }
 
-    let(:policy) { described_class.new(user, work_version) }
+    context 'when the parent work is elligible to create a new version' do
+      before { allow(work_policy).to receive(:create_version?).and_return(true) }
 
-    context 'when the version is published' do
-      before { allow(work_version).to receive(:published?).and_return(true) }
+      context 'when the given work version is the latest published version' do
+        before { allow(work).to receive(:latest_published_version).and_return(work_version) }
 
-      context 'when the version is the latest one in the work' do
-        let(:latest_version) { work_version }
-
-        it { is_expected.to eq true }
+        it { is_expected.to permit(user, work_version) }
       end
 
-      context 'when the version is NOT the latest one in the work' do
-        let(:latest_version) { instance_double('WorkVersion') }
+      context 'when the given work version is NOT the latest published version' do
+        before { allow(work).to receive(:latest_published_version).and_return(instance_double('WorkVersion')) }
 
-        it { is_expected.to eq false }
+        it { is_expected.not_to permit(user, work_version) }
       end
     end
 
-    context 'when the version is NOT published' do
-      let(:latest_version) { work_version }
+    context 'when the parent work cannot create a new version' do
+      before { allow(work_policy).to receive(:create_version?).and_return(false) }
 
-      before { allow(work_version).to receive(:published?).and_return(false) }
+      context 'when the given work version is the latest published version' do
+        before { allow(work).to receive(:latest_published_version).and_return(work_version) }
 
-      it { is_expected.to eq false }
+        it { is_expected.not_to permit(user, work_version) }
+      end
+
+      context 'when the given work version is NOT the latest published version' do
+        before { allow(work).to receive(:latest_published_version).and_return(instance_double('WorkVersion')) }
+
+        it { is_expected.not_to permit(user, work_version) }
+      end
     end
   end
 end

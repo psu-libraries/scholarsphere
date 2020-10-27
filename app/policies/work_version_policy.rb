@@ -28,8 +28,9 @@ class WorkVersionPolicy < ApplicationPolicy
     record.work.read_access?(user) && record.published?
   end
 
-  def new?(latest_version)
-    record.published? && record == latest_version
+  def new?
+    Pundit.policy(user, record.work).create_version? &&
+      record == record.work.latest_published_version
   end
 
   private
