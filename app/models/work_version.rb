@@ -138,6 +138,10 @@ class WorkVersion < ApplicationRecord
 
   after_save :perform_update_index
 
+  before_destroy do
+    raise ArgumentError, 'cannot delete published versions' if published?
+  end
+
   aasm do
     state :draft, intial: true
     state :published, :withdrawn, :removed

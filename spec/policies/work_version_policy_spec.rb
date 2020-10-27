@@ -26,7 +26,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
     end
   end
 
-  permissions :edit?, :update?, :destroy?, :publish? do
+  permissions :edit?, :update?, :publish? do
     before { allow(Pundit).to receive(:policy).with(user, work).and_return(work_policy) }
 
     context 'when the version is NOT published' do
@@ -53,6 +53,38 @@ RSpec.describe WorkVersionPolicy, type: :policy do
 
         it { is_expected.not_to permit(user, work_version) }
       end
+    end
+  end
+
+  permissions :destroy? do
+    let(:work_version) { work.latest_version }
+    let(:proxy) { build(:user) }
+    let(:edit_user) { build(:user) }
+    let(:other) { build(:user) }
+    let(:user) { build(:user, :admin) }
+
+    context 'with a draft version' do
+      let(:work) do
+        create(:work, has_draft: true, proxy_depositor: proxy.actor, edit_users: [edit_user])
+      end
+
+      it { is_expected.to permit(work.depositor.user, work_version) }
+      it { is_expected.to permit(proxy, work_version) }
+      it { is_expected.to permit(edit_user, work_version) }
+      it { is_expected.not_to permit(other, work_version) }
+      it { is_expected.to permit(user, work_version) }
+    end
+
+    context 'with a published version' do
+      let(:work) do
+        create(:work, has_draft: false, proxy_depositor: proxy.actor, edit_users: [edit_user])
+      end
+
+      it { is_expected.not_to permit(work.depositor.user, work_version) }
+      it { is_expected.not_to permit(proxy, work_version) }
+      it { is_expected.not_to permit(edit_user, work_version) }
+      it { is_expected.not_to permit(other, work_version) }
+      it { is_expected.not_to permit(user, work_version) }
     end
   end
 
