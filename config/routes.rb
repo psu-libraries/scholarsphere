@@ -21,6 +21,8 @@ Rails.application.routes.draw do
   mount Shrine.uppy_s3_multipart(:cache) => '/s3/multipart'
 
   root to: 'pages#home'
+  get 'about', to: 'markdown#show', page: 'about'
+
   concern :searchable, Blacklight::Routes::Searchable.new
 
   resource :catalog, only: [:index], as: 'catalog', path: '/catalog', controller: 'catalog' do
