@@ -109,12 +109,24 @@ RSpec.describe ResourceDecorator do
     let(:resource) { build_stubbed :work }
 
     before do
-      allow(MintableDoiComponent).to receive(:new).and_return(:mintable_doi_component)
+      allow(MintingStatusDoiComponent).to receive(:new).and_return(:minting_status_doi_component)
     end
 
-    it 'returns a new doi component, initialized with #resource_with_doi' do
-      expect(decorator.display_doi).to eq :mintable_doi_component
-      expect(MintableDoiComponent).to have_received(:new).with(resource: resource)
+    context 'when the resource has a doi' do
+      before { resource.doi = 'abc/123' }
+
+      it 'returns a new doi component, initialized with #resource_with_doi' do
+        expect(decorator.display_doi).to eq :minting_status_doi_component
+        expect(MintingStatusDoiComponent).to have_received(:new).with(resource: resource)
+      end
+    end
+
+    context 'when the resource does not have a doi' do
+      before { resource.doi = nil }
+
+      it 'returns nil' do
+        expect(decorator.display_doi).to be_nil
+      end
     end
   end
 end
