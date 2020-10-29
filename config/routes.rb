@@ -22,6 +22,12 @@ Rails.application.routes.draw do
 
   root to: 'pages#home'
   get 'about', to: 'markdown#show', page: 'about'
+  get 'policies-1.0', to: 'markdown#show', page: 'policies-1.0'
+  get 'policies-2.0', to: 'markdown#show', page: 'policies-2.0'
+  get 'policies', to: 'markdown#show', page: 'policies-2.0'
+  get 'agreement-1.0', to: 'markdown#show', page: 'agreement-1.0'
+  get 'agreement-2.0', to: 'markdown#show', page: 'agreement-2.0'
+  get 'agreement', to: 'markdown#show', page: 'agreement-2.0'
 
   concern :searchable, Blacklight::Routes::Searchable.new
 
