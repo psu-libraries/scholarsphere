@@ -83,6 +83,17 @@ RSpec.describe 'Public Resources', type: :feature do
         end
       end
     end
+
+    context 'when the work is present in a collection' do
+      let(:collection) { create(:collection) }
+      let(:work) { create(:work, has_draft: false, collections: [collection]) }
+
+      it 'displays information about the collection' do
+        visit resource_path(work.uuid)
+
+        expect(page).to have_link(collection.title)
+      end
+    end
   end
 
   describe 'given a collection without a DOI' do

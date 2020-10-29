@@ -66,7 +66,9 @@
       <div class="keyline keyline--left mb-3">
         <h2 class="h4"><%= t 'resources.collections' %></h2>
       </div>
-      <p><%= t 'resources.not_in_collections' %></p>
+
+      <%= render 'shared/work_version_collections', collections: work_version.work.collections %>
+
     </div>
   </article>
 

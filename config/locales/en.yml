@@ -347,7 +347,7 @@ en:
     download: "Download %{name}"
     files: Files
     metadata: Metadata
-    not_in_collections: 'This Work is not currently in any collections. TODO: we need to make the collection functionality actually work.'
+    not_in_collections: 'This resource is currently not in any collection.'
     old_version:
       link: View the current version.
       message: This is an older version of the work.
