@@ -9,6 +9,7 @@ class WorkVersionMetadataComponent < ApplicationComponent
   ATTRIBUTES = [
     :title,
     :subtitle,
+    :visibility_badge,
     :creator_aliases,
     :version_number,
     :keyword,

@@ -67,6 +67,7 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
       # Titles
       expect(result.css('th.work-version-title')).to be_present
       expect(result.css('th.work-version-subtitle')).to be_present
+      expect(result.css('th.work-version-visibility-badge')).to be_present
       expect(result.css('th.work-version-version-number')).to be_present
       expect(result.css('th.work-version-keyword')).to be_present
       expect(result.css('th.work-version-rights')).to be_present
