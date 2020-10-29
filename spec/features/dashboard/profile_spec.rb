@@ -48,6 +48,11 @@ RSpec.describe 'Profile', type: :feature, with_user: :user do
 
     it 'offers the option to enable admin privileges' do
       visit edit_dashboard_profile_path
+      within('#topbar') do
+        expect(page).to have_content(I18n.t('navbar.admin_name'))
+        expect(page).to have_link('Sidekiq')
+        expect(page).to have_link('Health Checks')
+      end
       expect(page).to have_content('Edit Profile')
       expect(page).to have_field('Administrative privileges enabled', checked: true)
       uncheck('Administrative privileges enabled')
@@ -56,6 +61,11 @@ RSpec.describe 'Profile', type: :feature, with_user: :user do
       expect(user.admin_enabled).to be(false)
       expect(page).to have_content(I18n.t('navbar.heading.dashboard'))
       expect(page).to have_content(I18n.t('dashboard.profiles.update.success'))
+      within('#topbar') do
+        expect(page).to have_content(user.access_id)
+        expect(page).not_to have_link('Sidekiq')
+        expect(page).not_to have_link('Health Checks')
+      end
     end
   end
 end

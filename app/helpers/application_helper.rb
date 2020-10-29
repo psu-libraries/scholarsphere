@@ -12,11 +12,11 @@ module ApplicationHelper
       .to_formatted_s(:long)
   end
 
-  def link_to_dropdown_item(link, path)
+  def link_to_dropdown_item(link, path, options = {})
     if request.path == path
-      link_to link, path, class: 'dropdown-item disabled'
+      link_to link, path, options.merge(class: 'dropdown-item disabled')
     else
-      link_to link, path, class: 'dropdown-item'
+      link_to link, path, options.merge(class: 'dropdown-item')
     end
   end
 
