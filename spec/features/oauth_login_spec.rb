@@ -12,9 +12,9 @@ RSpec.describe 'Logging in using OAuth' do
   end
 
   it 'uses OAuth to authenticate to the application' do
-    visit(dashboard_works_path)
+    visit(dashboard_root_path)
     expect(page).to have_content(I18n.t('devise.omniauth_callbacks.success', kind: 'Penn State'))
-    expect(page).to have_content(I18n.t('dashboard.works.index.heading'))
+    expect(page).to have_content(I18n.t('navbar.heading.dashboard'))
     expect(page).to have_content(user.reload.name)
   end
 
@@ -24,7 +24,7 @@ RSpec.describe 'Logging in using OAuth' do
     end
 
     it 'redirects the user to the homepage with an alert' do
-      visit(dashboard_works_path)
+      visit(dashboard_root_path)
       expect(page).to have_content('Login')
       expect(page).to have_content(I18n.t('omniauth.login_error'))
     end

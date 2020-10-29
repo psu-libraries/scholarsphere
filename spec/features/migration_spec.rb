@@ -56,7 +56,7 @@ RSpec.describe 'Migration', :inline_jobs, type: :feature do
   # See https://github.com/psu-stewardship/scholarsphere-4/issues/262
   context 'when logged in as the depositor' do
     it "lists the work in the user's available works", with_user: :user, js: true do
-      visit(dashboard_works_path)
+      visit(dashboard_root_path)
       expect(page).to have_content(work.title)
     end
   end

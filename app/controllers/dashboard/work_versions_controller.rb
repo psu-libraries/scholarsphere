@@ -19,7 +19,7 @@ module Dashboard
           # _Highly_ unlikely this branch could ever be hit, since
           # the latest version needs to be valid in order to be published
           format.html do
-            redirect_to dashboard_works_path,
+            redirect_to dashboard_root_path,
                         error: 'Work version could not be created: ' +
                           @work_version.errors.full_messages.join(', ')
           end
@@ -93,7 +93,7 @@ module Dashboard
         respond_to do |format|
           if @work_version.save
             format.html do
-              redirect_to dashboard_works_path, notice: 'Successfully published work!'
+              redirect_to dashboard_root_path, notice: 'Successfully published work!'
             end
             format.json { render :show, status: :ok, location: @work_version }
           else

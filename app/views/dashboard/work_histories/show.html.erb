@@ -1,6 +1,6 @@
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
-    <li class="breadcrumb-item"><%= link_to t('dashboard.works.index.heading'), dashboard_works_path %></li>
+    <li class="breadcrumb-item"><%= link_to t('dashboard.works.index.heading'), dashboard_root_path %></li>
     <li class="breadcrumb-item active" aria-current="page">
       <%= t('dashboard.work_history.heading', work: truncate(@latest_work_version.title)) %>
     </li>
