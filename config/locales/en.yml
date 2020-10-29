@@ -335,6 +335,7 @@ en:
       icon: "\u00D7"
   navbar:
     guest_name: 'Guest'
+    admin_name: 'Administrator'
     heading:
       about: 'About'
       dashboard: 'Your Dashboard'

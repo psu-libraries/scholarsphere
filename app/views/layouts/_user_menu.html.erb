@@ -20,6 +20,11 @@
       <%= link_to_dropdown_item('Profile', edit_dashboard_profile_path) %>
       <%= link_to_dropdown_item('Dashboard', dashboard_root_path) %>
       <%= link_to_dropdown_item('Create New Work', dashboard_work_form_new_path) %>
+      <% if current_user.admin? %>
+        <div class="dropdown-divider"></div>
+        <%= link_to_dropdown_item('Sidekiq', admin_sidekiq_web_path, target: :_blank) %>
+        <%= link_to_dropdown_item('Health Checks', '/health/all.json', target: :_blank) %>
+      <% end %>
       <div class="dropdown-divider"></div>
       <%= link_to_dropdown_item('Logout', destroy_user_session_path) %>
     </div>
