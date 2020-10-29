@@ -2,10 +2,24 @@
 
 module Dashboard
   class WorksController < BaseController
+    layout 'frontend'
 
+    def edit
+      undecorated_work = Work.find(params[:id])
+      authorize(undecorated_work)
+      @work = WorkDecorator.new(undecorated_work)
     end
 
+    def update
+      @work = Work.find(params[:id])
+      authorize(@work)
 
+      if @work.update(work_params)
+        redirect_to edit_dashboard_work_path(@work),
+                    notice: t('.success')
+      else
+        @work = WorkDecorator.new(@work)
+        render :edit
       end
     end
 

@@ -31,7 +31,7 @@
     <!-- End Matomo Code -->
   </head>
 
-  <body>
+  <body <%= yield :body_attributes %>>
     <header>
       <nav class="navbar navbar-light navbar-expand-lg topbar">
         <%= link_to 'ScholarSphere', root_path, class: 'navbar-brand slab-font' %>

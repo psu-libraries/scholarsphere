@@ -28,6 +28,15 @@ RSpec.describe DoisController, type: :controller do
         end
       end
 
+      context 'when happy path, and HTTP_REFERER is set' do
+        before { request.env['HTTP_REFERER'] = 'where_i_came_from' }
+
+        it 'redirects me to where I came from' do
+          do_post
+          expect(response).to redirect_to 'where_i_came_from'
+        end
+      end
+
       context 'with a Work that already has a DOI' do
         let(:resource) { create :work, doi: '123/456' }
 

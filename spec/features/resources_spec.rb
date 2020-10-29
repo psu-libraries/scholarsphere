@@ -18,6 +18,7 @@ RSpec.describe 'Public Resources', type: :feature do
         ## Does not have edit controls
         within('header') do
           expect(page).not_to have_content(I18n.t('resources.edit_button.text', version: 'V2'))
+          expect(page).not_to have_content(I18n.t('resources.settings_button.text'))
         end
 
         ## Navigate to an old version
@@ -41,6 +42,7 @@ RSpec.describe 'Public Resources', type: :feature do
             ## Edit controls are visible
             expect(page).to have_content(I18n.t('resources.edit_button.text', version: 'V2'))
               .and have_content(I18n.t('resources.create_button.text', version: 'V2'))
+              .and have_content(I18n.t('resources.settings_button.text'))
 
             ## Edit button is disabled, create draft button is enabled
             expect(page).to have_selector('.qa-edit-version.disabled')

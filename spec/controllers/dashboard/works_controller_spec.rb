@@ -5,25 +5,25 @@ require 'rails_helper'
 RSpec.describe Dashboard::WorksController, type: :controller do
   let(:valid_attributes) {
     {
-      'work_type' => Work::Types.all.first,
-      'visibility' => Permissions::Visibility.default,
-      'versions_attributes' => [
-        { 'title' => 'My new work' }
-      ]
+      'visibility' => Permissions::Visibility.default
     }
   }
 
   let(:invalid_attributes) {
     {
-      work_type: ''
+      'work_type' => ''
     }
   }
 
+  let(:work) { create :work, depositor: user.actor }
 
+  let(:user) { create :user }
 
+  describe 'GET #edit' do
     context 'when signed in' do
       before do
         log_in user
+        get :edit, params: { id: work.id }
       end
 
       it 'returns a success response' do
@@ -34,25 +34,42 @@ RSpec.describe Dashboard::WorksController, type: :controller do
     context 'when not signed in' do
       subject { response }
 
+      before { get :edit, params: { id: work.id } }
 
       it { is_expected.to redirect_to new_user_session_path }
     end
   end
 
+  describe 'POST #update' do
+    let(:perform_request) {
+      post :update, params: { id: work.id, work: attributes }
+    }
+
     context 'when signed in' do
       before { sign_in user }
 
       context 'with valid params' do
+        let(:attributes) { valid_attributes }
 
+        before { perform_request }
+
+        it 'redirects to the updated work settings page' do
+          expect(response).to redirect_to(edit_dashboard_work_path(work))
         end
       end
 
       context 'with invalid params' do
+        let(:attributes) { invalid_attributes }
+
+        it 're-renders the form' do
+          perform_request
+          expect(response).to render_template(:edit)
         end
       end
 
       context 'with an invalid visibility' do
         it 'raises an error' do
+          expect { post :update, params: { id: work.id, work: { visibility: 'bogus' } } }.to raise_error(ArgumentError)
         end
       end
     end
@@ -60,6 +77,9 @@ RSpec.describe Dashboard::WorksController, type: :controller do
     context 'when not signed in' do
       subject { response }
 
+      let(:attributes) { valid_attributes }
+
+      before { perform_request }
 
       it { is_expected.to redirect_to new_user_session_path }
     end

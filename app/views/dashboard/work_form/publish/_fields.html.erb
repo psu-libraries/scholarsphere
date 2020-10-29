@@ -9,21 +9,7 @@
 <%= form.fields_for :work do |work_form| %>
   <div class="form-wrapper">
 
-    <div class="form-group">
-      <p class="font-weight-bold mt-3"><%= WorkVersion.human_attribute_name(:visibility) %></p>
-
-      <% Permissions::Visibility.options_for_select_box.each do |lbl, val| %>
-        <div class="form-check form-check-inline">
-          <%= work_form.radio_button :visibility, val, class: 'form-check-input' %>
-          <%= work_form.label :visibility, lbl, value: val, class: 'form-check-label' do %>
-            <%= lbl %>
-            <% if I18n.exists? "helpers.hint.permissions.visibility.#{val}" %>
-              <span class="label__help"><%= t "helpers.hint.permissions.visibility.#{val}" %></span>
-            <% end %>
-          <% end %>
-        </div>
-      <% end %>
-    </div>
+    <%= render 'visibility_field', form: work_form %>
 
     <div class="form-group">
       <p class="font-weight-bold mt-5"><%= WorkVersion.human_attribute_name(:depositor_agreement) %></p>

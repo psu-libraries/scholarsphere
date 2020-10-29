@@ -26,6 +26,14 @@
           ) %>
     </li>
 
+    <li class="nav-item">
+      <%= link_to(edit_dashboard_work_path(work_version.work),
+                  class: 'btn btn-outline-light btn--squish mr-lg-2 btn--settings') do %>
+          <%= t('resources.settings_button.text') %>
+          <i class="material-icons">settings</i>
+      <% end %>
+    </li>
+
   <% end %>
 <% end %>
 
