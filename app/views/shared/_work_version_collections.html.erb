@@ -1,0 +1,22 @@
+<% if collections.empty? %>
+
+  <p><%= t 'resources.not_in_collections' %></p>
+
+<% else %>
+
+  <ul class="collection-card">
+    <% collections.each do |collection| %>
+      <li class="collection-card__item">
+        <div class="file-card__content">
+          <h3>
+          <%= link_to collection.title, resource_path(collection.uuid) %>
+          </h3>
+          <p class="meta mb-0">
+            <span class="meta__date"><%= collection.deposited_at.to_s(:short_date) %></span>
+          </p>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+
+<% end %>
