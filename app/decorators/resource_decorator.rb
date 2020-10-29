@@ -29,4 +29,11 @@ class ResourceDecorator < SimpleDelegator
   def display_doi
     MintableDoiComponent.new(resource: resource_with_doi)
   end
+
+  # @note These are only displayed via the WorkVersion
+  def visibility_badge
+    return unless respond_to?(:work)
+
+    VisibilityBadgeComponent.new(work: work)
+  end
 end

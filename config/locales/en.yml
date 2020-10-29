@@ -54,6 +54,7 @@ en:
         display_work_type: Work Type
         display_doi: DOI
         file_resources: Files
+        visibility_badge: Access
       user:
         admin_enabled: Administrative privileges enabled
     errors:

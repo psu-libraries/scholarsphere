@@ -117,4 +117,18 @@ RSpec.describe ResourceDecorator do
       expect(MintableDoiComponent).to have_received(:new).with(resource: resource)
     end
   end
+
+  describe '#visibility_badge' do
+    context 'with a WorkVersion' do
+      let(:resource) { build_stubbed :work_version }
+
+      its(:visibility_badge) { is_expected.to be_a(VisibilityBadgeComponent) }
+    end
+
+    context 'with a Work' do
+      let(:resource) { build_stubbed :work }
+
+      its(:visibility_badge) { is_expected.to be_nil }
+    end
+  end
 end
