@@ -335,8 +335,9 @@ en:
   navbar:
     guest_name: 'Guest'
     heading:
-      home: 'Welcome to ScholarSphere'
+      about: 'About'
       dashboard: 'Your Dashboard'
+      home: 'Welcome to ScholarSphere'
       not_found: 'Page Not Found'
       server_error: 'Server Error'
   resources:

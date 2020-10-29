@@ -342,6 +342,7 @@ GEM
     rdf (3.1.4)
       hamster (~> 3.0)
       link_header (~> 0.0, >= 0.0.8)
+    redcarpet (3.5.0)
     redis (4.2.1)
     regexp_parser (1.7.1)
     request_store (1.5.0)
@@ -528,6 +529,7 @@ DEPENDENCIES
   qa
   rails (~> 6.0.0)
   rails-controller-testing
+  redcarpet (~> 3.5)
   rsolr (>= 1.0, < 3)
   rspec
   rspec-its
