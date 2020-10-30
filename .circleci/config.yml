@@ -90,13 +90,14 @@ workflows:
           filters:
             branches:
               only:
-                - /^((?!preview|master).)*$/
+                - /^((?!preview|master|main).)*$/
       - test:
           name: test-publish
           publish: true
           filters:
             branches:
               only:
+                - main
                 - master
                 - /preview\/.*/
       - deploy:
@@ -106,6 +107,7 @@ workflows:
           filters:
             branches:
               only:
+                - main
                 - master
       - deploy:
           config_env: dev
