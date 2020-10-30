@@ -27,6 +27,7 @@ module Scholarsphere
     require 'scholarsphere/solr_config'
     require 'json_log_formatter'
     require 'qa/authorities/persons'
+    require 'qa/authorities/users'
 
     config.generators { |generator| generator.test_framework :rspec }
     # Initialize configuration defaults for originally generated Rails version.
