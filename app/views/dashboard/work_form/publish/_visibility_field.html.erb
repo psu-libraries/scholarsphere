@@ -1,0 +1,15 @@
+<div class="form-group">
+  <p class="label font-weight-bold mt-3"><%= WorkVersion.human_attribute_name(:visibility) %></p>
+
+  <% Permissions::Visibility.options_for_select_box.each do |lbl, val| %>
+    <div class="form-check form-check-inline">
+      <%= form.radio_button :visibility, val, class: 'form-check-input' %>
+      <%= form.label :visibility, lbl, value: val, class: 'form-check-label' do %>
+        <%= lbl %>
+        <% if I18n.exists? "helpers.hint.permissions.visibility.#{val}" %>
+          <span class="label__help"><%= t "helpers.hint.permissions.visibility.#{val}" %></span>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

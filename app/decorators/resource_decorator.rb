@@ -27,7 +27,9 @@ class ResourceDecorator < SimpleDelegator
   end
 
   def display_doi
-    MintableDoiComponent.new(resource: resource_with_doi)
+    return if resource_with_doi.doi.blank?
+
+    MintingStatusDoiComponent.new(resource: resource_with_doi)
   end
 
   # @note These are only displayed via the WorkVersion

@@ -71,7 +71,7 @@ RSpec.describe WorkPolicy, type: :policy do
     end
   end
 
-  permissions :edit? do
+  permissions :edit?, :update? do
     let(:work) do
       create :work,
              depositor: depositor_actor,

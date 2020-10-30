@@ -196,6 +196,18 @@ en:
       new:
         heading: "Create A New Work"
         error_message: "%{error} prohibited this work from being saved:"
+      edit:
+        heading: "Settings for %{work_title}"
+        back: Back to Work
+        visibility:
+          heading: Visibility
+          explanation: Visibility settings affect who can download files associated with the work.
+          submit_button: Update Visibility Settings
+        doi:
+          heading: DOI
+          explanation: A DOI is a persistent identifier that can be used in print or on the web.
+      update:
+        success: "Work settings successfully updated."
     work_form:
       heading:
         new: Add New Work
@@ -374,6 +386,8 @@ en:
     create_button:
       text: 'Create New Version From %{version}'
       tooltip: 'A new draft version can only be created from the latest published version. Only one draft version may exist at any time.'
+    settings_button:
+      text: 'Work Settings'
   shared:
     search:
       heading: 'Browse and search for works'

@@ -2,36 +2,24 @@
 
 module Dashboard
   class WorksController < BaseController
-    # GET /works
-    # GET /works.json
-    def index
-      @works = current_user.works.includes(:versions).map do |work|
-        WorkDecorator.new(work)
-      end
+    layout 'frontend'
+
+    def edit
+      undecorated_work = Work.find(params[:id])
+      authorize(undecorated_work)
+      @work = WorkDecorator.new(undecorated_work)
     end
 
-    # GET /works/new
-    def new
-      @work = Work.build_with_empty_version
-    end
+    def update
+      @work = Work.find(params[:id])
+      authorize(@work)
 
-    # POST /works
-    # POST /works.json
-    def create
-      @work = Work.build_with_empty_version(work_params.merge(depositor: current_user.actor))
-
-      respond_to do |format|
-        if @work.save
-          format.html do
-            # WIP redirect_to work_version_file_list_path(@work, @work.versions.last),
-            redirect_to dashboard_works_path,
-                        notice: 'Work was successfully created.'
-          end
-          format.json { render :show, status: :created, location: @work }
-        else
-          format.html { render :new }
-          format.json { render json: @work.errors, status: :unprocessable_entity }
-        end
+      if @work.update(work_params)
+        redirect_to edit_dashboard_work_path(@work),
+                    notice: t('.success')
+      else
+        @work = WorkDecorator.new(@work)
+        render :edit
       end
     end
 
@@ -41,7 +29,7 @@ module Dashboard
       @work = current_user.works.find(params[:id])
       @work.destroy
       respond_to do |format|
-        format.html { redirect_to dashboard_works_url, notice: 'Work was successfully destroyed.' }
+        format.html { redirect_to dashboard_root_path, notice: 'Work was successfully destroyed.' }
         format.json { head :no_content }
       end
     end

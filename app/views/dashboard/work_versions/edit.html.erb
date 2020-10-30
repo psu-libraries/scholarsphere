@@ -1,7 +1,7 @@
 <%# TODO extract this to a smart partial/helper/presenter %>
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
-    <li class="breadcrumb-item"><%= link_to t('dashboard.works.index.heading'), dashboard_works_path %></li>
+    <li class="breadcrumb-item"><%= link_to t('dashboard.works.index.heading'), dashboard_root_path %></li>
     <li class="breadcrumb-item active" aria-current="page"><%= t('dashboard.work_versions.edit.breadcrumb', title: truncate(@work_version.title, escape: false)) %></li>
   </ol>
 </nav>
