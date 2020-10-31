@@ -3,6 +3,8 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
+  config.session_store :cookie_store, httponly: true, secure: true
+
   # Code is not reloaded between requests.
   config.cache_classes = true
 
