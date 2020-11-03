@@ -338,8 +338,11 @@ en:
     admin_name: 'Administrator'
     heading:
       about: 'About'
-      policies: 'Policies'
       help: 'Help'
+      policies-2.0: 'Policies'
+      policies-1.0: 'Policies (old)'
+      agreement-2.0: 'Deposit Agreement'
+      agreement-1.0: 'Deposit Agreement (old)'
       dashboard: 'Your Dashboard'
       home: 'Welcome to ScholarSphere'
       not_found: 'Page Not Found'
