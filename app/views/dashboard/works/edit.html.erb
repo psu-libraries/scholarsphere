@@ -1,0 +1,58 @@
+<%= content_for :navbar_items do %>
+  <li class="nav-item">
+    <%= link_to(t('.back'),
+                resource_path(@work.uuid),
+                class: 'btn btn-outline-light btn--squish mr-lg-2 my-1') %>
+  </li>
+<% end %>
+
+<%= content_for :body_attributes, 'data-spy="scroll" data-target="#navbar-settings" data-offset="10" style="position: relative"'.html_safe %>
+
+<div class="container-fluid">
+  <article class="row">
+    <div class="col-lg-3">
+      <aside class="sidebar sticky-top">
+        <ul id="navbar-settings" class="nav flex-column">
+          <li class="nav-item">
+            <%= link_to t('.visibility.heading'), "##{t('.visibility.heading').parameterize}", class: 'nav-link' %>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#<%= t('.doi.heading').parameterize %>"><%= t('.doi.heading') %></a>
+          </li>
+        </ul>
+      </aside>
+    </div>
+    <div class="col-lg-9">
+
+        <h1 class="h2 mb-3"><%= t('.heading', work_title: @work.decorated_latest_published_version.title) %></h1>
+
+        <div class="keyline keyline--left">
+          <h2 id="<%= t('.visibility.heading').parameterize %>" class="h4"><%= t('.visibility.heading') %></h2>
+        </div>
+
+        <p><%= t('.visibility.explanation') %></p>
+
+        <%- visibility_form_id = "edit_visibility_#{dom_id @work}" %>
+        <%= form_for [:dashboard, @work], remote: false, html: { id: visibility_form_id, class: 'edit-work-visibility' } do |visibility_form| %>
+          <%= hidden_field_tag 'form_id', visibility_form_id %>
+          <% if params['form_id'] == visibility_form_id %>
+            <%= render FormErrorMessageComponent.new(form: visibility_form) %>
+          <% end %>
+
+          <%= render 'dashboard/work_form/publish/visibility_field', form: visibility_form %>
+
+          <div class="actions mt-4 mb-3">
+            <%= visibility_form.submit t('.visibility.submit_button'), class: 'btn btn-primary' %>
+          </div>
+        <% end %>
+
+        <div class="keyline keyline--left">
+          <h2 id="<%= t('.doi.heading').parameterize %>" class="h4"><%= t('.doi.heading') %></h2>
+        </div>
+
+        <p><%= t('.doi.explanation') %></p>
+        <%= render MintableDoiComponent.new(resource: @work) %>
+
+    </div>
+  </article>
+</div>

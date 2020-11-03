@@ -19,6 +19,7 @@
       var _paq = window._paq || [];
       /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
       _paq.push(['trackPageView']);
+      _paq.push(['setSecureCookie', true]);
       _paq.push(['enableLinkTracking']);
       (function() {
         var u = "<%= ENV.fetch('MATOMO_URL', 'https://analytics.libraries.psu.edu/matomo/') %>";
@@ -31,7 +32,7 @@
     <!-- End Matomo Code -->
   </head>
 
-  <body>
+  <body <%= yield :body_attributes %>>
     <header>
       <nav class="navbar navbar-light navbar-expand-lg topbar">
         <%= link_to 'ScholarSphere', root_path, class: 'navbar-brand slab-font' %>

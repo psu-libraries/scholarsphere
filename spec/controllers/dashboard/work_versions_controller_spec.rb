@@ -50,7 +50,7 @@ RSpec.describe Dashboard::WorkVersionsController, type: :controller do
 
         it 'redirects with an error message' do
           perform_request
-          expect(response).to redirect_to dashboard_works_path
+          expect(response).to redirect_to dashboard_root_path
         end
       end
     end
@@ -215,7 +215,7 @@ RSpec.describe Dashboard::WorkVersionsController, type: :controller do
 
         before { perform_request }
 
-        its(:response) { is_expected.to redirect_to dashboard_works_path }
+        its(:response) { is_expected.to redirect_to dashboard_root_path }
       end
 
       context 'with invalid attributes' do

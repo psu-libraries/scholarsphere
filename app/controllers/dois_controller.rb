@@ -14,7 +14,7 @@ class DoisController < ApplicationController
     # I don't think we need to do anything special here, just skip over the call
     # to MintDoiAsync and redirect back where we came from?
   ensure
-    redirect_to resource_path(params[:resource_id])
+    redirect_back fallback_location: resource_path(params[:resource_id])
   end
 
   private
