@@ -338,6 +338,8 @@ en:
     admin_name: 'Administrator'
     heading:
       about: 'About'
+      policies: 'Policies'
+      help: 'Help'
       dashboard: 'Your Dashboard'
       home: 'Welcome to ScholarSphere'
       not_found: 'Page Not Found'
