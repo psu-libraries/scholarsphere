@@ -5,12 +5,32 @@ orbs:
   slack: circleci/slack@3.4.2
 
 jobs:
-  test:
+  release_image:
     docker:
-      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v0.1.6
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v1.0.6
     environment:
       REGISTRY_HOST: harbor.k8s.libraries.psu.edu
-      REGISTRY_URL: harbor.k8s.libraries.psu.edu/library/scholarsphere
+      REGISTRY_REPO: library/scholarsphere
+      DOCKER_USERNAME: 'robot$circleci'
+      GITHUB_USER: 'psu-stewardship-bot'
+      CONFIG_REPO: git@github.com:psu-stewardship/scholarsphere-config.git
+    steps:
+      - add_ssh_keys
+      - run:
+          name: "Release"
+          command: |
+            /usr/local/bin/tag-image
+            ssh-keyscan github.com > ~/.ssh/known_hosts
+            git clone $CONFIG_REPO
+            cd scholarsphere-config
+            /usr/local/bin/pr-release argocd-prod/prod.yaml
+
+  test:
+    docker:
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v1.0.6
+    environment:
+      REGISTRY_HOST: harbor.k8s.libraries.psu.edu
+      REGISTRY_REPO: library/scholarsphere
       DOCKER_USERNAME: 'robot$circleci'
     parameters:
       publish:
@@ -31,7 +51,7 @@ jobs:
       - run:
           name: "Build Docker Container"
           command: |
-            docker build -t $REGISTRY_URL:$CIRCLE_SHA1 --target base .
+            docker build -t $REGISTRY_HOST/$REGISTRY_REPO:$CIRCLE_SHA1 --target base .
       - run:
           name: "Niftany"
           command: |
@@ -55,9 +75,9 @@ jobs:
             - run:
                 name: "Publishing the image"
                 command: |
-                  docker build -t $REGISTRY_URL:$CIRCLE_SHA1 .
+                  docker build -t $REGISTRY_HOST/$REGISTRY_REPO:$CIRCLE_SHA1 .
                   docker login -u $DOCKER_USERNAME -p $HARBOR_PASSWORD $REGISTRY_HOST
-                  docker push $REGISTRY_URL:$CIRCLE_SHA1
+                  docker push $REGISTRY_HOST/$REGISTRY_REPO:$CIRCLE_SHA1
       - slack/status:
           fail_only: true
   deploy:
@@ -84,6 +104,15 @@ workflows:
   version: 2
   scholarsphere:
     jobs:
+      - release_image:
+          name: "release image"
+          filters:
+            tags:
+              only:
+                - /^v\d+.\d+.\d+.*/
+            branches:
+              ignore:
+                - /.*/
       - test:
           name: test-no-publish
           publish: false
