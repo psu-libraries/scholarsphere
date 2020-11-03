@@ -206,6 +206,7 @@ en:
         doi:
           heading: DOI
           explanation: A DOI is a persistent identifier that can be used in print or on the web.
+          not_allowed: A DOI may only be created on published works. Since this work is a draft, you'll need to wait until it's published to create a DOI for it.
       update:
         success: "Work settings successfully updated."
     work_form:
