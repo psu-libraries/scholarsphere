@@ -126,4 +126,44 @@ RSpec.describe WorkPolicy, type: :policy do
       it { is_expected.to permit(admin, work) }
     end
   end
+
+  permissions :mint_doi? do
+    context 'when a published version exists' do
+      let(:work) do
+        create :work, has_draft: false,
+                      versions_count: 1,
+                      depositor: depositor_actor,
+                      proxy_depositor: proxy_actor,
+                      discover_users: [discover_user],
+                      edit_users: [edit_user]
+      end
+
+      it { is_expected.to permit(depositor, work) }
+      it { is_expected.to permit(proxy, work) }
+      it { is_expected.to permit(edit_user, work) }
+      it { is_expected.not_to permit(discover_user, work) }
+      it { is_expected.not_to permit(other_user, work) }
+      it { is_expected.not_to permit(public, work) }
+      it { is_expected.to permit(admin, work) }
+    end
+
+    context 'when no published version exists' do
+      let(:work) do
+        create :work, has_draft: true,
+                      versions_count: 1,
+                      depositor: depositor_actor,
+                      proxy_depositor: proxy_actor,
+                      discover_users: [discover_user],
+                      edit_users: [edit_user]
+      end
+
+      it { is_expected.not_to permit(depositor, work) }
+      it { is_expected.not_to permit(proxy, work) }
+      it { is_expected.not_to permit(edit_user, work) }
+      it { is_expected.not_to permit(discover_user, work) }
+      it { is_expected.not_to permit(other_user, work) }
+      it { is_expected.not_to permit(public, work) }
+      it { is_expected.not_to permit(admin, work) }
+    end
+  end
 end

@@ -46,13 +46,16 @@
         </div>
       <% end %>
 
-        <p><%= t('.doi.explanation') %></p>
-        <%= render MintableDoiComponent.new(resource: @work) %>
       <div class="keyline keyline--left">
         <h2 id="<%= t('.doi.heading').parameterize %>" class="h4"><%= t('.doi.heading') %></h2>
       </div>
 
       <p><%= t('.doi.explanation') %></p>
+      <% if policy(@work).mint_doi? %>
+        <%= render MintableDoiComponent.new(resource: @work) %>
+      <% else %>
+        <p><%= t('.doi.not_allowed') %></p>
+      <% end %>
     </div>
   </article>
 </div>

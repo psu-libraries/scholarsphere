@@ -39,11 +39,24 @@ RSpec.describe 'Work Settings Page', with_user: :user do
       visit edit_dashboard_work_path(work)
     end
 
-    it 'works from the Settings page' do
-      click_button I18n.t('resources.doi.create')
+    context 'when the work has been published' do
+      let(:work) { create :work, versions_count: 1, has_draft: false, depositor: user.actor }
 
-      expect(page).to have_current_path(edit_dashboard_work_path(work))
-      expect(page).not_to have_button I18n.t('resources.doi.create')
+      it 'works from the Settings page' do
+        click_button I18n.t('resources.doi.create')
+
+        expect(page).to have_current_path(edit_dashboard_work_path(work))
+        expect(page).not_to have_button I18n.t('resources.doi.create')
+      end
+    end
+
+    context 'when the work has not yet been published' do
+      let(:work) { create :work, versions_count: 1, has_draft: true, depositor: user.actor }
+
+      it 'is not allowed' do
+        expect(page).not_to have_content I18n.t('resources.doi.create')
+        expect(page).to have_content I18n.t('dashboard.works.edit.doi.not_allowed')
+      end
     end
   end
 end

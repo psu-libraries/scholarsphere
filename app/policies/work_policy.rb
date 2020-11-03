@@ -25,6 +25,12 @@ class WorkPolicy < ApplicationPolicy
     editable? && record.draft_version.blank?
   end
 
+  # @note we are temporarily disabling DOIs on draft works for launch. This
+  # method should probably go away when we re-enable them
+  def mint_doi?
+    published? && editable?
+  end
+
   private
 
     def editable?
