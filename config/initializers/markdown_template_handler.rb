@@ -2,7 +2,7 @@
 
 class MarkdownHandler
   def self.call(_template, source)
-    markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true)
+    markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML.new(with_toc_data: true), autolink: true, tables: true)
 
     new_source = markdown.render(source)
     "#{new_source.inspect}.html_safe;"

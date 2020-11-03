@@ -1,4 +1,8 @@
-# ScholarSphere Depositor’s Agreement (v2.0)
+# ScholarSphere Depositor’s Agreement
+
+<p class="alert alert-info">
+    Version 2.0
+</p>
 
 By depositing or authorizing the deposit of the content and metadata (the Work) in ScholarSphere, you represent and warrant to The Pennsylvania State University (Penn State) that you have the right to grant the rights contained in this license. If the Work contains material for which you do not hold copyright, you represent and warrant that you have obtained all necessary rights to permit Penn State to reproduce and distribute the Work and that any third-party material is clearly identified and acknowledged within the Work. You further represent and warrant that the Work does not, to the best of your knowledge, infringe or violate any rights of others and that it complies with the [Content and Deposit Policy](policies-2.0). 
 

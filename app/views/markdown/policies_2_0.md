@@ -1,6 +1,24 @@
-# ScholarSphere Policies (v2.0)
+# ScholarSphere Policies
 
-This document defines policies for depositing, accessing, curating and preserving work on ScholarSphere. Questions and concerns relating to these policies should be addressed to [repub@psu.edu](repub@psu.edu). Additional information on ScholarSphere, including instructions for depositors, can be found in the ScholarSphere user guide.
+<p class="alert alert-info">
+  For questions and concerns related to these policies, please <a href="contact">contact us</a>
+</p>
+
+## Table of Contents
+  - [Content & Deposit Policy](#content--deposit-policy)
+    - [Requirements for Deposit](#requirements-for-deposit)
+    - [Data Size Limits](#data-size-limits)
+    - [Versioning](#versioning)
+    - [Withdrawal and Deletion](#withdrawal-and-deletion)
+    - [Retractions](#retractions)
+  - [Access Policy](#access-policy)
+    - [Work Visibility (Public vs. Penn State)](#work-visibility-public-vs-penn-state)
+    - [Embargoes](#embargoes)
+  - [Curation Policy](#curation-policy)
+  - [Preservation Policy](#preservation-policy)
+    - [Storage & Backup](#storage--backup)
+    - [Repository Closure](#repository-closure)
+    - [URLs & Persistent Identifiers](#urls--persistent-identifiers)
 
 ## Content & Deposit Policy
 
@@ -67,7 +85,7 @@ In order to improve discoverability and accessibility of deposited content over 
 - create and make available derivatives of deposited files in open, non-proprietary file formats (without affecting the content of the deposited files)
 - migrate content to new versions of ScholarSphere or its successor repository.
 
-## Preservation Policy
+# Preservation Policy
 Deposited files and metadata are generally retained for the lifetime of the repository, however the guaranteed minimum preservation timeframe for work deposited to ScholarSphere is ten years. After that period, the Libraries may remove content that does not warrant continued preservation.
 In addition, files and metadata will be permanently deleted from the repository if:
 

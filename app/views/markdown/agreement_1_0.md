@@ -1,6 +1,8 @@
-# ScholarSphere Deposit Agreement (v1.0)
+# ScholarSphere Deposit Agreement
 
-> This is a legacy policy statement. It is superseded by [version 2.0](agreement-2.0).
+<p class="alert alert-warning">
+ This agreement (v1.0) has been superseded by <a href="agreement-2.0">version 2.0</a>.
+</p>
 
 To properly administer this repository and preserve the contents of ScholarSphere for future use, The Pennsylvania State University (Penn State) requires certain permissions from you, the author(s), or copyright owner. By accepting this license, you do not give up the copyright to your work. You do not give up the right to submit the work to publishers or other repositories. You grant to Penn State the non-exclusive right to store your work. You agree that Penn State may translate the submission to any medium or format and keep more than one copy for the purposes of security, back up and long-term preservation of the scholarly record. Penn State will not make any alteration, other than as allowed by this license, to your submission.
 

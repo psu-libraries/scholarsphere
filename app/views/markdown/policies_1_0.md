@@ -1,7 +1,6 @@
-
-# ScholarSphere Policies (v1.0)
-
-> This is a legacy policy statement. It is superseded by [version 2.0](policies-2.0).
+<p class="alert alert-warning">
+ This policy (v1.0) no longer in use. It is superseded by <a href="policies-2.0">version 2.0</a>.
+</p>
 
 ## Table of Contents
 
@@ -19,7 +18,7 @@
 -   Assistance in complying with data management planning and data sharing requirements.
 -   A service for researchers to deposit their datasets and link to them from their published articles, as often required by journal publishers.
 
-The University Faculty Senate at Penn State passed an open access resolution in April 2015.Faculty are encouraged to share their research outputs via ScholarSphere- for articles, deposit the pre-published versions (original manuscripts), or the post-published versions (i.e., peer-reviewed and final version of the article before being sent to the journal for publication - will usually not be formatted to look like the publishedversion).
+The University Faculty Senate at Penn State passed an open access resolution in April 2015.Faculty are encouraged to share their research outputs via ScholarSphere- for articles, deposit the pre-published versions (original manuscripts), or the post-published versions (i.e., peer-reviewed and final version of the article before being sent to the journal for publication - will usually not be formatted to look like the published version).
 
 SHERPA-RoMEO site delineates between pre-prints and post-prints - see: <http://www.sherpa.ac.uk/romeoinfo.html#prepostprints>.
 
