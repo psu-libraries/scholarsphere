@@ -85,10 +85,10 @@ class CatalogController < ApplicationController
     # prefixes that will be used to create the navigation (note: It is
     # case sensitive when searching values)
 
-    config.add_facet_field 'display_work_type_ssi', label: 'Work Type', limit: true
-    config.add_facet_field 'keyword_sim', label: 'Keywords', limit: true
-    config.add_facet_field 'subject_sim', label: 'Subject', limit: true
-    config.add_facet_field 'creators_sim', label: 'Creators', limit: true
+    config.add_facet_field 'display_work_type_ssi', label: I18n.t('catalog.facets.display_work_type_ssi'), limit: true
+    config.add_facet_field 'keyword_sim', label: I18n.t('catalog.facets.keyword_sim'), limit: true
+    config.add_facet_field 'subject_sim', label: I18n.t('catalog.facets.subject_sim'), limit: true
+    config.add_facet_field 'creators_sim', label: I18n.t('catalog.facets.creators_sim'), limit: true
 
     # Example pivot facet
     # config.add_facet_field 'example_pivot_field', label: 'Pivot Field', pivot: ['format', 'language_ssim']
