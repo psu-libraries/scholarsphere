@@ -324,11 +324,7 @@ en:
     intro:
       heading: 'What is ScholarSphere?'
       content: >
-        ScholarSphere is Penn State’s institutional repository - a repository service for research and scholarly work
-        produced by the university community. Through ScholarSphere, Penn State researchers - faculty, students, and
-        staff alike - are able to share their work on a worldwide scale and be assured of its long-term preservation
-        and thus ongoing access. ScholarSphere is Penn State’s institutional repository - a repository service for
-        research and scholarly work produced by the university community.
+        ScholarSphere is an institutional repository managed by Penn State University Libraries. Anyone with a Penn State Access Account can deposit materials relating to the University’s teaching, learning, and research mission to ScholarSphere. All types of scholarly materials, including publications, instructional materials, creative works, and research data are accepted.
     search:
       heading: 'Browse and search for works'
       placeholder: 'Search for titles, keywords, resource types, creators, etc.'
@@ -351,6 +347,11 @@ en:
     admin_name: 'Administrator'
     heading:
       about: 'About'
+      help: 'Documentation & Support'
+      policies_2_0: 'Policies'
+      policies_1_0: 'Policies'
+      agreement_2_0: 'Deposit Agreement'
+      agreement_1_0: 'Deposit Agreement'
       dashboard: 'Your Dashboard'
       home: 'Welcome to ScholarSphere'
       not_found: 'Page Not Found'
