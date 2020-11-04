@@ -412,3 +412,8 @@ en:
       submit: 'search'
       subheading: Or
       browse: 'Browse & Filter All Works'
+  visibility_badge_component:
+    label:
+      open: Open Access
+      authenticated: Penn State
+      restricted: Restricted

@@ -10,7 +10,7 @@ RSpec.describe VisibilityBadgeComponent, type: :component do
     let(:work) { build(:work) }
 
     specify do
-      expect(badge.text).to include('Open Access')
+      expect(badge.text).to include(I18n.t('visibility_badge_component.label.open'))
       expect(badge.attributes['data-before'].value).to eq('lock_open')
       expect(badge.classes).to contain_exactly('badge', 'badge--icon', 'badge--icon-orange')
     end
@@ -20,7 +20,7 @@ RSpec.describe VisibilityBadgeComponent, type: :component do
     let(:work) { build(:work, visibility: Permissions::Visibility::AUTHORIZED) }
 
     specify do
-      expect(badge.text).to include('Penn State')
+      expect(badge.text).to include(I18n.t('visibility_badge_component.label.authenticated'))
       expect(badge.attributes['data-before'].value).to eq('pets')
       expect(badge.classes).to contain_exactly('badge', 'badge--icon', 'badge--icon-blue')
     end
@@ -30,7 +30,7 @@ RSpec.describe VisibilityBadgeComponent, type: :component do
     let(:work) { build(:work, visibility: Permissions::Visibility::PRIVATE) }
 
     specify do
-      expect(badge.text).to include('Restricted')
+      expect(badge.text).to include(I18n.t('visibility_badge_component.label.restricted'))
       expect(badge.attributes['data-before'].value).to eq('lock')
       expect(badge.classes).to contain_exactly('badge', 'badge--icon', 'badge--icon-red')
     end
