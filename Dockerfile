@@ -1,4 +1,4 @@
-FROM psul/ruby-2.7.1-node-12:20200803 as base
+FROM harbor.k8s.libraries.psu.edu/library/ruby-2.7.1-node-12:20201104 as base
 
 COPY bin/vaultshell /usr/local/bin/
 
