@@ -37,7 +37,8 @@ jobs:
         type: boolean
         default: true
     steps:
-      - setup_remote_docker
+      - setup_remote_docker:
+          version: 19.03.13
       - checkout
       - run:
           name: "Start Dependencies"
