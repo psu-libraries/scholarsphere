@@ -41,6 +41,7 @@ module Dashboard
       config.add_facet_field 'keyword_sim', label: 'Keywords', limit: true
       config.add_facet_field 'subject_sim', label: 'Subject', limit: true
       config.add_facet_field 'creators_sim', label: 'Creators', limit: true
+      config.add_facet_field 'migration_errors_sim', label: 'Migration Errors', limit: true
     end
 
     private
