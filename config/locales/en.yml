@@ -83,6 +83,20 @@ en:
       options:
         heading: 'Search Alternatives'
         browse: "Browse & Filter All Works"
+    facets:
+      aasm_state_tesim: Status
+      creators_sim: Creators
+      display_work_type_ssi: Work Type
+      embargoed_until_dtsi: Embargoed Date
+      embargoed_until:
+        year_1: this year
+        year_5: in 5 years
+        year_10: in 10 years
+        year_more: beyond 10 years
+      keyword_sim: Keywords
+      migration_errors_sim: Migration Errors
+      subject_sim: Subject
+      visibility_ssi: Access
   embargo:
     heading: "Embargoed until %{date}"
     public_message: "Files are not available during the embargo."
@@ -200,9 +214,9 @@ en:
         heading: "Settings for %{work_title}"
         back: Back to Work
         visibility:
-          heading: Visibility
-          explanation: Visibility settings affect who can download files associated with the work.
-          submit_button: Update Visibility Settings
+          heading: Access
+          explanation: Access settings affect who can download files associated with the work.
+          submit_button: Update Access Settings
         doi:
           heading: DOI
           explanation: A DOI is a persistent identifier that can be used in print or on the web.
@@ -398,3 +412,8 @@ en:
       submit: 'search'
       subheading: Or
       browse: 'Browse & Filter All Works'
+  visibility_badge_component:
+    label:
+      open: Open Access
+      authenticated: Penn State
+      restricted: Restricted
