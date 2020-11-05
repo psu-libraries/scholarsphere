@@ -16,16 +16,19 @@ linters:
     enabled: true
     exclude:
       - '*app/components/flash_message_component.html.erb'
+      - '*app/views/actor_mailer/*'
       - '*app/views/catalog/_search_form.html.erb'
+      - '*app/views/catalog/facet.html.erb'
       - '*app/views/dashboard/catalog/_index_work_version.html.erb'
+      - '*app/views/dashboard/work_form/contributors/_creator_alias_fields.html.erb'
+      - '*app/views/dashboard/work_form/contributors/_search.html.erb'
+      - '*app/views/incident_mailer/acknowledgment.html.erb'
+      - '*app/views/incident_mailer/report.html.erb'
+      - '*app/views/incidents/_directions.html.erb'
+      - '*app/views/layouts/component_preview.html.erb'
+      - '*app/views/resources/_work_version.html.erb'
       - '*app/views/shared/_work_version_files.html.erb'
       - '*test/*'
-      - '*app/views/layouts/component_preview.html.erb'
-      - '*app/views/actor_mailer/*'
-      - '*app/views/catalog/facet.html.erb'
-      - '*app/views/dashboard/work_form/contributors/_search.html.erb'
-      - '*app/views/dashboard/work_form/contributors/_creator_alias_fields.html.erb'
-      - '*app/views/resources/_work_version.html.erb'
   RightTrim:
     enabled: true
     enforced_style: '-'

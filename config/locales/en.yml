@@ -25,6 +25,12 @@ en:
         related_url: Related URL
         source: Source
         display_doi: DOI
+      incident:
+        name: Name
+        email: Email
+        subject: Subject
+        message: Message
+        category: Issue Type
       permissions:
         visibility:
           open: Public
@@ -141,6 +147,11 @@ en:
       work_version:
         version_name: x.y.z
         published_date: yyyy-mm-dd
+  incidents:
+    new:
+      error_message: 'Cannot send message'
+    create:
+      success: 'Message was successfully sent'
 
   dashboard:
     actors:
@@ -362,6 +373,7 @@ en:
     heading:
       about: 'About'
       help: 'Documentation & Support'
+      contact: 'Contact'
       policies_2_0: 'Policies'
       policies_1_0: 'Policies'
       agreement_2_0: 'Deposit Agreement'
