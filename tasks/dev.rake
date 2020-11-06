@@ -8,5 +8,6 @@ namespace :dev do
     DatabaseCleaner.clean_with(:truncation)
     Scholarsphere::Cleaner.clean
     Rake::Task['db:seed:development:api_tokens'].invoke
+    Rake::Task['db:seed:groups'].invoke
   end
 end

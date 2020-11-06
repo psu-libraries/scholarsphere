@@ -10,6 +10,8 @@ RSpec.configure do |config|
   config.before :suite do
     Scholarsphere::Cleaner.clean
     DatabaseCleaner.clean_with(:truncation)
+    Group.find_or_create_by(name: Group::PUBLIC_AGENT_NAME)
+    Group.find_or_create_by(name: Group::AUTHORIZED_AGENT_NAME)
   end
 
   config.after :suite do
