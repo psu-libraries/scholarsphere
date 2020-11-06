@@ -18,6 +18,11 @@ RSpec.describe Group, type: :model do
     it { is_expected.to have_many(:users).through(:user_group_memberships) }
   end
 
+  describe 'validations' do
+    it { is_expected.to validate_presence_of(:name) }
+    it { is_expected.to validate_uniqueness_of(:name).case_insensitive }
+  end
+
   describe '.PUBLIC_AGENT_NAME' do
     subject { described_class::PUBLIC_AGENT_NAME }
 
