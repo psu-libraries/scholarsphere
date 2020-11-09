@@ -4,25 +4,15 @@ class Group < ApplicationRecord
   PUBLIC_AGENT_NAME = 'public'
   AUTHORIZED_AGENT_NAME = 'authorized'
 
-  # @note Database cleaner and transactional fixtures are causing caching problems so we re-find/create each time but
-  # only in test.
+  # @note This agent must be seeded in the database prior to deployment
   def self.public_agent
-    if Rails.env.test?
-      find_or_create_by(name: PUBLIC_AGENT_NAME)
-    else
-      @public_agent ||= find_or_create_by(name: PUBLIC_AGENT_NAME)
-    end
+    @public_agent ||= find_by!(name: PUBLIC_AGENT_NAME)
   end
   delegate :public_agent, to: :class
 
-  # @note Database cleaner and transactional fixtures are causing caching problems so we re-find/create each time but
-  # only in test.
+  # @note This agent must be seeded in the database prior to deployment
   def self.authorized_agent
-    if Rails.env.test?
-      find_or_create_by(name: AUTHORIZED_AGENT_NAME)
-    else
-      @authorized_agent ||= find_or_create_by(name: AUTHORIZED_AGENT_NAME)
-    end
+    @authorized_agent ||= find_by!(name: AUTHORIZED_AGENT_NAME)
   end
   delegate :authorized_agent, to: :class
 
@@ -43,4 +33,8 @@ class Group < ApplicationRecord
 
   has_many :users,
            through: :user_group_memberships
+
+  validates :name,
+            presence: true,
+            uniqueness: { case_sensitive: false }
 end

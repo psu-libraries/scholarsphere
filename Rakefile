@@ -4,11 +4,11 @@
 # for example lib/tasks/capistrano.rake, and they will automatically be available to Rake.
 
 require_relative 'config/application'
+require 'seedbank'
 
 unless Rails.env.production?
-  require 'seedbank'
-  Seedbank.load_tasks if defined?(Seedbank)
   Rails.root.join('tasks').children.map { |file| load(file) }
 end
 
 Rails.application.load_tasks
+Seedbank.load_tasks if defined?(Seedbank)
