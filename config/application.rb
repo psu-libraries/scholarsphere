@@ -54,6 +54,8 @@ module Scholarsphere
     config.view_component.default_preview_layout = 'component_preview'
 
     config.no_reply_email = ENV.fetch('NO_REPLY_EMAIL', 'no_reply@scholarsphere.psu.edu')
+    config.incident_email = ENV.fetch('INCIDENT_EMAIL', 'no_reply@scholarsphere.psu.edu')
+    config.subject_prefix = ENV.fetch('SUBJECT_PREFIX', 'ScholarSphere Contact Form -')
 
     # Use our own custom exceptions
     config.exceptions_app = routes

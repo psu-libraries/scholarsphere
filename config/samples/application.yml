@@ -121,6 +121,15 @@
 # API_URL_HOST: "localhost:3000"
 #
 # --------------------------------------------------------------------------------------------------------------------
+#
+# ReCaptcha
+#
+# Used to prevent spam from being sent via the contact form. Keys and domains are managed via
+# https://www.google.com/recaptcha
+#
+#  RECAPTCHA_SITE_KEY: 'xxxxxxx'
+#  RECAPTCHA_SECRET_KEY: 'yyyyyyy'
+# --------------------------------------------------------------------------------------------------------------------
 
 # Defaults for your local development environment
 DOWNLOAD_URL_TTL: 6

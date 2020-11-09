@@ -1,0 +1,41 @@
+<% content_for :navbar_heading do %>
+  <h1 class="navbar-brand navbar-brand--center slab-font"><%= t('navbar.heading.contact') %></h1>
+<% end %>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col">
+
+      <div class="alert alert-info">
+        <%= render 'directions' %>
+      </div>
+
+      <%= form_with(model: @incident, url: incidents_path, local: true) do |form| %>
+
+        <%= render FormErrorMessageComponent.new(
+              form: form,
+              heading: t('.error_message', error: pluralize(form.object.errors.count, 'issue'))
+            ) %>
+
+        <div class="form-wrapper">
+          <%= render 'form_fields/select',
+                     form: form,
+                     attribute: :category,
+                     options_for_select: Incident::ISSUE_TYPES,
+                     include_blank: true %>
+          <%= render 'form_fields/text', form: form, attribute: :name, required: true %>
+          <%= render 'form_fields/text', form: form, attribute: :email, required: true %>
+          <%= render 'form_fields/text', form: form, attribute: :subject %>
+          <%= render 'form_fields/text_area', form: form, attribute: :message %>
+
+          <div class="form-group mb-3">
+            <%= form.label :recaptcha, 'ReCaptcha', class: 'sr-only' %>
+            <%= recaptcha_tags %>
+          </div>
+
+          <%= form.submit value: 'Send', class: 'btn btn-primary btn--rounded' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

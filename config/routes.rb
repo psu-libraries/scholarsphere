@@ -30,6 +30,8 @@ Rails.application.routes.draw do
   get 'agreement-2.0', to: 'markdown#show', page: 'agreement_2_0'
   get 'agreement', to: 'markdown#show', page: 'agreement_2_0'
 
+  resources :incidents, only: [:new, :create]
+
   concern :searchable, Blacklight::Routes::Searchable.new
 
   resource :catalog, only: [:index], as: 'catalog', path: '/catalog', controller: 'catalog' do
