@@ -29,9 +29,9 @@ class WorkVersionMetadataComponent < ApplicationComponent
   ].freeze
 
   MINI_ATTRIBUTES = [
-    :title,
-    :creator_aliases,
-    :deposited_at
+    :first_creators,
+    :deposited_at,
+    :visibility_badge
   ].freeze
 
   def initialize(work_version:, mini: false)

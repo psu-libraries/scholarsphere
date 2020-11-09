@@ -45,4 +45,12 @@ class SolrDocument
   def version_number
     self[:version_number_isi].to_s
   end
+
+  def creator_aliases
+    Array.wrap(self[:creator_aliases_tesim])
+  end
+
+  def deposited_at
+    Time.zone.parse(self[:deposited_at_dtsi])
+  end
 end
