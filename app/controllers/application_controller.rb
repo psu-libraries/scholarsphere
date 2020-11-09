@@ -8,6 +8,8 @@ class ApplicationController < ActionController::Base
   # Authorization
   include Pundit
 
+  ActionDispatch::ExceptionWrapper.rescue_responses['Pundit::NotAuthorizedError'] = :not_found
+
   def current_user
     UserDecorator.new(super || User.guest)
   end
