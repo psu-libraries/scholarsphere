@@ -109,7 +109,7 @@ RSpec.describe 'Public Resources', type: :feature do
       expect(page).to have_content collection.description
       expect(page).to have_content work.latest_published_version.title
 
-      within('.meta-table') do
+      within('td.collection-title') do
         expect(page).to have_content(collection.title)
       end
     end
@@ -126,7 +126,7 @@ RSpec.describe 'Public Resources', type: :feature do
       expect(page).to have_content collection.description
       expect(page).to have_content work.latest_published_version.title
 
-      within('.meta-table') do
+      within('td.collection-display-doi') do
         expect(page).to have_content(collection.doi)
       end
     end

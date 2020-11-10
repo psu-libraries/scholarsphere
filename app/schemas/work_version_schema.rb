@@ -10,7 +10,8 @@ class WorkVersionSchema < BaseSchema
         embargoed_until_dtsi: work.embargoed_until,
         depositor_id_isi: work.depositor.id,
         proxy_id_isi: work.proxy_id,
-        migration_errors_sim: migration_errors
+        migration_errors_sim: migration_errors,
+        deposited_at_dtsi: resource.deposited_at
       )
   end
 

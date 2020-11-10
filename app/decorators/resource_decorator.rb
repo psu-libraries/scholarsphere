@@ -32,10 +32,15 @@ class ResourceDecorator < SimpleDelegator
     MintingStatusDoiComponent.new(resource: resource_with_doi)
   end
 
-  # @note These are only displayed via the WorkVersion
   def visibility_badge
-    return unless respond_to?(:work)
+    VisibilityBadgeComponent.new(work: self)
+  end
 
-    VisibilityBadgeComponent.new(work: work)
+  def first_creators
+    if creator_aliases.length > 3
+      creator_aliases.take(3) + ['&hellip;']
+    else
+      creator_aliases.take(3)
+    end
   end
 end

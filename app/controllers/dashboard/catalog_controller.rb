@@ -20,7 +20,6 @@ module Dashboard
 
     configure_blacklight do |config|
       config.search_builder_class = SearchBuilder
-      config.response_model = Dashboard::PostgresResponse
 
       config.index.display_type_field = 'model_ssi'
 
