@@ -80,6 +80,8 @@ en:
   api:
     errors:
       not_authorized: "401: Request not authorized. Please provide a valid API key for access."
+  blacklight:
+    application_name: 'ScholarSphere'
   catalog:
     zero_results:
       info:
