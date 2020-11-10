@@ -51,6 +51,8 @@ class SolrDocument
   end
 
   def deposited_at
+    return if self[:deposited_at_dtsi].nil?
+
     Time.zone.parse(self[:deposited_at_dtsi])
   end
 end

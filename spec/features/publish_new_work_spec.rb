@@ -447,12 +447,9 @@ RSpec.describe 'Publishing a work', with_user: :user do
       work = Work.last
       version = work.versions.first
 
-      within('.work-list__work') do
-        expect(page).to have_content(version.title)
-      end
+      expect(page).to have_selector('h3', text: version.title)
 
       expect(version).to be_published
-
       expect(version.version_number).to eq 1
       expect(version.title).to eq different_metadata[:title]
       expect(version.description).to eq different_metadata[:description]
