@@ -34,9 +34,5 @@ module Dashboard
             ]
           )
       end
-
-      def determine_layout
-        'frontend'
-      end
   end
 end

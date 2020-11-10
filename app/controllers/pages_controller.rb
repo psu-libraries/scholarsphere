@@ -7,10 +7,6 @@ class PagesController < ApplicationController
 
   private
 
-    def determine_layout
-      'frontend'
-    end
-
     def resources
       FeaturedResource
         .includes(:resource)
