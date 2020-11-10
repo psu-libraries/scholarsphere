@@ -397,9 +397,6 @@ en:
       link: View the current version.
       message: This is an older version of the work.
     work_history: Work History
-    work_history_diff: Version Comparison
-    work_history_diff_content: 'TODO: coming soon'
-    work_history_summary: Summary
     works: Works
     doi:
       doi: 'doi:'
