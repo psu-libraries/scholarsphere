@@ -95,8 +95,34 @@ RSpec.describe Qa::Authorities::Persons, type: :authority do
       it { is_expected.to include(formatted_result) }
     end
 
+    context "when Penn State's identity service contains existing Scholarsphere Actors" do
+      let!(:creator) { create(:actor) }
+
+      let(:formatted_result) do
+        {
+          given_name: creator.given_name,
+          surname: creator.surname,
+          psu_id: creator.psu_id,
+          default_alias: creator.default_alias,
+          email: creator.email,
+          orcid: creator.orcid,
+          source: 'scholarsphere',
+          actor_id: creator.id,
+          result_number: 1,
+          total_results: 1,
+          additional_metadata: "#{Actor.human_attribute_name(:psu_id)}: #{creator.psu_id}"
+        }
+      end
+
+      let(:mock_identity_response) { [person] }
+      let(:person) { build(:person, access_id: creator.psu_id) }
+      let(:search_term) { 'search query' }
+
+      it { is_expected.to include(formatted_result) }
+    end
+
     context 'with an unsupported person type' do
-      let(:bad_actor) { Struct.new('BadActor', :given_name).new('bad actor') }
+      let(:bad_actor) { Struct.new('BadActor', :given_name, :user_id).new('bad actor', 'bad123') }
       let(:mock_identity_response) { [bad_actor] }
 
       it 'raises an error' do
