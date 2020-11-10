@@ -5,20 +5,21 @@ module Dashboard
     layout 'frontend'
 
     def edit
-      undecorated_work = Work.find(params[:id])
-      authorize(undecorated_work)
-      @work = WorkDecorator.new(undecorated_work)
+      @undecorated_work = Work.find(params[:id])
+      authorize(@undecorated_work)
+      initialize_forms
     end
 
     def update
-      @work = Work.find(params[:id])
-      authorize(@work)
+      @undecorated_work = Work.find(params[:id])
+      authorize(@undecorated_work)
+      initialize_forms
 
-      if @work.update(work_params)
-        redirect_to edit_dashboard_work_path(@work),
-                    notice: t('.success')
+      form = select_form_model
+
+      if form.save
+        redirect_to edit_dashboard_work_path(@undecorated_work), notice: t('.success')
       else
-        @work = WorkDecorator.new(@work)
         render :edit
       end
     end
@@ -36,16 +37,36 @@ module Dashboard
 
     private
 
+      def initialize_forms
+        @work = WorkDecorator.new(@undecorated_work)
+        @work.attributes = work_params
+
+        @embargo_form = EmbargoForm.new(work: @undecorated_work, params: embargo_params)
+      end
+
+      def select_form_model
+        if params[:embargo_form].present?
+          @embargo_form
+        else
+          @work
+        end
+      end
+
       # Never trust parameters from the scary internet, only allow the white list through.
       def work_params
         params
-          .require(:work)
+          .fetch(:work, {})
           .permit(
-            :work_type,
-            :visibility,
-            versions_attributes: [
-              :title
-            ]
+            :visibility
+          )
+      end
+
+      def embargo_params
+        params
+          .fetch(:embargo_form, {})
+          .permit(
+            :embargoed_until,
+            :remove
           )
       end
   end

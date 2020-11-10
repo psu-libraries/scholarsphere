@@ -5,13 +5,17 @@ require 'rails_helper'
 RSpec.describe Dashboard::WorksController, type: :controller do
   let(:valid_attributes) {
     {
-      'visibility' => Permissions::Visibility.default
+      'work' => {
+        'visibility' => Permissions::Visibility.default
+      }
     }
   }
 
   let(:invalid_attributes) {
     {
-      'work_type' => ''
+      'embargo_form' => {
+        'embargoed_until' => 'not a valid date'
+      }
     }
   }
 
@@ -42,7 +46,7 @@ RSpec.describe Dashboard::WorksController, type: :controller do
 
   describe 'POST #update' do
     let(:perform_request) {
-      post :update, params: { id: work.id, work: attributes }
+      post :update, params: { id: work.id }.merge(attributes)
     }
 
     context 'when signed in' do

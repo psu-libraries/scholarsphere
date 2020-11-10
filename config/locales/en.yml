@@ -79,6 +79,14 @@ en:
               blank: is required to publish the work
             rights:
               blank: is required to publish the work
+  activemodel:
+    errors:
+      models:
+        embargo_form:
+          attributes:
+            embargoed_until:
+              format: must be in yyyy-mm-dd format
+              not_a_date: must be a valid date
   api:
     errors:
       not_authorized: "401: Request not authorized. Please provide a valid API key for access."
@@ -139,9 +147,6 @@ en:
         title: The title as would appear in a bibliographic reference to the work (not a filename).
         description: Include the work abstract if available.
         published_date: The publication date can be specific to the year (2020), month (2020-11), or day (2020-11-22).
-        subject: This is a hint for the subject
-      work:
-        work_type: This is a hint for the work type
       actor:
         orcid: "This is a 16-digit identifier in the format ####-####-####-####"
         default_alias: >
@@ -151,12 +156,13 @@ en:
       work_version:
         version_name: x.y.z
         published_date: yyyy-mm-dd
+      embargo_form:
+        embargoed_until: yyyy-mm-dd
   incidents:
     new:
       error_message: 'Cannot send message'
     create:
       success: 'Message was successfully sent'
-
   dashboard:
     actors:
       new:
@@ -232,6 +238,11 @@ en:
           heading: Access
           explanation: Access settings affect who can download files associated with the work.
           submit_button: Update Access Settings
+        embargo:
+          heading: Embargo
+          explanation: Files will be restricted (not downloadable) until after the embargo date. When the embargo lifts, files may be accessed based on the access settings above.
+          submit_button: Update Embargo Settings
+          remove_button: Remove Embargo
         doi:
           heading: DOI
           explanation: A DOI is a persistent identifier that can be used in print or on the web.

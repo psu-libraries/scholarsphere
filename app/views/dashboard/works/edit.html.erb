@@ -17,6 +17,9 @@
             <%= link_to t('.visibility.heading'), "##{t('.visibility.heading').parameterize}", class: 'nav-link' %>
           </li>
           <li class="nav-item">
+            <%= link_to t('.embargo.heading'), "##{t('.embargo.heading').parameterize}", class: 'nav-link' %>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="#<%= t('.doi.heading').parameterize %>"><%= t('.doi.heading') %></a>
           </li>
         </ul>
@@ -43,6 +46,31 @@
 
         <div class="actions mt-4 mb-3">
           <%= visibility_form.submit t('.visibility.submit_button'), class: 'btn btn-primary' %>
+        </div>
+      <% end %>
+
+      <div class="keyline keyline--left">
+        <h2 id="<%= t('.embargo.heading').parameterize %>" class="h4"><%= t('.embargo.heading') %></h2>
+      </div>
+
+      <p><%= t('.embargo.explanation') %></p>
+
+      <%- embargo_form_id = "edit_embargo_#{dom_id @work}" %>
+      <%= form_for @embargo_form, url: dashboard_work_path(@work), method: :patch, remote: false, html: { id: embargo_form_id, class: 'edit-work-embargo' } do |form| %>
+        <%= hidden_field_tag 'form_id', embargo_form_id %>
+        <%= render FormErrorMessageComponent.new(form: form) %>
+
+        <%= render 'form_fields/text', form: form, attribute: :embargoed_until %>
+
+        <div class="actions mt-1 mb-3">
+          <%= form.submit t('.embargo.submit_button'), class: 'btn btn-primary' %>
+
+          <% if form.object.embargoed_until.present? %>
+            <%= form.button t('.embargo.remove_button'),
+                            name: "#{form.object_name}[remove]",
+                            value: 't',
+                            class: 'btn btn-outline-danger' %>
+          <% end %>
         </div>
       <% end %>
 
