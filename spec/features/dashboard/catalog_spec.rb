@@ -9,6 +9,7 @@ RSpec.describe 'Dashboard catalog page', :inline_jobs do
   context 'when the user has NO deposited works' do
     it 'displays an informational page to the user', with_user: :user do
       visit(dashboard_root_path)
+      expect(page.title).to eq('ScholarSphere')
 
       expect(page).to have_link('Dashboard', class: 'disabled')
       expect(page).to have_selector('h4', text: 'What is my dashboard?')

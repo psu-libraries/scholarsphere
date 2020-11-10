@@ -1,3 +1,7 @@
+<%- content_for :page_title do %>
+  <%= work_version.title %>
+<% end %>
+
 <%= content_for :navbar_items do %>
   <%= render WorkVersions::VersionNavigationDropdownComponent.new(
         current_version: work_version,

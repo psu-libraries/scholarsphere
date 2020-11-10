@@ -71,6 +71,7 @@ RSpec.describe 'Blacklight catalog page', :inline_jobs do
 
   it 'displays the search form and facets' do
     visit search_catalog_path
+    expect(page.title).to eq('ScholarSphere')
     click_link('100 per page')
 
     expect(page).to have_content("1 - #{indexed_resources.count} of #{indexed_resources.count}")

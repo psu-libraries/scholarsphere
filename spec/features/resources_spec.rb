@@ -13,6 +13,8 @@ RSpec.describe 'Public Resources', type: :feature do
       it 'displays the public resource page for the work' do
         visit resource_path(work.uuid)
 
+        # @note There is some whitespace due to the :content_for block, but this is ultimately removed by the browser.
+        expect(page.title).to include(v2.title)
         expect(page).to have_content(v2.title)
 
         ## Does not have edit controls
