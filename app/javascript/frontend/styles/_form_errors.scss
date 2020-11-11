@@ -19,3 +19,17 @@
 .form-text.feedback-invalid {
   color: $dark-red;
 }
+
+.input-group > .field_with_errors:not(:last-child) .form-control,
+.input-group > .field_with_errors:not(:last-child) .custom-select {
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.input-group > .field_with_errors {
+  flex: 1 1 auto;
+  margin-bottom: 0;
+  min-width: 0;
+  position: relative;
+  width: 1%;
+}
