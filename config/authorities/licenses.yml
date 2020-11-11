@@ -18,22 +18,22 @@ terms:
     term: Attribution-NonCommercial-ShareAlike 3.0 United States
     active: false
   - id: https://creativecommons.org/licenses/by/4.0/
-    term: Attribution 4.0 International
+    term: Attribution 4.0 International (CC BY 4.0)
     active: true
   - id: https://creativecommons.org/licenses/by-sa/4.0/
-    term: Attribution-ShareAlike 4.0 International
+    term: Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
     active: true
   - id: https://creativecommons.org/licenses/by-nc/4.0/
-    term: Attribution-NonCommercial 4.0 International
+    term: Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)
     active: true
   - id: https://creativecommons.org/licenses/by-nd/4.0/
-    term: Attribution-NoDerivatives 4.0 International
+    term: Attribution-NoDerivatives 4.0 International (CC BY-ND 4.0)
     active: true
   - id: https://creativecommons.org/licenses/by-nc-nd/4.0/
-    term: Attribution-NonCommercial-NoDerivatives 4.0 International
+    term: Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)
     active: true
   - id: https://creativecommons.org/licenses/by-nc-sa/4.0/
-    term: Attribution-NonCommercial-ShareAlike 4.0 International
+    term: Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
     active: true
   - id: http://creativecommons.org/publicdomain/mark/1.0/
     term: Public Domain Mark 1.0
@@ -48,11 +48,11 @@ terms:
     term: Apache 2.0
     active: true
   - id: https://www.gnu.org/licenses/gpl.html
-    term: GNU General Public License
+    term: GNU General Public License (GPLv3)
     active: true
   - id: https://opensource.org/licenses/MIT
     term: MIT License
     active: true
   - id: https://opensource.org/licenses/BSD-3-Clause
-    term: BSD License
+    term: BSD 3-Clause License
     active: true
