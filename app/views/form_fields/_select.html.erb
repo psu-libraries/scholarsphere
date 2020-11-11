@@ -10,6 +10,7 @@
                   {
                     class: 'form-control custom-select',
                     required: local_assigns[:required].presence,
+                    multiple: local_assigns.fetch(:multiple, false),
                     aria: { describedby: (has_hint && hint_id).presence }
                   } %>
   <%= form.label attribute %>

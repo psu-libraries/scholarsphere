@@ -42,11 +42,14 @@ module Dashboard
         @work.attributes = work_params
 
         @embargo_form = EmbargoForm.new(work: @undecorated_work, params: embargo_params)
+        @editors_form = EditorsForm.new(work: @undecorated_work, user: current_user, params: editors_params)
       end
 
       def select_form_model
         if params[:embargo_form].present?
           @embargo_form
+        elsif params[:editors_form].present?
+          @editors_form
         else
           @work
         end
@@ -67,6 +70,15 @@ module Dashboard
           .permit(
             :embargoed_until,
             :remove
+          )
+      end
+
+      def editors_params
+        params
+          .fetch(:editors_form, {})
+          .permit(
+            edit_users: [],
+            edit_groups: []
           )
       end
   end
