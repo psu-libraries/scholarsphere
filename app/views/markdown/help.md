@@ -1,7 +1,14 @@
 
+
+  
+## User Support 
+
+If you need to report a problem using ScholarSphere, or would like to request service assistance, consultation, or share feedback, please use the[ Contact Form](https://scholarsphere.psu.edu/contact). The form will go to ScholarSphere User Services, and a librarian will get back to you within two business days.
+
+
+## Frequently Asked Questions 
 - [User Support](#user-support)
 - [Frequently Asked Questions](#frequently-asked-questions)
-  - [Using the ScholarSphere Service](#using-the-scholarsphere-service)
     - [Who can use ScholarSphere?](#who-can-use-scholarsphere)
     - [Does it cost anything to upload to ScholarSphere?](#does-it-cost-anything-to-upload-to-scholarsphere)
     - [What can I deposit to ScholarSphere?](#what-can-i-deposit-to-scholarsphere)
@@ -10,19 +17,9 @@
     - [How can I update or remove my work?](#how-can-i-update-or-remove-my-work)
     - [What happens to my files in ScholarSphere after I leave Penn State?](#what-happens-to-my-files-in-scholarsphere-after-i-leave-penn-state)
     - [Are materials deposited to ScholarSphere kept forever?](#are-materials-deposited-to-scholarsphere-kept-forever)
-  - [Uploading Files to ScholarSphere](#uploading-files-to-scholarsphere)
     - [Are there limits to how much I can deposit to ScholarSphere?](#are-there-limits-to-how-much-i-can-deposit-to-scholarsphere)
     - [How can I deposit very large datasets that are too large to upload through the web browser?](#how-can-i-deposit-very-large-datasets-that-are-too-large-to-upload-through-the-web-browser)
     - [What's the difference between ScholarSphere and cloud services like Dropbox?](#whats-the-difference-between-scholarsphere-and-cloud-services-like-dropbox)
-  
-## User Support 
-
-If you need to report a problem using ScholarSphere, or would like to request service assistance, consultation, or share feedback, please use the[ Contact Form](https://scholarsphere.psu.edu/contact). The form will go to ScholarSphere User Services, and a librarian will get back to you within two business days.
-
-
-## Frequently Asked Questions 
-
-### Using the ScholarSphere Service 
 
 #### Who can use ScholarSphere? 
 
@@ -65,13 +62,9 @@ If you need to report a problem using ScholarSphere, or would like to request se
 
 *   The files remain in ScholarSphere and continue to be discoverable, accessible, and citable. If you have any questions or concerns about your files after you have left Penn State, you may submit them via our [Contact Form](https://scholarsphere.psu.edu/contact).
 
-
 #### Are materials deposited to ScholarSphere kept forever? 
 
 *   Deposited files and metadata are generally retained for the lifetime of the repository, however the guaranteed minimum preservation timeframe for work deposited to ScholarSphere is ten years. After that period, the Libraries may remove content that does not warrant continued preservation. For more, see [ScholarSphere’s Preservation Policy](https://scholarsphere.psu.edu/policies).
-  
-
-### Uploading Files to ScholarSphere 
 
 #### Are there limits to how much I can deposit to ScholarSphere? 
 
@@ -79,14 +72,12 @@ If you need to report a problem using ScholarSphere, or would like to request se
 *   Deposits larger than 100 GB in size require approval from repository managers in Penn State Libraries. This limit applies to the total size of files in a work or in a collection of related works by the same depositor. For more, see [ScholarSphere’s Content and Deposit Policy](https://scholarsphere.psu.edu/policies).
 *   To receive approval for depositing large datasets, [contact us](https://scholarsphere.psu.edu/contact).
 
-
 #### How can I deposit very large datasets that are too large to upload through the web browser? 
 
 *   We can arrange to receive large datasets using [Globus](https://www.globus.org/). [Contact us, and we will help you](https://scholarsphere.psu.edu/contact). 
-
 
 #### What's the difference between ScholarSphere and cloud services like Dropbox? 
 
 *   **Reliability:** ScholarSphere is a Penn State service that is fully funded and supported by the University Libraries and Information Technology Services. That is, the two most reputable organizations at Penn State responsible for knowledge management and information security and organization oversee the service and the infrastructure supporting it, to make persistently accessible the content that is deposited into ScholarSphere.
 *   **Preservation:** Our main focus is to preserve your scholarly work and make it accessible for the long term. Files deposited into ScholarSphere undergo audits and other digital preservation checks. This helps ensure that your scholarship will be available for generations to come. Dropbox and Box, on the other hand, are primarily file-sharing and file-storage services, rather than digital repository services implementing digital preservation best practices.
-*   **Sharing scholarship for public access:** ScholarSphere collects scholarly and scientific research outputs primarily for public access to them, largely in accordance with Open Access principles and in compliance with funding agency data management planning requirements. As commercial services focused mainly on file sharing and file storage, Dropbox and Box are open to a variety of content and not really intended for making content accessible and searchable via the web.i
+*   **Sharing scholarship for public access:** ScholarSphere collects scholarly and scientific research outputs primarily for public access to them, largely in accordance with Open Access principles and in compliance with funding agency data management planning requirements. As commercial services focused mainly on file sharing and file storage, Dropbox and Box are open to a variety of content and not really intended for making content accessible and searchable via the web.
