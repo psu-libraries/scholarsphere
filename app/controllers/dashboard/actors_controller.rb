@@ -2,6 +2,9 @@
 
 module Dashboard
   class ActorsController < BaseController
+    # @note All views are modal-only
+    layout false
+
     # GET /dashboard/actors/new
     def new
       @actor = Actor.new
@@ -34,8 +37,5 @@ module Dashboard
             :orcid
           )
       end
-
-      # @note All views are modal-only
-      def determine_layout; end
   end
 end

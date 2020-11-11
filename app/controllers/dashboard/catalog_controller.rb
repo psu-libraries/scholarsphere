@@ -54,11 +54,5 @@ module Dashboard
       config.add_facet_field 'creators_sim', label: I18n.t('catalog.facets.creators_sim'), limit: true
       config.add_facet_field 'migration_errors_sim', label: I18n.t('catalog.facets.migration_errors_sim'), limit: true
     end
-
-    private
-
-      def determine_layout
-        'frontend'
-      end
   end
 end

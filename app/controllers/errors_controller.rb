@@ -8,10 +8,4 @@ class ErrorsController < ApplicationController
   def server_error
     render 'server_error', status: :internal_server_error
   end
-
-  private
-
-    def determine_layout
-      'frontend'
-    end
 end

@@ -5,10 +5,6 @@ module Dashboard
     class BaseController < ::Dashboard::BaseController
       private
 
-        def determine_layout
-          'frontend'
-        end
-
         def show_footer?
           false
         end

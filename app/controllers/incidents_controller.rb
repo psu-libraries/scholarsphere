@@ -46,8 +46,4 @@ class IncidentsController < ApplicationController
 
       render :new
     end
-
-    def determine_layout
-      'frontend'
-    end
 end
