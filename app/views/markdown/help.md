@@ -7,19 +7,17 @@ If you need to report a problem using ScholarSphere, or would like to request se
 
 
 ## Frequently Asked Questions 
-- [User Support](#user-support)
-- [Frequently Asked Questions](#frequently-asked-questions)
-    - [Who can use ScholarSphere?](#who-can-use-scholarsphere)
-    - [Does it cost anything to upload to ScholarSphere?](#does-it-cost-anything-to-upload-to-scholarsphere)
-    - [What can I deposit to ScholarSphere?](#what-can-i-deposit-to-scholarsphere)
-    - [Can I deposit my scholarly article in ScholarSphere?](#can-i-deposit-my-scholarly-article-in-scholarsphere)
-    - [Can I get a DOI (Digital Object Identifier) for my deposited work?](#can-i-get-a-doi-digital-object-identifier-for-my-deposited-work)
-    - [How can I update or remove my work?](#how-can-i-update-or-remove-my-work)
-    - [What happens to my files in ScholarSphere after I leave Penn State?](#what-happens-to-my-files-in-scholarsphere-after-i-leave-penn-state)
-    - [Are materials deposited to ScholarSphere kept forever?](#are-materials-deposited-to-scholarsphere-kept-forever)
-    - [Are there limits to how much I can deposit to ScholarSphere?](#are-there-limits-to-how-much-i-can-deposit-to-scholarsphere)
-    - [How can I deposit very large datasets that are too large to upload through the web browser?](#how-can-i-deposit-very-large-datasets-that-are-too-large-to-upload-through-the-web-browser)
-    - [What's the difference between ScholarSphere and cloud services like Dropbox?](#whats-the-difference-between-scholarsphere-and-cloud-services-like-dropbox)
+- [Who can use ScholarSphere?](#who-can-use-scholarsphere)
+- [Does it cost anything to upload to ScholarSphere?](#does-it-cost-anything-to-upload-to-scholarsphere)
+- [What can I deposit to ScholarSphere?](#what-can-i-deposit-to-scholarsphere)
+- [Can I deposit my scholarly article in ScholarSphere?](#can-i-deposit-my-scholarly-article-in-scholarsphere)
+- [Can I get a DOI (Digital Object Identifier) for my deposited work?](#can-i-get-a-doi-digital-object-identifier-for-my-deposited-work)
+- [How can I update or remove my work?](#how-can-i-update-or-remove-my-work)
+- [What happens to my files in ScholarSphere after I leave Penn State?](#what-happens-to-my-files-in-scholarsphere-after-i-leave-penn-state)
+- [Are materials deposited to ScholarSphere kept forever?](#are-materials-deposited-to-scholarsphere-kept-forever)
+- [Are there limits to how much I can deposit to ScholarSphere?](#are-there-limits-to-how-much-i-can-deposit-to-scholarsphere)
+- [How can I deposit very large datasets that are too large to upload through the web browser?](#how-can-i-deposit-very-large-datasets-that-are-too-large-to-upload-through-the-web-browser)
+- [What's the difference between ScholarSphere and cloud services like Dropbox?](#whats-the-difference-between-scholarsphere-and-cloud-services-like-dropbox)
 
 #### Who can use ScholarSphere? 
 
