@@ -17,7 +17,10 @@
         <%= form.check_box :depositor_agreement,
                            class: 'form-check-input' %>
 
-        <%= form.label :depositor_agreement, t('dashboard.work_versions.publish.agreement'), class: 'form-check-label' %>
+        <%= form.label :depositor_agreement, class: 'form-check-label' do %>
+          <%= link_to :policy_path, t('dashboard.work_versions.publish.agreement') %>
+        <% end %>
+
       </div>
     </div>
   </div>

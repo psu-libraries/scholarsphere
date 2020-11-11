@@ -40,7 +40,7 @@ en:
         alias: Display Name
       work_version:
         title: Work Title
-        version_name: Semantic Version (optional)
+        version_name: Semantic Version
         subtitle: Subtitle
         keyword: Keyword
         rights: License
@@ -146,7 +146,12 @@ en:
       work_version:
         title: The title as would appear in a bibliographic reference to the work (not a filename).
         description: Include the work abstract if available.
+        keywords: Words or phrases you select to describe what the work is about. 
         published_date: The publication date can be specific to the year (2020), month (2020-11), or day (2020-11-22).
+        version_name: For datasets or software using semantic versioning (e.g., x.y.z)
+        publisher: For journal articles, enter the journal name here.
+        identifier: If the publisher created a DOI (Digital Object Identifier) for the work, enter it here.
+        rights: The license you select determines how your work can be used by others.
       actor:
         orcid: "This is a 16-digit identifier in the format ####-####-####-####"
         default_alias: >
@@ -204,11 +209,7 @@ en:
       intro:
         heading: 'What is my dashboard?'
         content: >
-          I'm baby gluten-free chambray neutra squid freegan DIY selfies bespoke cloud bread ramps etsy occupy tumblr
-          shaman. VHS echo park typewriter etsy messenger bag fingerstache retro venmo jianbing viral flannel hella
-          vape. Umami gentrify YOLO, slow-carb mixtape unicorn austin farm-to-table street art food truck organic mlkshk
-          keffiyeh cronut taxidermy. Roof party ethical hell of squid poutine authentic quinoa polaroid VHS williamsburg
-          plaid.
+          Works you have deposited or have permission to edit will appear here. 
       start:
         heading: 'Get Started'
         subheading: Or
@@ -267,7 +268,7 @@ en:
       details:
         required_metadata: Required Metadata
         required_to_publish_metadata: Needed to Publish
-        additional_metadata: Additional Metadata
+        additional_metadata: Optional Metadata
       contributors:
         edit:
           badge: Creator
@@ -314,7 +315,7 @@ en:
         remove_creator: 'Remove'
       publish:
         heading: Publishing Work Version
-        agreement: I agree to all the stuff I need to to make this work
+        agreement: I have read and agree to the deposit agreement.
         error_message: "%{error} prohibited this work from being saved:"
     file_list:
       edit:
