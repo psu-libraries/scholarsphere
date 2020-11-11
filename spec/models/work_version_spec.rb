@@ -443,10 +443,22 @@ RSpec.describe WorkVersion, type: :model do
 
       specify do
         expect(options).to contain_exactly(
-          ['Attribution 4.0 International (CC BY 4.0)', 'https://creativecommons.org/licenses/by/4.0/'],
-          ['Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)', 'https://creativecommons.org/licenses/by-sa/4.0/'],
-          ['Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)', 'https://creativecommons.org/licenses/by-nc/4.0/'],
-          ['Attribution-NoDerivatives 4.0 International (CC BY-ND 4.0)', 'https://creativecommons.org/licenses/by-nd/4.0/'],
+          [
+            'Attribution 4.0 International (CC BY 4.0)',
+            'https://creativecommons.org/licenses/by/4.0/'
+          ],
+          [
+            'Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)',
+            'https://creativecommons.org/licenses/by-sa/4.0/'
+          ],
+          [
+            'Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)',
+            'https://creativecommons.org/licenses/by-nc/4.0/'
+          ],
+          [
+            'Attribution-NoDerivatives 4.0 International (CC BY-ND 4.0)',
+            'https://creativecommons.org/licenses/by-nd/4.0/'
+          ],
           [
             'Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)',
             'https://creativecommons.org/licenses/by-nc-nd/4.0/'
