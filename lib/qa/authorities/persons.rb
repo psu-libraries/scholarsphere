@@ -30,7 +30,9 @@ module Qa
         end
 
         def creators
-          @creators ||= Actor.where('surname ILIKE :q OR given_name ILIKE :q OR psu_id ILIKE :q', q: "%#{term}%")
+          @creators ||= Actor
+            .where('surname ILIKE :q OR given_name ILIKE :q OR psu_id ILIKE :q', q: "%#{term}%")
+            .or(Actor.where(psu_id: identities.map(&:user_id)))
         end
 
         # @note using Set enables faster searching for a given id instead of iterating over the entire array.
