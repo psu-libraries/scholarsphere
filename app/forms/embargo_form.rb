@@ -43,7 +43,7 @@ class EmbargoForm
     def embargoed_until_is_valid_date
       return if embargoed_until.blank?
 
-      unless embargoed_until.to_s.match(/^\d{4}-\d{2}-\d{2}$/)
+      unless /^\d{4}-\d{2}-\d{2}$/.match?(embargoed_until.to_s)
         errors.add(:embargoed_until, :format)
         return
       end
