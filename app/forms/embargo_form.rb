@@ -43,23 +43,15 @@ class EmbargoForm
     def embargoed_until_is_valid_date
       return if embargoed_until.blank?
 
-      valid_format = embargoed_until.to_s.match(/^\d{4}-\d{2}-\d{2}$/)
-
-      valid_date = begin
-                     Date.parse(embargoed_until.to_s)
-                     true
-                   rescue ArgumentError, TypeError
-                     false
-                   end
-
-      if !valid_format
+      unless embargoed_until.to_s.match(/^\d{4}-\d{2}-\d{2}$/)
         errors.add(:embargoed_until, :format)
         return
       end
 
-      if !valid_date
+      begin
+        Date.parse(embargoed_until.to_s)
+      rescue ArgumentError, TypeError
         errors.add(:embargoed_until, :not_a_date)
-        nil
       end
     end
 end
