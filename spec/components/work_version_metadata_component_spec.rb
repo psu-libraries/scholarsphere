@@ -113,9 +113,10 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
 
       it 'renders just the mini fields' do
         # Titles
-        expect(result.css('th.work-version-title')).to be_present
+        expect(result.css('th.work-version-title')).not_to be_present
         expect(result.css('th.work-version-deposited-at')).to be_present
-        expect(result.css('th.work-version-creator-aliases')).to be_present
+        expect(result.css('th.work-version-creator-aliases')).not_to be_present
+        expect(result.css('th.work-version-first-creators')).to be_present
         expect(result.css('th.work-version-subtitle')).not_to be_present
         expect(result.css('th.work-version-version-number')).not_to be_present
         expect(result.css('th.work-version-keyword')).not_to be_present

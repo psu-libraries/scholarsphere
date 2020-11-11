@@ -1,3 +1,7 @@
+<%- content_for :page_title do %>
+  <%= work_version.title %>
+<% end %>
+
 <%= content_for :navbar_items do %>
   <%= render WorkVersions::VersionNavigationDropdownComponent.new(
         current_version: work_version,
@@ -85,22 +89,7 @@
       <div class="keyline keyline--left mb-3">
         <h2 class="h4"><%= t 'resources.work_history' %></h2>
       </div>
-      <nav>
-        <div class="nav nav-tabs" role="tablist">
-          <a class="nav-item nav-link active" id="nav-summary-tab" data-toggle="tab" href="#nav-summary" role="tab" aria-controls="nav-summary" aria-selected="true"><%= t('resources.work_history_summary') %></a>
-          <a class="nav-item nav-link" id="nav-version-tab" data-toggle="tab" href="#nav-version" role="tab" aria-controls="nav-version" aria-selected="false"><%= t('resources.work_history_diff') %></a>
-        </div>
-      </nav>
-      <div class="tab-content">
-        <div class="tab-pane fade active show" id="nav-summary" role="tabpanel" aria-labelledby="nav-summary-tab">
-          <div class="row">
-            <%= render WorkHistories::WorkHistoryComponent.new(work: work_version.work) %>
-          </div>
-        </div>
-        <div class="tab-pane fade" id="nav-version" role="tabpanel" aria-labelledby="nav-version-tab">
-          <p><%= t('resources.work_history_diff_content') %></p>
-        </div>
-      </div>
+      <%= render WorkHistories::WorkHistoryComponent.new(work: work_version.work) %>
     </div>
   </div>
 </div>

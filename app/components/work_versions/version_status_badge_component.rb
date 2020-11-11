@@ -7,6 +7,10 @@ class WorkVersions::VersionStatusBadgeComponent < ApplicationComponent
     @work_version = work_version
   end
 
+  def render?
+    content.present?
+  end
+
   private
 
     attr_reader :work_version

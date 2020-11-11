@@ -6,6 +6,10 @@ class VisibilityBadgeComponent < ApplicationComponent
     @work = work
   end
 
+  def render
+    work.respond_to?(:visibility)
+  end
+
   private
 
     attr_reader :work

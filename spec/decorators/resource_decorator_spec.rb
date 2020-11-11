@@ -140,7 +140,21 @@ RSpec.describe ResourceDecorator do
     context 'with a Work' do
       let(:resource) { build_stubbed :work }
 
-      its(:visibility_badge) { is_expected.to be_nil }
+      its(:visibility_badge) { is_expected.to be_a(VisibilityBadgeComponent) }
+    end
+  end
+
+  describe '#first_creators' do
+    context 'when there are only creators' do
+      let(:resource) { build_stubbed :work_version, :with_creators, creator_count: 3 }
+
+      its(:first_creators) { is_expected.to eq(resource.creator_aliases) }
+    end
+
+    context 'when there are more than three creators' do
+      let(:resource) { build_stubbed :work_version, :with_creators, creator_count: 4 }
+
+      its(:first_creators) { is_expected.to eq(resource.creator_aliases.take(3) + ['&hellip;']) }
     end
   end
 end

@@ -15,7 +15,9 @@ RSpec.describe 'Blacklight catalog page', :inline_jobs do
   end
 
   let(:collections) do
-    Collection.all.includes(:creator_aliases)
+    Collection
+      .all
+      .includes(:creator_aliases)
   end
 
   let(:indexed_resources) { published_work_versions + collections }
@@ -69,6 +71,7 @@ RSpec.describe 'Blacklight catalog page', :inline_jobs do
 
   it 'displays the search form and facets' do
     visit search_catalog_path
+    expect(page.title).to eq('ScholarSphere')
     click_link('100 per page')
 
     expect(page).to have_content("1 - #{indexed_resources.count} of #{indexed_resources.count}")
@@ -86,13 +89,13 @@ RSpec.describe 'Blacklight catalog page', :inline_jobs do
 
         # The following fields are only valid for WorkVersions, not Collections
         if resource.is_a? WorkVersion
-          expect(page).to have_content(Work::Types.display(resource.work_type))
           within('.badge--text') do
             expect(page).to have_content(resource.aasm_state)
           end
-          within('.meta') do
-            expect(page).to have_content("#{WorkVersion.human_attribute_name(:published_date)} #{resource.published_date}")
-          end
+        end
+
+        within('.meta-table') do
+          expect(page).to have_content(resource.deposited_at.to_formatted_s(:long))
         end
       end
     end
