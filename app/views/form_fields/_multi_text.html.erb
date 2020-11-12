@@ -1,4 +1,7 @@
 <% terms = form.object.send(attribute).empty? ? [''] : form.object.send(attribute) %>
+<%- hint_id = "#{field_id}-hint" %>
+<%- hint_i18n_key = ['helpers', 'hint', form.object.class.model_name.i18n_key, attribute].join('.') %>
+<%- has_hint = I18n.exists?(hint_i18n_key) %>
 
 <div class="mb-3" data-controller="multiple-fields">
   <% terms.each_with_index do |term, index| %>
@@ -8,5 +11,8 @@
         <span><%= form.object.class.human_attribute_name(attribute) %></span>
       </label>
     </div>
+  <% end %>
+  <% if has_hint %>
+    <small id="<%= hint_id %>" class="form-text text-muted"><%= t hint_i18n_key %></small>
   <% end %>
 </div>
