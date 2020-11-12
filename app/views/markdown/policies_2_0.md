@@ -1,7 +1,7 @@
 # ScholarSphere Policies
 
 <p class="alert alert-info">
-  For questions and concerns related to these policies, please <a href="contact">contact us</a>
+  For questions and concerns related to these policies, please <a href="/incidents/new">contact us</a>
 </p>
 
 ## Table of Contents
@@ -85,7 +85,7 @@ In order to improve discoverability and accessibility of deposited content over 
 - create and make available derivatives of deposited files in open, non-proprietary file formats (without affecting the content of the deposited files)
 - migrate content to new versions of ScholarSphere or its successor repository.
 
-# Preservation Policy
+## Preservation Policy
 Deposited files and metadata are generally retained for the lifetime of the repository, however the guaranteed minimum preservation timeframe for work deposited to ScholarSphere is ten years. After that period, the Libraries may remove content that does not warrant continued preservation.
 In addition, files and metadata will be permanently deleted from the repository if:
 
@@ -94,11 +94,11 @@ In addition, files and metadata will be permanently deleted from the repository 
 
 ScholarSphere supports bit-level preservation of deposited content. All deposited files are stored with a checksum of the file content. ScholarSphere makes no promises of usability and understandability of deposited objects over time.
 
-## Storage & Backup
+### Storage & Backup
 Uploaded files are stored through a third-party service provider (currently, Amazon Web Services S3) and replicated across two geographic regions. Backups are generated on a daily basis and stored on Amazon Glacier. To ensure bit-level integrity, all data files are stored with a checksum of the file content. Metadata is stored in Penn State University Data Centers with daily backups. 
 
-## Repository Closure
+### Repository Closure
 In the event of ScholarSphere’s closure, best efforts will be made to migrate all content to suitable alternative institutional and/or subject based repositories and to update persistent identifiers (DOIs) with new resource locations
 
-## URLs & Persistent Identifiers
+### URLs & Persistent Identifiers
 ScholarSphere does not guarantee the long-term stability of URLs to the repository domain (scholarsphere.psu.edu). Users who require a stable identifier for their deposited work should create a DOI for the work. More information on DOIs is available in the ScholarSphere user guide. 
