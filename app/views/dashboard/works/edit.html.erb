@@ -22,6 +22,9 @@
           <li class="nav-item">
             <a class="nav-link" href="#<%= t('.doi.heading').parameterize %>"><%= t('.doi.heading') %></a>
           </li>
+          <li class="nav-item">
+            <%= link_to t('dashboard.works.editors.heading'), "##{t('dashboard.works.editors.heading').parameterize}", class: 'nav-link' %>
+          </li>
         </ul>
       </aside>
     </div>
@@ -78,12 +81,22 @@
         <h2 id="<%= t('.doi.heading').parameterize %>" class="h4"><%= t('.doi.heading') %></h2>
       </div>
 
-      <p><%= t('.doi.explanation') %></p>
-      <% if policy(@work).mint_doi? %>
-        <%= render MintableDoiComponent.new(resource: @work) %>
-      <% else %>
-        <p><%= t('.doi.not_allowed') %></p>
-      <% end %>
+      <div class="actions mb-3">
+        <p><%= t('.doi.explanation') %></p>
+        <% if policy(@work).mint_doi? %>
+          <%= render MintableDoiComponent.new(resource: @work) %>
+        <% else %>
+          <p><%= t('.doi.not_allowed') %></p>
+        <% end %>
+      </div>
+
+      <div class="keyline keyline--left">
+        <h2 id="<%= t('dashboard.works.editors.heading').parameterize %>" class="h4"><%= t('dashboard.works.editors.heading') %></h2>
+      </div>
+
+      <div class="actions mb-3">
+        <%= render 'editors', work: @work %>
+      </div>
     </div>
   </article>
 </div>
