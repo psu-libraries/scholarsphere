@@ -341,6 +341,29 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).to have_current_path(dashboard_work_form_files_path(work_version))
       end
     end
+
+    context 'when re-ordering creators' do
+      let(:work_version) { create :work_version, :draft, :with_creators, creator_count: 2 }
+
+      before do
+        creator_a, creator_b = work_version.creator_aliases
+
+        creator_a.update!(alias: 'Creator A', position: 1)
+        creator_b.update!(alias: 'Creator B', position: 2)
+      end
+
+      it 'saves the creator ordering' do
+        # Sanity Check
+        expect(work_version.reload.creator_aliases.map(&:alias)).to eq(['Creator A', 'Creator B'])
+
+        visit dashboard_work_form_contributors_path(work_version)
+
+        page.find_all('.js-move-down').first.click
+        FeatureHelpers::WorkForm.save_as_draft_and_exit
+
+        expect(work_version.reload.creator_aliases.map(&:alias)).to eq(['Creator B', 'Creator A'])
+      end
+    end
   end
 
   describe 'The Files tab', js: true do
