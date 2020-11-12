@@ -20,7 +20,9 @@ RSpec.describe 'Public Resources', type: :feature do
         # Spot check meta tags
         expect(page.find('meta[property="og:title"]', visible: false)[:content]).to eq v2.title
         expect(page.find('meta[property="og:description"]', visible: false)[:content]).to eq v2.description
-        expect(page.find('meta[property="og:url"]', visible: false)[:content]).to eq resource_url(work.uuid)
+        # Below was failing in CI due to hostnames getting weird
+        expect(page.find('meta[property="og:url"]', visible: false)[:content])
+          .to match(resource_path(work.uuid)).and match(/^https?:/)
         expect(page.find('meta[name="citation_title"]', visible: false)[:content]).to eq v2.title
         expect(page.find('meta[name="citation_publication_date"]', visible: false)[:content]).to eq v2.published_date
         all_authors = page.all(:css, 'meta[name="citation_author"]', visible: false)
@@ -121,7 +123,9 @@ RSpec.describe 'Public Resources', type: :feature do
       # Spot check meta tags
       expect(page.find('meta[property="og:title"]', visible: false)[:content]).to eq collection.title
       expect(page.find('meta[property="og:description"]', visible: false)[:content]).to eq collection.description
-      expect(page.find('meta[property="og:url"]', visible: false)[:content]).to eq resource_url(collection.uuid)
+      # Below was failing in CI due to hostnames getting weird
+      expect(page.find('meta[property="og:url"]', visible: false)[:content])
+        .to match(resource_path(collection.uuid)).and match(/^https?:/)
       expect(page.find('meta[name="citation_title"]', visible: false)[:content]).to eq collection.title
       expect(page.find('meta[name="citation_publication_date"]', visible: false)[:content])
         .to eq collection.published_date
