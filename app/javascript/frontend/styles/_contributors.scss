@@ -1,0 +1,25 @@
+.contributor-wrapper {
+  border-bottom: 1px solid $border-color;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+
+  &:last-of-type {
+    border-bottom: 0;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+
+  .move {
+    color: $blue;
+
+    &.disabled {
+      color: $gray-400;
+    }
+
+    i {
+      font-size: 40px;
+    }
+  }
+}
+

@@ -282,6 +282,8 @@ en:
             When autocomplete results are available use up and down arrows to review and enter to select.
             Touch device users, explore by touch or with swipe gestures.
           remove: "Remove creator %{name}"
+          move_up: "Move %{name} one position earlier"
+          move_down: "Move %{name} one position later"
           search: >
             You can search for creators using their Penn State Access Account, email, or name
           search_heading: Add another creator

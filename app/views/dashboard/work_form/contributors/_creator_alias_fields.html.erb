@@ -2,11 +2,7 @@
 <%- form ||= ActionView::Helpers::FormBuilder.new("work_version[creator_aliases_attributes][#{Time.zone.now.to_i}]", creator_alias, self, {}) %>
 <%- index = form.try(:index) || 0 %>
 
-<div class="nested-fields">
-  <% if index > 0 || form.try(:index).blank? %>
-    <hr>
-  <% end %>
-
+<div class="nested-fields contributor-wrapper js-contributor-wrapper">
   <div class="row">
     <div class="col-2">
       <span class="badge badge-dark badge--outline">
@@ -17,6 +13,7 @@
 
     <div class="col-8 pr-2">
       <%= form.hidden_field :actor_id %>
+      <%= form.hidden_field :position, class: 'js-position-index' %>
       <div class="form-group has-float-label">
         <%= form.text_field :alias, class: 'form-control', placeholder: true, required: true %>
         <%= form.label :alias %>
@@ -24,9 +21,34 @@
     </div>
 
     <div class="col-2 pl-0">
-      <%= link_to_remove_association form, class: 'remove' do %>
+      <%= link_to_remove_association form,
+                                     class: 'remove',
+                                     title: t('dashboard.work_form.contributors.edit.remove', name: form.object.alias),
+                                     data: { toggle: 'tooltip', placement: 'top', offset: '0,100%' } do %>
         <span class="sr-only"><%= t('dashboard.work_form.contributors.edit.remove', name: form.object.alias) %></span>
         <i class="material-icons" aria-hidden="true">highlight_off</i>
+      <% end %>
+
+      <%= link_to '#',
+                  class: 'move js-move-up',
+                  title: t('dashboard.work_form.contributors.edit.move_up', name: form.object.alias),
+                  data: {
+                    action: 'contributors#moveUp',
+                    toggle: 'tooltip', placement: 'top', offset: '0,100%'
+                  } do %>
+        <span class="sr-only"><%= t('dashboard.work_form.contributors.edit.move_up', name: form.object.alias) %></span>
+        <i class="material-icons" aria-hidden="true">arrow_circle_up</i>
+      <% end %>
+
+      <%= link_to '#',
+                  class: 'move js-move-down',
+                  title: t('dashboard.work_form.contributors.edit.move_down', name: form.object.alias),
+                  data: {
+                    action: 'contributors#moveDown',
+                    toggle: 'tooltip', placement: 'top', offset: '0,100%'
+                  } do %>
+        <span class="sr-only"><%= t('dashboard.work_form.contributors.edit.move_down', name: form.object.alias) %></span>
+        <i class="material-icons" aria-hidden="true">arrow_circle_down</i>
       <% end %>
     </div>
   </div>
