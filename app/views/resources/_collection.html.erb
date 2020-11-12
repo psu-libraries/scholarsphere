@@ -3,7 +3,7 @@
 <% end %>
 
 <%- content_for :meta_tags do %>
-  <%= render 'meta_tags', resource: collection, current_url: current_url %>
+  <%= render 'meta_tags', resource: collection, uuid: params[:id] %>
 <% end %>
 
 <div class="container-fluid">
