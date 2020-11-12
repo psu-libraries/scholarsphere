@@ -7,6 +7,7 @@
 
     <!-- Internet Explorer use the highest version available -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <%= yield(:meta_tags) if content_for? :meta_tags %>
 
     <title><%= render_page_title %></title>
     <%= javascript_pack_tag 'frontend' %>

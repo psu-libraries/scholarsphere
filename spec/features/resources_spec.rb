@@ -17,6 +17,17 @@ RSpec.describe 'Public Resources', type: :feature do
         expect(page.title).to include(v2.title)
         expect(page).to have_content(v2.title)
 
+        # Spot check meta tags
+        expect(page.find('meta[property="og:title"]', visible: false)[:content]).to eq v2.title
+        expect(page.find('meta[property="og:description"]', visible: false)[:content]).to eq v2.description
+        # Below was failing in CI due to hostnames getting weird
+        expect(page.find('meta[property="og:url"]', visible: false)[:content])
+          .to match(resource_path(work.uuid)).and match(/^https?:/)
+        expect(page.find('meta[name="citation_title"]', visible: false)[:content]).to eq v2.title
+        expect(page.find('meta[name="citation_publication_date"]', visible: false)[:content]).to eq v2.published_date
+        all_authors = page.all(:css, 'meta[name="citation_author"]', visible: false)
+        expect(all_authors.map { |a| a[:content] }).to match_array v2.creator_aliases.map(&:alias)
+
         ## Does not have edit controls
         within('header') do
           expect(page).not_to have_content(I18n.t('resources.edit_button.text', version: 'V2'))
@@ -106,6 +117,20 @@ RSpec.describe 'Public Resources', type: :feature do
 
     it 'displays the public resource page for the collection' do
       visit resource_path(collection.uuid)
+
+      expect(page.title).to include(collection.title)
+
+      # Spot check meta tags
+      expect(page.find('meta[property="og:title"]', visible: false)[:content]).to eq collection.title
+      expect(page.find('meta[property="og:description"]', visible: false)[:content]).to eq collection.description
+      # Below was failing in CI due to hostnames getting weird
+      expect(page.find('meta[property="og:url"]', visible: false)[:content])
+        .to match(resource_path(collection.uuid)).and match(/^https?:/)
+      expect(page.find('meta[name="citation_title"]', visible: false)[:content]).to eq collection.title
+      expect(page.find('meta[name="citation_publication_date"]', visible: false)[:content])
+        .to eq collection.published_date
+      all_authors = page.all(:css, 'meta[name="citation_author"]', visible: false)
+      expect(all_authors.map { |a| a[:content] }).to match_array collection.creator_aliases.map(&:alias)
 
       expect(page).to have_selector('h1', text: collection.title)
       expect(page).to have_content collection.description
