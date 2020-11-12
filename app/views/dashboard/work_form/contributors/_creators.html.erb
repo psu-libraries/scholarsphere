@@ -8,7 +8,9 @@
      data-controller="contributors"
      data-contributors-new="<%= new_dashboard_actor_path %>"
      data-contributors-post="<%= dashboard_work_form_aliases_new_path %>"
-     data-contributors-badge-class="badge--index">
+     data-contributors-wrapper-class="js-contributor-wrapper"
+     data-contributors-badge-class="badge--index"
+     data-contributors-position-class="js-position-index">
   <%= form.fields_for :creator_aliases do |creator_alias| %>
     <%= render 'dashboard/work_form/contributors/creator_alias_fields', form: creator_alias %>
   <% end %>

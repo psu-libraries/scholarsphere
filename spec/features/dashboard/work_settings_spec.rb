@@ -81,4 +81,68 @@ RSpec.describe 'Work Settings Page', with_user: :user do
       end
     end
   end
+
+  describe 'Updating Editors' do
+    context 'when adding a new editor' do
+      let(:work) { create :work, depositor: user.actor }
+
+      it 'adds a user as an editor' do
+        visit edit_dashboard_work_path(work)
+
+        expect(work.edit_users).to be_empty
+        fill_in('Edit users', with: 'agw13')
+        click_button('Update Editors')
+
+        work.reload
+        expect(work.edit_users.map(&:uid)).to contain_exactly('agw13')
+      end
+    end
+
+    context 'when removing an existing editor' do
+      let(:editor) { create(:user) }
+      let(:work) { create :work, depositor: user.actor, edit_users: [editor] }
+
+      it 'adds a user as an editor' do
+        visit edit_dashboard_work_path(work)
+
+        expect(work.edit_users).to contain_exactly(editor)
+        fill_in('Edit users', with: '')
+        click_button('Update Editors')
+
+        work.reload
+        expect(work.edit_users).to be_empty
+      end
+    end
+
+    context 'when the user does not exist' do
+      let(:work) { create :work, depositor: user.actor }
+
+      it 'adds a user as an editor' do
+        visit edit_dashboard_work_path(work)
+
+        fill_in('Edit users', with: 'iamnotpennstate')
+        click_button('Update Editors')
+
+        work.reload
+        expect(work.edit_users).to be_empty
+      end
+    end
+
+    context 'when selecting a group' do
+      let(:user) { create(:user, groups: User.default_groups + [group]) }
+      let(:group) { create(:group) }
+      let(:work) { create :work, depositor: user.actor }
+
+      it 'adds the group as an editor' do
+        visit edit_dashboard_work_path(work)
+
+        expect(work.edit_groups).to be_empty
+        select(group.name, from: 'Edit groups')
+        click_button('Update Editors')
+
+        work.reload
+        expect(work.edit_groups).to contain_exactly(group)
+      end
+    end
+  end
 end

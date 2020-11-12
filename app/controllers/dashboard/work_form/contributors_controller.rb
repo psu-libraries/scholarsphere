@@ -41,6 +41,7 @@ module Dashboard
                 :actor_id,
                 :_destroy,
                 :alias,
+                :position,
                 actor_attributes: [
                   :id,
                   :email,
