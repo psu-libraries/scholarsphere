@@ -1,0 +1,16 @@
+<!-- Twitter card metadata -->
+<meta name="twitter:card" content="product">
+<meta name="twitter:site" content="@ScholarSphere">
+<meta name="twitter:creator" content="@ScholarSphere">
+<meta property="og:site_name" content="ScholarSphere">
+<meta property="og:type" content="object">
+<meta property="og:title" content="<%= resource.title %>">
+<meta property="og:description" content="<%= resource.description %>">
+<meta property="og:url" content="<%= current_url %>">
+
+<!-- Google Scholar metadata -->
+<meta name="citation_title" content="<%= resource.title %>">
+<%- resource.creator_aliases.each do |creator_alias| %>
+  <meta name="citation_author" content="<%= creator_alias.alias %>">
+<%- end %>
+<meta name="citation_publication_date" content="<%= resource.published_date %>">

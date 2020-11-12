@@ -1,3 +1,11 @@
+<%- content_for :page_title do %>
+  <%= collection.title %>
+<% end %>
+
+<%- content_for :meta_tags do %>
+  <%= render 'meta_tags', resource: collection, current_url: current_url %>
+<% end %>
+
 <div class="container-fluid">
   <article class="row">
     <div class="col-lg-7">
