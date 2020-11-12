@@ -35,6 +35,7 @@ class WorkVersion < ApplicationRecord
            through: :file_version_memberships
 
   has_many :creator_aliases,
+           -> { order(position: :asc) },
            class_name: 'WorkVersionCreation',
            inverse_of: :work_version,
            dependent: :destroy
