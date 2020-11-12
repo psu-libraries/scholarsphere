@@ -20,9 +20,9 @@ en:
         display_published_date: *collection_published_date
         subject: Subject
         language: Language
-        identifier: Identifier
-        based_near: Based Near
-        related_url: Related URL
+        identifier: Publisher Identifier (DOI)
+        based_near: Geographic Area
+        related_url: Related URLs
         source: Source
         display_doi: DOI
       incident:
@@ -54,9 +54,9 @@ en:
         display_published_date: *work_version_published_date
         subject: Subject
         language: Language
-        identifier: Identifier
-        based_near: Based Near
-        related_url: Related URL
+        identifier: Publisher Identifier (DOI)
+        based_near: Geographic Area
+        related_url: Related URLs
         source: Source
         display_work_type: Work Type
         display_doi: DOI
@@ -146,11 +146,8 @@ en:
       work_version:
         title: The title as would appear in a bibliographic reference to the work (not a filename).
         description: Include the work abstract if available.
-        keywords: Words or phrases you select to describe what the work is about. 
         published_date: The publication date can be specific to the year (2020), month (2020-11), or day (2020-11-22).
         version_name: For datasets or software using semantic versioning (e.g., x.y.z)
-        publisher: For journal articles, enter the journal name here.
-        identifier: If the publisher created a DOI (Digital Object Identifier) for the work, enter it here.
         rights: The license you select determines how your work can be used by others.
       actor:
         orcid: "This is a 16-digit identifier in the format ####-####-####-####"
@@ -246,7 +243,7 @@ en:
           remove_button: Remove Embargo
         doi:
           heading: DOI
-          explanation: A DOI is a persistent identifier that can be used in print or on the web.
+          explanation: A Digital Object Identifier (DOI) is a persistent identifier that can be used in print or on the web.
           not_allowed: A DOI may only be created on published works. Since this work is a draft, you'll need to wait until it's published to create a DOI for it.
       update:
         success: "Work settings successfully updated."
@@ -315,7 +312,8 @@ en:
         remove_creator: 'Remove'
       publish:
         heading: Publishing Work Version
-        agreement: I have read and agree to the deposit agreement.
+        agreement_preamble: I have read and agree to
+        agreement_link: the deposit agreement
         error_message: "%{error} prohibited this work from being saved:"
     file_list:
       edit:
@@ -416,7 +414,7 @@ en:
       invalid: 'This DOI has formatting errors. Please contact us to have it fixed'
       unmanaged: 'This is a valid DOI, but we cannot manage or update it. Please contact us to have it fixed'
       waiting: 'Waiting to be created'
-      minting: 'Being created right now'
+      minting: 'Being created now (refresh the page to update)'
       error: 'There was an error creating this doi. Please contact us.'
       create: 'Create a DOI for this work'
       confirm: 'Do you want to create a DOI? This DOI will always resolve to the most recently published version of this work.'

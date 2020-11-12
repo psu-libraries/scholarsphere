@@ -18,7 +18,8 @@
                            class: 'form-check-input' %>
 
         <%= form.label :depositor_agreement, class: 'form-check-label' do %>
-          <%= link_to :policy_path, t('dashboard.work_versions.publish.agreement') %>
+          <%= t('dashboard.work_versions.publish.agreement_preamble') %>
+          <%= link_to t('dashboard.work_versions.publish.agreement_link'), agreement_path, target: :_blank  %>.
         <% end %>
 
       </div>
