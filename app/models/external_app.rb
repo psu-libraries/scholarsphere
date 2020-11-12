@@ -37,4 +37,10 @@ class ExternalApp < ApplicationRecord
   def access_id
     name
   end
+
+  # @note ExternalApp and User need to behave in similar ways. This could be extracted into a decorator. See above note
+  # for #access_id.
+  def guest?
+    false
+  end
 end
