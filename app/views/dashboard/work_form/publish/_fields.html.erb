@@ -2,6 +2,7 @@
   <%= render 'form_fields/select',
              form: form,
              attribute: :rights,
+             required: true,
              options_for_select: WorkVersion::Licenses.options_for_select_box,
              include_blank: true %>
 </div>
@@ -15,6 +16,7 @@
       <p class="font-weight-bold mt-5"><%= WorkVersion.human_attribute_name(:depositor_agreement) %></p>
       <div class="form-check">
         <%= form.check_box :depositor_agreement,
+                           required: true,
                            class: 'form-check-input' %>
 
         <%= form.label :depositor_agreement, class: 'form-check-label' do %>
