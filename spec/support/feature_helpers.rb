@@ -3,9 +3,9 @@
 require_relative './feature_helpers/work_form'
 
 module FeatureHelpers
-  def setup_oauth(user: nil)
+  def setup_oauth(user:)
     OmniAuth.config.test_mode = true
-    OmniAuth.config.mock_auth[:azure_oauth] = mock_auth_hash(user) if user.present?
+    OmniAuth.config.mock_auth[:azure_oauth] = mock_auth_hash(user)
   end
 
   def retry_click(count: 0)
@@ -51,16 +51,9 @@ end
 
 RSpec.configure do |config|
   config.before(type: :feature) do |example|
-    # @note Bypass OAuth and use Warden, except if we're testing Javascript because we'll be in a multithreaded
-    # situation. Note, however, that when using the :js option, .setup_oauth doesn't actually log you in. The login
-    # process is happening by conincidence in the DashboardController. Currently, we don't have a way of logging the
-    # user in after OAuth is setup unless we visit a page requiring authentication, or click the 'Log in' link.
     if user = example.metadata[:with_user]
-      if example.metadata[:js]
-        setup_oauth(user: send(user))
-      else
-        login_as(send(user))
-      end
+      setup_oauth(user: send(user))
+      login_as(send(user))
     end
   end
 
