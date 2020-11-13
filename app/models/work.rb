@@ -106,9 +106,23 @@ class Work < ApplicationRecord
     work
   end
 
-  def self.reindex_all(relation = all)
-    relation.find_each { |work| WorkIndexer.call(work, commit: false) }
-    IndexingService.commit
+  def self.reindex_all(relation: all, async: false)
+    last = relation.count
+    count = 0
+
+    relation.find_each do |work|
+      if async
+        count = count + 1
+        SolrIndexingJob.perform_later(work, commit: (count == last))
+      else
+        work.update_index(commit: false)
+      end
+    end
+    IndexingService.commit unless async
+  end
+
+  def update_index(commit: true)
+    WorkIndexer.call(self, commit: commit)
   end
 
   def latest_version

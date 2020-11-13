@@ -23,6 +23,7 @@ Metrics/BlockLength:
     - 'config/environments/production.rb'
     - 'config/environments/development.rb'
     - 'spec/**/*'
+    - 'lib/tasks/**/*'
 
 Rails/FilePath:
   EnforcedStyle: arguments

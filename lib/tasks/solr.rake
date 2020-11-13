@@ -19,7 +19,7 @@ namespace :solr do
 
   desc 'Reindexes all the works (as well as their versions) into Solr'
   task reindex_works: :environment do
-    Work.reindex_all
+    Work.reindex_all(async: true)
   end
 
   desc 'Reindexes all the collections into Solr'

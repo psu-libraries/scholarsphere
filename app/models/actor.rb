@@ -93,9 +93,9 @@ class Actor < ApplicationRecord
   # by Works, Versions, and Collections via the `creators` metadata field.
   # Therefore, if a person updates their `default_alias`, we want to trigger a
   # reindex of those associated items so the updated alias shows up in the facet
-  def update_index
-    Work.reindex_all(created_works)
-    Collection.reindex_all(created_collections)
+  def update_index(_options = {})
+    Work.reindex_all(relation: created_works)
+    Collection.reindex_all(relation: created_collections)
   end
 
   # Fields that contain single values automatically remove blank values
