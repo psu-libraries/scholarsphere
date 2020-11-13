@@ -12,7 +12,7 @@ module WithAuditing
   # @note Overrides PaperTrail::Rails::Controller to return a global id because our current users are either a User or
   # an ExternalApp.
   def user_for_paper_trail
-    return unless defined?(current_user)
+    return if current_user.guest?
 
     current_user.to_gid
   end
