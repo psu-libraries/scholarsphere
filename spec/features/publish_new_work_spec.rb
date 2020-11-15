@@ -471,6 +471,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       version = work.versions.first
 
       expect(page).to have_selector('h3', text: version.title)
+      expect(page).to have_selector('span.badge--content', text: 'PUBLISHED')
 
       expect(version).to be_published
       expect(version.version_number).to eq 1

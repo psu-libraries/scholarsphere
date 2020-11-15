@@ -35,14 +35,22 @@ module Dashboard
           end
         end
 
-        def update_or_save_work_version(attributes: nil)
-          @work_version.indexing_source = SolrIndexingJob.public_method(:perform_now)
+        def update_or_save_work_version(attributes: nil, index: true)
+          @work_version.indexing_source = if index
+                                            SolrIndexingJob.public_method(:perform_now)
+                                          else
+                                            null_indexer
+                                          end
 
           if attributes
             @work_version.update(attributes)
           else
             @work_version.save
           end
+        end
+
+        def null_indexer
+          Proc.new { nil }
         end
     end
   end
