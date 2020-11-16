@@ -1,7 +1,7 @@
 # ScholarSphere Policies
 
 <p class="alert alert-info">
-  For questions and concerns related to these policies, please <a href="/incidents/new">contact us</a>
+  For questions and concerns related to these policies, please <a href="/contact">contact us</a>
 </p>
 
 ## Table of Contents
