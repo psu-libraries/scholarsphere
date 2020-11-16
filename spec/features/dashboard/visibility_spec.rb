@@ -88,7 +88,7 @@ RSpec.describe 'Setting visibility in the dashboard', with_user: :user do
       FeatureHelpers::WorkForm.publish
 
       within('#error_explanation') do
-        expect(page).to have_content('Visibility cannot be private')
+        expect(page).to have_content('Access cannot be private')
       end
     end
   end

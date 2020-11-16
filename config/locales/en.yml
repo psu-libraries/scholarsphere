@@ -61,6 +61,7 @@ en:
         display_work_type: Work Type
         display_doi: DOI
         file_resources: Files
+        visibility: Access
         visibility_badge: Access
         deposited_at: Deposited
       user:

@@ -458,6 +458,9 @@ RSpec.describe 'Publishing a work', with_user: :user do
       end
       FeatureHelpers::WorkForm.save_and_continue
 
+      # Don't yell at them for something they haven't seen yet
+      expect(page).not_to have_selector('div#error_explanation')
+
       # On the review page, change all the details metadata to ensure the params
       # are submitted correctly
       FeatureHelpers::WorkForm.fill_in_work_details(different_metadata)

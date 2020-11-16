@@ -8,9 +8,7 @@ module Dashboard
           .includes(file_version_memberships: [:file_resource])
           .find(params[:work_version_id])
         authorize(@work_version)
-
-        @work_version.publish
-        @work_version.validate
+        prevalidate
       end
 
       def update
@@ -50,6 +48,15 @@ module Dashboard
       end
 
       private
+
+        # @note Validate the work like we're going to publish it, so we can inform the user ahead of time before they
+        # actually attempt it. However, we want to be nice and not yell at them for something they _haven't_ seen yet
+        # like rights.
+        def prevalidate
+          @work_version.publish
+          @work_version.validate
+          @work_version.errors.delete(:rights)
+        end
 
         def publish_work?
           !save_and_exit?
