@@ -74,7 +74,7 @@ Research involving the use of human subjects must be approved by Penn State\'s I
 
 If any sensitive or non-scholarly content is found in ScholarSphere, the files will immediately be made private; the depositors will be notified; and the content will likely be withdrawn from the system.
 
-If you are unsure whether your data is considered sensitive, please consult Penn State policy [AD95](https://policy.psu.edu/policies/ad95) or contact the ScholarSphere service team via the [Contact Form](https://scholarsphere.psu.edu/contact). In addition, ScholarSphere will not accept content if it is in violation of copyright agreements. In the event that such violations are found, ScholarSphere reserves the right to withdraw the submitted content. See our [Deposit Agreement](#ScholarSphere-Deposit-Agreement) for clarification.
+If you are unsure whether your data is considered sensitive, please consult Penn State policy [AD95](https://policy.psu.edu/policies/ad95) or contact the ScholarSphere service team via the [Contact Form](/contact). In addition, ScholarSphere will not accept content if it is in violation of copyright agreements. In the event that such violations are found, ScholarSphere reserves the right to withdraw the submitted content. See our [Deposit Agreement](#ScholarSphere-Deposit-Agreement) for clarification.
 
 ScholarSphere welcomes deposits from the Penn State community - faculty, students (undergraduates and graduates), postdoctoral researchers, administrators, and staff. Deposit of Penn State co-authored materials is also encouraged, provided the co-author has secured any requisite copyright permissions for deposit in ScholarSphere.
 
@@ -177,7 +177,7 @@ IF THE SUBMISSION IS BASED UPON WORK THAT HAS BEEN SPONSORED OR SUPPORTED BY AN 
 
 -   A. Copyright Complaints: We respect the intellectual property rights of others. If you believe your copyright has been violated on the Site, please notify us through Penn State\'s designated agent under the Digital Millennium Copyright Act (see 17 U.S.C. §512(c)(3).
 
--   B. Other Site Issues: Please direct all other communications to [contact form](https://scholarsphere.psu.edu/contact).
+-   B. Other Site Issues: Please direct all other communications to [contact form](/contact).
 
 13\. **Applicable Law and Jurisdiction; Access from Outside the Commonwealth of Pennsylvania:** The Site is controlled and operated from our facilities in and around University Park, PA. These Terms of Use, and any claim or dispute that arises from or relates to your use of the Site or the Content, will be governed by the laws of Pennsylvania, without regard to its conflicts of laws principles. You agree that all such claims and disputes will be heard and resolved exclusively in the courts of Centre County, Pennsylvania. You consent to the personal jurisdiction of such courts over you for this purpose, and waive and agree not to assert any objection to such proceedings in such courts (including any defense or objection of lack of proper jurisdiction or venue or inconvenience of forum). If you choose to access our website from locations other than Pennsylvania, you will be responsible for compliance with all local laws of those other locations.
 
