@@ -231,10 +231,10 @@ class WorkVersion < ApplicationRecord
   # this won't present a problem because we only index published versions, and at that point, the version will have
   # already been saved and reloaded from the database. However, there could be edge cases or other unforseen siutations
   # where the uuid is nil and the version needs to be indexed. Reloading it from Postgres will avoid those problems.
-  def update_index
+  def update_index(commit: true)
     reload if uuid.nil?
 
-    WorkIndexer.call(work, commit: true)
+    WorkIndexer.call(work, commit: commit)
   end
 
   def indexing_source

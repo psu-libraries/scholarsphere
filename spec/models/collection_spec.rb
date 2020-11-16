@@ -139,7 +139,7 @@ RSpec.describe Collection, type: :model do
       let(:only_special_collections) { described_class.where(depositor: special_collection.depositor) }
 
       it 'only reindexes collections within that relation' do
-        described_class.reindex_all(only_special_collections)
+        described_class.reindex_all(relation: only_special_collections)
         expect(CollectionIndexer).to have_received(:call).once
         expect(CollectionIndexer).to have_received(:call).with(special_collection, anything)
       end

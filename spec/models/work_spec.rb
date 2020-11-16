@@ -351,15 +351,19 @@ RSpec.describe Work, type: :model do
 
   describe '::reindex_all' do
     before do
-      create(:work)
+      create_list(:work, 2)
       allow(IndexingService).to receive(:commit)
       allow(WorkIndexer).to receive(:call)
     end
 
-    it 'reindexes all the works and their versions into solr' do
-      described_class.reindex_all
-      expect(WorkIndexer).to have_received(:call).once
-      expect(IndexingService).to have_received(:commit).once
+    context 'without any arguments' do
+      it 'reindexes all the works and their versions into solr synchronously' do
+        allow(SolrIndexingJob).to receive(:perform_later)
+        described_class.reindex_all
+        expect(WorkIndexer).to have_received(:call).twice
+        expect(IndexingService).to have_received(:commit).once
+        expect(SolrIndexingJob).not_to have_received(:perform_later)
+      end
     end
 
     context 'when given a relation' do
@@ -368,9 +372,22 @@ RSpec.describe Work, type: :model do
       let(:only_special_works) { described_class.where(depositor: special_work.depositor) }
 
       it 'only reindexes works within that relation' do
-        described_class.reindex_all(only_special_works)
+        allow(SolrIndexingJob).to receive(:perform_later)
+        described_class.reindex_all(relation: only_special_works)
         expect(WorkIndexer).to have_received(:call).once
         expect(WorkIndexer).to have_received(:call).with(special_work, anything)
+        expect(SolrIndexingJob).not_to have_received(:perform_later)
+      end
+    end
+
+    context 'with async: true' do
+      it 'reindexes all the works and their versions into solr asynchronously' do
+        allow(SolrIndexingJob).to receive(:perform_later)
+        described_class.reindex_all(async: true)
+        expect(WorkIndexer).not_to have_received(:call)
+        expect(IndexingService).not_to have_received(:commit)
+        expect(SolrIndexingJob).to have_received(:perform_later).once.with(kind_of(described_class), commit: false)
+        expect(SolrIndexingJob).to have_received(:perform_later).once.with(kind_of(described_class), commit: true)
       end
     end
   end

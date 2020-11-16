@@ -128,8 +128,8 @@ RSpec.describe Actor, type: :model do
 
       actor.update_index
 
-      expect(Work).to have_received(:reindex_all).with(actor.created_works)
-      expect(Collection).to have_received(:reindex_all).with(actor.created_collections)
+      expect(Work).to have_received(:reindex_all).with(relation: actor.created_works)
+      expect(Collection).to have_received(:reindex_all).with(relation: actor.created_collections)
     end
   end
 

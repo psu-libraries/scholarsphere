@@ -98,7 +98,7 @@ class Collection < ApplicationRecord
     end
   end
 
-  def self.reindex_all(relation = all)
+  def self.reindex_all(relation: all)
     relation.find_each { |collection| CollectionIndexer.call(collection, commit: false) }
     IndexingService.commit
   end
@@ -129,10 +129,10 @@ class Collection < ApplicationRecord
   # this won't present a problem because we only index published versions, and at that point, the version will have
   # already been saved and reloaded from the database. However, there could be edge cases or other unforseen siutations
   # where the uuid is nil and the version needs to be indexed. Reloading it from Postgres will avoid those problems.
-  def update_index
+  def update_index(commit: true)
     reload if uuid.nil?
 
-    CollectionIndexer.call(self, commit: true)
+    CollectionIndexer.call(self, commit: commit)
   end
 
   def work_type
