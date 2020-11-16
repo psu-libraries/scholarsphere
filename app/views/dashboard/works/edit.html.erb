@@ -1,8 +1,6 @@
 <%= content_for :navbar_items do %>
   <li class="nav-item">
-    <%= link_to(t('.back'),
-                resource_path(@work.uuid),
-                class: 'btn btn-outline-light btn--squish mr-lg-2 my-1') %>
+    <%= render BackToWorkButtonComponent.new(work: @work) %>
   </li>
 <% end %>
 
