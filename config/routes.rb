@@ -30,6 +30,7 @@ Rails.application.routes.draw do
   get 'agreement-2.0', to: 'markdown#show', page: 'agreement_2_0'
   get 'agreement', to: 'markdown#show', page: 'agreement_2_0'
 
+  get 'contact', to: 'incidents#new'
   resources :incidents, only: [:new, :create]
 
   concern :searchable, Blacklight::Routes::Searchable.new
