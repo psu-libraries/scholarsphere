@@ -90,8 +90,6 @@ Rails.application.routes.draw do
                   only: %i(edit update destroy),
                   shallow: true
       end
-
-      get 'history', to: 'work_histories#show'
     end
 
     namespace :work_form, path: 'work-form' do # @todo change `path:` key once all of dashboard is converted
