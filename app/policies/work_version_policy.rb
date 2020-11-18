@@ -8,7 +8,7 @@ class WorkVersionPolicy < ApplicationPolicy
   end
 
   def show?
-    Pundit.policy(user, record.work).show?
+    Pundit.policy(user, record.work).show? || editable?
   end
   alias_method :diff?, :show?
 

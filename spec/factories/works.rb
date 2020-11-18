@@ -47,7 +47,7 @@ FactoryBot.define do
   end
 
   trait(:with_no_access) do
-    after(:build) do |work|
+    after(:create) do |work|
       work.access_controls.destroy_all
     end
   end
