@@ -10,6 +10,10 @@ Rails.application.configure do
   config.hosts << /.*ngrok\.io$/
   config.hosts << 'host.docker.internal'
 
+  # This enables puma-dev to work. If you're not using this, then you
+  # can just ignore it.
+  config.hosts << 'scholarsphere.test'
+
   # ActiveJob config
   # Comment this out if you want to test Sidekiq integration locally
   config.active_job.queue_adapter = :async
@@ -66,8 +70,4 @@ Rails.application.configure do
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
-
-  # This enables puma-dev to work. If you're not using this, then you
-  # can just ignore it.
-  config.hosts << 'scholarsphere-4.test'
 end
