@@ -55,4 +55,8 @@ FactoryBot.define do
   trait(:with_authorized_access) do
     visibility { Permissions::Visibility::AUTHORIZED }
   end
+
+  trait(:with_private_access) do
+    visibility { Permissions::Visibility::PRIVATE }
+  end
 end
