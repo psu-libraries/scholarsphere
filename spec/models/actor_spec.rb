@@ -155,7 +155,7 @@ RSpec.describe Actor, type: :model do
 
       before { actor.validate }
 
-      it { is_expected.to include('ORCiD must be 16 digits only') }
+      it { is_expected.to include('ORCiD must be valid') }
     end
   end
 end
