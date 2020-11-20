@@ -42,7 +42,7 @@ As part of the deposit process, the depositor will be prompted to describe the c
 ### Data Size Limits
 Deposits larger than 100 GB in size require approval from repository managers in Penn State Libraries. This limit applies to the total size of files in a work or in a collection of related works by the same depositor. The Libraries may delete deposits over this threshold that have not received approval (see Withdrawal and Deletion).
 
-To request approval for depositing large dataset, please contact: [repub@psu.edu](repub@psu.edu)
+To request approval for depositing large dataset, please contact: [repub@psu.edu](mailto:repub@psu.edu)
 
 ### Versioning
 ScholarSphere deposits (“works”) consist of one or more versions. A work version may be in a “draft”, “published”, or “withdrawn” state. In the draft state, depositors may edit and remove metadata and files associated with the version. Once a version is published, it can no longer be modified by the depositor. To make changes, depositors may create and publish a new version of the work with updated files or metadata. The authoritative (or active) version of a work is the most recently published version. More information about the versioning system is available in the ScholarSphere technical documentation.

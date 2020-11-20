@@ -19,7 +19,7 @@ RSpec.describe 'Home page', type: :feature do
         expect(page).to have_content('Welcome to ScholarSphere')
       end
 
-      expect(page).to have_selector('h2', text: 'What is ScholarSphere?')
+      expect(page).to have_selector('h2', text: 'ScholarSphere Updates')
       expect(page).to have_selector('h2', text: 'Browse and search for works')
       expect(page).to have_selector('h2', text: 'Featured Works')
 
@@ -47,7 +47,7 @@ RSpec.describe 'Home page', type: :feature do
     it 'displays the landing page without any featured resources' do
       visit(root_path)
 
-      expect(page).to have_selector('h2', text: 'What is ScholarSphere?')
+      expect(page).to have_selector('h2', text: 'ScholarSphere Updates')
       expect(page).to have_selector('h2', text: 'Browse and search for works')
       expect(page).not_to have_selector('h2', text: 'Featured Works')
     end
