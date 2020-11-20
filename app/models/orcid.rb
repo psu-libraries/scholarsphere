@@ -17,7 +17,7 @@ class Orcid
   end
 
   def valid?
-    id.match?(/^\d{16,16}$/)
+    id.match?(/^\d{15,15}[0-9X]$/)
   end
 
   def to_s

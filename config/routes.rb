@@ -47,6 +47,8 @@ Rails.application.routes.draw do
     resource :doi, only: %i[create]
   end
 
+  resources :sitemap, defaults: { format: :xml }, only: [:index, :show]
+
   resources :bookmarks do
     concerns :exportable
 
@@ -90,8 +92,6 @@ Rails.application.routes.draw do
                   only: %i(edit update destroy),
                   shallow: true
       end
-
-      get 'history', to: 'work_histories#show'
     end
 
     namespace :work_form, path: 'work-form' do # @todo change `path:` key once all of dashboard is converted

@@ -16,6 +16,17 @@ RSpec.describe Orcid, type: :model do
     its(:uri) { is_expected.to eq(uri) }               # returns https://orcid.org/1234-1234-1234-1234
   end
 
+  context 'when the check digit is an X' do
+    subject { described_class.new(id) }
+
+    let(:id) { Faker::Number.leading_zero_number(digits: 15) + 'X' }
+
+    it { is_expected.to be_valid }
+    its(:to_s) { is_expected.to eq(id) }               # returns 123412341234123X
+    its(:to_human) { is_expected.to eq(formatted_id) } # returns 1234-1234-1234-123X
+    its(:uri) { is_expected.to eq(uri) }               # returns https://orcid.org/1234-1234-1234-123X
+  end
+
   context 'with a formatted string such as 1234-1234-1234-1234' do
     subject { described_class.new(formatted_id) }
 
