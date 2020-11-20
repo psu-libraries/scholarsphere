@@ -35,7 +35,11 @@
 
     <div class="form-wrapper">
       <%= render 'form_fields/text', form: form, attribute: :surname, required: true %>
-      <%= render 'form_fields/text', form: form, attribute: :orcid, required: true %>
+      <%= render 'form_fields/text',
+                 form: form,
+                 attribute: :orcid,
+                 data: { controller: 'inputmask' },
+                 required: true %>
     </div>
 
     <div class="form-wrapper form-wrapper--wide">
