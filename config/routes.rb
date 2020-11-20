@@ -47,6 +47,8 @@ Rails.application.routes.draw do
     resource :doi, only: %i[create]
   end
 
+  resources :sitemap, defaults: { format: :xml }, only: [:index, :show]
+
   resources :bookmarks do
     concerns :exportable
 
