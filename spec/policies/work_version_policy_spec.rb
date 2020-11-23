@@ -20,9 +20,23 @@ RSpec.describe WorkVersionPolicy, type: :policy do
     end
 
     context 'when the user has NO show access to the work' do
-      before { allow(work_policy).to receive(:show?).and_return(false) }
+      context 'when the user has edit access to the work' do
+        before do
+          allow(work_policy).to receive(:show?).and_return(false)
+          allow(work_policy).to receive(:edit?).and_return(true)
+        end
 
-      it { is_expected.not_to permit(user, work_version) }
+        it { is_expected.to permit(user, work_version) }
+      end
+
+      context 'when the user has NO edit access to the work' do
+        before do
+          allow(work_policy).to receive(:show?).and_return(false)
+          allow(work_policy).to receive(:edit?).and_return(false)
+        end
+
+        it { is_expected.not_to permit(user, work_version) }
+      end
     end
   end
 

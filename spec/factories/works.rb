@@ -47,12 +47,16 @@ FactoryBot.define do
   end
 
   trait(:with_no_access) do
-    after(:build) do |work|
+    after(:create) do |work|
       work.access_controls.destroy_all
     end
   end
 
   trait(:with_authorized_access) do
     visibility { Permissions::Visibility::AUTHORIZED }
+  end
+
+  trait(:with_private_access) do
+    visibility { Permissions::Visibility::PRIVATE }
   end
 end

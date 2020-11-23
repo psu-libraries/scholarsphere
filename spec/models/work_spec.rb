@@ -115,7 +115,7 @@ RSpec.describe Work, type: :model do
   describe '::DepositAgreement::CURRENT_VERSION' do
     subject { described_class::DepositAgreement::CURRENT_VERSION }
 
-    it { is_expected.to eq('1.0') }
+    it { is_expected.to eq('2.0') }
   end
 
   describe '#update_deposit_agreement' do

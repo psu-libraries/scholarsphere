@@ -67,8 +67,8 @@ class Actor < ApplicationRecord
               allow_nil: true
             },
             format: {
-              with: /\A\d{16,16}\z/,
-              message: 'must be 16 digits only',
+              with: /\A\d{15,15}[0-9X]{1,1}\z/,
+              message: 'must be valid',
               allow_nil: true
             }
 

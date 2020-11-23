@@ -8,6 +8,7 @@
                       class: 'form-control',
                       placeholder: true,
                       required: local_assigns[:required].presence,
+                      data: local_assigns[:data],
                       aria: { describedby: (has_hint && hint_id).presence } %>
   <%= form.label attribute %>
 

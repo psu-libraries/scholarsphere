@@ -8,7 +8,7 @@ class WorkPolicy < ApplicationPolicy
   end
 
   def show?
-    (record.discover_access?(user) && published?) || edit?
+    published? && (record.discover_access?(user) || edit?)
   end
 
   def edit?

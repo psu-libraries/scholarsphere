@@ -88,7 +88,7 @@ class Work < ApplicationRecord
   end
 
   module DepositAgreement
-    CURRENT_VERSION = '1.0'
+    CURRENT_VERSION = '2.0'
   end
 
   enum work_type: Types.all.zip(Types.all).to_h
