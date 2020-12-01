@@ -8,6 +8,7 @@ import './scripts/view_statistics_chart'
 // Load dependencies
 require('jquery/dist/jquery')
 require('bootstrap/dist/js/bootstrap')
+require('select2/dist/js/select2')
 
 // Load Blacklight dependencies
 // This should be just enough JS to get the facet modals working.

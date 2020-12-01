@@ -254,21 +254,30 @@ en:
         submit_button: Update Editors 
       update:
         success: "Work settings successfully updated."
-    work_form:
+    form: 
+      unsaved_changes_prompt: You have unsaved changes on this page. Are you sure you want to leave and discard these changes?
       heading:
-        new: Add New Work
-        edit: Edit Draft Work
-        error_message: "%{error} prohibited this work from being saved:"
+        error_message: "%{error} prohibited this from being saved:"
+        work_version:
+          new: "Add New Draft Work"
+          edit: "Edit Draft Work"
+        collection:
+          new: "Add New Collection"
+          edit: "Edit Collection"
       tabs:
-        details: Work Details
+        work_version_details: Work Details
+        collection_details: Collection Details
         contributors: Contributors
         files: Files
         publish: Review & Publish
+        members: Works
       actions:
-        save_and_exit: Save as Draft & Exit
         save_and_continue: Save and Continue
         cancel: Cancel
         publish: Publish
+        save_and_exit:
+          collection: Save and Exit
+          work_version: Save as Draft & Exit
       details:
         required_metadata: Required Metadata
         required_to_publish_metadata: Needed to Publish
@@ -276,6 +285,8 @@ en:
       contributors:
         edit:
           badge: Creator
+          creator: Creator
+          remove_creator: Remove Creator
           empty_result: No results found. Choose this option to create a new creator.
           creators_heading: Creators
           contributors_heading: Additional Acknowledgments
@@ -303,7 +314,22 @@ en:
           contributors: Contributors
           files: Files
           publishing_details: Publishing Details
-      unsaved_changes_prompt: You have unsaved changes on this page. Are you sure you want to leave and discard these changes?
+      members:
+        heading: Works
+        badge: Work 
+        empty_result: No works found.
+        placeholder: "Search..."
+        reader_hint: >
+          When autocomplete results are available use up and down arrows to review and enter to select.
+          Touch device users, explore by touch or with swipe gestures.
+        remove: "Remove work %{name}"
+        move_up: "Move %{name} one position earlier"
+        move_down: "Move %{name} one position later"
+        search: >
+          You can search for works by title
+        search_heading: Add works to collection
+        search_label: Search works
+        search_results: Search Results
     work_versions:
       files:
         name: Name

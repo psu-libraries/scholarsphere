@@ -68,6 +68,9 @@ class Collection < ApplicationRecord
                                 reject_if: :all_blank,
                                 allow_destroy: true
 
+  accepts_nested_attributes_for :collection_work_memberships,
+                                reject_if: :all_blank,
+                                allow_destroy: true
   after_initialize :set_defaults
 
   after_save :perform_update_index

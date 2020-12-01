@@ -36,7 +36,7 @@ RSpec.describe Dashboard::WorkVersionsController, type: :controller do
           perform_request
           new_version = work.reload.draft_version
 
-          expect(response).to redirect_to dashboard_work_form_details_path(new_version)
+          expect(response).to redirect_to dashboard_form_work_version_details_path(new_version)
         end
       end
 
