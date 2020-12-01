@@ -5,6 +5,8 @@ class Collection < ApplicationRecord
   include DepositedAtTimestamp
   include ViewStatistics
 
+  attr_writer :indexing_source
+
   jsonb_accessor :metadata,
                  title: :string,
                  subtitle: :string,
@@ -67,7 +69,7 @@ class Collection < ApplicationRecord
 
   after_initialize :set_defaults
 
-  after_save :update_index_async
+  after_save :perform_update_index
 
   after_destroy { SolrDeleteJob.perform_later(uuid) }
 
@@ -121,10 +123,6 @@ class Collection < ApplicationRecord
     document_builder.generate(resource: self)
   end
 
-  def update_index_async
-    SolrIndexingJob.perform_later(self)
-  end
-
   # @note Postgres mints uuids, but they are not present until the record is reloaded from the database.  In most cases,
   # this won't present a problem because we only index published versions, and at that point, the version will have
   # already been saved and reloaded from the database. However, there could be edge cases or other unforseen siutations
@@ -135,6 +133,10 @@ class Collection < ApplicationRecord
     CollectionIndexer.call(self, commit: commit)
   end
 
+  def indexing_source
+    @indexing_source ||= SolrIndexingJob.public_method(:perform_later)
+  end
+
   def work_type
     'collection'
   end
@@ -143,6 +145,10 @@ class Collection < ApplicationRecord
 
     def set_defaults
       self.visibility = Permissions::Visibility::OPEN unless access_controls.any?
+    end
+
+    def perform_update_index
+      indexing_source.call(self)
     end
 
     def strip_blanks_from_array(arr)
