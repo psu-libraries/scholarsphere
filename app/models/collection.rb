@@ -42,6 +42,7 @@ class Collection < ApplicationRecord
            inverse_of: :collections
 
   has_many :creator_aliases,
+           -> { order(position: :asc) },
            class_name: 'CollectionCreation',
            inverse_of: :collection,
            dependent: :destroy

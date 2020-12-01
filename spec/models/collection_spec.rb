@@ -296,4 +296,10 @@ RSpec.describe Collection, type: :model do
       expect(SolrDeleteJob).to have_received(:perform_later).with(collection.uuid)
     end
   end
+
+  describe '#creators' do
+    let(:resource) { create(:collection, :with_creators, creator_count: 2) }
+
+    it_behaves_like 'a resource with orderable creators'
+  end
 end
