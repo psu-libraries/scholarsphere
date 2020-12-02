@@ -32,7 +32,8 @@ RSpec.describe Dashboard::SearchBuilder do
       expect(parameters['fq']).to include(
         "({!terms f=edit_groups_ssim}#{Group::PUBLIC_AGENT_NAME},#{Group::AUTHORIZED_AGENT_NAME}) " \
         "OR edit_users_ssim:#{user.access_id} " \
-        "OR {!terms f=depositor_id_isi}#{user.actor.id}"
+        "OR {!terms f=depositor_id_isi}#{user.actor.id} " \
+        "OR {!terms f=proxy_id_isi}#{user.actor.id}"
       )
     end
 
