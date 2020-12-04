@@ -1,8 +1,9 @@
 FROM harbor.k8s.libraries.psu.edu/library/ruby-2.7.1-node-12:20201104 as base
+ARG UID=2000
 
 COPY bin/vaultshell /usr/local/bin/
 
-RUN useradd -u 2000 app -d /app
+RUN useradd -u $UID app -d /app
 RUN mkdir /app/tmp
 RUN chown -R app /app
 USER app
@@ -20,7 +21,6 @@ COPY package.json yarn.lock /app/
 RUN yarn --frozen-lockfile && \
   rm -rf /app/.cache && \
   rm -rf /app/tmp
-
 
 COPY --chown=app . /app
 
@@ -44,7 +44,7 @@ RUN RAILS_ENV=production \
   AWS_ACCESS_KEY_ID=key \
   AWS_SECRET_ACCESS_KEY=secret \
   AWS_REGION=us-east-1 \
-  bundle exec rails assets:precompile && \
+  bundle exec rake webpacker:compile && \
   rm -rf /app/.cache/ && \
   rm -rf /app/node_modules/.cache/ && \
   rm -rf /app/tmp/
