@@ -13,6 +13,10 @@ class WorkVersionDecorator < ResourceDecorator
     WorkDecorator.new(work)
   end
 
+  def display_rights
+    DisplayRightsComponent.new(id: rights)
+  end
+
   private
 
     def version_name_or_number

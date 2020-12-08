@@ -475,12 +475,28 @@ RSpec.describe WorkVersion, type: :model do
           ],
           ['Public Domain Mark 1.0', 'http://creativecommons.org/publicdomain/mark/1.0/'],
           ['CC0 1.0 Universal', 'http://creativecommons.org/publicdomain/zero/1.0/'],
-          ['All rights reserved', 'http://www.europeana.eu/portal/rights/rr-r.html'],
+          ['All rights reserved', 'https://rightsstatements.org/page/InC/1.0/'],
           ['Apache 2.0', 'http://www.apache.org/licenses/LICENSE-2.0'],
           ['GNU General Public License (GPLv3)', 'https://www.gnu.org/licenses/gpl.html'],
           ['MIT License', 'https://opensource.org/licenses/MIT'],
           ['BSD 3-Clause License', 'https://opensource.org/licenses/BSD-3-Clause']
         )
+      end
+    end
+
+    describe '::label' do
+      subject { described_class.label(license['id']) }
+
+      context 'with an existing id' do
+        let(:license) { described_class.all.sample }
+
+        it { is_expected.to eq(license['label']) }
+      end
+
+      context 'with an invalid id' do
+        let(:license) { { 'id' => 'bogus' } }
+
+        it { is_expected.to be_nil }
       end
     end
   end

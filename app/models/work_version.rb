@@ -78,7 +78,10 @@ class WorkVersion < ApplicationRecord
       end
 
       def label(id)
-        all.select { |license| license[:id] == id }.first[:label]
+        all
+          .select { |license| license[:id] == id }
+          .map { |license| license[:label] }
+          .first
       end
     end
   end
