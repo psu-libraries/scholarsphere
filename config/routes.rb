@@ -132,8 +132,6 @@ Rails.application.routes.draw do
 
       post ':resource_klass/:id/aliases/new', to: 'aliases#new', as: 'aliases'
     end
-
-    resources :collections
   end
 
   namespace :api do

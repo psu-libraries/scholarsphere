@@ -186,25 +186,6 @@ en:
         options:
           heading: 'Dashboard Search Alternatives'
           browse: "Browse & Filter All Your Works"
-    collections:
-      index:
-        heading: "Your Collections"
-        new: "New Collection"
-        delete_confirm: "Are you sure you want to delete this collection? This cannot be undone."
-        delete: "Delete"
-        edit: "Edit"
-        show: "Show"
-      new:
-        heading: "Create A New Collection"
-        error_message: "%{error} prohibited this collection from being saved:"
-      edit:
-        heading: Edit %{title}
-        add_creator: 'Add another Creator'
-        breadcrumb: Edit %{title}
-        creator: Creator
-        error_message: "%{error} prohibited this collection from being saved:"
-        remove_creator: 'Remove'
-      works: 'Works'
     home:
       intro:
         heading: 'What is my dashboard?'
