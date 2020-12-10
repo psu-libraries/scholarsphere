@@ -24,7 +24,9 @@ RSpec.describe Dashboard::SearchBuilder do
 
     it 'searches only latest work versions' do
       expect(parameters['fq']).to include(
-        '({!terms f=model_ssi}WorkVersion AND {!terms f=latest_version_bsi}true})'
+        '(({!terms f=model_ssi}WorkVersion AND {!terms f=latest_version_bsi}true}) ' \
+        'OR ' \
+        '({!terms f=model_ssi}Collection))'
       )
     end
 

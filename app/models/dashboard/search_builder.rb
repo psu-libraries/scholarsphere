@@ -12,8 +12,9 @@ module Dashboard
 
     def search_only_latest_work_versions(solr_parameters)
       solr_parameters[:fq] ||= []
-
-      solr_parameters[:fq] << '({!terms f=model_ssi}WorkVersion AND {!terms f=latest_version_bsi}true})'
+      latest_work_versions = '({!terms f=model_ssi}WorkVersion AND {!terms f=latest_version_bsi}true})'
+      collections = '({!terms f=model_ssi}Collection)'
+      solr_parameters[:fq] << "(#{latest_work_versions} OR #{collections})"
     end
 
     def apply_gated_edit(solr_parameters)
