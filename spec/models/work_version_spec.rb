@@ -49,23 +49,10 @@ RSpec.describe WorkVersion, type: :model do
     it { is_expected.to accept_nested_attributes_for(:file_resources) }
     it { is_expected.to accept_nested_attributes_for(:creator_aliases).allow_destroy(true) }
 
-    describe '.creators' do
-      let(:work_version) { create(:work_version, :with_creators, creator_count: 2) }
+    describe '#creators' do
+      let(:resource) { create(:work_version, :with_creators, creator_count: 2) }
 
-      it 'default orders them by #position asc' do
-        creator_a, creator_b = work_version.creator_aliases
-
-        creator_a.update!(alias: 'A', position: 1)
-        creator_b.update!(alias: 'B', position: 2)
-
-        work_version.reload
-        expect(work_version.creator_aliases.map(&:alias)).to eq %w(A B)
-
-        creator_a.update!(position: 100)
-
-        work_version.reload
-        expect(work_version.creator_aliases.map(&:alias)).to eq %w(B A)
-      end
+      it_behaves_like 'a resource with orderable creators'
     end
   end
 

@@ -30,7 +30,12 @@ module Dashboard
     private
 
       def gated_edit_filters
-        [:apply_group_permissions, :apply_user_permissions, :apply_depositor_access].map do |method|
+        [
+          :apply_group_permissions,
+          :apply_user_permissions,
+          :apply_depositor_access,
+          :apply_proxy_access
+        ].map do |method|
           send(method)
         end
       end
@@ -54,6 +59,10 @@ module Dashboard
 
       def apply_depositor_access
         "{!terms f=depositor_id_isi}#{current_user.actor.id}"
+      end
+
+      def apply_proxy_access
+        "{!terms f=proxy_id_isi}#{current_user.actor.id}"
       end
 
       def current_user

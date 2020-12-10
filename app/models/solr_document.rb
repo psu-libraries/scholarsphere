@@ -55,4 +55,8 @@ class SolrDocument
 
     Time.zone.parse(self[:deposited_at_dtsi])
   end
+
+  def work_id
+    self[:work_id_isi].to_i
+  end
 end

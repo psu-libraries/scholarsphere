@@ -32,18 +32,18 @@ FactoryBot.define do
     trait :with_complete_metadata do
       title { "Collection #{generate(:work_title)}" }
       subtitle { FactoryBotHelpers.work_title }
-      keyword { [Faker::Science.element] }
+      keyword { Faker::Science.element }
       description { Faker::Lorem.paragraph }
-      contributor { [Faker::Artist.name] }
-      publisher { [Faker::Book.publisher] }
+      contributor { Faker::Artist.name }
+      publisher { Faker::Book.publisher }
       published_date { Faker::Date.between(from: 2.years.ago, to: Date.today).iso8601 }
-      subject { [Faker::Book.genre] }
+      subject { Faker::Book.genre }
 
-      language { [Faker::Nation.language] }
-      identifier { [Faker::Number.leading_zero_number(digits: 10)] }
-      based_near { [FactoryBotHelpers.fancy_geo_location] }
-      related_url { [Faker::Internet.url] }
-      source { [Faker::SlackEmoji.emoji] }
+      language { Faker::Nation.language }
+      identifier { Faker::Number.leading_zero_number(digits: 10) }
+      based_near { FactoryBotHelpers.fancy_geo_location }
+      related_url { Faker::Internet.url }
+      source { Faker::SlackEmoji.emoji }
     end
 
     trait :with_a_doi do

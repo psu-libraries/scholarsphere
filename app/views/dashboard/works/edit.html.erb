@@ -43,7 +43,7 @@
           <%= render FormErrorMessageComponent.new(form: visibility_form) %>
         <% end %>
 
-        <%= render 'dashboard/work_form/publish/visibility_field', form: visibility_form %>
+        <%= render 'dashboard/form/publish/visibility_field', form: visibility_form %>
 
         <div class="actions mt-4 mb-3">
           <%= visibility_form.submit t('.visibility.submit_button'), class: 'btn btn-primary' %>

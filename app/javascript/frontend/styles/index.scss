@@ -32,6 +32,9 @@
 @import '~blacklight-frontend/app/assets/stylesheets/blacklight/facets';
 //@import '~blacklight-frontend/app/assets/stylesheets/blacklight/constraints';
 
+// Import styles for select2
+@import '~select2/dist/css/select2';
+
 // Import our stuff
 @import 'autocomplete';
 @import 'common';

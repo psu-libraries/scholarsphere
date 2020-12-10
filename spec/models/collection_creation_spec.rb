@@ -7,6 +7,7 @@ RSpec.describe CollectionCreation, type: :model do
     it { is_expected.to have_db_column(:collection_id) }
     it { is_expected.to have_db_column(:actor_id) }
     it { is_expected.to have_db_column(:alias).of_type(:string) }
+    it { is_expected.to have_db_column(:position).of_type(:integer) }
     it { is_expected.to have_db_column(:created_at).of_type(:datetime) }
     it { is_expected.to have_db_column(:updated_at).of_type(:datetime) }
 
