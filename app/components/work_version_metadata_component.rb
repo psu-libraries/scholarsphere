@@ -13,7 +13,7 @@ class WorkVersionMetadataComponent < ApplicationComponent
     :creator_aliases,
     :version_number,
     :keyword,
-    :rights,
+    :display_rights,
     :display_work_type,
     :contributor,
     :publisher,
@@ -42,9 +42,9 @@ class WorkVersionMetadataComponent < ApplicationComponent
   private
 
     def decorate(work_ver)
-      return work_ver if work_ver.is_a? ResourceDecorator
+      return work_ver if work_ver.is_a? WorkVersionDecorator
 
-      ResourceDecorator.new(work_ver)
+      WorkVersionDecorator.new(work_ver)
     end
 
     def attributes_list

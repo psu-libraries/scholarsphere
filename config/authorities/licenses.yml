@@ -41,9 +41,12 @@ terms:
   - id: http://creativecommons.org/publicdomain/zero/1.0/
     term: CC0 1.0 Universal
     active: true
-  - id: http://www.europeana.eu/portal/rights/rr-r.html
+  - id: https://rightsstatements.org/page/InC/1.0/
     term: All rights reserved
     active: true
+  - id: http://www.europeana.eu/portal/rights/rr-r.html
+    term: All rights reserved
+    active: false
   - id: http://www.apache.org/licenses/LICENSE-2.0
     term: Apache 2.0
     active: true

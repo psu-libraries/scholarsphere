@@ -46,6 +46,7 @@ en:
         subtitle: Subtitle
         keyword: Keyword
         rights: License
+        display_rights: License
         description: Description
         creator_aliases: Creators
         first_creators: Creators
