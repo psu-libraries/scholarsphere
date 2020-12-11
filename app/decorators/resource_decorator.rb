@@ -43,4 +43,11 @@ class ResourceDecorator < SimpleDelegator
       creator_aliases.take(3)
     end
   end
+
+  # @note Google Scholar prefers the year alone
+  def published_date_or_deposited_year
+    return deposited_at.year unless EdtfDate.valid?(published_date)
+
+    Date.edtf(published_date).year
+  end
 end
