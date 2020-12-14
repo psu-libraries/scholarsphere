@@ -115,6 +115,7 @@ Rails.application.routes.draw do
 
         get   ':id/details', to: 'collection_details#edit', as: 'collection_details'
         match ':id/details', to: 'collection_details#update', via: %i[patch put], as: nil
+        match ':id/details', to: 'collection_details#destroy', via: :delete, as: nil
 
         get   ':id/members', to: 'members#edit', as: 'members'
         match ':id/members', to: 'members#update', via: %i[patch put], as: nil

@@ -289,11 +289,11 @@ RSpec.describe Collection, type: :model do
   describe 'after destroy' do
     let(:collection) { create(:collection) }
 
-    before { allow(SolrDeleteJob).to receive(:perform_later) }
+    before { allow(SolrDeleteJob).to receive(:perform_now) }
 
     it 'removes the collection from the index' do
       collection.destroy
-      expect(SolrDeleteJob).to have_received(:perform_later).with(collection.uuid)
+      expect(SolrDeleteJob).to have_received(:perform_now).with(collection.uuid)
     end
   end
 

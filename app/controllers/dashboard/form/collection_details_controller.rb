@@ -28,6 +28,15 @@ module Dashboard
         process_response(on_error: :edit)
       end
 
+      def destroy
+        @resource = Collection.find(params[:id])
+        authorize(@resource)
+        @resource.destroy
+        respond_to do |format|
+          format.html { redirect_to dashboard_root_path, notice: 'Collection was successfully deleted.' }
+        end
+      end
+
       private
 
         def new_collection(attrs = {})
