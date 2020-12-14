@@ -24,7 +24,8 @@ RSpec.describe 'Public Resources', type: :feature do
         expect(page.find('meta[property="og:url"]', visible: false)[:content])
           .to match(resource_path(work.uuid)).and match(/^https?:/)
         expect(page.find('meta[name="citation_title"]', visible: false)[:content]).to eq v2.title
-        expect(page.find('meta[name="citation_publication_date"]', visible: false)[:content]).to eq v2.published_date
+        expect(page.find('meta[name="citation_publication_date"]', visible: false)[:content])
+          .to eq Date.edtf(v2.published_date).year.to_s
         all_authors = page.all(:css, 'meta[name="citation_author"]', visible: false)
         expect(all_authors.map { |a| a[:content] }).to match_array v2.creator_aliases.map(&:alias)
 
@@ -129,7 +130,7 @@ RSpec.describe 'Public Resources', type: :feature do
           .to match(resource_path(collection.uuid)).and match(/^https?:/)
         expect(page.find('meta[name="citation_title"]', visible: false)[:content]).to eq collection.title
         expect(page.find('meta[name="citation_publication_date"]', visible: false)[:content])
-          .to eq collection.published_date
+          .to eq Date.edtf(collection.published_date).year.to_s
         all_authors = page.all(:css, 'meta[name="citation_author"]', visible: false)
         expect(all_authors.map { |a| a[:content] }).to match_array collection.creator_aliases.map(&:alias)
 

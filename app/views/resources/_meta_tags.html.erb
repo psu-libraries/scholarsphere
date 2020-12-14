@@ -13,4 +13,4 @@
 <%- resource.creator_aliases.each do |creator_alias| %>
   <meta name="citation_author" content="<%= creator_alias.alias %>">
 <%- end %>
-<meta name="citation_publication_date" content="<%= resource.published_date %>">
+<meta name="citation_publication_date" content="<%= resource.published_date_or_deposited_year %>">
