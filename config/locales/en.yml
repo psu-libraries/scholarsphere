@@ -237,14 +237,14 @@ en:
       update:
         success: "Work settings successfully updated."
     form: 
-      unsaved_changes_prompt: You have unsaved changes on this page. Are you sure you want to leave and discard these changes?
+      unsaved_changes_prompt: You have unsaved changes on this page. Are you sure you want to leave and discard these changes? 
       heading:
         error_message: "%{error} prohibited this from being saved:"
         work_version:
-          new: "Add New Draft Work"
-          edit: "Edit Draft Work"
+          new: "Create New Work"
+          edit: "Edit Work"
         collection:
-          new: "Add New Collection"
+          new: "Create New Collection"
           edit: "Edit Collection"
       tabs:
         work_version_details: Work Details
@@ -261,6 +261,10 @@ en:
           collection: Save and Exit
           work_version: Save as Draft & Exit
       details:
+        about_collections: 
+          label: About Collections
+          message: >
+            Collections provide additional context for your related work. For example, a research group can use a collection to organize published reports and datasets.
         required_metadata: Required Metadata
         required_to_publish_metadata: Needed to Publish
         additional_metadata: Optional Metadata
