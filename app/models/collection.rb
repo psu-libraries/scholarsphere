@@ -75,7 +75,7 @@ class Collection < ApplicationRecord
 
   after_save :perform_update_index
 
-  after_destroy { SolrDeleteJob.perform_later(uuid) }
+  after_destroy { SolrDeleteJob.perform_now(uuid) }
 
   # Fields that can contain multiple values automatically remove blank values
   %i[

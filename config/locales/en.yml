@@ -449,6 +449,8 @@ en:
         tooltip: 'A new draft version can only be created from the latest published version. Only one draft version may exist at any time.'
     collection:
       edit_button: 'Edit'
+      delete_button: 'Delete'
+      delete_confirm: "Are you sure you want to delete this collection? This cannot be undone."
     settings_button:
       text: 'Work Settings'
   shared:
