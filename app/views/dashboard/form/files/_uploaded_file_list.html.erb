@@ -9,17 +9,13 @@
   </thead>
   <tbody class="work-files__file">
     <% file_version_memberships.each do |membership| %>
-      <tr id="<%= dom_id membership %>" data-controller="filename-editor">
+      <tr id="<%= dom_id membership %>">
         <td>
-          <span class="filename" data-target="filename-editor.titleStatic"><%= membership.title %></span>
-          <%# render 'inline_filename_editor', membership: membership %>
+          <span class="filename"><%= membership.title %></span>
         </td>
         <td><%= membership.mime_type %></td>
         <td><%= number_to_human_size membership.size %></td>
         <td>
-          <%# link_to t('dashboard.file_list.edit.rename'),
-                      edit_dashboard_file_path(membership),
-                      data: { action: 'click->filename-editor#toggleForm' } %>
           <%= link_to t('dashboard.file_list.edit.delete'),
                       dashboard_file_path(membership),
                       method: :delete,
