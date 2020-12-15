@@ -162,4 +162,19 @@ RSpec.describe 'Creating and editing collections', :inline_jobs, with_user: :use
       expect(collection.works).to be_empty
     end
   end
+
+  context 'when a collection has no works' do
+    let(:collection) { create(:collection, depositor: actor) }
+
+    it 'updates successfully' do
+      visit(dashboard_form_members_path(collection))
+
+      expect(collection.works).to be_empty
+
+      FeatureHelpers::DashboardForm.save_and_continue
+
+      expect(page).to have_content('Collection was updated successfully')
+      expect(collection.works).to be_empty
+    end
+  end
 end

@@ -19,6 +19,8 @@ module Dashboard
       private
 
         def collection_params
+          return {} unless params.key?(:collection)
+
           params
             .require(:collection)
             .permit(
