@@ -39,7 +39,7 @@
                   class: 'move js-move-up',
                   title: t('dashboard.form.members.move_up', name: work_version.title),
                   data: {
-                    action: 'contributors#moveUp',
+                    action: 'associations#moveUp',
                     toggle: 'tooltip', placement: 'top', offset: '0,100%'
                   } do %>
         <span class="sr-only"><%= t('dashboard.form.members.move_up', name: work_version.title) %></span>
@@ -50,7 +50,7 @@
                   class: 'move js-move-down',
                   title: t('dashboard.form.members.move_down', name: work_version.title),
                   data: {
-                    action: 'contributors#moveDown',
+                    action: 'associations#moveDown',
                     toggle: 'tooltip', placement: 'top', offset: '0,100%'
                   } do %>
         <span class="sr-only"><%= t('dashboard.form.members.move_down', name: work_version.title) %></span>

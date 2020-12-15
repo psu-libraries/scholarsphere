@@ -7,12 +7,12 @@
 </div>
 
 <div id="creator_aliases"
-     data-controller="contributors"
-     data-contributors-new="<%= dashboard_form_actors_path(resource_klass: klass) %>"
-     data-contributors-post="<%= dashboard_form_aliases_path(resource_klass: klass) %>"
-     data-contributors-wrapper-class="js-contributor-wrapper"
-     data-contributors-badge-class="badge--index"
-     data-contributors-position-class="js-position-index">
+     data-controller="associations"
+     data-associations-new="<%= dashboard_form_actors_path(resource_klass: klass) %>"
+     data-associations-post="<%= dashboard_form_aliases_path(resource_klass: klass) %>"
+     data-associations-wrapper-class="js-contributor-wrapper"
+     data-associations-badge-class="badge--index"
+     data-associations-position-class="js-position-index">
   <%= form.fields_for :creator_aliases do |creator_alias| %>
     <%= render 'dashboard/form/contributors/creator_alias_fields', form: creator_alias %>
   <% end %>
