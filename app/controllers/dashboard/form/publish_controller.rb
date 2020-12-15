@@ -24,7 +24,7 @@ module Dashboard
         # against the draft validations, then mark the record as published and
         # save again--this time using the published validations. That way the
         # appropriate error messages will appear on the form when it's re-rendered
-        if publish_work?
+        if publish?
           save_resource(index: false)
           @resource.publish
         end
@@ -43,12 +43,8 @@ module Dashboard
           @resource.errors.delete(:rights)
         end
 
-        def publish_work?
-          !save_and_exit?
-        end
-
         def redirect_upon_success
-          notice = if publish_work?
+          notice = if publish?
                      'Successfully published work!'
                    else
                      'Work version was successfully updated.'

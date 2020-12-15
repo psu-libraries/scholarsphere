@@ -36,6 +36,14 @@ module Dashboard
           params.key?(:save_and_exit)
         end
 
+        def publish?
+          params.key?(:publish)
+        end
+
+        def finish?
+          params.key?(:finish)
+        end
+
         def redirect_upon_success
           if save_and_exit?
             redirect_to resource_path(@resource.uuid), notice: "#{@resource.model_name.human} was successfully updated."
@@ -63,7 +71,7 @@ module Dashboard
         end
 
         def save_resource(index: true)
-          @resource.indexing_source = if index
+          @resource.indexing_source = if (publish? || finish? || save_and_exit?) && index
                                         SolrIndexingJob.public_method(:perform_now)
                                       else
                                         null_indexer

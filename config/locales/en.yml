@@ -257,6 +257,7 @@ en:
         save_and_continue: Save and Continue
         cancel: Cancel
         publish: Publish
+        finish: Finish
         save_and_exit:
           collection: Save and Exit
           work_version: Save as Draft & Exit

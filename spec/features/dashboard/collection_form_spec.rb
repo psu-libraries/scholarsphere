@@ -9,6 +9,10 @@ RSpec.describe 'Creating and editing collections', :inline_jobs, with_user: :use
   let(:metadata) { attributes_for(:collection, :with_complete_metadata) }
   let(:new_collection) { Collection.last }
 
+  before do
+    allow(SolrIndexingJob).to receive(:perform_now).and_call_original
+  end
+
   context 'when creating a collection with only the required metadata' do
     it 'creates a new collection with minimal metadata' do
       initial_collection_count = Collection.count
@@ -27,6 +31,7 @@ RSpec.describe 'Creating and editing collections', :inline_jobs, with_user: :use
       expect(new_collection.works).to be_empty
 
       expect(page).to have_current_path(resource_path(new_collection.uuid))
+      expect(SolrIndexingJob).to have_received(:perform_now).once
     end
   end
 
@@ -53,6 +58,7 @@ RSpec.describe 'Creating and editing collections', :inline_jobs, with_user: :use
 
       FeatureHelpers::DashboardForm.fill_in_collection_details(metadata)
       FeatureHelpers::DashboardForm.save_and_continue
+      expect(SolrIndexingJob).not_to have_received(:perform_now)
 
       expect(Collection.count).to eq(initial_collection_count + 1)
 
@@ -110,6 +116,7 @@ RSpec.describe 'Creating and editing collections', :inline_jobs, with_user: :use
       end
 
       FeatureHelpers::DashboardForm.save_and_continue
+      expect(SolrIndexingJob).not_to have_received(:perform_now)
 
       expect(new_collection.creators.map(&:surname)).to contain_exactly('Wead', actor.surname)
       expect(new_collection.works).to be_empty
@@ -130,7 +137,8 @@ RSpec.describe 'Creating and editing collections', :inline_jobs, with_user: :use
       end
 
       FeatureHelpers::DashboardForm.select_work(published_work.latest_published_version.title)
-      FeatureHelpers::DashboardForm.save_and_continue
+      FeatureHelpers::DashboardForm.finish
+      expect(SolrIndexingJob).to have_received(:perform_now).once
 
       expect(new_collection.works).to contain_exactly(published_work)
     end
@@ -144,6 +152,7 @@ RSpec.describe 'Creating and editing collections', :inline_jobs, with_user: :use
 
       FeatureHelpers::DashboardForm.fill_in_collection_details(metadata)
       FeatureHelpers::DashboardForm.save_and_exit
+      expect(SolrIndexingJob).to have_received(:perform_now).once
 
       collection.reload
       expect(collection.title).to eq metadata[:title]
@@ -171,7 +180,8 @@ RSpec.describe 'Creating and editing collections', :inline_jobs, with_user: :use
 
       expect(collection.works).to be_empty
 
-      FeatureHelpers::DashboardForm.save_and_continue
+      FeatureHelpers::DashboardForm.finish
+      expect(SolrIndexingJob).to have_received(:perform_now).once
 
       expect(page).to have_content('Collection was updated successfully')
       expect(collection.works).to be_empty

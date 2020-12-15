@@ -7,6 +7,10 @@ RSpec.describe 'Publishing a work', with_user: :user do
   let(:user) { create(:user) }
   let(:metadata) { attributes_for(:work_version, :with_complete_metadata) }
 
+  before do
+    allow(SolrIndexingJob).to receive(:perform_now).and_call_original
+  end
+
   describe 'The Work Details tab for a new work' do
     context 'when saving as draft and exiting' do
       it 'creates a new work with all fields provided' do
@@ -29,6 +33,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(new_work_version.version_number).to eq 1
 
         expect(page).to have_current_path(resource_path(new_work_version.uuid))
+        expect(SolrIndexingJob).to have_received(:perform_now).twice
       end
     end
 
@@ -63,6 +68,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(new_work_version.source).to eq [metadata[:source]]
 
         expect(page).to have_current_path(dashboard_form_contributors_path('work_version', new_work_version))
+        expect(SolrIndexingJob).not_to have_received(:perform_now)
       end
     end
   end
@@ -85,6 +91,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         work_version.reload
         expect(work_version.title).to eq metadata[:title]
+        expect(SolrIndexingJob).to have_received(:perform_now).once
       end
     end
 
@@ -112,6 +119,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(work_version.source).to eq [metadata[:source]]
 
         expect(page).to have_current_path(dashboard_form_contributors_path('work_version', work_version))
+        expect(SolrIndexingJob).not_to have_received(:perform_now)
       end
     end
 
@@ -132,6 +140,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         end
 
         expect(page).to have_current_path(dashboard_form_contributors_path('work_version', work_version))
+        expect(SolrIndexingJob).not_to have_received(:perform_now)
       end
     end
   end
@@ -169,6 +178,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(work_version.contributor).to eq [metadata[:contributor]]
 
         expect(page).to have_current_path(dashboard_form_files_path(work_version))
+        expect(SolrIndexingJob).not_to have_received(:perform_now)
       end
     end
 
@@ -202,6 +212,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         expect(work_version.creators.map(&:surname)).to include('Wead')
         expect(page).to have_current_path(dashboard_form_files_path(work_version))
+        expect(SolrIndexingJob).not_to have_received(:perform_now)
       end
     end
 
@@ -235,6 +246,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         expect(work_version.creators.map(&:surname)).to include(actor.surname)
         expect(page).to have_current_path(dashboard_form_files_path(work_version))
+        expect(SolrIndexingJob).not_to have_received(:perform_now)
       end
     end
 
@@ -281,6 +293,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         expect(work_version.creators.map(&:surname)).to include(metadata[:surname])
         expect(page).to have_current_path(dashboard_form_files_path(work_version))
+        expect(SolrIndexingJob).not_to have_received(:perform_now)
       end
     end
 
@@ -339,6 +352,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         expect(work_version.reload.creators.map(&:surname)).to contain_exactly(creators.last.surname)
         expect(page).to have_current_path(dashboard_form_files_path(work_version))
+        expect(SolrIndexingJob).not_to have_received(:perform_now)
       end
     end
 
@@ -362,6 +376,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         FeatureHelpers::DashboardForm.save_as_draft_and_exit
 
         expect(work_version.reload.creator_aliases.map(&:alias)).to eq(['Creator B', 'Creator A'])
+        expect(SolrIndexingJob).to have_received(:perform_now).once
       end
     end
   end
@@ -381,6 +396,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
       # Save, reload the page, and ensure that it's now in the files table
       FeatureHelpers::DashboardForm.save_as_draft_and_exit
+      expect(SolrIndexingJob).to have_received(:perform_now).once
       visit dashboard_form_files_path(work_version)
 
       within('.table') do
@@ -413,6 +429,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         fill_in 'work_version_published_date', with: 'this is not a valid date'
         FeatureHelpers::DashboardForm.publish
+        expect(SolrIndexingJob).not_to have_received(:perform_now)
 
         expect(page).to have_current_path(dashboard_form_publish_path(work_version))
 
@@ -435,6 +452,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
       FeatureHelpers::DashboardForm.fill_in_work_details(metadata)
       FeatureHelpers::DashboardForm.save_and_continue
+      expect(SolrIndexingJob).not_to have_received(:perform_now)
 
       # Ensure one creator is pre-filled with the User's Actor
       within('#creator_aliases') do
@@ -451,12 +469,14 @@ RSpec.describe 'Publishing a work', with_user: :user do
       end
 
       FeatureHelpers::DashboardForm.save_and_continue
+      expect(SolrIndexingJob).not_to have_received(:perform_now)
 
       FeatureHelpers::DashboardForm.upload_file(Rails.root.join('spec', 'fixtures', 'image.png'))
       within('.uppy-Dashboard-files') do
         expect(page).to have_content('image.png')
       end
       FeatureHelpers::DashboardForm.save_and_continue
+      expect(SolrIndexingJob).not_to have_received(:perform_now)
 
       # Don't yell at them for something they haven't seen yet
       expect(page).not_to have_selector('div#error_explanation')
@@ -466,6 +486,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       FeatureHelpers::DashboardForm.fill_in_work_details(different_metadata)
       FeatureHelpers::DashboardForm.fill_in_publishing_details(metadata)
       FeatureHelpers::DashboardForm.publish
+      expect(SolrIndexingJob).to have_received(:perform_now).once
 
       #
       # Load out the new published work and ensure that all is well
