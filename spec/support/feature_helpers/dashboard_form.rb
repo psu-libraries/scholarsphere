@@ -103,6 +103,11 @@ module FeatureHelpers
       click_on I18n.t('dashboard.form.actions.publish')
     end
 
+    def self.finish
+      fix_sticky_footer
+      click_on I18n.t('dashboard.form.actions.finish')
+    end
+
     def self.fix_sticky_footer
       Capybara.current_session.current_window.resize_to(1000, 1000)
     rescue Capybara::NotSupportedByDriverError
