@@ -5,11 +5,11 @@
 </div>
 
 <div id="works"
-     data-controller="contributors"
-     data-contributors-post="<%= dashboard_form_collection_memberships_path %>"
-     data-contributors-wrapper-class="js-work-wrapper"
-     data-contributors-badge-class="badge--index"
-     data-contributors-position-class="js-position-index">
+     data-controller="associations"
+     data-associations-post="<%= dashboard_form_collection_memberships_path %>"
+     data-associations-wrapper-class="js-work-wrapper"
+     data-associations-badge-class="badge--index"
+     data-associations-position-class="js-position-index">
   <%= form.fields_for :collection_work_memberships do |work_membership| %>
     <%= render 'dashboard/form/members/work_membership_fields', form: work_membership %>
   <% end %>

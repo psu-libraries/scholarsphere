@@ -1,3 +1,7 @@
+// @abstract Adds ordered associations to a resource, such as creators to work versions and collections, as well as
+// member works to a collection. A new association is posted to an endpoint and then the order updated in DOM. Existing
+// associations can be reordered on the page.
+
 import { Controller } from 'stimulus'
 import axios from 'axios'
 import { csrfToken } from './stimulus_modules'
