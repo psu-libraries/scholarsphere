@@ -51,6 +51,7 @@ export default class extends Controller {
   }
 
   moveUp (event) {
+    event.preventDefault()
     const $target = $(event.target)
     const $parentWrapper = $target.closest(`.${this.wrapperClass}`)
     const $previousSibling = $parentWrapper.prevAll(`.${this.wrapperClass}:visible`).first()
@@ -62,6 +63,7 @@ export default class extends Controller {
   }
 
   moveDown (event) {
+    event.preventDefault()
     const $target = $(event.target)
     const $parentWrapper = $target.closest(`.${this.wrapperClass}`)
     const $nextSibling = $parentWrapper.nextAll(`.${this.wrapperClass}:visible`).first()
