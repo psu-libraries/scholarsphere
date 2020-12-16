@@ -21,13 +21,13 @@ The new release of ScholarSphere 4.0 introduces several improvements:
 - The ability to save new works as 'drafts' for later publishing
 - A versioning system that allows you to update your work and access older versions.
 
-Note that some features are not currently available as we work on improving the platform. In particular, please [contact us](/contact) if you need to create or manage *collections* of works. Support for creating and managing collections will be reintroduced in the next release. The ScholarSphere 4.0 development roadmap is outlined below.
+Note that some features you may be used to are not currently available as we work on improving the platform. The ScholarSphere 4.0 development roadmap is outlined below.
 
 | Feature                          | Status / Expected Release |
 |----------------------------------|------------------|
 | Create and Manage Works          | ✔️                |
 | Work versions and drafts         | ✔️                |
-| Create and Manage Collections    | 4.1.x            |
+| Create and Manage Collections    | ✔️                |
 | Display README files             | 4.2.x            |
 | Work Thumbnails                  | 4.3.x            |
 | Export Usage Statistics          | 4.3.x            | 

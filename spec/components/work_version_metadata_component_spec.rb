@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe WorkVersionMetadataComponent, type: :component do
-  let(:decorated_work_version) { ResourceDecorator.new(work_version) }
+  let(:decorated_work_version) { WorkVersionDecorator.new(work_version) }
   let(:result) { render_inline(described_class.new(work_version: decorated_work_version)) }
 
   # MintableDoiComponent uses the `helpers` method to access a Pundit policy, to
@@ -70,7 +70,7 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
       expect(result.css('th.work-version-visibility-badge')).to be_present
       expect(result.css('th.work-version-version-number')).to be_present
       expect(result.css('th.work-version-keyword')).to be_present
-      expect(result.css('th.work-version-rights')).to be_present
+      expect(result.css('th.work-version-display-rights')).to be_present
       expect(result.css('th.work-version-resource-type')).not_to be_present
       expect(result.css('th.work-version-display-work-type')).to be_present
       expect(result.css('th.work-version-contributor')).to be_present
@@ -93,7 +93,7 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
       expect(result.css('td.work-version-creator-aliases').text).to include work_version.creator_aliases.map(&:alias).first
       expect(result.css('td.work-version-version-number').text).to eq work_version[:version_number].to_s
       expect(result.css('td.work-version-keyword').text).to include work_version[:keyword].first
-      expect(result.css('td.work-version-rights').text).to eq work_version[:rights]
+      expect(result.css('td.work-version-display-rights a').attr('href').text).to eq work_version[:rights]
       expect(result.css('td.work-version-display-work-type').text).to eq decorated_work_version.display_work_type
       expect(result.css('td.work-version-contributor').text).to include work_version[:contributor].first
       expect(result.css('td.work-version-publisher').text).to include work_version[:publisher].first

@@ -24,7 +24,9 @@ RSpec.describe Dashboard::SearchBuilder do
 
     it 'searches only latest work versions' do
       expect(parameters['fq']).to include(
-        '({!terms f=model_ssi}WorkVersion AND {!terms f=latest_version_bsi}true})'
+        '(({!terms f=model_ssi}WorkVersion AND {!terms f=latest_version_bsi}true}) ' \
+        'OR ' \
+        '({!terms f=model_ssi}Collection))'
       )
     end
 
@@ -32,7 +34,8 @@ RSpec.describe Dashboard::SearchBuilder do
       expect(parameters['fq']).to include(
         "({!terms f=edit_groups_ssim}#{Group::PUBLIC_AGENT_NAME},#{Group::AUTHORIZED_AGENT_NAME}) " \
         "OR edit_users_ssim:#{user.access_id} " \
-        "OR {!terms f=depositor_id_isi}#{user.actor.id}"
+        "OR {!terms f=depositor_id_isi}#{user.actor.id} " \
+        "OR {!terms f=proxy_id_isi}#{user.actor.id}"
       )
     end
 

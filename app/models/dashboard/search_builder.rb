@@ -12,8 +12,9 @@ module Dashboard
 
     def search_only_latest_work_versions(solr_parameters)
       solr_parameters[:fq] ||= []
-
-      solr_parameters[:fq] << '({!terms f=model_ssi}WorkVersion AND {!terms f=latest_version_bsi}true})'
+      latest_work_versions = '({!terms f=model_ssi}WorkVersion AND {!terms f=latest_version_bsi}true})'
+      collections = '({!terms f=model_ssi}Collection)'
+      solr_parameters[:fq] << "(#{latest_work_versions} OR #{collections})"
     end
 
     def apply_gated_edit(solr_parameters)
@@ -30,7 +31,12 @@ module Dashboard
     private
 
       def gated_edit_filters
-        [:apply_group_permissions, :apply_user_permissions, :apply_depositor_access].map do |method|
+        [
+          :apply_group_permissions,
+          :apply_user_permissions,
+          :apply_depositor_access,
+          :apply_proxy_access
+        ].map do |method|
           send(method)
         end
       end
@@ -54,6 +60,10 @@ module Dashboard
 
       def apply_depositor_access
         "{!terms f=depositor_id_isi}#{current_user.actor.id}"
+      end
+
+      def apply_proxy_access
+        "{!terms f=proxy_id_isi}#{current_user.actor.id}"
       end
 
       def current_user

@@ -24,13 +24,14 @@ RSpec.describe 'Public Resources', type: :feature do
         expect(page.find('meta[property="og:url"]', visible: false)[:content])
           .to match(resource_path(work.uuid)).and match(/^https?:/)
         expect(page.find('meta[name="citation_title"]', visible: false)[:content]).to eq v2.title
-        expect(page.find('meta[name="citation_publication_date"]', visible: false)[:content]).to eq v2.published_date
+        expect(page.find('meta[name="citation_publication_date"]', visible: false)[:content])
+          .to eq Date.edtf(v2.published_date).year.to_s
         all_authors = page.all(:css, 'meta[name="citation_author"]', visible: false)
         expect(all_authors.map { |a| a[:content] }).to match_array v2.creator_aliases.map(&:alias)
 
         ## Does not have edit controls
         within('header') do
-          expect(page).not_to have_content(I18n.t('resources.edit_button.text', version: 'V2'))
+          expect(page).not_to have_content(I18n.t('resources.work_version.edit_button.text', version: 'V2'))
           expect(page).not_to have_content(I18n.t('resources.settings_button.text'))
         end
 
@@ -53,8 +54,8 @@ RSpec.describe 'Public Resources', type: :feature do
 
           within('header') do
             ## Edit controls are visible
-            expect(page).to have_content(I18n.t('resources.edit_button.text', version: 'V2'))
-              .and have_content(I18n.t('resources.create_button.text', version: 'V2'))
+            expect(page).to have_content(I18n.t('resources.work_version.edit_button.text', version: 'V2'))
+              .and have_content(I18n.t('resources.work_version.create_button.text', version: 'V2'))
               .and have_content(I18n.t('resources.settings_button.text'))
 
             ## Edit button is disabled, create draft button is enabled
@@ -111,50 +112,71 @@ RSpec.describe 'Public Resources', type: :feature do
     end
   end
 
-  describe 'given a collection without a DOI' do
-    let(:collection) { create :collection, :with_complete_metadata, works: [work] }
-    let(:work) { build :work, has_draft: false, versions_count: 1 }
+  describe 'a collection' do
+    context 'when it does NOT have a DOI' do
+      let(:collection) { create :collection, :with_complete_metadata, works: [work] }
+      let(:work) { build :work, has_draft: false, versions_count: 1 }
 
-    it 'displays the public resource page for the collection' do
-      visit resource_path(collection.uuid)
+      it 'displays the public resource page for the collection' do
+        visit resource_path(collection.uuid)
 
-      expect(page.title).to include(collection.title)
+        expect(page.title).to include(collection.title)
 
-      # Spot check meta tags
-      expect(page.find('meta[property="og:title"]', visible: false)[:content]).to eq collection.title
-      expect(page.find('meta[property="og:description"]', visible: false)[:content]).to eq collection.description
-      # Below was failing in CI due to hostnames getting weird
-      expect(page.find('meta[property="og:url"]', visible: false)[:content])
-        .to match(resource_path(collection.uuid)).and match(/^https?:/)
-      expect(page.find('meta[name="citation_title"]', visible: false)[:content]).to eq collection.title
-      expect(page.find('meta[name="citation_publication_date"]', visible: false)[:content])
-        .to eq collection.published_date
-      all_authors = page.all(:css, 'meta[name="citation_author"]', visible: false)
-      expect(all_authors.map { |a| a[:content] }).to match_array collection.creator_aliases.map(&:alias)
+        # Spot check meta tags
+        expect(page.find('meta[property="og:title"]', visible: false)[:content]).to eq collection.title
+        expect(page.find('meta[property="og:description"]', visible: false)[:content]).to eq collection.description
+        # Below was failing in CI due to hostnames getting weird
+        expect(page.find('meta[property="og:url"]', visible: false)[:content])
+          .to match(resource_path(collection.uuid)).and match(/^https?:/)
+        expect(page.find('meta[name="citation_title"]', visible: false)[:content]).to eq collection.title
+        expect(page.find('meta[name="citation_publication_date"]', visible: false)[:content])
+          .to eq Date.edtf(collection.published_date).year.to_s
+        all_authors = page.all(:css, 'meta[name="citation_author"]', visible: false)
+        expect(all_authors.map { |a| a[:content] }).to match_array collection.creator_aliases.map(&:alias)
 
-      expect(page).to have_selector('h1', text: collection.title)
-      expect(page).to have_content collection.description
-      expect(page).to have_content work.latest_published_version.title
+        expect(page).to have_selector('h1', text: collection.title)
+        expect(page).to have_content collection.description
+        expect(page).to have_content work.latest_published_version.title
 
-      within('td.collection-title') do
-        expect(page).to have_content(collection.title)
+        within('td.collection-title') do
+          expect(page).to have_content(collection.title)
+        end
       end
     end
-  end
 
-  describe 'given a collection with a DOI' do
-    let(:collection) { create :collection, :with_complete_metadata, :with_a_doi, works: [work] }
-    let(:work) { build :work, has_draft: false, versions_count: 1 }
+    context 'when it has a DOI' do
+      let(:collection) { create :collection, :with_complete_metadata, :with_a_doi, works: [work] }
+      let(:work) { build :work, has_draft: false, versions_count: 1 }
 
-    it 'displays the public resource page for the collection' do
-      visit resource_path(collection.uuid)
+      it 'displays the public resource page for the collection' do
+        visit resource_path(collection.uuid)
 
-      expect(page).to have_selector('h1', text: collection.title)
-      expect(page).to have_content collection.description
-      expect(page).to have_content work.latest_published_version.title
+        expect(page).to have_selector('h1', text: collection.title)
+        expect(page).to have_content collection.description
+        expect(page).to have_content work.latest_published_version.title
 
-      within('td.collection-display-doi') do
-        expect(page).to have_content(collection.doi)
+        within('td.collection-display-doi') do
+          expect(page).to have_content(collection.doi)
+        end
+      end
+    end
+
+    context 'when logged in as the resource owner', with_user: :user do
+      let(:collection) { create :collection }
+      let(:user) { collection.depositor.user }
+
+      it 'displays edit controls on the resource page and allows the user to delete the collection' do
+        visit resource_path(collection.uuid)
+
+        expect(page.title).to include(collection.title)
+
+        within('header') do
+          expect(page).to have_content(I18n.t('resources.collection.edit_button'))
+          click_on I18n.t('resources.collection.delete_button')
+        end
+
+        expect(page).to have_current_path(dashboard_root_path)
+        expect(page).to have_content('Collection was successfully deleted.')
       end
     end
   end

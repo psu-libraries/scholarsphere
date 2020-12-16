@@ -1,0 +1,61 @@
+<%# @note Builds a form object when the partial is called async, such as appending new works to the collection form %>
+<% form ||= ActionView::Helpers::FormBuilder.new(
+     "collection[collection_work_memberships_attributes][#{Time.zone.now.to_i}]",
+     work_membership,
+     self,
+     {}
+   ) %>
+<%- index = form.try(:index) || 0 %>
+<%- work_version = form.object.work.latest_published_version %>
+
+<div class="nested-fields mb-3 contributor-wrapper js-work-wrapper">
+  <div class="row">
+    <div class="col-2">
+      <span class="badge badge-dark badge--outline">
+        <%= t('dashboard.form.members.badge') %>
+        <span class="badge--index"><%= index + 1 %></span>
+      </span>
+    </div>
+
+    <div class="col-8 pr-2">
+      <%= form.hidden_field :work_id %>
+      <%= form.hidden_field :position, class: 'js-position-index' %>
+      <h3>
+        <%= link_to work_version.title, resource_path(work_version.uuid) %>
+      </h3>
+      <%= render WorkVersionMetadataComponent.new(work_version: work_version, mini: true) %>
+    </div>
+
+    <div class="col-2 pl-0">
+      <%= link_to_remove_association form,
+                                     class: 'remove',
+                                     title: t('dashboard.form.members.remove', name: work_version.title),
+                                     data: { toggle: 'tooltip', placement: 'top', offset: '0,100%' } do %>
+        <span class="sr-only"><%= t('dashboard.form.members.remove', name: work_version.title) %></span>
+        <i class="material-icons" aria-hidden="true">highlight_off</i>
+      <% end %>
+
+      <%= link_to '#',
+                  class: 'move js-move-up',
+                  title: t('dashboard.form.members.move_up', name: work_version.title),
+                  data: {
+                    action: 'associations#moveUp',
+                    toggle: 'tooltip', placement: 'top', offset: '0,100%'
+                  } do %>
+        <span class="sr-only"><%= t('dashboard.form.members.move_up', name: work_version.title) %></span>
+        <i class="material-icons" aria-hidden="true">arrow_circle_up</i>
+      <% end %>
+
+      <%= link_to '#',
+                  class: 'move js-move-down',
+                  title: t('dashboard.form.members.move_down', name: work_version.title),
+                  data: {
+                    action: 'associations#moveDown',
+                    toggle: 'tooltip', placement: 'top', offset: '0,100%'
+                  } do %>
+        <span class="sr-only"><%= t('dashboard.form.members.move_down', name: work_version.title) %></span>
+        <i class="material-icons" aria-hidden="true">arrow_circle_down</i>
+      <% end %>
+    </div>
+  </div>
+</div>

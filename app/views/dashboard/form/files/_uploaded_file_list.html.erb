@@ -1,0 +1,28 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= t('dashboard.file_list.edit.name') %></th>
+      <th><%= t('dashboard.file_list.edit.mime_type') %></th>
+      <th><%= t('dashboard.file_list.edit.size') %></th>
+      <th><%= t('dashboard.file_list.edit.actions') %></th>
+    </tr>
+  </thead>
+  <tbody class="work-files__file">
+    <% file_version_memberships.each do |membership| %>
+      <tr id="<%= dom_id membership %>">
+        <td>
+          <span class="filename"><%= membership.title %></span>
+        </td>
+        <td><%= membership.mime_type %></td>
+        <td><%= number_to_human_size membership.size %></td>
+        <td>
+          <%= link_to t('dashboard.file_list.edit.delete'),
+                      dashboard_file_path(membership),
+                      method: :delete,
+                      class: 'remove',
+                      data: { confirm: 'Are you sure?' } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

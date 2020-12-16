@@ -1,0 +1,39 @@
+<div class="form-wrapper form-wrapper--wide">
+  <div class="keyline keyline--left mb-3">
+    <h4><%= t 'dashboard.form.details.about_collections.label' %></h4>
+  </div>
+</div>
+
+<div class="form-wrapper">
+  <p><%= t 'dashboard.form.details.about_collections.message' %></p>
+</div>
+
+<div class="form-wrapper form-wrapper--wide">
+  <div class="keyline keyline--left mb-3">
+    <h4><%= t 'dashboard.form.details.required_metadata' %></h4>
+  </div>
+</div>
+
+<div class="form-wrapper">
+  <%= render 'form_fields/text', form: form, attribute: :title, required: true %>
+  <%= render 'form_fields/text_area', form: form, attribute: :description, required: true %>
+</div>
+
+<div class="form-wrapper form-wrapper--wide">
+  <div class="keyline keyline--left mb-3">
+    <h4><%= t 'dashboard.form.details.additional_metadata' %></h4>
+  </div>
+</div>
+
+<div class="form-wrapper">
+  <%= render 'form_fields/text', form: form, attribute: :published_date %>
+  <%= render 'form_fields/multi_text', form: form, attribute: :keyword %>
+  <%= render 'form_fields/text', form: form, attribute: :subtitle %>
+  <%= render 'form_fields/multi_text', form: form, attribute: :publisher %>
+  <%= render 'form_fields/multi_text', form: form, attribute: :identifier %>
+  <%= render 'form_fields/multi_text', form: form, attribute: :related_url %>
+  <%= render 'form_fields/multi_text', form: form, attribute: :subject %>
+  <%= render 'form_fields/multi_text', form: form, attribute: :language %>
+  <%= render 'form_fields/multi_text', form: form, attribute: :based_near %>
+  <%= render 'form_fields/multi_text', form: form, attribute: :source %>
+</div>

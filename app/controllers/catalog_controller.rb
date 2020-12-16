@@ -9,6 +9,17 @@ class CatalogController < ApplicationController
     { current_user: current_user }
   end
 
+  def index
+    (@response, _document_list) = search_service.search_results
+
+    respond_to do |format|
+      format.html { store_preferred_view }
+      format.json do
+        @presenter = Blacklight::JsonPresenter.new(@response, blacklight_config)
+      end
+    end
+  end
+
   configure_blacklight do |config|
     ## Class for sending and receiving requests from a search index
     # config.repository_class = Blacklight::Solr::Repository

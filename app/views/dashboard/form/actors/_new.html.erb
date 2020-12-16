@@ -1,0 +1,64 @@
+<div class="modal-header">
+  <h3 class="modal-title" id="modal-label">
+    <%= t('dashboard.form.contributors.new.heading') %>
+  </h3>
+  <button type="button" class="close" data-dismiss="modal" aria-label="<%= t('blacklight.modal.close') %>">
+    <span aria-hidden="true"><%= t('modal.close.icon') %></span>
+  </button>
+</div>
+
+<%= form_with(
+      model: actor,
+      url: dashboard_form_actors_path,
+      remote: true,
+      data: {
+        controller: 'actors',
+        action: 'ajax:success->actors#success',
+        'actors-redirect' => dashboard_form_aliases_path
+      }
+    ) do |form| %>
+
+  <div class="modal-body">
+
+    <%= render FormErrorMessageComponent.new(
+          form: form,
+          heading: t('dashboard.actors.new.error_message', error: pluralize(actor.errors.count, 'error'))
+        ) %>
+
+    <%= hidden_field_tag(:work_version_id, params[:work_version_id]) %>
+
+    <div class="form-wrapper form-wrapper--wide">
+      <div class="keyline keyline--left mb-3">
+        <h4><%= t 'dashboard.actors.new.required_metadata' %></h4>
+      </div>
+    </div>
+
+    <div class="form-wrapper">
+      <%= render 'form_fields/text', form: form, attribute: :surname, required: true %>
+      <%= render 'form_fields/text',
+                 form: form,
+                 attribute: :orcid,
+                 data: { controller: 'inputmask' },
+                 required: true %>
+    </div>
+
+    <div class="form-wrapper form-wrapper--wide">
+      <div class="keyline keyline--left mb-3">
+        <h4><%= t 'dashboard.actors.new.additional_metadata' %></h4>
+      </div>
+    </div>
+
+    <div class="form-wrapper">
+      <%= render 'form_fields/text', form: form, attribute: :given_name %>
+      <%= render 'form_fields/text', form: form, attribute: :email %>
+    </div>
+
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn--rounded" data-dismiss="modal">
+      <%= t('dashboard.form.contributors.new.cancel') %>
+    </button>
+    <%= form.submit t('dashboard.actors.new.actions.save'), class: 'btn btn-primary btn--rounded' %>
+  </div>
+<% end %>

@@ -1,8 +1,9 @@
-FROM harbor.k8s.libraries.psu.edu/library/ruby-2.7.1-node-12:20201104 as base
+FROM harbor.k8s.libraries.psu.edu/library/ruby-2.7.1-node-12:20201210 as base
+ARG UID=2000
 
 COPY bin/vaultshell /usr/local/bin/
 
-RUN useradd -u 2000 app -d /app
+RUN useradd -u $UID app -d /app
 RUN mkdir /app/tmp
 RUN chown -R app /app
 USER app

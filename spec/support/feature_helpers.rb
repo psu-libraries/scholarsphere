@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative './feature_helpers/work_form'
+require_relative './feature_helpers/dashboard_form'
 
 module FeatureHelpers
   def setup_oauth(user: nil)

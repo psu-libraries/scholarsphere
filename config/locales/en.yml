@@ -46,6 +46,7 @@ en:
         subtitle: Subtitle
         keyword: Keyword
         rights: License
+        display_rights: License
         description: Description
         creator_aliases: Creators
         first_creators: Creators
@@ -186,25 +187,6 @@ en:
         options:
           heading: 'Dashboard Search Alternatives'
           browse: "Browse & Filter All Your Works"
-    collections:
-      index:
-        heading: "Your Collections"
-        new: "New Collection"
-        delete_confirm: "Are you sure you want to delete this collection? This cannot be undone."
-        delete: "Delete"
-        edit: "Edit"
-        show: "Show"
-      new:
-        heading: "Create A New Collection"
-        error_message: "%{error} prohibited this collection from being saved:"
-      edit:
-        heading: Edit %{title}
-        add_creator: 'Add another Creator'
-        breadcrumb: Edit %{title}
-        creator: Creator
-        error_message: "%{error} prohibited this collection from being saved:"
-        remove_creator: 'Remove'
-      works: 'Works'
     home:
       intro:
         heading: 'What is my dashboard?'
@@ -254,28 +236,44 @@ en:
         submit_button: Update Editors 
       update:
         success: "Work settings successfully updated."
-    work_form:
+    form: 
+      unsaved_changes_prompt: You have unsaved changes on this page. Are you sure you want to leave and discard these changes? 
       heading:
-        new: Add New Work
-        edit: Edit Draft Work
-        error_message: "%{error} prohibited this work from being saved:"
+        error_message: "%{error} prohibited this from being saved:"
+        work_version:
+          new: "Create New Work"
+          edit: "Edit Work"
+        collection:
+          new: "Create New Collection"
+          edit: "Edit Collection"
       tabs:
-        details: Work Details
+        work_version_details: Work Details
+        collection_details: Collection Details
         contributors: Contributors
         files: Files
         publish: Review & Publish
+        members: Works
       actions:
-        save_and_exit: Save as Draft & Exit
         save_and_continue: Save and Continue
         cancel: Cancel
         publish: Publish
+        finish: Finish
+        save_and_exit:
+          collection: Save and Exit
+          work_version: Save as Draft & Exit
       details:
+        about_collections: 
+          label: About Collections
+          message: >
+            Collections provide additional context for your related work. For example, a research group can use a collection to organize published reports and datasets.
         required_metadata: Required Metadata
         required_to_publish_metadata: Needed to Publish
         additional_metadata: Optional Metadata
       contributors:
         edit:
           badge: Creator
+          creator: Creator
+          remove_creator: Remove Creator
           empty_result: No results found. Choose this option to create a new creator.
           creators_heading: Creators
           contributors_heading: Additional Acknowledgments
@@ -303,7 +301,22 @@ en:
           contributors: Contributors
           files: Files
           publishing_details: Publishing Details
-      unsaved_changes_prompt: You have unsaved changes on this page. Are you sure you want to leave and discard these changes?
+      members:
+        heading: Works
+        badge: Work 
+        empty_result: No works found.
+        placeholder: "Search..."
+        reader_hint: >
+          When autocomplete results are available use up and down arrows to review and enter to select.
+          Touch device users, explore by touch or with swipe gestures.
+        remove: "Remove work %{name}"
+        move_up: "Move %{name} one position earlier"
+        move_down: "Move %{name} one position later"
+        search: >
+          You can search for works by title
+        search_heading: Add works to collection
+        search_label: Search works
+        search_results: Search Results
     work_versions:
       files:
         name: Name
@@ -428,12 +441,17 @@ en:
       create: 'Create a DOI for this work'
       confirm: 'Do you want to create a DOI? This DOI will always resolve to the most recently published version of this work.'
       disable_with: 'Creating...'
-    edit_button:
-      text: 'Edit %{version}'
-      tooltip: 'Only a draft can be edited. Create a new version to add changes to the published work.'
-    create_button:
-      text: 'Create New Version From %{version}'
-      tooltip: 'A new draft version can only be created from the latest published version. Only one draft version may exist at any time.'
+    work_version:
+      edit_button:
+        text: 'Edit %{version}'
+        tooltip: 'Only a draft can be edited. Create a new version to add changes to the published work.'
+      create_button:
+        text: 'Create New Version From %{version}'
+        tooltip: 'A new draft version can only be created from the latest published version. Only one draft version may exist at any time.'
+    collection:
+      edit_button: 'Edit'
+      delete_button: 'Delete'
+      delete_confirm: "Are you sure you want to delete this collection? This cannot be undone."
     settings_button:
       text: 'Work Settings'
   shared:

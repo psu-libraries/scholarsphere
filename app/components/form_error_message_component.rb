@@ -22,6 +22,6 @@ class FormErrorMessageComponent < ApplicationComponent
   end
 
   def default_heading
-    I18n.t('dashboard.work_form.heading.error_message', error: pluralize(errors.count, 'error'))
+    I18n.t('dashboard.form.heading.error_message', error: pluralize(errors.count, 'error'))
   end
 end

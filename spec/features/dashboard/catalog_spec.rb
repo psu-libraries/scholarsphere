@@ -6,7 +6,7 @@ RSpec.describe 'Dashboard catalog page', :inline_jobs do
   let(:user) { create(:user) }
   let(:outsider) { create(:user) }
 
-  context 'when the user has NO deposited works' do
+  context 'when the user has NO deposited works or collections' do
     it 'displays an informational page to the user', with_user: :user do
       visit(dashboard_root_path)
       expect(page.title).to eq('ScholarSphere')
@@ -24,8 +24,6 @@ RSpec.describe 'Dashboard catalog page', :inline_jobs do
         .where(depositor: user.actor)
         .map(&:latest_version)
         .compact
-        .sort_by!(&:updated_at)
-        .reverse
     end
 
     let(:title_cards) do
@@ -48,17 +46,50 @@ RSpec.describe 'Dashboard catalog page', :inline_jobs do
 
       expect(page).to have_content("1 - #{work_versions.count} of #{work_versions.count}")
 
-      # Ensure most recently updated work version is listed first
-      expect(page.first('.card-title').text).to eq(work_versions.first.title)
+      expect(page.find_all('.card-title').map(&:text)).to contain_exactly(*work_versions.map(&:title))
 
       click_link(work_versions.first.title)
       expect(page).to have_content(work_versions.first.title)
     end
   end
 
-  context 'when the user has only editable works, and none that they own or have deposited' do
+  context 'when the user has collections' do
+    let(:collections) do
+      Collection.where(depositor: user.actor)
+    end
+
+    let(:title_cards) do
+      page.find_all('.card-title')
+    end
+
+    before do
+      Array.new(10).map do
+        FactoryBot.create(:collection, depositor: user.actor)
+      end
+
+      Array.new(10).map do
+        FactoryBot.create(:collection, depositor: outsider.actor)
+      end
+    end
+
+    it "displays the depositor's collections", with_user: :user do
+      visit(dashboard_root_path)
+      click_link('100 per page')
+
+      expect(page).to have_content("1 - #{collections.count} of #{collections.count}")
+
+      expect(page.find_all('.card-title').map(&:text)).to contain_exactly(*collections.map(&:title))
+
+      click_link(collections.first.title)
+      expect(page).to have_content(collections.first.title)
+    end
+  end
+
+  context 'when the user has only editable works and collections, none of which they created' do
     let!(:restricted_work) { create(:work, has_draft: true, depositor: outsider.actor) }
+    let!(:restricted_collection) { create(:collection, depositor: outsider.actor) }
     let!(:editable_work) { create(:work, has_draft: true, depositor: outsider.actor, edit_users: [user]) }
+    let!(:editable_collection) { create(:collection, depositor: outsider.actor, edit_users: [user]) }
 
     it "displays the user's editable works", with_user: :user do
       visit(dashboard_root_path)
@@ -68,8 +99,12 @@ RSpec.describe 'Dashboard catalog page', :inline_jobs do
       expect(page).not_to have_text('What is my dashboard?')
       expect(page).not_to have_text('Get Started')
 
-      expect(page.first('.card-title').text).to eq(editable_work.versions.first.title)
+      expect(page.find_all('.card-title').map(&:text)).to contain_exactly(
+        editable_work.versions.first.title,
+        editable_collection.title
+      )
       expect(page).not_to have_text(restricted_work.versions.first.title)
+      expect(page).not_to have_text(restricted_collection.title)
       click_link(editable_work.versions.first.title)
       expect(page).to have_link('Edit V1')
     end

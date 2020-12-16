@@ -1,0 +1,43 @@
+<div class="form-wrapper form-wrapper--wide">
+  <div class="keyline keyline--left mb-3">
+    <h4><%= t 'dashboard.form.details.required_metadata' %></h4>
+  </div>
+</div>
+
+<div class="form-wrapper">
+  <%= render 'form_fields/text', form: form, attribute: :title, required: true %>
+
+  <%= form.fields_for :work do |work_form| %>
+    <%= render 'form_fields/select', form: work_form, attribute: :work_type, options_for_select: Work::Types.options_for_select_box %>
+  <% end %>
+</div>
+
+<div class="form-wrapper form-wrapper--wide">
+  <div class="keyline keyline--left mb-3">
+    <h4><%= t 'dashboard.form.details.required_to_publish_metadata' %></h4>
+  </div>
+</div>
+
+<div class="form-wrapper">
+  <%= render 'form_fields/text_area', form: form, attribute: :description %>
+  <%= render 'form_fields/text', form: form, attribute: :published_date %>
+  <%= render 'form_fields/multi_text', form: form, attribute: :keyword %>
+</div>
+
+<div class="form-wrapper form-wrapper--wide">
+  <div class="keyline keyline--left mb-3">
+    <h4><%= t 'dashboard.form.details.additional_metadata' %></h4>
+  </div>
+</div>
+
+<div class="form-wrapper">
+  <%= render 'form_fields/text', form: form, attribute: :subtitle %>
+  <%= render 'form_fields/multi_text', form: form, attribute: :publisher %>
+  <%= render 'form_fields/multi_text', form: form, attribute: :identifier %>
+  <%= render 'form_fields/multi_text', form: form, attribute: :related_url %>
+  <%= render 'form_fields/multi_text', form: form, attribute: :subject %>
+  <%= render 'form_fields/multi_text', form: form, attribute: :language %>
+  <%= render 'form_fields/multi_text', form: form, attribute: :based_near %>
+  <%= render 'form_fields/multi_text', form: form, attribute: :source %>
+  <%= render 'form_fields/text', form: form, attribute: :version_name %>
+</div>

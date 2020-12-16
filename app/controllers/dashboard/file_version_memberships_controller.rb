@@ -13,7 +13,7 @@ module Dashboard
       if @file_version.update(file_version_params)
         respond_to do |format|
           format.html do
-            redirect_to dashboard_work_form_files_path(@work_version),
+            redirect_to dashboard_form_files_path(@work_version),
                         notice: 'File was successfully updated.'
           end
           format.json { render json: @file_version }
@@ -31,7 +31,7 @@ module Dashboard
       @file_version.destroy
       respond_to do |format|
         format.html do
-          redirect_to dashboard_work_form_files_path(@work_version),
+          redirect_to dashboard_form_files_path(@work_version),
                       notice: 'Work version was successfully destroyed.'
         end
         format.json { head :no_content }

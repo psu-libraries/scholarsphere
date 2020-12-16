@@ -9,13 +9,13 @@ RSpec.describe 'Setting visibility in the dashboard', with_user: :user do
     let(:work_version) { create :work_version, :able_to_be_published }
 
     it 'sets the visibility to Penn State' do
-      visit dashboard_work_form_publish_path(work_version)
+      visit dashboard_form_publish_path(work_version)
 
       expect(find_field('Public')).to be_checked
 
       choose "work_version_work_attributes_visibility_#{Permissions::Visibility::AUTHORIZED}"
       check 'work_version_depositor_agreement'
-      FeatureHelpers::WorkForm.publish
+      FeatureHelpers::DashboardForm.publish
 
       work = Work.last
       expect(work).to be_authorized_access
@@ -26,13 +26,13 @@ RSpec.describe 'Setting visibility in the dashboard', with_user: :user do
     let(:work_version) { create :work_version, :able_to_be_published, work: create(:work, :with_authorized_access) }
 
     it 'sets the visibility to public' do
-      visit dashboard_work_form_publish_path(work_version)
+      visit dashboard_form_publish_path(work_version)
 
       expect(find_field('Penn State Only')).to be_checked
 
       choose "work_version_work_attributes_visibility_#{Permissions::Visibility::OPEN}"
       check 'work_version_depositor_agreement'
-      FeatureHelpers::WorkForm.publish
+      FeatureHelpers::DashboardForm.publish
 
       work = Work.last
       expect(work).to be_open_access
@@ -43,14 +43,14 @@ RSpec.describe 'Setting visibility in the dashboard', with_user: :user do
     let(:work_version) { create :work_version, :able_to_be_published, work: create(:work, :with_no_access) }
 
     it 'sets the visibility to public' do
-      visit dashboard_work_form_publish_path(work_version)
+      visit dashboard_form_publish_path(work_version)
 
       expect(find_field('Penn State Only')).not_to be_checked
       expect(find_field('Public')).not_to be_checked
 
       choose "work_version_work_attributes_visibility_#{Permissions::Visibility::AUTHORIZED}"
       check 'work_version_depositor_agreement'
-      FeatureHelpers::WorkForm.publish
+      FeatureHelpers::DashboardForm.publish
 
       work = Work.last
       expect(work).to be_authorized_access
@@ -61,14 +61,14 @@ RSpec.describe 'Setting visibility in the dashboard', with_user: :user do
     let(:work_version) { create :work_version, :able_to_be_published, work: create(:work, :with_no_access) }
 
     it 'sets the visibility to public' do
-      visit dashboard_work_form_publish_path(work_version)
+      visit dashboard_form_publish_path(work_version)
 
       expect(find_field('Penn State Only')).not_to be_checked
       expect(find_field('Public')).not_to be_checked
 
       choose "work_version_work_attributes_visibility_#{Permissions::Visibility::OPEN}"
       check 'work_version_depositor_agreement'
-      FeatureHelpers::WorkForm.publish
+      FeatureHelpers::DashboardForm.publish
 
       work = Work.last
       expect(work).to be_open_access
@@ -79,13 +79,13 @@ RSpec.describe 'Setting visibility in the dashboard', with_user: :user do
     let(:work_version) { create :work_version, :able_to_be_published, work: create(:work, :with_no_access) }
 
     it 'sets the visibility to public' do
-      visit dashboard_work_form_publish_path(work_version)
+      visit dashboard_form_publish_path(work_version)
 
       expect(find_field('Penn State Only')).not_to be_checked
       expect(find_field('Public')).not_to be_checked
 
       check 'work_version_depositor_agreement'
-      FeatureHelpers::WorkForm.publish
+      FeatureHelpers::DashboardForm.publish
 
       within('#error_explanation') do
         expect(page).to have_content('Access cannot be private')

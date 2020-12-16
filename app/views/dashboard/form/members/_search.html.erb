@@ -1,0 +1,37 @@
+<div class="row row--md-reduce">
+  <div class="col-10 offset-2">
+    <div class="form-wrapper form-wrapper--wide">
+      <div class="keyline keyline--left mb-3">
+        <h4><%= t('dashboard.form.members.search_heading') %></h4>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row row--md-reduce">
+  <div class="col-10 offset-2">
+    <div class="form-group" data-controller="search-works">
+
+      <select id="search-works"
+              class="form-control"
+              data-target="search-works.field"
+              aria-describedby="search-works-description">
+
+        <option></option>
+        <%- @member_works.documents.map do |doc| %>
+          <option value="<%= doc.work_id %>"><%= doc.title %></option>
+        <% end %>
+      </select>
+
+      <label for="search-works" class="sr-only">
+        <%= t('dashboard.form.members.search_label') %>
+      </label>
+      <small id="search-works-description" class="form-text text-muted">
+        <%= t('dashboard.form.members.search') %>
+        <span class="sr-only">
+          <%= t('dashboard.form.members.reader_hint') %>
+        </span>
+      </small>
+    </div>
+  </div>
+</div>

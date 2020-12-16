@@ -1,8 +1,0 @@
-<%= form_with(model: @work_version, url: url, local: true, data: { target: 'unsaved-changes.form' }) do |form| %>
-
-  <%= render FormErrorMessageComponent.new(form: form) %>
-
-  <%= render 'fields', form: form %>
-
-  <%= render 'dashboard/work_form/shared/action_footer', form: form, publish: false %>
-<% end %>

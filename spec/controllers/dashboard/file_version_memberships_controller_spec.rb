@@ -56,7 +56,7 @@ RSpec.describe Dashboard::FileVersionMembershipsController, type: :controller do
 
         before { perform_request }
 
-        it { is_expected.to redirect_to dashboard_work_form_files_path(work_version) }
+        it { is_expected.to redirect_to dashboard_form_files_path(work_version) }
       end
 
       context 'with invalid params' do
@@ -90,7 +90,7 @@ RSpec.describe Dashboard::FileVersionMembershipsController, type: :controller do
       context 'when requesting a file on a DRAFT version of my own work' do
         before { perform_request }
 
-        it { is_expected.to redirect_to dashboard_work_form_files_path(work_version) }
+        it { is_expected.to redirect_to dashboard_form_files_path(work_version) }
       end
 
       context 'when requesting a file on a PUBLISHED version of my own work' do

@@ -3,8 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe Collection, type: :model do
-  it_behaves_like 'an indexable resource'
-
   it_behaves_like 'a resource with permissions' do
     let(:factory_name) { :collection }
   end
@@ -239,22 +237,22 @@ RSpec.describe Collection, type: :model do
 
     # I've heard it's bad practice to mock the object under test, but I can't
     # think of a better way to do this without testing the contents of
-    # update_index_async twice.
+    # perform_update_index twice.
 
-    it 'calls #update_index_async' do
-      allow(collection).to receive(:update_index_async)
+    it 'calls #perform_update_index' do
+      allow(collection).to receive(:perform_update_index)
       collection.save!
-      expect(collection).to have_received(:update_index_async)
+      expect(collection).to have_received(:perform_update_index)
     end
   end
 
-  describe '#update_index_async' do
+  describe '#perform_update_index' do
     let(:collection) { described_class.new }
 
     before { allow(SolrIndexingJob).to receive(:perform_later) }
 
     it 'provides itself to SolrIndexingJob.perform_later' do
-      collection.update_index_async
+      collection.send(:perform_update_index)
       expect(SolrIndexingJob).to have_received(:perform_later).with(collection)
     end
   end
@@ -291,11 +289,17 @@ RSpec.describe Collection, type: :model do
   describe 'after destroy' do
     let(:collection) { create(:collection) }
 
-    before { allow(SolrDeleteJob).to receive(:perform_later) }
+    before { allow(SolrDeleteJob).to receive(:perform_now) }
 
     it 'removes the collection from the index' do
       collection.destroy
-      expect(SolrDeleteJob).to have_received(:perform_later).with(collection.uuid)
+      expect(SolrDeleteJob).to have_received(:perform_now).with(collection.uuid)
     end
+  end
+
+  describe '#creators' do
+    let(:resource) { create(:collection, :with_creators, creator_count: 2) }
+
+    it_behaves_like 'a resource with orderable creators'
   end
 end

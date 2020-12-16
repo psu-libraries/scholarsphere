@@ -94,27 +94,45 @@ Rails.application.routes.draw do
       end
     end
 
-    namespace :work_form, path: 'work-form' do # @todo change `path:` key once all of dashboard is converted
-      get   'new', to: 'details#new'
-      post  '/', to: 'details#create'
+    namespace :form do
+      scope 'work_versions' do
+        get   'new', to: 'work_version_details#new', as: 'work_versions'
+        match 'new', to: 'work_version_details#create', via: :post, as: nil
 
-      get   ':work_version_id/details', to: 'details#edit', as: 'details'
-      match ':work_version_id/details', to: 'details#update', via: %i[patch put], as: nil
+        get   ':id/details', to: 'work_version_details#edit', as: 'work_version_details'
+        match ':id/details', to: 'work_version_details#update', via: %i[patch put], as: nil
 
-      get   ':work_version_id/contributors', to: 'contributors#edit', as: 'contributors'
-      match ':work_version_id/contributors', to: 'contributors#update', via: %i[patch put], as: nil
+        get   ':id/files', to: 'files#edit', as: 'files'
+        match ':id/files', to: 'files#update', via: %i[patch put], as: nil
 
-      get   ':work_version_id/files', to: 'files#edit', as: 'files'
-      match ':work_version_id/files', to: 'files#update', via: %i[patch put], as: nil
+        get   ':id/publish', to: 'publish#edit', as: 'publish'
+        match ':id/publish', to: 'publish#update', via: %i[patch put], as: nil
+      end
 
-      get   ':work_version_id/publish', to: 'publish#edit', as: 'publish'
-      match ':work_version_id/publish', to: 'publish#update', via: %i[patch put], as: nil
+      scope 'collections' do
+        get   'new', to: 'collection_details#new', as: 'collections'
+        match 'new', to: 'collection_details#create', via: :post, as: nil
 
-      post 'aliases/new', to: 'aliases#new'
+        get   ':id/details', to: 'collection_details#edit', as: 'collection_details'
+        match ':id/details', to: 'collection_details#update', via: %i[patch put], as: nil
+        match ':id/details', to: 'collection_details#destroy', via: :delete, as: nil
+
+        get   ':id/members', to: 'members#edit', as: 'members'
+        match ':id/members', to: 'members#update', via: %i[patch put], as: nil
+
+        post ':id/work_memberships/new', to: 'work_memberships#new', as: 'collection_memberships'
+      end
+
+      # Routes common to both work versions and collections
+
+      get   ':resource_klass/:id/contributors', to: 'contributors#edit', as: 'contributors'
+      match ':resource_klass/:id/contributors', to: 'contributors#update', via: %i[patch put], as: nil
+
+      get   ':resource_klass/:id/actors/new', to: 'actors#new', as: 'actors'
+      match ':resource_klass/:id/actors/new', to: 'actors#create', via: :post, as: nil
+
+      post ':resource_klass/:id/aliases/new', to: 'aliases#new', as: 'aliases'
     end
-
-    resources :collections
-    resources :actors, only: [:new, :create]
   end
 
   namespace :api do

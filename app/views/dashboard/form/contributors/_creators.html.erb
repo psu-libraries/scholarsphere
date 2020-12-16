@@ -1,0 +1,19 @@
+<% klass = local_assigns.fetch(:resource_klass, params[:resource_klass]) %>
+
+<div class="form-wrapper form-wrapper--wide">
+  <div class="keyline keyline--left mb-3">
+    <h4><%= t('dashboard.form.contributors.edit.creators_heading') %></h4>
+  </div>
+</div>
+
+<div id="creator_aliases"
+     data-controller="associations"
+     data-associations-new="<%= dashboard_form_actors_path(resource_klass: klass) %>"
+     data-associations-post="<%= dashboard_form_aliases_path(resource_klass: klass) %>"
+     data-associations-wrapper-class="js-contributor-wrapper"
+     data-associations-badge-class="badge--index"
+     data-associations-position-class="js-position-index">
+  <%= form.fields_for :creator_aliases do |creator_alias| %>
+    <%= render 'dashboard/form/contributors/creator_alias_fields', form: creator_alias %>
+  <% end %>
+</div>
