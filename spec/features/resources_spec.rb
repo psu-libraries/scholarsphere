@@ -128,11 +128,6 @@ RSpec.describe 'Public Resources', type: :feature do
         # Below was failing in CI due to hostnames getting weird
         expect(page.find('meta[property="og:url"]', visible: false)[:content])
           .to match(resource_path(collection.uuid)).and match(/^https?:/)
-        expect(page.find('meta[name="citation_title"]', visible: false)[:content]).to eq collection.title
-        expect(page.find('meta[name="citation_publication_date"]', visible: false)[:content])
-          .to eq Date.edtf(collection.published_date).year.to_s
-        all_authors = page.all(:css, 'meta[name="citation_author"]', visible: false)
-        expect(all_authors.map { |a| a[:content] }).to match_array collection.creator_aliases.map(&:alias)
 
         expect(page).to have_selector('h1', text: collection.title)
         expect(page).to have_content collection.description
