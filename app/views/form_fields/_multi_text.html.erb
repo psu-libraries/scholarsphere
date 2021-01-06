@@ -1,12 +1,22 @@
 <% terms = form.object.send(attribute).empty? ? [''] : form.object.send(attribute) %>
+<%- field_id = form_field_id(form, attribute) %>
+<%- hint_id = "#{field_id}-hint" %>
+<%- hint_i18n_key = ['helpers', 'hint', form.object.class.model_name.i18n_key, attribute].join('.') %>
+<%- has_hint = I18n.exists?(hint_i18n_key) %>
 
-<div class="mb-3" data-controller="multiple-fields">
-  <% terms.each_with_index do |term, index| %>
-    <div class="removable-input js-multiple-field-group mb-1">
-      <label class="has-float-label">
-        <%= form.text_field attribute, multiple: true, placeholder: true, value: term, class: 'form-control' %>
-        <span><%= form.object.class.human_attribute_name(attribute) %></span>
-      </label>
-    </div>
+<div class="mb-3">
+  <div data-controller="multiple-fields">
+    <% terms.each_with_index do |term, index| %>
+      <div class="removable-input js-multiple-field-group mb-1">
+        <label class="has-float-label">
+          <%= form.text_field attribute, multiple: true, placeholder: true, value: term, class: 'form-control' %>
+          <span><%= form.object.class.human_attribute_name(attribute) %></span>
+        </label>
+      </div>
+    <% end %>
+  </div>
+
+  <% if has_hint %>
+    <small id="<%= hint_id %>" class="form-text text-muted"><%= t hint_i18n_key %></small>
   <% end %>
 </div>

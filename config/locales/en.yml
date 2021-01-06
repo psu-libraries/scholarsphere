@@ -144,6 +144,8 @@ en:
     copyright_statement: 'Copyright © 2020 The Pennsylvania State University'
   helpers:
     hint:
+      editors_form:
+        edit_users: Requires the user's Penn State Access ID (e.g., xyz500)
       permissions:
         visibility:
           authenticated: 'By choosing Penn State Only, files can only be accessed by users with a Penn State Access ID.'
@@ -234,6 +236,8 @@ en:
         heading: Editors
         explanation: Gives the ability for other users from Penn State to edit your work. This can be done on a per-user basis, or a group basis.
         submit_button: Update Editors 
+        not_found: "User %{access_id} could not be found"
+        unexpected: "%{access_id} is not a valid user"
       update:
         success: "Work settings successfully updated."
     form: 

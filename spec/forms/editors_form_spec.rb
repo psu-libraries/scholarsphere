@@ -79,7 +79,7 @@ RSpec.describe EditorsForm, type: :model do
 
     context 'when the user does NOT exist' do
       let(:params) { { 'edit_users' => [access_id] } }
-      let(:access_id) { 'we-aint-penn-state' }
+      let(:access_id) { build(:user).uid }
 
       before { allow(UserRegistrationService).to receive(:call).with(uid: access_id).and_return(nil) }
 
@@ -87,7 +87,36 @@ RSpec.describe EditorsForm, type: :model do
         expect(work.edit_users).to be_empty
         form.save
         expect(work.edit_users).to be_empty
-        expect(form.errors.full_messages).to contain_exactly("Edit users #{access_id} does not exist")
+        expect(form.errors.full_messages).to contain_exactly(
+          'Edit users ' + I18n.t('dashboard.works.editors.not_found', access_id: access_id)
+        )
+      end
+    end
+
+    context 'when the service returns URI::InvalidURIError' do
+      let(:params) { { 'edit_users' => [access_id] } }
+      let(:access_id) { build(:user).email }
+
+      before { allow(UserRegistrationService).to receive(:call).with(uid: access_id).and_raise(URI::InvalidURIError) }
+
+      it 'does not add the user and reports an error' do
+        expect(work.edit_users).to be_empty
+        form.save
+        expect(work.edit_users).to be_empty
+        expect(form.errors.full_messages).to contain_exactly(
+          'Edit users ' + I18n.t('dashboard.works.editors.unexpected', access_id: access_id)
+        )
+      end
+    end
+
+    context 'when the service returns an unexpected error' do
+      let(:params) { { 'edit_users' => [access_id] } }
+      let(:access_id) { build(:user).email }
+
+      before { allow(UserRegistrationService).to receive(:call).with(uid: access_id).and_raise(StandardError, 'oops!') }
+
+      it 'raises the error' do
+        expect { form.save }.to raise_error(StandardError, 'oops!')
       end
     end
 
