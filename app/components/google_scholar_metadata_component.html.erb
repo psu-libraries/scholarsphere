@@ -1,0 +1,9 @@
+<!-- Google Scholar metadata -->
+<meta name="citation_title" content="<%= title %>">
+<%- citation_authors.each do |author| %>
+  <meta name="citation_author" content="<%= author %>">
+<%- end %>
+<meta name="citation_publication_date" content="<%= citation_publication_date %>">
+<%- file_resources.each do |file| %>
+  <meta name="citation_pdf_url" content="<%= resource_download_url(file.id, resource_id: resource.uuid) %>">
+<%- end %>
