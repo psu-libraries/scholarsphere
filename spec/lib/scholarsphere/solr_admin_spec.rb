@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Scholarsphere::SolrAdmin do
+RSpec.describe Scholarsphere::SolrAdmin, skip: ci_build? do
   subject(:admin) { described_class.new(config) }
 
   let(:config) { Scholarsphere::SolrConfig.new }
