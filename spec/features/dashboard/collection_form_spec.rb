@@ -35,7 +35,7 @@ RSpec.describe 'Creating and editing collections', :inline_jobs, with_user: :use
     end
   end
 
-  context 'when creating a collection with complete metadata and member works' do
+  context 'when creating a collection with complete metadata and member works', :vcr do
     let!(:published_work) { create(:work, has_draft: false, depositor: actor) }
     let!(:proxy_work) { create(:work, has_draft: false, proxy_depositor: actor) }
     let!(:edit_work) { create(:work, has_draft: false, edit_users: [user]) }

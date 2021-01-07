@@ -182,7 +182,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       end
     end
 
-    context 'when adding additional users from Penn State' do
+    context 'when adding additional users from Penn State', :vcr do
       it 'inserts the Penn State person as a creator into the form' do
         visit dashboard_form_contributors_path('work_version', work_version)
 
@@ -216,8 +216,9 @@ RSpec.describe 'Publishing a work', with_user: :user do
       end
     end
 
-    context 'when add existing actors from Scholarsphere' do
-      let!(:actor) { create(:actor) }
+    context 'when add existing actors from Scholarsphere', :vcr do
+      # Use a fixed surname so we can record a consistent VCR response from Penn State's identity service
+      let!(:actor) { create(:actor, surname: 'Doofus') }
 
       it 'inserts the local Scholarsphere actor as a creator into the form' do
         visit dashboard_form_contributors_path('work_version', work_version)
@@ -250,7 +251,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       end
     end
 
-    context 'when the creator is not found' do
+    context 'when the creator is not found', :vcr do
       let(:metadata) { attributes_for(:actor) }
 
       it 'creates a new one and enters it into the form' do
@@ -297,7 +298,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       end
     end
 
-    context 'when providing an incorrect ORCiD id' do
+    context 'when providing an incorrect ORCiD id', :vcr do
       let(:metadata) { attributes_for(:actor) }
 
       it 'prevents the actor from being added' do
