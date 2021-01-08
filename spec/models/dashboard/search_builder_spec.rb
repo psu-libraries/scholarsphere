@@ -13,7 +13,7 @@ RSpec.describe Dashboard::SearchBuilder do
     its(:default_processor_chain) do
       is_expected.to include(
         :log_solr_parameters,
-        :search_only_latest_work_versions,
+        :main_query,
         :apply_gated_edit
       )
     end

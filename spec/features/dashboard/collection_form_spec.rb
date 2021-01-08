@@ -37,15 +37,13 @@ RSpec.describe 'Creating and editing collections', :inline_jobs, with_user: :use
 
   context 'when creating a collection with complete metadata and member works', :vcr do
     let!(:published_work) { create(:work, has_draft: false, depositor: actor) }
+    let!(:published_work_with_draft) { create(:work, has_draft: true, versions_count: 3, depositor: actor) }
     let!(:proxy_work) { create(:work, has_draft: false, proxy_depositor: actor) }
     let!(:edit_work) { create(:work, has_draft: false, edit_users: [user]) }
+    let!(:draft_work) { create(:work, depositor: actor) }
+    let!(:other_work) { create(:work, has_draft: false, depositor: another_user.actor) }
 
     let(:another_user) { create(:user) }
-
-    before do
-      create(:work, depositor: actor)
-      create(:work, has_draft: false, depositor: another_user.actor)
-    end
 
     it 'steps through each tab of the form until the collection is complete', js: true do
       initial_collection_count = Collection.count
@@ -128,12 +126,12 @@ RSpec.describe 'Creating and editing collections', :inline_jobs, with_user: :use
       expect(page).to have_current_path(dashboard_form_members_path(new_collection))
 
       within('#search-works') do
-        expect(page.find_all('option').map(&:value)).to contain_exactly(
-          '',
-          published_work.id.to_s,
-          proxy_work.id.to_s,
-          edit_work.id.to_s
-        )
+        expect(page.find_all('option').map(&:value)).to include(published_work.id.to_s)
+        expect(page.find_all('option').map(&:value)).to include(published_work_with_draft.id.to_s)
+        expect(page.find_all('option').map(&:value)).to include(proxy_work.id.to_s)
+        expect(page.find_all('option').map(&:value)).to include(edit_work.id.to_s)
+        expect(page.find_all('option').map(&:value)).not_to include(draft_work.id.to_s)
+        expect(page.find_all('option').map(&:value)).not_to include(other_work.id.to_s)
       end
 
       FeatureHelpers::DashboardForm.select_work(published_work.latest_published_version.title)

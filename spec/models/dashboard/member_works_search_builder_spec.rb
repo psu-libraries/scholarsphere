@@ -13,9 +13,8 @@ RSpec.describe Dashboard::MemberWorksSearchBuilder do
     its(:default_processor_chain) do
       is_expected.to include(
         :log_solr_parameters,
-        :search_only_latest_work_versions,
         :apply_gated_edit,
-        :build_member_works_query
+        :main_query
       )
     end
   end
@@ -25,7 +24,7 @@ RSpec.describe Dashboard::MemberWorksSearchBuilder do
 
     it 'searches only published work versions' do
       expect(parameters['fq']).to include(
-        '({!terms f=aasm_state_tesim}published)'
+        '{!terms f=model_ssi}Work'
       )
     end
   end
