@@ -157,44 +157,4 @@ RSpec.describe ResourceDecorator do
       its(:first_creators) { is_expected.to eq(resource.creator_aliases.take(3) + ['&hellip;']) }
     end
   end
-
-  describe '#published_date_or_deposited_year' do
-    subject { decorator.published_date_or_deposited_year }
-
-    context 'when a work version has a missing published date' do
-      let(:resource) { build(:work_version, published_date: nil) }
-
-      it { is_expected.to eq(resource.deposited_at.year) }
-    end
-
-    context 'when a work version has invalid EDTF' do
-      let(:resource) { build(:work_version, published_date: 'Last Thursday') }
-
-      it { is_expected.to eq(resource.deposited_at.year) }
-    end
-
-    context 'when a work verison has valid EDTF' do
-      let(:resource) { build(:work_version, :able_to_be_published) }
-
-      it { is_expected.to eq Date.edtf(resource.published_date).year }
-    end
-
-    context 'when a work version has valid EDTF but an uncertain year' do
-      let(:resource) { build(:work_version, published_date: '2002?-12') }
-
-      it { is_expected.to eq(2002) }
-    end
-
-    context 'when a collection has a published date' do
-      let(:resource) { build(:collection, :with_complete_metadata) }
-
-      it { is_expected.to eq Date.edtf(resource.published_date).year }
-    end
-
-    context 'when a collection does NOT have a published date' do
-      let(:resource) { build(:collection) }
-
-      it { is_expected.to eq(resource.deposited_at.year) }
-    end
-  end
 end

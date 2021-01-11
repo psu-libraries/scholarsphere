@@ -8,9 +8,4 @@
 <meta property="og:description" content="<%= resource.description %>">
 <meta property="og:url" content="<%= resource_url(uuid) %>">
 
-<!-- Google Scholar metadata -->
-<meta name="citation_title" content="<%= resource.title %>">
-<%- resource.creator_aliases.each do |creator_alias| %>
-  <meta name="citation_author" content="<%= creator_alias.alias %>">
-<%- end %>
-<meta name="citation_publication_date" content="<%= resource.published_date_or_deposited_year %>">
+<%= render GoogleScholarMetadataComponent.new(resource: resource, policy: policy(resource)) %>

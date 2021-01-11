@@ -5,12 +5,12 @@ module Dashboard
     include Blacklight::Solr::SearchBuilderBehavior
 
     self.default_processor_chain += %i(
-      search_only_latest_work_versions
+      main_query
       apply_gated_edit
       log_solr_parameters
     )
 
-    def search_only_latest_work_versions(solr_parameters)
+    def main_query(solr_parameters)
       solr_parameters[:fq] ||= []
       latest_work_versions = '({!terms f=model_ssi}WorkVersion AND {!terms f=latest_version_bsi}true})'
       collections = '({!terms f=model_ssi}Collection)'
