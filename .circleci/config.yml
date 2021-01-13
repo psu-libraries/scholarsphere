@@ -139,6 +139,14 @@ workflows:
               only:
                 - develop
       - deploy:
+          config_env: stage
+          requires:
+            - test-publish
+          filters:
+            branches:
+              only:
+                - main
+      - deploy:
           config_env: dev
           requires:
             - test-publish
