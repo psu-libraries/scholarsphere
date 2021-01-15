@@ -4,7 +4,9 @@ module Dashboard
   module Form
     class MembersController < BaseController
       def edit
-        @resource = Collection.find(params[:id])
+        @resource = Collection
+          .includes(collection_work_memberships: [:work])
+          .find(params[:id])
         (@member_works, _deprecated_document_list) = search_service.search_results
         authorize(@resource)
       end
