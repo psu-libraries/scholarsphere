@@ -34,10 +34,7 @@ class Collection < ApplicationRecord
   has_many :collection_work_memberships,
            dependent: :destroy
 
-  # Beware that the order clause here references the join table. You may need to
-  # account for that in your `includes` or `eager_load` statements
   has_many :works,
-           -> { order('collection_work_memberships.position ASC') },
            through: :collection_work_memberships,
            inverse_of: :collections
 
