@@ -141,6 +141,7 @@ Rails.application.routes.draw do
       resources :collections, only: [:create]
       resources :files, only: [:update]
       resources :featured_resources, only: [:create]
+      resources :uploads, only: [:create]
     end
   end
 
