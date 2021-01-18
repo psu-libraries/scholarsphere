@@ -20,7 +20,13 @@ module Api
         end
       end
 
+      # @note This is called before #authenticate_request! so we must check for a null token. We're returning a guest
+      # user to avoid any possible NillClass errors down the line. Public access to the API is not supported so this
+      # user will never be used. If this changes, however, we should probably create a default, public-level
+      # application.
       def current_user
+        return User.guest unless api_token
+
         api_token.application
       end
 
