@@ -26,6 +26,7 @@ class BuildNewWorkVersion
       new_version.creator_aliases.build(
         actor_id: previous_creation.actor_id,
         alias: previous_creation.alias,
+        position: previous_creation.position,
         changed_by_system: true # mute papertrail for this change
       )
     end
