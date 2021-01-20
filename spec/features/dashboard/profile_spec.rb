@@ -14,7 +14,7 @@ RSpec.describe 'Profile', type: :feature, with_user: :user do
       expect(page).to have_content('Edit Profile')
       fill_in 'Display Name', with: updated_display_name
       fill_in 'Given Name', with: attributes[:given_name]
-      fill_in 'Surname', with: attributes[:surname]
+      fill_in 'Family Name', with: attributes[:surname]
       fill_in 'Email', with: attributes[:email]
       fill_in 'ORCiD', with: attributes[:orcid]
       expect(page).not_to have_content('Administrative privileges enabled')

@@ -86,7 +86,7 @@ RSpec.describe 'Creating and editing collections', :inline_jobs, with_user: :use
         expect(page).to have_content('CREATOR 1')
         expect(find_field('Display Name').value).to eq("#{actor.given_name} #{actor.surname}")
         expect(page).to have_content('Given Name')
-        expect(page).to have_content('Surname')
+        expect(page).to have_content('Family Name')
         expect(page).to have_content('Email')
         expect(page).to have_content('Access Account')
         expect(page).to have_content(actor.email)
