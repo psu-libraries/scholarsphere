@@ -9,6 +9,7 @@ en:
         default_alias: Display Name
         orcid: ORCiD
         given_name: Given Name
+        surname: Family Name
       collection_creation:
         alias: Display Name
       collection:

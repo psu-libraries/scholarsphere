@@ -160,7 +160,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
           expect(page).to have_content('CREATOR 1')
           expect(find_field('Display Name').value).to eq("#{actor.given_name} #{actor.surname}")
           expect(page).to have_content('Given Name')
-          expect(page).to have_content('Surname')
+          expect(page).to have_content('Family Name')
           expect(page).to have_content('Email')
           expect(page).to have_content('Access Account')
           expect(page).to have_content(actor.email)
@@ -274,7 +274,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).to have_selector('.modal-body')
 
         within('.modal-content') do
-          fill_in('Surname', with: metadata[:surname])
+          fill_in('Family Name', with: metadata[:surname])
           fill_in('Given Name', with: metadata[:given_name])
           fill_in('Email', with: metadata[:email])
           fill_in('ORCiD', with: metadata[:orcid])
@@ -315,7 +315,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).to have_selector('.modal-body')
 
         within('.modal-content') do
-          fill_in('Surname', with: metadata[:surname])
+          fill_in('Family Name', with: metadata[:surname])
           fill_in('ORCiD', with: Faker::Number.leading_zero_number(digits: 15))
           click_button('Save')
         end
@@ -460,7 +460,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         actor = user.reload.actor
         expect(find_field('Display Name').value).to eq("#{actor.given_name} #{actor.surname}")
         expect(page).to have_content('Given Name')
-        expect(page).to have_content('Surname')
+        expect(page).to have_content('Family Name')
         expect(page).to have_content('Email')
         expect(page).to have_content('Access Account')
         expect(page).to have_content(actor.email)
