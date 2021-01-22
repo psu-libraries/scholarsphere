@@ -22,6 +22,11 @@ OkComputer::Registry.register(
   HealthChecks::QueueDeadSetCheck.new
 )
 
+OkComputer::Registry.register(
+  'version',
+  HealthChecks::VersionCheck.new
+)
+
 # Reports as Failed, but continues to return 200 status code.
-# This is so a POD won't get restarted just for latency checks.
-OkComputer.make_optional %w(sidekiq sidekiq_deadset)
+# This is so a POD won't get restarted just for optional checks.
+OkComputer.make_optional %w(sidekiq sidekiq_deadset version)
