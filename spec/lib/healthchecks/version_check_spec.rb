@@ -27,16 +27,10 @@ RSpec.describe HealthChecks::VersionCheck do
         ENV['APP_VERSION'] = nil
       end
 
-      it 'returns a failure' do
+      it 'writes unknown' do
         hc = described_class.new
         hc.check
-        expect(hc.failure_occurred).to be true
-      end
-
-      it 'does not write a message' do
-        hc = described_class.new
-        hc.check
-        expect(hc.message).to eq('')
+        expect(hc.message).to eq('unknown')
       end
     end
   end

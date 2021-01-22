@@ -3,8 +3,7 @@
 module HealthChecks
   class VersionCheck < OkComputer::Check
     def check
-      version = ENV.fetch('APP_VERSION', nil)
-      mark_failure unless version
+      version = ENV.fetch('APP_VERSION', 'unknown')
       mark_message version.to_s
     end
   end
