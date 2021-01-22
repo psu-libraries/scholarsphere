@@ -16,7 +16,7 @@ class Work < ApplicationRecord
              optional: true
 
   has_many :versions,
-           -> { order(created_at: :asc) },
+           -> { order(version_number: :asc) },
            class_name: 'WorkVersion',
            inverse_of: 'work',
            dependent: :destroy
