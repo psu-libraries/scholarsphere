@@ -9,11 +9,11 @@ require 'rails_helper'
 # factories between every single test run. Instead I've tried to re-use as many
 # objects as possible in a single it-block with big comments to denote each test
 
-RSpec.describe WorkHistories::CreatorAliasChangeComponent, type: :component do
+RSpec.describe WorkHistories::CreatorChangeComponent, type: :component do
   let(:user) { build_stubbed :user }
 
   describe '#initialize' do
-    it 'requires paper_trail_version to apply to a WorkVersionCreation' do
+    it 'requires paper_trail_version to apply to a Authorship' do
       expect {
         described_class.new(
           user: user,
@@ -27,11 +27,11 @@ RSpec.describe WorkHistories::CreatorAliasChangeComponent, type: :component do
     it 'renders the correct state given the paper trail version' do
       ##########################################################################
       #
-      # Context: when the WorkVersionCreation has been created
+      # Context: when the Authorship has been created
       #
       ##########################################################################
-      creator_alias = create :work_version_creation
-      paper_trail_version = creator_alias.versions.last
+      creator = create :authorship
+      paper_trail_version = creator.versions.last
       allow(paper_trail_version).to receive(:created_at)
         .and_return(Time.zone.parse('2019-12-20 14:00:00'))
       result = render_inline(described_class.new(paper_trail_version: paper_trail_version, user: user))
@@ -41,7 +41,7 @@ RSpec.describe WorkHistories::CreatorAliasChangeComponent, type: :component do
       #
       expect(result.at('li').attr('id')).to eq "change_#{paper_trail_version.id}"
       expect(result.css('.version-timeline__change--create')).to be_present
-      expect(result.css('.version-timeline__change-action').text).to include('Added').and include(creator_alias.alias)
+      expect(result.css('.version-timeline__change-action').text).to include('Added').and include(creator.display_name)
       expect(result.css('.version-timeline__change-timestamp').text).to eq 'December 20, 2019 14:00'
       expect(result.css('.version-timeline__change-user').text).to eq user.access_id
 
@@ -61,12 +61,12 @@ RSpec.describe WorkHistories::CreatorAliasChangeComponent, type: :component do
 
       ##########################################################################
       #
-      # Context: when the WorkVersionCreation has been renamed
+      # Context: when the Authorship has been renamed
       #
       ##########################################################################
-      creator_alias.update!(alias: 'Old Alias')
-      creator_alias.update!(alias: 'New Alias')
-      paper_trail_version = creator_alias.versions.last
+      creator.update!(display_name: 'Old Alias')
+      creator.update!(display_name: 'New Alias')
+      paper_trail_version = creator.versions.last
       result = render_inline(described_class.new(paper_trail_version: paper_trail_version, user: user))
 
       #
@@ -77,12 +77,12 @@ RSpec.describe WorkHistories::CreatorAliasChangeComponent, type: :component do
 
       ##########################################################################
       #
-      # Context: when the WorkVersionCreation has been destroyed
+      # Context: when the Authorship has been destroyed
       #
       ##########################################################################
-      creator_alias.update!(alias: 'Destroy Test')
-      creator_alias.destroy
-      paper_trail_version = creator_alias.versions.last
+      creator.update!(display_name: 'Destroy Test')
+      creator.destroy
+      paper_trail_version = creator.versions.last
       result = render_inline(described_class.new(paper_trail_version: paper_trail_version, user: user))
 
       #

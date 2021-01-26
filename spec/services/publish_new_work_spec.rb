@@ -27,9 +27,9 @@ RSpec.describe PublishNewWork do
       described_class.call(
         metadata: HashWithIndifferentAccess.new(work.metadata.merge(
                                                   work_type: 'dataset',
-                                                  creator_aliases_attributes: [
+                                                  creators_attributes: [
                                                     {
-                                                      alias: user.name,
+                                                      display_name: user.name,
                                                       actor_attributes: {
                                                         email: user.email,
                                                         given_name: user.actor.given_name,
@@ -73,9 +73,9 @@ RSpec.describe PublishNewWork do
       described_class.call(
         metadata: HashWithIndifferentAccess.new(work.metadata.merge(
                                                   work_type: 'dataset',
-                                                  creator_aliases_attributes: [
+                                                  creators_attributes: [
                                                     {
-                                                      alias: user.name,
+                                                      display_name: user.name,
                                                       actor_attributes: {
                                                         email: user.email,
                                                         given_name: user.actor.given_name,
@@ -115,9 +115,9 @@ RSpec.describe PublishNewWork do
       described_class.call(
         metadata: HashWithIndifferentAccess.new(work.metadata.merge(
                                                   work_type: 'dataset',
-                                                  creator_aliases_attributes: [
+                                                  creators_attributes: [
                                                     {
-                                                      alias: user.name,
+                                                      display_name: user.name,
                                                       actor_attributes: {
                                                         email: user.email,
                                                         given_name: user.actor.given_name,
@@ -194,9 +194,9 @@ RSpec.describe PublishNewWork do
         metadata: HashWithIndifferentAccess.new(work.metadata.merge(
                                                   work_type: 'dataset',
                                                   published_date: 'not a valid EDTF date',
-                                                  creator_aliases_attributes: [
+                                                  creators_attributes: [
                                                     {
-                                                      alias: user.name,
+                                                      display_name: user.name,
                                                       actor_attributes: {
                                                         email: user.email,
                                                         given_name: user.actor.given_name,
@@ -227,9 +227,9 @@ RSpec.describe PublishNewWork do
         metadata: HashWithIndifferentAccess.new(work.metadata.merge(
                                                   work_type: 'dataset',
                                                   visibility: Permissions::Visibility::PRIVATE,
-                                                  creator_aliases_attributes: [
+                                                  creators_attributes: [
                                                     {
-                                                      alias: user.name,
+                                                      display_name: user.name,
                                                       actor_attributes: {
                                                         email: user.email,
                                                         given_name: user.actor.given_name,
@@ -275,9 +275,9 @@ RSpec.describe PublishNewWork do
       described_class.call(
         metadata: HashWithIndifferentAccess.new(work.metadata.merge(
                                                   work_type: 'dataset',
-                                                  creator_aliases_attributes: [
+                                                  creators_attributes: [
                                                     {
-                                                      alias: user.name,
+                                                      display_name: user.name,
                                                       actor_attributes: {
                                                         email: user.email,
                                                         given_name: user.actor.given_name,
@@ -309,9 +309,9 @@ RSpec.describe PublishNewWork do
       described_class.call(
         metadata: HashWithIndifferentAccess.new(work.metadata.merge(
                                                   work_type: 'dataset',
-                                                  creator_aliases_attributes: [
+                                                  creators_attributes: [
                                                     {
-                                                      alias: user.name,
+                                                      display_name: user.name,
                                                       actor_attributes: {
                                                         email: user.email,
                                                         given_name: user.actor.given_name,
@@ -345,9 +345,9 @@ RSpec.describe PublishNewWork do
       described_class.call(
         metadata: HashWithIndifferentAccess.new(work.metadata.merge(
                                                   work_type: 'dataset',
-                                                  creator_aliases_attributes: [
+                                                  creators_attributes: [
                                                     {
-                                                      alias: user.name,
+                                                      display_name: user.name,
                                                       actor_attributes: {
                                                         email: user.email,
                                                         given_name: user.actor.given_name,
@@ -391,9 +391,9 @@ RSpec.describe PublishNewWork do
       described_class.call(
         metadata: HashWithIndifferentAccess.new(work.metadata.merge(
                                                   work_type: 'dataset',
-                                                  creator_aliases_attributes: [
+                                                  creators_attributes: [
                                                     {
-                                                      alias: user.name,
+                                                      display_name: user.name,
                                                       actor_attributes: {
                                                         email: user.email,
                                                         given_name: user.actor.given_name,
@@ -428,9 +428,9 @@ RSpec.describe PublishNewWork do
       described_class.call(
         metadata: HashWithIndifferentAccess.new(work.metadata.merge(
                                                   work_type: '',
-                                                  creator_aliases_attributes: [
+                                                  creators_attributes: [
                                                     {
-                                                      alias: user.name,
+                                                      display_name: user.name,
                                                       actor_attributes: {
                                                         email: user.email,
                                                         given_name: user.actor.given_name,

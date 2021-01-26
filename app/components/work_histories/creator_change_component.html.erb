@@ -3,7 +3,7 @@
   class="version-timeline__change version-timeline__change--creator version-timeline__change--<%= event_class %>">
 
   <div class="version-timeline__change-action">
-    <%= action %> <%= t 'dashboard.work_history.creator_alias.creator' %> <%= current_alias %>
+    <%= action %> <%= t 'dashboard.work_history.creator.creator' %> <%= current_name %>
 
     <% if rename? %>
       <span class="badge badge-pill badge-primary badge--nudge-up"><a data-toggle="collapse" href="#<%= diff_id %>"><%= t 'dashboard.work_history.show_diff' %></a></span>

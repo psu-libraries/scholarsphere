@@ -83,14 +83,14 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
       expect(result.css('th.work-version-related-url')).to be_present
       expect(result.css('th.work-version-source')).to be_present
       expect(result.css('th.work-version-deposited-at')).to be_present
-      expect(result.css('th.work-version-creator-aliases')).to be_present
+      expect(result.css('th.work-version-creators')).to be_present
 
       # Test that the fields have the correct values. Please note that some of
       # the more exotic field type (multiples, dates, iso8601 strings) are only
       # rudimentarily tested here, because they're unit-tested in detail above.
       expect(result.css('td.work-version-title').text).to eq work_version[:title]
       expect(result.css('td.work-version-subtitle').text).to eq work_version[:subtitle]
-      expect(result.css('td.work-version-creator-aliases').text).to include work_version.creator_aliases.map(&:alias).first
+      expect(result.css('td.work-version-creators').text).to include work_version.creators.map(&:alias).first
       expect(result.css('td.work-version-version-number').text).to eq work_version[:version_number].to_s
       expect(result.css('td.work-version-keyword').text).to include work_version[:keyword].first
       expect(result.css('td.work-version-display-rights a').attr('href').text).to eq work_version[:rights]
@@ -115,7 +115,7 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
         # Titles
         expect(result.css('th.work-version-title')).not_to be_present
         expect(result.css('th.work-version-deposited-at')).to be_present
-        expect(result.css('th.work-version-creator-aliases')).not_to be_present
+        expect(result.css('th.work-version-creators')).not_to be_present
         expect(result.css('th.work-version-first-creators')).to be_present
         expect(result.css('th.work-version-subtitle')).not_to be_present
         expect(result.css('th.work-version-version-number')).not_to be_present

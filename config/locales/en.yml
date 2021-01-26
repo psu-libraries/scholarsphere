@@ -16,7 +16,7 @@ en:
         subtitle: Subtitle
         keyword: Keyword
         description: Description
-        creator_aliases: Creator
+        creators: Creator
         contributor: Acknowledgments
         publisher: Publisher
         published_date: &collection_published_date Publication Date
@@ -39,7 +39,7 @@ en:
           open: Public
           authenticated: Penn State Only
           restricted: Private
-      work_version_creation:
+      authorship:
         alias: Display Name
       work_version:
         title: Work Title
@@ -49,7 +49,7 @@ en:
         rights: License
         display_rights: License
         description: Description
-        creator_aliases: Creators
+        creators: Creators
         first_creators: Creators
         resource_type: Resource Type
         contributor: Acknowledgments
@@ -367,7 +367,7 @@ en:
       unknown_user: '[unknown user]'
       renamed_to:
         html: "&rarr;"
-      creator_alias:
+      creator:
         creator: Creator
         create: Added
         rename: Renamed

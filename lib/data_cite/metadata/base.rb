@@ -49,18 +49,15 @@ module DataCite
       private
 
         def creators
-          creator_aliases
-            .map { |ca| creator_attributes(ca) }
+          resource
+            .creators
+            .map { |creator| creator_attributes(creator) }
         end
 
-        def creator_aliases
-          resource.creator_aliases
-        end
+        def creator_attributes(creator)
+          attrs = { name: creator.alias }
 
-        def creator_attributes(creator_alias)
-          attrs = { name: creator_alias.alias }
-
-          if orcid = creator_alias.actor.orcid.presence
+          if orcid = creator.actor.orcid.presence
             attrs[:nameIdentifiers] = [
               {
                 nameIdentifier: orcid,

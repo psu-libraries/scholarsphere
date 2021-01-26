@@ -8,7 +8,7 @@ require 'rails_helper'
 RSpec.describe Api::V1::CollectionsController, type: :controller do
   let(:api_token) { create(:api_token).token }
   let(:user) { build(:actor) }
-  let(:creator_alias) do
+  let(:creator) do
     {
       alias: "#{user.given_name} #{user.surname}",
       actor_attributes: {
@@ -37,7 +37,7 @@ RSpec.describe Api::V1::CollectionsController, type: :controller do
           metadata: {
             title: FactoryBotHelpers.work_title,
             work_ids: works.map(&:id),
-            creator_aliases_attributes: [creator_alias]
+            creators_attributes: [creator]
           },
           depositor: { given_name: user.given_name, surname: user.surname, email: user.email, psu_id: user.psu_id }
         }
@@ -64,7 +64,7 @@ RSpec.describe Api::V1::CollectionsController, type: :controller do
         post :create, params: {
           metadata: {
             title: FactoryBotHelpers.work_title,
-            creator_aliases_attributes: [creator_alias]
+            creators_attributes: [creator]
           },
           depositor: { given_name: user.given_name, surname: user.surname, email: user.email, psu_id: user.psu_id },
           work_noids: legacy_identifiers.map(&:old_id)
@@ -119,7 +119,7 @@ RSpec.describe Api::V1::CollectionsController, type: :controller do
         post :create, params: {
           metadata: {
             title: FactoryBotHelpers.work_title,
-            creator_aliases_attributes: [creator_alias]
+            creators_attributes: [creator]
           },
           depositor: { given_name: user.given_name, surname: user.surname, email: user.email, psu_id: user.psu_id },
           work_noids: ['idontexist']

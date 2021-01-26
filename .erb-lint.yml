@@ -20,7 +20,7 @@ linters:
       - '*app/views/catalog/_search_form.html.erb'
       - '*app/views/catalog/facet.html.erb'
       - '*app/views/dashboard/catalog/_index_work_version.html.erb'
-      - '*app/views/dashboard/form/contributors/_creator_alias_fields.html.erb'
+      - '*app/views/dashboard/form/contributors/_authorship_fields.html.erb'
       - '*app/views/dashboard/form/contributors/_search.html.erb'
       - '*app/views/dashboard/form/members/_work_membership_fields.html.erb'
       - '*app/views/incident_mailer/acknowledgment.html.erb'

@@ -6,17 +6,17 @@ RSpec.shared_examples 'a resource with orderable creators' do
   end
 
   it 'orders them by #position asc' do
-    creator_a, creator_b = resource.creator_aliases
+    creator_a, creator_b = resource.creators
 
-    creator_a.update!(alias: 'A', position: 1)
-    creator_b.update!(alias: 'B', position: 2)
+    creator_a.update!(display_name: 'A', position: 1)
+    creator_b.update!(display_name: 'B', position: 2)
 
     resource.reload
-    expect(resource.creator_aliases.map(&:alias)).to eq %w(A B)
+    expect(resource.creators.map(&:display_name)).to eq %w(A B)
 
     creator_a.update!(position: 100)
 
     resource.reload
-    expect(resource.creator_aliases.map(&:alias)).to eq %w(B A)
+    expect(resource.creators.map(&:display_name)).to eq %w(B A)
   end
 end

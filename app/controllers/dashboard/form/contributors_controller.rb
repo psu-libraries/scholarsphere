@@ -6,7 +6,7 @@ module Dashboard
       def edit
         @resource = resource_klass.find(params[:id])
         authorize(@resource)
-        @resource.build_creator_alias(actor: current_user.actor) if @resource.creators.empty?
+        @resource.build_creator(actor: current_user.actor) if @resource.creators.empty?
       end
 
       def update
@@ -23,11 +23,11 @@ module Dashboard
             .require(param_key)
             .permit(
               contributor: [],
-              creator_aliases_attributes: [
+              creators_attributes: [
                 :id,
                 :actor_id,
                 :_destroy,
-                :alias,
+                :display_name,
                 :position,
                 actor_attributes: [
                   :id,
