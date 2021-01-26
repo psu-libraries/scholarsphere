@@ -72,7 +72,7 @@ module Dashboard
               based_near: [],
               related_url: [],
               source: [],
-              creator_aliases_attributes: [
+              creators_attributes: [
                 :id,
                 :actor_id,
                 :_destroy,

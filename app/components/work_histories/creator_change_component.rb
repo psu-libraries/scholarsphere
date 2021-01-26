@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-class WorkHistories::CreatorAliasChangeComponent < WorkHistories::PaperTrailChangeBaseComponent
+class WorkHistories::CreatorChangeComponent < WorkHistories::PaperTrailChangeBaseComponent
   private
 
     def i18n_key
-      'creator_alias'
+      'creator'
     end
 
     def expected_item_type
-      'WorkVersionCreation'
+      'Authorship'
     end
 
     def event_class

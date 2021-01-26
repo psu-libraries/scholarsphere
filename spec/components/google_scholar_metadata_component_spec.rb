@@ -17,7 +17,7 @@ RSpec.describe GoogleScholarMetadataComponent, type: :component do
 
     it 'renders all the meta tags' do
       expect(html.search('meta[@name="citation_title"]').first['content']).to eq(resource.title)
-      expect(html.search('meta[@name="citation_author"]').first['content']).to eq(resource.creator_aliases.first.alias)
+      expect(html.search('meta[@name="citation_author"]').first['content']).to eq(resource.creators.first.alias)
       expect(html.search('meta[@name="citation_publication_date"]').first['content']).to eq(Time.zone.now.year.to_s)
       expect(html.search('meta[@name="citation_pdf_url"]').first['content']).to eq(
         resource_download_url(file.id, resource_id: resource.uuid, host: 'test.host')
@@ -31,7 +31,7 @@ RSpec.describe GoogleScholarMetadataComponent, type: :component do
 
     it 'renders all the meta tags' do
       expect(html.search('meta[@name="citation_title"]').first['content']).to eq(resource.title)
-      expect(html.search('meta[@name="citation_author"]').first['content']).to eq(resource.creator_aliases.first.alias)
+      expect(html.search('meta[@name="citation_author"]').first['content']).to eq(resource.creators.first.alias)
       expect(html.search('meta[@name="citation_publication_date"]').first['content']).to eq(Time.zone.now.year.to_s)
       expect(html.search('meta[@name="citation_pdf_url"]')).to be_empty
     end

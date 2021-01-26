@@ -10,7 +10,7 @@ class CollectionMetadataComponent < ApplicationComponent
   ATTRIBUTES = [
     :title,
     :subtitle,
-    :creator_aliases,
+    :creators,
     :keyword,
     :contributor,
     :publisher,
@@ -61,7 +61,7 @@ class CollectionMetadataComponent < ApplicationComponent
           .html_safe
       elsif value.respond_to?(:strftime) # Date/Time/DateTime/TimeWithZone etc
         value.to_formatted_s(:long)
-      elsif value.is_a? CollectionCreation
+      elsif value.is_a? Authorship
         value.alias
       elsif value.is_a? ApplicationComponent
         render value

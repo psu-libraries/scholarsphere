@@ -41,13 +41,13 @@ RSpec.describe WorkVersion, type: :model do
     it { is_expected.to belong_to(:work) }
     it { is_expected.to have_many(:file_version_memberships) }
     it { is_expected.to have_many(:file_resources).through(:file_version_memberships) }
+    it { is_expected.to have_many(:creators) }
     it { is_expected.to have_many(:creator_aliases) }
-    it { is_expected.to have_many(:creators).through(:creator_aliases) }
     it { is_expected.to have_many(:view_statistics) }
     it { is_expected.to be_versioned }
 
     it { is_expected.to accept_nested_attributes_for(:file_resources) }
-    it { is_expected.to accept_nested_attributes_for(:creator_aliases).allow_destroy(true) }
+    it { is_expected.to accept_nested_attributes_for(:creators).allow_destroy(true) }
 
     describe '#creators' do
       let(:resource) { create(:work_version, :with_creators, creator_count: 2) }
@@ -90,12 +90,12 @@ RSpec.describe WorkVersion, type: :model do
       end
 
       it 'validates the presence of creators' do
-        work_version.creator_aliases = []
+        work_version.creators = []
         work_version.validate
-        expect(work_version.errors[:creator_aliases]).not_to be_empty
-        work_version.creator_aliases.build(attributes_for(:work_version_creation))
+        expect(work_version.errors[:creators]).not_to be_empty
+        work_version.creators.build(attributes_for(:authorship))
         work_version.validate
-        expect(work_version.errors[:creator_aliases]).to be_empty
+        expect(work_version.errors[:creators]).to be_empty
       end
 
       it 'validates the visibility of the work' do
@@ -260,29 +260,29 @@ RSpec.describe WorkVersion, type: :model do
     end
   end
 
-  describe '#build_creator_alias' do
+  describe '#build_creator' do
     let(:actor) { build_stubbed :actor }
     let(:work_version) { build_stubbed :work_version, :with_creators, creator_count: 0 }
 
-    it 'builds a creator_alias for the given Actor but does not persist it' do
+    it 'builds a creator for the given Actor but does not persist it' do
       expect {
-        work_version.build_creator_alias(actor: actor)
+        work_version.build_creator(actor: actor)
       }.to change {
-        work_version.creator_aliases.length
+        work_version.creators.length
       }.by(1)
 
-      work_version.creator_aliases.first.tap do |creator_alias|
-        expect(creator_alias).not_to be_persisted
-        expect(creator_alias.actor).to eq actor
-        expect(creator_alias.alias).to eq actor.default_alias
+      work_version.creators.first.tap do |creator|
+        expect(creator).not_to be_persisted
+        expect(creator.actor).to eq actor
+        expect(creator.alias).to eq actor.default_alias
       end
     end
 
     it 'is idempotent' do
       expect {
-        2.times { work_version.build_creator_alias(actor: actor) }
+        2.times { work_version.build_creator(actor: actor) }
       }.to change {
-        work_version.creator_aliases.length
+        work_version.creators.length
       }.by(1)
     end
   end

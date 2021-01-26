@@ -9,7 +9,7 @@ RSpec.describe 'Blacklight catalog page', :inline_jobs do
   let(:published_work_versions) do
     Work
       .all
-      .includes(versions: :creator_aliases)
+      .includes(versions: :creators)
       .map(&:latest_published_version)
       .reject(&:blank?)
   end
@@ -17,7 +17,7 @@ RSpec.describe 'Blacklight catalog page', :inline_jobs do
   let(:collections) do
     Collection
       .all
-      .includes(:creator_aliases)
+      .includes(:creators)
   end
 
   let(:indexed_resources) { published_work_versions + collections }

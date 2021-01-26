@@ -10,7 +10,7 @@ class WorkVersionMetadataComponent < ApplicationComponent
     :title,
     :subtitle,
     :visibility_badge,
-    :creator_aliases,
+    :creators,
     :version_number,
     :keyword,
     :display_rights,
@@ -75,7 +75,7 @@ class WorkVersionMetadataComponent < ApplicationComponent
           .html_safe
       elsif value.respond_to?(:strftime) # Date/Time/DateTime/TimeWithZone etc
         value.to_formatted_s(:long)
-      elsif value.is_a? WorkVersionCreation
+      elsif value.is_a? Authorship
         value.alias
       elsif value.is_a? ApplicationComponent
         render value

@@ -37,10 +37,10 @@ class ResourceDecorator < SimpleDelegator
   end
 
   def first_creators
-    if creator_aliases.length > 3
-      creator_aliases.take(3) + ['&hellip;']
+    if creators.length > 3
+      creators.take(3) + ['&hellip;']
     else
-      creator_aliases.take(3)
+      creators.take(3)
     end
   end
 end

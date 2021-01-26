@@ -17,7 +17,7 @@ RSpec.describe BuildNewWorkVersion, type: :model do
   let(:initial_file_membership) { initial_work_version.file_version_memberships.first }
   let(:file_resource) { initial_file_membership.file_resource }
 
-  let(:initial_creation) { initial_work_version.creator_aliases.first }
+  let(:initial_creation) { initial_work_version.creators.first }
   let(:creator) { initial_creation.actor }
 
   before do
@@ -45,12 +45,13 @@ RSpec.describe BuildNewWorkVersion, type: :model do
     end
 
     it 'retains the same creators' do
-      expect(new_version.creator_aliases.length).to eq 1
+      expect(new_version.creators.length).to eq 1
 
-      new_version.creator_aliases.first.tap do |creation|
+      new_version.creators.first.tap do |creation|
         expect(creation.alias).to eq 'My Creator Alias'
         expect(creation.actor).to eq creator
         expect(creation.position).to eq 100
+        expect(creation.instance_token).to eq initial_creation.instance_token
       end
     end
 

@@ -77,14 +77,14 @@ RSpec.describe CollectionMetadataComponent, type: :component do
       expect(result.css('th.collection-related-url')).to be_present
       expect(result.css('th.collection-source')).to be_present
       expect(result.css('th.collection-deposited-at')).to be_present
-      expect(result.css('th.collection-creator-aliases')).to be_present
+      expect(result.css('th.collection-creators')).to be_present
 
       # Test that the fields have the correct values. Please note that some of
       # the more exotic field type (multiples, dates, iso8601 strings) are only
       # rudimentarily tested here, because they're unit-tested in detail above.
       expect(result.css('td.collection-title').text).to eq collection[:title]
       expect(result.css('td.collection-subtitle').text).to eq collection[:subtitle]
-      expect(result.css('td.collection-creator-aliases').text).to include collection.creator_aliases.map(&:alias).first
+      expect(result.css('td.collection-creators').text).to include collection.creators.map(&:alias).first
       expect(result.css('td.collection-keyword').text).to include collection[:keyword].first
       expect(result.css('td.collection-contributor').text).to include collection[:contributor].first
       expect(result.css('td.collection-publisher').text).to include collection[:publisher].first

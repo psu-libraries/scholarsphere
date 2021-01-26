@@ -9,7 +9,7 @@ require 'scholarsphere/client'
 RSpec.describe Api::V1::IngestController, type: :controller do
   let(:api_token) { create(:api_token).token }
   let(:user) { build(:actor) }
-  let(:creator_alias) do
+  let(:creator) do
     {
       alias: "#{user.given_name} #{user.surname}",
       actor_attributes: {
@@ -27,7 +27,7 @@ RSpec.describe Api::V1::IngestController, type: :controller do
     context 'with valid input' do
       before do
         post :create, params: {
-          metadata: { title: FactoryBotHelpers.work_title, creator_aliases_attributes: [creator_alias] },
+          metadata: { title: FactoryBotHelpers.work_title, creators_attributes: [creator] },
           depositor: { given_name: user.given_name, surname: user.surname, email: user.email, psu_id: user.psu_id },
           content: [{ file: fixture_file_upload(File.join(fixture_path, 'image.png')) }]
         }
@@ -47,7 +47,7 @@ RSpec.describe Api::V1::IngestController, type: :controller do
         file = Scholarsphere::S3::UploadedFile.new(path)
         Scholarsphere::S3::Uploader.new.upload(file)
         post :create, params: {
-          metadata: { title: FactoryBotHelpers.work_title, creator_aliases_attributes: [creator_alias] },
+          metadata: { title: FactoryBotHelpers.work_title, creators_attributes: [creator] },
           content: [{ file: file.to_shrine.to_json }],
           depositor: { given_name: user.given_name, surname: user.surname, email: user.email, psu_id: user.psu_id }
         }
@@ -102,7 +102,7 @@ RSpec.describe Api::V1::IngestController, type: :controller do
     context 'with missing files' do
       before do
         post :create, params: {
-          metadata: { title: FactoryBotHelpers.work_title, creator_aliases_attributes: [creator_alias] },
+          metadata: { title: FactoryBotHelpers.work_title, creators_attributes: [creator] },
           depositor: { given_name: user.given_name, surname: user.surname, email: user.email, psu_id: user.psu_id }
         }
       end
@@ -132,7 +132,7 @@ RSpec.describe Api::V1::IngestController, type: :controller do
         expect(response.body).to eq(
           '{' \
             '"message":"Work was created but cannot be published",' \
-            "\"errors\":[\"#{i18n_error_message(:creator_aliases, :blank)}\"]" \
+            "\"errors\":[\"#{i18n_error_message(:creators, :blank)}\"]" \
           '}'
         )
       end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_01_185144) do
+ActiveRecord::Schema.define(version: 2021_01_26_195635) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,6 +50,23 @@ ActiveRecord::Schema.define(version: 2020_12_01_185144) do
     t.integer "application_id"
     t.index ["application_id"], name: "index_api_tokens_on_application_id"
     t.index ["token"], name: "index_api_tokens_on_token", unique: true
+  end
+
+  create_table "authorships", force: :cascade do |t|
+    t.string "alias"
+    t.string "given_name"
+    t.string "surname"
+    t.string "email"
+    t.integer "position"
+    t.string "instance_token"
+    t.string "resource_type"
+    t.bigint "resource_id"
+    t.bigint "actor_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["actor_id"], name: "index_authorships_on_actor_id"
+    t.index ["instance_token"], name: "index_authorships_on_instance_token"
+    t.index ["resource_type", "resource_id"], name: "index_authorships_on_resource_type_and_resource_id"
   end
 
   create_table "bookmarks", id: :serial, force: :cascade do |t|
@@ -192,7 +209,10 @@ ActiveRecord::Schema.define(version: 2020_12_01_185144) do
     t.datetime "created_at"
     t.jsonb "object_changes"
     t.integer "work_version_id"
+    t.integer "resource_id"
+    t.string "resource_type"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
+    t.index ["resource_type", "resource_id"], name: "index_versions_on_resource_type_and_resource_id"
     t.index ["work_version_id"], name: "index_versions_on_work_version_id"
   end
 
@@ -248,6 +268,7 @@ ActiveRecord::Schema.define(version: 2020_12_01_185144) do
   end
 
   add_foreign_key "api_tokens", "external_apps", column: "application_id"
+  add_foreign_key "authorships", "actors"
   add_foreign_key "collection_creations", "actors"
   add_foreign_key "collection_creations", "collections"
   add_foreign_key "collection_work_memberships", "collections"

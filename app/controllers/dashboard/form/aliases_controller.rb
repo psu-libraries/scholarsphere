@@ -7,9 +7,8 @@ module Dashboard
   module Form
     class AliasesController < BaseController
       def new
-        creator_alias = creation_klass.new(actor: alias_actor)
-        render partial: 'dashboard/form/contributors/creator_alias_fields',
-               locals: { creator_alias: creator_alias }
+        render partial: 'dashboard/form/contributors/authorship_fields',
+               locals: { authorship: authorship }
       end
 
       private
@@ -33,14 +32,20 @@ module Dashboard
             )
         end
 
-        def alias_actor
+        def actor
           Actor.find(alias_params[:actor_id])
         rescue ActiveRecord::RecordNotFound
           Actor.new(alias_params.slice(:given_name, :email, :surname, :psu_id, :default_alias, :orcid))
         end
 
-        def creation_klass
-          "#{resource_klass}Creation".constantize
+        def authorship
+          Authorship.new(
+            alias: alias_params['default_alias'],
+            given_name: alias_params['given_name'],
+            surname: alias_params['surname'],
+            email: alias_params['email'],
+            actor: actor
+          )
         end
     end
   end
