@@ -46,8 +46,8 @@ class SolrDocument
     self[:version_number_isi].to_s
   end
 
-  def creator_aliases
-    Array.wrap(self[:creator_aliases_tesim])
+  def creators
+    Array.wrap(self[:creators_tesim])
   end
 
   def deposited_at

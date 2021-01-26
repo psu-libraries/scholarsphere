@@ -13,7 +13,7 @@ RSpec.describe DataCite::Metadata::WorkVersion do
   let(:work_version) { FactoryBot.build_stubbed :work_version, :with_complete_metadata, creators: [creator] }
   let(:work) { work_version.work }
 
-  let(:creator) { FactoryBot.build_stubbed :actor, orcid: nil }
+  let(:creator) { FactoryBot.build_stubbed :authorship, :with_orcid }
 
   before do
     metadata.public_url_source = ->(id) { "http://example.test/resources/#{id}" }
@@ -100,21 +100,21 @@ RSpec.describe DataCite::Metadata::WorkVersion do
       subject(:first_creator) { attributes[:creators].first }
 
       context 'when the creator has no orcid' do
-        before { creator.orcid = nil }
+        before { creator.actor.orcid = nil }
 
         it "sets the creator's name" do
           expect(first_creator).to eq(
-            name: work_version.creator_aliases.first.alias
+            name: work_version.creators.first.alias
           )
         end
       end
 
       context 'when the creator has an ORCiD' do
-        before { creator.orcid = '1111-2222-3333-4444' }
+        before { creator.actor.orcid = '1111-2222-3333-4444' }
 
         it "sets the creator's name and provides the ORCiD" do
           expect(first_creator).to eq(
-            name: work_version.creator_aliases.first.alias,
+            name: work_version.creators.first.alias,
             nameIdentifiers: [
               {
                 nameIdentifier: '1111-2222-3333-4444',

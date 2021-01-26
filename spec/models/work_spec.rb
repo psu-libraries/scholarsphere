@@ -294,7 +294,7 @@ RSpec.describe Work, type: :model do
           based_near_tesim
           contributor_tesim
           created_at_dtsi
-          creator_aliases_tesim
+          creators_tesim
           creators_sim
           deposit_agreed_at_dtsi
           deposit_agreement_version_tesim

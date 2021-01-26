@@ -10,7 +10,7 @@ RSpec.describe 'Migration', :inline_jobs, type: :feature do
     HashWithIndifferentAccess.new(
       work.metadata.merge(
         work_type: 'dataset',
-        creator_aliases_attributes: [
+        creators_attributes: [
           {
             alias: user.name,
             actor_attributes: {

@@ -38,7 +38,7 @@ module Dashboard
       @work_version = WorkVersion.find(params[:id])
       authorize(@work_version)
 
-      @work_version.build_creator_alias(actor: current_user.actor)
+      @work_version.build_creator(actor: current_user.actor)
     end
 
     def update
@@ -80,7 +80,7 @@ module Dashboard
       @presenter = DiffPresenter.new(
         MetadataDiff.call(@previous_version, @work_version),
         file_diff: FileVersionMembershipDiff.call(@previous_version, @work_version),
-        creator_diff: WorkVersionCreationDiff.call(@previous_version, @work_version)
+        creator_diff: AuthorshipDiff.call(@previous_version, @work_version)
       )
     end
 
@@ -139,7 +139,7 @@ module Dashboard
             based_near: [],
             related_url: [],
             source: [],
-            creator_aliases_attributes: [
+            creators_attributes: [
               :id,
               :actor_id,
               :_destroy,

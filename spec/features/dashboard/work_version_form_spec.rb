@@ -156,7 +156,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         expect(work_version.creators).to be_empty
 
-        within('#creator_aliases') do
+        within('#creators') do
           expect(page).to have_content('CREATOR 1')
           expect(find_field('Display Name').value).to eq("#{actor.given_name} #{actor.surname}")
           expect(page).to have_content('Given Name')
@@ -174,7 +174,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         FeatureHelpers::DashboardForm.save_and_continue
 
         work_version.reload
-        expect(work_version.creators).to contain_exactly(actor)
+        expect(work_version.creators.map(&:actor)).to contain_exactly(actor)
         expect(work_version.contributor).to eq [metadata[:contributor]]
 
         expect(page).to have_current_path(dashboard_form_files_path(work_version))
@@ -187,7 +187,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         visit dashboard_form_contributors_path('work_version', work_version)
 
         expect(work_version.creators).to be_empty
-        within('#creator_aliases') do
+        within('#creators') do
           expect(page).to have_content('CREATOR 1')
           expect(page).to have_field('Display Name', count: 1)
         end
@@ -202,7 +202,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         find_all('.aa-suggestion').first.click
 
-        within('#creator_aliases') do
+        within('#creators') do
           expect(page).to have_content('CREATOR 1')
           expect(page).to have_content('CREATOR 2')
           expect(page).to have_field('Display Name', count: 2)
@@ -224,7 +224,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         visit dashboard_form_contributors_path('work_version', work_version)
 
         expect(work_version.creators).to be_empty
-        within('#creator_aliases') do
+        within('#creators') do
           expect(page).to have_content('CREATOR 1')
           expect(page).to have_field('Display Name', count: 1)
         end
@@ -237,7 +237,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         find_all('.aa-suggestion').first.click
 
-        within('#creator_aliases') do
+        within('#creators') do
           expect(page).to have_content('CREATOR 1')
           expect(page).to have_content('CREATOR 2')
           expect(page).to have_field('Display Name', count: 2)
@@ -258,7 +258,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         visit dashboard_form_contributors_path('work_version', work_version)
 
         expect(work_version.creators).to be_empty
-        within('#creator_aliases') do
+        within('#creators') do
           expect(page).to have_content('CREATOR 1')
           expect(page).to have_field('Display Name', count: 1)
         end
@@ -283,7 +283,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         wait_for_modal(5)
 
-        within('#creator_aliases') do
+        within('#creators') do
           expect(page).to have_content('CREATOR 1')
           expect(page).to have_content('CREATOR 2')
           expect(page).to have_content(metadata[:surname])
@@ -320,7 +320,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
           click_button('Save')
         end
 
-        within('#creator_aliases') do
+        within('#creators') do
           expect(page).not_to have_content('CREATOR 2')
         end
 
@@ -338,17 +338,19 @@ RSpec.describe 'Publishing a work', with_user: :user do
         visit dashboard_form_contributors_path('work_version', work_version)
 
         expect(work_version.creators.map(&:surname)).to eq(creators.map(&:surname))
-        within('#creator_aliases') do
+        within('#creators') do
           expect(page).to have_content('CREATOR 1')
           expect(page).to have_content('CREATOR 2')
           expect(page).to have_field('Display Name', count: 2)
         end
+
         page.find_all('.remove_fields').first.click
-        within('#creator_aliases') do
+        within('#creators') do
           expect(page).to have_content('CREATOR 1')
           expect(page).not_to have_content('CREATOR 2')
           expect(page).to have_field('Display Name', count: 1)
         end
+
         FeatureHelpers::DashboardForm.save_and_continue
 
         expect(work_version.reload.creators.map(&:surname)).to contain_exactly(creators.last.surname)
@@ -361,22 +363,22 @@ RSpec.describe 'Publishing a work', with_user: :user do
       let(:work_version) { create :work_version, :draft, :with_creators, creator_count: 2 }
 
       before do
-        creator_a, creator_b = work_version.creator_aliases
+        creator_a, creator_b = work_version.creators
 
-        creator_a.update!(alias: 'Creator A', position: 1)
-        creator_b.update!(alias: 'Creator B', position: 2)
+        creator_a.update!(display_name: 'Creator A', position: 1)
+        creator_b.update!(display_name: 'Creator B', position: 2)
       end
 
       it 'saves the creator ordering' do
         # Sanity Check
-        expect(work_version.reload.creator_aliases.map(&:alias)).to eq(['Creator A', 'Creator B'])
+        expect(work_version.reload.creators.map(&:display_name)).to eq(['Creator A', 'Creator B'])
 
         visit dashboard_form_contributors_path('work_version', work_version)
 
         page.find_all('.js-move-down').first.click
         FeatureHelpers::DashboardForm.save_as_draft_and_exit
 
-        expect(work_version.reload.creator_aliases.map(&:alias)).to eq(['Creator B', 'Creator A'])
+        expect(work_version.reload.creators.map(&:display_name)).to eq(['Creator B', 'Creator A'])
         expect(SolrIndexingJob).to have_received(:perform_now).once
       end
     end
@@ -456,7 +458,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       expect(SolrIndexingJob).not_to have_received(:perform_now)
 
       # Ensure one creator is pre-filled with the User's Actor
-      within('#creator_aliases') do
+      within('#creators') do
         actor = user.reload.actor
         expect(find_field('Display Name').value).to eq("#{actor.given_name} #{actor.surname}")
         expect(page).to have_content('Given Name')
@@ -510,8 +512,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
       expect(version.related_url).to eq [different_metadata[:related_url]]
       expect(version.rights).to eq metadata[:rights]
 
-      expect(version.creator_aliases.length).to eq 1
-      expect(version.creator_aliases.first.alias).to eq user.actor.default_alias
+      expect(version.creators.length).to eq 1
+      expect(version.creators.first.display_name).to eq user.actor.default_alias
     end
   end
 end

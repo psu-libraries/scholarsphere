@@ -24,9 +24,9 @@ RSpec.describe CreateNewCollection do
       described_class.call(
         metadata: HashWithIndifferentAccess.new(collection.metadata.merge(
                                                   work_ids: [work.id],
-                                                  creator_aliases_attributes: [
+                                                  creators_attributes: [
                                                     {
-                                                      alias: user.name,
+                                                      display_name: user.name,
                                                       actor_attributes: {
                                                         email: user.email,
                                                         given_name: user.actor.given_name,
@@ -64,9 +64,9 @@ RSpec.describe CreateNewCollection do
       described_class.call(
         metadata: HashWithIndifferentAccess.new(collection.metadata.merge(
                                                   work_ids: [work.id],
-                                                  creator_aliases_attributes: [
+                                                  creators_attributes: [
                                                     {
-                                                      alias: user.name,
+                                                      display_name: user.name,
                                                       actor_attributes: {
                                                         email: user.email,
                                                         given_name: user.actor.given_name,
@@ -107,9 +107,9 @@ RSpec.describe CreateNewCollection do
       described_class.call(
         metadata: HashWithIndifferentAccess.new(collection.metadata.merge(
                                                   work_ids: [work.id],
-                                                  creator_aliases_attributes: [
+                                                  creators_attributes: [
                                                     {
-                                                      alias: user.name,
+                                                      display_name: user.name,
                                                       actor_attributes: {
                                                         email: user.email,
                                                         given_name: user.actor.given_name,
@@ -188,9 +188,9 @@ RSpec.describe CreateNewCollection do
       described_class.call(
         metadata: HashWithIndifferentAccess.new(collection.metadata.merge(
                                                   work_ids: [work.id],
-                                                  creator_aliases_attributes: [
+                                                  creators_attributes: [
                                                     {
-                                                      alias: user.name,
+                                                      display_name: user.name,
                                                       actor_attributes: {
                                                         email: user.email,
                                                         given_name: user.actor.given_name,
@@ -217,9 +217,9 @@ RSpec.describe CreateNewCollection do
         metadata: HashWithIndifferentAccess.new(collection.metadata.merge(
                                                   work_ids: [work.id],
                                                   published_date: 'not a valid EDTF',
-                                                  creator_aliases_attributes: [
+                                                  creators_attributes: [
                                                     {
-                                                      alias: user.name,
+                                                      display_name: user.name,
                                                       actor_attributes: {
                                                         email: user.email,
                                                         given_name: user.actor.given_name,
@@ -243,9 +243,9 @@ RSpec.describe CreateNewCollection do
       described_class.call(
         metadata: HashWithIndifferentAccess.new(collection.metadata.merge(
                                                   work_ids: [work.id],
-                                                  creator_aliases_attributes: [
+                                                  creators_attributes: [
                                                     {
-                                                      alias: user.name,
+                                                      display_name: user.name,
                                                       actor_attributes: {
                                                         email: user.email,
                                                         given_name: user.actor.given_name,

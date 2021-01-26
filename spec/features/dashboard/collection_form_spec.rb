@@ -82,7 +82,7 @@ RSpec.describe 'Creating and editing collections', :inline_jobs, with_user: :use
       expect(page).to have_current_path(dashboard_form_contributors_path('collection', new_collection))
 
       # By default, it includes the current user as a creator
-      within('#creator_aliases') do
+      within('#creators') do
         expect(page).to have_content('CREATOR 1')
         expect(find_field('Display Name').value).to eq("#{actor.given_name} #{actor.surname}")
         expect(page).to have_content('Given Name')
@@ -107,7 +107,7 @@ RSpec.describe 'Creating and editing collections', :inline_jobs, with_user: :use
 
       find_all('.aa-suggestion').first.click
 
-      within('#creator_aliases') do
+      within('#creators') do
         expect(page).to have_content('CREATOR 1')
         expect(page).to have_content('CREATOR 2')
         expect(page).to have_field('Display Name', count: 2)

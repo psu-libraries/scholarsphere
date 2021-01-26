@@ -16,15 +16,9 @@ FactoryBot.define do
       end
 
       after(:build, :stub) do |collection, evaluator|
-        actors = build_list(:actor, evaluator.creator_count)
-
-        actors.each do |actor|
-          # Alias "Pat Doe" to "Dr. Pat Doe"
-          creator_alias = "#{Faker::Name.prefix} #{actor.given_name} #{actor.surname}"
-          collection.creator_aliases.build(
-            actor: actor,
-            alias: creator_alias
-          )
+        collection.creators = build_list(:authorship, evaluator.creator_count, :of_collection) do |creator, index|
+          creator.resource = collection
+          creator.position = index
         end
       end
     end

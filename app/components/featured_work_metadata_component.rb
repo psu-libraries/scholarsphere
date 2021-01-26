@@ -7,7 +7,7 @@ class FeaturedWorkMetadataComponent < WorkVersionMetadataComponent
 
     def attributes_list
       [
-        :creator_aliases,
+        :creators,
         :keyword
       ]
     end
