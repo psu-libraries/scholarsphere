@@ -68,6 +68,14 @@ RSpec.describe DataCite::Metadata::WorkVersion do
         end
       end
 
+      context 'when the publication_date is EDTF' do
+        before { work_version.published_date = '2019-06?' }
+
+        it 'parses the publication_date and uses the year' do
+          expect(publicationYear).to eq 2019
+        end
+      end
+
       context 'when the publication_date cannot be parsed' do
         before do
           work_version.published_date = 'nonsense'

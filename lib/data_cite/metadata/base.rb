@@ -82,7 +82,9 @@ module DataCite
         end
 
         def parsed_publication_date
-          Time.zone.parse(resource.published_date)
+          return nil unless EdtfDate.valid?(resource.published_date)
+
+          Date.edtf(resource.published_date)
         rescue ArgumentError, TypeError
           nil
         end
