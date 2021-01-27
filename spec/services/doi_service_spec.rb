@@ -1,17 +1,19 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 require 'data_cite'
 
 RSpec.describe DoiService do
   subject(:call_service) { described_class.call(resource) }
 
   let(:client_mock) { instance_spy 'DataCite::Client' }
-  let(:metadata_mock) { instance_spy 'DataCite::Metadata' }
+  let(:work_version_metadata_mock) { instance_spy 'DataCite::Metadata::WorkVersion' }
+  let(:collection_metadata_mock) { instance_spy 'DataCite::Metadata::Collection' }
 
   before do
     allow(DataCite::Client).to receive(:new).and_return(client_mock)
-    allow(DataCite::Metadata).to receive(:new).and_return(metadata_mock)
+    allow(DataCite::Metadata::WorkVersion).to receive(:new).and_return(work_version_metadata_mock)
+    allow(DataCite::Metadata::Collection).to receive(:new).and_return(collection_metadata_mock)
   end
 
   describe '.call' do
@@ -49,10 +51,10 @@ RSpec.describe DoiService do
           end
 
           it 'publishes a new doi with metadata' do
-            allow(metadata_mock).to receive(:attributes).and_return(mocked: :metadata)
+            allow(work_version_metadata_mock).to receive(:attributes).and_return(mocked: :metadata)
             call_service
-            expect(DataCite::Metadata).to have_received(:new).with(
-              work_version: work_version,
+            expect(DataCite::Metadata::WorkVersion).to have_received(:new).with(
+              resource: work_version,
               public_identifier: work_version.uuid
             )
             expect(client_mock).to have_received(:publish).with(
@@ -89,10 +91,10 @@ RSpec.describe DoiService do
           end
 
           it 'publishes the doi with metadata' do
-            allow(metadata_mock).to receive(:attributes).and_return(mocked: :metadata)
+            allow(work_version_metadata_mock).to receive(:attributes).and_return(mocked: :metadata)
             call_service
-            expect(DataCite::Metadata).to have_received(:new).with(
-              work_version: work_version,
+            expect(DataCite::Metadata::WorkVersion).to have_received(:new).with(
+              resource: work_version,
               public_identifier: work_version.uuid
             )
             expect(client_mock).to have_received(:publish).with(
@@ -101,7 +103,7 @@ RSpec.describe DoiService do
             )
           end
 
-          it 'does not update the WorkVerison db record' do
+          it 'does not update the WorkVersion db record' do
             call_service
             expect(work_version).not_to have_received(:update!)
           end
@@ -145,10 +147,10 @@ RSpec.describe DoiService do
           end
 
           it 'publishes a new doi with metadata' do
-            allow(metadata_mock).to receive(:attributes).and_return(mocked: :metadata)
+            allow(work_version_metadata_mock).to receive(:attributes).and_return(mocked: :metadata)
             call_service
-            expect(DataCite::Metadata).to have_received(:new).with(
-              work_version: latest_work_version,
+            expect(DataCite::Metadata::WorkVersion).to have_received(:new).with(
+              resource: latest_work_version,
               public_identifier: work.uuid
             )
             expect(client_mock).to have_received(:publish).with(
@@ -185,10 +187,10 @@ RSpec.describe DoiService do
           end
 
           it 'publishes the doi with metadata' do
-            allow(metadata_mock).to receive(:attributes).and_return(mocked: :metadata)
+            allow(work_version_metadata_mock).to receive(:attributes).and_return(mocked: :metadata)
             call_service
-            expect(DataCite::Metadata).to have_received(:new).with(
-              work_version: latest_work_version,
+            expect(DataCite::Metadata::WorkVersion).to have_received(:new).with(
+              resource: latest_work_version,
               public_identifier: work.uuid
             )
             expect(client_mock).to have_received(:publish).with(
@@ -205,6 +207,61 @@ RSpec.describe DoiService do
       end
     end
 
+    context 'when given a Collection' do
+      let(:resource) { collection }
+      let(:collection) { FactoryBot.build_stubbed :collection }
+
+      before do
+        allow(collection).to receive(:valid?).and_return(true)
+        allow(collection).to receive(:update!)
+      end
+
+      context "when the Collection's doi field is empty" do
+        before { collection.doi = nil }
+
+        it 'publishes a new doi with metadata' do
+          allow(collection_metadata_mock).to receive(:attributes).and_return(mocked: :metadata)
+          call_service
+          expect(DataCite::Metadata::Collection).to have_received(:new).with(
+            resource: collection,
+            public_identifier: collection.uuid
+          )
+          expect(client_mock).to have_received(:publish).with(
+            doi: nil,
+            metadata: { mocked: :metadata }
+          )
+        end
+
+        it 'saves the doi on the Collection db record' do
+          allow(client_mock).to receive(:publish).and_return(['new/doi', { some: :metadata }])
+          call_service
+          expect(collection).to have_received(:update!).with(doi: 'new/doi')
+        end
+      end
+
+      context "when the Collection's doi field is present" do
+        before { collection.doi = 'existing/doi' }
+
+        it 'publishes the doi with metadata' do
+          allow(collection_metadata_mock).to receive(:attributes).and_return(mocked: :metadata)
+          call_service
+          expect(DataCite::Metadata::Collection).to have_received(:new).with(
+            resource: collection,
+            public_identifier: collection.uuid
+          )
+          expect(client_mock).to have_received(:publish).with(
+            doi: 'existing/doi',
+            metadata: { mocked: :metadata }
+          )
+        end
+
+        it 'does not update the Collection db record' do
+          call_service
+          expect(collection).not_to have_received(:update!)
+        end
+      end
+    end
+
     context 'when given some other type of object' do
       let(:resource) { FactoryBot.build_stubbed :user }
 
@@ -212,7 +269,9 @@ RSpec.describe DoiService do
     end
 
     context 'when given an invalid resource' do
-      let(:resource) { instance_spy('Work', valid?: false) }
+      let(:resource) { Work.new }
+
+      before { allow(resource).to receive(:valid?).and_return(false) }
 
       it do
         expect {
@@ -226,13 +285,13 @@ RSpec.describe DoiService do
 
       before do
         allow(resource).to receive(:draft?).and_return(false)
-        allow(metadata_mock).to receive(:validate!).and_raise(DataCite::Metadata::ValidationError)
+        allow(work_version_metadata_mock).to receive(:validate!).and_raise(DataCite::Metadata::Base::ValidationError)
       end
 
       it do
         expect {
           call_service
-        }.to raise_error(DataCite::Metadata::ValidationError)
+        }.to raise_error(DataCite::Metadata::Base::ValidationError)
       end
     end
 
