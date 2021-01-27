@@ -27,7 +27,7 @@ RSpec.describe DoiMintingJob, type: :job do
       [
         DoiService::Error,
         DataCite::Client::Error,
-        DataCite::Metadata::Error
+        DataCite::Metadata::Base::Error
       ].each do |potential_error|
         context "When a #{potential_error} is thrown" do
           before do
