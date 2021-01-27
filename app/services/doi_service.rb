@@ -17,6 +17,19 @@ module DoiService
     instance.call
   end
 
+  def self.publish_doi(doi:, metadata_adapter:, client:)
+    metadata = metadata_adapter
+      .tap(&:validate!)
+      .attributes
+
+    response_doi, _response_metadata = client.publish(
+      doi: doi,
+      metadata: metadata
+    )
+
+    response_doi
+  end
+
   class WorkAndVersionStrategy
     attr_reader :resource,
                 :work_version
@@ -79,17 +92,12 @@ module DoiService
       end
 
       def publish_doi(doi:)
-        metadata = metadata_source
+        metadata_adapter = metadata_source
           .call(resource: work_version, public_identifier: resource.uuid)
-          .tap(&:validate!)
-          .attributes
 
-        response_doi, _response_metadata = client_source.call.publish(
-          doi: doi,
-          metadata: metadata
-        )
+        client = client_source.call
 
-        response_doi
+        DoiService.publish_doi(doi: doi, metadata_adapter: metadata_adapter, client: client)
       end
   end
 
@@ -131,17 +139,12 @@ module DoiService
     private
 
       def publish_doi(doi:)
-        metadata = metadata_source
+        metadata_adapter = metadata_source
           .call(resource: collection, public_identifier: collection.uuid)
-          .tap(&:validate!)
-          .attributes
 
-        response_doi, _response_metadata = client_source.call.publish(
-          doi: doi,
-          metadata: metadata
-        )
+        client = client_source.call
 
-        response_doi
+        DoiService.publish_doi(doi: doi, metadata_adapter: metadata_adapter, client: client)
       end
   end
 end
