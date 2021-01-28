@@ -109,7 +109,7 @@ RSpec.describe DataCite::Metadata::Collection do
     context 'when title is blank' do
       before { collection.title = nil }
 
-      it { expect { metadata.validate! }.to raise_error(described_class::ValidationError) }
+      it { expect { metadata.validate! }.to raise_error(DataCite::Metadata::ValidationError) }
       it { expect(metadata).not_to be_valid }
     end
 
@@ -119,7 +119,7 @@ RSpec.describe DataCite::Metadata::Collection do
         collection.created_at = nil
       end
 
-      it { expect { metadata.validate! }.to raise_error(described_class::ValidationError) }
+      it { expect { metadata.validate! }.to raise_error(DataCite::Metadata::ValidationError) }
       it { expect(metadata).not_to be_valid }
     end
   end

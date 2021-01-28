@@ -285,13 +285,13 @@ RSpec.describe DoiService do
 
       before do
         allow(resource).to receive(:draft?).and_return(false)
-        allow(work_version_metadata_mock).to receive(:validate!).and_raise(DataCite::Metadata::Base::ValidationError)
+        allow(work_version_metadata_mock).to receive(:validate!).and_raise(DataCite::Metadata::ValidationError)
       end
 
       it do
         expect {
           call_service
-        }.to raise_error(DataCite::Metadata::Base::ValidationError)
+        }.to raise_error(DataCite::Metadata::ValidationError)
       end
     end
 

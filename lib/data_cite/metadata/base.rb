@@ -2,10 +2,10 @@
 
 module DataCite
   module Metadata
-    class Base
-      class Error < StandardError; end
-      class ValidationError < Error; end
+    class Error < StandardError; end
+    class ValidationError < Error; end
 
+    class Base
       attr_reader :resource,
                   :public_identifier
 

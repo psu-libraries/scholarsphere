@@ -13,7 +13,7 @@ class DoiMintingJob < ApplicationJob
     handle_error(e, status)
   rescue DataCite::Client::Error => e
     handle_error(e, status)
-  rescue DataCite::Metadata::Base::Error => e
+  rescue DataCite::Metadata::Error => e
     handle_error(e, status)
   end
 
