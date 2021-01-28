@@ -1,0 +1,241 @@
+# Swagger spec for Scholarsphere (see https://swagger.io/specification/)
+
+openapi: "3.0.2"
+info:
+  title: "ScholarSphere"
+  description: "API specification for ScholarSphere"
+  termsOfService: "https://scholarsphere.psu.edu/about"
+  contact:
+    name: "ScholarSphere Support"
+    email: "https://scholarsphere.psu.edu/help"
+  license:
+    name: "MIT"
+    url: "https://opensource.org/licenses/MIT"
+  version: "1.0"
+
+servers:
+  - url: "https://scholarsphere.psu.edu/api/{version}"
+    description: "API endpoint"
+    variables:
+      version:
+        description: "Version of the API"
+        enum:
+          - "v1"
+        default: "v1"
+
+# Listing of the basic model concepts used in the application (see https://swagger.io/specification/#tagObject)
+tags:
+  - name: "Work"
+    description: "The primary unit of content in ScholarSphere"
+  - name: "WorkVersion"
+    description: "An instance of work, containing descriptive metadata and binary content"
+  - name: "Collection"
+    description: "A resource with descriptive metadata containing an ordered grouping of works"
+
+# Paths Object, containing multiple Path Item Objects. Each path item will contain multiple Operation Objects.
+# See:
+#   https://swagger.io/specification/#pathsObject
+#   https://swagger.io/specification/#pathItemObject
+#   https://swagger.io/specification/#operationObject
+paths:
+  /ingest:
+    post:
+      summary: "Creates a new work"
+  /collections:
+    post:
+      summary: "Creates a new collection"
+  /files:
+    put:
+      summary: "Updates a file's metadata"
+      description: >-
+        The client can update a file's metadata, such as the results of a virus scan or other async process.
+      security:
+        - APIKey: []
+      requestBody:
+        description: "Posting updating information for a file after checking for viruses"
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/fileMetadata'
+            examples:
+              novirus:
+                summary: "No virus was found in the file"
+                description: >-
+                  Client posts a json object containing the results of the virus check and when it was performed.
+                value:
+                  id: '1'
+                  metadata:
+                    virus:
+                      status: 'false'
+                      scanned_at: '2021-01-25'
+              yesvirus:
+                summary: "A virus was found in the file"
+                description: >-
+                  Client posts a json object containing a positive virus check and when it was performed.
+                value:
+                  id: '1'
+                  metadata:
+                    virus:
+                      status: 'true'
+                      scanned_at: '2021-01-25'
+      responses:
+        200:
+          description: >-
+            The file's metadata was successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/successResponse"
+              examples:
+                summary: "The client is not authorized to perform the requested action"
+                value:
+                  message: "File was successfully updated"
+        default:
+          $ref: "#/components/responses/defaultPostError"
+  /featured_resources:
+    post:
+      summary: "Adds a new featured resource to the home page"
+      security:
+        - APIKey: []
+      requestBody:
+        description: "Given an existing UUID for a resource, feature it on the homepage"
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/featuredResource'
+            examples:
+              standard:
+                summary: "Makes this work a featured work on the homepage"
+                description: >-
+                  Client posts a json object containing the uuid of the resource they want to have featured.
+                value:
+                  uuid: 'a0fc525b-0d49-48e0-a385-f86bd13bce4d'
+      responses:
+        200:
+          description: >-
+            If the resources has been featured before, or is already featured, it will update with a new timestamp and
+            moved to the top of the list.
+        201:
+          description: >-
+            The resource has not been featured before, and a new entry is made in the list of featured resources, moving
+            this one to the top.
+        default:
+          $ref: "#/components/responses/defaultPostError"
+  /uploads:
+    post:
+      summary: "Requests a pre-signed URL to upload a file into ScholarSphere's S3 instance"
+
+
+# Array of Schema Objects used to define the concepts/models (see https://swagger.io/specification/#schemaObject)
+components:
+  schemas:
+    uuid:
+      type: "object"
+      properties:
+        uuid:
+          type: "string"
+          example: "a0fc525b-0d49-48e0-a385-f86bd13bce4d"
+    id:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          example: '1'
+    featuredResource:
+      allOf:
+        - $ref: "#/components/schemas/uuid"
+        - type: 'object'
+          required:
+            - 'uuid'
+    errorResponse:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        errors:
+          type: "array"
+          items:
+            type: "string"
+    fileMetadata:
+      required:
+        - 'id'
+      properties:
+        id:
+          $ref: "#/components/schemas/id"
+        metadata:
+          allOf:
+            - $ref: "#/components/schemas/virusCheck"
+    successResponse:
+      required:
+        - message
+      properties:
+        message:
+          type: string
+    virusCheck:
+      properties:
+        status:
+          type: "string"
+          format: 'boolean'
+          enum:
+            - "true"
+            - "false"
+        scanned_at:
+          type: "string"
+          format: 'date'
+  securitySchemes:
+    APIKey:
+      type: "apiKey"
+      description: >-
+        Key-based authorization mechanism to the API. A key is obtained fron the ScholarSphere team and is included in
+        the header of all requests.
+      name: "X_API_KEY"
+      in: "header"
+  responses:
+    defaultPostError:
+      description: >-
+        If the resource can't be created, then there is some kind of error. The client can interpret the responses.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/errorResponse"
+          examples:
+            unauthorized:
+              $ref: "#/components/examples/unauthorized"
+            notFound:
+              $ref: "#/components/examples/notFound"
+            unprocessableEntity:
+              $ref: "#/components/examples/unprocessableEntity"
+            serverError:
+              $ref: "#/components/examples/serverError"
+  examples:
+    unauthorized:
+      summary: "The client is not authorized to perform the requested action"
+      value:
+        code: 401
+        message: "401: Request not authorized. Please provide a valid API key for access."
+    notFound:
+      summary: "The requested resource does not exist"
+      value:
+        code: 404
+        message: "Record not found"
+    unprocessableEntity:
+      summary: "The request has missing or incorrect information"
+      value:
+        code: 411
+        message: "Unable to complete the request"
+        errors:
+          - "Sample error from server"
+    serverError:
+      summary: "The server threw some kind of error or exception"
+      value:
+        code: 500
+        message: "We're sorry, but something went wrong"
+        errors:
+          - "NoMethodError"
+          - "undefined method `application' for nil:NilClass"
+
