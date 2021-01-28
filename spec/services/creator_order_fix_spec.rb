@@ -128,11 +128,16 @@ RSpec.describe CreatorOrderFix, versioning: true do
       work.reload
     end
 
-    it 'raises an error' do
+    it 'returns false and puts errors to stdout' do
       expect(work.versions[0].creator_aliases[0].position).to eq(1)
       expect(work.versions[0].creator_aliases[1].position).to eq(3)
       expect(work.versions[0].creator_aliases[2].position).to eq(nil)
-      expect { described_class.call }.to raise_error(StandardError, "Work #{work.uuid} can't be corrected")
+
+      expected_output = /Work##{work.id}, WorkVersion##{work.versions[0].id}, Work #{work.uuid} can't be corrected/
+
+      return_value = nil
+      expect { return_value = described_class.call }.to output(expected_output).to_stdout
+      expect(return_value).to eq false
     end
   end
 end

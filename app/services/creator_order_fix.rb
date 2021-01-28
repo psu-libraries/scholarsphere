@@ -3,6 +3,8 @@
 class CreatorOrderFix
   class << self
     def call
+      errors = []
+
       Work.find_each do |work|
         work.versions.order(:version_number).each_with_index do |work_version, index|
           if index.zero?
@@ -10,8 +12,13 @@ class CreatorOrderFix
           else
             update_later_version(work_version, work.versions[index - 1])
           end
+        rescue StandardError => e
+          errors << "Work##{work.id}, WorkVersion##{work_version.id}, #{e.message}"
         end
       end
+
+      errors.each { |e| puts e }
+      errors.empty?
     end
 
     def update_first_version(version)
