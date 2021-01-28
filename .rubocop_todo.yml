@@ -74,6 +74,7 @@ Metrics/ClassLength:
 Metrics/PerceivedComplexity:
   Exclude:
     - 'app/services/publish_new_work.rb'
+    - 'app/services/doi_service.rb'
 
 # Offense count: 1
 # Configuration parameters: CustomIncludeMethods.

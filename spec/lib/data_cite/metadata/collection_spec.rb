@@ -1,17 +1,16 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 require 'data_cite'
 
-RSpec.describe DataCite::Metadata do
-  subject(:metadata) { described_class.new(work_version: work_version, public_identifier: uuid) }
+RSpec.describe DataCite::Metadata::Collection do
+  subject(:metadata) { described_class.new(resource: collection, public_identifier: uuid) }
 
   let(:uuid) { 'abc-123' }
 
   let(:attributes) { metadata.attributes }
 
-  let(:work_version) { FactoryBot.build_stubbed :work_version, :with_complete_metadata, creators: [creator] }
-  let(:work) { work_version.work }
+  let(:collection) { FactoryBot.build_stubbed :collection, :with_complete_metadata, creators: [creator] }
 
   let(:creator) { FactoryBot.build_stubbed :actor, orcid: nil }
 
@@ -19,30 +18,24 @@ RSpec.describe DataCite::Metadata do
     metadata.public_url_source = ->(id) { "http://example.test/resources/#{id}" }
   end
 
-  describe '::RESOURCE_TYPES' do
-    it 'maps each of our Work::Types to a corresponding one in DataCite' do
-      expect(described_class::RESOURCE_TYPES.keys).to match_array Work::Types.all
-    end
-  end
-
   describe '#initialize' do
-    it 'accepts a WorkVersion and public identifier (uuid)' do
-      metadata = described_class.new(work_version: work_version, public_identifier: uuid)
-      expect(metadata.work_version).to eq work_version
+    it 'accepts a Collection and public identifier (uuid)' do
+      metadata = described_class.new(resource: collection, public_identifier: uuid)
+      expect(metadata.resource).to eq collection
       expect(metadata.public_identifier).to eq uuid
     end
   end
 
   describe '#attributes' do
     context 'when given the happy path' do
-      it "maps the given WorkVersion's attributes into ones needed by DataCite" do
-        expect(attributes[:titles]).to eq([{ title: work_version.title }])
+      it "maps the given Collection's attributes into ones needed by DataCite" do
+        expect(attributes[:titles]).to eq([{ title: collection.title }])
 
         # The following are tested thoroughly below
         expect(attributes[:url]).to be_present
         expect(attributes[:creators]).to be_present
         expect(attributes[:publicationYear]).to be_present
-        expect(attributes.dig(:types, :resourceTypeGeneral)).to be_present
+        expect(attributes.dig(:types, :resourceTypeGeneral)).to eq 'Collection'
       end
 
       describe 'url generation' do
@@ -61,7 +54,7 @@ RSpec.describe DataCite::Metadata do
       subject(:publicationYear) { attributes[:publicationYear] }
 
       context 'when the publication_date can be parsed' do
-        before { work_version.published_date = '2019-12-16' }
+        before { collection.published_date = '2019-12-16' }
 
         it 'parses the publication_date and uses the year' do
           expect(publicationYear).to eq 2019
@@ -70,20 +63,12 @@ RSpec.describe DataCite::Metadata do
 
       context 'when the publication_date cannot be parsed' do
         before do
-          work_version.published_date = 'nonsense'
-          work_version.created_at = Time.zone.parse('2019-12-16')
+          collection.published_date = 'nonsense'
+          collection.created_at = Time.zone.parse('2019-12-16')
         end
 
         it 'uses the year from the date the record was created' do
           expect(publicationYear).to eq 2019
-        end
-      end
-    end
-
-    context 'when given variants of the work_type' do
-      context 'with the default work type' do
-        it 'maps to the correct resource type' do
-          expect(attributes.dig(:types, :resourceTypeGeneral)).to eq 'Dataset'
         end
       end
     end
@@ -96,7 +81,7 @@ RSpec.describe DataCite::Metadata do
 
         it "sets the creator's name" do
           expect(first_creator).to eq(
-            name: work_version.creator_aliases.first.alias
+            name: collection.creator_aliases.first.alias
           )
         end
       end
@@ -106,7 +91,7 @@ RSpec.describe DataCite::Metadata do
 
         it "sets the creator's name and provides the ORCiD" do
           expect(first_creator).to eq(
-            name: work_version.creator_aliases.first.alias,
+            name: collection.creator_aliases.first.alias,
             nameIdentifiers: [
               {
                 nameIdentifier: '1111-2222-3333-4444',
@@ -122,26 +107,19 @@ RSpec.describe DataCite::Metadata do
 
   describe '#validate! and #valid?' do
     context 'when title is blank' do
-      before { work_version.title = nil }
+      before { collection.title = nil }
 
-      it { expect { metadata.validate! }.to raise_error(described_class::ValidationError) }
+      it { expect { metadata.validate! }.to raise_error(DataCite::Metadata::ValidationError) }
       it { expect(metadata).not_to be_valid }
     end
 
     context 'when publication_date and created_at are empty/blank' do
       before do
-        work_version.published_date = nil
-        work_version.created_at = nil
+        collection.published_date = nil
+        collection.created_at = nil
       end
 
-      it { expect { metadata.validate! }.to raise_error(described_class::ValidationError) }
-      it { expect(metadata).not_to be_valid }
-    end
-
-    context 'when work_type is empty' do
-      before { work.work_type = nil }
-
-      it { expect { metadata.validate! }.to raise_error(described_class::ValidationError) }
+      it { expect { metadata.validate! }.to raise_error(DataCite::Metadata::ValidationError) }
       it { expect(metadata).not_to be_valid }
     end
   end
