@@ -20,6 +20,7 @@ module OmniAuth
 
       info do
         raw_info['groups'] = graph_groups if ENV['AZURE_GRAPH_GROUPS'].present?
+        raw_info['groups'] = raw_info.fetch('groups', []) unless ENV['AZURE_GRAPH_GRUPS'].present?
         raw_info
       end
 
