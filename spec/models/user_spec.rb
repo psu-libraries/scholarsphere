@@ -54,7 +54,7 @@ RSpec.describe User, type: :model do
                               given_name: 'Joe',
                               surname: 'Developer',
                               access_id: 'jd1',
-                              groups: [
+                              info_groups: [
                                 'umg-admin',
                                 'umg-reporter',
                                 'Invalid With Spaces',
