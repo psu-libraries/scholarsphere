@@ -18,13 +18,13 @@ module OmniAuth
         raw_info['upn'].split('@')[0]
       end
 
+      # @note Groups may be populated with data prior to this point. If AZURE_GRAPH_GROUPS is present, we will overwrite
+      # that data with the data returned from the group query. If AZURE_GRAPH_GROUPS is not present, then we leave the
+      # group data alone, but ensure that there isn't any nil value.
       info do
+        raw_info['groups'] ||= []
         raw_info['groups'] = graph_groups if ENV['AZURE_GRAPH_GROUPS'].present?
         raw_info
-      end
-
-      def graph_groups
-        @graph_groups ||= group_query(url: GRAPH_URL)
       end
 
       # @note Override callback URL. OmniAuth by default passes the entire URL of the callback, including query
@@ -38,6 +38,10 @@ module OmniAuth
       end
 
       private
+
+        def graph_groups
+          @graph_groups ||= group_query(url: GRAPH_URL)
+        end
 
         def group_query(url:, groups: [])
           return groups if url.nil?
