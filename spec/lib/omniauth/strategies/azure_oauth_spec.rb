@@ -43,14 +43,8 @@ RSpec.describe OmniAuth::Strategies::AzureOauth do
     it { is_expected.to eq(auth_hash.uid) }
   end
 
-  describe '.info' do
-    subject { strategy.info }
-
-    it { is_expected.to eq(auth_hash) }
-  end
-
-  describe '#graph_groups', :vcr do
-    subject { strategy.graph_groups }
+  describe '.info', :vcr do
+    subject(:info) { strategy.info }
 
     # @note If you want to re-create the VCR file. You will need to save an existing access token as a json file from a
     # session created in development mode:
@@ -64,7 +58,11 @@ RSpec.describe OmniAuth::Strategies::AzureOauth do
     # After the responses are recorded, remove the record: :all directive and modify the yaml files to remove the bearer
     # tokens.
     context 'with an unpaginated response' do
-      its(:count) { is_expected.to eq(42) }
+      before { ENV['AZURE_GRAPH_GROUPS'] = 'true' }
+
+      specify do
+        expect(info['groups'].count).to eq(42)
+      end
     end
 
     # @note When re-creating the response, make the same changes above, and in addition record each request by changing
@@ -76,7 +74,30 @@ RSpec.describe OmniAuth::Strategies::AzureOauth do
     # pagination of the user's groups. After the responses are recorded, remove tokens and change the initial uri *back*
     # to the origin graph url.
     context 'with a paginated response' do
-      its(:count) { is_expected.to eq(42) }
+      before { ENV['AZURE_GRAPH_GROUPS'] = 'true' }
+
+      specify do
+        expect(info['groups'].count).to eq(42)
+      end
+    end
+
+    context 'when AZURE_GRAPH_GROUPS is not present' do
+      before { ENV['AZURE_GRAPH_GROUPS'] = nil }
+
+      specify do
+        expect(info['groups']).to be_empty
+      end
+    end
+
+    context 'when previous groups exist' do
+      let(:auth_hash) { build(:psu_oauth_response, main_groups: groups) }
+      let(:groups) { Array.new(3) { "umg-.#{Faker::Currency.code.downcase}" } }
+
+      before { ENV['AZURE_GRAPH_GROUPS'] = nil }
+
+      specify do
+        expect(info['groups']).to eq(groups)
+      end
     end
   end
 end

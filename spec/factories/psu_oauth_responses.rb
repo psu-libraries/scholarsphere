@@ -13,12 +13,14 @@ FactoryBot.define do
       email { "#{access_id}@psu.edu" }
 
       # Group names cannot contain spaces (see #155)
-      groups { Array.new(3) { "umg-.#{Faker::Currency.code.downcase}" } }
+      info_groups { Array.new(3) { "umg-.#{Faker::Currency.code.downcase}" } }
+      main_groups { nil }
     end
 
     provider { 'azure_oauth' }
     uid { access_id }
     upn { email }
+    groups { main_groups }
     info do
       {
         uid: access_id,
@@ -28,7 +30,7 @@ FactoryBot.define do
         given_name: given_name,
         surname: surname,
         primary_affiliation: 'STAFF',
-        groups: groups,
+        groups: info_groups,
         name: email
       }
     end
