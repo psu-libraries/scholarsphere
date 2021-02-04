@@ -91,7 +91,7 @@ module Qa
             additional_metadata = "#{label}: #{value}"
           elsif orcid = result[:orcid].presence
             label = Actor.human_attribute_name(:orcid)
-            value = Orcid.new(orcid).to_human
+            value = OrcidId.new(orcid).to_human
             additional_metadata = "#{label}: #{value}"
           end
 
