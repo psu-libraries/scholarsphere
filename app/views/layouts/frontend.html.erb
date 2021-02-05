@@ -71,7 +71,7 @@
     </header>
 
     <main class="main">
-      <%= render FlashMessageComponent.new(flash: flash) if flash.present? %>
+      <%= render FlashMessageComponent.new(flash: flash) %>
       <% if content_for? :sidebar %>
         <%= render '/layouts/with_sidebar' %>
       <% elsif content_for? :content %>

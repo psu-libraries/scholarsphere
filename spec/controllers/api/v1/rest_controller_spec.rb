@@ -31,6 +31,13 @@ RSpec.describe Api::V1::RestController, type: :controller do
 
       its(:status) { is_expected.to eq 401 }
     end
+
+    context 'when the application is read-only', :read_only do
+      before { get :index }
+
+      its(:status) { is_expected.to eq 401 }
+      its(:body) { is_expected.to include(I18n.t('api.errors.not_authorized')) }
+    end
   end
 
   context 'with an authenticated request' do
@@ -45,6 +52,11 @@ RSpec.describe Api::V1::RestController, type: :controller do
 
     its(:status) { is_expected.to eq 200 }
     its(:body) { is_expected.to eq 'success' }
+
+    context 'when the application is read-only', :read_only do
+      its(:status) { is_expected.to eq 401 }
+      its(:body) { is_expected.to include(I18n.t('api.errors.not_authorized')) }
+    end
   end
 
   context 'when a record is not found' do

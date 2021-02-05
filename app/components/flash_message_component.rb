@@ -8,9 +8,11 @@ class FlashMessageComponent < ApplicationComponent
   end
 
   def messages
-    flash.map do |message|
-      Message.new(*message)
-    end
+    read_only_message + flash_messages
+  end
+
+  def render?
+    messages.present?
   end
 
   class Message
@@ -38,4 +40,18 @@ class FlashMessageComponent < ApplicationComponent
       "alert-#{type}"
     end
   end
+
+  private
+
+    def flash_messages
+      flash.map do |message|
+        Message.new(*message)
+      end
+    end
+
+    def read_only_message
+      return [] unless Rails.application.read_only?
+
+      [Message.new('alert', I18n.t('read_only'))]
+    end
 end

@@ -1,7 +1,11 @@
 en:
   application_name: "ScholarSphere"
   description: >
-    ScholarSphere is an institutional repository managed by Penn State University Libraries. Anyone with a Penn State Access Account can deposit materials relating to the University’s teaching, learning, and research mission to ScholarSphere. All types of scholarly materials, including publications, instructional materials, creative works, and research data are accepted.
+    ScholarSphere is an institutional repository managed by Penn State University Libraries. Anyone with a Penn State
+    Access Account can deposit materials relating to the University’s teaching, learning, and research mission to
+    ScholarSphere. All types of scholarly materials, including publications, instructional materials, creative works,
+    and research data are accepted.
+  read_only: Scholarsphere is undergoing maintenance. No changes can be made during this time.
   activerecord:
     attributes:
       actor:

@@ -29,6 +29,10 @@ module Scholarsphere
     require 'qa/authorities/persons'
     require 'qa/authorities/users'
 
+    def read_only?
+      ENV['READ_ONLY'] == 'true'
+    end
+
     config.generators { |generator| generator.test_framework :rspec }
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.0

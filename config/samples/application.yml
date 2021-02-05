@@ -130,6 +130,16 @@
 #  RECAPTCHA_SITE_KEY: 'xxxxxxx'
 #  RECAPTCHA_SECRET_KEY: 'yyyyyyy'
 # --------------------------------------------------------------------------------------------------------------------
+#
+# Read-Only Mode
+#
+# Prevents any database writes. Database reads and Solr will still work normally. This is used when performing updates
+# or destructive changes during the maintenance window, or any other time you don't want users making any changes to the
+# data.
+#
+# READ_ONLY: 'true'
+#
+# --------------------------------------------------------------------------------------------------------------------
 
 # Defaults for your local development environment
 DOWNLOAD_URL_TTL: 6
