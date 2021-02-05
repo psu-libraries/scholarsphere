@@ -52,6 +52,7 @@ group :development, :test do
   gem 'rubocop-performance', '= 1.5.2'
   gem 'rubocop-rails', '= 2.5.2'
   gem 'rubocop-rspec', '= 1.39.0'
+  gem 'timecop'
 end
 
 group :development do
