@@ -128,6 +128,17 @@ RSpec.describe 'Blacklight catalog page', :inline_jobs do
     end
   end
 
+  context 'when the application is read-only', :read_only do
+    it 'displays a message' do
+      visit(search_catalog_path)
+
+      within('.alert-warning') do
+        expect(page).to have_content(I18n.t('read_only'))
+      end
+      expect(page).to have_link('Login', class: 'disabled')
+    end
+  end
+
   def document_id(resource)
     if resource.is_a? WorkVersion
       "document-#{resource.work.uuid}"

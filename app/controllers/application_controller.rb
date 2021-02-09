@@ -11,6 +11,8 @@ class ApplicationController < ActionController::Base
   ActionDispatch::ExceptionWrapper.rescue_responses['Pundit::NotAuthorizedError'] = :not_found
 
   def current_user
+    return User.guest if Rails.application.read_only?
+
     UserDecorator.new(super || User.guest)
   end
 

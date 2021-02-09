@@ -59,5 +59,13 @@ RSpec.describe FlashMessageComponent, type: :component do
         expect(result.css('div.alert-danger').text).to match(/Second flash message/)
       end
     end
+
+    context 'when the application is read-only', :read_only do
+      let(:flash) { [] }
+
+      specify do
+        expect(result.css('div.alert-warning').text).to match(/#{I18n.t('read_only')}/)
+      end
+    end
   end
 end
