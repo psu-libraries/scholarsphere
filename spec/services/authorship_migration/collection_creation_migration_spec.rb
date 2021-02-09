@@ -92,9 +92,12 @@ RSpec.describe AuthorshipMigration::CollectionCreationMigration, type: :model do
     end
 
     it 'migrates all collecdtions' do
-      expect { described_class.migrate_all_collections }
+      return_value = nil
+      expect { return_value = described_class.migrate_all_collections }
         .to change(Authorship, :count)
         .by(3)
+
+      expect(return_value).to eq true
     end
   end
 end

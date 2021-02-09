@@ -210,4 +210,34 @@ RSpec.describe AuthorshipMigration::WorkVersionCreationMigration, type: :model, 
       end
     end
   end
+
+  describe '.migrate_all_work_versions' do
+    let(:work_version2) { create :work_version }
+
+    before do
+      @act4 = create(:actor, psu_id: 'act004', given_name: 'Actor4')
+      @wvc4 = nil
+
+      PaperTrail.request(whodunnit: user.to_gid) do
+        Timecop.freeze(Time.zone.local(2021, 1, 8)) do
+          @wvc4 = create(
+            :work_version_creation,
+            work_version: work_version,
+            actor: @act4,
+            alias: 'Original Alias for Actor 4',
+            position: 10
+          )
+        end
+      end
+    end
+
+    it 'migrates all work versions' do
+      return_value = nil
+      expect { return_value = described_class.migrate_all_work_versions }
+        .to change(Authorship, :count)
+        .by(3)
+
+      expect(return_value).to eq true
+    end
+  end
 end

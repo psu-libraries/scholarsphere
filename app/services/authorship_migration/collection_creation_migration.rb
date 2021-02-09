@@ -12,11 +12,11 @@ module AuthorshipMigration
           errors << call(collection: collection)
         end
 
-        errors.flatten
+        errors = errors.flatten
 
         if $stdout.tty?
           errors.each { |err| puts err }
-          errors.any? # return true or false
+          errors.empty? # return true or false
         else
           errors
         end

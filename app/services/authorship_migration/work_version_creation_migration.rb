@@ -14,15 +14,17 @@ module AuthorshipMigration
       def migrate_all_work_versions
         errors = []
 
-        WorkVersion.find_each do |work_version|
+        WorkVersion.find_each.with_index do |work_version, index|
+          print '.' if $stdout.tty? && (index % 100).zero?
           errors << call(work_version: work_version)
         end
 
         errors = errors.flatten
 
         if $stdout.tty?
+          puts 'done'
           errors.each { |err| puts err }
-          errors.any? # return true or false
+          errors.empty? # return true or false
         else
           errors
         end
