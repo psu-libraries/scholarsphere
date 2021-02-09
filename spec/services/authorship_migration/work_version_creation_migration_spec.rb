@@ -171,20 +171,16 @@ RSpec.describe AuthorshipMigration::WorkVersionCreationMigration, type: :model, 
         @wvc1.versions.first.destroy!
       end
 
-      it 'reports the error, continues to migrate the rest of the creators' do
+      it 'still works' do
         authorship_count_before = Authorship.count
         versions_count_before = PaperTrail::Version.count
 
         errors = perform_call
 
-        expect(errors.length).to eq 1
-        expect(errors.first).to match(/WorkVersion##{work_version.id}/i)
-          .and match(/cannot find the papertrail::version/i)
+        expect(errors).to be_empty
 
-        # It skips the first creator because it errors out, but continues to
-        # migrate the other two (one of which is deleted)
-        expect(Authorship.count - authorship_count_before).to eq 1
-        expect(PaperTrail::Version.count - versions_count_before).to eq 3
+        expect(Authorship.count - authorship_count_before).to eq 2
+        expect(PaperTrail::Version.count - versions_count_before).to eq 5
       end
     end
 

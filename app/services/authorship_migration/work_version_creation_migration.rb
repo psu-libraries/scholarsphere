@@ -59,10 +59,6 @@ module AuthorshipMigration
 
         return if already_migrated?(actor_id: actor_id)
 
-        if versions.first.event != 'create'
-          raise(AuthorMigrationError,
-                'Cannot find the PaperTrail::Version for when the record was created')
-        end
         raise AuthorMigrationError, "Could not find Actor##{actor_id.inspect}" if actor.blank?
 
         base_authorship_attributes = map_actor_to_authorship_attributes(actor: actor)
@@ -110,8 +106,13 @@ module AuthorshipMigration
 
       # Takes a list of paper trail changes, and extracts all unique actor ids
       def extract_author_ids(paper_trail_changes:)
-        _actor_ids = paper_trail_changes
+        actor_change_sets = paper_trail_changes
           .flat_map { |ptv| ptv.changeset.fetch('actor_id', []) }
+
+        actor_objects = paper_trail_changes
+          .flat_map { |ptv| (ptv.object || {}).fetch('actor_id', []) }
+
+        (actor_change_sets + actor_objects)
           .compact
           .uniq
       end
