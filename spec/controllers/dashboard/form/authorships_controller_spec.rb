@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Dashboard::Form::AliasesController, type: :controller do
+RSpec.describe Dashboard::Form::AuthorshipsController, type: :controller do
   describe 'POST #new' do
     context 'when the user is logged in' do
       let(:user) { create(:user) }
