@@ -58,6 +58,14 @@ RSpec.describe AuthorshipMigration::WorkVersionCreationMigration, type: :model, 
       Timecop.freeze(Time.zone.local(2021, 1, 5)) do
         @wvc_deleted.destroy
       end
+
+      Timecop.freeze(Time.zone.local(2021, 1, 6)) do
+        # Simulate a bug fix to creator position data that we did
+        @wvc2.update(
+          position: 111,
+          changed_by_system: true
+        )
+      end
     end
   end
 
@@ -128,6 +136,7 @@ RSpec.describe AuthorshipMigration::WorkVersionCreationMigration, type: :model, 
           expect(v3.created_at.to_date).to eq Time.zone.local(2021, 1, 3).to_date
 
           authorship2 = Authorship.find_by(actor_id: @act2)
+          expect(authorship2.position).to eq 111 # Simulate a bug fix we did
           expect(authorship2.versions.length).to eq 1
 
           # Test deleted actor, have to extract from DB.
@@ -286,7 +295,7 @@ RSpec.describe AuthorshipMigration::WorkVersionCreationMigration, type: :model, 
         expect(authorship2.given_name).to eq @act2.given_name
         expect(authorship2.surname).to eq @act2.surname
         expect(authorship2.email).to eq @act2.email
-        expect(authorship2.position).to eq 10
+        expect(authorship2.position).to eq 111
         expect(authorship2.actor_id).to eq @act2.id
         expect(authorship2.instance_token).to be_present
         expect(authorship2.created_at.to_date).to eq Time.zone.local(2021, 1, 8).to_date

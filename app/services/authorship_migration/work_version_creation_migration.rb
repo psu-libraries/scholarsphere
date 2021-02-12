@@ -47,7 +47,10 @@ module AuthorshipMigration
       # Use papertrail as much as possible, so that we can maintain the editing
       # (and deletion!) history of an Author.
       paper_trail_versions__by_creator.each do |work_version_creation_id, versions|
-        migrate_paper_trail_versions_to_authorship(versions: versions)
+        migrate_paper_trail_versions_to_authorship(
+          work_version_creation_id: work_version_creation_id,
+          versions: versions
+        )
       rescue StandardError => e
         errors << "WorkVersion##{work_version.id}, WorkVersionCreation##{work_version_creation_id}, #{e}"
       end
@@ -79,7 +82,7 @@ module AuthorshipMigration
 
     private
 
-      def migrate_paper_trail_versions_to_authorship(versions:)
+      def migrate_paper_trail_versions_to_authorship(versions:, work_version_creation_id:)
         actor_id = extract_actor_ids(paper_trail_changes: versions).first
         actor = actor_lookup[actor_id]
 
@@ -107,11 +110,27 @@ module AuthorshipMigration
                      end
 
         ActiveRecord::Base.transaction do
-          versions.each do |version|
+          versions.each_with_index do |version, index|
+            is_last_version = index == versions.length - 1
+
             PaperTrail.request(whodunnit: version.whodunnit) do
               case version.event
               when 'create', 'update'
                 changes = map_paper_trail_updates_to_authorship_attributes(version: version)
+
+                # We did a bug fix on our work_version_creations table that
+                # inserted missing positions into the database. However, when we
+                # did this bug fix we chose not to write a papertrail::version,
+                # so this code here has no knowledge of this fix being done. As
+                # a result we need to pull the final position from the current
+                # state of the database (if available) and write it to the
+                # Authorship if it's different than what currently exists
+                if is_last_version &&
+                    creator_alias = work_version.creator_aliases
+                        .find { |wvc| wvc.id == work_version_creation_id }.presence
+                  changes[:position] = creator_alias.position
+                end
+
                 authorship.update!(changes)
               when 'destroy'
                 authorship.destroy
