@@ -32,6 +32,7 @@ module Qa
         def creators
           @creators ||= Actor
             .where('surname ILIKE :q OR given_name ILIKE :q OR psu_id ILIKE :q', q: "%#{term}%")
+            .where('psu_id IS NOT NULL OR orcid IS NOT NULL')
             .or(Actor.where(psu_id: identities.map(&:user_id)))
         end
 

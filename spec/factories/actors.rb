@@ -18,5 +18,10 @@ FactoryBot.define do
     trait :without_an_orcid do
       orcid { nil }
     end
+
+    trait :with_no_identifiers do
+      orcid { nil }
+      psu_id { nil }
+    end
   end
 end
