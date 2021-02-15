@@ -265,7 +265,7 @@ RSpec.describe AuthorshipMigration::WorkVersionCreationMigration, type: :model, 
         expect {
           perform_call
         }.to change(Authorship, :count).by(2)
-          .and change(PaperTrail::Version, :count).by(1)
+          .and change(PaperTrail::Version, :count).by(3)
 
         authorship1 = Authorship.find_by(resource: @work_version_v2, actor_id: @act1)
         expect(authorship1).to be_present
@@ -280,13 +280,16 @@ RSpec.describe AuthorshipMigration::WorkVersionCreationMigration, type: :model, 
         expect(authorship1.created_at.to_date).to eq Time.zone.local(2021, 1, 8).to_date
         expect(authorship1.updated_at.to_date).to eq Time.zone.local(2021, 1, 9).to_date
 
-        expect(authorship1.versions.length).to eq 1
-        v1 = authorship1.versions.first
-        expect(v1.event).to eq 'update'
-        expect(v1.changeset.keys.map(&:to_s)).to match_array %w[display_name updated_at]
-        expect(v1.changeset[:display_name]).to eq(@wvc1_v2.versions[0].changeset[:alias])
-        expect(v1.changeset[:updated_at]).to eq(@wvc1_v2.versions[0].changeset[:updated_at])
-        expect(v1.created_at.to_date).to eq Time.zone.local(2021, 1, 9).to_date
+        expect(authorship1.versions.length).to eq 2
+        v1, v2 = authorship1.versions
+        expect(v1.event).to eq 'create'
+        expect(v1.changed_by_system).to eq true
+
+        expect(v2.event).to eq 'update'
+        expect(v2.changeset.keys.map(&:to_s)).to match_array %w[display_name updated_at]
+        expect(v2.changeset[:display_name]).to eq(@wvc1_v2.versions[0].changeset[:alias])
+        expect(v2.changeset[:updated_at]).to eq(@wvc1_v2.versions[0].changeset[:updated_at])
+        expect(v2.created_at.to_date).to eq Time.zone.local(2021, 1, 9).to_date
 
         authorship2 = Authorship.find_by(resource: @work_version_v2, actor_id: @act2)
         expect(authorship2).to be_present
@@ -300,6 +303,11 @@ RSpec.describe AuthorshipMigration::WorkVersionCreationMigration, type: :model, 
         expect(authorship2.instance_token).to be_present
         expect(authorship2.created_at.to_date).to eq Time.zone.local(2021, 1, 8).to_date
         expect(authorship2.updated_at.to_date).to eq Time.zone.local(2021, 1, 8).to_date
+
+        expect(authorship2.versions.length).to eq 1
+        a2_v1 = authorship1.versions.first
+        expect(a2_v1.event).to eq 'create'
+        expect(a2_v1.changed_by_system).to eq true
       end
 
       it 'is idempotent' do

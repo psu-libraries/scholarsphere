@@ -13,6 +13,10 @@ class WorkHistories::PaperTrailChangeBaseComponent < ApplicationComponent
     @user = user
   end
 
+  def render?
+    !paper_trail_version.changed_by_system # Do not render changes by system
+  end
+
   private
 
     # Implement these in your subclass

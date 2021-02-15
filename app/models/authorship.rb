@@ -12,15 +12,15 @@ class Authorship < ApplicationRecord
 
   after_initialize :set_defaults
 
-  attr_accessor :changed_by_system
+  attr_writer :changed_by_system
 
   has_paper_trail(
-    unless: ->(record) { record.changed_by_system },
     meta: {
       # Explicitly store the resource type and id in the PaperTrail::Version to allow
       # easy access in the work history
       resource_id: :resource_id,
-      resource_type: :resource_type
+      resource_type: :resource_type,
+      changed_by_system: :changed_by_system
     },
     skip: [:instance_token]
   )
@@ -52,6 +52,11 @@ class Authorship < ApplicationRecord
   # @deprecated Use :display_name= instead. This will be removed in 4.3
   def alias=(val)
     self.display_name = val
+  end
+
+  # Force changed_by_system to a boolean
+  def changed_by_system
+    !!@changed_by_system
   end
 
   private
