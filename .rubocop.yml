@@ -28,6 +28,7 @@ Metrics/BlockLength:
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/services/doi_service.rb'
+    - 'app/services/authorship_migration/work_version_creation_migration.rb'
 
 Rails/FilePath:
   EnforcedStyle: arguments

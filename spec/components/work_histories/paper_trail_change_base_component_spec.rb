@@ -51,6 +51,24 @@ RSpec.describe WorkHistories::PaperTrailChangeBaseComponent, type: :component do
     end
   end
 
+  describe '#render?' do
+    subject { component.render? }
+
+    let(:component) { HasItemType.new(user: user, paper_trail_version: paper_trail_version) }
+
+    context 'when the PaperTrail::Version has changed_by_system = true' do
+      before { allow(paper_trail_version).to receive(:changed_by_system).and_return(true) }
+
+      it { is_expected.to eq false }
+    end
+
+    context 'when the PaperTrail::Version has changed_by_system = false' do
+      before { allow(paper_trail_version).to receive(:changed_by_system).and_return(false) }
+
+      it { is_expected.to eq true }
+    end
+  end
+
   describe '#i18n_key' do
     context 'when the subclass does not implement #i18n_key' do
       it do

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_26_195635) do
+ActiveRecord::Schema.define(version: 2021_02_15_172117) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -211,6 +211,7 @@ ActiveRecord::Schema.define(version: 2021_01_26_195635) do
     t.integer "work_version_id"
     t.integer "resource_id"
     t.string "resource_type"
+    t.boolean "changed_by_system", default: false, null: false
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
     t.index ["resource_type", "resource_id"], name: "index_versions_on_resource_type_and_resource_id"
     t.index ["work_version_id"], name: "index_versions_on_work_version_id"

@@ -98,19 +98,24 @@ RSpec.describe Authorship, type: :model do
     context 'when the record is marked as changed by the system' do
       let(:authorship) { create(:authorship, changed_by_system: true) }
 
-      it 'does not write a papertrail version' do
-        expect(authorship.reload.versions).to be_empty
+      it "writes a version with the flag saved in PaperTrail's metadata" do
+        expect(authorship.reload.versions.length).to eq 1
+
+        paper_trail_version = authorship.versions.first
+
+        expect(paper_trail_version.changed_by_system).to eq(true)
       end
     end
 
     context 'when the record is NOT marked as changed by the system' do
-      let(:authorship) { create(:authorship, changed_by_system: false) }
+      let(:authorship) { create(:authorship) }
 
       it "writes a version and stores the record's type and id into the version metadata" do
         paper_trail_version = authorship.versions.first
 
         expect(paper_trail_version.resource_id).to eq(authorship.resource_id)
         expect(paper_trail_version.resource_type).to eq(authorship.resource_type)
+        expect(paper_trail_version.changed_by_system).to eq(false)
       end
     end
   end

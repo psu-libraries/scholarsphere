@@ -68,6 +68,7 @@ Metrics/ClassLength:
     - 'app/controllers/dashboard/work_versions_controller.rb'
     - 'app/models/collection.rb'
     - 'app/models/work_version.rb'
+    - 'app/services/authorship_migration/work_version_creation_migration.rb'
 
 # Offense count: 1
 # Configuration parameters: IgnoredMethods, Max.
@@ -75,6 +76,7 @@ Metrics/PerceivedComplexity:
   Exclude:
     - 'app/services/publish_new_work.rb'
     - 'app/services/doi_service.rb'
+    - 'app/services/authorship_migration/work_version_creation_migration.rb'
 
 # Offense count: 1
 # Configuration parameters: CustomIncludeMethods.
