@@ -131,7 +131,7 @@ Rails.application.routes.draw do
       get   ':resource_klass/:id/actors/new', to: 'actors#new', as: 'actors'
       match ':resource_klass/:id/actors/new', to: 'actors#create', via: :post, as: nil
 
-      post ':resource_klass/:id/aliases/new', to: 'aliases#new', as: 'aliases'
+      post ':resource_klass/:id/authorships/new', to: 'authorships#new', as: 'authorships'
     end
   end
 

@@ -1,5 +1,5 @@
 <%# @note Builds a form object when the partial is called async, such as appending new creators to the work form %>
-<%- form ||= ActionView::Helpers::FormBuilder.new("#{param_key}[creator_aliases_attributes][#{Time.zone.now.to_i}]", creator_alias, self, {}) %>
+<%- form ||= ActionView::Helpers::FormBuilder.new("#{param_key}[creators_attributes][#{Time.zone.now.to_i}]", authorship, self, {}) %>
 <%- index = form.try(:index) || 0 %>
 
 <div class="nested-fields contributor-wrapper js-contributor-wrapper">
@@ -66,10 +66,10 @@
         </thead>
         <tbody>
           <tr>
-            <td><%= form.object.actor.given_name %></td>
-            <td><%= form.object.actor.surname %></td>
-            <td><%= form.object.actor.email %></td>
-            <td><%= form.object.actor.psu_id %></td>
+            <td><%= form.object.given_name %></td>
+            <td><%= form.object.surname %></td>
+            <td><%= form.object.email %></td>
+            <td><%= form.object.psu_id %></td>
           </tr>
         </tbody>
       </table>

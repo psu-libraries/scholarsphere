@@ -3,7 +3,7 @@
 class CollectionDecorator < ResourceDecorator
   def decorated_work_versions
     works
-      .includes(versions: :creator_aliases)
+      .includes(versions: :creators)
       .map(&:latest_published_version)
       .reject(&:blank?)
       .map do |work_version|

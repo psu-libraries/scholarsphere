@@ -122,8 +122,8 @@ RSpec.describe DiffPresenter do
     end
 
     context 'when the diff has renamed creators' do
-      let(:creator_1) { build(:work_version_creation) }
-      let(:creator_2) { build(:work_version_creation) }
+      let(:creator_1) { build(:authorship) }
+      let(:creator_2) { build(:authorship) }
 
       let(:renamed_creators) do
         described_class.new(

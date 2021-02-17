@@ -17,16 +17,9 @@ FactoryBot.define do
       end
 
       after(:build, :stub) do |work_version, evaluator|
-        actors = build_list(:actor, evaluator.creator_count)
-
-        actors.each_with_index do |actor, index|
-          # Alias "Pat Doe" to "Dr. Pat Doe"
-          creator_alias = "#{Faker::Name.prefix} #{actor.given_name} #{actor.surname}"
-          work_version.creator_aliases.build(
-            actor: actor,
-            alias: creator_alias,
-            position: index + 1
-          )
+        work_version.creators = build_list(:authorship, evaluator.creator_count) do |creator, index|
+          creator.resource = work_version
+          creator.position = index
         end
       end
     end
@@ -36,7 +29,7 @@ FactoryBot.define do
         file_count { 1 }
       end
 
-      after(:build) do |work_version, evaluator|
+      after(:build, :stub) do |work_version, evaluator|
         work_version.file_resources = build_list(:file_resource, evaluator.file_count)
       end
     end

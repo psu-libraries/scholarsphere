@@ -42,7 +42,7 @@ module WorkHistories
             changes = (
               changes_to_work_version(work_version) +
               changes_to_work_versions_files(work_version) +
-              changes_to_creator_aliases(work_version)
+              changes_to_creators(work_version)
             ).sort_by { |h| h.dig(:locals, :paper_trail_version).created_at }
 
             [decorated_work_version, changes]
@@ -93,13 +93,13 @@ module WorkHistories
       # Hash with everything we need to render the component.
       #
       # @param [WorkVersion]
-      # @return [Hash<CreatorAliasChangeComponent, PaperTrail::Version, User>]
-      def changes_to_creator_aliases(work_version)
+      # @return [Hash<CreatorChangeComponent, PaperTrail::Version, User>]
+      def changes_to_creators(work_version)
         PaperTrail::Version
-          .where(item_type: 'WorkVersionCreation', work_version_id: work_version.id)
+          .where(item_type: 'Authorship', resource_id: work_version.id, resource_type: 'WorkVersion')
           .map do |paper_trail_version|
             {
-              component: CreatorAliasChangeComponent,
+              component: CreatorChangeComponent,
               locals: {
                 paper_trail_version: paper_trail_version,
                 user: lookup_user(paper_trail_version.whodunnit)

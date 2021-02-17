@@ -5,11 +5,10 @@
 
 module Dashboard
   module Form
-    class AliasesController < BaseController
+    class AuthorshipsController < BaseController
       def new
-        creator_alias = creation_klass.new(actor: alias_actor)
-        render partial: 'dashboard/form/contributors/creator_alias_fields',
-               locals: { creator_alias: creator_alias }
+        render partial: 'dashboard/form/contributors/authorship_fields',
+               locals: { authorship: authorship }
       end
 
       private
@@ -17,7 +16,7 @@ module Dashboard
         # @note These are the same attributes that come from Qa::Authorities::Persons, with a few additions to make
         # the form work. The Qa module returns a json object for each person found, which is then passed directly on
         # to this controller for processing.
-        def alias_params
+        def authorship_params
           params
             .permit(
               :id,
@@ -33,14 +32,20 @@ module Dashboard
             )
         end
 
-        def alias_actor
-          Actor.find(alias_params[:actor_id])
+        def actor
+          Actor.find(authorship_params[:actor_id])
         rescue ActiveRecord::RecordNotFound
-          Actor.new(alias_params.slice(:given_name, :email, :surname, :psu_id, :default_alias, :orcid))
+          Actor.new(authorship_params.slice(:given_name, :email, :surname, :psu_id, :default_alias, :orcid))
         end
 
-        def creation_klass
-          "#{resource_klass}Creation".constantize
+        def authorship
+          Authorship.new(
+            display_name: authorship_params['default_alias'],
+            given_name: authorship_params['given_name'],
+            surname: authorship_params['surname'],
+            email: authorship_params['email'],
+            actor: actor
+          )
         end
     end
   end

@@ -148,13 +148,13 @@ RSpec.describe ResourceDecorator do
     context 'when there are only creators' do
       let(:resource) { build_stubbed :work_version, :with_creators, creator_count: 3 }
 
-      its(:first_creators) { is_expected.to eq(resource.creator_aliases) }
+      its(:first_creators) { is_expected.to eq(resource.creators) }
     end
 
     context 'when there are more than three creators' do
       let(:resource) { build_stubbed :work_version, :with_creators, creator_count: 4 }
 
-      its(:first_creators) { is_expected.to eq(resource.creator_aliases.take(3) + ['&hellip;']) }
+      its(:first_creators) { is_expected.to eq(resource.creators.take(3) + ['&hellip;']) }
     end
   end
 end

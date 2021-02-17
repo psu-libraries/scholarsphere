@@ -10,7 +10,7 @@ class DiffPresenter
 
   # @param [Hash] output from MetadataDiff.call
   # @param [Hash, nil] output from WorkVersionMembershipDiff.call
-  # @param [Hash, nil] output from WorkVersionCreationDiff.call
+  # @param [Hash, nil] output from AuthorshipDiff.call
   def initialize(metadata_diff, file_diff: nil, creator_diff: nil)
     metadata_diff.map do |key, value|
       hash[key] = Diffy::Diff.new(*value)
@@ -59,12 +59,12 @@ class DiffPresenter
     end
   end
 
-  # @return [Array<WorkVersionCreation>]
+  # @return [Array<Authorship>]
   def deleted_creators
     creators.fetch(:deleted, [])
   end
 
-  # @return [Array<WorkVersionCreation>]
+  # @return [Array<Authorship>]
   def added_creators
     creators.fetch(:added, [])
   end

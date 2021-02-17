@@ -5,7 +5,7 @@ class GoogleScholarMetadataComponent < ApplicationComponent
               :policy
 
   delegate :title,
-           :creator_aliases,
+           :creators,
            :deposited_at,
            :published_date,
            to: :resource
@@ -22,7 +22,7 @@ class GoogleScholarMetadataComponent < ApplicationComponent
   end
 
   def citation_authors
-    creator_aliases.map(&:alias)
+    creators.map(&:alias)
   end
 
   def citation_publication_date

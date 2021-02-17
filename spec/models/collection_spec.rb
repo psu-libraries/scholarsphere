@@ -45,8 +45,8 @@ RSpec.describe Collection, type: :model do
     it { is_expected.to have_many(:legacy_identifiers) }
     it { is_expected.to have_many(:collection_work_memberships) }
     it { is_expected.to have_many(:works).through(:collection_work_memberships) }
+    it { is_expected.to have_many(:creators) }
     it { is_expected.to have_many(:creator_aliases) }
-    it { is_expected.to have_many(:creators).through(:creator_aliases) }
     it { is_expected.to have_many(:view_statistics) }
 
     describe 'default order of works' do
@@ -151,29 +151,29 @@ RSpec.describe Collection, type: :model do
     end
   end
 
-  describe '#build_creator_alias' do
+  describe '#build_creator' do
     let(:actor) { build_stubbed :actor }
     let(:collection) { build_stubbed :collection }
 
-    it 'builds a creator_alias for the given Actor but does not persist it' do
+    it 'builds a creator for the given Actor but does not persist it' do
       expect {
-        collection.build_creator_alias(actor: actor)
+        collection.build_creator(actor: actor)
       }.to change {
-        collection.creator_aliases.length
+        collection.creators.length
       }.by(1)
 
-      collection.creator_aliases.first.tap do |creator_alias|
-        expect(creator_alias).not_to be_persisted
-        expect(creator_alias.actor).to eq actor
-        expect(creator_alias.alias).to eq actor.default_alias
+      collection.creators.first.tap do |creator|
+        expect(creator).not_to be_persisted
+        expect(creator.actor).to eq actor
+        expect(creator.display_name).to eq actor.default_alias
       end
     end
 
     it 'is idempotent' do
       expect {
-        2.times { collection.build_creator_alias(actor: actor) }
+        2.times { collection.build_creator(actor: actor) }
       }.to change {
-        collection.creator_aliases.length
+        collection.creators.length
       }.by(1)
     end
   end
@@ -194,7 +194,7 @@ RSpec.describe Collection, type: :model do
         based_near_tesim
         contributor_tesim
         created_at_dtsi
-        creator_aliases_tesim
+        creators_tesim
         creators_sim
         deposited_at_dtsi
         depositor_id_isi

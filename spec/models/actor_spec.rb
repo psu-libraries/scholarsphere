@@ -20,11 +20,11 @@ RSpec.describe Actor, type: :model do
 
   describe 'associations' do
     it { is_expected.to have_one(:user) }
-    it { is_expected.to have_many(:work_version_creations) }
-    it { is_expected.to have_many(:created_work_versions).through(:work_version_creations).source(:work_version) }
-    it { is_expected.to have_many(:created_works).through(:created_work_versions).source(:work) }
+    it { is_expected.to have_many(:authorships) }
+    it { is_expected.to have_many(:created_work_versions) }
+    it { is_expected.to have_many(:created_works) }
+    it { is_expected.to have_many(:created_collections) }
     it { is_expected.to have_many(:collection_creations) }
-    it { is_expected.to have_many(:created_collections).through(:collection_creations) }
     it { is_expected.to have_many(:deposited_works).class_name('Work').inverse_of(:depositor) }
     it { is_expected.to have_many(:proxy_deposited_works).class_name('Work').inverse_of(:proxy_depositor) }
     it { is_expected.to have_many(:deposited_collections).class_name('Collection').inverse_of(:depositor) }

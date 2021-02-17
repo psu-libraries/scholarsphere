@@ -22,11 +22,15 @@ class BuildNewWorkVersion
     end
 
     # Copy over creators
-    previous_version.creator_aliases.each do |previous_creation|
-      new_version.creator_aliases.build(
+    previous_version.creators.each do |previous_creation|
+      new_version.creators.build(
         actor_id: previous_creation.actor_id,
-        alias: previous_creation.alias,
+        display_name: previous_creation.display_name,
+        given_name: previous_creation.given_name,
+        surname: previous_creation.surname,
+        email: previous_creation.email,
         position: previous_creation.position,
+        instance_token: previous_creation.instance_token,
         changed_by_system: true # mute papertrail for this change
       )
     end

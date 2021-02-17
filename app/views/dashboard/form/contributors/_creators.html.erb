@@ -6,14 +6,14 @@
   </div>
 </div>
 
-<div id="creator_aliases"
+<div id="creators"
      data-controller="associations"
      data-associations-new="<%= dashboard_form_actors_path(resource_klass: klass) %>"
-     data-associations-post="<%= dashboard_form_aliases_path(resource_klass: klass) %>"
+     data-associations-post="<%= dashboard_form_authorships_path(resource_klass: klass) %>"
      data-associations-wrapper-class="js-contributor-wrapper"
      data-associations-badge-class="badge--index"
      data-associations-position-class="js-position-index">
-  <%= form.fields_for :creator_aliases do |creator_alias| %>
-    <%= render 'dashboard/form/contributors/creator_alias_fields', form: creator_alias %>
+  <%= form.fields_for :creators do |authorship| %>
+    <%= render 'dashboard/form/contributors/authorship_fields', form: authorship %>
   <% end %>
 </div>

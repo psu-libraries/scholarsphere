@@ -27,7 +27,7 @@ class PublishNewWork
       actor.attributes = depositor
     end
 
-    creator_aliases_attributes = metadata.to_hash.fetch('creator_aliases_attributes', []).map do |attributes|
+    creators_attributes = metadata.to_hash.fetch('creators_attributes', []).map do |attributes|
       actor_attributes = attributes['actor_attributes']
       psu_id = actor_attributes['psu_id']
 
@@ -39,7 +39,7 @@ class PublishNewWork
                 Actor.find_or_create_by(actor_attributes)
               end
 
-      { alias: attributes['alias'], actor: actor }
+      { display_name: attributes['display_name'], given_name: actor.given_name, surname: actor.surname, actor: actor }
     end
 
     params = {
@@ -49,7 +49,7 @@ class PublishNewWork
       depositor: depositor_actor,
       deposited_at: deposited_at,
       doi: metadata.delete(:doi),
-      versions_attributes: [metadata.to_hash.merge!('creator_aliases_attributes' => creator_aliases_attributes)]
+      versions_attributes: [metadata.to_hash.merge!('creators_attributes' => creators_attributes)]
     }
 
     work = Work.build_with_empty_version(params)

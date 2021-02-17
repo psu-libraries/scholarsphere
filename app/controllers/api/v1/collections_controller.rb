@@ -74,7 +74,7 @@ module Api::V1
             based_near: [],
             related_url: [],
             source: [],
-            creator_aliases_attributes: [
+            creators_attributes: [
               :alias,
               actor_attributes: [
                 :email,

@@ -119,7 +119,7 @@ class CatalogController < ApplicationController
     # solr fields to be displayed in the index (search results) view
     #   The ordering of the field names is the order of the display
     config.add_index_field 'title_tesim', label: 'Title'
-    config.add_index_field 'creator_aliases_tesim', label: 'Creators'
+    config.add_index_field 'creators_tesim', label: 'Creators'
     config.add_index_field 'aasm_state_tesim', label: 'Status'
     config.add_index_field 'keyword_tesim', label: 'Keywords'
     config.add_index_field 'work_type_ssim', label: 'Work Type'
@@ -147,7 +147,7 @@ class CatalogController < ApplicationController
     config.add_show_field 'version_name_tesim', label: 'Version Name'
     config.add_show_field 'deposited_at_dtsi', label: 'Date Deposited'
     config.add_show_field 'updated_at_dtsi', label: 'Last Updated'
-    config.add_show_field 'creator_aliases_tesim'
+    config.add_show_field 'creators_tesim'
 
     # "fielded" search configuration. Used by pulldown among other places.
     # For supported keys in hash, see rdoc for Blacklight::SearchFields
