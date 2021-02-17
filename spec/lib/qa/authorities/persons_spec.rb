@@ -59,7 +59,7 @@ RSpec.describe Qa::Authorities::Persons, type: :authority do
         let(:search_term) { creator.surname.slice(0..3).downcase }
 
         let(:expected_result) { formatted_result.merge(
-          additional_metadata: "#{Actor.human_attribute_name(:orcid)}: #{Orcid.new(creator.orcid).to_human}"
+          additional_metadata: "#{Actor.human_attribute_name(:orcid)}: #{OrcidId.new(creator.orcid).to_human}"
         ) }
 
         it { is_expected.to include(expected_result) }
@@ -67,6 +67,13 @@ RSpec.describe Qa::Authorities::Persons, type: :authority do
 
       context 'when no results are returned' do
         let(:search_term) { 'nothing' }
+
+        it { is_expected.to be_empty }
+      end
+
+      context 'when PSU ID and ORCiD are absent' do
+        let!(:creator) { create(:actor, :with_no_identifiers) }
+        let(:search_term) { creator.surname.slice(0..3).downcase }
 
         it { is_expected.to be_empty }
       end

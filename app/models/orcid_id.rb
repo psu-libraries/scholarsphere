@@ -4,7 +4,7 @@
 # and can return any of those formats. The unformatted numeric string is preferred for database storage, but this
 # class be used to present the id in alternative, human-readable formats.
 
-class Orcid
+class OrcidId
   def self.valid?(value)
     new(value).valid?
   end
