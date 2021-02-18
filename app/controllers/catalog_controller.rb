@@ -220,4 +220,13 @@ class CatalogController < ApplicationController
     # default 'mySuggester', uncomment and provide it below
     # config.autocomplete_suggester = 'mySuggester'
   end
+
+  private
+
+    # @note Overrides Blacklight::SearchContext to NOT save searches into the current session. This prevents searches
+    # from being written to the Search table, and also disables the feature to allow users to save their searches for
+    # future use.
+    def current_search_session
+      session
+    end
 end
