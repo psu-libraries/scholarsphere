@@ -75,6 +75,8 @@ Rails.application.routes.draw do
       concerns :searchable
     end
 
+    resources :collections, only: %i[edit update destroy]
+
     resource :profile, only: %i[edit update]
 
     resources :works, only: %i[edit update destroy] do

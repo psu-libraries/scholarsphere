@@ -8,7 +8,7 @@ RSpec.describe 'Work Settings Page', with_user: :user do
 
   it 'is available from the resource page' do
     visit resource_path(work.uuid)
-    click_on I18n.t('resources.settings_button.text')
+    click_on I18n.t('resources.settings_button.text', type: 'Work')
     expect(page).to have_content(I18n.t('dashboard.works.edit.heading', work_title: work.latest_version.title))
   end
 

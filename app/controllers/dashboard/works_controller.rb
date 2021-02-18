@@ -42,7 +42,7 @@ module Dashboard
         @work.attributes = work_params
 
         @embargo_form = EmbargoForm.new(work: @undecorated_work, params: embargo_params)
-        @editors_form = EditorsForm.new(work: @undecorated_work, user: current_user, params: editors_params)
+        @editors_form = EditorsForm.new(resource: @undecorated_work, user: current_user, params: editors_params)
       end
 
       def select_form_model

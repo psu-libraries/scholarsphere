@@ -3,16 +3,16 @@
 class EditorsForm
   include ActiveModel::Model
 
-  attr_reader :work, :user
+  attr_reader :resource, :user
 
-  def initialize(work:, params:, user:)
-    @work = work
+  def initialize(resource:, params:, user:)
+    @resource = resource
     @user = user
     super(params)
   end
 
   def edit_users
-    @edit_users || work.edit_users.map(&:access_id)
+    @edit_users || resource.edit_users.map(&:access_id)
   end
 
   def edit_users=(access_ids)
@@ -20,7 +20,7 @@ class EditorsForm
   end
 
   def edit_groups
-    @edit_groups || work.edit_groups.map(&:name)
+    @edit_groups || resource.edit_groups.map(&:name)
   end
 
   def edit_groups=(names)
@@ -35,9 +35,9 @@ class EditorsForm
     user_list = build_users
     return false if errors.present?
 
-    work.edit_users = user_list
-    work.edit_groups = group_list
-    work.save
+    resource.edit_users = user_list
+    resource.edit_groups = group_list
+    resource.save
   end
 
   private

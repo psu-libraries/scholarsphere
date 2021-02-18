@@ -194,6 +194,18 @@ en:
         options:
           heading: 'Dashboard Search Alternatives'
           browse: "Browse & Filter All Your Works"
+    collections:
+      edit:
+        heading: "Settings for %{title}"
+        back: Back to Collection
+        doi:
+          heading: DOI
+          explanation: A Digital Object Identifier (DOI) is a persistent identifier that can be used in print or on the web.
+          not_allowed: A DOI cannot be created for this collection.
+      update:
+        success: Collection settings successfully updated.
+      destroy:
+        success: Collection was successfully destroyed.
     home:
       intro:
         heading: 'What is my dashboard?'
@@ -209,6 +221,13 @@ en:
         error_message: "%{error} prohibited your profile from being saved:"
       update:
         success: 'Your profile was saved successfully.'
+    shared:
+      editors_form:
+        heading: Editors
+        explanation: "Gives the ability for other users from Penn State to edit your %{type}. This can be done on a per-user basis, or a group basis."
+        submit_button: Update Editors
+        not_found: "User %{access_id} could not be found"
+        unexpected: "%{access_id} is not a valid user"
     works:
       index:
         heading: "Your ScholarSphere Deposits"
@@ -237,12 +256,6 @@ en:
           heading: DOI
           explanation: A Digital Object Identifier (DOI) is a persistent identifier that can be used in print or on the web.
           not_allowed: A DOI may only be created on published works. Since this work is a draft, you'll need to wait until it's published to create a DOI for it.
-      editors:
-        heading: Editors
-        explanation: Gives the ability for other users from Penn State to edit your work. This can be done on a per-user basis, or a group basis.
-        submit_button: Update Editors 
-        not_found: "User %{access_id} could not be found"
-        unexpected: "%{access_id} is not a valid user"
       update:
         success: "Work settings successfully updated."
     form: 
@@ -462,7 +475,7 @@ en:
       delete_button: 'Delete'
       delete_confirm: "Are you sure you want to delete this collection? This cannot be undone."
     settings_button:
-      text: 'Work Settings'
+      text: '%{type} Settings'
   shared:
     search:
       heading: 'Browse and search for works'

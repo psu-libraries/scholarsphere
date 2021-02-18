@@ -28,6 +28,7 @@ linters:
       - '*app/views/incidents/_directions.html.erb'
       - '*app/views/layouts/component_preview.html.erb'
       - '*app/views/resources/_work_version.html.erb'
+      - '*app/views/resources/_collection.html.erb'
       - '*app/views/shared/_work_version_files.html.erb'
       - '*test/*'
   RightTrim:

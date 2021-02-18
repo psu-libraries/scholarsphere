@@ -241,6 +241,24 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe '#collections' do
+    let(:user) { create :user }
+    let(:user_actor) { user.actor }
+
+    let(:different_user) { create :user }
+    let(:different_actor) { different_user.actor }
+
+    let!(:deposited_collection) { create :collection, depositor: user_actor }
+
+    before do
+      create :collection, depositor: different_actor
+    end
+
+    it "returns a scope of works where the User's Actor is either the depositor or proxy" do
+      expect(user.collections).to contain_exactly(deposited_collection)
+    end
+  end
+
   describe '#admin?' do
     subject { user }
 
