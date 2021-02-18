@@ -34,11 +34,7 @@ export default class extends Controller {
       ]
     ).on('autocomplete:selected', (event, suggestion, dataset, context) => {
       event.preventDefault()
-      if (suggestion.last_option) {
-        this.element.dispatchEvent(new CustomEvent('autocomplete:alternative', { bubbles: true }))
-      } else {
-        this.element.dispatchEvent(this.afterSelectedEvent(suggestion))
-      }
+      this.element.dispatchEvent(this.afterSelectedEvent(suggestion))
     })
   }
 

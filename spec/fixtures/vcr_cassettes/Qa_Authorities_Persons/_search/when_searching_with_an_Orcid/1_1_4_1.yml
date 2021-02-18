@@ -1,0 +1,67 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://pub.orcid.org/v2.1/0000-0001-8485-6532/person
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.3
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 18 Feb 2021 19:44:03 GMT
+      Content-Type:
+      - application/json;charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - X-Mapping-fjhppofk=C9CF0771B896904864254CD659E1CE8B; path=/
+      - __cfduid=d48c930c85e5814809b68b2022f14956a1613677443; expires=Sat, 20-Mar-21
+        19:44:03 GMT; path=/; domain=.orcid.org; HttpOnly; SameSite=Lax
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Expires:
+      - '0'
+      Pragma:
+      - no-cache
+      X-Xss-Protection:
+      - 1; mode=block
+      Access-Control-Allow-Origin:
+      - "*"
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - DENY
+      Cf-Cache-Status:
+      - DYNAMIC
+      Cf-Request-Id:
+      - '085844d23400007fa021a5f000000001'
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 623a3d96b9b97fa0-ORD
+    body:
+      encoding: ASCII-8BIT
+      string: '{"last-modified-date":{"value":1612465770316},"name":{"created-date":{"value":1601473260303},"last-modified-date":{"value":1612452781871},"given-names":{"value":"Adam"},"family-name":{"value":"Wead"},"credit-name":{"value":"Dr.
+        Adam Wead"},"source":null,"visibility":"PUBLIC","path":"0000-0001-8485-6532"},"other-names":{"last-modified-date":null,"other-name":[],"path":"/0000-0001-8485-6532/other-names"},"biography":{"created-date":{"value":1612452696013},"last-modified-date":{"value":1612452696013},"content":"Developer
+        working for Penn State University Libraries.","visibility":"PUBLIC","path":"/0000-0001-8485-6532/biography"},"researcher-urls":{"last-modified-date":null,"researcher-url":[],"path":"/0000-0001-8485-6532/researcher-urls"},"emails":{"last-modified-date":{"value":1612465770316},"email":[{"created-date":{"value":1612465747618},"last-modified-date":{"value":1612465770316},"source":{"source-orcid":{"uri":"https://orcid.org/0000-0001-8485-6532","path":"0000-0001-8485-6532","host":"orcid.org"},"source-client-id":null,"source-name":{"value":"Dr.
+        Adam Wead"}},"email":"agw13@psu.edu","path":null,"visibility":"PUBLIC","verified":true,"primary":false,"put-code":null},{"created-date":{"value":1601473260293},"last-modified-date":{"value":1612465218966},"source":{"source-orcid":{"uri":"https://orcid.org/0000-0001-8485-6532","path":"0000-0001-8485-6532","host":"orcid.org"},"source-client-id":null,"source-name":{"value":"Dr.
+        Adam Wead"}},"email":"awead@psu.edu","path":null,"visibility":"PUBLIC","verified":true,"primary":false,"put-code":null}],"path":"/0000-0001-8485-6532/email"},"addresses":{"last-modified-date":null,"address":[],"path":"/0000-0001-8485-6532/address"},"keywords":{"last-modified-date":null,"keyword":[],"path":"/0000-0001-8485-6532/keywords"},"external-identifiers":{"last-modified-date":null,"external-identifier":[],"path":"/0000-0001-8485-6532/external-identifiers"},"path":"/0000-0001-8485-6532/person"}'
+  recorded_at: Thu, 18 Feb 2021 19:44:04 GMT
+recorded_with: VCR 6.0.0

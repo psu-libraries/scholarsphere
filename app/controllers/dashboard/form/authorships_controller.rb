@@ -33,6 +33,8 @@ module Dashboard
         end
 
         def actor
+          return unless params[:psu_id].present? || params[:orcid].present?
+
           Actor.find(authorship_params[:actor_id])
         rescue ActiveRecord::RecordNotFound
           Actor.new(authorship_params.slice(:given_name, :email, :surname, :psu_id, :default_alias, :orcid))

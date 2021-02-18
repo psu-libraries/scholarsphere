@@ -13,7 +13,7 @@ class OrcidId
 
   # @param [String, URI] id
   def initialize(id)
-    @id = URI(id.to_s).path.gsub(/^\//, '').delete('-')
+    @id = URI(id.to_s.gsub(/ /, '')).path.gsub(/^\//, '').delete('-')
   end
 
   def valid?
