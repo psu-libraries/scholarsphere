@@ -107,7 +107,7 @@
 
     <dynamicField name="*_dtri" type="rdate" stored="false" indexed="true" multiValued="false"/>
     <dynamicField name="*_dtrim" type="rdate" stored="false" indexed="true" multiValued="true"/>
-    <dynamicField name="*_dtrsm" type="rdate" stored="true" indexed="true" multiValued="true"/>
+    <dynamicField name="*_dtrsim" type="rdate" stored="true" indexed="true" multiValued="true"/>
     <dynamicField name="*_dtrsi" type="rdate" stored="true" indexed="true" multiValued="false"/>
 
     <!-- long (_l...) -->
