@@ -21,7 +21,7 @@
             <a class="nav-link" href="#<%= t('.doi.heading').parameterize %>"><%= t('.doi.heading') %></a>
           </li>
           <li class="nav-item">
-            <%= link_to t('dashboard.works.editors.heading'), "##{t('dashboard.works.editors.heading').parameterize}", class: 'nav-link' %>
+            <%= link_to t('dashboard.shared.editors_form.heading'), "##{t('dashboard.shared.editors_form.heading').parameterize}", class: 'nav-link' %>
           </li>
         </ul>
       </aside>
@@ -89,11 +89,11 @@
       </div>
 
       <div class="keyline keyline--left">
-        <h2 id="<%= t('dashboard.works.editors.heading').parameterize %>" class="h4"><%= t('dashboard.works.editors.heading') %></h2>
+        <h2 id="<%= t('dashboard.shared.editors_form.heading').parameterize %>" class="h4"><%= t('dashboard.shared.editors_form.heading') %></h2>
       </div>
 
       <div class="actions mb-3">
-        <%= render 'editors', work: @work %>
+        <%= render 'dashboard/shared/editors_form', editors_form: @editors_form, url: dashboard_work_path(@work) %>
       </div>
     </div>
   </article>

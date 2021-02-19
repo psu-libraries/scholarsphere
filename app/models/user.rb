@@ -43,6 +43,10 @@ class User < ApplicationRecord
       .distinct
   end
 
+  def collections
+    actor.deposited_collections
+  end
+
   def self.guest
     new(guest: true, groups: [Group.public_agent]).tap(&:readonly!)
   end

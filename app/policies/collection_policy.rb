@@ -17,6 +17,7 @@ class CollectionPolicy < ApplicationPolicy
   alias_method :create?, :edit?
   alias_method :update?, :edit?
   alias_method :destroy?, :edit?
+  alias_method :mint_doi?, :edit?
 
   private
 

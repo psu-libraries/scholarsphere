@@ -69,7 +69,7 @@ RSpec.describe CollectionPolicy, type: :policy do
     end
   end
 
-  permissions :edit? do
+  permissions :edit?, :update?, :mint_doi? do
     let(:collection) do
       create :collection,
              depositor: depositor_actor,

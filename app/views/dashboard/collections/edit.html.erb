@@ -1,0 +1,50 @@
+<%= content_for :navbar_items do %>
+  <li class="nav-item">
+    <%= link_to(t('.back'),
+                resource_path(@collection.uuid),
+                class: 'btn btn-outline-light btn--squish mr-lg-2 my-1') %>
+  </li>
+<% end %>
+
+<%= content_for :body_attributes, 'data-spy="scroll" data-target="#navbar-settings" data-offset="10" style="position: relative"'.html_safe %>
+
+<div class="container-fluid">
+  <article class="row">
+    <div class="col-lg-3">
+      <aside class="sidebar sticky-top">
+        <ul id="navbar-settings" class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link" href="#<%= t('.doi.heading').parameterize %>"><%= t('.doi.heading') %></a>
+          </li>
+          <li class="nav-item">
+            <%= link_to t('dashboard.shared.editors_form.heading'), "##{t('dashboard.shared.editors_form.heading').parameterize}", class: 'nav-link' %>
+          </li>
+        </ul>
+      </aside>
+    </div>
+    <div class="col-lg-9">
+      <h1 class="h2 mb-3"><%= t('.heading', title: @collection.title) %></h1>
+
+      <div class="keyline keyline--left">
+        <h2 id="<%= t('.doi.heading').parameterize %>" class="h4"><%= t('.doi.heading') %></h2>
+      </div>
+
+      <div class="actions mb-3">
+        <p><%= t('.doi.explanation') %></p>
+        <% if policy(@collection).mint_doi? %>
+          <%= render MintableDoiComponent.new(resource: @collection) %>
+        <% else %>
+          <p><%= t('.doi.not_allowed') %></p>
+        <% end %>
+      </div>
+
+      <div class="keyline keyline--left">
+        <h2 id="<%= t('dashboard.shared.editors_form.heading').parameterize %>" class="h4"><%= t('dashboard.shared.editors_form.heading') %></h2>
+      </div>
+
+      <div class="actions mb-3">
+        <%= render 'dashboard/shared/editors_form', editors_form: @editors_form, url: dashboard_collection_path(@collection) %>
+      </div>
+    </div>
+  </article>
+</div>

@@ -1,11 +1,11 @@
-<p><%= t('.explanation') %></p>
+<p><%= t('.explanation', type: editors_form.resource.class.name.downcase) %></p>
 
-<%- editors_form_id = "edit_editors_#{dom_id @work}" %>
-<%= form_for @editors_form,
-             url: dashboard_work_path(@work),
+<%- editors_form_id = "edit_editors_#{dom_id editors_form.resource}" %>
+<%= form_for editors_form,
+             url: url,
              method: :patch,
              remote: false,
-             html: { id: editors_form_id, class: 'edit-work-editors' } do |form| %>
+             html: { id: editors_form_id, class: 'edit-resource-editors' } do |form| %>
 
   <%= hidden_field_tag 'form_id', editors_form_id %>
   <%= render FormErrorMessageComponent.new(form: form) %>
