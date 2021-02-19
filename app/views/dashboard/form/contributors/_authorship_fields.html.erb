@@ -5,18 +5,26 @@
 <div class="nested-fields contributor-wrapper js-contributor-wrapper">
   <div class="row">
     <div class="col-2">
+      <%= form.hidden_field :position, class: 'js-position-index' %>
       <span class="badge badge-dark badge--outline">
         <%= t('dashboard.form.contributors.edit.badge') %>
         <span class="badge--index"><%= index + 1 %></span>
       </span>
     </div>
 
+    <%= form.hidden_field :actor_id %>
+    <%= form.fields_for :actor do |actor_fields| %>
+      <%= actor_fields.hidden_field :email %>
+      <%= actor_fields.hidden_field :given_name %>
+      <%= actor_fields.hidden_field :surname %>
+      <%= actor_fields.hidden_field :psu_id %>
+      <%= actor_fields.hidden_field :orcid %>
+    <% end %>
+
     <div class="col-8 pr-2">
-      <%= form.hidden_field :actor_id %>
-      <%= form.hidden_field :position, class: 'js-position-index' %>
       <div class="form-group has-float-label">
-        <%= form.text_field :alias, class: 'form-control', placeholder: true, required: true %>
-        <%= form.label :alias %>
+        <%= form.text_field :display_name, class: 'form-control', placeholder: true, required: true %>
+        <%= form.label :display_name %>
       </div>
     </div>
 
@@ -55,31 +63,43 @@
 
   <div class="row">
     <div class="col-10 offset-2">
-      <table class="table table-sm">
-        <thead>
-          <tr>
-            <th><%= Actor.human_attribute_name(:given_name) %></th>
-            <th><%= Actor.human_attribute_name(:surname) %></th>
-            <th><%= Actor.human_attribute_name(:email) %></th>
-            <th><%= Actor.human_attribute_name(:psu_id) %></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><%= form.object.given_name %></td>
-            <td><%= form.object.surname %></td>
-            <td><%= form.object.email %></td>
-            <td><%= form.object.psu_id %></td>
-          </tr>
-        </tbody>
-      </table>
 
-      <%= form.fields_for :actor do |actor_fields| %>
-        <%= actor_fields.hidden_field :email %>
-        <%= actor_fields.hidden_field :given_name %>
-        <%= actor_fields.hidden_field :surname %>
-        <%= actor_fields.hidden_field :psu_id %>
-      <% end %>
+      <div class="row">
+        <div class="col-6">
+          <div class="form-group has-float-label">
+            <%= form.text_field :given_name, class: 'form-control', placeholder: true, required: false %>
+            <%= form.label :given_name %>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <div class="form-group has-float-label">
+            <%= form.text_field :surname, class: 'form-control', placeholder: true, required: false %>
+            <%= form.label :surname %>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-6">
+          <div class="form-group has-float-label">
+            <%= form.text_field :email, class: 'form-control', placeholder: true, required: false %>
+            <%= form.label :email %>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <span class="badge badge-dark badge--outline">
+            <% if form.object.psu_id.present? %>
+              <%= t('dashboard.form.contributors.edit.psu_identity', id: form.object.psu_id) %>
+            <% elsif form.object.orcid.present? %>
+              <%= t('dashboard.form.contributors.edit.orcid_identity', id: OrcidId.new(form.object.orcid).to_human) %>
+            <% else %>
+              <%= t('dashboard.form.contributors.edit.unknown_identity') %>
+            <% end %>
+          </span>
+        </div>
+      </div>
     </div>
   </div>
 </div>

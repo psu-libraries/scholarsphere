@@ -85,14 +85,10 @@ RSpec.describe 'Creating and editing collections', :inline_jobs, with_user: :use
       within('#creators') do
         expect(page).to have_content('CREATOR 1')
         expect(find_field('Display Name').value).to eq("#{actor.given_name} #{actor.surname}")
-        expect(page).to have_content('Given Name')
-        expect(page).to have_content('Family Name')
-        expect(page).to have_content('Email')
-        expect(page).to have_content('Access Account')
-        expect(page).to have_content(actor.email)
-        expect(page).to have_content(actor.given_name)
-        expect(page).to have_content(actor.surname)
-        expect(page).to have_content(actor.psu_id)
+        expect(page).to have_field('Given Name')
+        expect(page).to have_field('Family Name')
+        expect(page).to have_field('Email')
+        expect(page).to have_content("Access Account: #{actor.psu_id}".upcase)
       end
 
       fill_in 'collection_contributor', with: metadata[:contributor]

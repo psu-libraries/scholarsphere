@@ -159,14 +159,10 @@ RSpec.describe 'Publishing a work', with_user: :user do
         within('#creators') do
           expect(page).to have_content('CREATOR 1')
           expect(find_field('Display Name').value).to eq("#{actor.given_name} #{actor.surname}")
-          expect(page).to have_content('Given Name')
-          expect(page).to have_content('Family Name')
-          expect(page).to have_content('Email')
-          expect(page).to have_content('Access Account')
-          expect(page).to have_content(actor.email)
-          expect(page).to have_content(actor.given_name)
-          expect(page).to have_content(actor.surname)
-          expect(page).to have_content(actor.psu_id)
+          expect(page).to have_field('Given Name')
+          expect(page).to have_field('Family Name')
+          expect(page).to have_field('Email')
+          expect(page).to have_content("Access Account: #{actor.psu_id}".upcase)
         end
 
         fill_in 'work_version_contributor', with: metadata[:contributor]
@@ -175,6 +171,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         work_version.reload
         expect(work_version.creators.map(&:actor)).to contain_exactly(actor)
+        expect(work_version.creators.map(&:display_name)).to contain_exactly(actor.default_alias)
         expect(work_version.contributor).to eq [metadata[:contributor]]
 
         expect(page).to have_current_path(dashboard_form_files_path(work_version))
@@ -187,6 +184,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         visit dashboard_form_contributors_path('work_version', work_version)
 
         expect(work_version.creators).to be_empty
+
         within('#creators') do
           expect(page).to have_content('CREATOR 1')
           expect(page).to have_field('Display Name', count: 1)
@@ -206,19 +204,64 @@ RSpec.describe 'Publishing a work', with_user: :user do
           expect(page).to have_content('CREATOR 1')
           expect(page).to have_content('CREATOR 2')
           expect(page).to have_field('Display Name', count: 2)
+          expect(page).to have_content('Access Account: agw13'.upcase)
         end
 
         FeatureHelpers::DashboardForm.save_and_continue
 
-        expect(work_version.creators.map(&:surname)).to include('Wead')
+        work_version.reload
+        expect(work_version.creators[0].actor).to be_present
+        expect(work_version.creators[0].display_name).to eq(actor.default_alias)
+        expect(work_version.creators[1].actor).to be_present
+        expect(work_version.creators[1].display_name).to eq('Adam Wead')
+
         expect(page).to have_current_path(dashboard_form_files_path(work_version))
         expect(SolrIndexingJob).not_to have_received(:perform_now)
       end
     end
 
-    context 'when add existing actors from Scholarsphere', :vcr do
+    context 'when adding additional users with an orcid id', :vcr do
+      it 'inserts the Orcid person as a creator into the form' do
+        visit dashboard_form_contributors_path('work_version', work_version)
+
+        expect(work_version.creators).to be_empty
+
+        within('#creators') do
+          expect(page).to have_content('CREATOR 1')
+          expect(page).to have_field('Display Name', count: 1)
+        end
+
+        FeatureHelpers::DashboardForm.search_creators('0000-0001-8485-6532')
+
+        within('.algolia-autocomplete') do
+          expect(page).to have_content('Adam Wead')
+        end
+
+        find_all('.aa-suggestion').first.click
+
+        within('#creators') do
+          expect(page).to have_content('CREATOR 1')
+          expect(page).to have_content('CREATOR 2')
+          expect(page).to have_field('Display Name', count: 2)
+          expect(page).to have_content('ORCID: 0000-0001-8485-6532')
+        end
+
+        FeatureHelpers::DashboardForm.save_and_continue
+
+        work_version.reload
+        expect(work_version.creators[0].actor).to be_present
+        expect(work_version.creators[0].display_name).to eq(actor.default_alias)
+        expect(work_version.creators[1].actor).to be_present
+        expect(work_version.creators[1].display_name).to eq('Dr. Adam Wead')
+
+        expect(page).to have_current_path(dashboard_form_files_path(work_version))
+        expect(SolrIndexingJob).not_to have_received(:perform_now)
+      end
+    end
+
+    context 'when adding existing actors from Scholarsphere', :vcr do
       # Use a fixed surname so we can record a consistent VCR response from Penn State's identity service
-      let!(:actor) { create(:actor, surname: 'Doofus') }
+      let!(:existing_actor) { create(:actor, surname: 'Doofus') }
 
       it 'inserts the local Scholarsphere actor as a creator into the form' do
         visit dashboard_form_contributors_path('work_version', work_version)
@@ -229,10 +272,10 @@ RSpec.describe 'Publishing a work', with_user: :user do
           expect(page).to have_field('Display Name', count: 1)
         end
 
-        FeatureHelpers::DashboardForm.search_creators(actor.surname)
+        FeatureHelpers::DashboardForm.search_creators(existing_actor.surname)
 
         within('.algolia-autocomplete') do
-          expect(page).to have_content(actor.default_alias)
+          expect(page).to have_content(existing_actor.default_alias)
         end
 
         find_all('.aa-suggestion').first.click
@@ -241,11 +284,17 @@ RSpec.describe 'Publishing a work', with_user: :user do
           expect(page).to have_content('CREATOR 1')
           expect(page).to have_content('CREATOR 2')
           expect(page).to have_field('Display Name', count: 2)
+          expect(page).to have_content("Access Account: #{existing_actor.psu_id}".upcase)
         end
 
         FeatureHelpers::DashboardForm.save_and_continue
 
-        expect(work_version.creators.map(&:surname)).to include(actor.surname)
+        work_version.reload
+        expect(work_version.creators[0].actor).to be_present
+        expect(work_version.creators[0].display_name).to eq(actor.default_alias)
+        expect(work_version.creators[1].actor).to be_present
+        expect(work_version.creators[1].display_name).to eq(existing_actor.default_alias)
+
         expect(page).to have_current_path(dashboard_form_files_path(work_version))
         expect(SolrIndexingJob).not_to have_received(:perform_now)
       end
@@ -269,64 +318,33 @@ RSpec.describe 'Publishing a work', with_user: :user do
           expect(page).to have_content('No results')
         end
 
-        expect(page).not_to have_selector('.modal-body')
         find_all('.aa-suggestion').first.click
-        expect(page).to have_selector('.modal-body')
-
-        within('.modal-content') do
-          fill_in('Family Name', with: metadata[:surname])
-          fill_in('Given Name', with: metadata[:given_name])
-          fill_in('Email', with: metadata[:email])
-          fill_in('ORCiD', with: metadata[:orcid])
-          click_button('Save')
-        end
-
-        wait_for_modal(5)
 
         within('#creators') do
           expect(page).to have_content('CREATOR 1')
           expect(page).to have_content('CREATOR 2')
-          expect(page).to have_content(metadata[:surname])
-          expect(page).to have_content(metadata[:given_name])
           expect(page).to have_field('Display Name', count: 2)
+          expect(page).to have_content('UNIDENTIFIED')
         end
+
+        within(page.find_all('.nested-fields').last) do
+          fill_in('Display Name', with: "#{metadata[:given_name]} #{metadata[:surname]}")
+          fill_in('Given Name', with: metadata[:given_name])
+          fill_in('Family Name', with: metadata[:surname])
+          fill_in('Email', with: metadata[:email])
+        end
+
         FeatureHelpers::DashboardForm.save_and_continue
 
-        expect(work_version.creators.map(&:surname)).to include(metadata[:surname])
+        work_version.reload
+        expect(work_version.creators[0].actor).to be_present
+        expect(work_version.creators[0].display_name).to eq(actor.default_alias)
+        expect(work_version.creators[1].actor).not_to be_present
+        expect(work_version.creators[1].given_name).to eq(metadata[:given_name])
+        expect(work_version.creators[1].surname).to eq(metadata[:surname])
+
         expect(page).to have_current_path(dashboard_form_files_path(work_version))
         expect(SolrIndexingJob).not_to have_received(:perform_now)
-      end
-    end
-
-    context 'when providing an incorrect ORCiD id', :vcr do
-      let(:metadata) { attributes_for(:actor) }
-
-      it 'prevents the actor from being added' do
-        visit dashboard_form_contributors_path('work_version', work_version)
-
-        FeatureHelpers::DashboardForm.search_creators('nobody')
-
-        within('.algolia-autocomplete') do
-          expect(page).to have_content('No results')
-        end
-
-        expect(page).not_to have_selector('.modal-body')
-        find_all('.aa-suggestion').first.click
-        expect(page).to have_selector('.modal-body')
-
-        within('.modal-content') do
-          fill_in('Family Name', with: metadata[:surname])
-          fill_in('ORCiD', with: Faker::Number.leading_zero_number(digits: 15))
-          click_button('Save')
-        end
-
-        within('#creators') do
-          expect(page).not_to have_content('CREATOR 2')
-        end
-
-        within('.modal-content') do
-          expect(page).to have_content('ORCiD must be valid')
-        end
       end
     end
 
@@ -458,17 +476,14 @@ RSpec.describe 'Publishing a work', with_user: :user do
       expect(SolrIndexingJob).not_to have_received(:perform_now)
 
       # Ensure one creator is pre-filled with the User's Actor
+      actor = user.reload.actor
       within('#creators') do
-        actor = user.reload.actor
+        expect(page).to have_content('CREATOR 1')
         expect(find_field('Display Name').value).to eq("#{actor.given_name} #{actor.surname}")
-        expect(page).to have_content('Given Name')
-        expect(page).to have_content('Family Name')
-        expect(page).to have_content('Email')
-        expect(page).to have_content('Access Account')
-        expect(page).to have_content(actor.email)
-        expect(page).to have_content(actor.given_name)
-        expect(page).to have_content(actor.surname)
-        expect(page).to have_content(actor.psu_id)
+        expect(page).to have_field('Given Name')
+        expect(page).to have_field('Family Name')
+        expect(page).to have_field('Email')
+        expect(page).to have_content("Access Account: #{actor.psu_id}".upcase)
       end
 
       FeatureHelpers::DashboardForm.save_and_continue

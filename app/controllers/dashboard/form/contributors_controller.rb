@@ -29,12 +29,16 @@ module Dashboard
                 :_destroy,
                 :display_name,
                 :position,
+                :given_name,
+                :surname,
+                :email,
                 actor_attributes: [
                   :id,
                   :email,
                   :given_name,
                   :surname,
-                  :psu_id
+                  :psu_id,
+                  :orcid
                 ]
               ]
             )

@@ -50,4 +50,10 @@ RSpec.describe OrcidId, type: :model do
 
     it { is_expected.not_to be_valid }
   end
+
+  context 'with string content' do
+    subject { described_class.new(Faker::Lorem.sentence) }
+
+    it { is_expected.not_to be_valid }
+  end
 end

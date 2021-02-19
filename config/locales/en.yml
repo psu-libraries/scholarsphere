@@ -44,7 +44,12 @@ en:
           authenticated: Penn State Only
           restricted: Private
       authorship:
-        alias: Display Name
+        display_name: Display Name
+        given_name: Given Name
+        surname: Family Name
+        email: Email
+        psu_id: Access Account
+        orcid: ORCiD
       work_version:
         title: Work Title
         version_name: Semantic Version
@@ -317,6 +322,9 @@ en:
           search_heading: Add another creator
           search_label: Search creators
           search_results: Search Results
+          orcid_identity: "ORCiD: %{id}"
+          psu_identity: "Access Account: %{id}"
+          unknown_identity: "Unidentified"
         new:
           heading: New Creator
           cancel: Cancel
