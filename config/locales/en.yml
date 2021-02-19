@@ -91,6 +91,11 @@ en:
   activemodel:
     errors:
       models:
+        editors_form:
+          attributes:
+            edit_users:
+              not_found: "User %{access_id} could not be found"
+              unexpected: "%{access_id} is not a valid user"
         embargo_form:
           attributes:
             embargoed_until:
@@ -226,8 +231,6 @@ en:
         heading: Editors
         explanation: "Gives the ability for other users from Penn State to edit your %{type}. This can be done on a per-user basis, or a group basis."
         submit_button: Update Editors
-        not_found: "User %{access_id} could not be found"
-        unexpected: "%{access_id} is not a valid user"
     works:
       index:
         heading: "Your ScholarSphere Deposits"

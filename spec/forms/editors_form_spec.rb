@@ -98,7 +98,8 @@ RSpec.describe EditorsForm, type: :model do
         form.save
         expect(resource.edit_users).to be_empty
         expect(form.errors.full_messages).to contain_exactly(
-          'Edit users ' + I18n.t('dashboard.works.editors.not_found', access_id: access_id)
+          'Edit users ' +
+          I18n.t!('activemodel.errors.models.editors_form.attributes.edit_users.not_found', access_id: access_id)
         )
       end
     end
@@ -114,7 +115,8 @@ RSpec.describe EditorsForm, type: :model do
         form.save
         expect(resource.edit_users).to be_empty
         expect(form.errors.full_messages).to contain_exactly(
-          'Edit users ' + I18n.t('dashboard.works.editors.unexpected', access_id: access_id)
+          'Edit users ' +
+          I18n.t!('activemodel.errors.models.editors_form.attributes.edit_users.unexpected', access_id: access_id)
         )
       end
     end

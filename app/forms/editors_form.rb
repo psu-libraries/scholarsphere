@@ -45,7 +45,7 @@ class EditorsForm
     def build_users
       edit_users.map do |access_id|
         service_wrapper(access_id) ||
-          errors.add(:edit_users, I18n.t('dashboard.works.editors.not_found', access_id: access_id)) && access_id
+          errors.add(:edit_users, :not_found, access_id: access_id) && access_id
       end
     end
 
@@ -63,6 +63,6 @@ class EditorsForm
     def service_wrapper(access_id)
       UserRegistrationService.call(uid: access_id)
     rescue URI::InvalidURIError
-      errors.add(:edit_users, I18n.t('dashboard.works.editors.unexpected', access_id: access_id)) && access_id
+      errors.add(:edit_users, :unexpected, access_id: access_id) && access_id
     end
 end
