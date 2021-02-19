@@ -236,6 +236,7 @@ en:
         heading: Editors
         explanation: "Gives the ability for other users from Penn State to edit your %{type}. This can be done on a per-user basis, or a group basis."
         submit_button: Update Editors
+        depositor: "%{depositor_name} (%{depositor_id}) deposited this %{type} and will always have edit access."
     works:
       index:
         heading: "Your ScholarSphere Deposits"
