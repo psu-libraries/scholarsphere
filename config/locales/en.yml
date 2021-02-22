@@ -318,7 +318,7 @@ en:
           move_up: "Move %{name} one position earlier"
           move_down: "Move %{name} one position later"
           search: >
-            You can search for creators using their Penn State Access Account, email, or name
+            You can search for authors using their ORCID ID, Penn State Access Account, email address, or name
           search_heading: Add another creator
           search_label: Search creators
           search_results: Search Results
