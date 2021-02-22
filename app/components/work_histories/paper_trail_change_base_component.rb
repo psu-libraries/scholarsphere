@@ -2,7 +2,7 @@
 
 class WorkHistories::PaperTrailChangeBaseComponent < ApplicationComponent
   # @param paper_trail_version [PaperTrail::Version] representing a change to a
-  #        WorkVersionCreation
+  #        Authorship
   # @param user [User]
   def initialize(paper_trail_version:, user:)
     if paper_trail_version.item_type.to_s != expected_item_type.to_s
@@ -11,6 +11,10 @@ class WorkHistories::PaperTrailChangeBaseComponent < ApplicationComponent
 
     @paper_trail_version = paper_trail_version
     @user = user
+  end
+
+  def render?
+    !paper_trail_version.changed_by_system # Do not render changes by system
   end
 
   private

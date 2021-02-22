@@ -1,0 +1,27 @@
+<li
+  id="<%= element_id %>"
+  class="version-timeline__change version-timeline__change--creator version-timeline__change--<%= event_class %>">
+
+  <div class="version-timeline__change-action">
+    <%= action %> <%= t 'dashboard.work_history.creator.creator' %> <%= current_name %>
+
+    <% if rename? %>
+      <span class="badge badge-pill badge-primary badge--nudge-up"><a data-toggle="collapse" href="#<%= diff_id %>"><%= t 'dashboard.work_history.show_diff' %></a></span>
+    <% end %>
+  </div>
+
+  <p class="version-timeline__change-metadata">
+    <span class="version-timeline__change-timestamp"><%= timestamp %></span>
+    <%= t 'dashboard.work_history.by' %>
+    <span class="version-timeline__change-user"><%= user_name %></span>
+  </p>
+
+  <% if rename? %>
+    <div id="<%= diff_id %>" class="version-timeline__diff collapse">
+      <%# @todo make the diff its own component? %>
+      <% diff_presenter.hash.each do |term, value| %>
+        <%= value.to_s(:html).html_safe %>
+      <% end %>
+    </div>
+  <% end %>
+</li>

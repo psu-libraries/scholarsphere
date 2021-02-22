@@ -25,7 +25,7 @@ module Api
       # user will never be used. If this changes, however, we should probably create a default, public-level
       # application.
       def current_user
-        return User.guest unless api_token
+        return User.guest if api_token.blank?
 
         api_token.application
       end
@@ -33,10 +33,10 @@ module Api
       private
 
         def authenticate_request!
-          if api_token
+          if api_token && !Rails.application.read_only?
             api_token.record_usage
           else
-            render json: { message: I18n.t('api.errors.not_authorized'), code: 401 }, status: 401 unless api_token
+            render json: { message: I18n.t('api.errors.not_authorized'), code: 401 }, status: 401
           end
         end
 

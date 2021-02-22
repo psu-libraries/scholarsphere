@@ -68,12 +68,15 @@ Metrics/ClassLength:
     - 'app/controllers/dashboard/work_versions_controller.rb'
     - 'app/models/collection.rb'
     - 'app/models/work_version.rb'
+    - 'app/services/authorship_migration/work_version_creation_migration.rb'
 
 # Offense count: 1
 # Configuration parameters: IgnoredMethods, Max.
 Metrics/PerceivedComplexity:
   Exclude:
     - 'app/services/publish_new_work.rb'
+    - 'app/services/doi_service.rb'
+    - 'app/services/authorship_migration/work_version_creation_migration.rb'
 
 # Offense count: 1
 # Configuration parameters: CustomIncludeMethods.
@@ -104,13 +107,6 @@ Rails/OutputSafety:
 Rails/SkipsModelValidations:
   Exclude:
     - 'app/models/api_token.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: PreferredMethods.
-Style/CollectionMethods:
-  Exclude:
-    - 'app/models/work_version.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.

@@ -8,6 +8,14 @@
 
 <%= content_for :navbar_items do %>
   <% if policy(collection).edit? %>
+    <li class="nav-item">
+      <%= link_to(edit_dashboard_collection_path(collection),
+                  class: 'btn btn-outline-light btn--squish mr-lg-2 btn--settings') do %>
+          <%= t('resources.settings_button.text', type: 'Collection') %>
+          <i class="material-icons">settings</i>
+      <% end %>
+    </li>
+
     <li class="nav-item py-1">
       <%= link_to t('resources.collection.edit_button'),
                   dashboard_form_collection_details_path(collection.id),

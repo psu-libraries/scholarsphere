@@ -46,3 +46,4 @@ cc-test-reporter
 .bash_history
 .cache
 .yarnrc
+doc/api/*

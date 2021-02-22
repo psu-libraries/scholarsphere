@@ -32,7 +32,7 @@ RSpec.describe WorkVersions::StatusBadgeComponent, type: :component do
   end
 
   context 'with a published version' do
-    let(:work_version) { build_stubbed :work_version, :published, version_number: 3 }
+    let(:work_version) { create :work_version, :published, version_number: 3 }
 
     specify do
       expect(badge.text).to include('published')

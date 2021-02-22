@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe EditorsForm, type: :model do
-  subject(:form) { described_class.new(work: work, params: params, user: current_user) }
+  subject(:form) { described_class.new(resource: resource, params: params, user: current_user) }
 
-  let(:work) { build(:work) }
+  let(:resource) { build(:work) }
   let(:params) { {} }
   let(:current_user) { build(:user) }
 
@@ -39,14 +39,18 @@ RSpec.describe EditorsForm, type: :model do
       its(:edit_groups) { is_expected.to eq(['groupName']) }
     end
 
-    context 'when the work has existing users and grous' do
+    context 'when the resource has existing users and grous' do
       let(:user) { build(:user) }
       let(:group) { build(:group) }
-      let(:work) { build(:work, edit_users: [user], edit_groups: [group]) }
+      let(:resource) { build(:work, edit_users: [user], edit_groups: [group]) }
 
       its(:edit_users) { is_expected.to contain_exactly(user.uid) }
       its(:edit_groups) { is_expected.to contain_exactly(group.name) }
     end
+  end
+
+  describe '#resource' do
+    its(:resource) { is_expected.to eq resource }
   end
 
   describe '#group_options' do
@@ -69,11 +73,17 @@ RSpec.describe EditorsForm, type: :model do
 
       before { allow(UserRegistrationService).to receive(:call).with(uid: user.access_id).and_return(user) }
 
-      it 'adds the user as an editor' do
-        expect(work.edit_users).to be_empty
-        form.save
-        work.reload
-        expect(work.edit_users).to contain_exactly(user)
+      [:work, :collection].each do |resource_type|
+        context "when given a #{resource_type}" do
+          let(:resource) { build resource_type }
+
+          it 'adds the user as an editor' do
+            expect(resource.edit_users).to be_empty
+            form.save
+            resource.reload
+            expect(resource.edit_users).to contain_exactly(user)
+          end
+        end
       end
     end
 
@@ -84,11 +94,12 @@ RSpec.describe EditorsForm, type: :model do
       before { allow(UserRegistrationService).to receive(:call).with(uid: access_id).and_return(nil) }
 
       it 'does not add the user and reports an error' do
-        expect(work.edit_users).to be_empty
+        expect(resource.edit_users).to be_empty
         form.save
-        expect(work.edit_users).to be_empty
+        expect(resource.edit_users).to be_empty
         expect(form.errors.full_messages).to contain_exactly(
-          'Edit users ' + I18n.t('dashboard.works.editors.not_found', access_id: access_id)
+          'Edit users ' +
+          I18n.t!('activemodel.errors.models.editors_form.attributes.edit_users.not_found', access_id: access_id)
         )
       end
     end
@@ -100,11 +111,12 @@ RSpec.describe EditorsForm, type: :model do
       before { allow(UserRegistrationService).to receive(:call).with(uid: access_id).and_raise(URI::InvalidURIError) }
 
       it 'does not add the user and reports an error' do
-        expect(work.edit_users).to be_empty
+        expect(resource.edit_users).to be_empty
         form.save
-        expect(work.edit_users).to be_empty
+        expect(resource.edit_users).to be_empty
         expect(form.errors.full_messages).to contain_exactly(
-          'Edit users ' + I18n.t('dashboard.works.editors.unexpected', access_id: access_id)
+          'Edit users ' +
+          I18n.t!('activemodel.errors.models.editors_form.attributes.edit_users.unexpected', access_id: access_id)
         )
       end
     end
@@ -125,10 +137,10 @@ RSpec.describe EditorsForm, type: :model do
       let(:group) { create(:group) }
 
       it 'adds the group as an editor' do
-        expect(work.edit_groups).to be_empty
+        expect(resource.edit_groups).to be_empty
         form.save
-        work.reload
-        expect(work.edit_groups).to contain_exactly(group)
+        resource.reload
+        expect(resource.edit_groups).to contain_exactly(group)
       end
     end
 
@@ -136,10 +148,10 @@ RSpec.describe EditorsForm, type: :model do
       let(:params) { { 'edit_groups' => ['missing-group'] } }
 
       it 'adds the group as an editor' do
-        expect(work.edit_groups).to be_empty
+        expect(resource.edit_groups).to be_empty
         form.save
-        work.reload
-        expect(work.edit_groups).to be_empty
+        resource.reload
+        expect(resource.edit_groups).to be_empty
       end
     end
   end

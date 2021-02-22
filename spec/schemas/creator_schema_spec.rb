@@ -11,8 +11,8 @@ RSpec.describe CreatorSchema do
 
       its(:document) do
         is_expected.to eq(
-          creators_sim: resource.creators.map(&:default_alias),
-          creator_aliases_tesim: resource.creator_aliases.map(&:alias)
+          creators_sim: resource.creators.map(&:alias),
+          creators_tesim: resource.creators.map(&:alias)
         )
       end
     end

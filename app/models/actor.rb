@@ -17,14 +17,24 @@ class Actor < ApplicationRecord
            inverse_of: 'proxy_depositor',
            dependent: :restrict_with_exception
 
+  # @deprecated Use :authorships instead. This will be removed in 4.3
   has_many :work_version_creations,
            dependent: :restrict_with_exception,
            inverse_of: :actor
 
+  has_many :authorships,
+           dependent: :restrict_with_exception,
+           inverse_of: :actor
+
   has_many :created_work_versions,
-           through: :work_version_creations,
-           source: :work_version,
-           inverse_of: :creators
+           through: :authorships,
+           source: :resource,
+           source_type: 'WorkVersion'
+
+  has_many :created_collections,
+           through: :authorships,
+           source: :resource,
+           source_type: 'Collection'
 
   has_many :created_works,
            source: :work,
@@ -36,14 +46,10 @@ class Actor < ApplicationRecord
            inverse_of: 'depositor',
            dependent: :restrict_with_exception
 
+  # @deprecated Use :authorships instead. This will be removed in 4.3
   has_many :collection_creations,
            dependent: :restrict_with_exception,
            inverse_of: :actor
-
-  has_many :created_collections,
-           source: :collection,
-           through: :collection_creations,
-           inverse_of: :creators
 
   accepts_nested_attributes_for :user
 

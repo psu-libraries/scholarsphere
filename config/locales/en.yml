@@ -1,7 +1,11 @@
 en:
   application_name: "ScholarSphere"
   description: >
-    ScholarSphere is an institutional repository managed by Penn State University Libraries. Anyone with a Penn State Access Account can deposit materials relating to the University’s teaching, learning, and research mission to ScholarSphere. All types of scholarly materials, including publications, instructional materials, creative works, and research data are accepted.
+    ScholarSphere is an institutional repository managed by Penn State University Libraries. Anyone with a Penn State
+    Access Account can deposit materials relating to the University’s teaching, learning, and research mission to
+    ScholarSphere. All types of scholarly materials, including publications, instructional materials, creative works,
+    and research data are accepted.
+  read_only: Scholarsphere is undergoing maintenance. No changes can be made during this time.
   activerecord:
     attributes:
       actor:
@@ -16,7 +20,7 @@ en:
         subtitle: Subtitle
         keyword: Keyword
         description: Description
-        creator_aliases: Creator
+        creators: Creator
         contributor: Acknowledgments
         publisher: Publisher
         published_date: &collection_published_date Publication Date
@@ -39,8 +43,13 @@ en:
           open: Public
           authenticated: Penn State Only
           restricted: Private
-      work_version_creation:
-        alias: Display Name
+      authorship:
+        display_name: Display Name
+        given_name: Given Name
+        surname: Family Name
+        email: Email
+        psu_id: Access Account
+        orcid: ORCiD
       work_version:
         title: Work Title
         version_name: Semantic Version
@@ -49,7 +58,7 @@ en:
         rights: License
         display_rights: License
         description: Description
-        creator_aliases: Creators
+        creators: Creators
         first_creators: Creators
         resource_type: Resource Type
         contributor: Acknowledgments
@@ -87,6 +96,11 @@ en:
   activemodel:
     errors:
       models:
+        editors_form:
+          attributes:
+            edit_users:
+              not_found: "User %{access_id} could not be found"
+              unexpected: "%{access_id} is not a valid user"
         embargo_form:
           attributes:
             embargoed_until:
@@ -190,6 +204,18 @@ en:
         options:
           heading: 'Dashboard Search Alternatives'
           browse: "Browse & Filter All Your Works"
+    collections:
+      edit:
+        heading: "Settings for %{title}"
+        back: Back to Collection
+        doi:
+          heading: DOI
+          explanation: A Digital Object Identifier (DOI) is a persistent identifier that can be used in print or on the web.
+          not_allowed: A DOI cannot be created for this collection.
+      update:
+        success: Collection settings successfully updated.
+      destroy:
+        success: Collection was successfully destroyed.
     home:
       intro:
         heading: 'What is my dashboard?'
@@ -205,6 +231,11 @@ en:
         error_message: "%{error} prohibited your profile from being saved:"
       update:
         success: 'Your profile was saved successfully.'
+    shared:
+      editors_form:
+        heading: Editors
+        explanation: "Gives the ability for other users from Penn State to edit your %{type}. This can be done on a per-user basis, or a group basis."
+        submit_button: Update Editors
     works:
       index:
         heading: "Your ScholarSphere Deposits"
@@ -233,12 +264,6 @@ en:
           heading: DOI
           explanation: A Digital Object Identifier (DOI) is a persistent identifier that can be used in print or on the web.
           not_allowed: A DOI may only be created on published works. Since this work is a draft, you'll need to wait until it's published to create a DOI for it.
-      editors:
-        heading: Editors
-        explanation: Gives the ability for other users from Penn State to edit your work. This can be done on a per-user basis, or a group basis.
-        submit_button: Update Editors 
-        not_found: "User %{access_id} could not be found"
-        unexpected: "%{access_id} is not a valid user"
       update:
         success: "Work settings successfully updated."
     form: 
@@ -293,10 +318,13 @@ en:
           move_up: "Move %{name} one position earlier"
           move_down: "Move %{name} one position later"
           search: >
-            You can search for creators using their Penn State Access Account, email, or name
+            You can search for authors using their ORCID ID, Penn State Access Account, email address, or name
           search_heading: Add another creator
           search_label: Search creators
           search_results: Search Results
+          orcid_identity: "ORCiD: %{id}"
+          psu_identity: "Access Account: %{id}"
+          unknown_identity: "Unidentified"
         new:
           heading: New Creator
           cancel: Cancel
@@ -367,7 +395,7 @@ en:
       unknown_user: '[unknown user]'
       renamed_to:
         html: "&rarr;"
-      creator_alias:
+      creator:
         creator: Creator
         create: Added
         rename: Renamed
@@ -458,7 +486,7 @@ en:
       delete_button: 'Delete'
       delete_confirm: "Are you sure you want to delete this collection? This cannot be undone."
     settings_button:
-      text: 'Work Settings'
+      text: '%{type} Settings'
   shared:
     search:
       heading: 'Browse and search for works'

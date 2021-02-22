@@ -75,6 +75,8 @@ Rails.application.routes.draw do
       concerns :searchable
     end
 
+    resources :collections, only: %i[edit update destroy]
+
     resource :profile, only: %i[edit update]
 
     resources :works, only: %i[edit update destroy] do
@@ -131,7 +133,7 @@ Rails.application.routes.draw do
       get   ':resource_klass/:id/actors/new', to: 'actors#new', as: 'actors'
       match ':resource_klass/:id/actors/new', to: 'actors#create', via: :post, as: nil
 
-      post ':resource_klass/:id/aliases/new', to: 'aliases#new', as: 'aliases'
+      post ':resource_klass/:id/authorships/new', to: 'authorships#new', as: 'authorships'
     end
   end
 

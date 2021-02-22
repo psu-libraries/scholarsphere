@@ -25,6 +25,11 @@ Metrics/BlockLength:
     - 'spec/**/*'
     - 'lib/tasks/**/*'
 
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - 'app/services/doi_service.rb'
+    - 'app/services/authorship_migration/work_version_creation_migration.rb'
+
 Rails/FilePath:
   EnforcedStyle: arguments
 
@@ -92,3 +97,8 @@ Style/EmptyMethod:
 Style/MethodMissingSuper:
   Exclude:
    - 'app/models/null_work_version.rb'
+
+Style/EmptyCaseCondition:
+  Exclude:
+    - 'app/services/doi_service.rb'
+

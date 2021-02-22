@@ -1,0 +1,65 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://pub.orcid.org/v2.1/0000-0001-8485-6532/email
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.3
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 04 Feb 2021 21:06:30 GMT
+      Content-Type:
+      - application/json;charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - X-Mapping-fjhppofk=4842165633BFDE68C17EFF06BB2B96E5; path=/
+      - __cfduid=d00657df118a7cb884103c2a24002fbb91612472790; expires=Sat, 06-Mar-21
+        21:06:30 GMT; path=/; domain=.orcid.org; HttpOnly; SameSite=Lax
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Expires:
+      - '0'
+      Pragma:
+      - no-cache
+      X-Xss-Protection:
+      - 1; mode=block
+      Access-Control-Allow-Origin:
+      - "*"
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - DENY
+      Cf-Cache-Status:
+      - DYNAMIC
+      Cf-Request-Id:
+      - '08107745f000003f60db28b000000001'
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 61c75b1cbd0a3f60-ORD
+    body:
+      encoding: ASCII-8BIT
+      string: '{"last-modified-date":{"value":1612465770316},"email":[{"created-date":{"value":1612465747618},"last-modified-date":{"value":1612465770316},"source":{"source-orcid":{"uri":"https://orcid.org/0000-0001-8485-6532","path":"0000-0001-8485-6532","host":"orcid.org"},"source-client-id":null,"source-name":{"value":"Dr.
+        Adam Wead"}},"email":"agw13@psu.edu","path":null,"visibility":"PUBLIC","verified":true,"primary":false,"put-code":null},{"created-date":{"value":1601473260293},"last-modified-date":{"value":1612465218966},"source":{"source-orcid":{"uri":"https://orcid.org/0000-0001-8485-6532","path":"0000-0001-8485-6532","host":"orcid.org"},"source-client-id":null,"source-name":{"value":"Dr.
+        Adam Wead"}},"email":"awead@psu.edu","path":null,"visibility":"PUBLIC","verified":true,"primary":false,"put-code":null}],"path":"/0000-0001-8485-6532/email"}'
+  recorded_at: Thu, 04 Feb 2021 21:06:30 GMT
+recorded_with: VCR 6.0.0

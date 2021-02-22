@@ -1,0 +1,105 @@
+<%# @note Builds a form object when the partial is called async, such as appending new creators to the work form %>
+<%- form ||= ActionView::Helpers::FormBuilder.new("#{param_key}[creators_attributes][#{Time.zone.now.to_i}]", authorship, self, {}) %>
+<%- index = form.try(:index) || 0 %>
+
+<div class="nested-fields contributor-wrapper js-contributor-wrapper">
+  <div class="row">
+    <div class="col-2">
+      <%= form.hidden_field :position, class: 'js-position-index' %>
+      <span class="badge badge-dark badge--outline">
+        <%= t('dashboard.form.contributors.edit.badge') %>
+        <span class="badge--index"><%= index + 1 %></span>
+      </span>
+    </div>
+
+    <%= form.hidden_field :actor_id %>
+    <%= form.fields_for :actor do |actor_fields| %>
+      <%= actor_fields.hidden_field :email %>
+      <%= actor_fields.hidden_field :given_name %>
+      <%= actor_fields.hidden_field :surname %>
+      <%= actor_fields.hidden_field :psu_id %>
+      <%= actor_fields.hidden_field :orcid %>
+    <% end %>
+
+    <div class="col-8 pr-2">
+      <div class="form-group has-float-label">
+        <%= form.text_field :display_name, class: 'form-control', placeholder: true, required: true %>
+        <%= form.label :display_name %>
+      </div>
+    </div>
+
+    <div class="col-2 pl-0">
+      <%= link_to_remove_association form,
+                                     class: 'remove',
+                                     title: t('dashboard.form.contributors.edit.remove', name: form.object.alias),
+                                     data: { toggle: 'tooltip', placement: 'top', offset: '0,100%' } do %>
+        <span class="sr-only"><%= t('dashboard.form.contributors.edit.remove', name: form.object.alias) %></span>
+        <i class="material-icons" aria-hidden="true">highlight_off</i>
+      <% end %>
+
+      <%= link_to '#',
+                  class: 'move js-move-up',
+                  title: t('dashboard.form.contributors.edit.move_up', name: form.object.alias),
+                  data: {
+                    action: 'associations#moveUp',
+                    toggle: 'tooltip', placement: 'top', offset: '0,100%'
+                  } do %>
+        <span class="sr-only"><%= t('dashboard.form.contributors.edit.move_up', name: form.object.alias) %></span>
+        <i class="material-icons" aria-hidden="true">arrow_circle_up</i>
+      <% end %>
+
+      <%= link_to '#',
+                  class: 'move js-move-down',
+                  title: t('dashboard.form.contributors.edit.move_down', name: form.object.alias),
+                  data: {
+                    action: 'associations#moveDown',
+                    toggle: 'tooltip', placement: 'top', offset: '0,100%'
+                  } do %>
+        <span class="sr-only"><%= t('dashboard.form.contributors.edit.move_down', name: form.object.alias) %></span>
+        <i class="material-icons" aria-hidden="true">arrow_circle_down</i>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-10 offset-2">
+
+      <div class="row">
+        <div class="col-6">
+          <div class="form-group has-float-label">
+            <%= form.text_field :given_name, class: 'form-control', placeholder: true, required: false %>
+            <%= form.label :given_name %>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <div class="form-group has-float-label">
+            <%= form.text_field :surname, class: 'form-control', placeholder: true, required: false %>
+            <%= form.label :surname %>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-6">
+          <div class="form-group has-float-label">
+            <%= form.text_field :email, class: 'form-control', placeholder: true, required: false %>
+            <%= form.label :email %>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <span class="badge badge-dark badge--outline">
+            <% if form.object.psu_id.present? %>
+              <%= t('dashboard.form.contributors.edit.psu_identity', id: form.object.psu_id) %>
+            <% elsif form.object.orcid.present? %>
+              <%= t('dashboard.form.contributors.edit.orcid_identity', id: OrcidId.new(form.object.orcid).to_human) %>
+            <% else %>
+              <%= t('dashboard.form.contributors.edit.unknown_identity') %>
+            <% end %>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

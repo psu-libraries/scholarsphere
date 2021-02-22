@@ -8,17 +8,6 @@ RSpec.describe 'Search Facets', :inline_jobs do
 
     let(:another_actor) { build :actor, default_alias: 'Someone Else' }
 
-    before do
-      # A work I'm a creator on
-      my_work_version = create(:work_version, :published, title: 'A Work I Created', creator_count: 0, creators: [my_actor])
-
-      # A collection I'm a creator on
-      create(:collection, title: 'A Collection I Created', creators: [my_actor], works: [my_work_version.work])
-
-      # A work someone else created
-      create(:work_version, :published, title: 'A Work Someone Else Created', creators: [another_actor])
-    end
-
     it 'updates the facet (but not the resource) when an actor changes their default alias' do
       pending('Requires further input from stakeholders on design and metadata changes')
       visit search_catalog_path

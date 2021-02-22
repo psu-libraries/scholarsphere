@@ -35,9 +35,11 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
+    "redoc-cli": "^0.10.2",
     "webpack-dev-server": "^3.11.0"
   },
   "scripts": {
-    "lint": "yarn run eslint --ext .js app/javascript"
+    "lint": "yarn run eslint --ext .js app/javascript",
+    "build-docs": "yarn run redoc-cli bundle -o doc/api/index.html openapi.yml"
   }
 }

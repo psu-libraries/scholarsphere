@@ -120,4 +120,15 @@ RSpec.describe 'Dashboard catalog page', :inline_jobs do
       expect(page).to have_content(I18n.t('dashboard.catalog.zero_results.info.content'))
     end
   end
+
+  context 'when the application is read-only', :read_only, with_user: :user do
+    it 'redirects to the home page' do
+      visit(dashboard_root_path)
+
+      within('.alert-warning') do
+        expect(page).to have_content(I18n.t('read_only'))
+      end
+      expect(page).to have_link('Login', class: 'disabled')
+    end
+  end
 end

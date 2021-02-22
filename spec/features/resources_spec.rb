@@ -27,12 +27,12 @@ RSpec.describe 'Public Resources', type: :feature do
         expect(page.find('meta[name="citation_publication_date"]', visible: false)[:content])
           .to eq Date.edtf(v2.published_date).year.to_s
         all_authors = page.all(:css, 'meta[name="citation_author"]', visible: false)
-        expect(all_authors.map { |a| a[:content] }).to match_array v2.creator_aliases.map(&:alias)
+        expect(all_authors.map { |a| a[:content] }).to match_array v2.creators.map(&:alias)
 
         ## Does not have edit controls
         within('header') do
           expect(page).not_to have_content(I18n.t('resources.work_version.edit_button.text', version: 'V2'))
-          expect(page).not_to have_content(I18n.t('resources.settings_button.text'))
+          expect(page).not_to have_content(I18n.t('resources.settings_button.text', type: 'Work'))
         end
 
         ## Navigate to an old version
@@ -56,7 +56,7 @@ RSpec.describe 'Public Resources', type: :feature do
             ## Edit controls are visible
             expect(page).to have_content(I18n.t('resources.work_version.edit_button.text', version: 'V2'))
               .and have_content(I18n.t('resources.work_version.create_button.text', version: 'V2'))
-              .and have_content(I18n.t('resources.settings_button.text'))
+              .and have_content(I18n.t('resources.settings_button.text', type: 'Work'))
 
             ## Edit button is disabled, create draft button is enabled
             expect(page).to have_selector('.qa-edit-version.disabled')

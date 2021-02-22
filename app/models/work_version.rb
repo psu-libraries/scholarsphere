@@ -34,6 +34,7 @@ class WorkVersion < ApplicationRecord
   has_many :file_resources,
            through: :file_version_memberships
 
+  # @deprecated Use :creators instead. This will be removed in 4.3.
   has_many :creator_aliases,
            -> { order(position: :asc) },
            class_name: 'WorkVersionCreation',
@@ -41,15 +42,17 @@ class WorkVersion < ApplicationRecord
            dependent: :destroy
 
   has_many :creators,
-           source: :actor,
-           through: :creator_aliases,
-           inverse_of: :created_work_versions
+           -> { order(position: :asc) },
+           as: :resource,
+           class_name: 'Authorship',
+           dependent: :destroy,
+           inverse_of: :resource
 
   accepts_nested_attributes_for :work
 
   accepts_nested_attributes_for :file_resources
 
-  accepts_nested_attributes_for :creator_aliases,
+  accepts_nested_attributes_for :creators,
                                 reject_if: :all_blank,
                                 allow_destroy: true
 
@@ -93,7 +96,7 @@ class WorkVersion < ApplicationRecord
             presence: true,
             if: :published?
 
-  validates :creator_aliases,
+  validates :creators,
             presence: true,
             if: :published?
 
@@ -204,12 +207,15 @@ class WorkVersion < ApplicationRecord
     work_version
   end
 
-  def build_creator_alias(actor:)
-    existing_creator_alias = creator_aliases.detect { |ca| ca.actor == actor }
-    return existing_creator_alias if existing_creator_alias.present?
+  def build_creator(actor:)
+    existing_creator = creators.find { |ca| ca.actor == actor }
+    return existing_creator if existing_creator.present?
 
-    creator_aliases.build(
-      alias: actor.default_alias,
+    creators.build(
+      display_name: actor.default_alias,
+      surname: actor.surname,
+      given_name: actor.given_name,
+      email: actor.email,
       actor: actor
     )
   end

@@ -59,7 +59,7 @@ RSpec.describe Qa::Authorities::Persons, type: :authority do
         let(:search_term) { creator.surname.slice(0..3).downcase }
 
         let(:expected_result) { formatted_result.merge(
-          additional_metadata: "#{Actor.human_attribute_name(:orcid)}: #{Orcid.new(creator.orcid).to_human}"
+          additional_metadata: "#{Actor.human_attribute_name(:orcid)}: #{OrcidId.new(creator.orcid).to_human}"
         ) }
 
         it { is_expected.to include(expected_result) }
@@ -67,6 +67,13 @@ RSpec.describe Qa::Authorities::Persons, type: :authority do
 
       context 'when no results are returned' do
         let(:search_term) { 'nothing' }
+
+        it { is_expected.to be_empty }
+      end
+
+      context 'when PSU ID and ORCiD are absent' do
+        let!(:creator) { create(:actor, :with_no_identifiers) }
+        let(:search_term) { creator.surname.slice(0..3).downcase }
 
         it { is_expected.to be_empty }
       end
@@ -117,6 +124,52 @@ RSpec.describe Qa::Authorities::Persons, type: :authority do
       let(:mock_identity_response) { [person] }
       let(:person) { build(:person, access_id: creator.psu_id) }
       let(:search_term) { 'search query' }
+
+      it { is_expected.to include(formatted_result) }
+    end
+
+    context 'when searching with an Orcid', :vcr do
+      let(:formatted_result) do
+        {
+          given_name: 'Adam',
+          surname: 'Wead',
+          default_alias: 'Dr. Adam Wead',
+          email: 'agw13@psu.edu',
+          orcid: '0000000184856532',
+          source: 'orcid',
+          result_number: 1,
+          total_results: 1,
+          additional_metadata: "#{Actor.human_attribute_name(:orcid)}: #{search_term}"
+        }
+      end
+
+      let(:mock_identity_response) { [] }
+      let(:search_term) { '0000-0001-8485-6532' }
+
+      it { is_expected.to include(formatted_result) }
+    end
+
+    context 'when an actor exists with the same Orcid', :vcr do
+      let!(:creator) { create(:actor, orcid: search_term) }
+
+      let(:formatted_result) do
+        {
+          given_name: creator.given_name,
+          surname: creator.surname,
+          psu_id: creator.psu_id,
+          default_alias: creator.default_alias,
+          email: creator.email,
+          orcid: creator.orcid,
+          source: 'scholarsphere',
+          actor_id: creator.id,
+          result_number: 1,
+          total_results: 1,
+          additional_metadata: "#{Actor.human_attribute_name(:psu_id)}: #{creator.psu_id}"
+        }
+      end
+
+      let(:mock_identity_response) { [] }
+      let(:search_term) { '0000000184856532' }
 
       it { is_expected.to include(formatted_result) }
     end

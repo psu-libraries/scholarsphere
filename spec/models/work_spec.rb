@@ -213,9 +213,9 @@ RSpec.describe Work, type: :model do
   describe 'version accessors' do
     subject(:work) { create :work, versions: [draft, v2, v1] }
 
-    let(:draft) { build :work_version, :draft, title: 'Draft', work: nil, created_at: 1.day.ago }
-    let(:v2) { build :work_version, :published, title: 'Published v2', work: nil, created_at: 2.days.ago }
-    let(:v1) { build :work_version, :published, title: 'Published v1', work: nil, created_at: 3.days.ago }
+    let(:draft) { build :work_version, :draft, title: 'Draft', work: nil, created_at: 1.day.ago, version_number: 3 }
+    let(:v2) { build :work_version, :published, title: 'Published v2', work: nil, created_at: 2.days.ago, version_number: 2 }
+    let(:v1) { build :work_version, :published, title: 'Published v1', work: nil, created_at: 3.days.ago, version_number: 1 }
 
     before { work.reload }
 
@@ -294,7 +294,7 @@ RSpec.describe Work, type: :model do
           based_near_tesim
           contributor_tesim
           created_at_dtsi
-          creator_aliases_tesim
+          creators_tesim
           creators_sim
           deposit_agreed_at_dtsi
           deposit_agreement_version_tesim
