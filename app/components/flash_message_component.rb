@@ -8,7 +8,7 @@ class FlashMessageComponent < ApplicationComponent
   end
 
   def messages
-    read_only_message + flash_messages
+    [announcement, read_only_message].compact + flash_messages
   end
 
   def render?
@@ -50,8 +50,17 @@ class FlashMessageComponent < ApplicationComponent
     end
 
     def read_only_message
-      return [] unless Rails.application.read_only?
+      return unless Rails.application.read_only?
 
-      [Message.new('alert', I18n.t('read_only'))]
+      content = ApplicationSetting.instance.read_only_message.presence || I18n.t('read_only')
+      Message.new('alert', content)
+    end
+
+    def announcement
+      content = ApplicationSetting.instance.announcement
+
+      return if content.blank?
+
+      Message.new('info', content)
     end
 end

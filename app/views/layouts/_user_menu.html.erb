@@ -25,6 +25,7 @@
         <div class="dropdown-divider"></div>
         <%= link_to_dropdown_item('Sidekiq', admin_sidekiq_web_path, target: :_blank) %>
         <%= link_to_dropdown_item('Health Checks', '/health/all.json', target: :_blank) %>
+        <%= link_to_dropdown_item('Application Settings', admin_application_settings_path) %>
       <% end %>
       <div class="dropdown-divider"></div>
       <%= link_to_dropdown_item('Logout', destroy_user_session_path) %>
