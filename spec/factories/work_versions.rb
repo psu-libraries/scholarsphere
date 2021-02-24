@@ -54,6 +54,13 @@ FactoryBot.define do
       aasm_state { WorkVersion::STATE_PUBLISHED }
     end
 
+    # A valid withdrawn work version
+    # Note: this does not represent a version that was published and then withdrawn.
+    trait :withdrawn do
+      able_to_be_published
+      aasm_state { WorkVersion::STATE_WITHDRAWN }
+    end
+
     trait :with_complete_metadata do
       title { generate(:work_title) }
       subtitle { FactoryBotHelpers.work_title }

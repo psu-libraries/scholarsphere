@@ -25,6 +25,16 @@ RSpec.describe WorkVersions::VersionStatusBadgeComponent, type: :component do
     end
   end
 
+  context 'with a withdrawn version' do
+    let(:work_version) { create :work_version, :withdrawn, version_number: 3 }
+
+    specify do
+      expect(badge.text).to include('withdrawn')
+        .and include('V3')
+      expect(badge.classes).to contain_exactly('badge', 'badge--text', 'badge--dark-red')
+    end
+  end
+
   context 'when version_name is provided' do
     let(:work_version) { build_stubbed :work_version, version_name: '1.2.3' }
 

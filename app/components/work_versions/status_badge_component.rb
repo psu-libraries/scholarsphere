@@ -3,12 +3,14 @@
 class WorkVersions::StatusBadgeComponent < ApplicationComponent
   STATE_CLASSES = {
     WorkVersion::STATE_DRAFT => %w(badge--dark-blue badge--outline),
-    WorkVersion::STATE_PUBLISHED => %w(badge--dark-blue)
+    WorkVersion::STATE_PUBLISHED => %w(badge--dark-blue),
+    WorkVersion::STATE_WITHDRAWN => %w(badge--dark-red)
   }.with_indifferent_access.freeze
 
   INVERTED_STATE_CLASSES = {
     WorkVersion::STATE_DRAFT => %w(badge-light badge--outline),
-    WorkVersion::STATE_PUBLISHED => %w(badge-light)
+    WorkVersion::STATE_PUBLISHED => %w(badge-light),
+    WorkVersion::STATE_WITHDRAWN => %w(badge--light-red)
   }.with_indifferent_access.freeze
 
   def initialize(work_version:, invert: false)

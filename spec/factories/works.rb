@@ -52,6 +52,12 @@ FactoryBot.define do
     end
   end
 
+  trait(:withdrawn) do
+    after(:create) do |work|
+      work.latest_published_version.withdraw!
+    end
+  end
+
   trait(:with_authorized_access) do
     visibility { Permissions::Visibility::AUTHORIZED }
   end

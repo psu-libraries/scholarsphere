@@ -16,9 +16,13 @@ class WorkHistories::WorkVersionChangeComponent < WorkHistories::PaperTrailChang
     end
 
     def action
-      return translate('publish') if publish?
-
-      super
+      if publish?
+        translate('publish')
+      elsif withdrawn?
+        translate('withdrawn')
+      else
+        super
+      end
     end
 
     def changed_attributes
@@ -46,8 +50,13 @@ class WorkHistories::WorkVersionChangeComponent < WorkHistories::PaperTrailChang
         paper_trail_version.object_changes.fetch('aasm_state', []).last.to_s == WorkVersion::STATE_PUBLISHED.to_s
     end
 
+    def withdrawn?
+      paper_trail_version.event == 'update' &&
+        paper_trail_version.object_changes.fetch('aasm_state', []).last.to_s == WorkVersion::STATE_WITHDRAWN.to_s
+    end
+
     def update?
-      super && !publish?
+      super && (!publish? || !withdrawn?)
     end
 
     def diff

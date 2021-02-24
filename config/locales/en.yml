@@ -144,6 +144,11 @@ en:
     public_message: "Files are not available during the embargo."
     edit_message: "You have permission to access the files during the embargo."
     link_text: "Public link"
+  withdrawn:
+    heading: "Withdrawn"
+    public_message: "Files are not available for works that have been withdrawn."
+    edit_message: "You have permission to access the files."
+    link_text: "Public link"
   errors:
     messages:
       invalid_edtf: is not a valid date in EDTF format
@@ -426,6 +431,7 @@ en:
         publish: Published
         update: Updated
         destroy: Deleted
+        withdrawn: Withdrawn
         truncated_attributes: "and %{count} more"
   omniauth:
     login_error: 'There was a problem logging you in. We have been notified of the issue and will work to fix it. Please try again later.'
