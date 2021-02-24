@@ -12,6 +12,9 @@ Rails.application.routes.draw do
     authenticate :user do
       constraints ScholarsphereAdmin do
         mount Sidekiq::Web => '/sidekiq'
+
+        get   'settings', to: 'application_settings#edit', as: :application_settings
+        match 'settings', to: 'application_settings#update', via: %i[patch put]
       end
     end
   end

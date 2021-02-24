@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_15_172117) do
+ActiveRecord::Schema.define(version: 2021_02_22_170738) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,6 +50,13 @@ ActiveRecord::Schema.define(version: 2021_02_15_172117) do
     t.integer "application_id"
     t.index ["application_id"], name: "index_api_tokens_on_application_id"
     t.index ["token"], name: "index_api_tokens_on_token", unique: true
+  end
+
+  create_table "application_settings", force: :cascade do |t|
+    t.string "read_only_message"
+    t.text "announcement"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "authorships", force: :cascade do |t|

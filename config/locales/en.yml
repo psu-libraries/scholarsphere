@@ -14,6 +14,9 @@ en:
         orcid: ORCiD
         given_name: Given Name
         surname: Family Name
+      application_setting:
+        read_only_message: Read Only
+        announcement: Announcement
       collection_creation:
         alias: Display Name
       collection:
@@ -106,6 +109,10 @@ en:
             embargoed_until:
               format: must be in yyyy-mm-dd format
               not_a_date: must be a valid date
+  admin:
+    application_setting:
+      heading: Application Settings
+      error_message: "%{error} prohibited settings from being saved:"
   api:
     errors:
       not_authorized: "401: Request not authorized. Please provide a valid API key for access."
@@ -175,6 +182,13 @@ en:
         default_alias: >
           When you create new works, this will be used as the initial value for the Creator field. For example, if your
           first and last name are Pat Researcher, you might wish to set this to "Dr. Pat Q. Researcher PhD."
+      application_setting:
+        read_only_message: >
+          Message displayed when the application is placed in read-only mode. If this field is blank, a default message
+          is shown.
+        announcement: >
+          When present, this will appear on every page alerting users of an upcoming change or scheduled maintenance
+          period.
     placeholder:
       work_version:
         version_name: x.y.z

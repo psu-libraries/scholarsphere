@@ -1,0 +1,24 @@
+<% content_for :navbar_heading do %>
+  <h1 class="navbar-brand navbar-brand--center slab-font"><%= t('admin.application_setting.heading') %></h1>
+<% end %>
+
+<div class="container">
+  <div class="row">
+    <%= form_with(model: @application_setting, url: admin_application_settings_path, local: true) do |form| %>
+      <%= render FormErrorMessageComponent.new(
+            form: form,
+            heading: t('admin.application_setting.error_message', error: pluralize(@application_setting.errors.count, 'error'))
+          ) %>
+
+      <div class="form-wrapper">
+        <%= render 'form_fields/text', form: form, attribute: :read_only_message %>
+        <%= render 'form_fields/text_area', form: form, attribute: :announcement %>
+      </div>
+
+      <div class="actions">
+        <%= form.submit 'Save', class: 'btn btn-primary' %>
+        <%= link_to 'Cancel', :back, class: 'btn btn-text' %>
+      </div>
+    <% end %>
+  </div>
+</div>
