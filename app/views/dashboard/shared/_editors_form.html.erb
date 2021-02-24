@@ -4,7 +4,7 @@
 <p><%= t('.explanation', type: type) %></p>
 <p><%= t('.depositor',
          type: type,
-         depositor_name: depositor == current_user.actor ? 'You' : depositor.default_alias,
+         depositor_name: depositor == current_user.actor ? 'You' : depositor.display_name,
          depositor_id: depositor.psu_id) %></p>
 
 <%- editors_form_id = "edit_editors_#{dom_id editors_form.resource}" %>

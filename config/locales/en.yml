@@ -10,15 +10,13 @@ en:
     attributes:
       actor:
         psu_id: Access Account
-        default_alias: Display Name
+        display_name: Display Name
         orcid: ORCiD
         given_name: Given Name
         surname: Family Name
       application_setting:
         read_only_message: Read Only
         announcement: Announcement
-      collection_creation:
-        alias: Display Name
       collection:
         subtitle: Subtitle
         keyword: Keyword
@@ -179,7 +177,7 @@ en:
         rights: The license you select determines how your work can be used by others.
       actor:
         orcid: "This is a 16-digit identifier in the format ####-####-####-####"
-        default_alias: >
+        display_name: >
           When you create new works, this will be used as the initial value for the Creator field. For example, if your
           first and last name are Pat Researcher, you might wish to set this to "Dr. Pat Q. Researcher PhD."
       application_setting:

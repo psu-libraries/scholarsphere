@@ -91,7 +91,7 @@ module Qa
             psu_id: result.psu_id,
             email: result.email,
             orcid: result.orcid,
-            default_alias: result.default_alias,
+            display_name: result.display_name,
             actor_id: result.id,
             source: 'scholarsphere'
           }
@@ -104,7 +104,7 @@ module Qa
             psu_id: result.user_id,
             email: result.university_email,
             orcid: '',
-            default_alias: result.display_name,
+            display_name: result.display_name,
             source: 'penn state'
           }
         end
@@ -115,7 +115,7 @@ module Qa
             surname: result.family_name,
             email: result.emails.default,
             orcid: OrcidId.new(result.id).to_s,
-            default_alias: result.credit_name,
+            display_name: result.credit_name,
             source: 'orcid'
           }
         end

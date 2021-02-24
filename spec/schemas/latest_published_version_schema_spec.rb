@@ -11,8 +11,8 @@ RSpec.describe LatestPublishedVersionSchema do
 
       its(:document) do
         is_expected.to include(
-          creators_sim: resource.latest_published_version.creators.map(&:alias),
-          creators_tesim: resource.latest_published_version.creators.map(&:alias)
+          creators_sim: resource.latest_published_version.creators.map(&:display_name),
+          creators_tesim: resource.latest_published_version.creators.map(&:display_name)
         )
       end
     end

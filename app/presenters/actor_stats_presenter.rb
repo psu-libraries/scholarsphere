@@ -5,6 +5,8 @@ class ActorStatsPresenter
               :beginning_at,
               :ending_at
 
+  delegate :display_name, to: :actor
+
   # @param [Actor] actor
   # @param [Date] beginning_at
   # @param [Date] ending_at
@@ -12,10 +14,6 @@ class ActorStatsPresenter
     @actor = actor
     @beginning_at = beginning_at
     @ending_at = ending_at
-  end
-
-  def display_name
-    actor.default_alias
   end
 
   def file_downloads

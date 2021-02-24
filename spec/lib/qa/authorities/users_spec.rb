@@ -19,7 +19,7 @@ RSpec.describe Qa::Authorities::Users, type: :authority do
         given_name: person.given_name,
         surname: person.surname,
         psu_id: person.user_id,
-        default_alias: person.display_name,
+        display_name: person.display_name,
         email: person.university_email,
         orcid: '',
         source: 'penn state',

@@ -55,7 +55,7 @@ class DiffPresenter
   # @return [Array<Diffy::Diff>]
   def renamed_creators
     creators.fetch(:renamed, []).map do |renamed_creators|
-      Diffy::Diff.new(*renamed_creators.map(&:alias))
+      Diffy::Diff.new(*renamed_creators.map(&:display_name))
     end
   end
 

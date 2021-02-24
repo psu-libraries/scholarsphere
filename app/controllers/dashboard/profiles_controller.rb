@@ -25,7 +25,7 @@ module Dashboard
           .permit(
             :given_name,
             :surname,
-            :default_alias,
+            :display_name,
             :email,
             :orcid,
             user_attributes: [

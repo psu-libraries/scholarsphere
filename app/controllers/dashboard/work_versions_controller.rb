@@ -143,7 +143,7 @@ module Dashboard
               :id,
               :actor_id,
               :_destroy,
-              :alias,
+              :display_name,
               actor_attributes: [
                 :id,
                 :email,

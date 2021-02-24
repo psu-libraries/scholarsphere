@@ -35,7 +35,7 @@ RSpec.describe Dashboard::Form::AuthorshipsController, type: :controller do
             psu_id: actor.psu_id,
             email: actor.email,
             orcid: actor.orcid,
-            default_alias: actor.default_alias,
+            display_name: actor.display_name,
             resource_klass: 'work_version',
             id: '1'
           }

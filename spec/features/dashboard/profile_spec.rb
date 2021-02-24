@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Profile', type: :feature, with_user: :user do
   let(:attributes) { attributes_for(:actor) }
-  let(:updated_display_name) { "Dr. #{attributes[:default_alias]}" }
+  let(:updated_display_name) { "Dr. #{attributes[:display_name]}" }
 
   context 'with a standard user' do
     let(:user) { create(:user) }

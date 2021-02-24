@@ -107,7 +107,7 @@ class Collection < ApplicationRecord
     return existing_creator if existing_creator.present?
 
     creators.build(
-      display_name: actor.default_alias,
+      display_name: actor.display_name,
       surname: actor.surname,
       given_name: actor.given_name,
       email: actor.email,

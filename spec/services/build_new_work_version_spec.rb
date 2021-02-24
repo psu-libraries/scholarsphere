@@ -22,7 +22,7 @@ RSpec.describe BuildNewWorkVersion, type: :model do
 
   before do
     initial_file_membership.update!(title: 'overridden-title.png')
-    initial_creation.update!(display_name: 'My Creator Alias', position: 100)
+    initial_creation.update!(display_name: 'My Creator Name', position: 100)
   end
 
   describe '.call' do
@@ -48,7 +48,7 @@ RSpec.describe BuildNewWorkVersion, type: :model do
       expect(new_version.creators.length).to eq 1
 
       new_version.creators.first.tap do |creation|
-        expect(creation.display_name).to eq 'My Creator Alias'
+        expect(creation.display_name).to eq 'My Creator Name'
         expect(creation.actor).to eq creator
         expect(creation.position).to eq 100
         expect(creation.instance_token).to eq initial_creation.instance_token

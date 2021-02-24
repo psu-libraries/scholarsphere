@@ -12,7 +12,7 @@ RSpec.describe 'Migration', :inline_jobs, type: :feature do
         work_type: 'dataset',
         creators_attributes: [
           {
-            alias: user.name,
+            display_name: user.name,
             actor_attributes: {
               email: user.email,
               given_name: user.actor.given_name,
