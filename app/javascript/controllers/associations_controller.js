@@ -12,7 +12,6 @@ export default class extends Controller {
     this.badgeClass = this.data.get('badge-class')
     this.positionClass = this.data.get('position-class')
 
-    document.addEventListener('autocomplete:alternative', () => this.openModal(this.data.get('new')))
     document.addEventListener('autocomplete:after-selected', () => this.post(this.data.get('post')))
     document.addEventListener('actor:created', () => this.appendResponse(event.detail.response))
 
@@ -42,16 +41,6 @@ export default class extends Controller {
   // @todo Something nicer should go here.
   processError (error) {
     console.log(error)
-  }
-
-  openModal (url) {
-    axios.get(url)
-      .then(function (response) {
-        Blacklight.modal.receiveAjax(response.data) // eslint-disable-line no-undef
-      })
-      .catch(function (error) {
-        console.log(error)
-      })
   }
 
   moveUp (event) {
