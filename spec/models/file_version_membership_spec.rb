@@ -69,20 +69,24 @@ RSpec.describe FileVersionMembership, type: :model do
     context 'when the record is marked as changed by the system' do
       let(:file_version_membership) { create(:file_version_membership, changed_by_system: true) }
 
-      it 'does not write a papertrail version' do
-        expect(file_version_membership.reload.versions).to be_empty
+      it "writes a version with the flag saved in PaperTrail's metadata" do
+        expect(file_version_membership.reload.versions.length).to eq 1
+
+        paper_trail_version = file_version_membership.versions.first
+
+        expect(paper_trail_version.changed_by_system).to eq(true)
       end
     end
 
     context 'when the record is NOT marked as changed by the system' do
       let(:file_version_membership) { create(:file_version_membership, changed_by_system: false) }
 
-      it "writes a version and stores the WorkVersion's FK into the version metadata" do
+      it "writes a version and stores the record's type and id into the version metadata" do
         paper_trail_version = file_version_membership.versions.first
 
-        expect(paper_trail_version.work_version_id).to eq(
-          file_version_membership.work_version_id
-        )
+        expect(paper_trail_version.resource_id).to eq(file_version_membership.work_version_id)
+        expect(paper_trail_version.resource_type).to eq('WorkVersion')
+        expect(paper_trail_version.changed_by_system).to eq(false)
       end
     end
   end

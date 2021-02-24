@@ -2,7 +2,9 @@
 
 require 'rails_helper'
 
-RSpec.describe AuthorshipMigration::FileVersionMembershipBackfill, type: :model, versioning: true do
+# This spec no longer works, because the incorrect setup has been fixed by this
+# commit. If you want to run the spec, check out the previous commit
+RSpec.xdescribe AuthorshipMigration::FileVersionMembershipBackfill, type: :model, versioning: true do
   let(:user) { create :user }
 
   before do
