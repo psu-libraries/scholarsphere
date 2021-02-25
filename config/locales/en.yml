@@ -163,7 +163,9 @@ en:
         edit_users: Requires the user's Penn State Access ID (e.g., xyz500)
       permissions:
         visibility:
-          authenticated: 'By choosing Penn State Only, files can only be accessed by users with a Penn State Access ID.'
+          authenticated: >
+            By choosing Penn State Only, files can only be accessed by users with a Penn State Access ID. The Penn State
+            Only option DOES NOT satisfy Penn State's Open Access to Scholarly Articles Policy (AC02) requirements.
       work_version:
         title: The title as would appear in a bibliographic reference to the work (not a filename).
         description: Include the work abstract if available.
