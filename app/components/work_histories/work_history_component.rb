@@ -75,7 +75,11 @@ module WorkHistories
       # @return [Hash<FileMembershipChangePresenter, PaperTrail::Version, User>]
       def changes_to_work_versions_files(work_version)
         PaperTrail::Version
-          .where(item_type: 'FileVersionMembership', work_version_id: work_version.id)
+          .where(
+            item_type: 'FileVersionMembership',
+            resource_id: work_version.id,
+            resource_type: 'WorkVersion'
+          )
           .map do |paper_trail_version|
             {
               component: FileMembershipChangeComponent,
