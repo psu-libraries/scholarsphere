@@ -64,8 +64,8 @@ RSpec.describe WorkHistories::CreatorChangeComponent, type: :component do
       # Context: when the Authorship has been renamed
       #
       ##########################################################################
-      creator.update!(display_name: 'Old Alias')
-      creator.update!(display_name: 'New Alias')
+      creator.update!(display_name: 'Old Name')
+      creator.update!(display_name: 'New Name')
       paper_trail_version = creator.versions.last
       result = render_inline(described_class.new(paper_trail_version: paper_trail_version, user: user))
 
@@ -73,7 +73,7 @@ RSpec.describe WorkHistories::CreatorChangeComponent, type: :component do
       # It: shows both old a new filenames
       #
       expect(result.css('.version-timeline__change--rename')).to be_present
-      expect(result.css('.version-timeline__change-action').text).to include('Renamed').and include('New Alias')
+      expect(result.css('.version-timeline__change-action').text).to include('Renamed').and include('New Name')
 
       ##########################################################################
       #

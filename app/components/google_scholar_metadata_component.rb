@@ -22,7 +22,7 @@ class GoogleScholarMetadataComponent < ApplicationComponent
   end
 
   def citation_authors
-    creators.map(&:alias)
+    creators.map(&:display_name)
   end
 
   def citation_publication_date

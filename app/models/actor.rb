@@ -72,13 +72,14 @@ class Actor < ApplicationRecord
             presence: true,
             on: :from_user
 
-  after_save :reindex_if_default_alias_changed
+  after_save :reindex_if_display_name_changed
 
   after_destroy :update_index_async
 
-  def default_alias
+  def display_name
     super.presence || "#{given_name} #{surname}"
   end
+  alias :default_alias :display_name
 
   def update_index_async
     SolrIndexingJob.perform_later(self)
@@ -87,7 +88,7 @@ class Actor < ApplicationRecord
   # This is a little bit different than our other update_index methods. Actors
   # are not themselves directly indexed, but they are faceted upon
   # by Works, Versions, and Collections via the `creators` metadata field.
-  # Therefore, if a person updates their `default_alias`, we want to trigger a
+  # Therefore, if a person updates their `display_name`, we want to trigger a
   # reindex of those associated items so the updated alias shows up in the facet
   def update_index(_options = {})
     Work.reindex_all(relation: created_works)
@@ -109,7 +110,7 @@ class Actor < ApplicationRecord
 
   private
 
-    def reindex_if_default_alias_changed
-      update_index_async if saved_changes.key?(:default_alias)
+    def reindex_if_display_name_changed
+      update_index_async if saved_changes.key?(:display_name)
     end
 end

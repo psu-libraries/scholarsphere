@@ -16,15 +16,15 @@
   <%= render 'form_fields/text', form: form, attribute: :version_name %>
 
   <div id="creators" class="mb-3">
-    <%= form.fields_for :creators do |creator_alias| %>
-      <%= render 'creator_alias_fields', f: creator_alias %>
+    <%= form.fields_for :creators do |creator_display_name| %>
+      <%= render 'creator_display_name_fields', f: creator_display_name %>
     <% end %>
     <div class="links">
       <%= link_to_add_association t('dashboard.work_versions.edit.add_creator'),
                                   form,
                                   :creators,
                                   # Ensure the associated Creator object exists, so its fields are rendered
-                                  wrap_object: ->(creator_alias) { creator_alias.tap(&:build_actor) },
+                                  wrap_object: ->(creator_display_name) { creator_display_name.tap(&:build_actor) },
                                   class: 'btn btn-outline-success btn-sm' %>
     </div>
   </div>

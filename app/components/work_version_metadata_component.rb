@@ -76,7 +76,7 @@ class WorkVersionMetadataComponent < ApplicationComponent
       elsif value.respond_to?(:strftime) # Date/Time/DateTime/TimeWithZone etc
         value.to_formatted_s(:long)
       elsif value.is_a? Authorship
-        value.alias
+        value.display_name
       elsif value.is_a? ApplicationComponent
         render value
       else

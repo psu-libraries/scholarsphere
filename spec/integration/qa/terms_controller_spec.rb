@@ -20,7 +20,7 @@ RSpec.describe Qa::TermsController, type: :controller, skip: ci_build? do
       before { get :search, params: { q: 'daniel cough', vocab: 'persons' } }
 
       it 'returns a set of search results as JSON' do
-        expect(search_results.first).to include('default_alias' => 'Daniel M Coughlin')
+        expect(search_results.first).to include('display_name' => 'Daniel M Coughlin')
       end
     end
   end

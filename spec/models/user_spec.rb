@@ -318,6 +318,6 @@ RSpec.describe User, type: :model do
   end
 
   describe '#name' do
-    it { is_expected.to delegate_method(:name).to(:actor).as(:default_alias) }
+    it { is_expected.to delegate_method(:name).to(:actor).as(:display_name) }
   end
 end

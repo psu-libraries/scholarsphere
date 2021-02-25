@@ -25,7 +25,7 @@ module Dashboard
               :given_name,
               :surname,
               :psu_id,
-              :default_alias,
+              :display_name,
               :orcid,
               :source,
               :index
@@ -37,12 +37,12 @@ module Dashboard
 
           Actor.find(authorship_params[:actor_id])
         rescue ActiveRecord::RecordNotFound
-          Actor.new(authorship_params.slice(:given_name, :email, :surname, :psu_id, :default_alias, :orcid))
+          Actor.new(authorship_params.slice(:given_name, :email, :surname, :psu_id, :display_name, :orcid))
         end
 
         def authorship
           Authorship.new(
-            display_name: authorship_params['default_alias'],
+            display_name: authorship_params['display_name'],
             given_name: authorship_params['given_name'],
             surname: authorship_params['surname'],
             email: authorship_params['email'],

@@ -25,16 +25,16 @@
       <div>
         <p><strong><%= WorkVersion.human_attribute_name(:creators) %></strong></p>
 
-        <% @presenter.renamed_creators.each do |alias_diff| %>
-          <p><%= alias_diff.to_s(:html).html_safe %></p>
+        <% @presenter.renamed_creators.each do |display_name_diff| %>
+          <p><%= display_name_diff.to_s(:html).html_safe %></p>
         <% end %>
 
         <% @presenter.deleted_creators.each do |creator| %>
-          <p class="text-danger"><%= creator.alias %></p>
+          <p class="text-danger"><%= creator.display_name %></p>
         <% end %>
 
         <% @presenter.added_creators.each do |creator| %>
-          <p class="text-success"><%= creator.alias %></p>
+          <p class="text-success"><%= creator.display_name %></p>
         <% end %>
     <% end %>
 

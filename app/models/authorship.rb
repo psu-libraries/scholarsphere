@@ -44,16 +44,6 @@ class Authorship < ApplicationRecord
     actor.try(:orcid)
   end
 
-  # @deprecated Use :display_name instead. This will be removed in 4.3
-  def alias
-    display_name
-  end
-
-  # @deprecated Use :display_name= instead. This will be removed in 4.3
-  def alias=(val)
-    self.display_name = val
-  end
-
   # Force changed_by_system to a boolean
   def changed_by_system
     !!@changed_by_system
