@@ -26,7 +26,7 @@ RSpec.describe 'Collection Settings Page', with_user: :user do
     end
   end
 
-  describe 'Updating Editors' do
+  describe 'Updating Editors', :vcr do
     context 'when adding a new editor' do
       it 'adds a user as an editor' do
         visit edit_dashboard_collection_path(collection)
