@@ -242,6 +242,34 @@ RSpec.describe Work, type: :model do
         its(:draft_version) { is_expected.to be_nil }
       end
     end
+
+    describe '#withdrawn?' do
+      context "when the works's only version is withdrawn" do
+        subject(:work) { create :work, versions: [v1] }
+
+        let(:v1) { build :work_version, :withdrawn, work: nil, created_at: 3.days.ago, version_number: 1 }
+
+        it { is_expected.to be_withdrawn }
+      end
+
+      context 'when the work has a withdrawn version and a draft version' do
+        subject(:work) { create :work, versions: [v1, draft] }
+
+        let(:v1) { build :work_version, :withdrawn, work: nil, created_at: 3.days.ago, version_number: 1 }
+        let(:draft) { build :work_version, :draft, work: nil, created_at: 1.day.ago, version_number: 3 }
+
+        it { is_expected.to be_withdrawn }
+      end
+
+      context 'when the work has a withdrawn version and a published version' do
+        subject(:work) { create :work, versions: [v1, v2] }
+
+        let(:v1) { build :work_version, :withdrawn, work: nil, created_at: 3.days.ago, version_number: 1 }
+        let(:v2) { build :work_version, :published, work: nil, created_at: 2.days.ago, version_number: 2 }
+
+        it { is_expected.not_to be_withdrawn }
+      end
+    end
   end
 
   describe '#resource_with_doi' do

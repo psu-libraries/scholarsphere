@@ -137,6 +137,10 @@ class Work < ApplicationRecord
     versions.draft.last
   end
 
+  def withdrawn?
+    versions.withdrawn.any? && versions.published.none?
+  end
+
   def resource_with_doi
     self
   end
