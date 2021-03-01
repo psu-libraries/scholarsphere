@@ -49,6 +49,6 @@ RSpec.describe Dashboard::Form::AuthorshipsController, type: :controller do
   context 'when the user is NOT logged in' do
     before { post :new, params: { resource_klass: 'work_version', id: '1' } }
 
-    its(:response) { is_expected.to redirect_to new_user_session_path }
+    its(:response) { is_expected.to redirect_to root_path }
   end
 end

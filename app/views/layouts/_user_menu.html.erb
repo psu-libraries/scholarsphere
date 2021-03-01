@@ -1,7 +1,7 @@
 <% if current_user.guest? %>
 
   <li class="nav-item">
-    <%= link_to_login t('blacklight.header_links.login'), new_user_session_path %>
+    <%= link_to_login t('blacklight.header_links.login'), user_azure_oauth_omniauth_authorize_path, method: :post %>
   </li>
 
 <% else %>

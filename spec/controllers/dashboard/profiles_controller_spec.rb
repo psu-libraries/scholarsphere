@@ -44,7 +44,7 @@ RSpec.describe Dashboard::ProfilesController, type: :controller do
 
       before { get :edit }
 
-      it { is_expected.to redirect_to new_user_session_path }
+      it { is_expected.to redirect_to root_path }
     end
   end
 
@@ -83,7 +83,7 @@ RSpec.describe Dashboard::ProfilesController, type: :controller do
 
       before { put :update, params: { work: valid_attributes } }
 
-      it { is_expected.to redirect_to new_user_session_path }
+      it { is_expected.to redirect_to root_path }
     end
   end
 end

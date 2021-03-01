@@ -21,6 +21,6 @@ RSpec.describe 'Sidekiq admin', type: :request do
   it 'redirects to login when not logged in' do
     get '/admin/sidekiq'
     expect(response.status).to eq 302
-    expect(response.location).to eq 'http://www.example.com/sign_in'
+    expect(response.location).to eq 'http://www.example.com/'
   end
 end

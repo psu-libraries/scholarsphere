@@ -40,7 +40,7 @@ RSpec.describe Dashboard::WorksController, type: :controller do
 
       before { get :edit, params: { id: work.id } }
 
-      it { is_expected.to redirect_to new_user_session_path }
+      it { is_expected.to redirect_to root_path }
     end
   end
 
@@ -85,7 +85,7 @@ RSpec.describe Dashboard::WorksController, type: :controller do
 
       before { perform_request }
 
-      it { is_expected.to redirect_to new_user_session_path }
+      it { is_expected.to redirect_to root_path }
     end
   end
 
@@ -129,7 +129,7 @@ RSpec.describe Dashboard::WorksController, type: :controller do
 
       before { delete :destroy, params: { id: work.to_param } }
 
-      it { is_expected.to redirect_to new_user_session_path }
+      it { is_expected.to redirect_to root_path }
     end
   end
 end
