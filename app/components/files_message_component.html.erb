@@ -1,0 +1,15 @@
+<div class="alert alert-warning" role="alert">
+  <h2><%= heading %></h2>
+
+  <p>
+    <% if download? %>
+      <%= t("#{i18n_key}.edit_message") %>
+    <% else %>
+      <%= t("#{i18n_key}.public_message") %>
+    <% end %>
+  </p>
+
+  <% if display_sharable_link? %>
+    <%= link_to t("#{i18n_key}.link_text"), resource_path(work_version.work.uuid) %>
+  <% end %>
+</div>

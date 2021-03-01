@@ -82,7 +82,7 @@ RSpec.describe 'Work Settings Page', with_user: :user do
     end
   end
 
-  describe 'Updating Editors' do
+  describe 'Updating Editors', :vcr do
     context 'when adding a new editor' do
       let(:work) { create :work, depositor: user.actor }
 

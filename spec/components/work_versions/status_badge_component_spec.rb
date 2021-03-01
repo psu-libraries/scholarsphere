@@ -53,4 +53,27 @@ RSpec.describe WorkVersions::StatusBadgeComponent, type: :component do
       end
     end
   end
+
+  context 'with a withdrawn version' do
+    let(:work_version) { create :work_version, :withdrawn, version_number: 3 }
+
+    specify do
+      expect(badge.text).to include('withdrawn')
+      expect(badge.classes).to contain_exactly(
+        *common_expected_classes,
+        'badge--dark-red'
+      )
+    end
+
+    context 'when inverted' do
+      let(:node) { render_inline(described_class.new(work_version: work_version, invert: true)) }
+
+      specify do
+        expect(badge.classes).to contain_exactly(
+          *common_expected_classes,
+          'badge--light-red'
+        )
+      end
+    end
+  end
 end

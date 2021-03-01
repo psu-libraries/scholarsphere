@@ -1079,6 +1079,17 @@ h4,
     }
   }
 
+  &--dark-red {
+    background: $dark-red;
+    color: $white;
+
+    &.badge--outline {
+      background: transparent;
+      border: 1px solid $dark-red;
+      color: $dark-red;
+    }
+  }
+
   &--gray-800 {
     background: $gray-800;
     color: $white;
@@ -1107,6 +1118,17 @@ h4,
   }
 
   &-light {
+    &.badge--outline {
+      background: transparent;
+      border: 1px solid $light;
+      color: $light;
+    }
+  }
+
+  &--light-red {
+    background: $white;
+    color: $dark-red;
+
     &.badge--outline {
       background: transparent;
       border: 1px solid $light;

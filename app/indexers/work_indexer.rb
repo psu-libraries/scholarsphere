@@ -18,6 +18,8 @@ class WorkIndexer
 
     if work.latest_published_version.present?
       IndexingService.add_document(work.to_solr, commit: commit)
+    elsif work.withdrawn?
+      IndexingService.delete_document(work.uuid, commit: commit)
     elsif commit
       Blacklight.default_index.connection.commit
     end

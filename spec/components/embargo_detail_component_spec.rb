@@ -55,7 +55,7 @@ RSpec.describe EmbargoDetailComponent, type: :component do
     let(:work) { build(:work) }
 
     specify do
-      expect { content }.to raise_error(ArgumentError, 'component must be used with an embargoed work')
+      expect(content).to be_empty
     end
   end
 end
