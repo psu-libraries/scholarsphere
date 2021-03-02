@@ -11,7 +11,9 @@
 #
 
 class WorkIndexer
-  def self.call(work, commit: false)
+  def self.call(work, commit: false, reload: false)
+    work.reload if reload
+
     work.versions.map do |version|
       IndexingService.add_document(version.to_solr, commit: false)
     end

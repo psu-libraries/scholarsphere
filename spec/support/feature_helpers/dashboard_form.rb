@@ -77,8 +77,8 @@ module FeatureHelpers
       end
     end
 
-    def self.fill_in_publishing_details(metadata)
-      choose "work_version_work_attributes_visibility_#{Permissions::Visibility::OPEN}"
+    def self.fill_in_publishing_details(metadata, visibility: Permissions::Visibility::OPEN)
+      choose "work_version_work_attributes_visibility_#{visibility}"
       check 'work_version_depositor_agreement'
       select WorkVersion::Licenses.label(metadata[:rights]), from: 'work_version_rights'
     end
