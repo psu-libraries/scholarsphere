@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Migration', :inline_jobs, type: :feature do
-  let(:user) { build(:user) }
+  let(:user) { create(:user) }
   let(:work) { build(:work_version, :with_complete_metadata) }
 
   let(:metadata) do
@@ -52,10 +52,8 @@ RSpec.describe 'Migration', :inline_jobs, type: :feature do
     end
   end
 
-  # @note We need to use the JS option so that omniauth will be invoked. This is probably a bug and should be fixed.
-  # See https://github.com/psu-stewardship/scholarsphere-4/issues/262
   context 'when logged in as the depositor' do
-    it "lists the work in the user's available works", with_user: :user, js: true do
+    it "lists the work in the user's available works", with_user: :user do
       visit(dashboard_root_path)
       expect(page).to have_content(work.title)
     end

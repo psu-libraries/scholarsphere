@@ -29,10 +29,10 @@ RSpec.describe OmniAuth::Strategies::AzureOauth do
 
   before { strategy.access_token = OAuth2::AccessToken.from_hash(client, access_token) }
 
-  describe 'GET /users/auth/azure_oauth' do
+  describe 'POST /users/auth/azure_oauth' do
     subject { last_response }
 
-    before { get '/users/auth/azure_oauth' }
+    before { post '/users/auth/azure_oauth' }
 
     its(:status) { is_expected.to eq(302) }
   end

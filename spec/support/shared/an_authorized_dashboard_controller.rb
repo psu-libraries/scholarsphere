@@ -28,6 +28,6 @@ RSpec.shared_examples 'an authorized dashboard controller' do
 
     before { perform_request }
 
-    it { is_expected.to redirect_to new_user_session_path }
+    it { is_expected.to redirect_to root_path }
   end
 end
