@@ -5,7 +5,8 @@ class WorkVersion < ApplicationRecord
   include ViewStatistics
   has_paper_trail
 
-  attr_writer :indexing_source
+  attr_writer :indexing_source,
+              :reload_on_index
 
   jsonb_accessor :metadata,
                  title: :string,
@@ -147,7 +148,12 @@ class WorkVersion < ApplicationRecord
     state :published, :withdrawn, :removed
 
     event :publish do
-      transitions from: [:draft, :withdrawn], to: :published, after: Proc.new { work.try(:update_deposit_agreement) }
+      transitions from: [:draft, :withdrawn],
+                  to: :published,
+                  after: Proc.new {
+                    work.try(:update_deposit_agreement)
+                    self.reload_on_index = true
+                  }
     end
 
     event :withdraw do
@@ -236,11 +242,15 @@ class WorkVersion < ApplicationRecord
   def update_index(commit: true)
     reload if uuid.nil?
 
-    WorkIndexer.call(work, commit: commit)
+    WorkIndexer.call(work, commit: commit, reload: reload_on_index)
   end
 
   def indexing_source
     @indexing_source ||= SolrIndexingJob.public_method(:perform_later)
+  end
+
+  def reload_on_index
+    @reload_on_index ||= false
   end
 
   delegate :depositor, :proxy_depositor, :visibility, :embargoed?, :work_type, :deposited_at, to: :work
