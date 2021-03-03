@@ -57,7 +57,7 @@ module DataCite
         def creator_attributes(creator)
           attrs = { name: creator.display_name }
 
-          if orcid = creator.actor.orcid.presence
+          if orcid = creator.orcid.presence
             attrs[:nameIdentifiers] = [
               {
                 nameIdentifier: orcid,
