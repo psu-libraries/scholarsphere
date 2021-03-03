@@ -1,7 +1,8 @@
 <% primary_action = local_assigns.fetch(:primary_action, :save_and_continue) %>
+<% button_key = current_user.admin? ? :admin_save : param_key %>
 
 <footer class="footer footer--actions footer--fixed d-flex justify-content-center">
-  <%= form.button t("dashboard.form.actions.save_and_exit.#{param_key}"), name: 'save_and_exit', class: 'btn btn-outline-primary btn--rounded' %>
+  <%= form.button t("dashboard.form.actions.save_and_exit.#{button_key}"), name: 'save_and_exit', class: 'btn btn-outline-primary btn--rounded' %>
   <div>
     <%= link_to t('dashboard.form.actions.cancel'), cancel_path, class: 'btn btn-outline-dark btn--rounded' %>
     <%= form.submit t("dashboard.form.actions.#{primary_action}"), name: primary_action, class: 'btn btn-primary btn--rounded ml-2' %>

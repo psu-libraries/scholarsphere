@@ -592,4 +592,21 @@ RSpec.describe 'Publishing a work', with_user: :user do
       expect(version.creators.first.display_name).to eq user.actor.display_name
     end
   end
+
+  describe 'Editing a published work' do
+    let(:work_version) { create :work_version, :published }
+    let(:different_metadata) { attributes_for(:work_version, :with_complete_metadata) }
+    let(:user) { create(:user, :admin) }
+
+    it 'allows an administrator to update the metadata' do
+      visit dashboard_form_publish_path(work_version)
+
+      FeatureHelpers::DashboardForm.fill_in_publishing_details(different_metadata)
+      FeatureHelpers::DashboardForm.finish
+      expect(SolrIndexingJob).to have_received(:perform_now)
+
+      work_version.reload
+      expect(work_version.rights).to eq(different_metadata[:rights])
+    end
+  end
 end

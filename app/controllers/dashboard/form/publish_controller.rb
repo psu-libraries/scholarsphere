@@ -38,7 +38,7 @@ module Dashboard
         # actually attempt it. However, we want to be nice and not yell at them for something they _haven't_ seen yet
         # like rights.
         def prevalidate
-          @resource.publish
+          @resource.publish unless @resource.published?
           @resource.validate
           @resource.errors.delete(:rights)
         end
