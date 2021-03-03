@@ -2,9 +2,9 @@
   "name": "scholarsphere",
   "private": true,
   "dependencies": {
-    "@rails/actioncable": "^6.0.2-2",
-    "@rails/activestorage": "^6.0.2-2",
-    "@rails/ujs": "^6.0.2-2",
+    "@rails/actioncable": "^6.0.3-4",
+    "@rails/activestorage": "^6.0.3-4",
+    "@rails/ujs": "^6.0.3-4",
     "@rails/webpacker": "^5.2.1",
     "@uppy/aws-s3-multipart": "^1.8.5",
     "@uppy/core": "^1.13.1",
