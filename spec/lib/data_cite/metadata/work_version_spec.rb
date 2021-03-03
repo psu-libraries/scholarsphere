@@ -100,7 +100,7 @@ RSpec.describe DataCite::Metadata::WorkVersion do
       subject(:first_creator) { attributes[:creators].first }
 
       context 'when the creator has no orcid' do
-        before { creator.actor.orcid = nil }
+        before { creator.actor = nil }
 
         it "sets the creator's name" do
           expect(first_creator).to eq(
