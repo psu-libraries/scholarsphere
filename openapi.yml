@@ -20,7 +20,7 @@ servers:
       version:
         description: "Version of the API"
         enum:
-          - "v1"
+          - v1
         default: "v1"
 
 # Listing of the basic model concepts used in the application (see https://swagger.io/specification/#tagObject)
@@ -31,6 +31,16 @@ tags:
     description: "An instance of work, containing descriptive metadata and binary content"
   - name: "Collection"
     description: "A resource with descriptive metadata containing an ordered grouping of works"
+  - name: "Actor"
+    description: >-
+      An identifiable person who has a relationship to a work or collection. They are linked to resources in two ways:
+      1) a depositor, linked directly to the resource; or 2) a creator, linked to a resource via an authorship.
+      Any given actor will have zero to many authorships.
+  - name: "Authorship"
+    description: >-
+      A person who has authored a resource, either a collection or work. These are listed as "creators" in the
+      application. If the person is identifiable, either via a Penn State access id or an Orcid, they will have a
+      corresponding linked actor record. If they are not identifiable, there is no linked actor record.
 
 # Paths Object, containing multiple Path Item Objects. Each path item will contain multiple Operation Objects.
 # See:
@@ -40,7 +50,25 @@ tags:
 paths:
   /ingest:
     post:
-      summary: "Creates a new work"
+      summary: "Publishes a new work"
+      description: >-
+        Creates a new work with a single version, and if all the requirements are present, the version will be published
+        and publicly available.
+      security:
+        - APIKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ingest"
+      responses:
+        200:
+          description: "The work was successfully published"
+        201:
+          description: "The work was created, but not published"
+        default:
+          $ref: "#/components/responses/defaultPostError"
   /collections:
     post:
       summary: "Creates a new collection"
@@ -54,7 +82,7 @@ paths:
       requestBody:
         description: "Posting updating information for a file after checking for viruses"
         content:
-          'application/json':
+          application/json:
             schema:
               $ref: '#/components/schemas/fileMetadata'
             examples:
@@ -100,7 +128,7 @@ paths:
       requestBody:
         description: "Given an existing UUID for a resource, feature it on the homepage"
         content:
-          'application/json':
+          application/json:
             schema:
               $ref: '#/components/schemas/featuredResource'
             examples:
@@ -141,6 +169,212 @@ components:
         id:
           type: "integer"
           example: '1'
+    metadata:
+      type: "object"
+      required:
+        - "title"
+        - "work_type"
+        - "description"
+        - "published_date"
+        - "creators"
+        - "rights"
+        - "visibility"
+      properties:
+        title:
+          type: "string"
+          example: "Classifying Independent Hybridity"
+        work_type:
+          type: "string"
+          enum:
+            - article
+            - audio
+            - book
+            - capstone_project
+            - collection
+            - conference_proceeding
+            - dataset
+            - dissertation
+            - image
+            - journal
+            - map_or_cartographic_material
+            - masters_culminating_experience
+            - masters_thesis
+            - other
+            - part_of_book
+            - poster
+            - presentation
+            - project
+            - report
+            - research_paper
+            - software_or_program_code
+            - video
+          example: "dataset"
+        description:
+          type: "string"
+          example: >-
+            Anaesthesiology anthropology chaology craniology ecology endocrinology epileptology gnomonics ichthyology
+            linguistics mammalogy mazology nasology nematology neurobiology palaeontology psychopathology pterylology
+            textology toponymics. Aerostatics anemology avionics diplomatology euthenics geochemistry historiography
+            historiology hydrology hydrometeorology hygiastics iatromathematics lexigraphy martyrology metallogeny
+            neonatology numismatics oikology patrology pestology photobiology psychobiology psychology sphagnology
+            stemmatology threpsology ufology vinology. Arctophily astrophysics carcinology dactylology electrology
+            genealogy horography hydrobiology immunopathology lexigraphy molinology nidology paidonosology
+            palaeopedology venereology.
+        published_date:
+          type: "string"
+          format: "date"
+          example: "2020-10-31"
+          description: >-
+            EDTF date formats are also supported. See https://www.loc.gov/standards/datetime/
+        keyword:
+          type: "array"
+          items:
+            type: "string"
+          example: ["optics", "quantum physics", "fake paper names"]
+        subtitle:
+          type: "string"
+          example: "Quantum Optics and/in the Clan"
+        publisher:
+          type: "array"
+          items:
+            type: "string"
+        subject:
+          type: "array"
+          items:
+            type: "string"
+        language:
+          type: "array"
+          items:
+            type: "string"
+        identifier:
+          type: "array"
+          items:
+            type: "string"
+        based_near:
+          type: "array"
+          items:
+            type: "string"
+        related_url:
+          type: "array"
+          items:
+            type: "string"
+        source:
+          type: "array"
+          items:
+            type: "string"
+        creators_attributes:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/authorship"
+        contributor:
+          type: "array"
+          items:
+            type: "string"
+          example: ["Dr. Phyllis Abracadabra", "Harry L. Snethers"]
+        rights:
+          type: "string"
+          enum:
+            - https://creativecommons.org/licenses/by/4.0/
+            - https://creativecommons.org/licenses/by-sa/4.0/
+            - https://creativecommons.org/licenses/by-nc/4.0/
+            - https://creativecommons.org/licenses/by-nd/4.0/
+            - https://creativecommons.org/licenses/by-nc-nd/4.0/
+            - https://creativecommons.org/licenses/by-nc-sa/4.0/
+            - http://creativecommons.org/publicdomain/mark/1.0/
+            - http://creativecommons.org/publicdomain/zero/1.0/
+            - https://rightsstatements.org/page/InC/1.0/
+            - http://www.apache.org/licenses/LICENSE-2.0
+            - https://www.gnu.org/licenses/gpl.html
+            - https://opensource.org/licenses/MIT
+            - https://opensource.org/licenses/BSD-3-Clause
+          example: "https://creativecommons.org/licenses/by/4.0/"
+        visibility:
+          type: "string"
+          enum:
+            - open
+            - authenticated
+        embargoed_until:
+          type: "string"
+          format: "date"
+        version_name:
+          type: "string"
+          example: "1.0.0"
+          description: "Must be in semantic version format. See https://semver.org/"
+        doi:
+          type: "string"
+          example: "doi:10.26207/002c-bb83"
+          description: >-
+            A DOI minted under Scholarsphere's current prefix, 10.26207. If you have another DOI that was previously
+            supplied by a publisher or someone else, that can be put into the identifier field.
+    authorship:
+      type: "object"
+      required:
+        - "display_name"
+        - "surname"
+      properties:
+        display_name:
+          type: "string"
+          example: "Dr. Pat Researcher"
+        surname:
+          type: "string"
+          example: "Researcher"
+        given_name:
+          type: "string"
+          example: "Pat"
+        email:
+          type: "string"
+          example: "pat@example.com"
+        actor:
+          $ref: "#/components/schemas/actor"
+    actor:
+      type: "object"
+      required:
+        - "surname"
+      properties:
+        display_name:
+          type: "string"
+          example: "Dr. Pat Researcher"
+        surname:
+          type: "string"
+          example: "Researcher"
+        given_name:
+          type: "string"
+          example: "Pat"
+        email:
+          type: "string"
+          example: "pat@example.com"
+        psu_id:
+          type: "string"
+          example: "pxr123"
+        orcid:
+          type: "string"
+          example: "0000-0001-5933-547X"
+    ingest:
+      type: "object"
+      required:
+        - "metadata"
+        - "depositor"
+      properties:
+        metadata:
+          $ref: "#/components/schemas/metadata"
+        content:
+          type: "array"
+          description: >-
+            Files that have been uploaded to S3 in a previous step. The location information for each one, as well as
+            their original names and mime types, is included here.
+          items:
+            $ref: "#/components/schemas/uploadedFile"
+        depositor:
+          $ref: "#/components/schemas/actor"
+        permissions:
+          $ref: "#/components/schemas/permissions" 
+    uploadedFile:
+      type: "object"
+    permissions:
+      type: "object"
+      description: >-
+        Additional permissions for the work such as users or groups that can edit work. By default, only the depositor
+        may edit the work after it has been uploaded.
     featuredResource:
       allOf:
         - $ref: "#/components/schemas/uuid"
@@ -182,8 +416,8 @@ components:
           type: "string"
           format: 'boolean'
           enum:
-            - "true"
-            - "false"
+            - true
+            - false
         scanned_at:
           type: "string"
           format: 'date'
