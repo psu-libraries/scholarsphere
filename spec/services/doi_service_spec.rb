@@ -17,13 +17,13 @@ RSpec.describe DoiService do
   end
 
   describe '.call' do
-    context 'when given a WorkVersion' do
+    context 'when given a valid WorkVersion' do
       let(:resource) { work_version }
       let(:work_version) { FactoryBot.build_stubbed :work_version }
 
       before do
         allow(resource).to receive(:update!)
-        allow(resource).to receive(:valid?).and_return(true)
+        allow(resource).to receive(:validate).and_return(true)
       end
 
       context "when the WorkVersion's doi field is empty" do
@@ -111,7 +111,7 @@ RSpec.describe DoiService do
       end
     end
 
-    context 'when given a Work' do
+    context 'when given a valid Work' do
       let(:resource) { work }
       let(:work) { FactoryBot.build_stubbed :work }
       let(:latest_work_version) { FactoryBot.build_stubbed :work_version, work: work }
@@ -119,7 +119,8 @@ RSpec.describe DoiService do
       before do
         allow(work).to receive(:latest_version).and_return(latest_work_version)
         allow(work).to receive(:update!)
-        allow(work).to receive(:valid?).and_return(true)
+        allow(work).to receive(:validate).and_return(true)
+        allow(latest_work_version).to receive(:validate).and_return(true)
       end
 
       context "when the Work's doi field is empty" do
@@ -207,12 +208,31 @@ RSpec.describe DoiService do
       end
     end
 
+    context 'when given an invalid Work' do
+      let(:resource) { Work.new }
+
+      specify do
+        expect {
+          call_service
+        }.to raise_error(described_class::Error, /Cannot mint a doi for an invalid resource/)
+      end
+    end
+
+    context 'when given an invalid WorkVersion' do
+      let(:resource) { build(:work_version, title: nil) }
+
+      specify do
+        expect {
+          call_service
+        }.to raise_error(described_class::Error, /Cannot mint a doi for an invalid resource/)
+      end
+    end
+
     context 'when given a Collection' do
       let(:resource) { collection }
       let(:collection) { FactoryBot.build_stubbed :collection }
 
       before do
-        allow(collection).to receive(:valid?).and_return(true)
         allow(collection).to receive(:update!)
       end
 
@@ -266,18 +286,6 @@ RSpec.describe DoiService do
       let(:resource) { FactoryBot.build_stubbed :user }
 
       it { expect { call_service }.to raise_error(ArgumentError) }
-    end
-
-    context 'when given an invalid resource' do
-      let(:resource) { Work.new }
-
-      before { allow(resource).to receive(:valid?).and_return(false) }
-
-      it do
-        expect {
-          call_service
-        }.to raise_error(described_class::Error)
-      end
     end
 
     context 'when the metadata mapper cannot build valid metadata' do

@@ -9,9 +9,10 @@ module DoiService
     strategy_class = [WorkAndVersionStrategy, CollectionStrategy].find { |klass| klass.applicable_to?(resource) }
 
     raise ArgumentError, "DoiService cannot be called with a #{resource.class.name}" if strategy_class.blank?
-    raise Error.new("Cannot mint a doi for an invalid resource: #{resource.inspect}") unless resource.valid?
 
     instance = strategy_class.new(resource)
+    raise Error.new("Cannot mint a doi for an invalid resource: #{resource.inspect}") unless instance.valid?
+
     instance.client_source = client_source
     instance.metadata_source = metadata_source
     instance.call
@@ -76,6 +77,10 @@ module DoiService
       end
     end
 
+    def valid?
+      resource.validate && work_version.validate
+    end
+
     def client_source
       @client_source ||= DataCite::Client.public_method(:new)
     end
@@ -126,6 +131,10 @@ module DoiService
         new_doi = publish_doi(doi: nil)
         collection.update!(doi: new_doi)
       end
+    end
+
+    def valid?
+      collection.validate
     end
 
     def client_source
