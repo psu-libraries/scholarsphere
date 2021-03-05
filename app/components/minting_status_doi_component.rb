@@ -14,14 +14,15 @@ class MintingStatusDoiComponent < ApplicationComponent
   end
 
   def render?
-    display_doi_component.render? || resource_is_minting_doi?
+    display_doi_component.render? || resource_is_minting_doi? || invalid?
   end
 
   def css_class
     {
       waiting: 'badge badge-light',
       minting: 'badge badge-light',
-      error: 'text-danger'
+      error: 'text-danger',
+      blocked: 'text-danger'
     }[status]
   end
 
@@ -38,6 +39,8 @@ class MintingStatusDoiComponent < ApplicationComponent
   end
 
   def status
+    return :blocked if invalid?
+
     if resource_is_minting_doi?
       return :waiting if minting_status.waiting?
       return :minting if minting_status.minting?
@@ -53,4 +56,18 @@ class MintingStatusDoiComponent < ApplicationComponent
   def minting_status_source
     @minting_status_source ||= DoiMintingStatus.public_method(:new)
   end
+
+  def invalid?
+    !validation
+  end
+
+  private
+
+    def validation
+      @validation ||= if resource.is_a?(Work)
+                        resource.latest_version.validate
+                      else
+                        resource.validate
+                      end
+    end
 end

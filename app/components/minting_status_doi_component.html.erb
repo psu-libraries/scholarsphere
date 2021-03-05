@@ -1,4 +1,4 @@
-<% if resource_is_minting_doi? %>
+<% if resource_is_minting_doi? || invalid? %>
   <span class="<%= css_class %>"><%= display_content %></span>
 <% else %>
   <%= render display_doi_component %>

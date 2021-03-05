@@ -12,6 +12,7 @@ RSpec.describe MintingStatusDoiComponent, type: :component do
 
   before do
     allow(DoiMintingStatus).to receive(:new).with(resource).and_return(mock_minting_status)
+    allow(resource).to receive(:validate).and_return(true)
   end
 
   context 'when the doi is nil' do
@@ -27,6 +28,14 @@ RSpec.describe MintingStatusDoiComponent, type: :component do
       before { allow(mock_minting_status).to receive(:present?).and_return(true) }
 
       it { is_expected.to be_render }
+    end
+
+    context 'when the resource is invalid' do
+      before { allow(resource).to receive(:validate).and_return(false) }
+
+      it { is_expected.to be_render }
+      its(:css_class) { is_expected.to eq('text-danger') }
+      specify { expect(html.text).to include(I18n.t('resources.doi.blocked')) }
     end
   end
 

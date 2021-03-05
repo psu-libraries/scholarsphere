@@ -15,6 +15,7 @@ RSpec.describe MintableDoiComponent, type: :component do
 
   before do
     allow(component).to receive(:helpers).and_return(mock_helpers)
+    allow(resource).to receive(:validate).and_return(true)
   end
 
   context 'when the resource already has a doi' do
