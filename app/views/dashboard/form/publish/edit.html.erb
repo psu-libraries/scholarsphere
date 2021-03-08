@@ -44,11 +44,10 @@
             </div>
             <%= render 'fields', form: form %>
 
-            <% if form.object.aasm.from_state == WorkVersion::STATE_DRAFT %>
-              <%= render 'dashboard/form/shared/action_footer', form: form, primary_action: :publish %>
-            <% else %>
-              <%= render 'dashboard/form/shared/action_footer', form: form, primary_action: :finish %>
-            <% end %>
+            <%= render 'dashboard/form/shared/action_footer',
+                       form: form,
+                       primary_action: form.object.published? ? :finish : :publish %>
+
           <% end %>
 
         </div>
