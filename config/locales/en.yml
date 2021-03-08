@@ -311,6 +311,7 @@ en:
         save_and_exit:
           collection: Save and Exit
           work_version: Save as Draft & Exit
+          admin_save: Save and Exit
       details:
         about_collections: 
           label: About Collections

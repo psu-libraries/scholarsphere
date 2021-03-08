@@ -7,7 +7,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
 
   let(:work) { instance_double 'Work' }
   let(:work_version) { instance_double 'WorkVersion', work: work }
-  let(:user) { instance_double 'User' }
+  let(:user) { instance_double 'User', admin?: false }
   let(:work_policy) { instance_double 'WorkPolicy' }
 
   permissions :show?, :diff? do
@@ -40,7 +40,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
     end
   end
 
-  permissions :edit?, :update?, :publish? do
+  permissions :edit?, :update? do
     before { allow(Pundit).to receive(:policy).with(user, work).and_return(work_policy) }
 
     context 'when the version is NOT published' do
@@ -60,17 +60,24 @@ RSpec.describe WorkVersionPolicy, type: :policy do
     end
 
     context 'when the version is published' do
-      before { allow(work_version).to receive(:published?).and_return(true) }
+      before do
+        allow(work_version).to receive(:published?).and_return(true)
+        allow(work_policy).to receive(:edit?).and_return(true)
+      end
 
       context 'when the user has the access to the work' do
-        before { allow(work_policy).to receive(:edit?).and_return(true) }
-
         it { is_expected.not_to permit(user, work_version) }
+      end
+
+      context 'when the user is an admin' do
+        let(:user) { build(:user, :admin) }
+
+        it { is_expected.to permit(user, work_version) }
       end
     end
   end
 
-  permissions :destroy? do
+  permissions :destroy?, :publish? do
     let(:work_version) { work.latest_version }
     let(:proxy) { build(:user) }
     let(:edit_user) { build(:user) }
