@@ -5,11 +5,18 @@ require 'data_cite'
 module DoiService
   class Error < StandardError; end
 
+  # Accepts a resource, maps its metadata into DataCite's format, then mints a
+  # DOI with DataCite--or any future DOI minting service beyond DataCite,
+  # it's extensible.
+  #
+  # @note that this method uses ActiveRecord::Base#update_attribute, which
+  # specifically does not invoke validations. The reason for this is, if we
+  # mint a DOI with DataCite, we _definitely_ want that DOI saved to the db,
+  # regardless of whether some internal vagaries denote the record as invalid.
   def self.call(resource, client_source: nil, metadata_source: nil)
     strategy_class = [WorkAndVersionStrategy, CollectionStrategy].find { |klass| klass.applicable_to?(resource) }
 
     raise ArgumentError, "DoiService cannot be called with a #{resource.class.name}" if strategy_class.blank?
-    raise Error.new("Cannot mint a doi for an invalid resource: #{resource.inspect}") unless resource.valid?
 
     instance = strategy_class.new(resource)
     instance.client_source = client_source
@@ -64,10 +71,10 @@ module DoiService
       case
       when !has_doi_already && is_draft
         doi = register_new_doi
-        resource.update!(doi: doi)
+        resource.update_attribute(:doi, doi)
       when !has_doi_already && !is_draft
         doi = publish_doi(doi: nil)
-        resource.update!(doi: doi)
+        resource.update_attribute(:doi, doi)
       when has_doi_already && is_draft
         # No-op
       when has_doi_already && !is_draft
@@ -124,7 +131,7 @@ module DoiService
         publish_doi(doi: collection.doi)
       else
         new_doi = publish_doi(doi: nil)
-        collection.update!(doi: new_doi)
+        collection.update_attribute(:doi, new_doi)
       end
     end
 
