@@ -38,13 +38,6 @@ class Collection < ApplicationRecord
            through: :collection_work_memberships,
            inverse_of: :collections
 
-  # @deprecated Use :creators instead. This will be removed in 4.3.
-  has_many :creator_aliases,
-           -> { order(position: :asc) },
-           class_name: 'CollectionCreation',
-           inverse_of: :collection,
-           dependent: :destroy
-
   has_many :creators,
            -> { order(position: :asc) },
            as: :resource,
@@ -114,7 +107,7 @@ class Collection < ApplicationRecord
     return existing_creator if existing_creator.present?
 
     creators.build(
-      display_name: actor.default_alias,
+      display_name: actor.display_name,
       surname: actor.surname,
       given_name: actor.given_name,
       email: actor.email,

@@ -44,7 +44,10 @@
             </div>
             <%= render 'fields', form: form %>
 
-            <%= render 'dashboard/form/shared/action_footer', form: form, primary_action: :publish %>
+            <%= render 'dashboard/form/shared/action_footer',
+                       form: form,
+                       primary_action: form.object.published? ? :finish : :publish %>
+
           <% end %>
 
         </div>

@@ -36,4 +36,16 @@ RSpec.describe WorkIndexer, :inline_jobs do
       expect(SolrDocument.find(work.uuid)[:title_tesim]).to eq([current_published.title])
     end
   end
+
+  context 'when the work is withdrawn' do
+    let(:work) { create(:work, has_draft: false) }
+    let(:current_published) { work.versions[0] }
+
+    it 'reindexes the withdrawn version and removes the work' do
+      expect(SolrDocument.find(work.uuid)[:title_tesim]).to eq([current_published.title])
+      current_published.withdraw!
+      expect(SolrDocument.find(current_published.uuid)[:latest_version_bsi]).to be(true)
+      expect { SolrDocument.find(work.uuid) }.to raise_error(Blacklight::Exceptions::RecordNotFound)
+    end
+  end
 end

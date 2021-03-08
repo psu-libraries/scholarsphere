@@ -90,7 +90,7 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
       # rudimentarily tested here, because they're unit-tested in detail above.
       expect(result.css('td.work-version-title').text).to eq work_version[:title]
       expect(result.css('td.work-version-subtitle').text).to eq work_version[:subtitle]
-      expect(result.css('td.work-version-creators').text).to include work_version.creators.map(&:alias).first
+      expect(result.css('td.work-version-creators').text).to include work_version.creators.map(&:display_name).first
       expect(result.css('td.work-version-version-number').text).to eq work_version[:version_number].to_s
       expect(result.css('td.work-version-keyword').text).to include work_version[:keyword].first
       expect(result.css('td.work-version-display-rights a').attr('href').text).to eq work_version[:rights]

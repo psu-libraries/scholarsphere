@@ -10,12 +10,13 @@ en:
     attributes:
       actor:
         psu_id: Access Account
-        default_alias: Display Name
+        display_name: Display Name
         orcid: ORCiD
         given_name: Given Name
         surname: Family Name
-      collection_creation:
-        alias: Display Name
+      application_setting:
+        read_only_message: Read Only
+        announcement: Announcement
       collection:
         subtitle: Subtitle
         keyword: Keyword
@@ -106,6 +107,10 @@ en:
             embargoed_until:
               format: must be in yyyy-mm-dd format
               not_a_date: must be a valid date
+  admin:
+    application_setting:
+      heading: Application Settings
+      error_message: "%{error} prohibited settings from being saved:"
   api:
     errors:
       not_authorized: "401: Request not authorized. Please provide a valid API key for access."
@@ -138,6 +143,11 @@ en:
     heading: "Embargoed until %{date}"
     public_message: "Files are not available during the embargo."
     edit_message: "You have permission to access the files during the embargo."
+    link_text: "Public link"
+  withdrawn:
+    heading: "Withdrawn"
+    public_message: "Files are not available for works that have been withdrawn."
+    edit_message: "You have permission to access the files."
     link_text: "Public link"
   errors:
     messages:
@@ -174,9 +184,16 @@ en:
         rights: The license you select determines how your work can be used by others.
       actor:
         orcid: "This is a 16-digit identifier in the format ####-####-####-####"
-        default_alias: >
+        display_name: >
           When you create new works, this will be used as the initial value for the Creator field. For example, if your
           first and last name are Pat Researcher, you might wish to set this to "Dr. Pat Q. Researcher PhD."
+      application_setting:
+        read_only_message: >
+          Message displayed when the application is placed in read-only mode. If this field is blank, a default message
+          is shown.
+        announcement: >
+          When present, this will appear on every page alerting users of an upcoming change or scheduled maintenance
+          period.
     placeholder:
       work_version:
         version_name: x.y.z
@@ -238,6 +255,7 @@ en:
         heading: Editors
         explanation: "Gives the ability for other users from Penn State to edit your %{type}. This can be done on a per-user basis, or a group basis."
         submit_button: Update Editors
+        depositor: "%{depositor_name} (%{depositor_id}) deposited this %{type} and will always have edit access."
     works:
       index:
         heading: "Your ScholarSphere Deposits"
@@ -293,6 +311,7 @@ en:
         save_and_exit:
           collection: Save and Exit
           work_version: Save as Draft & Exit
+          admin_save: Save and Exit
       details:
         about_collections: 
           label: About Collections
@@ -413,6 +432,7 @@ en:
         publish: Published
         update: Updated
         destroy: Deleted
+        withdrawn: Withdrawn
         truncated_attributes: "and %{count} more"
   omniauth:
     login_error: 'There was a problem logging you in. We have been notified of the issue and will work to fix it. Please try again later.'

@@ -11,7 +11,7 @@ RSpec.describe FeaturedWorkMetadataComponent, type: :component do
 
     it 'renders creators' do
       expect(result.css('dt.creators').text).to eq WorkVersion.human_attribute_name(:creators)
-      expect(result.css('dd.creators').text).to eq work_version.creators.first.alias
+      expect(result.css('dd.creators').text).to eq work_version.creators.first.display_name
     end
 
     it 'renders keywords' do

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_15_172117) do
+ActiveRecord::Schema.define(version: 2021_02_24_154851) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 2021_02_15_172117) do
     t.string "orcid"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "default_alias"
+    t.string "display_name"
     t.index ["orcid"], name: "index_actors_on_orcid", unique: true
     t.index ["psu_id"], name: "index_actors_on_psu_id", unique: true
   end
@@ -50,6 +50,13 @@ ActiveRecord::Schema.define(version: 2021_02_15_172117) do
     t.integer "application_id"
     t.index ["application_id"], name: "index_api_tokens_on_application_id"
     t.index ["token"], name: "index_api_tokens_on_token", unique: true
+  end
+
+  create_table "application_settings", force: :cascade do |t|
+    t.string "read_only_message"
+    t.text "announcement"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "authorships", force: :cascade do |t|
@@ -79,17 +86,6 @@ ActiveRecord::Schema.define(version: 2021_02_15_172117) do
     t.datetime "updated_at", null: false
     t.index ["document_id"], name: "index_bookmarks_on_document_id"
     t.index ["user_id"], name: "index_bookmarks_on_user_id"
-  end
-
-  create_table "collection_creations", force: :cascade do |t|
-    t.bigint "collection_id", null: false
-    t.bigint "actor_id", null: false
-    t.string "alias"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.integer "position"
-    t.index ["actor_id"], name: "index_collection_creations_on_actor_id"
-    t.index ["collection_id"], name: "index_collection_creations_on_collection_id"
   end
 
   create_table "collection_work_memberships", force: :cascade do |t|
@@ -228,17 +224,6 @@ ActiveRecord::Schema.define(version: 2021_02_15_172117) do
     t.index ["resource_type", "resource_id"], name: "index_view_statistics_on_resource_type_and_resource_id"
   end
 
-  create_table "work_version_creations", force: :cascade do |t|
-    t.bigint "work_version_id", null: false
-    t.string "alias"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.bigint "actor_id", null: false
-    t.integer "position"
-    t.index ["actor_id"], name: "index_work_version_creations_on_actor_id"
-    t.index ["work_version_id"], name: "index_work_version_creations_on_work_version_id"
-  end
-
   create_table "work_versions", force: :cascade do |t|
     t.bigint "work_id"
     t.string "aasm_state"
@@ -270,8 +255,6 @@ ActiveRecord::Schema.define(version: 2021_02_15_172117) do
 
   add_foreign_key "api_tokens", "external_apps", column: "application_id"
   add_foreign_key "authorships", "actors"
-  add_foreign_key "collection_creations", "actors"
-  add_foreign_key "collection_creations", "collections"
   add_foreign_key "collection_work_memberships", "collections"
   add_foreign_key "collection_work_memberships", "works"
   add_foreign_key "collections", "actors", column: "depositor_id"
@@ -280,8 +263,6 @@ ActiveRecord::Schema.define(version: 2021_02_15_172117) do
   add_foreign_key "user_group_memberships", "groups"
   add_foreign_key "user_group_memberships", "users"
   add_foreign_key "users", "actors"
-  add_foreign_key "work_version_creations", "actors"
-  add_foreign_key "work_version_creations", "work_versions"
   add_foreign_key "work_versions", "works"
   add_foreign_key "works", "actors", column: "depositor_id"
   add_foreign_key "works", "actors", column: "proxy_id"

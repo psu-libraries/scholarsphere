@@ -67,5 +67,35 @@ RSpec.describe FlashMessageComponent, type: :component do
         expect(result.css('div.alert-warning').text).to match(/#{I18n.t('read_only')}/)
       end
     end
+
+    context 'when providing a custom read-only mesage', :read_only do
+      let(:flash) { [] }
+
+      before { create(:application_setting) }
+
+      specify do
+        expect(result.css('div.alert-warning').text).to match(/#{ApplicationSetting.instance.read_only_message}/)
+      end
+    end
+
+    context 'with an announcement' do
+      let(:flash) { [] }
+
+      before { create(:application_setting) }
+
+      specify do
+        expect(result.css('div.alert-info').text).to match(/#{ApplicationSetting.instance.announcement}/)
+      end
+    end
+
+    context 'without an announcement' do
+      let(:flash) { [] }
+
+      before { create(:application_setting, announcement: '') }
+
+      specify do
+        expect(result.css('div.alert-info')).to be_empty
+      end
+    end
   end
 end

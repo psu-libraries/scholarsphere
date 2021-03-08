@@ -9,8 +9,8 @@
     <%= f.hidden_field :actor_id %>
 
     <div class="form-group required">
-      <%= f.label :alias %>
-      <%= f.text_field :alias, class: 'form-control', required: true %>
+      <%= f.label :display_name %>
+      <%= f.text_field :display_name, class: 'form-control', required: true %>
     </div>
 
     <%= f.fields_for :actor do |actor_fields| %>

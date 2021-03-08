@@ -9,7 +9,7 @@ RSpec.describe Actor, type: :model do
     it { is_expected.to have_db_column(:email).of_type(:string) }
     it { is_expected.to have_db_column(:psu_id).of_type(:string) }
     it { is_expected.to have_db_column(:orcid).of_type(:string) }
-    it { is_expected.to have_db_column(:default_alias).of_type(:string) }
+    it { is_expected.to have_db_column(:display_name).of_type(:string) }
 
     it { is_expected.to have_db_index(:psu_id) }
   end
@@ -24,7 +24,6 @@ RSpec.describe Actor, type: :model do
     it { is_expected.to have_many(:created_work_versions) }
     it { is_expected.to have_many(:created_works) }
     it { is_expected.to have_many(:created_collections) }
-    it { is_expected.to have_many(:collection_creations) }
     it { is_expected.to have_many(:deposited_works).class_name('Work').inverse_of(:depositor) }
     it { is_expected.to have_many(:proxy_deposited_works).class_name('Work').inverse_of(:proxy_depositor) }
     it { is_expected.to have_many(:deposited_collections).class_name('Collection').inverse_of(:depositor) }
@@ -61,15 +60,15 @@ RSpec.describe Actor, type: :model do
 
     before { allow(actor).to receive(:update_index_async) }
 
-    context 'when the default_alias has changed' do
+    context 'when the display_name has changed' do
       it 'triggers update_index_async' do
-        actor.default_alias = "I'm a changed person"
+        actor.display_name = "I'm a changed person"
         actor.save
         expect(actor).to have_received(:update_index_async)
       end
     end
 
-    context 'when the default_alias has NOT changed' do
+    context 'when the display_name has NOT changed' do
       it 'does not trigger update_index_async' do
         actor.save
         expect(actor).not_to have_received(:update_index_async)
@@ -88,22 +87,22 @@ RSpec.describe Actor, type: :model do
     end
   end
 
-  describe '#default_alias' do
+  describe '#display_name' do
     let(:actor) { build :actor, given_name: 'Pat', surname: 'Researcher' }
 
     context 'when nil' do
-      before { actor.default_alias = nil }
+      before { actor.display_name = nil }
 
       it 'defaults to concatenated given and surname' do
-        expect(actor.default_alias).to eq 'Pat Researcher'
+        expect(actor.display_name).to eq 'Pat Researcher'
       end
     end
 
     context 'when set' do
-      before { actor.default_alias = 'Dr. Pat Q. Researcher PhD MD MLIS' }
+      before { actor.display_name = 'Dr. Pat Q. Researcher PhD MD MLIS' }
 
       it 'returns the saved value' do
-        expect(actor.default_alias).to eq 'Dr. Pat Q. Researcher PhD MD MLIS'
+        expect(actor.display_name).to eq 'Dr. Pat Q. Researcher PhD MD MLIS'
       end
     end
   end

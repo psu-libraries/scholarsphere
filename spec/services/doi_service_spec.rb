@@ -22,7 +22,7 @@ RSpec.describe DoiService do
       let(:work_version) { FactoryBot.build_stubbed :work_version }
 
       before do
-        allow(resource).to receive(:update!)
+        allow(resource).to receive(:update_attribute)
         allow(resource).to receive(:valid?).and_return(true)
       end
 
@@ -40,7 +40,7 @@ RSpec.describe DoiService do
           it 'saves the doi on the WorkVersion db record' do
             allow(client_mock).to receive(:register).and_return(['new/doi', { some: :metadata }])
             call_service
-            expect(work_version).to have_received(:update!).with(doi: 'new/doi')
+            expect(work_version).to have_received(:update_attribute).with(:doi, 'new/doi')
           end
         end
 
@@ -66,7 +66,7 @@ RSpec.describe DoiService do
           it 'saves the doi on the WorkVersion db record' do
             allow(client_mock).to receive(:publish).and_return(['new/doi', { some: :metadata }])
             call_service
-            expect(work_version).to have_received(:update!).with(doi: 'new/doi')
+            expect(work_version).to have_received(:update_attribute).with(:doi, 'new/doi')
           end
         end
       end
@@ -105,7 +105,7 @@ RSpec.describe DoiService do
 
           it 'does not update the WorkVersion db record' do
             call_service
-            expect(work_version).not_to have_received(:update!)
+            expect(work_version).not_to have_received(:update_attribute)
           end
         end
       end
@@ -118,7 +118,7 @@ RSpec.describe DoiService do
 
       before do
         allow(work).to receive(:latest_version).and_return(latest_work_version)
-        allow(work).to receive(:update!)
+        allow(work).to receive(:update_attribute)
         allow(work).to receive(:valid?).and_return(true)
       end
 
@@ -136,7 +136,7 @@ RSpec.describe DoiService do
           it 'saves the doi on the Work db record' do
             allow(client_mock).to receive(:register).and_return(['new/doi', { some: :metadata }])
             call_service
-            expect(work).to have_received(:update!).with(doi: 'new/doi')
+            expect(work).to have_received(:update_attribute).with(:doi, 'new/doi')
           end
         end
 
@@ -162,7 +162,7 @@ RSpec.describe DoiService do
           it 'saves the doi on the Work db record' do
             allow(client_mock).to receive(:publish).and_return(['new/doi', { some: :metadata }])
             call_service
-            expect(work).to have_received(:update!).with(doi: 'new/doi')
+            expect(work).to have_received(:update_attribute).with(:doi, 'new/doi')
           end
         end
       end
@@ -201,7 +201,7 @@ RSpec.describe DoiService do
 
           it 'does not update the Work db record' do
             call_service
-            expect(work).not_to have_received(:update!)
+            expect(work).not_to have_received(:update_attribute)
           end
         end
       end
@@ -213,7 +213,7 @@ RSpec.describe DoiService do
 
       before do
         allow(collection).to receive(:valid?).and_return(true)
-        allow(collection).to receive(:update!)
+        allow(collection).to receive(:update_attribute)
       end
 
       context "when the Collection's doi field is empty" do
@@ -235,7 +235,7 @@ RSpec.describe DoiService do
         it 'saves the doi on the Collection db record' do
           allow(client_mock).to receive(:publish).and_return(['new/doi', { some: :metadata }])
           call_service
-          expect(collection).to have_received(:update!).with(doi: 'new/doi')
+          expect(collection).to have_received(:update_attribute).with(:doi, 'new/doi')
         end
       end
 
@@ -257,7 +257,7 @@ RSpec.describe DoiService do
 
         it 'does not update the Collection db record' do
           call_service
-          expect(collection).not_to have_received(:update!)
+          expect(collection).not_to have_received(:update_attribute)
         end
       end
     end
@@ -269,14 +269,60 @@ RSpec.describe DoiService do
     end
 
     context 'when given an invalid resource' do
-      let(:resource) { Work.new }
+      let(:work) { FactoryBot.create(:work, has_draft: false, versions_count: 1) }
+      let(:version) { work.versions.first }
 
-      before { allow(resource).to receive(:valid?).and_return(false) }
+      before do
+        allow(client_mock).to receive(:publish).and_return(['new/doi', { some: :metadata }])
 
-      it do
-        expect {
-          call_service
-        }.to raise_error(described_class::Error)
+        version.update_attribute(:description, nil)
+      end
+
+      context 'when given an invalid WorkVersion' do
+        let(:resource) { version }
+
+        it 'still saves the DOI' do
+          # Sanity check
+          expect(version).not_to be_valid
+
+          expect {
+            call_service
+          }.to change {
+            resource.reload.doi
+          }.from(nil).to('new/doi')
+        end
+      end
+
+      context 'when given a Work with an invalid version' do
+        let(:resource) { work }
+
+        it 'still saves the DOI' do
+          # Sanity check
+          expect(version).not_to be_valid
+
+          expect {
+            call_service
+          }.to change {
+            resource.reload.doi
+          }.from(nil).to('new/doi')
+        end
+      end
+
+      context 'when given a Collection' do
+        let(:resource) { create :collection }
+
+        before { resource.update_attribute(:description, nil) }
+
+        it 'still saves the DOI' do
+          # Sanity check
+          expect(resource).not_to be_valid
+
+          expect {
+            call_service
+          }.to change {
+            resource.reload.doi
+          }.from(nil).to('new/doi')
+        end
       end
     end
 

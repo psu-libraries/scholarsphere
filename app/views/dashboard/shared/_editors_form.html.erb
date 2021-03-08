@@ -1,4 +1,11 @@
-<p><%= t('.explanation', type: editors_form.resource.class.name.downcase) %></p>
+<%- type = editors_form.resource.class.name.downcase -%>
+<%- depositor = editors_form.resource.depositor -%>
+
+<p><%= t('.explanation', type: type) %></p>
+<p><%= t('.depositor',
+         type: type,
+         depositor_name: depositor == current_user.actor ? 'You' : depositor.display_name,
+         depositor_id: depositor.psu_id) %></p>
 
 <%- editors_form_id = "edit_editors_#{dom_id editors_form.resource}" %>
 <%= form_for editors_form,

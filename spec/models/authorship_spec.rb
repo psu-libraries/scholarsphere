@@ -71,20 +71,6 @@ RSpec.describe Authorship, type: :model do
     end
   end
 
-  describe '#alias' do
-    subject(:authorship) { build(:authorship) }
-
-    its(:alias) { is_expected.to eq(authorship.display_name) }
-  end
-
-  describe '#alias=' do
-    subject(:authorship) { build(:authorship) }
-
-    before { authorship.alias = 'New Alias' }
-
-    its(:alias) { is_expected.to eq('New Alias') }
-  end
-
   describe 'singlevalued fields' do
     it_behaves_like 'a singlevalued field', :surname
     it_behaves_like 'a singlevalued field', :given_name

@@ -171,7 +171,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         work_version.reload
         expect(work_version.creators.map(&:actor)).to contain_exactly(actor)
-        expect(work_version.creators.map(&:display_name)).to contain_exactly(actor.default_alias)
+        expect(work_version.creators.map(&:display_name)).to contain_exactly(actor.display_name)
         expect(work_version.contributor).to eq [metadata[:contributor]]
 
         expect(page).to have_current_path(dashboard_form_files_path(work_version))
@@ -211,7 +211,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         work_version.reload
         expect(work_version.creators[0].actor).to be_present
-        expect(work_version.creators[0].display_name).to eq(actor.default_alias)
+        expect(work_version.creators[0].display_name).to eq(actor.display_name)
         expect(work_version.creators[1].actor).to be_present
         expect(work_version.creators[1].display_name).to eq('Adam Wead')
 
@@ -250,7 +250,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         work_version.reload
         expect(work_version.creators[0].actor).to be_present
-        expect(work_version.creators[0].display_name).to eq(actor.default_alias)
+        expect(work_version.creators[0].display_name).to eq(actor.display_name)
         expect(work_version.creators[1].actor).to be_present
         expect(work_version.creators[1].display_name).to eq('Dr. Adam Wead')
 
@@ -275,7 +275,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         FeatureHelpers::DashboardForm.search_creators(existing_actor.surname)
 
         within('.algolia-autocomplete') do
-          expect(page).to have_content(existing_actor.default_alias)
+          expect(page).to have_content(existing_actor.display_name)
         end
 
         find_all('.aa-suggestion').first.click
@@ -291,9 +291,9 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         work_version.reload
         expect(work_version.creators[0].actor).to be_present
-        expect(work_version.creators[0].display_name).to eq(actor.default_alias)
+        expect(work_version.creators[0].display_name).to eq(actor.display_name)
         expect(work_version.creators[1].actor).to be_present
-        expect(work_version.creators[1].display_name).to eq(existing_actor.default_alias)
+        expect(work_version.creators[1].display_name).to eq(existing_actor.display_name)
 
         expect(page).to have_current_path(dashboard_form_files_path(work_version))
         expect(SolrIndexingJob).not_to have_received(:perform_now)
@@ -338,7 +338,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         work_version.reload
         expect(work_version.creators[0].actor).to be_present
-        expect(work_version.creators[0].display_name).to eq(actor.default_alias)
+        expect(work_version.creators[0].display_name).to eq(actor.display_name)
         expect(work_version.creators[1].actor).not_to be_present
         expect(work_version.creators[1].given_name).to eq(metadata[:given_name])
         expect(work_version.creators[1].surname).to eq(metadata[:surname])
@@ -516,6 +516,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       expect(page).to have_selector('span.badge--content', text: 'PUBLISHED')
 
       expect(version).to be_published
+      expect(work.visibility).to eq(Permissions::Visibility::OPEN)
       expect(version.version_number).to eq 1
       expect(version.title).to eq different_metadata[:title]
       expect(version.description).to eq different_metadata[:description]
@@ -528,7 +529,84 @@ RSpec.describe 'Publishing a work', with_user: :user do
       expect(version.rights).to eq metadata[:rights]
 
       expect(version.creators.length).to eq 1
-      expect(version.creators.first.display_name).to eq user.actor.default_alias
+      expect(version.creators.first.display_name).to eq user.actor.display_name
+    end
+  end
+
+  describe 'Publishing a Penn State only work', js: true do
+    let(:different_metadata) { attributes_for(:work_version, :with_complete_metadata) }
+
+    it 'routes the user through the workflow' do
+      visit dashboard_form_work_versions_path
+
+      FeatureHelpers::DashboardForm.fill_in_work_details(metadata)
+      FeatureHelpers::DashboardForm.save_and_continue
+      expect(SolrIndexingJob).not_to have_received(:perform_now)
+
+      FeatureHelpers::DashboardForm.save_and_continue
+      expect(SolrIndexingJob).not_to have_received(:perform_now)
+
+      FeatureHelpers::DashboardForm.upload_file(Rails.root.join('spec', 'fixtures', 'image.png'))
+      within('.uppy-Dashboard-files') do
+        expect(page).to have_content('image.png')
+      end
+      FeatureHelpers::DashboardForm.save_and_continue
+      expect(SolrIndexingJob).not_to have_received(:perform_now)
+
+      # Don't yell at them for something they haven't seen yet
+      expect(page).not_to have_selector('div#error_explanation')
+
+      # On the review page, change all the details metadata to ensure the params
+      # are submitted correctly
+      FeatureHelpers::DashboardForm.fill_in_work_details(different_metadata)
+      FeatureHelpers::DashboardForm.fill_in_publishing_details(
+        metadata,
+        visibility: Permissions::Visibility::AUTHORIZED
+      )
+      FeatureHelpers::DashboardForm.publish
+      expect(SolrIndexingJob).to have_received(:perform_now).once
+
+      #
+      # Load out the new published work and ensure that all is well
+      #
+      work = Work.last
+      version = work.versions.first
+
+      expect(page).to have_selector('h3', text: version.title)
+      expect(page).to have_selector('span.badge--content', text: 'PUBLISHED')
+
+      expect(version).to be_published
+      expect(work.visibility).to eq(Permissions::Visibility::AUTHORIZED)
+      expect(version.version_number).to eq 1
+      expect(version.title).to eq different_metadata[:title]
+      expect(version.description).to eq different_metadata[:description]
+      expect(version.published_date).to eq different_metadata[:published_date]
+      expect(version.keyword).to eq [different_metadata[:keyword]]
+      expect(version.publisher).to eq [different_metadata[:publisher]]
+      expect(version.subject).to eq [different_metadata[:subject]]
+      expect(version.language).to eq [different_metadata[:language]]
+      expect(version.related_url).to eq [different_metadata[:related_url]]
+      expect(version.rights).to eq metadata[:rights]
+
+      expect(version.creators.length).to eq 1
+      expect(version.creators.first.display_name).to eq user.actor.display_name
+    end
+  end
+
+  describe 'Editing a published work' do
+    let(:work_version) { create :work_version, :published }
+    let(:different_metadata) { attributes_for(:work_version, :with_complete_metadata) }
+    let(:user) { create(:user, :admin) }
+
+    it 'allows an administrator to update the metadata' do
+      visit dashboard_form_publish_path(work_version)
+
+      FeatureHelpers::DashboardForm.fill_in_publishing_details(different_metadata)
+      FeatureHelpers::DashboardForm.finish
+      expect(SolrIndexingJob).to have_received(:perform_now)
+
+      work_version.reload
+      expect(work_version.rights).to eq(different_metadata[:rights])
     end
   end
 end

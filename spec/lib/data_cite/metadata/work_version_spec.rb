@@ -104,7 +104,7 @@ RSpec.describe DataCite::Metadata::WorkVersion do
 
         it "sets the creator's name" do
           expect(first_creator).to eq(
-            name: work_version.creators.first.alias
+            name: work_version.creators.first.display_name
           )
         end
       end
@@ -114,7 +114,7 @@ RSpec.describe DataCite::Metadata::WorkVersion do
 
         it "sets the creator's name and provides the ORCiD" do
           expect(first_creator).to eq(
-            name: work_version.creators.first.alias,
+            name: work_version.creators.first.display_name,
             nameIdentifiers: [
               {
                 nameIdentifier: '1111-2222-3333-4444',

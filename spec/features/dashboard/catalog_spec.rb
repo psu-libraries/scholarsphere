@@ -131,4 +131,29 @@ RSpec.describe 'Dashboard catalog page', :inline_jobs do
       expect(page).to have_link('Login', class: 'disabled')
     end
   end
+
+  context 'when the user has withdrawn a work version', with_user: :user do
+    let(:work) { create(:work, has_draft: false, depositor: user.actor) }
+
+    before do
+      work.versions[0].withdraw!
+      work.save
+    end
+
+    it 'shows the withdrawn version in the dashboard' do
+      visit(dashboard_root_path)
+
+      expect(page).to have_selector('span.badge--content', text: 'withdrawn')
+      click_link(work.versions.first.title)
+
+      within('.dropdown--versions') do
+        expect(page).to have_link('V1 withdrawn')
+      end
+
+      within('.alert') do
+        expect(page).to have_content(I18n.t('withdrawn.heading'))
+        expect(page).to have_content(I18n.t('withdrawn.edit_message'))
+      end
+    end
+  end
 end

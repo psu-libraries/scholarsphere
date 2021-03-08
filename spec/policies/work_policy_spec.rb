@@ -69,6 +69,24 @@ RSpec.describe WorkPolicy, type: :policy do
       it { is_expected.not_to permit(public, work) }
       it { is_expected.not_to permit(admin, work) }
     end
+
+    context 'with a withdrawn work' do
+      let(:work) do
+        create :work, :withdrawn, has_draft: false,
+               depositor: depositor_actor,
+               proxy_depositor: proxy_actor,
+               discover_users: [discover_user],
+               edit_users: [edit_user]
+      end
+
+      it { is_expected.not_to permit(depositor, work) }
+      it { is_expected.not_to permit(proxy, work) }
+      it { is_expected.not_to permit(edit_user, work) }
+      it { is_expected.not_to permit(discover_user, work) }
+      it { is_expected.not_to permit(other_user, work) }
+      it { is_expected.not_to permit(public, work) }
+      it { is_expected.not_to permit(admin, work) }
+    end
   end
 
   permissions :edit?, :update? do
@@ -111,6 +129,24 @@ RSpec.describe WorkPolicy, type: :policy do
     context 'when no draft exists' do
       let(:work) do
         create :work, has_draft: false,
+                      depositor: depositor_actor,
+                      proxy_depositor: proxy_actor,
+                      discover_users: [discover_user],
+                      edit_users: [edit_user]
+      end
+
+      it { is_expected.to permit(depositor, work) }
+      it { is_expected.to permit(proxy, work) }
+      it { is_expected.to permit(edit_user, work) }
+      it { is_expected.not_to permit(discover_user, work) }
+      it { is_expected.not_to permit(other_user, work) }
+      it { is_expected.not_to permit(public, work) }
+      it { is_expected.to permit(admin, work) }
+    end
+
+    context 'when the work is withdrawn' do
+      let(:work) do
+        create :work, :withdrawn, has_draft: false,
                       depositor: depositor_actor,
                       proxy_depositor: proxy_actor,
                       discover_users: [discover_user],

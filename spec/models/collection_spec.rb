@@ -46,7 +46,6 @@ RSpec.describe Collection, type: :model do
     it { is_expected.to have_many(:collection_work_memberships) }
     it { is_expected.to have_many(:works).through(:collection_work_memberships) }
     it { is_expected.to have_many(:creators) }
-    it { is_expected.to have_many(:creator_aliases) }
     it { is_expected.to have_many(:view_statistics) }
 
     describe 'default order of works' do
@@ -165,7 +164,7 @@ RSpec.describe Collection, type: :model do
       collection.creators.first.tap do |creator|
         expect(creator).not_to be_persisted
         expect(creator.actor).to eq actor
-        expect(creator.display_name).to eq actor.default_alias
+        expect(creator.display_name).to eq actor.display_name
       end
     end
 

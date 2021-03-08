@@ -7,7 +7,7 @@ RSpec.describe ApplicationHelper, type: :helper do
   describe '#new_session_path' do
     subject { helper.new_session_path }
 
-    it { is_expected.to eq(new_user_session_path) }
+    it { is_expected.to eq(root_path) }
   end
 
   # Used in app/views/form_fields/*

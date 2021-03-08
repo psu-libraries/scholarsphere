@@ -117,6 +117,22 @@ RSpec.describe WorkHistories::WorkVersionChangeComponent, type: :component do
       # it: renders the published state
       #
       expect(result.css('.version-timeline__change-action').text).to include 'Published'
+
+      ##########################################################################
+      #
+      # Context: when the WorkVersion is withdrawn
+      #
+      ##########################################################################
+      work_version = create(:work_version, :published)
+      work_version.withdraw
+      work_version.save!
+      paper_trail_version = work_version.versions.last
+      result = render_inline(described_class.new(paper_trail_version: paper_trail_version, user: user))
+
+      #
+      # it: renders the withdrawn state
+      #
+      expect(result.css('.version-timeline__change-action').text).to include 'Withdrawn'
     end
   end
 end

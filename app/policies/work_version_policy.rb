@@ -13,13 +13,18 @@ class WorkVersionPolicy < ApplicationPolicy
   alias_method :diff?, :show?
 
   def edit?
-    return false if record.published?
+    return false if record.published? && !user.admin?
 
     editable?
   end
   alias_method :update?, :edit?
-  alias_method :destroy?, :edit?
-  alias_method :publish?, :edit?
+
+  def destroy?
+    return false if record.published?
+
+    editable?
+  end
+  alias_method :publish?, :destroy?
 
   def download?
     return true if editable?

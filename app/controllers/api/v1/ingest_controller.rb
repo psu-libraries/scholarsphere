@@ -103,7 +103,7 @@ module Api::V1
             related_url: [],
             source: [],
             creators_attributes: [
-              :alias,
+              :display_name,
               actor_attributes: [
                 :email,
                 :given_name,

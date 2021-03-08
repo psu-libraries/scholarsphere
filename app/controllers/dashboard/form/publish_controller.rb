@@ -38,9 +38,22 @@ module Dashboard
         # actually attempt it. However, we want to be nice and not yell at them for something they _haven't_ seen yet
         # like rights.
         def prevalidate
-          @resource.publish
-          @resource.validate
-          @resource.errors.delete(:rights)
+          temporarily_publish @resource do
+            @resource.validate
+            @resource.errors.delete(:rights)
+          end
+        end
+
+        # Temporarily mark a resource as published (do not save to the
+        # database), allow some actions to be performed in a block, then reset
+        # the aasm state back to whatever it was previously.
+        def temporarily_publish(resource)
+          initial_state = resource.aasm_state
+          resource.publish unless resource.published?
+
+          yield
+        ensure
+          resource.aasm_state = initial_state
         end
 
         def redirect_upon_success

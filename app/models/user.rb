@@ -101,6 +101,6 @@ class User < ApplicationRecord
   end
 
   def name
-    actor.default_alias
+    actor.display_name
   end
 end

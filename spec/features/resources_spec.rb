@@ -27,7 +27,7 @@ RSpec.describe 'Public Resources', type: :feature do
         expect(page.find('meta[name="citation_publication_date"]', visible: false)[:content])
           .to eq Date.edtf(v2.published_date).year.to_s
         all_authors = page.all(:css, 'meta[name="citation_author"]', visible: false)
-        expect(all_authors.map { |a| a[:content] }).to match_array v2.creators.map(&:alias)
+        expect(all_authors.map { |a| a[:content] }).to match_array v2.creators.map(&:display_name)
 
         ## Does not have edit controls
         within('header') do

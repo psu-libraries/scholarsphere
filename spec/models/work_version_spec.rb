@@ -42,7 +42,6 @@ RSpec.describe WorkVersion, type: :model do
     it { is_expected.to have_many(:file_version_memberships) }
     it { is_expected.to have_many(:file_resources).through(:file_version_memberships) }
     it { is_expected.to have_many(:creators) }
-    it { is_expected.to have_many(:creator_aliases) }
     it { is_expected.to have_many(:view_statistics) }
     it { is_expected.to be_versioned }
 
@@ -274,7 +273,7 @@ RSpec.describe WorkVersion, type: :model do
       work_version.creators.first.tap do |creator|
         expect(creator).not_to be_persisted
         expect(creator.actor).to eq actor
-        expect(creator.display_name).to eq actor.default_alias
+        expect(creator.display_name).to eq actor.display_name
       end
     end
 

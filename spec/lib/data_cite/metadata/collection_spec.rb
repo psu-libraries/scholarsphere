@@ -81,7 +81,7 @@ RSpec.describe DataCite::Metadata::Collection do
 
         it "sets the creator's name" do
           expect(first_creator).to eq(
-            name: collection.creators.first.alias
+            name: collection.creators.first.display_name
           )
         end
       end
@@ -89,7 +89,7 @@ RSpec.describe DataCite::Metadata::Collection do
       context 'when the creator has an ORCiD' do
         it "sets the creator's name and provides the ORCiD" do
           expect(first_creator).to eq(
-            name: collection.creators.first.alias,
+            name: collection.creators.first.display_name,
             nameIdentifiers: [
               {
                 nameIdentifier: creator.actor.orcid,

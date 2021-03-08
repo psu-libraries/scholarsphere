@@ -84,7 +84,7 @@ RSpec.describe CollectionMetadataComponent, type: :component do
       # rudimentarily tested here, because they're unit-tested in detail above.
       expect(result.css('td.collection-title').text).to eq collection[:title]
       expect(result.css('td.collection-subtitle').text).to eq collection[:subtitle]
-      expect(result.css('td.collection-creators').text).to include collection.creators.map(&:alias).first
+      expect(result.css('td.collection-creators').text).to include collection.creators.map(&:display_name).first
       expect(result.css('td.collection-keyword').text).to include collection[:keyword].first
       expect(result.css('td.collection-contributor').text).to include collection[:contributor].first
       expect(result.css('td.collection-publisher').text).to include collection[:publisher].first

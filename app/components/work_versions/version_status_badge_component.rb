@@ -42,7 +42,8 @@ class WorkVersions::VersionStatusBadgeComponent < ApplicationComponent
     def state_classes
       {
         WorkVersion::STATE_DRAFT => %w(badge--dark-blue badge--outline),
-        WorkVersion::STATE_PUBLISHED => %w(badge--dark-blue)
+        WorkVersion::STATE_PUBLISHED => %w(badge--dark-blue),
+        WorkVersion::STATE_WITHDRAWN => %w(badge--dark-red)
       }.with_indifferent_access.fetch(work_version.aasm_state)
     end
 end

@@ -5,7 +5,8 @@ class WorkVersion < ApplicationRecord
   include ViewStatistics
   has_paper_trail
 
-  attr_writer :indexing_source
+  attr_writer :indexing_source,
+              :reload_on_index
 
   jsonb_accessor :metadata,
                  title: :string,
@@ -33,13 +34,6 @@ class WorkVersion < ApplicationRecord
 
   has_many :file_resources,
            through: :file_version_memberships
-
-  # @deprecated Use :creators instead. This will be removed in 4.3.
-  has_many :creator_aliases,
-           -> { order(position: :asc) },
-           class_name: 'WorkVersionCreation',
-           inverse_of: :work_version,
-           dependent: :destroy
 
   has_many :creators,
            -> { order(position: :asc) },
@@ -154,7 +148,12 @@ class WorkVersion < ApplicationRecord
     state :published, :withdrawn, :removed
 
     event :publish do
-      transitions from: [:draft, :withdrawn], to: :published, after: Proc.new { work.try(:update_deposit_agreement) }
+      transitions from: [:draft, :withdrawn],
+                  to: :published,
+                  after: Proc.new {
+                    work.try(:update_deposit_agreement)
+                    self.reload_on_index = true
+                  }
     end
 
     event :withdraw do
@@ -212,7 +211,7 @@ class WorkVersion < ApplicationRecord
     return existing_creator if existing_creator.present?
 
     creators.build(
-      display_name: actor.default_alias,
+      display_name: actor.display_name,
       surname: actor.surname,
       given_name: actor.given_name,
       email: actor.email,
@@ -243,11 +242,15 @@ class WorkVersion < ApplicationRecord
   def update_index(commit: true)
     reload if uuid.nil?
 
-    WorkIndexer.call(work, commit: commit)
+    WorkIndexer.call(work, commit: commit, reload: reload_on_index)
   end
 
   def indexing_source
     @indexing_source ||= SolrIndexingJob.public_method(:perform_later)
+  end
+
+  def reload_on_index
+    @reload_on_index ||= false
   end
 
   delegate :depositor, :proxy_depositor, :visibility, :embargoed?, :work_type, :deposited_at, to: :work

@@ -11,13 +11,17 @@
 #
 
 class WorkIndexer
-  def self.call(work, commit: false)
+  def self.call(work, commit: false, reload: false)
+    work.reload if reload
+
     work.versions.map do |version|
       IndexingService.add_document(version.to_solr, commit: false)
     end
 
     if work.latest_published_version.present?
       IndexingService.add_document(work.to_solr, commit: commit)
+    elsif work.withdrawn?
+      IndexingService.delete_document(work.uuid, commit: commit)
     elsif commit
       Blacklight.default_index.connection.commit
     end

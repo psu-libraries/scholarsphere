@@ -31,31 +31,31 @@
     <div class="col-2 pl-0">
       <%= link_to_remove_association form,
                                      class: 'remove',
-                                     title: t('dashboard.form.contributors.edit.remove', name: form.object.alias),
+                                     title: t('dashboard.form.contributors.edit.remove', name: form.object.display_name),
                                      data: { toggle: 'tooltip', placement: 'top', offset: '0,100%' } do %>
-        <span class="sr-only"><%= t('dashboard.form.contributors.edit.remove', name: form.object.alias) %></span>
+        <span class="sr-only"><%= t('dashboard.form.contributors.edit.remove', name: form.object.display_name) %></span>
         <i class="material-icons" aria-hidden="true">highlight_off</i>
       <% end %>
 
       <%= link_to '#',
                   class: 'move js-move-up',
-                  title: t('dashboard.form.contributors.edit.move_up', name: form.object.alias),
+                  title: t('dashboard.form.contributors.edit.move_up', name: form.object.display_name),
                   data: {
                     action: 'associations#moveUp',
                     toggle: 'tooltip', placement: 'top', offset: '0,100%'
                   } do %>
-        <span class="sr-only"><%= t('dashboard.form.contributors.edit.move_up', name: form.object.alias) %></span>
+        <span class="sr-only"><%= t('dashboard.form.contributors.edit.move_up', name: form.object.display_name) %></span>
         <i class="material-icons" aria-hidden="true">arrow_circle_up</i>
       <% end %>
 
       <%= link_to '#',
                   class: 'move js-move-down',
-                  title: t('dashboard.form.contributors.edit.move_down', name: form.object.alias),
+                  title: t('dashboard.form.contributors.edit.move_down', name: form.object.display_name),
                   data: {
                     action: 'associations#moveDown',
                     toggle: 'tooltip', placement: 'top', offset: '0,100%'
                   } do %>
-        <span class="sr-only"><%= t('dashboard.form.contributors.edit.move_down', name: form.object.alias) %></span>
+        <span class="sr-only"><%= t('dashboard.form.contributors.edit.move_down', name: form.object.display_name) %></span>
         <i class="material-icons" aria-hidden="true">arrow_circle_down</i>
       <% end %>
     </div>
