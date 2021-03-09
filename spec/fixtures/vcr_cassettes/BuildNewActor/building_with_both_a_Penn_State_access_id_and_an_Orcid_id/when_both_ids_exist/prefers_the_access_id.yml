@@ -1,0 +1,109 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://identity.apps.psu.edu/search-service/resources/people/userid/agw13
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.3
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Tue, 16 Mar 2021 15:15:48 GMT
+      Content-Type:
+      - application/vnd-psu.edu-v1+json
+      Content-Length:
+      - '357'
+      Connection:
+      - keep-alive
+      X-Content-Security-Policy:
+      - frame-ancestors 'none'
+      Set-Cookie:
+      - JSESSIONID=KoxLM-EIgdJSeNYXeWJwHEAvgzEQdZlyvm4-ktTL.search-service-7cbccc979b-hkn8t;
+        path=/search-service
+      X-Request-Id:
+      - 8a0be6d7b234c2fbdc9b6876ca591b38
+      X-Frame-Options:
+      - DENY
+      Content-Security-Policy:
+      - frame-ancestors 'none'
+      Uniqueid:
+      - 435e119d-6303-401a-9d5a-6b7d8e2a0962
+      Strict-Transport-Security:
+      - max-age=15724800; includeSubDomains
+    body:
+      encoding: UTF-8
+      string: '{"userid":"agw13","cprid":"2784093","givenName":"Adam","middleName":"Garner","familyName":"Wead","preferredGivenName":"Adam","preferredFamilyName":"Wead","active":true,"confHold":false,"universityEmail":"agw13@psu.edu","serviceAccount":false,"affiliation":["STAFF"],"displayName":"Adam
+        Wead","link":{"href":"https://dev.apps.psu.edu/cpr/resources/2784093"}}'
+  recorded_at: Tue, 16 Mar 2021 15:15:49 GMT
+- request:
+    method: get
+    uri: https://pub.orcid.org/v2.1/0000-0001-9500-0828/person
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.3
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Tue, 16 Mar 2021 15:15:48 GMT
+      Content-Type:
+      - application/json;charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - X-Mapping-fjhppofk=C9CF0771B896904864254CD659E1CE8B; path=/
+      - __cfduid=dea4bd1d79c3fcb92f0bb2b2c16ed0d6d1615907748; expires=Thu, 15-Apr-21
+        15:15:48 GMT; path=/; domain=.orcid.org; HttpOnly; SameSite=Lax
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Expires:
+      - '0'
+      Pragma:
+      - no-cache
+      X-Xss-Protection:
+      - 1; mode=block
+      Access-Control-Allow-Origin:
+      - "*"
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - DENY
+      Cf-Cache-Status:
+      - DYNAMIC
+      Cf-Request-Id:
+      - '08dd3493c200003f6d9da5a000000001'
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 630ef0660b3d3f6d-ORD
+    body:
+      encoding: ASCII-8BIT
+      string: '{"last-modified-date":null,"name":{"created-date":{"value":1460756163930},"last-modified-date":{"value":1460756163930},"given-names":{"value":"Adam"},"family-name":{"value":"Coughlin"},"credit-name":null,"source":null,"visibility":"PUBLIC","path":"0000-0001-9500-0828"},"other-names":{"last-modified-date":null,"other-name":[],"path":"/0000-0001-9500-0828/other-names"},"biography":null,"researcher-urls":{"last-modified-date":null,"researcher-url":[],"path":"/0000-0001-9500-0828/researcher-urls"},"emails":{"last-modified-date":null,"email":[],"path":"/0000-0001-9500-0828/email"},"addresses":{"last-modified-date":null,"address":[],"path":"/0000-0001-9500-0828/address"},"keywords":{"last-modified-date":null,"keyword":[],"path":"/0000-0001-9500-0828/keywords"},"external-identifiers":{"last-modified-date":null,"external-identifier":[],"path":"/0000-0001-9500-0828/external-identifiers"},"path":"/0000-0001-9500-0828/person"}'
+  recorded_at: Tue, 16 Mar 2021 15:15:49 GMT
+recorded_with: VCR 6.0.0

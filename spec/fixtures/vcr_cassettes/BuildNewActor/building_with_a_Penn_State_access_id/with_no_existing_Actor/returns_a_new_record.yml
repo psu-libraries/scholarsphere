@@ -1,0 +1,49 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://identity.apps.psu.edu/search-service/resources/people/userid/agw13
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.3
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Tue, 16 Mar 2021 15:14:39 GMT
+      Content-Type:
+      - application/vnd-psu.edu-v1+json
+      Content-Length:
+      - '357'
+      Connection:
+      - keep-alive
+      X-Content-Security-Policy:
+      - frame-ancestors 'none'
+      Set-Cookie:
+      - JSESSIONID=DwI2tbE3Y79OwRPfijinHaLM2njgM_qHuVMN8jQN.search-service-7cbccc979b-jqf8r;
+        path=/search-service
+      X-Request-Id:
+      - 54276c1f68af9296166d30b56f1b42d0
+      X-Frame-Options:
+      - DENY
+      Content-Security-Policy:
+      - frame-ancestors 'none'
+      Uniqueid:
+      - a1396eb0-a4a4-40aa-8f23-dcecdc3d5834
+      Strict-Transport-Security:
+      - max-age=15724800; includeSubDomains
+    body:
+      encoding: UTF-8
+      string: '{"userid":"agw13","cprid":"2784093","givenName":"Adam","middleName":"Garner","familyName":"Wead","preferredGivenName":"Adam","preferredFamilyName":"Wead","active":true,"confHold":false,"universityEmail":"agw13@psu.edu","serviceAccount":false,"affiliation":["STAFF"],"displayName":"Adam
+        Wead","link":{"href":"https://dev.apps.psu.edu/cpr/resources/2784093"}}'
+  recorded_at: Tue, 16 Mar 2021 15:14:40 GMT
+recorded_with: VCR 6.0.0

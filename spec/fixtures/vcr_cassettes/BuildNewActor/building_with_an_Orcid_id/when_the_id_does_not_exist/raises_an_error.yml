@@ -1,0 +1,65 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://pub.orcid.org/v2.1/abc123/person
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.3
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Date:
+      - Tue, 16 Mar 2021 15:14:40 GMT
+      Content-Type:
+      - application/json;charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - X-Mapping-fjhppofk=4842165633BFDE68C17EFF06BB2B96E5; path=/
+      - __cfduid=d72879346b4fdc4ab5a21d74f4898b9d61615907680; expires=Thu, 15-Apr-21
+        15:14:40 GMT; path=/; domain=.orcid.org; HttpOnly; SameSite=Lax
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Expires:
+      - '0'
+      Pragma:
+      - no-cache
+      X-Xss-Protection:
+      - 1; mode=block
+      Access-Control-Allow-Origin:
+      - "*"
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - DENY
+      Cf-Cache-Status:
+      - DYNAMIC
+      Cf-Request-Id:
+      - '08dd3389180000d153ed0bb000000001'
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 630eeebb5afad153-BUF
+    body:
+      encoding: ASCII-8BIT
+      string: '{"response-code":404,"developer-message":"404 Not Found: The resource
+        was not found. Full validation error: ORCID iD abc123 not found","user-message":"The
+        resource was not found.","error-code":9016,"more-info":"https://members.orcid.org/api/resources/troubleshooting"}'
+  recorded_at: Tue, 16 Mar 2021 15:14:41 GMT
+recorded_with: VCR 6.0.0
