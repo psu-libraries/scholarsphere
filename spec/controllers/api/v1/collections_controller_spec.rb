@@ -36,6 +36,7 @@ RSpec.describe Api::V1::CollectionsController, type: :controller do
         post :create, params: {
           metadata: {
             title: FactoryBotHelpers.work_title,
+            description: Faker::Lorem.paragraph,
             work_ids: works.map(&:id),
             creators_attributes: [creator]
           },
@@ -64,6 +65,7 @@ RSpec.describe Api::V1::CollectionsController, type: :controller do
         post :create, params: {
           metadata: {
             title: FactoryBotHelpers.work_title,
+            description: Faker::Lorem.paragraph,
             creators_attributes: [creator]
           },
           depositor: { given_name: user.given_name, surname: user.surname, email: user.email, psu_id: user.psu_id },
@@ -109,7 +111,7 @@ RSpec.describe Api::V1::CollectionsController, type: :controller do
         expect(response.status).to eq(422)
         expect(json_response).to include(
           'message' => 'Unable to complete the request',
-          'errors' => ["Title can't be blank"]
+          'errors' => ["Title can't be blank", "Description can't be blank"]
         )
       end
     end

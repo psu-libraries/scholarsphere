@@ -68,12 +68,12 @@ class PublishNewWork
     # not valid, roll back to previous state
     begin
       work_version.publish
-      work_version.validate!(:migration_api)
+      work_version.validate!
     rescue ActiveRecord::RecordInvalid
       work_version.aasm_state = work_version.aasm.from_state
     end
 
-    if work.save(context: :migration_api)
+    if work.save
       work.reload
     else
       work

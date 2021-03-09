@@ -160,7 +160,7 @@ RSpec.describe CreateNewCollection do
 
   context 'without a required title' do
     let(:new_collection) do
-      described_class.call(metadata: {}, depositor: depositor)
+      described_class.call(metadata: { description: Faker::Lorem.paragraph }, depositor: depositor)
     end
 
     it 'does NOT save the collection' do
@@ -208,33 +208,6 @@ RSpec.describe CreateNewCollection do
     it 'creates a new collection with a legacy identifier' do
       expect(new_collection.legacy_identifiers.map(&:old_id)).to contain_exactly(legacy_identifier.old_id)
       expect(new_collection.legacy_identifiers.map(&:version)).to contain_exactly(3)
-    end
-  end
-
-  context "when the collection has attributes that wouldn't pass validation outside of a migration" do
-    let(:new_collection) do
-      described_class.call(
-        metadata: HashWithIndifferentAccess.new(collection.metadata.merge(
-                                                  work_ids: [work.id],
-                                                  published_date: 'not a valid EDTF',
-                                                  creators_attributes: [
-                                                    {
-                                                      display_name: user.name,
-                                                      actor_attributes: {
-                                                        email: user.email,
-                                                        given_name: user.actor.given_name,
-                                                        surname: user.actor.surname,
-                                                        psu_id: user.actor.psu_id
-                                                      }
-                                                    }
-                                                  ]
-                                                )),
-        depositor: depositor
-      )
-    end
-
-    it 'creates a new collection' do
-      expect { new_collection }.to change(Collection, :count).by(1)
     end
   end
 

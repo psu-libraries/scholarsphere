@@ -129,13 +129,11 @@ class WorkVersion < ApplicationRecord
   validates :published_date,
             presence: true,
             edtf_date: true,
-            if: :published?,
-            unless: -> { validation_context == :migration_api }
+            if: :published?
 
   validates :description,
             presence: true,
-            if: :published?,
-            unless: -> { validation_context == :migration_api }
+            if: :published?
 
   after_save :perform_update_index
 

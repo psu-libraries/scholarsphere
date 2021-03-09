@@ -48,7 +48,7 @@ module Api::V1
       def publishing_errors
         work_version = work.latest_version
         work_version.publish
-        work_version.validate(:migration_api)
+        work_version.validate
         work_version.errors.full_messages
       end
 

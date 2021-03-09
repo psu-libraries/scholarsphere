@@ -112,13 +112,6 @@ RSpec.describe WorkVersion, type: :model do
         expect(work_version).to allow_value('1999-uu-uu').for(:published_date)
         expect(work_version).not_to allow_value('not an EDTF formatted date').for(:published_date)
       end
-
-      context 'with the :migration_api validation context' do
-        it { is_expected.to allow_value(nil).for(:description).on(:migration_api) }
-        it { is_expected.to allow_value(nil).for(:published_date).on(:migration_api) }
-
-        it { is_expected.to allow_value('not an EDTF formatted date').for(:published_date).on(:migration_api) }
-      end
     end
 
     context 'with the version number' do
