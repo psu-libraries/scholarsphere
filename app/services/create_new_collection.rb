@@ -13,27 +13,8 @@ class CreateNewCollection
   # @param [ActionController::Parameters] metadata
   # @param [ActionController::Parameters] depositor
   # @param [ActionController::Parameters] permissions
-  # @param [Array<String>] work_noids
   # @return [Collection]
-  def self.call(metadata:, depositor:, permissions: {}, work_noids: [])
-    noid = metadata.delete(:noid)
-
-    # Return early if any of the supplied noids don't exist
-    missing_noids = work_noids.reject { |work_noid| LegacyIdentifier.find_by(old_id: work_noid) }
-    if missing_noids.present?
-      collection = Collection.new
-      collection.errors.add(:legacy_identifiers, "#{missing_noids.join(', ')} were not found")
-      return collection
-    end
-
-    # Build a list of work ids from the given noids and merge those will any other supplied work_ids
-    work_ids = begin
-                 work_noids.map { |work_noid| LegacyIdentifier.find_by!(old_id: work_noid).resource_id }
-                   .concat(metadata.fetch(:work_ids, []))
-                   .uniq
-               end
-    metadata[:work_ids] = work_ids
-
+  def self.call(metadata:, depositor:, permissions: {})
     # @todo start a transaction here in case we need to rollback and remove any Actors we've created
 
     depositor_actor = Actor.find_or_create_by(psu_id: depositor['psu_id']) do |actor|
@@ -62,7 +43,6 @@ class CreateNewCollection
     )
 
     collection = Collection.new(params)
-    LegacyIdentifier.create_noid(resource: collection, noid: noid)
     UpdatePermissionsService.call(resource: collection, permissions: permissions, create_agents: true)
 
     if collection.save

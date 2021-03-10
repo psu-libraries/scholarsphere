@@ -181,36 +181,6 @@ RSpec.describe CreateNewCollection do
     end
   end
 
-  context 'when the collection has a NOID from Scholarpshere 3' do
-    let(:legacy_identifier) { build(:legacy_identifier) }
-
-    let(:new_collection) do
-      described_class.call(
-        metadata: HashWithIndifferentAccess.new(collection.metadata.merge(
-                                                  work_ids: [work.id],
-                                                  creators_attributes: [
-                                                    {
-                                                      display_name: user.name,
-                                                      actor_attributes: {
-                                                        email: user.email,
-                                                        given_name: user.actor.given_name,
-                                                        surname: user.actor.surname,
-                                                        psu_id: user.actor.psu_id
-                                                      }
-                                                    }
-                                                  ],
-                                                  noid: legacy_identifier.old_id
-                                                )),
-        depositor: depositor
-      )
-    end
-
-    it 'creates a new collection with a legacy identifier' do
-      expect(new_collection.legacy_identifiers.map(&:old_id)).to contain_exactly(legacy_identifier.old_id)
-      expect(new_collection.legacy_identifiers.map(&:version)).to contain_exactly(3)
-    end
-  end
-
   context 'with custom deposit dates' do
     let(:new_collection) do
       described_class.call(
