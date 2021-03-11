@@ -97,6 +97,9 @@
 # 
 # OAUTH_AUTHORIZE_URL: "/oauth/authorize"
 # OAUTH_TOKEN_URL: "/oauth/token"
+# Domain Hint is used to add the domain_hint query parameter into the authorization URL
+# an empty string, or value that doesn't match a tenant will be ignored.
+# AZURE_DOMAIN_HINT: "psu.edu"
 
 # --------------------------------------------------------------------------------------------------------------------
 # 
