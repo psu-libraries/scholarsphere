@@ -21,13 +21,20 @@ RSpec.describe Api::V1::IngestController, type: :controller do
     }
   end
 
+  let(:metadata) { attributes_for(:work_version, :able_to_be_published) }
+
   before { request.headers[:'X-API-Key'] = api_token }
 
   describe 'POST #create' do
     context 'with valid input' do
       before do
         post :create, params: {
-          metadata: { title: FactoryBotHelpers.work_title, creators_attributes: [creator] },
+          metadata: {
+            title: metadata[:title],
+            description: metadata[:description],
+            published_date: metadata[:published_date],
+            creators_attributes: [creator]
+          },
           depositor: { given_name: user.given_name, surname: user.surname, email: user.email, psu_id: user.psu_id },
           content: [{ file: fixture_file_upload(File.join(fixture_path, 'image.png')) }]
         }
@@ -47,7 +54,12 @@ RSpec.describe Api::V1::IngestController, type: :controller do
         file = Scholarsphere::S3::UploadedFile.new(path)
         Scholarsphere::S3::Uploader.new.upload(file)
         post :create, params: {
-          metadata: { title: FactoryBotHelpers.work_title, creators_attributes: [creator] },
+          metadata: {
+            title: metadata[:title],
+            description: metadata[:description],
+            published_date: metadata[:published_date],
+            creators_attributes: [creator]
+          },
           content: [{ file: file.to_shrine.to_json }],
           depositor: { given_name: user.given_name, surname: user.surname, email: user.email, psu_id: user.psu_id }
         }
@@ -102,7 +114,12 @@ RSpec.describe Api::V1::IngestController, type: :controller do
     context 'with missing files' do
       before do
         post :create, params: {
-          metadata: { title: FactoryBotHelpers.work_title, creators_attributes: [creator] },
+          metadata: {
+            title: metadata[:title],
+            description: metadata[:description],
+            published_date: metadata[:published_date],
+            creators_attributes: [creator]
+          },
           depositor: { given_name: user.given_name, surname: user.surname, email: user.email, psu_id: user.psu_id }
         }
       end
@@ -118,10 +135,14 @@ RSpec.describe Api::V1::IngestController, type: :controller do
       end
     end
 
-    context 'when the work cannot be published' do
+    context 'with missing creators' do
       before do
         post :create, params: {
-          metadata: { title: FactoryBotHelpers.work_title },
+          metadata: {
+            title: metadata[:title],
+            description: metadata[:description],
+            published_date: metadata[:published_date]
+          },
           depositor: { given_name: user.given_name, surname: user.surname, email: user.email, psu_id: user.psu_id },
           content: [{ file: fixture_file_upload(File.join(fixture_path, 'image.png')) }]
         }
@@ -134,25 +155,6 @@ RSpec.describe Api::V1::IngestController, type: :controller do
             '"message":"Work was created but cannot be published",' \
             "\"errors\":[\"#{i18n_error_message(:creators, :blank)}\"]" \
           '}'
-        )
-      end
-    end
-
-    context 'when a work with the same noid already exists' do
-      let(:legacy_identifier) { create(:legacy_identifier, :with_work, version: 3) }
-
-      before do
-        post :create, params: {
-          metadata: { title: FactoryBotHelpers.work_title, noid: legacy_identifier.old_id },
-          depositor: { given_name: user.given_name, surname: user.surname, email: user.email, psu_id: user.psu_id },
-          content: [{ file: fixture_file_upload(File.join(fixture_path, 'image.png')) }]
-        }
-      end
-
-      it 'returns the url of the previously migrated work' do
-        expect(response.status).to eq(303)
-        expect(response.body).to eq(
-          "{\"message\":\"Work has already been migrated\",\"url\":\"/resources/#{legacy_identifier.resource.uuid}\"}"
         )
       end
     end

@@ -2,8 +2,6 @@
 
 module Api::V1
   class CollectionsController < RestController
-    before_action :return_migrated_collection
-
     def create
       if collection.errors.any?
         render json: unprocessable_entity_response, status: :unprocessable_entity
@@ -13,14 +11,6 @@ module Api::V1
     end
 
     private
-
-      def return_migrated_collection
-        ids = LegacyIdentifier.where(old_id: metadata_params['noid'], version: 3, resource_type: 'Collection')
-        return if ids.empty?
-
-        collection = Collection.find(ids.first.resource_id)
-        render json: migrated_response(collection), status: 303
-      end
 
       def migrated_response(collection)
         {
@@ -47,8 +37,7 @@ module Api::V1
         @collection ||= CreateNewCollection.call(
           metadata: metadata_params,
           depositor: depositor_params,
-          permissions: permission_params,
-          work_noids: work_noid_params
+          permissions: permission_params
         )
       end
 
@@ -59,7 +48,6 @@ module Api::V1
             :title,
             :subtitle,
             :rights,
-            :noid,
             :published_date,
             :deposited_at,
             :description,
@@ -107,10 +95,6 @@ module Api::V1
             discover_users: [],
             discover_group: []
           )
-      end
-
-      def work_noid_params
-        params.fetch(:work_noids, [])
       end
   end
 end

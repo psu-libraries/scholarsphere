@@ -49,13 +49,11 @@ class Collection < ApplicationRecord
             presence: true
 
   validates :description,
-            presence: true,
-            unless: -> { validation_context == :migration_api }
+            presence: true
 
   validates :published_date,
             edtf_date: true,
-            allow_blank: true,
-            unless: -> { validation_context == :migration_api }
+            allow_blank: true
 
   accepts_nested_attributes_for :creators,
                                 reject_if: :all_blank,

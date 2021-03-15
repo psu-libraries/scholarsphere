@@ -17,7 +17,6 @@ class PublishNewWork
   # @param [ActionController::Parameters] permissions
   # @return [Work]
   def self.call(metadata:, depositor:, content:, permissions: {})
-    noid = metadata.delete(:noid)
     deposited_at = metadata.delete(:deposited_at)
     metadata[:rights] ||= WorkVersion::Licenses::DEFAULT
 
@@ -53,13 +52,11 @@ class PublishNewWork
     }
 
     work = Work.build_with_empty_version(params)
-    LegacyIdentifier.create_noid(resource: work, noid: noid)
     UpdatePermissionsService.call(resource: work, permissions: permissions, create_agents: true)
     work_version = work.versions.first
 
     content.map do |file|
-      file_resource = work_version.file_resources.build(file: file[:file], deposited_at: file[:deposited_at])
-      LegacyIdentifier.create_noid(resource: file_resource, noid: file[:noid])
+      work_version.file_resources.build(file: file[:file], deposited_at: file[:deposited_at])
     end
 
     return work unless work.valid?
@@ -68,12 +65,12 @@ class PublishNewWork
     # not valid, roll back to previous state
     begin
       work_version.publish
-      work_version.validate!(:migration_api)
+      work_version.validate!
     rescue ActiveRecord::RecordInvalid
       work_version.aasm_state = work_version.aasm.from_state
     end
 
-    if work.save(context: :migration_api)
+    if work.save
       work.reload
     else
       work

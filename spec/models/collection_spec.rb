@@ -79,23 +79,15 @@ RSpec.describe Collection, type: :model do
   end
 
   describe 'validations' do
+    let(:collection) { subject }
+
     it { is_expected.to validate_presence_of(:title) }
     it { is_expected.to validate_presence_of(:description) }
 
-    context 'with the :migration_api validation context' do
-      it { is_expected.not_to validate_presence_of(:description).on(:migration_api) }
-      it { is_expected.to allow_value('').for(:published_date).on(:migration_api) }
-      it { is_expected.to allow_value('not an EDTF formatted date').for(:published_date).on(:migration_api) }
-    end
-
-    context 'without the :migration_api validation context' do
-      let(:collection) { subject }
-
-      it 'validates published_date is in EDTF format' do
-        expect(collection).to allow_value('').for(:published_date)
-        expect(collection).to allow_value('1999-uu-uu').for(:published_date)
-        expect(collection).not_to allow_value('not an EDTF formatted date').for(:published_date)
-      end
+    it 'validates published_date is in EDTF format' do
+      expect(collection).to allow_value('').for(:published_date)
+      expect(collection).to allow_value('1999-uu-uu').for(:published_date)
+      expect(collection).not_to allow_value('not an EDTF formatted date').for(:published_date)
     end
   end
 

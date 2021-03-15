@@ -2,8 +2,6 @@
 
 module Api::V1
   class IngestController < RestController
-    before_action :return_migrated_work
-
     def create
       if work.errors.any?
         render json: unprocessable_entity_response, status: :unprocessable_entity
@@ -13,14 +11,6 @@ module Api::V1
     end
 
     private
-
-      def return_migrated_work
-        ids = LegacyIdentifier.where(old_id: metadata_params['noid'], version: 3, resource_type: 'Work')
-        return if ids.empty?
-
-        work = Work.find(ids.first.resource_id)
-        render json: { message: 'Work has already been migrated', url: resource_path(work.uuid) }, status: 303
-      end
 
       def success_response
         if work.latest_version.published?
@@ -48,7 +38,7 @@ module Api::V1
       def publishing_errors
         work_version = work.latest_version
         work_version.publish
-        work_version.validate(:migration_api)
+        work_version.validate
         work_version.errors.full_messages
       end
 
@@ -88,7 +78,6 @@ module Api::V1
             :rights,
             :version_name,
             :published_date,
-            :noid,
             :deposited_at,
             :description,
             :doi,
@@ -130,8 +119,7 @@ module Api::V1
           content_parameter
             .permit(
               :file,
-              :deposited_at,
-              :noid
+              :deposited_at
             )
         end
       end
