@@ -23,6 +23,8 @@ RSpec.describe Api::V1::IngestController, type: :controller do
 
   let(:metadata) { attributes_for(:work_version, :able_to_be_published) }
 
+  let(:json_response) { HashWithIndifferentAccess.new(JSON.parse(response.body)) }
+
   before { request.headers[:'X-API-Key'] = api_token }
 
   describe 'POST #create' do
@@ -102,11 +104,9 @@ RSpec.describe Api::V1::IngestController, type: :controller do
 
       it 'reports the error' do
         expect(response.status).to eq(422)
-        expect(response.body).to eq(
-          '{' \
-            '"message":"Unable to complete the request",' \
-            "\"errors\":[\"Versions title can't be blank\"]" \
-          '}'
+        expect(json_response[:message]).to eq('Unable to complete the request')
+        expect(json_response[:errors]).to include(
+          "Versions title can't be blank"
         )
       end
     end
@@ -124,13 +124,11 @@ RSpec.describe Api::V1::IngestController, type: :controller do
         }
       end
 
-      it 'saves the work with errors' do
-        expect(response).to be_created
-        expect(response.body).to eq(
-          '{' \
-            '"message":"Work was created but cannot be published",' \
-            "\"errors\":[\"#{i18n_error_message(:file_resources, :blank)}\"]" \
-          '}'
+      it 'reports the error' do
+        expect(response.status).to eq(422)
+        expect(json_response[:message]).to eq('Unable to complete the request')
+        expect(json_response[:errors]).to include(
+          "Versions file resources can't be blank"
         )
       end
     end
@@ -148,13 +146,11 @@ RSpec.describe Api::V1::IngestController, type: :controller do
         }
       end
 
-      it 'saves the work with errors' do
-        expect(response).to be_created
-        expect(response.body).to eq(
-          '{' \
-            '"message":"Work was created but cannot be published",' \
-            "\"errors\":[\"#{i18n_error_message(:creators, :blank)}\"]" \
-          '}'
+      it 'reports the error' do
+        expect(response.status).to eq(422)
+        expect(json_response[:message]).to eq('Unable to complete the request')
+        expect(json_response[:errors]).to include(
+          "Versions creators can't be blank"
         )
       end
     end

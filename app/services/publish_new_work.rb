@@ -1,13 +1,11 @@
 # frozen_string_literal: true
 
 # @abstract Used in conjunction with our REST API, this service publishes a new work with complete metadata and content.
-# It is incumbent upon the caller to provide the required metadata and binary content. Here are the possible outcomes:
-# for the work:
-# 1. A work has valid metadata and can be published
+# It is incumbent upon the caller to provide the required metadata and binary content. If all the information is
+# provided and is correct, the work will be published; otherwise, errors are returned:
+# * A work has valid metadata and can be published
 #      * a new, persisted work is returned in a published state
-# 2. A work has valid metadata, but cannot be published due to unmet critera (ex. a private work)
-#      * a new, persisted work is returned in a DRAFT state
-# 3. A work has invalid metadata or content
+# * A work has invalid metadata or content
 #      * a new, UNPERSISTED work is returned with errors
 
 class PublishNewWork
@@ -52,28 +50,20 @@ class PublishNewWork
     }
 
     work = Work.build_with_empty_version(params)
-    UpdatePermissionsService.call(resource: work, permissions: permissions, create_agents: true)
-    work_version = work.versions.first
 
-    content.map do |file|
-      work_version.file_resources.build(file: file[:file], deposited_at: file[:deposited_at])
-    end
+    WorkVersion.transaction do
+      UpdatePermissionsService.call(resource: work, permissions: permissions, create_agents: true)
+      work_version = work.versions.first
 
-    return work unless work.valid?
+      content.map do |file|
+        work_version.file_resources.build(file: file[:file], deposited_at: file[:deposited_at])
+      end
 
-    # Publish the work version (without saving), check if it's valid. If it's
-    # not valid, roll back to previous state
-    begin
       work_version.publish
-      work_version.validate!
-    rescue ActiveRecord::RecordInvalid
-      work_version.aasm_state = work_version.aasm.from_state
-    end
-
-    if work.save
+      work_version.save!
       work.reload
-    else
-      work
     end
+  rescue ActiveRecord::RecordInvalid
+    work
   end
 end

@@ -165,7 +165,7 @@ RSpec.describe PublishNewWork do
     end
   end
 
-  context 'without a required title' do
+  context 'without all the required metadata' do
     let(:new_work) do
       described_class.call(metadata: {}, depositor: depositor, content: [])
     end
@@ -184,7 +184,14 @@ RSpec.describe PublishNewWork do
     end
 
     it 'returns the work with errors' do
-      expect(new_work.errors.full_messages).to contain_exactly("Versions title can't be blank")
+      expect(new_work.errors.full_messages).to contain_exactly(
+        "Versions title can't be blank",
+        'Versions description is required to publish the work',
+        "Versions creators can't be blank",
+        "Versions file resources can't be blank",
+        'Versions published date is not a valid date in EDTF format',
+        'Versions published date is required to publish the work'
+      )
     end
   end
 
@@ -213,25 +220,21 @@ RSpec.describe PublishNewWork do
       )
     end
 
-    it 'creates an private work with a single DRAFT version, complete metadata, and content' do
-      expect(new_work).not_to be_open_access
-      expect(new_work).not_to be_authorized_access
-      expect(new_work).not_to be_embargoed
-      expect(new_work.visibility).to eq(Permissions::Visibility::PRIVATE)
-      expect(new_work.work_type).to eq('dataset')
-      expect(new_work.versions.count).to eq(1)
-      expect(new_work.latest_version).to be_persisted
-      expect(new_work.latest_version).to be_draft
-      expect(new_work.latest_version.metadata).to eq(work.metadata)
-      expect(new_work.latest_version.file_version_memberships.map(&:title)).to contain_exactly('image.png')
+    it 'does NOT save the work' do
+      expect { new_work }.not_to change(Work, :count)
     end
 
-    it 'creates a new Actor record for the depositor' do
-      expect { new_work }.to change(Actor, :count).by(1)
+    it 'does NOT create an Actor for the depositor' do
+      pending('Need to implement transactions to rollback any changes to the database when works fail to save')
+      expect { new_work }.not_to change(Actor, :count).by(1)
     end
 
     it 'does NOT create a User record for the depositor' do
       expect { new_work }.not_to change(User, :count)
+    end
+
+    it 'returns the work with errors' do
+      expect(new_work.errors.full_messages).to contain_exactly('Versions visibility cannot be private')
     end
   end
 
