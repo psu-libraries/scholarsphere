@@ -56,10 +56,19 @@ module Dashboard
     def destroy
       @work_version = WorkVersion.find(params[:id])
       authorize(@work_version)
-      DestroyWorkVersion.call(@work_version)
+
+      parent_work = DestroyWorkVersion.call(
+        @work_version, force: current_user.admin?
+      )
+
+      redirect_path = if parent_work.nil?
+                        dashboard_root_path
+                      else
+                        resource_path(parent_work.latest_version.uuid)
+                      end
 
       respond_to do |format|
-        format.html { redirect_to dashboard_root_path, notice: 'Work version was successfully destroyed.' }
+        format.html { redirect_to redirect_path, notice: 'Work version was successfully destroyed.' }
         format.json { head :no_content }
       end
     end

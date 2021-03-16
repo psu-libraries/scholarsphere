@@ -19,12 +19,21 @@ class WorkVersionPolicy < ApplicationPolicy
   end
   alias_method :update?, :edit?
 
+  # Work versions cannot be destroyed if they haven't been persisted.
+  # Admins can delete a work version in any state, as long as it's the latest one
+  # Regular users can only delete draft versions that they can edit
   def destroy?
+    return false if record.new_record?
+    return true if user.admin? && record == record.work.latest_version
+
+    !record.published? && editable?
+  end
+
+  def publish?
     return false if record.published?
 
     editable?
   end
-  alias_method :publish?, :destroy?
 
   def download?
     return true if editable?
