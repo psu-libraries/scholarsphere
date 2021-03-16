@@ -231,6 +231,9 @@ en:
           heading: DOI
           explanation: A Digital Object Identifier (DOI) is a persistent identifier that can be used in print or on the web.
           not_allowed: A DOI cannot be created for this collection.
+        danger:
+          heading: Danger
+          explanation: Deleting a collection cannot be undone.
       update:
         success: Collection settings successfully updated.
       destroy:
@@ -284,6 +287,9 @@ en:
           heading: DOI
           explanation: A Digital Object Identifier (DOI) is a persistent identifier that can be used in print or on the web.
           not_allowed: A DOI may only be created on published works. Since this work is a draft, you'll need to wait until it's published to create a DOI for it.
+        danger:
+          heading: Danger
+          explanation: This line of text can be fleshed out depending on whether the latest version is a draft, a non-draft, and explain that deleting the only version will also delete the work.
       update:
         success: "Work settings successfully updated."
     form: 

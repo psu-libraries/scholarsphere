@@ -19,6 +19,9 @@
           <li class="nav-item">
             <%= link_to t('dashboard.shared.editors_form.heading'), "##{t('dashboard.shared.editors_form.heading').parameterize}", class: 'nav-link' %>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#<%= t('.danger.heading').parameterize %>"><%= t('.danger.heading') %></a>
+          </li>
         </ul>
       </aside>
     </div>
@@ -45,6 +48,28 @@
       <div class="actions mb-3">
         <%= render 'dashboard/shared/editors_form', editors_form: @editors_form, url: dashboard_collection_path(@collection) %>
       </div>
+
+      <% if policy(@collection).destroy? %>
+        <div class="keyline keyline--left">
+          <h2 id="<%= t('.danger.heading').parameterize %>" class="h4"><%= t('.danger.heading') %></h2>
+        </div>
+
+        <div class="border border-danger rounded p-2">
+          <div class="actions">
+            <div class="d-flex">
+              <div class="mr-auto">
+                <p><%= t('.danger.explanation') %></p>
+              </div>
+              <div>
+                <%= link_to t('dashboard.form.actions.destroy.button'),
+                            dashboard_collection_path(@collection),
+                            class: 'btn btn-danger btn--squish mr-lg-2',
+                            method: :delete,
+                            data: { confirm: t('dashboard.form.actions.destroy.confirm') } %>
+              </div>
+          </div>
+        </div>
+      <% end %>
     </div>
   </article>
 </div>
