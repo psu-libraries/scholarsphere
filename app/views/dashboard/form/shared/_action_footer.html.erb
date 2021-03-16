@@ -2,9 +2,19 @@
 <% secondary_action = current_user.admin? ? :admin_save : param_key %>
 
 <footer class="footer footer--actions footer--fixed d-flex justify-content-center">
-  <%= form.button t("dashboard.form.actions.save_and_exit.#{secondary_action}"), name: 'save_and_exit', class: 'btn btn-outline-primary btn--rounded' %>
+  <%= form.button t("dashboard.form.actions.save_and_exit.#{secondary_action}"), name: 'save_and_exit', class: 'btn btn-outline-primary btn--rounded pull-left' %>
+
   <div>
     <%= link_to t('dashboard.form.actions.cancel'), cancel_path, class: 'btn btn-outline-dark btn--rounded' %>
     <%= form.submit t("dashboard.form.actions.#{primary_action}"), name: primary_action, class: 'btn btn-primary btn--rounded ml-2' %>
   </div>
+
+  <% if form.object.persisted? && policy(form.object).destroy? %>
+    <%- destroy_path = form.object.is_a?(Collection) ? method(:dashboard_collection_path) : method(:dashboard_work_version_path) %>
+    <%= link_to t('dashboard.form.actions.destroy.button'),
+                destroy_path.call(form.object),
+                method: :delete,
+                class: 'btn btn-outline-danger btn--rounded pull-right',
+                data: { confirm: t('dashboard.form.actions.destroy.confirm') } %>
+  <% end %>
 </footer>

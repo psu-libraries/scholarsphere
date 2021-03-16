@@ -312,6 +312,9 @@ en:
           collection: Save and Exit
           work_version: Save as Draft & Exit
           admin_save: Save and Exit
+        destroy:
+          button: Delete
+          confirm: "Are you sure you want to delete this version? This cannot be undone."
       details:
         about_collections: 
           label: About Collections
