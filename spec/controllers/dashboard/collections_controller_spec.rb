@@ -73,10 +73,10 @@ RSpec.describe Dashboard::CollectionsController, type: :controller do
       end
 
       context 'with an invalid visibility' do
-        it 'raises an error' do
+        it 'does nothing' do
           expect {
             post :update, params: { id: collection.id, collection: { visibility: 'bogus' } }
-          }.to raise_error(ArgumentError)
+          }.not_to change(collection, :visibility)
         end
       end
     end

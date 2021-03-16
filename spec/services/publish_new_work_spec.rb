@@ -27,6 +27,7 @@ RSpec.describe PublishNewWork do
       described_class.call(
         metadata: HashWithIndifferentAccess.new(work.metadata.merge(
                                                   work_type: 'dataset',
+                                                  visibility: Permissions::Visibility::OPEN,
                                                   creators_attributes: [
                                                     {
                                                       display_name: user.name,
@@ -73,6 +74,7 @@ RSpec.describe PublishNewWork do
       described_class.call(
         metadata: HashWithIndifferentAccess.new(work.metadata.merge(
                                                   work_type: 'dataset',
+                                                  visibility: Permissions::Visibility::OPEN,
                                                   creators_attributes: [
                                                     {
                                                       display_name: user.name,
@@ -115,6 +117,7 @@ RSpec.describe PublishNewWork do
       described_class.call(
         metadata: HashWithIndifferentAccess.new(work.metadata.merge(
                                                   work_type: 'dataset',
+                                                  visibility: Permissions::Visibility::OPEN,
                                                   creators_attributes: [
                                                     {
                                                       display_name: user.name,
@@ -190,7 +193,10 @@ RSpec.describe PublishNewWork do
         "Versions creators can't be blank",
         "Versions file resources can't be blank",
         'Versions published date is not a valid date in EDTF format',
-        'Versions published date is required to publish the work'
+        'Versions published date is required to publish the work',
+        'Versions visibility cannot be private',
+        "Work type can't be blank",
+        'Versions rights is required to publish the work'
       )
     end
   end
@@ -243,6 +249,7 @@ RSpec.describe PublishNewWork do
       described_class.call(
         metadata: HashWithIndifferentAccess.new(work.metadata.merge(
                                                   work_type: 'dataset',
+                                                  visibility: Permissions::Visibility::OPEN,
                                                   creators_attributes: [
                                                     {
                                                       display_name: user.name,
@@ -279,6 +286,7 @@ RSpec.describe PublishNewWork do
       described_class.call(
         metadata: HashWithIndifferentAccess.new(work.metadata.merge(
                                                   work_type: 'dataset',
+                                                  visibility: Permissions::Visibility::OPEN,
                                                   creators_attributes: [
                                                     {
                                                       display_name: user.name,
@@ -342,9 +350,14 @@ RSpec.describe PublishNewWork do
       )
     end
 
-    it 'creates a work using the specified deposit dates' do
-      expect(new_work.latest_version).to be_published
-      expect(new_work.work_type).to eq(Work::Types.unspecified)
+    it 'does NOT save the work' do
+      expect { new_work }.not_to change(Work, :count)
+    end
+
+    it 'returns the work with errors' do
+      expect(new_work.errors.full_messages).to include(
+        "Work type can't be blank"
+      )
     end
   end
 end

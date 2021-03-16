@@ -113,8 +113,6 @@ module Permissions
       grant_authorized_access
     when Visibility::PRIVATE
       revoke_open_access && revoke_authorized_access
-    else
-      raise ArgumentError, "#{level} is not a supported visibility" unless Visibility.all.include?(level)
     end
   end
 

@@ -10,6 +10,7 @@ RSpec.describe 'Migration', :inline_jobs, type: :feature do
     HashWithIndifferentAccess.new(
       work.metadata.merge(
         work_type: 'dataset',
+        visibility: Permissions::Visibility::OPEN,
         creators_attributes: [
           {
             display_name: user.name,

@@ -33,9 +33,12 @@ RSpec.describe Api::V1::IngestController, type: :controller do
         post :create, params: {
           metadata: {
             title: metadata[:title],
+            work_type: Work::Types.default,
             description: metadata[:description],
             published_date: metadata[:published_date],
-            creators_attributes: [creator]
+            creators_attributes: [creator],
+            rights: metadata[:rights],
+            visibility: Permissions::Visibility::OPEN
           },
           depositor: { given_name: user.given_name, surname: user.surname, email: user.email, psu_id: user.psu_id },
           content: [{ file: fixture_file_upload(File.join(fixture_path, 'image.png')) }]
@@ -58,9 +61,12 @@ RSpec.describe Api::V1::IngestController, type: :controller do
         post :create, params: {
           metadata: {
             title: metadata[:title],
+            work_type: Work::Types.default,
             description: metadata[:description],
             published_date: metadata[:published_date],
-            creators_attributes: [creator]
+            creators_attributes: [creator],
+            rights: metadata[:rights],
+            visibility: Permissions::Visibility::OPEN
           },
           content: [{ file: file.to_shrine.to_json }],
           depositor: { given_name: user.given_name, surname: user.surname, email: user.email, psu_id: user.psu_id }

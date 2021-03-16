@@ -72,8 +72,10 @@ RSpec.describe Dashboard::WorksController, type: :controller do
       end
 
       context 'with an invalid visibility' do
-        it 'raises an error' do
-          expect { post :update, params: { id: work.id, work: { visibility: 'bogus' } } }.to raise_error(ArgumentError)
+        it 'does nothing' do
+          expect {
+            post :update, params: { id: work.id, work: { visibility: 'bogus' } }
+          }.not_to change(work, :visibility)
         end
       end
     end

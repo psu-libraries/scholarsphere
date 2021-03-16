@@ -15,9 +15,6 @@ class PublishNewWork
   # @param [ActionController::Parameters] permissions
   # @return [Work]
   def self.call(metadata:, depositor:, content:, permissions: {})
-    deposited_at = metadata.delete(:deposited_at)
-    metadata[:rights] ||= WorkVersion::Licenses::DEFAULT
-
     # @todo start a transaction here in case we need to rollback and remove any Actors we've created
 
     depositor_actor = Actor.find_or_create_by(psu_id: depositor['psu_id']) do |actor|
@@ -40,11 +37,11 @@ class PublishNewWork
     end
 
     params = {
-      work_type: (metadata.delete(:work_type).presence || Work::Types.unspecified),
-      visibility: metadata.delete(:visibility) { Permissions::Visibility::OPEN },
+      work_type: metadata.delete(:work_type),
+      visibility: metadata.delete(:visibility),
       embargoed_until: metadata.delete(:embargoed_until),
       depositor: depositor_actor,
-      deposited_at: deposited_at,
+      deposited_at: metadata.delete(:deposited_at),
       doi: metadata.delete(:doi),
       versions_attributes: [metadata.to_hash.merge!('creators_attributes' => creators_attributes)]
     }
