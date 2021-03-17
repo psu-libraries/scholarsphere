@@ -2,9 +2,10 @@
 
 # @abstract Client for querying Penn State's identity API: https://identity.apps.psu.edu/search-service/resources
 module PennState::SearchService
-  class Client
-    class Error < StandardError; end
+  class Error < StandardError; end
+  class NotFound < StandardError; end
 
+  class Client
     attr_reader :base_url
 
     # @param [String] base_url
@@ -37,8 +38,7 @@ module PennState::SearchService
 
       # @return [PennState::SearchService::Person, nil]
       def process_userid_response(response)
-        return if response.status == 404
-
+        raise NotFound if response.status == 404
         raise Error.new(response.body) unless response.success?
 
         Person.new(JSON.parse(response.body))
