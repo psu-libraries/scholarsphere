@@ -8,34 +8,35 @@ require 'scholarsphere/client'
 
 RSpec.describe Api::V1::IngestController, type: :controller do
   let(:api_token) { create(:api_token).token }
-  let(:user) { build(:actor) }
+  let(:depositor) { VCRHelpers.depositor }
   let(:creator) do
     {
-      display_name: "#{user.given_name} #{user.surname}",
-      actor_attributes: {
-        email: user.email,
-        given_name: user.given_name,
-        surname: user.surname,
-        psu_id: user.psu_id
-      }
+      display_name: attributes_for(:authorship)[:display_name]
     }
   end
 
   let(:metadata) { attributes_for(:work_version, :able_to_be_published) }
 
-  before { request.headers[:'X-API-Key'] = api_token }
+  let(:json_response) { HashWithIndifferentAccess.new(JSON.parse(response.body)) }
+
+  before do
+    request.headers[:'X-API-Key'] = api_token
+  end
 
   describe 'POST #create' do
-    context 'with valid input' do
+    context 'with valid input', vcr: VCRHelpers.depositor_cassette do
       before do
         post :create, params: {
           metadata: {
             title: metadata[:title],
+            work_type: Work::Types.default,
             description: metadata[:description],
             published_date: metadata[:published_date],
-            creators_attributes: [creator]
+            creators: [creator],
+            rights: metadata[:rights],
+            visibility: Permissions::Visibility::OPEN
           },
-          depositor: { given_name: user.given_name, surname: user.surname, email: user.email, psu_id: user.psu_id },
+          depositor: depositor,
           content: [{ file: fixture_file_upload(File.join(fixture_path, 'image.png')) }]
         }
       end
@@ -48,7 +49,69 @@ RSpec.describe Api::V1::IngestController, type: :controller do
       end
     end
 
-    context 'when uploading files from S3' do
+    context 'with a Penn State user', vcr: VCRHelpers.depositor_cassette do
+      let(:creator) do
+        {
+          psu_id: depositor
+        }
+      end
+
+      before do
+        post :create, params: {
+          metadata: {
+            title: metadata[:title],
+            work_type: Work::Types.default,
+            description: metadata[:description],
+            published_date: metadata[:published_date],
+            creators: [creator],
+            rights: metadata[:rights],
+            visibility: Permissions::Visibility::OPEN
+          },
+          depositor: depositor,
+          content: [{ file: fixture_file_upload(File.join(fixture_path, 'image.png')) }]
+        }
+      end
+
+      it 'publishes a new work' do
+        expect(response).to be_ok
+        expect(response.body).to eq(
+          "{\"message\":\"Work was successfully created\",\"url\":\"/resources/#{Work.last.uuid}\"}"
+        )
+      end
+    end
+
+    context 'with an Orcid id', :vcr do
+      let(:creator) do
+        {
+          orcid: '0000-0002-8985-2378'
+        }
+      end
+
+      before do
+        post :create, params: {
+          metadata: {
+            title: metadata[:title],
+            work_type: Work::Types.default,
+            description: metadata[:description],
+            published_date: metadata[:published_date],
+            creators: [creator],
+            rights: metadata[:rights],
+            visibility: Permissions::Visibility::OPEN
+          },
+          depositor: depositor,
+          content: [{ file: fixture_file_upload(File.join(fixture_path, 'image.png')) }]
+        }
+      end
+
+      it 'publishes a new work' do
+        expect(response).to be_ok
+        expect(response.body).to eq(
+          "{\"message\":\"Work was successfully created\",\"url\":\"/resources/#{Work.last.uuid}\"}"
+        )
+      end
+    end
+
+    context 'when uploading files from S3', vcr: VCRHelpers.depositor_cassette do
       before do
         path = Pathname.new(fixture_path).join('image.png')
         file = Scholarsphere::S3::UploadedFile.new(path)
@@ -56,12 +119,15 @@ RSpec.describe Api::V1::IngestController, type: :controller do
         post :create, params: {
           metadata: {
             title: metadata[:title],
+            work_type: Work::Types.default,
             description: metadata[:description],
             published_date: metadata[:published_date],
-            creators_attributes: [creator]
+            creators: [creator],
+            rights: metadata[:rights],
+            visibility: Permissions::Visibility::OPEN
           },
           content: [{ file: file.to_shrine.to_json }],
-          depositor: { given_name: user.given_name, surname: user.surname, email: user.email, psu_id: user.psu_id }
+          depositor: depositor
         }
       end
 
@@ -91,51 +157,47 @@ RSpec.describe Api::V1::IngestController, type: :controller do
       end
     end
 
-    context 'with missing metadata' do
+    context 'with missing metadata', vcr: VCRHelpers.depositor_cassette do
       before do
         post :create, params: {
           metadata: { title: nil },
-          depositor: { given_name: user.given_name, surname: user.surname, email: user.email, psu_id: user.psu_id },
+          depositor: depositor,
           content: [{ file: fixture_file_upload(File.join(fixture_path, 'image.png')) }]
         }
       end
 
       it 'reports the error' do
         expect(response.status).to eq(422)
-        expect(response.body).to eq(
-          '{' \
-            '"message":"Unable to complete the request",' \
-            "\"errors\":[\"Versions title can't be blank\"]" \
-          '}'
+        expect(json_response[:message]).to eq('Unable to complete the request')
+        expect(json_response[:errors]).to include(
+          "Versions title can't be blank"
         )
       end
     end
 
-    context 'with missing files' do
+    context 'with missing files', vcr: VCRHelpers.depositor_cassette do
       before do
         post :create, params: {
           metadata: {
             title: metadata[:title],
             description: metadata[:description],
             published_date: metadata[:published_date],
-            creators_attributes: [creator]
+            creators: [creator]
           },
-          depositor: { given_name: user.given_name, surname: user.surname, email: user.email, psu_id: user.psu_id }
+          depositor: depositor
         }
       end
 
-      it 'saves the work with errors' do
-        expect(response).to be_created
-        expect(response.body).to eq(
-          '{' \
-            '"message":"Work was created but cannot be published",' \
-            "\"errors\":[\"#{i18n_error_message(:file_resources, :blank)}\"]" \
-          '}'
+      it 'reports the error' do
+        expect(response.status).to eq(422)
+        expect(json_response[:message]).to eq('Unable to complete the request')
+        expect(json_response[:errors]).to include(
+          "Versions file resources can't be blank"
         )
       end
     end
 
-    context 'with missing creators' do
+    context 'with missing creators', vcr: VCRHelpers.depositor_cassette do
       before do
         post :create, params: {
           metadata: {
@@ -143,18 +205,42 @@ RSpec.describe Api::V1::IngestController, type: :controller do
             description: metadata[:description],
             published_date: metadata[:published_date]
           },
-          depositor: { given_name: user.given_name, surname: user.surname, email: user.email, psu_id: user.psu_id },
+          depositor: depositor,
           content: [{ file: fixture_file_upload(File.join(fixture_path, 'image.png')) }]
         }
       end
 
-      it 'saves the work with errors' do
-        expect(response).to be_created
-        expect(response.body).to eq(
-          '{' \
-            '"message":"Work was created but cannot be published",' \
-            "\"errors\":[\"#{i18n_error_message(:creators, :blank)}\"]" \
-          '}'
+      it 'reports the error' do
+        expect(response.status).to eq(422)
+        expect(json_response[:message]).to eq('Unable to complete the request')
+        expect(json_response[:errors]).to include(
+          "Versions creators can't be blank"
+        )
+      end
+    end
+
+    context 'when the depositor does not exist', :vcr do
+      before do
+        post :create, params: {
+          metadata: {
+            title: metadata[:title],
+            work_type: Work::Types.default,
+            description: metadata[:description],
+            published_date: metadata[:published_date],
+            creators: [creator],
+            rights: metadata[:rights],
+            visibility: Permissions::Visibility::OPEN
+          },
+          depositor: 'unknown',
+          content: [{ file: fixture_file_upload(File.join(fixture_path, 'image.png')) }]
+        }
+      end
+
+      it 'reports the error' do
+        expect(response.status).to eq(422)
+        expect(json_response[:message]).to eq('Unable to complete the request')
+        expect(json_response[:errors]).to include(
+          "Depositor 'unknown' does not exist"
         )
       end
     end

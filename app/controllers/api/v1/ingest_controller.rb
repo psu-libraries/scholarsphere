@@ -2,65 +2,55 @@
 
 module Api::V1
   class IngestController < RestController
+    rescue_from PennState::SearchService::NotFound do
+      render json: depositor_not_found, status: :unprocessable_entity
+    end
+
     def create
-      if work.errors.any?
+      if publisher.errors.any?
         render json: unprocessable_entity_response, status: :unprocessable_entity
       else
-        success_response
+        render json: published_response, status: :ok
       end
     end
 
     private
 
-      def success_response
-        if work.latest_version.published?
-          render json: published_response, status: :ok
-        else
-          render json: draft_response, status: :created
-        end
-      end
-
       def published_response
         {
           message: 'Work was successfully created',
-          url: resource_path(work.uuid)
+          url: resource_path(publisher.work.uuid)
         }
-      end
-
-      def draft_response
-        {
-          message: 'Work was created but cannot be published',
-          errors: publishing_errors
-        }
-      end
-
-      # @note Attempt to re-publish the work, then validate it to see what errors there are
-      def publishing_errors
-        work_version = work.latest_version
-        work_version.publish
-        work_version.validate
-        work_version.errors.full_messages
       end
 
       def unprocessable_entity_response
         {
           message: 'Unable to complete the request',
-          errors: work.errors.full_messages + file_errors
+          errors: publisher.errors.full_messages + file_errors
+        }
+      end
+
+      def depositor_not_found
+        {
+          message: 'Unable to complete the request',
+          errors: "Depositor '#{depositor_params}' does not exist"
         }
       end
 
       # @note Dig down into all the file version memberships and pull out any errors.
+      # ** THIS SHOULD PROBABLY BE MOVED INTO WorkPublisher **
       def file_errors
-        work
+        publisher
+          .work
           .versions
           .flat_map { |version| version.file_version_memberships.to_a }
           .flat_map { |membership| membership.errors.full_messages }
       end
 
-      def work
-        @work ||= PublishNewWork.call(
+      def publisher
+        @publisher ||= WorkPublisher.call(
           metadata: metadata_params,
-          depositor: depositor_params,
+          depositor_access_id: depositor_params,
           content: content_params,
           permissions: permission_params
         )
@@ -91,14 +81,13 @@ module Api::V1
             based_near: [],
             related_url: [],
             source: [],
-            creators_attributes: [
+            creators: [
               :display_name,
-              actor_attributes: [
-                :email,
-                :given_name,
-                :surname,
-                :psu_id
-              ]
+              :email,
+              :given_name,
+              :surname,
+              :psu_id,
+              :orcid
             ]
           )
       end
@@ -106,12 +95,6 @@ module Api::V1
       def depositor_params
         params
           .require(:depositor)
-          .permit(
-            :email,
-            :given_name,
-            :surname,
-            :psu_id
-          )
       end
 
       def content_params

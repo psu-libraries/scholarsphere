@@ -1,0 +1,49 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://identity.apps.psu.edu/search-service/resources/people/userid/dmc186
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.3
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 18 Mar 2021 15:08:39 GMT
+      Content-Type:
+      - application/vnd-psu.edu-v1+json
+      Content-Length:
+      - '319'
+      Connection:
+      - keep-alive
+      X-Content-Security-Policy:
+      - frame-ancestors 'none'
+      Set-Cookie:
+      - JSESSIONID=eY49gYxUa6ejNyKrePflnku_6TAS6X42MDWCE5Rv.search-service-7cbccc979b-jqf8r;
+        path=/search-service
+      X-Request-Id:
+      - b5afbb98b4ae38b41c1e5a355e10a112
+      X-Frame-Options:
+      - DENY
+      Content-Security-Policy:
+      - frame-ancestors 'none'
+      Uniqueid:
+      - e4673bd2-ee1e-4af9-a08f-1132942346b2
+      Strict-Transport-Security:
+      - max-age=15724800; includeSubDomains
+    body:
+      encoding: UTF-8
+      string: '{"userid":"dmc186","cprid":"722576","givenName":"Daniel","middleName":"M","familyName":"Coughlin","active":true,"confHold":false,"universityEmail":"dmc186@psu.edu","serviceAccount":false,"affiliation":["FACULTY","STAFF"],"displayName":"Daniel
+        M Coughlin","link":{"href":"https://dev.apps.psu.edu/cpr/resources/722576"}}'
+  recorded_at: Thu, 18 Mar 2021 15:08:40 GMT
+recorded_with: VCR 6.0.0

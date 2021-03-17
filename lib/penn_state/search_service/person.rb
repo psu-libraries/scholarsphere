@@ -39,19 +39,19 @@ module PennState::SearchService
     end
 
     def preferred_given_name
-      data['preferredGivenName']
+      data.fetch('preferredGivenName', given_name)
     end
 
     def preferred_middle_name
-      data['preferredMiddleName']
+      data.fetch('preferredMiddleName', middle_name)
     end
 
     def preferred_family_name
-      data['preferredFamilyName']
+      data.fetch('preferredFamilyName', family_name)
     end
 
     def preferred_honorific_suffix
-      data['preferredHonorificSuffix']
+      data.fetch('preferredHonorificSuffix', honorific_suffix)
     end
 
     def active?

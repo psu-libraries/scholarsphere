@@ -10,6 +10,9 @@ class Authorship < ApplicationRecord
 
   accepts_nested_attributes_for :actor
 
+  validates :display_name,
+            presence: true
+
   after_initialize :set_defaults
 
   attr_writer :changed_by_system
