@@ -8,12 +8,15 @@ RSpec.describe UserRegistrationService do
 
     before do
       allow(PennState::SearchService::Client).to receive(:new).and_return(mock_client)
-      allow(mock_client).to receive(:userid).with(user_id).and_return(person)
     end
 
     context 'when the user exists at Penn State' do
       let(:user_id) { person.user_id }
       let(:person) { create(:person) }
+
+      before do
+        allow(mock_client).to receive(:userid).with(user_id).and_return(person)
+      end
 
       it 'returns the newly created User, associated with the new Actor' do
         new_user = described_class.call(uid: user_id)
@@ -38,7 +41,10 @@ RSpec.describe UserRegistrationService do
 
     context 'when the user does not exist a Penn State' do
       let(:user_id) { 'nothere401' }
-      let(:person) { nil }
+
+      before do
+        allow(mock_client).to receive(:userid).with(user_id).and_raise(PennState::SearchService::NotFound)
+      end
 
       it 'returns nil with no changes to the database' do
         expect(described_class.call(uid: user_id)).to be_nil
@@ -49,7 +55,10 @@ RSpec.describe UserRegistrationService do
       let(:user_id) { person.user_id }
       let(:person) { create(:person) }
 
-      before { create(:user, access_id: user_id) }
+      before do
+        create(:user, access_id: user_id)
+        allow(mock_client).to receive(:userid).with(user_id).and_return(person)
+      end
 
       it 'returns the existing user without any changes' do
         allow(User).to receive(:from_omniauth)

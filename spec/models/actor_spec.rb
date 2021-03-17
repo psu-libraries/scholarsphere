@@ -32,26 +32,46 @@ RSpec.describe Actor, type: :model do
   describe 'validations' do
     context 'when given no validation context' do
       it { is_expected.to validate_presence_of(:surname) }
-      it { is_expected.not_to validate_presence_of(:psu_id) }
+      it { is_expected.to validate_presence_of(:psu_id) }
       it { is_expected.to validate_uniqueness_of(:psu_id).case_insensitive }
-      it { is_expected.not_to validate_presence_of(:orcid) }
+      it { is_expected.to validate_presence_of(:orcid) }
       it { is_expected.to validate_uniqueness_of(:orcid).case_insensitive }
     end
 
     context 'when given the from_omniauth context' do
       it { is_expected.not_to validate_presence_of(:surname).on(:from_omniauth) }
-      it { is_expected.to validate_presence_of(:psu_id).on(:from_omniauth) }
-      it { is_expected.to validate_uniqueness_of(:psu_id).on(:from_omniauth).case_insensitive }
-      it { is_expected.not_to validate_presence_of(:orcid).on(:from_omniauth) }
-      it { is_expected.to validate_uniqueness_of(:orcid).on(:from_omniauth).case_insensitive }
     end
 
-    context 'when given the from_user context' do
-      it { is_expected.to validate_presence_of(:surname).on(:from_user) }
-      it { is_expected.not_to validate_presence_of(:psu_id).on(:from_user) }
-      it { is_expected.to validate_uniqueness_of(:psu_id).on(:from_user).case_insensitive }
-      it { is_expected.to validate_presence_of(:orcid).on(:from_user) }
-      it { is_expected.to validate_uniqueness_of(:orcid).on(:from_user).case_insensitive }
+    context 'when neither orcid nor psu_id are present' do
+      subject { build(:actor, orcid: nil, psu_id: nil) }
+
+      it { is_expected.not_to be_valid }
+    end
+
+    context 'when orcid is present but psu_id is not' do
+      subject { build(:actor, psu_id: nil) }
+
+      it { is_expected.to be_valid }
+    end
+
+    context 'when psu_id is present but orcid is not' do
+      subject { build(:actor, orcid: nil) }
+
+      it { is_expected.to be_valid }
+    end
+
+    context 'when the psu_id is present and the orcid is invalid' do
+      subject { build(:actor, orcid: 'asdf') }
+
+      it { is_expected.not_to be_valid }
+    end
+
+    context 'when the orcid is present and the psu_id is invalid' do
+      subject { build(:actor, psu_id: 'abc123') }
+
+      before { create(:actor, psu_id: 'abc123') }
+
+      it { is_expected.not_to be_valid }
     end
   end
 
