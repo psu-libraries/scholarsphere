@@ -779,11 +779,11 @@ RSpec.shared_examples 'a resource with permissions' do
     end
 
     context 'with an unsupported visibility' do
-      subject(:resource) { open_access_resource }
+      subject(:resource) { build(factory_name, visibility: 'bogus') }
 
-      it 'raises an argument error' do
-        expect { resource.visibility = 'bogus' }.to raise_error(ArgumentError, 'bogus is not a supported visibility')
-      end
+      let(:default) { factory_name.to_s.capitalize.constantize.new }
+
+      its(:visibility) { is_expected.to eq(default.visibility) }
     end
   end
 end
