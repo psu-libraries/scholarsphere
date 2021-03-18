@@ -43,15 +43,6 @@
     </li>
 
   <% end %>
-
-  <% if policy(work_version).destroy? %>
-    <%= link_to t('dashboard.form.actions.destroy.button'),
-                dashboard_work_version_path(work_version),
-                class: 'btn btn-danger btn--squish mr-lg-2',
-                method: :delete,
-                data: { confirm: t('dashboard.form.actions.destroy.confirm') } %>
-  <% end %>
-
 <% end %>
 
 <div class="container-fluid">

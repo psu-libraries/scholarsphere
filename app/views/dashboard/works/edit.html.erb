@@ -23,9 +23,11 @@
           <li class="nav-item">
             <%= link_to t('dashboard.shared.editors_form.heading'), "##{t('dashboard.shared.editors_form.heading').parameterize}", class: 'nav-link' %>
           </li>
+          <% if current_user.admin? && policy(@work.latest_version).destroy? %>
           <li class="nav-item">
             <a class="nav-link" href="#<%= t('.danger.heading').parameterize %>"><%= t('.danger.heading') %></a>
           </li>
+        <% end %>
         </ul>
       </aside>
     </div>
@@ -99,7 +101,7 @@
         <%= render 'dashboard/shared/editors_form', editors_form: @editors_form, url: dashboard_work_path(@work) %>
       </div>
 
-      <% if policy(@work.latest_version).destroy? %>
+      <% if current_user.admin? && policy(@work.latest_version).destroy? %>
         <div class="keyline keyline--left">
           <h2 id="<%= t('.danger.heading').parameterize %>" class="h4"><%= t('.danger.heading') %></h2>
         </div>
@@ -111,11 +113,11 @@
                 <p><%= t('.danger.explanation') %></p>
               </div>
               <div>
-                <%= link_to t('dashboard.form.actions.destroy.button'),
-                            dashboard_work_version_path(@work.latest_version),
-                            class: 'btn btn-danger btn--squish mr-lg-2',
-                            method: :delete,
-                            data: { confirm: t('dashboard.form.actions.destroy.confirm') } %>
+                <%= render DeleteResourceButtonComponent.new(
+                      resource: @work.latest_version,
+                      html_class: 'btn btn-outline-danger text-nowrap mr-lg-2',
+                      hide_if_published: false
+                    ) %>
               </div>
           </div>
         </div>

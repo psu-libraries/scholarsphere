@@ -627,11 +627,11 @@ RSpec.describe 'Publishing a work', with_user: :user do
       let(:work_version) { create :work_version, :published }
       let(:user) { create(:user, :admin) }
 
-      it 'allows an admin to delete a published version' do
+      it 'hides the delete button on published versions' do
         visit dashboard_form_work_version_details_path(work_version)
-        FeatureHelpers::DashboardForm.delete
-
-        expect { work_version.reload }.to raise_error(ActiveRecord::RecordNotFound)
+        expect {
+          FeatureHelpers::DashboardForm.delete
+        }.to raise_error(Capybara::ElementNotFound)
       end
     end
   end

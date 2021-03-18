@@ -19,9 +19,11 @@
           <li class="nav-item">
             <%= link_to t('dashboard.shared.editors_form.heading'), "##{t('dashboard.shared.editors_form.heading').parameterize}", class: 'nav-link' %>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#<%= t('.danger.heading').parameterize %>"><%= t('.danger.heading') %></a>
-          </li>
+          <% if current_user.admin? && policy(@collection).destroy? %>
+            <li class="nav-item">
+              <a class="nav-link" href="#<%= t('.danger.heading').parameterize %>"><%= t('.danger.heading') %></a>
+            </li>
+          <% end %>
         </ul>
       </aside>
     </div>
@@ -49,7 +51,7 @@
         <%= render 'dashboard/shared/editors_form', editors_form: @editors_form, url: dashboard_collection_path(@collection) %>
       </div>
 
-      <% if policy(@collection).destroy? %>
+      <% if current_user.admin? && policy(@collection).destroy? %>
         <div class="keyline keyline--left">
           <h2 id="<%= t('.danger.heading').parameterize %>" class="h4"><%= t('.danger.heading') %></h2>
         </div>
@@ -61,11 +63,11 @@
                 <p><%= t('.danger.explanation') %></p>
               </div>
               <div>
-                <%= link_to t('dashboard.form.actions.destroy.button'),
-                            dashboard_collection_path(@collection),
-                            class: 'btn btn-danger btn--squish mr-lg-2',
-                            method: :delete,
-                            data: { confirm: t('dashboard.form.actions.destroy.confirm') } %>
+                <%= render DeleteResourceButtonComponent.new(
+                      resource: @collection,
+                      html_class: 'btn btn-outline-danger text-nowrap mr-lg-2',
+                      hide_if_published: false
+                    ) %>
               </div>
           </div>
         </div>
