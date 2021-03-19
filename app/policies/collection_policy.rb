@@ -16,8 +16,13 @@ class CollectionPolicy < ApplicationPolicy
   end
   alias_method :create?, :edit?
   alias_method :update?, :edit?
-  alias_method :destroy?, :edit?
   alias_method :mint_doi?, :edit?
+
+  def destroy?
+    return true if user.admin?
+
+    edit? && record.doi.blank?
+  end
 
   private
 
