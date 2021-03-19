@@ -6,8 +6,12 @@ class DestroyWorkVersion
     parent_work = work_version.work
 
     if parent_work.versions.count == 1
-      parent_work.destroy!
-      IndexingService.delete_document(work_version.uuid, commit: true)
+      WorkVersion.transaction do
+        work_version.destroy!
+        parent_work.destroy!
+      end
+      IndexingService.delete_document(work_version.uuid, commit: false)
+      IndexingService.delete_document(parent_work.uuid, commit: true)
 
       nil
     else
