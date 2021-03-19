@@ -50,7 +50,7 @@
 
         <%= render 'dashboard/form/publish/visibility_field', form: visibility_form %>
 
-        <div class="actions mt-4 mb-3">
+        <div class="actions mt-5 mb-3">
           <%= visibility_form.submit t('.visibility.submit_button'), class: 'btn btn-primary' %>
         </div>
       <% end %>
@@ -115,7 +115,7 @@
               <div>
                 <%= render DeleteResourceButtonComponent.new(
                       resource: @work.latest_version,
-                      html_class: 'btn btn-outline-danger text-nowrap mr-lg-2',
+                      html_class: 'btn btn-outline-danger text-nowrap ml-lg-2',
                       hide_if_published: false
                     ) %>
               </div>

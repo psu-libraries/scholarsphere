@@ -83,4 +83,34 @@ RSpec.describe CollectionPolicy, type: :policy do
     it { is_expected.not_to permit(public, collection) }
     it { is_expected.to permit(admin, collection) }
   end
+
+  permissions :destroy? do
+    let(:collection) do
+      create :collection,
+             depositor: depositor_actor,
+             edit_users: [edit_user]
+    end
+
+    context 'when the collection does NOT have a doi' do
+      before { collection.doi = nil }
+
+      it { is_expected.to permit(depositor, collection) }
+      it { is_expected.to permit(edit_user, collection) }
+      it { is_expected.not_to permit(discover_user, collection) }
+      it { is_expected.not_to permit(other_user, collection) }
+      it { is_expected.not_to permit(public, collection) }
+      it { is_expected.to permit(admin, collection) }
+    end
+
+    context 'when the collection DOES have a doi' do
+      before { collection.doi = FactoryBotHelpers.valid_doi }
+
+      it { is_expected.not_to permit(depositor, collection) }
+      it { is_expected.not_to permit(edit_user, collection) }
+      it { is_expected.not_to permit(discover_user, collection) }
+      it { is_expected.not_to permit(other_user, collection) }
+      it { is_expected.not_to permit(public, collection) }
+      it { is_expected.to permit(admin, collection) }
+    end
+  end
 end
