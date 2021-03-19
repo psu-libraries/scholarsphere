@@ -377,24 +377,40 @@ RSpec.describe WorkVersion, type: :model do
     end
   end
 
+  describe '#force_destroy' do
+    it { is_expected.to respond_to(:force_destroy).and respond_to(:force_destroy=) }
+  end
+
   describe '#destroy' do
     context 'with a published version' do
       let(:work_version) { create(:work_version, :published) }
 
-      it 'raises an error' do
-        expect {
-          work_version.destroy
-        }.to raise_error(ArgumentError, 'cannot delete published versions')
+      context 'when force_destroy is false' do
+        it 'raises an error' do
+          expect {
+            work_version.destroy
+          }.to raise_error(ArgumentError, 'cannot delete published versions')
+        end
+      end
+
+      context 'when force_destroy is true' do
+        before { work_version.force_destroy = true } # get off my lawn
+
+        it 'raises an error' do
+          expect {
+            work_version.destroy
+          }.to change(described_class, :count).by(-1)
+        end
       end
     end
 
     context 'with a draft version' do
-      let(:work_version) { create(:work_version, :draft) }
+      let!(:work_version) { create(:work_version, :draft) }
 
       it 'deletes the version' do
         expect {
           work_version.destroy
-        }.to change(described_class, :count).by(1)
+        }.to change(described_class, :count).by(-1)
       end
     end
   end

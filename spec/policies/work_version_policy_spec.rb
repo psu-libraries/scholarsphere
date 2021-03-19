@@ -77,12 +77,12 @@ RSpec.describe WorkVersionPolicy, type: :policy do
     end
   end
 
-  permissions :destroy?, :publish? do
+  permissions :publish? do
     let(:work_version) { work.latest_version }
     let(:proxy) { build(:user) }
     let(:edit_user) { build(:user) }
     let(:other) { build(:user) }
-    let(:user) { build(:user, :admin) }
+    let(:admin) { build(:user, :admin) }
 
     context 'with a draft version' do
       let(:work) do
@@ -93,7 +93,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
       it { is_expected.to permit(proxy, work_version) }
       it { is_expected.to permit(edit_user, work_version) }
       it { is_expected.not_to permit(other, work_version) }
-      it { is_expected.to permit(user, work_version) }
+      it { is_expected.to permit(admin, work_version) }
     end
 
     context 'with a published version' do
@@ -105,7 +105,69 @@ RSpec.describe WorkVersionPolicy, type: :policy do
       it { is_expected.not_to permit(proxy, work_version) }
       it { is_expected.not_to permit(edit_user, work_version) }
       it { is_expected.not_to permit(other, work_version) }
-      it { is_expected.not_to permit(user, work_version) }
+      it { is_expected.not_to permit(admin, work_version) }
+    end
+  end
+
+  permissions :destroy? do
+    let(:work_version) { work.latest_version }
+    let(:proxy) { build(:user) }
+    let(:edit_user) { build(:user) }
+    let(:other) { build(:user) }
+    let(:admin) { build(:user, :admin) }
+
+    context 'with a draft version that has NOT been persisted' do
+      let(:work) do
+        build(:work, has_draft: true, proxy_depositor: proxy.actor, edit_users: [edit_user])
+      end
+
+      it 'sanity checks the test environment' do
+        expect(work_version).not_to be_persisted
+      end
+
+      it { is_expected.not_to permit(work.depositor.user, work_version) }
+      it { is_expected.not_to permit(proxy, work_version) }
+      it { is_expected.not_to permit(edit_user, work_version) }
+      it { is_expected.not_to permit(other, work_version) }
+      it { is_expected.not_to permit(admin, work_version) }
+    end
+
+    context 'with a draft version' do
+      let(:work) do
+        create(:work, has_draft: true, proxy_depositor: proxy.actor, edit_users: [edit_user])
+      end
+
+      it { is_expected.to permit(work.depositor.user, work_version) }
+      it { is_expected.to permit(proxy, work_version) }
+      it { is_expected.to permit(edit_user, work_version) }
+      it { is_expected.not_to permit(other, work_version) }
+      it { is_expected.to permit(admin, work_version) }
+    end
+
+    context 'with the latest published version' do
+      let(:work) do
+        create(:work, has_draft: false, proxy_depositor: proxy.actor, edit_users: [edit_user])
+      end
+
+      it { is_expected.not_to permit(work.depositor.user, work_version) }
+      it { is_expected.not_to permit(proxy, work_version) }
+      it { is_expected.not_to permit(edit_user, work_version) }
+      it { is_expected.not_to permit(other, work_version) }
+      it { is_expected.to permit(admin, work_version) }
+    end
+
+    context 'with a published version that is NOT the latest' do
+      let(:work) do
+        create(:work, versions_count: 2, proxy_depositor: proxy.actor, edit_users: [edit_user])
+      end
+
+      let(:work_version) { work.versions.first }
+
+      it { is_expected.not_to permit(work.depositor.user, work_version) }
+      it { is_expected.not_to permit(proxy, work_version) }
+      it { is_expected.not_to permit(edit_user, work_version) }
+      it { is_expected.not_to permit(other, work_version) }
+      it { is_expected.not_to permit(admin, work_version) }
     end
   end
 

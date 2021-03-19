@@ -112,9 +112,28 @@ RSpec.describe Dashboard::WorkVersionsController, type: :controller do
       context 'when I own the work' do
         before { allow(DestroyWorkVersion).to receive(:call) }
 
-        it 'deletes the work' do
+        it 'deletes the version' do
           perform_request
-          expect(DestroyWorkVersion).to have_received(:call).with(work_version)
+          expect(DestroyWorkVersion).to have_received(:call).with(work_version, force: false)
+        end
+
+        context 'when destroying the version will also destroy the parent work' do
+          before { allow(DestroyWorkVersion).to receive(:call).and_return(nil) }
+
+          specify do
+            expect(perform_request).to redirect_to dashboard_root_path
+          end
+        end
+
+        context 'when destroying the version will not destroy the parent work' do
+          let(:parent_work) { work_version.work }
+          let(:previous_version) { parent_work.versions[parent_work.versions.length - 2] }
+
+          before { allow(DestroyWorkVersion).to receive(:call).and_call_original }
+
+          it "redirects to the previous versions's resource page" do
+            expect(perform_request).to redirect_to resource_path(previous_version.uuid)
+          end
         end
       end
     end

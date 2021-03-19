@@ -28,6 +28,7 @@ module Dashboard
     # DELETE /collections/1.json
     def destroy
       @collection = current_user.collections.find(params[:id])
+      authorize(@collection)
       @collection.destroy
       respond_to do |format|
         format.html { redirect_to dashboard_root_path, notice: t('.success') }

@@ -579,22 +579,38 @@ h4,
     padding: $spacer;
 
     @include media-breakpoint-up(md) {
-      > button:first-of-type {
+      > .pull-left,
+        .pull-right {
         position: absolute;
+      }
+
+      >.pull-left {
         left: $spacer;
+      }
+
+      >.pull-right {
+        right: $spacer;
       }
     }
 
     @include media-breakpoint-down(sm) {
-      button {
+      .btn {
         font-size: $font-size-sm;
         padding-left: $spacer;
         padding-right: $spacer;
       }
+
+      .responsive-hide {
+        display: none;
+      }
     }
 
-    > button:first-of-type {
+    >.pull-left {
       margin-right: $spacer;
+    }
+
+    >.pull-right {
+      margin-left: $spacer;
     }
   }
 

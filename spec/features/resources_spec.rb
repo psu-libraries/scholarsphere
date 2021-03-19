@@ -160,18 +160,14 @@ RSpec.describe 'Public Resources', type: :feature do
       let(:collection) { create :collection }
       let(:user) { collection.depositor.user }
 
-      it 'displays edit controls on the resource page and allows the user to delete the collection' do
+      it 'displays edit controls on the resource page' do
         visit resource_path(collection.uuid)
 
         expect(page.title).to include(collection.title)
 
         within('header') do
           expect(page).to have_content(I18n.t('resources.collection.edit_button'))
-          click_on I18n.t('resources.collection.delete_button')
         end
-
-        expect(page).to have_current_path(dashboard_root_path)
-        expect(page).to have_content('Collection was successfully deleted.')
       end
     end
   end
