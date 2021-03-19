@@ -25,6 +25,10 @@ RSpec.describe Authorship, type: :model do
     it { is_expected.to belong_to(:actor).optional }
   end
 
+  describe 'validations' do
+    it { is_expected.to validate_presence_of(:display_name) }
+  end
+
   describe 'default values' do
     context 'without a linked actor' do
       subject { described_class.new }
