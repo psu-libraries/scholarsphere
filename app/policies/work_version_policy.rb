@@ -29,6 +29,13 @@ class WorkVersionPolicy < ApplicationPolicy
     !record.published? && editable?
   end
 
+  # Navigable means, "does this version show up in menus," which is _different_
+  # than `#show?` because we allow the public to show draft versions if they
+  # happen to know the secret uuid.
+  def navigable?
+    record.published? || editable?
+  end
+
   def publish?
     return false if record.published?
 

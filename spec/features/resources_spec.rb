@@ -4,10 +4,11 @@ require 'rails_helper'
 
 RSpec.describe 'Public Resources', type: :feature do
   describe 'given a work' do
-    let(:work) { create :work, has_draft: false, versions_count: 2 }
+    let(:work) { create :work, has_draft: true, versions_count: 3 }
 
     let(:v1) { work.versions[0] }
     let(:v2) { work.versions[1] }
+    let(:draft) { work.versions[2] }
 
     context 'when I am not logged in (i.e. as a public user)' do
       it 'displays the public resource page for the work' do
@@ -35,11 +36,30 @@ RSpec.describe 'Public Resources', type: :feature do
           expect(page).not_to have_content(I18n.t('resources.settings_button.text', type: 'Work'))
         end
 
+        ## Ensure we cannot navigate to the draft version
+        within('.navbar .dropdown--versions') do
+          expect(page).not_to have_content 'V3'
+          expect(page).not_to have_content 'draft'
+        end
+
         ## Navigate to an old version
         within('.navbar .dropdown--versions') { click_on 'V1' }
 
         expect(page).to have_content(v1.title)
         expect(page).to have_content(I18n.t('resources.old_version.message'))
+      end
+
+      it 'I can access a draft resource if I know the uuid' do
+        visit resource_path(draft.uuid)
+
+        expect(page.title).to include(draft.title)
+        expect(page).to have_content(draft.title)
+
+        ## Does not have edit controls
+        within('header') do
+          expect(page).not_to have_content(I18n.t('resources.work_version.edit_button.text', version: 'V3'))
+          expect(page).not_to have_content(I18n.t('resources.settings_button.text', type: 'Work'))
+        end
       end
     end
 
@@ -49,6 +69,8 @@ RSpec.describe 'Public Resources', type: :feature do
       before { visit resource_path(work.uuid) }
 
       context 'when no draft exists' do
+        let(:work) { create :work, has_draft: false, versions_count: 2 }
+
         it 'displays edit controls on the resource page' do
           expect(page).to have_content(v2.title) # Sanity
 
