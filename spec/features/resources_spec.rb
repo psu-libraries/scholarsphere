@@ -42,6 +42,12 @@ RSpec.describe 'Public Resources', type: :feature do
           expect(page).not_to have_content 'draft'
         end
 
+        ## Ensure we do not see work history for draft version
+        within('.version-timeline') do
+          expect(page).not_to have_content 'Version 3'
+          expect(page).to have_content 'Version 2'
+        end
+
         ## Navigate to an old version
         within('.navbar .dropdown--versions') { click_on 'V1' }
 
@@ -59,6 +65,16 @@ RSpec.describe 'Public Resources', type: :feature do
         within('header') do
           expect(page).not_to have_content(I18n.t('resources.work_version.edit_button.text', version: 'V3'))
           expect(page).not_to have_content(I18n.t('resources.settings_button.text', type: 'Work'))
+        end
+
+        ## Does have draft in the navigation menu
+        within('.navbar .dropdown--versions') do
+          expect(page).to have_content 'V3'
+        end
+
+        ## Does have draft in work history
+        within('.version-timeline') do
+          expect(page).to have_content 'Version 3'
         end
       end
     end
@@ -107,6 +123,11 @@ RSpec.describe 'Public Resources', type: :feature do
             ## Edit and create buttons are disabled
             expect(page).to have_selector('.qa-edit-version.disabled')
             expect(page).to have_selector('.qa-create-draft.disabled')
+          end
+
+          ## Does have draft in work history
+          within('.version-timeline') do
+            expect(page).to have_content 'Version 3'
           end
 
           ## Navigate to draft version

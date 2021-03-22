@@ -92,6 +92,7 @@ RSpec/VerifiedDoubles:
   Exclude:
     - 'spec/components/mintable_doi_component_spec.rb'
     - 'spec/components/work_versions/version_navigation_dropdown_component_spec.rb'
+    - 'spec/components/work_histories/work_history_component_spec.rb'
 
 Style/ClassVars:
   Exclude:
