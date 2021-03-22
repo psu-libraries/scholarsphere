@@ -55,7 +55,7 @@ class Actor < ApplicationRecord
 
   validates :psu_id,
             presence: true,
-            on: :from_omniauth
+            unless: -> { orcid.present? }
 
   validates :orcid,
             uniqueness: {
@@ -70,7 +70,7 @@ class Actor < ApplicationRecord
 
   validates :orcid,
             presence: true,
-            on: :from_user
+            unless: -> { psu_id.present? }
 
   after_save :reindex_if_display_name_changed
 

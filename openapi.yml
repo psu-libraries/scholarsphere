@@ -262,10 +262,10 @@ components:
           type: "array"
           items:
             type: "string"
-        creators_attributes:
+        creators:
           type: "array"
           items:
-            $ref: "#/components/schemas/authorship"
+            $ref: "#/components/schemas/creator"
         contributor:
           type: "array"
           items:
@@ -306,30 +306,10 @@ components:
           description: >-
             A DOI minted under Scholarsphere's current prefix, 10.26207. If you have another DOI that was previously
             supplied by a publisher or someone else, that can be put into the identifier field.
-    authorship:
+    creator:
       type: "object"
       required:
         - "display_name"
-        - "surname"
-      properties:
-        display_name:
-          type: "string"
-          example: "Dr. Pat Researcher"
-        surname:
-          type: "string"
-          example: "Researcher"
-        given_name:
-          type: "string"
-          example: "Pat"
-        email:
-          type: "string"
-          example: "pat@example.com"
-        actor:
-          $ref: "#/components/schemas/actor"
-    actor:
-      type: "object"
-      required:
-        - "surname"
       properties:
         display_name:
           type: "string"
@@ -345,15 +325,16 @@ components:
           example: "pat@example.com"
         psu_id:
           type: "string"
-          example: "pxr123"
-        orcid:
+          example: "axb123"
+        orcid: 
           type: "string"
-          example: "0000-0001-5933-547X"
+          example: "0000-0000-1234-123X"
     ingest:
       type: "object"
       required:
         - "metadata"
         - "depositor"
+        - "content"
       properties:
         metadata:
           $ref: "#/components/schemas/metadata"
@@ -365,7 +346,12 @@ components:
           items:
             $ref: "#/components/schemas/uploadedFile"
         depositor:
-          $ref: "#/components/schemas/actor"
+          type: "string"
+          exmample: "axc123"
+          description: >-
+            The Penn State access of the person who is depositing the work. This is typically the same person who is the
+            creator, but not always. There is no restriction regarding who the depositor is other than they must have an
+            active account in Penn State's identity management system.
         permissions:
           $ref: "#/components/schemas/permissions" 
     uploadedFile:

@@ -95,6 +95,8 @@ module Permissions
       discover_access?(Group.public_agent)
   end
 
+  # @note This value is determined based the presence of a set of predetermined access controls. If there are no access
+  # controls, or none that conform to either open or authorized levels, a private visibility is assumed.
   def visibility
     if open_access?
       Visibility::OPEN
@@ -105,6 +107,10 @@ module Permissions
     end
   end
 
+  # @note This is a misleading use of a setting method, because there is no 'visibility' attribute that is set in the
+  # database. Instead, the value passed to the setter triggers a method that adds or removes a set of predetermined
+  # ACLs. The value must be one of Permissions::Visibility. If it is not, then no changes will be made the object's
+  # access controls and nil is returned.
   def visibility=(level)
     case level
     when Visibility::OPEN
@@ -113,8 +119,6 @@ module Permissions
       grant_authorized_access
     when Visibility::PRIVATE
       revoke_open_access && revoke_authorized_access
-    else
-      raise ArgumentError, "#{level} is not a supported visibility" unless Visibility.all.include?(level)
     end
   end
 

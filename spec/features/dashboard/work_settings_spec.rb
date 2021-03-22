@@ -145,4 +145,24 @@ RSpec.describe 'Work Settings Page', with_user: :user do
       end
     end
   end
+
+  describe 'Deleting a work' do
+    context 'when a regular user' do
+      it 'does not allow a regular user to delete a work version' do
+        visit edit_dashboard_work_path(work)
+        expect(page).not_to have_content(I18n.t!('dashboard.works.edit.danger.explanation'))
+        expect(page).not_to have_link(I18n.t!('dashboard.form.actions.destroy.button'))
+      end
+    end
+
+    context 'when an admin user' do
+      let(:user) { create :user, :admin }
+
+      it 'allows a work version to be deleted' do
+        visit edit_dashboard_work_path(work)
+        click_on(I18n.t!('dashboard.form.actions.destroy.button'))
+        expect { work.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+  end
 end

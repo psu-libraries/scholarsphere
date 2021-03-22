@@ -36,7 +36,7 @@ class WorkVersionSchema < BaseSchema
     def build_migration_errors
       current_state = resource.aasm_state
       resource.publish unless resource.published?
-      resource.validate(:migration_api)
+      resource.validate
       resource.aasm_state = current_state
       resource.errors
     end

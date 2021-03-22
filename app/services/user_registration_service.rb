@@ -15,7 +15,7 @@ class UserRegistrationService
   attr_reader :found_user, :existing_user
 
   def initialize(uid)
-    @found_user = PennState::SearchService::Client.new.userid(uid)
+    @found_user = penn_state_user(uid)
     @existing_user = User.find_by(access_id: uid)
   end
 
@@ -26,6 +26,12 @@ class UserRegistrationService
   end
 
   private
+
+    def penn_state_user(uid)
+      PennState::SearchService::Client.new.userid(uid)
+    rescue PennState::SearchService::NotFound
+      nil
+    end
 
     def authorization_hash
       OmniAuth::AuthHash.new.tap do |auth_hash|

@@ -22,14 +22,6 @@
                   class: 'btn btn-outline-light btn--squish mr-lg-2' %>
     </li>
   <% end %>
-
-  <% if policy(collection).destroy? %>
-    <%= link_to t('resources.collection.delete_button'),
-                dashboard_form_collection_details_path(collection),
-                class: 'btn btn-danger btn--squish mr-lg-2',
-                method: :delete,
-                data: { confirm: t('resources.collection.delete_confirm') } %>
-  <% end %>
 <% end %>
 
 <div class="container-fluid">

@@ -609,4 +609,30 @@ RSpec.describe 'Publishing a work', with_user: :user do
       expect(work_version.rights).to eq(different_metadata[:rights])
     end
   end
+
+  describe 'Deleting a version' do
+    context 'when logged in as a regular user' do
+      let(:work_version) { create :work_version, :draft }
+      let(:user) { work_version.work.depositor.user }
+
+      it 'allows a user to delete a draft' do
+        visit dashboard_form_work_version_details_path(work_version)
+        FeatureHelpers::DashboardForm.delete
+
+        expect { work_version.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context 'when logged in as an admin' do
+      let(:work_version) { create :work_version, :published }
+      let(:user) { create(:user, :admin) }
+
+      it 'hides the delete button on published versions' do
+        visit dashboard_form_work_version_details_path(work_version)
+        expect {
+          FeatureHelpers::DashboardForm.delete
+        }.to raise_error(Capybara::ElementNotFound)
+      end
+    end
+  end
 end

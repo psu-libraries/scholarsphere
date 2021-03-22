@@ -70,13 +70,6 @@ RSpec.describe Qa::Authorities::Persons, type: :authority do
 
         it { is_expected.to be_empty }
       end
-
-      context 'when PSU ID and ORCiD are absent' do
-        let!(:creator) { create(:actor, :with_no_identifiers) }
-        let(:search_term) { creator.surname.slice(0..3).downcase }
-
-        it { is_expected.to be_empty }
-      end
     end
 
     context "with results from Penn State's identity service" do

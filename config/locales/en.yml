@@ -231,6 +231,9 @@ en:
           heading: DOI
           explanation: A Digital Object Identifier (DOI) is a persistent identifier that can be used in print or on the web.
           not_allowed: A DOI cannot be created for this collection.
+        danger:
+          heading: Danger
+          explanation: Deleting a collection cannot be undone. When a collection is deleted, the works in the collection are not deleted. If the collection has a DOI, it will no longer resolve; you are responsible for updating the DOI to a new URI.
       update:
         success: Collection settings successfully updated.
       destroy:
@@ -284,6 +287,9 @@ en:
           heading: DOI
           explanation: A Digital Object Identifier (DOI) is a persistent identifier that can be used in print or on the web.
           not_allowed: A DOI may only be created on published works. Since this work is a draft, you'll need to wait until it's published to create a DOI for it.
+        danger:
+          heading: Danger
+          explanation: Only the most recent version can be deleted. Deleting a version cannot be undone. If the most recent version is the only version of the work, the work itself will be deleted (regardless of publication status). If the work has a DOI, it will no longer resolve; you are responsible for updating the DOI to a new URI.
       update:
         success: "Work settings successfully updated."
     form: 
@@ -312,6 +318,12 @@ en:
           collection: Save and Exit
           work_version: Save as Draft & Exit
           admin_save: Save and Exit
+        destroy:
+          button: Delete
+          collection: Collection
+          draft: Draft
+          work_version: Version
+          confirm: "Are you sure you want to delete this %{type}? This cannot be undone."
       details:
         about_collections: 
           label: About Collections

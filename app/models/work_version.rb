@@ -129,18 +129,21 @@ class WorkVersion < ApplicationRecord
   validates :published_date,
             presence: true,
             edtf_date: true,
-            if: :published?,
-            unless: -> { validation_context == :migration_api }
+            if: :published?
 
   validates :description,
             presence: true,
-            if: :published?,
-            unless: -> { validation_context == :migration_api }
+            if: :published?
 
   after_save :perform_update_index
 
+  attr_accessor :force_destroy
+
+  # Do not allow pubilshed works to be destroyed, unless specially flagged by
+  # setting `work_version.force_destroy = true`
   before_destroy do
-    raise ArgumentError, 'cannot delete published versions' if published?
+    prevent_destroy = published? && !force_destroy
+    raise ArgumentError, 'cannot delete published versions' if prevent_destroy
   end
 
   aasm do

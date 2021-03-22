@@ -87,4 +87,26 @@ RSpec.describe 'Collection Settings Page', with_user: :user do
       end
     end
   end
+
+  describe 'Deleting a collection' do
+    context 'when a regular user' do
+      it 'does not allow a regular user to delete a collection' do
+        visit edit_dashboard_collection_path(collection)
+        expect(page).not_to have_content(I18n.t!('dashboard.collections.edit.danger.explanation'))
+        expect(page).not_to have_link(I18n.t!('dashboard.form.actions.destroy.button'))
+      end
+    end
+
+    context 'when an admin user' do
+      let(:user) { create :user, :admin }
+
+      before { collection.update!(doi: FactoryBotHelpers.valid_doi) }
+
+      it 'allows a collection to be deleted' do
+        visit edit_dashboard_collection_path(collection)
+        click_on(I18n.t!('dashboard.form.actions.destroy.button'))
+        expect { collection.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+  end
 end
