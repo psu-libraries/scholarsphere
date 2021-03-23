@@ -6,6 +6,7 @@ FactoryBot.define do
     surname { Faker::Name.last_name }
     display_name { "#{Faker::Name.prefix} #{given_name} #{surname}" }
     email { Faker::Internet.email(name: given_name) }
+    sequence(:position)
     of_work
 
     trait :of_work do

@@ -27,6 +27,7 @@ RSpec.describe CreateNewCollection do
                                                   creators_attributes: [
                                                     {
                                                       display_name: user.name,
+                                                      position: 1,
                                                       actor_attributes: {
                                                         email: user.email,
                                                         given_name: user.actor.given_name,
@@ -67,6 +68,7 @@ RSpec.describe CreateNewCollection do
                                                   creators_attributes: [
                                                     {
                                                       display_name: user.name,
+                                                      position: 1,
                                                       actor_attributes: {
                                                         email: user.email,
                                                         given_name: user.actor.given_name,
@@ -110,6 +112,7 @@ RSpec.describe CreateNewCollection do
                                                   creators_attributes: [
                                                     {
                                                       display_name: user.name,
+                                                      position: 1,
                                                       actor_attributes: {
                                                         email: user.email,
                                                         given_name: user.actor.given_name,
@@ -189,6 +192,7 @@ RSpec.describe CreateNewCollection do
                                                   creators_attributes: [
                                                     {
                                                       display_name: user.name,
+                                                      position: 1,
                                                       actor_attributes: {
                                                         email: user.email,
                                                         given_name: user.actor.given_name,

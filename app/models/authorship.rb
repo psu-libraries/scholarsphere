@@ -11,6 +11,7 @@ class Authorship < ApplicationRecord
   accepts_nested_attributes_for :actor
 
   validates :display_name,
+            :position,
             presence: true
 
   after_initialize :set_defaults

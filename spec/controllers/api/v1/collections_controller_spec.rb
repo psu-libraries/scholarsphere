@@ -11,6 +11,7 @@ RSpec.describe Api::V1::CollectionsController, type: :controller do
   let(:creator) do
     {
       display_name: "#{user.given_name} #{user.surname}",
+      position: 1,
       actor_attributes: {
         email: user.email,
         given_name: user.given_name,
