@@ -42,6 +42,7 @@ Rails/SkipsModelValidations:
     - 'app/models/api_token.rb'
     - 'app/services/doi_service.rb'
     - 'spec/services/doi_service_spec.rb'
+    - 'spec/services/authorship_migration/collection_authorship_position_fix_spec.rb'
 
 RSpec/DescribeClass:
   Exclude:
