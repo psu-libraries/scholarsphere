@@ -93,7 +93,10 @@
       <div class="keyline keyline--left mb-3">
         <h2 class="h4"><%= t 'resources.work_history' %></h2>
       </div>
-      <%= render WorkHistories::WorkHistoryComponent.new(work: work_version.work) %>
+      <%= render WorkHistories::WorkHistoryComponent.new(
+            work: work_version.work,
+            current_version: work_version
+          ) %>
     </div>
   </div>
 </div>

@@ -3,14 +3,16 @@
 module WorkHistories
   class WorkHistoryComponent < ApplicationComponent
     # @param work [Work]
-    def initialize(work:)
+    def initialize(work:, current_version: NullWorkVersion.new)
       @work = work
+      @current_version = current_version
       @user_lookup_cache = {}
     end
 
     private
 
       attr_reader :work,
+                  :current_version,
                   :user_lookup_cache
 
       # @returns a two dimensional array, where dimension 1 is all the WorkVersion
@@ -36,6 +38,7 @@ module WorkHistories
       def load_changes
         work
           .versions
+          .filter { |work_version| show_version?(work_version) }
           .map do |work_version|
             decorated_work_version = WorkVersionDecorator.new(work_version)
 
@@ -47,6 +50,39 @@ module WorkHistories
 
             [decorated_work_version, changes]
           end
+      end
+
+      # Accpets a WorkVersion, returns true if the given WorkVersion is the same
+      # as the current_version
+      #
+      # @param WorkVersion
+      # @returns Boolean
+      def current?(work_version)
+        current_version.uuid == work_version.uuid
+      end
+
+      # Accpets a WorkVersion, returns true if the given WorkVersion should be
+      # shown.
+      #
+      # @param WorkVersion
+      # @returns Boolean
+      def show_version?(work_version)
+        current?(work_version) || navigable?(work_version)
+      end
+
+      # Accpets a WorkVersion, returns true if the given WorkVersion is deemed
+      # navigable by WorkVersionPolicy.
+      #
+      # Components can call view helpers through the `helpers` method, as is done in
+      # the body of the lambda below. However, the one below to retrieve the pundit
+      # policy relies on current_user, which also relies on having Warden up and
+      # running. This is no problem in the actual environment, but in unit tests
+      # it's not available. We can use stubbing to get around this during tests.
+      #
+      # @param WorkVersion
+      # @returns Boolean
+      def navigable?(work_version)
+        helpers.policy(work_version).navigable?
       end
 
       # Accepts a WorkVersion, loads all the PaperTrail::Versions of it, then
