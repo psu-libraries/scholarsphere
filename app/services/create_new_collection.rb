@@ -33,7 +33,11 @@ class CreateNewCollection
                 Actor.find_or_create_by(actor_attributes)
               end
 
-      { display_name: attributes['display_name'], given_name: actor.given_name, surname: actor.surname, actor: actor }
+      { display_name: attributes['display_name'],
+        position: attributes['position'],
+        given_name: actor.given_name,
+        surname: actor.surname,
+        actor: actor }
     end
 
     params = metadata.to_hash.merge!(

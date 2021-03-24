@@ -27,6 +27,7 @@ RSpec.describe Authorship, type: :model do
 
   describe 'validations' do
     it { is_expected.to validate_presence_of(:display_name) }
+    it { is_expected.to validate_presence_of(:position) }
   end
 
   describe 'default values' do
