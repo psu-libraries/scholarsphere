@@ -288,6 +288,7 @@ RSpec.describe Work, type: :model do
 
       let(:keys) do
         %w(
+          all_dois_ssim
           created_at_dtsi
           deposit_agreed_at_dtsi
           deposit_agreement_version_tesim
@@ -321,6 +322,7 @@ RSpec.describe Work, type: :model do
       let(:keys) do
         %w(
           aasm_state_tesim
+          all_dois_ssim
           based_near_tesim
           contributor_tesim
           created_at_dtsi

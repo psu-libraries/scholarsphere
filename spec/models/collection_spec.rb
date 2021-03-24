@@ -184,6 +184,7 @@ RSpec.describe Collection, type: :model do
 
     let(:expected_keys) do
       %w(
+        all_dois_ssim
         based_near_tesim
         contributor_tesim
         created_at_dtsi

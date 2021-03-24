@@ -36,5 +36,6 @@ module AllDois
       .filter(&:valid?)
       .map(&:to_s)
       .uniq
+      .to_a
   end
 end

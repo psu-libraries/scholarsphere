@@ -184,7 +184,8 @@ class Work < ApplicationRecord
         DefaultSchema,
         LatestPublishedVersionSchema,
         PermissionsSchema,
-        WorkTypeSchema
+        WorkTypeSchema,
+        DoiSchema
       )
     end
 end

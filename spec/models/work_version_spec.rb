@@ -310,6 +310,7 @@ RSpec.describe WorkVersion, type: :model do
 
     its(:to_solr) do
       is_expected.to include(
+        all_dois_ssim: an_instance_of(Array),
         title_tesim: [work_version.title],
         latest_version_bsi: false,
         display_work_type_ssi: Work::Types.display(work_version.work_type),

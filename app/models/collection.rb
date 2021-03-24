@@ -163,7 +163,8 @@ class Collection < ApplicationRecord
         PermissionsSchema,
         PublishedDateSchema,
         FacetSchema,
-        WorkTypeSchema
+        WorkTypeSchema,
+        DoiSchema
       )
     end
 end
