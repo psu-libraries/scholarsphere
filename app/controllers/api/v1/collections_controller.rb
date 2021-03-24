@@ -64,6 +64,7 @@ module Api::V1
             source: [],
             creators_attributes: [
               :display_name,
+              :position,
               actor_attributes: [
                 :email,
                 :given_name,
