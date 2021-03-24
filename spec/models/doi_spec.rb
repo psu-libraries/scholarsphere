@@ -99,4 +99,15 @@ RSpec.describe Doi do
     its(:directory_indicator) { is_expected.to eq('10') }
     its(:registrant_code) { is_expected.to eq('26207.10') }
   end
+
+  context 'with various invalid inputs' do
+    it 'gracefully handles strange input' do
+      invalid_inputs = [nil, '', 1, true, []]
+
+      invalid_inputs.each do |invalid|
+        doi = described_class.new(invalid)
+        expect(doi).not_to be_valid
+      end
+    end
+  end
 end

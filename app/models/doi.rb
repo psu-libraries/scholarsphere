@@ -5,11 +5,15 @@ class Doi
 
   # @param [String] doi
   def initialize(doi)
-    @doi = URI(doi.gsub(/\s/, ''))
+    @doi = begin
+             URI(doi.to_s.gsub(/\s/, ''))
+           rescue URI::InvalidURIError
+             URI('')
+           end
   end
 
   def valid?
-    prefix.match?(/^10\./) && suffix.present?
+    prefix.to_s.match?(/^10\./) && suffix.present?
   end
 
   def managed?
