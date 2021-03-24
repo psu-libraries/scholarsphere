@@ -9,6 +9,8 @@ RSpec.describe Work, type: :model do
 
   it_behaves_like 'a resource with a deposited at timestamp'
 
+  it_behaves_like 'a resource that can provide all DOIs in', [:doi]
+
   describe 'table' do
     it { is_expected.to have_db_column(:work_type).of_type(:string) }
     it { is_expected.to have_db_column(:depositor_id) }

@@ -3,6 +3,9 @@
 class Work < ApplicationRecord
   include Permissions
   include DepositedAtTimestamp
+  include AllDois
+
+  fields_with_dois :doi
 
   belongs_to :depositor,
              class_name: 'Actor',

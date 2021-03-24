@@ -7,6 +7,8 @@ RSpec.describe WorkVersion, type: :model do
     let(:resource) { create(:work_version) }
   end
 
+  it_behaves_like 'a resource that can provide all DOIs in', [:doi, :identifier]
+
   describe 'table' do
     it { is_expected.to have_db_column(:work_id) }
     it { is_expected.to have_db_index(:work_id) }

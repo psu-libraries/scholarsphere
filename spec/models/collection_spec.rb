@@ -13,6 +13,8 @@ RSpec.describe Collection, type: :model do
 
   it_behaves_like 'a resource with a deposited at timestamp'
 
+  it_behaves_like 'a resource that can provide all DOIs in', [:doi, :identifier]
+
   describe 'table' do
     it { is_expected.to have_db_column(:depositor_id) }
     it { is_expected.to have_db_column(:metadata).of_type(:jsonb) }

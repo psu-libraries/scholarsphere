@@ -4,6 +4,9 @@ class Collection < ApplicationRecord
   include Permissions
   include DepositedAtTimestamp
   include ViewStatistics
+  include AllDois
+
+  fields_with_dois :doi, :identifier
 
   attr_writer :indexing_source
 

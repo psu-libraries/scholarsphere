@@ -68,6 +68,7 @@ RSpec/LeakyConstantDeclaration:
     - 'spec/models/permissions_builder_spec.rb'
     - 'spec/lib/healthchecks/queue_latency_check_spec.rb'
     - 'spec/system/active_job_system_spec.rb'
+    - 'spec/models/concerns/all_dois_spec.rb'
 
 RSpec/ExpectActual:
   Exclude:
