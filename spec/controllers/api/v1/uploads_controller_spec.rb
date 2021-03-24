@@ -12,7 +12,9 @@ RSpec.describe Api::V1::UploadsController, type: :controller do
     let(:id) { JSON.parse(response.body)['id'] }
     let(:prefix) { JSON.parse(response.body)['prefix'] }
 
-    before { post :create, params: { extension: extension } }
+    let(:checksum) { 'md5sum' }
+
+    before { post :create, params: { extension: extension, content_md5: checksum } }
 
     context 'with a valid extension' do
       let(:extension) { Faker::File.extension }
@@ -20,6 +22,7 @@ RSpec.describe Api::V1::UploadsController, type: :controller do
       it 'creates a presigned url' do
         expect(response).to be_ok
         expect(presigned_url).to include(ENV['S3_ENDPOINT'])
+        expect(presigned_url).to include('content-md5')
         expect(URI.parse(presigned_url).path).to match(
           "/#{ENV['AWS_BUCKET']}/#{Scholarsphere::ShrineConfig::CACHE_PREFIX}.*#{extension}"
         )
@@ -40,6 +43,13 @@ RSpec.describe Api::V1::UploadsController, type: :controller do
 
     context 'with a missing key' do
       let(:extension) { nil }
+
+      it { expect(response).to be_bad_request }
+    end
+
+    context 'without a checksum' do
+      let(:extension) { Faker::File.extension }
+      let(:checksum) { nil }
 
       it { expect(response).to be_bad_request }
     end
