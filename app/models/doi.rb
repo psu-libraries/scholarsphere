@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Doi
+  attr_reader :prefix,
+              :suffix
+
   MANAGED_PREFIXES = ['10.26207', '10.18113'].freeze
 
   # @param [String] doi
@@ -10,6 +13,8 @@ class Doi
            rescue URI::InvalidURIError
              URI('')
            end
+
+    parse_doi
   end
 
   def valid?
@@ -18,14 +23,6 @@ class Doi
 
   def managed?
     MANAGED_PREFIXES.include?(prefix) || prefix == ENV['DATACITE_PREFIX']
-  end
-
-  def prefix
-    parsed_doi.split('/')[0]
-  end
-
-  def suffix
-    parsed_doi.split('/')[1]
   end
 
   def directory_indicator
@@ -46,11 +43,14 @@ class Doi
 
   private
 
-    def parsed_doi
-      if @doi.path
-        @doi.path.gsub(/^\//, '')
-      else
-        @doi.opaque
-      end
+    def parse_doi
+      parsed_doi = if @doi.path
+                     @doi.path.gsub(/^\//, '')
+                   else
+                     @doi.opaque
+                   end
+
+      @prefix, *suffixes = parsed_doi.split('/')
+      @suffix = suffixes.join('/')
     end
 end
