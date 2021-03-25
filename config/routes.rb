@@ -143,6 +143,7 @@ Rails.application.routes.draw do
       resources :files, only: [:update]
       resources :featured_resources, only: [:create]
       resources :uploads, only: [:create]
+      get '/dois/*doi', to: 'dois#show' # DOIs have a slash ("/") in them, hence the `*`
     end
   end
 
