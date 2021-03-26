@@ -72,6 +72,32 @@ paths:
   /collections:
     post:
       summary: "Creates a new collection"
+  /dois/{doi}:
+    get:
+      summary: "Search for a DOI"
+      description: >-
+        Retrieve a list of resources that mention the given DOI.
+      security:
+        - APIKey: []
+      parameters:
+        - name: doi
+          in: path
+          description: >-
+            A DOI name, including the slash ("/"). Just put the slash right in
+            the url, like `/dois/10.26207/002c-bb83`
+          required: true
+          schema:
+            type: "string"
+            example: "10.26207/002c-bb83"
+      responses:
+        200:
+          description: "The DOI was found in one or more resources"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/doi_response"
+        404:
+          description: "The DOI was not found in any of ScholarSphere's resources"
   /files:
     put:
       summary: "Updates a file's metadata"
@@ -157,6 +183,16 @@ paths:
 # Array of Schema Objects used to define the concepts/models (see https://swagger.io/specification/#schemaObject)
 components:
   schemas:
+    doi_response:
+      type: "array"
+      items:
+        type: "object"
+        properties:
+          url: 
+            type: "string"
+            format: "uri"
+            example: "/resources/a0fc525b-0d49-48e0-a385-f86bd13bce4d"
+            description: "path to a Scholarsphere resource"
     uuid:
       type: "object"
       properties:
