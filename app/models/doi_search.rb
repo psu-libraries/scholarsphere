@@ -13,16 +13,15 @@ class DoiSearch
 
     doi_query = escape(doi.to_s)
 
-    solr_response = Blacklight.default_index.search(
-      q: %(all_dois_ssim:"#{doi_query}"),
-      fl: ['id'],
-      rows: max_documents
-    )
-
-    solr_response
-      .response
-      .fetch('docs', [])
-      .map { |d| d['id'] }
+    Blacklight
+      .default_index
+      .search(
+        q: %(all_dois_ssim:"#{doi_query}"),
+        fl: ['id'],
+        rows: max_documents
+      )
+      .docs
+      .map(&:id)
   end
 
   private
