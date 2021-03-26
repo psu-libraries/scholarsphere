@@ -152,7 +152,14 @@ paths:
   /uploads:
     post:
       summary: "Requests a pre-signed URL to upload a file into ScholarSphere's S3 instance"
-
+      security:
+        - APIKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/uploads"
 
 # Array of Schema Objects used to define the concepts/models (see https://swagger.io/specification/#schemaObject)
 components:
@@ -354,6 +361,22 @@ components:
             active account in Penn State's identity management system.
         permissions:
           $ref: "#/components/schemas/permissions" 
+    uploads:
+      type: "object"
+      required:
+        - "extension"
+        - "content_md5"
+      properties:
+        extension:
+          type: "string"
+          description: >-
+            Three-letter file extension of the file your are requesting to upload into S3. This is used to created a
+            unique filename for the file in S3.
+        content_md5:
+          type: "string"
+          description: >-
+            Binary encoded md5 checksum of the file you are requesting to upload into S3. This is required so that we
+            can verify the integrity of the file when it is uploaded into S3.
     uploadedFile:
       type: "object"
     permissions:

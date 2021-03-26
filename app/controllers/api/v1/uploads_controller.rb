@@ -2,9 +2,12 @@
 
 module Api::V1
   class UploadsController < RestController
+    # @return [String] json response sent to the client
+    # @note The content_md5 parameter is required because we always want our clients to include an md5 checksum of the
+    # files they are sending.
     def create
       render json: {
-        url: signer.presigned_url(:put_object, bucket: ENV['AWS_BUCKET'], key: key),
+        url: signer.presigned_url(:put_object, bucket: ENV['AWS_BUCKET'], key: key, content_md5: content_md5),
         id: id,
         prefix: prefix
       }
@@ -48,6 +51,10 @@ module Api::V1
 
       def extension
         params.require(:extension).gsub('.', '')
+      end
+
+      def content_md5
+        params.require(:content_md5)
       end
   end
 end
