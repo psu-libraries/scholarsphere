@@ -41,10 +41,25 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
     end
 
     it 'renders a multi-value field' do
-      expect(result.css('td.work-version-keyword .multiple-member').map(&:text))
+      expect(result.css('td.work-version-keyword li.multiple-member').map(&:text))
         .to contain_exactly('one', 'two')
+    end
 
-      expect(result.css('td.work-version-keyword').text).to include('; ')
+    it 'makes any url in the related_url field clickable' do
+      work_version.related_url = [
+        'http://psu.edu',
+        'not a link'
+      ]
+
+      related_urls = result.css('td.work-version-related-url .multiple-member').children
+
+      related_urls[0].tap do |link|
+        expect(link['href']).to eq 'http://psu.edu'
+        expect(link['target']).to eq '_blank'
+        expect(link.text).to eq 'http://psu.edu'
+      end
+
+      expect(related_urls[1]).to be_text
     end
 
     it 'does not render any fields that are empty' do

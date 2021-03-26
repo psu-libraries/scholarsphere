@@ -55,7 +55,7 @@ class WorkVersionMetadataComponent < ApplicationComponent
       attributes_list
         .map do |attr|
           label = format_label(attr)
-          value = format_value(work_version.send(attr))
+          value = format_value(attr: attr, value: work_version.send(attr))
           [attr, label, value]
         end
         .reject { |_attr, _label, val| val.blank? }
@@ -65,23 +65,40 @@ class WorkVersionMetadataComponent < ApplicationComponent
       WorkVersion.human_attribute_name(attr)
     end
 
-    def format_value(value)
+    def format_value(value:, attr:)
       if value.is_a? Enumerable
-        value
-          .map { |member| format_value(member) }
-          .compact
-          .map { |member| %(<span class="multiple-member">#{member}</span>) }
-          .join('; ')
-          .html_safe
+        format_multi_value(value: value, attr: attr)
       elsif value.respond_to?(:strftime) # Date/Time/DateTime/TimeWithZone etc
         value.to_formatted_s(:long)
       elsif value.is_a? Authorship
         value.display_name
       elsif value.is_a? ApplicationComponent
         render value
+      elsif attr == :related_url
+        format_link(value)
       else
         value.to_s
       end
+    end
+
+    def format_multi_value(value:, attr:)
+      return nil if value.empty?
+
+      list_items =
+        value
+          .map { |member| format_value(value: member, attr: attr) }
+          .compact
+          .map { |member| %(<li class="multiple-member">#{member}</li>) }
+          .join
+
+      %(<ol class="multiple-values">#{list_items}</ol>).html_safe
+    end
+
+    def format_link(text)
+      text.gsub(
+        URI::DEFAULT_PARSER.make_regexp,
+        '<a href="\0" target="_blank">\0</a>'
+      ).html_safe
     end
 
     def css_class(attr)
