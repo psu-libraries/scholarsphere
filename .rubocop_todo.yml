@@ -69,6 +69,7 @@ Metrics/ClassLength:
     - 'app/models/collection.rb'
     - 'app/models/work_version.rb'
     - 'app/services/authorship_migration/work_version_creation_migration.rb'
+    - 'app/models/work.rb'
 
 # Offense count: 1
 # Configuration parameters: IgnoredMethods, Max.
