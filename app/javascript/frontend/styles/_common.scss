@@ -557,6 +557,20 @@ h4,
     padding-left: 0;
     min-width: 150px;
   }
+
+  ol.multiple-values {
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+
+    .multiple-member {
+      margin-bottom: .2rem;
+
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+    }
+  }
 }
 
 .footer {

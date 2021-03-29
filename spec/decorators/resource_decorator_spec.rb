@@ -35,6 +35,25 @@ RSpec.describe ResourceDecorator do
     end
   end
 
+  describe '#to_model' do
+    let(:resource) { build(:work) }
+
+    it 'returns the original object' do
+      expect(decorator.to_model.object_id).to eq resource.object_id
+    end
+
+    context 'when there are multiple ResourceDecorators wrapped around each other' do
+      it 'returns the ActiveRecord under all the nesting' do
+        decorator = described_class.new(
+          described_class.new(
+            described_class.new(resource)
+          )
+        )
+        expect(decorator.to_model.object_id).to eq resource.object_id
+      end
+    end
+  end
+
   describe '#partial_name' do
     context 'with a work' do
       let(:resource) { build(:work) }

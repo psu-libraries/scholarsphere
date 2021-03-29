@@ -57,7 +57,7 @@ class WorkVersions::VersionNavigationDropdownComponent < ApplicationComponent
     # running. This is no problem in the actual environment, but in unit tests
     # it's not available. We can use stubbing to get around this during tests.
     def navigable?(decorated_version)
-      undecorated_version = decorated_version.__getobj__
+      undecorated_version = decorated_version.to_model
 
       helpers.policy(undecorated_version).navigable?
     end
