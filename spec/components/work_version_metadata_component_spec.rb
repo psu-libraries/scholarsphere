@@ -70,7 +70,7 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
       non_decorated_result = render_inline(described_class.new(work_version: work_version))
       expect(non_decorated_result.css('th.work-version-subtitle')).to be_present
 
-      decorated_result = render_inline(described_class.new(work_version: ResourceDecorator.new(work_version)))
+      decorated_result = render_inline(described_class.new(work_version: ResourceDecorator.decorate(work_version)))
       expect(decorated_result.css('th.work-version-subtitle')).to be_present
     end
   end

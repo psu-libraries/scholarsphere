@@ -44,6 +44,10 @@ Rails/SkipsModelValidations:
     - 'spec/services/doi_service_spec.rb'
     - 'spec/services/authorship_migration/collection_authorship_position_fix_spec.rb'
 
+Rails/OutputSafety:
+  Exclude:
+    - 'app/components/base_metadata_component.rb'
+
 RSpec/DescribeClass:
   Exclude:
     - 'spec/features/**/*'

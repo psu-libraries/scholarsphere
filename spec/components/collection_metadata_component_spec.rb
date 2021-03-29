@@ -40,10 +40,8 @@ RSpec.describe CollectionMetadataComponent, type: :component do
     end
 
     it 'renders a multi-value field' do
-      expect(result.css('td.collection-keyword .multiple-member').map(&:text))
+      expect(result.css('td.collection-keyword li.multiple-member').map(&:text))
         .to contain_exactly('one', 'two')
-
-      expect(result.css('td.collection-keyword').text).to include('; ')
     end
 
     it 'does not render any fields that are empty' do
