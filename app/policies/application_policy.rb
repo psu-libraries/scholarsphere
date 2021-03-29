@@ -6,7 +6,7 @@ class ApplicationPolicy
   # @param [User, UserDecorator] user
   # @param [ActiveRecord::Base] record
   def initialize(user, record)
-    @user = user.try(:__getobj__) || user
+    @user = user.try(:to_model) || user
     @record = record
   end
 

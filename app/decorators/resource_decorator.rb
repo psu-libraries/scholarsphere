@@ -10,6 +10,23 @@ class ResourceDecorator < SimpleDelegator
     raise ArgumentError, "I don't know how to decorate a #{resource.class.name}"
   end
 
+  # Rails convention for "un-decorating" objects:
+  # https://api.rubyonrails.org/v6.0.0/classes/ActiveModel/Conversion.html#method-i-to_model
+  def to_model
+    undecorated = __getobj__
+
+    # It's possible to compose decorators on top of each other, so keep digging
+    # down the stack unitl we are no longer getting SimpleDelegators.
+    # Also define a max number of nesting so we don't get an infinite loop.
+    100.times do
+      break unless undecorated.respond_to?(:__getobj__)
+
+      undecorated = undecorated.__getobj__
+    end
+
+    undecorated
+  end
+
   def partial_name
     model_name.singular
   end
