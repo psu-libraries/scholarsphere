@@ -10,7 +10,6 @@ class WorkVersionMetadataComponent < BaseMetadataComponent
     :subtitle,
     :visibility_badge,
     :creators,
-    :version_number,
     :keyword,
     :display_rights,
     :display_work_type,

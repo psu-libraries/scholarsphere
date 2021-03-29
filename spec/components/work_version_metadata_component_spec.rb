@@ -83,7 +83,6 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
       expect(result.css('th.work-version-title')).to be_present
       expect(result.css('th.work-version-subtitle')).to be_present
       expect(result.css('th.work-version-visibility-badge')).to be_present
-      expect(result.css('th.work-version-version-number')).to be_present
       expect(result.css('th.work-version-keyword')).to be_present
       expect(result.css('th.work-version-display-rights')).to be_present
       expect(result.css('th.work-version-resource-type')).not_to be_present
@@ -106,7 +105,6 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
       expect(result.css('td.work-version-title').text).to eq work_version[:title]
       expect(result.css('td.work-version-subtitle').text).to eq work_version[:subtitle]
       expect(result.css('td.work-version-creators').text).to include work_version.creators.map(&:display_name).first
-      expect(result.css('td.work-version-version-number').text).to eq work_version[:version_number].to_s
       expect(result.css('td.work-version-keyword').text).to include work_version[:keyword].first
       expect(result.css('td.work-version-display-rights a').attr('href').text).to eq work_version[:rights]
       expect(result.css('td.work-version-display-work-type').text).to eq decorated_work_version.display_work_type
@@ -133,7 +131,6 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
         expect(result.css('th.work-version-creators')).not_to be_present
         expect(result.css('th.work-version-first-creators')).to be_present
         expect(result.css('th.work-version-subtitle')).not_to be_present
-        expect(result.css('th.work-version-version-number')).not_to be_present
         expect(result.css('th.work-version-keyword')).not_to be_present
         expect(result.css('th.work-version-rights')).not_to be_present
         expect(result.css('th.work-version-display-work-type')).not_to be_present
