@@ -36,6 +36,10 @@ module Dashboard
           params.key?(:save_and_exit)
         end
 
+        def create?
+          @resource.new_record?
+        end
+
         def publish?
           params.key?(:publish)
         end
@@ -71,7 +75,9 @@ module Dashboard
         end
 
         def save_resource(index: true)
-          @resource.indexing_source = if (publish? || finish? || save_and_exit?) && index
+          should_index = (create? || publish? || finish? || save_and_exit?)
+
+          @resource.indexing_source = if should_index && index
                                         SolrIndexingJob.public_method(:perform_now)
                                       else
                                         null_indexer

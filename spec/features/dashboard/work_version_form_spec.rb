@@ -68,7 +68,22 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(new_work_version.source).to eq [metadata[:source]]
 
         expect(page).to have_current_path(dashboard_form_contributors_path('work_version', new_work_version))
-        expect(SolrIndexingJob).not_to have_received(:perform_now)
+        expect(SolrIndexingJob).to have_received(:perform_now).twice
+      end
+    end
+
+    context 'when saving-and-continuing, then hitting cancel' do
+      it 'indexes the work the initial time' do
+        visit dashboard_form_work_versions_path
+
+        FeatureHelpers::DashboardForm.fill_in_work_details(metadata)
+        FeatureHelpers::DashboardForm.save_and_continue
+
+        FeatureHelpers::DashboardForm.cancel
+
+        visit dashboard_root_path
+
+        expect(page).to have_content metadata[:title]
       end
     end
   end
@@ -473,7 +488,6 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
       FeatureHelpers::DashboardForm.fill_in_work_details(metadata)
       FeatureHelpers::DashboardForm.save_and_continue
-      expect(SolrIndexingJob).not_to have_received(:perform_now)
 
       # Ensure one creator is pre-filled with the User's Actor
       actor = user.reload.actor
@@ -487,14 +501,12 @@ RSpec.describe 'Publishing a work', with_user: :user do
       end
 
       FeatureHelpers::DashboardForm.save_and_continue
-      expect(SolrIndexingJob).not_to have_received(:perform_now)
 
       FeatureHelpers::DashboardForm.upload_file(Rails.root.join('spec', 'fixtures', 'image.png'))
       within('.uppy-Dashboard-files') do
         expect(page).to have_content('image.png')
       end
       FeatureHelpers::DashboardForm.save_and_continue
-      expect(SolrIndexingJob).not_to have_received(:perform_now)
 
       # Don't yell at them for something they haven't seen yet
       expect(page).not_to have_selector('div#error_explanation')
@@ -504,7 +516,6 @@ RSpec.describe 'Publishing a work', with_user: :user do
       FeatureHelpers::DashboardForm.fill_in_work_details(different_metadata)
       FeatureHelpers::DashboardForm.fill_in_publishing_details(metadata)
       FeatureHelpers::DashboardForm.publish
-      expect(SolrIndexingJob).to have_received(:perform_now).once
 
       #
       # Load out the new published work and ensure that all is well
@@ -541,17 +552,14 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
       FeatureHelpers::DashboardForm.fill_in_work_details(metadata)
       FeatureHelpers::DashboardForm.save_and_continue
-      expect(SolrIndexingJob).not_to have_received(:perform_now)
 
       FeatureHelpers::DashboardForm.save_and_continue
-      expect(SolrIndexingJob).not_to have_received(:perform_now)
 
       FeatureHelpers::DashboardForm.upload_file(Rails.root.join('spec', 'fixtures', 'image.png'))
       within('.uppy-Dashboard-files') do
         expect(page).to have_content('image.png')
       end
       FeatureHelpers::DashboardForm.save_and_continue
-      expect(SolrIndexingJob).not_to have_received(:perform_now)
 
       # Don't yell at them for something they haven't seen yet
       expect(page).not_to have_selector('div#error_explanation')
@@ -564,7 +572,6 @@ RSpec.describe 'Publishing a work', with_user: :user do
         visibility: Permissions::Visibility::AUTHORIZED
       )
       FeatureHelpers::DashboardForm.publish
-      expect(SolrIndexingJob).to have_received(:perform_now).once
 
       #
       # Load out the new published work and ensure that all is well

@@ -113,6 +113,11 @@ module FeatureHelpers
       click_on I18n.t('dashboard.form.actions.destroy.button')
     end
 
+    def self.cancel
+      fix_sticky_footer
+      click_on I18n.t!('dashboard.form.actions.cancel')
+    end
+
     def self.fix_sticky_footer
       Capybara.current_session.current_window.resize_to(1000, 1000)
     rescue Capybara::NotSupportedByDriverError
