@@ -6,6 +6,10 @@ RSpec.describe 'Work Settings Page', with_user: :user do
   let(:user) { create :user }
   let(:work) { create :work, versions_count: 1, has_draft: false, depositor: user.actor }
 
+  before do
+    allow(WorkIndexer).to receive(:call).and_call_original
+  end
+
   it 'is available from the resource page' do
     visit resource_path(work.uuid)
     click_on I18n.t('resources.settings_button.text', type: 'Work')
@@ -30,6 +34,7 @@ RSpec.describe 'Work Settings Page', with_user: :user do
 
       work.reload
       expect(work.visibility).to eq Permissions::Visibility::AUTHORIZED
+      expect(WorkIndexer).to have_received(:call)
     end
   end
 
@@ -52,6 +57,7 @@ RSpec.describe 'Work Settings Page', with_user: :user do
 
       work.reload
       expect(work.embargoed_until).to be_nil
+      expect(WorkIndexer).to have_received(:call).twice
     end
   end
 
@@ -95,6 +101,7 @@ RSpec.describe 'Work Settings Page', with_user: :user do
 
         work.reload
         expect(work.edit_users.map(&:uid)).to contain_exactly('agw13')
+        expect(WorkIndexer).to have_received(:call)
       end
     end
 
@@ -111,6 +118,7 @@ RSpec.describe 'Work Settings Page', with_user: :user do
 
         work.reload
         expect(work.edit_users).to be_empty
+        expect(WorkIndexer).to have_received(:call)
       end
     end
 
@@ -125,6 +133,7 @@ RSpec.describe 'Work Settings Page', with_user: :user do
 
         work.reload
         expect(work.edit_users).to be_empty
+        expect(WorkIndexer).to have_received(:call)
       end
     end
 
@@ -142,6 +151,7 @@ RSpec.describe 'Work Settings Page', with_user: :user do
 
         work.reload
         expect(work.edit_groups).to contain_exactly(group)
+        expect(WorkIndexer).to have_received(:call)
       end
     end
   end
