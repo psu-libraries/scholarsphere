@@ -9,6 +9,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
   before do
     allow(SolrIndexingJob).to receive(:perform_now).and_call_original
+    allow(SolrIndexingJob).to receive(:perform_later)
   end
 
   describe 'The Work Details tab for a new work' do
@@ -33,7 +34,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(new_work_version.version_number).to eq 1
 
         expect(page).to have_current_path(resource_path(new_work_version.uuid))
-        expect(SolrIndexingJob).to have_received(:perform_now).twice
+        expect(SolrIndexingJob).to have_received(:perform_now).at_least(:once)
       end
     end
 
@@ -68,7 +69,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(new_work_version.source).to eq [metadata[:source]]
 
         expect(page).to have_current_path(dashboard_form_contributors_path('work_version', new_work_version))
-        expect(SolrIndexingJob).to have_received(:perform_now).twice
+        expect(SolrIndexingJob).to have_received(:perform_now).at_least(:once)
       end
     end
 
@@ -135,6 +136,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         expect(page).to have_current_path(dashboard_form_contributors_path('work_version', work_version))
         expect(SolrIndexingJob).not_to have_received(:perform_now)
+        expect(SolrIndexingJob).to have_received(:perform_later)
       end
     end
 
@@ -156,6 +158,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         expect(page).to have_current_path(dashboard_form_contributors_path('work_version', work_version))
         expect(SolrIndexingJob).not_to have_received(:perform_now)
+        expect(SolrIndexingJob).not_to have_received(:perform_later)
       end
     end
   end
@@ -191,6 +194,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         expect(page).to have_current_path(dashboard_form_files_path(work_version))
         expect(SolrIndexingJob).not_to have_received(:perform_now)
+        expect(SolrIndexingJob).to have_received(:perform_later)
       end
     end
 
@@ -271,6 +275,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         expect(page).to have_current_path(dashboard_form_files_path(work_version))
         expect(SolrIndexingJob).not_to have_received(:perform_now)
+        expect(SolrIndexingJob).to have_received(:perform_later)
       end
     end
 
@@ -312,6 +317,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         expect(page).to have_current_path(dashboard_form_files_path(work_version))
         expect(SolrIndexingJob).not_to have_received(:perform_now)
+        expect(SolrIndexingJob).to have_received(:perform_later)
       end
     end
 
@@ -360,6 +366,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         expect(page).to have_current_path(dashboard_form_files_path(work_version))
         expect(SolrIndexingJob).not_to have_received(:perform_now)
+        expect(SolrIndexingJob).to have_received(:perform_later)
       end
     end
 
@@ -389,6 +396,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(work_version.reload.creators.map(&:surname)).to contain_exactly(creators.last.surname)
         expect(page).to have_current_path(dashboard_form_files_path(work_version))
         expect(SolrIndexingJob).not_to have_received(:perform_now)
+        expect(SolrIndexingJob).to have_received(:perform_later)
       end
     end
 
@@ -465,7 +473,9 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         fill_in 'work_version_published_date', with: 'this is not a valid date'
         FeatureHelpers::DashboardForm.publish
+
         expect(SolrIndexingJob).not_to have_received(:perform_now)
+        expect(SolrIndexingJob).not_to have_received(:perform_later)
 
         expect(page).to have_current_path(dashboard_form_publish_path(work_version))
 

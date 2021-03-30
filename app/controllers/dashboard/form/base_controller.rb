@@ -75,12 +75,15 @@ module Dashboard
         end
 
         def save_resource(index: true)
-          should_index = (create? || publish? || finish? || save_and_exit?)
+          index_synchronously = (create? || publish? || finish? || save_and_exit?)
 
-          @resource.indexing_source = if should_index && index
+          @resource.indexing_source = case
+                                      when !index
+                                        null_indexer
+                                      when index_synchronously
                                         SolrIndexingJob.public_method(:perform_now)
                                       else
-                                        null_indexer
+                                        SolrIndexingJob.public_method(:perform_later)
                                       end
           @resource.save
         end

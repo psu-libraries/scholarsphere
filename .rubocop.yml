@@ -110,4 +110,5 @@ Style/MethodMissingSuper:
 Style/EmptyCaseCondition:
   Exclude:
     - 'app/services/doi_service.rb'
+    - 'app/controllers/dashboard/form/base_controller.rb'
 
