@@ -47,6 +47,7 @@ Rails/SkipsModelValidations:
 Rails/OutputSafety:
   Exclude:
     - 'app/components/base_metadata_component.rb'
+    - 'app/decorators/resource_decorator.rb'
 
 RSpec/DescribeClass:
   Exclude:

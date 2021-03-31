@@ -5,7 +5,7 @@
 <meta property="og:site_name" content="ScholarSphere">
 <meta property="og:type" content="object">
 <meta property="og:title" content="<%= resource.title %>">
-<meta property="og:description" content="<%= resource.description %>">
+<meta property="og:description" content="<%= resource.description_plain_text %>">
 <meta property="og:url" content="<%= resource_url(uuid) %>">
 
 <%= render GoogleScholarMetadataComponent.new(resource: resource, policy: policy(resource)) %>
