@@ -81,7 +81,7 @@ Rails.application.routes.draw do
 
     resource :profile, only: %i[edit update]
 
-    resources :works, only: %i[edit update destroy] do
+    resources :works, only: %i[edit update] do
       resources :work_versions, except: [:new], shallow: true do
         get 'file_list', to: 'file_lists#edit'
         put 'file_list', to: 'file_lists#update'
