@@ -16,32 +16,68 @@
 import { Controller } from 'stimulus'
 
 export default class extends Controller {
+  buttonClass = 'js-mutiple-field-action'
+  addButtonClass = 'js-multiple-fields-action--add'
+  removeButtonClass = 'js-multiple-fields-action--remove'
+
   connect () {
     this.baseLabelText = this.element.getElementsByTagName('label').item(0).innerText
     this.firstInput = this.cloneFirstInput()
 
-    for (let count = 1; count < this.inputGroups.length; count++) {
-      this.inputGroups.item(count).appendChild(this.removeButton)
+    this.updateActionButtons()
+  }
+
+  updateActionButtons () {
+    const ACTIONS = {
+      ADD: {
+        className: this.addButtonClass,
+        buildButton: () => this.addButton()
+      },
+      REMOVE: {
+        className: this.removeButtonClass,
+        buildButton: () => this.removeButton()
+      }
     }
-    this.inputGroups.item(0).appendChild(this.addButton())
+
+    Array.from(this.inputGroups).forEach((inputGroup, i) => {
+      const isLast = i === this.inputGroups.length - 1
+      const action = isLast ? ACTIONS.ADD : ACTIONS.REMOVE
+
+      const existingButton = inputGroup.getElementsByClassName(this.buttonClass)[0]
+      const existingButtonIsCorrect = existingButton && existingButton.classList.contains(action.className)
+
+      if (existingButtonIsCorrect) {
+        // Do nothing, the button already exists and is the correct type
+      } else if (existingButton) {
+        // A button already exists, but is the wrong type,
+        // remove it and replace it with the right one
+        existingButton.remove()
+        inputGroup.appendChild(action.buildButton())
+      } else {
+        // No button exists, build the right one
+        inputGroup.appendChild(action.buildButton())
+      }
+    })
   }
 
   // By default, Stimulus listens to click events on buttons and will execute this method.
   add (event) {
     event.preventDefault()
     this.element.appendChild(this.newField)
+    this.updateActionButtons()
   }
 
   // By default, Stimulus listens to click events on buttons and will execute this method.
   remove (event) {
     event.preventDefault()
     event.target.parentElement.parentElement.remove()
+    this.updateActionButtons()
   }
 
   // @return [HTMLElement] cloned field taken from the first input group.
   get newField () {
     const clone = this.firstInput.cloneNode(true)
-    clone.appendChild(this.removeButton)
+    clone.appendChild(this.addButton())
     return clone
   }
 
@@ -50,7 +86,7 @@ export default class extends Controller {
     const node = document.createElement('a')
     node.setAttribute('href', '#')
     node.setAttribute('data-action', 'multiple-fields#add')
-    node.classList.add('add')
+    node.classList.add(this.buttonClass, this.addButtonClass, 'add')
 
     const description = this.descriptionText('add another')
     node.appendChild(description)
@@ -62,11 +98,11 @@ export default class extends Controller {
   }
 
   // @return [HTMLElement]
-  get removeButton () {
+  removeButton () {
     const node = document.createElement('a')
     node.setAttribute('href', '#')
     node.setAttribute('data-action', 'multiple-fields#remove')
-    node.classList.add('remove')
+    node.classList.add(this.buttonClass, this.removeButtonClass, 'remove')
 
     const description = this.descriptionText('remove')
     node.appendChild(description)
