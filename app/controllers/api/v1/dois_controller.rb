@@ -2,6 +2,11 @@
 
 module Api::V1
   class DoisController < RestController
+    def index
+      results = DoiSearch.all
+      render json: results
+    end
+
     def show
       results = DoiSearch.new(doi: params[:doi]).results
       if results.any?

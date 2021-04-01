@@ -12,6 +12,18 @@ RSpec.describe DoiSearch do
     Collection.reindex_all
   end
 
+  describe '.all' do
+    it 'returns all unique DOIs in the index' do
+      expect(described_class.all).to match_array(
+        %w(
+          doi:10.26207/upw2-pkx3
+          doi:10.18113/dmnf-6dzs
+          doi:10.18113/qi03-b693
+        )
+      )
+    end
+  end
+
   describe '#results' do
     it 'returns an array of resource uuids who reference the given doi' do
       # Find a collection

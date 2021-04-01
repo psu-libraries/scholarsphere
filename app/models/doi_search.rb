@@ -3,6 +3,19 @@
 class DoiSearch
   attr_reader :doi
 
+  def self.all
+    Blacklight
+      .default_index
+      .search(
+        q: %(all_dois_ssim:*),
+        fl: ['all_dois_ssim'],
+        rows: 1_000_000_000
+      )
+      .docs
+      .flat_map { |doc| doc['all_dois_ssim'] }
+      .uniq
+  end
+
   def initialize(doi:)
     @doi = Doi.new(doi)
   end

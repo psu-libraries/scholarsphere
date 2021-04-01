@@ -72,6 +72,20 @@ paths:
   /collections:
     post:
       summary: "Creates a new collection"
+  /dois:
+    get:
+      summary: "List of all DOIs"
+      description: >-
+        Retrieve a flat list of all the DOIs known to Scholarsphere's resources.
+      security:
+        - APIKey: []
+      responses:
+        200:
+          description: A list of all DOIs
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/doi_list"
   /dois/{doi}:
     get:
       summary: "Search for a DOI"
@@ -190,6 +204,12 @@ paths:
 # Array of Schema Objects used to define the concepts/models (see https://swagger.io/specification/#schemaObject)
 components:
   schemas:
+    doi_list:
+      type: "array"
+      items:
+        type: "string"
+        description: "a DOI with the 'doi:' prefix"
+        example: "doi:10.26207/utaj-jfhi"
     doi_response:
       type: "array"
       items:
