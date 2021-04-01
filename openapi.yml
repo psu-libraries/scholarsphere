@@ -76,7 +76,9 @@ paths:
     get:
       summary: "List of all DOIs"
       description: >-
-        Retrieve a flat list of all the DOIs known to Scholarsphere's resources.
+        Retrieve a dictionary of all DOIs known to Scholarsphere. The keys in
+        this dictionary will be the DOI, like `"doi:10.26207/002c-bb83"` and the
+        value will be an array of UUIDs of all resources that reference that DOI
       security:
         - APIKey: []
       responses:
@@ -205,11 +207,20 @@ paths:
 components:
   schemas:
     doi_list:
-      type: "array"
-      items:
-        type: "string"
-        description: "a DOI with the 'doi:' prefix"
-        example: "doi:10.26207/utaj-jfhi"
+      type: "object"
+      additionalProperties:
+        type: "array"
+        description: "a list of resource UUIDs"
+        items:
+          type: "string"
+          description: "a resource UUID"
+          example: "a0fc525b-0d49-48e0-a385-f86bd13bce4d"
+      example:
+        "doi:10.26207/002c-bb83":
+          - "a0fc525b-0d49-48e0-a385-f86bd13bce4d"
+          - "146a74e3-ae66-4802-b5f8-471bcac80d58"
+        "doi:10.18113/dmnf-6dzs":
+          - "87287b53-76be-424e-b202-bc6d521c841b"
     doi_response:
       type: "array"
       items:

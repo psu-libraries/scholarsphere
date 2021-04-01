@@ -17,7 +17,7 @@ describe 'API V1 DOIs', type: :request do
 
     it 'returns a valid response' do
       expect(response).to be_ok
-      expect(json_response).to match_array(['doi:10.26207/utaj-jfhi'])
+      expect(json_response).to match({ 'doi:10.26207/utaj-jfhi' => [collection.uuid] })
     end
   end
 
