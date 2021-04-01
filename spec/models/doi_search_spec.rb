@@ -14,12 +14,12 @@ RSpec.describe DoiSearch do
 
   describe '.all' do
     it 'returns all unique DOIs in the index' do
-      expect(described_class.all).to match_array(
-        %w(
-          doi:10.26207/upw2-pkx3
-          doi:10.18113/dmnf-6dzs
-          doi:10.18113/qi03-b693
-        )
+      expect(described_class.all).to match(
+        {
+          'doi:10.26207/upw2-pkx3' => a_collection_containing_exactly(work_version_1.uuid, work_version_2.uuid),
+          'doi:10.18113/dmnf-6dzs' => [work_version_2.uuid],
+          'doi:10.18113/qi03-b693' => [collection.uuid]
+        }
       )
     end
   end
