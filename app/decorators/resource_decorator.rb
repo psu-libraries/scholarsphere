@@ -37,19 +37,7 @@ class ResourceDecorator < SimpleDelegator
     return unless respond_to?(:description)
     return '' if description.blank?
 
-    markdown = Redcarpet::Markdown.new(
-      Redcarpet::Render::HTML.new(
-        with_toc_data: false,
-        filter_html: true,
-        no_styles: true,
-        safe_links_only: true,
-        prettify: false,
-        no_images: true
-      ),
-      autolink: true,
-      tables: false
-    )
-    markdown.render(description).html_safe
+    @description_html ||= render_markdown(description)
   end
 
   def description_plain_text
@@ -86,4 +74,24 @@ class ResourceDecorator < SimpleDelegator
       creators.take(3)
     end
   end
+
+  private
+
+    def render_markdown(str)
+      markdown = Redcarpet::Markdown.new(
+        Redcarpet::Render::HTML.new(
+          with_toc_data: false,
+          filter_html: true,
+          no_styles: true,
+          safe_links_only: true,
+          prettify: false,
+          no_images: true
+        ),
+        autolink: true,
+        tables: false
+      )
+      markdown.render(str).html_safe
+    rescue StandardError
+      str
+    end
 end

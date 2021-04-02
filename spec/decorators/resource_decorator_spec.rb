@@ -232,6 +232,17 @@ RSpec.describe ResourceDecorator do
 
       it { is_expected.to eq '' }
     end
+
+    context 'when given something that explodes' do
+      before do
+        allow(Redcarpet::Markdown).to receive(:new).and_raise
+      end
+
+      it 'traps the error and returns the original string' do
+        expect(description_html).to eq resource.description
+        expect(description_html).not_to be_html_safe
+      end
+    end
   end
 
   describe '#description_plain_text' do
@@ -247,6 +258,7 @@ RSpec.describe ResourceDecorator do
 
     it 'returns plain text, without any markdown or html formatting' do
       expect(description_plain_text).to eq 'This is marked down'
+      expect(description_plain_text).not_to be_html_safe
     end
 
     context 'when given nil' do
