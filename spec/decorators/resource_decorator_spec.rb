@@ -176,4 +176,97 @@ RSpec.describe ResourceDecorator do
       its(:first_creators) { is_expected.to eq(resource.creators.take(3) + ['&hellip;']) }
     end
   end
+
+  describe '#description_html' do
+    subject(:description_html) { decorator.description_html }
+
+    let(:parsed) { Nokogiri::HTML(description_html) }
+    let(:resource) { instance_spy('WorkVersion') }
+
+    before do
+      allow(resource).to receive(:description).and_return(<<-MARKDOWN.strip_heredoc)
+        This is my first paragraph, which is *emphasized*.
+
+        This is my second paragraph with has a [link](https://scholarsphere.psu.edu)
+
+        And this is my third paragraph which has an autolink to https://google.com
+
+        This paragraph has <h1>sneaky html</h1>
+      MARKDOWN
+    end
+
+    it 'renders the description into markdown' do
+      expect(description_html).to be_html_safe
+
+      expect(parsed.css('p').length).to eq 4
+
+      parsed.css('p').first.tap do |first_paragraph|
+        expect(first_paragraph.css('em').text).to eq 'emphasized'
+      end
+    end
+
+    it 'supports explicit links' do
+      parsed.css('p')[1].tap do |second_paragraph|
+        expect(second_paragraph.css('a').text).to eq 'link'
+        expect(second_paragraph.css('a')[0]['href']).to eq 'https://scholarsphere.psu.edu'
+      end
+    end
+
+    it 'supports autolinks' do
+      parsed.css('p')[2].tap do |third_paragraph|
+        expect(third_paragraph.css('a').text).to eq 'https://google.com'
+        expect(third_paragraph.css('a')[0]['href']).to eq 'https://google.com'
+      end
+    end
+
+    it 'does not allow html' do
+      parsed.css('p')[3].tap do |fourth_paragraph|
+        expect(fourth_paragraph.css('h1').text).to be_empty
+      end
+    end
+
+    context 'when given nil' do
+      before do
+        allow(resource).to receive(:description).and_return(nil)
+      end
+
+      it { is_expected.to eq '' }
+    end
+
+    context 'when given something that explodes' do
+      before do
+        allow(Redcarpet::Markdown).to receive(:new).and_raise
+      end
+
+      it 'traps the error and returns the original string' do
+        expect(description_html).to eq resource.description
+        expect(description_html).not_to be_html_safe
+      end
+    end
+  end
+
+  describe '#description_plain_text' do
+    subject(:description_plain_text) { decorator.description_plain_text }
+
+    let(:resource) { instance_spy('WorkVersion') }
+
+    before do
+      allow(resource).to receive(:description).and_return(
+        'This *is* _marked_ [down](http://psu.edu)'
+      )
+    end
+
+    it 'returns plain text, without any markdown or html formatting' do
+      expect(description_plain_text).to eq 'This is marked down'
+      expect(description_plain_text).not_to be_html_safe
+    end
+
+    context 'when given nil' do
+      before do
+        allow(resource).to receive(:description).and_return(nil)
+      end
+
+      it { is_expected.to eq '' }
+    end
+  end
 end

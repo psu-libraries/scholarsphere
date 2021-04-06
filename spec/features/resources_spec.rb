@@ -11,6 +11,10 @@ RSpec.describe 'Public Resources', type: :feature do
     let(:draft) { work.versions[2] }
 
     context 'when I am not logged in (i.e. as a public user)' do
+      before do
+        v2.update(description: 'This *has* [markdown](https://daringfireball.net/projects/markdown/)')
+      end
+
       it 'displays the public resource page for the work' do
         visit resource_path(work.uuid)
 
@@ -20,7 +24,7 @@ RSpec.describe 'Public Resources', type: :feature do
 
         # Spot check meta tags
         expect(page.find('meta[property="og:title"]', visible: false)[:content]).to eq v2.title
-        expect(page.find('meta[property="og:description"]', visible: false)[:content]).to eq v2.description
+        expect(page.find('meta[property="og:description"]', visible: false)[:content]).to eq 'This has markdown'
         # Below was failing in CI due to hostnames getting weird
         expect(page.find('meta[property="og:url"]', visible: false)[:content])
           .to match(resource_path(work.uuid)).and match(/^https?:/)
@@ -29,6 +33,9 @@ RSpec.describe 'Public Resources', type: :feature do
           .to eq Date.edtf(v2.published_date).year.to_s
         all_authors = page.all(:css, 'meta[name="citation_author"]', visible: false)
         expect(all_authors.map { |a| a[:content] }).to match_array v2.creators.map(&:display_name)
+
+        # Description is rendered as html
+        expect(page).to have_link('markdown', href: 'https://daringfireball.net/projects/markdown/')
 
         ## Does not have edit controls
         within('header') do
@@ -157,7 +164,13 @@ RSpec.describe 'Public Resources', type: :feature do
 
   describe 'a collection' do
     context 'when it does NOT have a DOI' do
-      let(:collection) { create :collection, :with_complete_metadata, works: [work] }
+      let(:collection) do
+        create :collection,
+               :with_complete_metadata,
+               works: [work],
+               description: 'This *has* [markdown](https://daringfireball.net/projects/markdown/)'
+      end
+
       let(:work) { build :work, has_draft: false, versions_count: 1 }
 
       it 'displays the public resource page for the collection' do
@@ -167,13 +180,13 @@ RSpec.describe 'Public Resources', type: :feature do
 
         # Spot check meta tags
         expect(page.find('meta[property="og:title"]', visible: false)[:content]).to eq collection.title
-        expect(page.find('meta[property="og:description"]', visible: false)[:content]).to eq collection.description
+        expect(page.find('meta[property="og:description"]', visible: false)[:content]).to eq 'This has markdown'
         # Below was failing in CI due to hostnames getting weird
         expect(page.find('meta[property="og:url"]', visible: false)[:content])
           .to match(resource_path(collection.uuid)).and match(/^https?:/)
 
         expect(page).to have_selector('h1', text: collection.title)
-        expect(page).to have_content collection.description
+        expect(page).to have_link('markdown', href: 'https://daringfireball.net/projects/markdown/')
         expect(page).to have_content work.latest_published_version.title
 
         within('td.collection-title') do

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ResourceDecorator < SimpleDelegator
+  include ActionView::Helpers::SanitizeHelper
+
   # @returns an appropriately-decorated object. This is a factory method
   def self.decorate(resource)
     return WorkVersionDecorator.new(resource) if resource.is_a? WorkVersion
@@ -29,6 +31,18 @@ class ResourceDecorator < SimpleDelegator
 
   def partial_name
     model_name.singular
+  end
+
+  def description_html
+    return unless respond_to?(:description)
+    return '' if description.blank?
+
+    @description_html ||= render_markdown(description)
+  end
+
+  def description_plain_text
+    strip_tags(description_html)
+      .strip # Remove any leading or trailing whitspace
   end
 
   def display_work_type
@@ -60,4 +74,24 @@ class ResourceDecorator < SimpleDelegator
       creators.take(3)
     end
   end
+
+  private
+
+    def render_markdown(str)
+      markdown = Redcarpet::Markdown.new(
+        Redcarpet::Render::HTML.new(
+          with_toc_data: false,
+          filter_html: true,
+          no_styles: true,
+          safe_links_only: true,
+          prettify: false,
+          no_images: true
+        ),
+        autolink: true,
+        tables: false
+      )
+      markdown.render(str).html_safe
+    rescue StandardError
+      str
+    end
 end
