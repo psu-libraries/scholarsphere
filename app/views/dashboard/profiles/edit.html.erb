@@ -16,7 +16,10 @@
         <%= render 'form_fields/text', form: form, attribute: :given_name %>
         <%= render 'form_fields/text', form: form, attribute: :surname %>
         <%= render 'form_fields/text', form: form, attribute: :email %>
-        <%= render 'form_fields/text', form: form, attribute: :orcid %>
+        <%= render 'form_fields/text',
+                   form: form,
+                   attribute: :orcid,
+                   data: { controller: 'inputmask' } %>
         <%= render 'admin_fields', form: form if @actor.user.admin_available? %>
       </div>
 
