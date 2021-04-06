@@ -8,6 +8,37 @@ RSpec.describe Api::V1::DoisController, type: :controller do
 
   before { request.headers[:'X-API-Key'] = api_token }
 
+  describe 'GET #index' do
+    let(:mock_results) do
+      {
+        'doi:10.123/doi1' => ['uuid-1', 'uuid-2'],
+        'doi:10.123/doi2' => ['uuid-3']
+      }
+    end
+
+    before do
+      allow(DoiSearch).to receive(:all).and_return mock_results
+      get :index
+    end
+
+    it 'returns 200 and a json array of all DOIs' do
+      expect(response).to be_ok
+      expect(json_response).to match(
+        {
+          'doi:10.123/doi1' => ['uuid-1', 'uuid-2'],
+          'doi:10.123/doi2' => ['uuid-3']
+        }
+      )
+    end
+
+    context 'when not authorized' do
+      let(:api_token) { nil }
+      let(:mock_search_results) { [] }
+
+      specify { expect(response).to be_unauthorized }
+    end
+  end
+
   describe 'GET #show' do
     let(:mock_search) { instance_spy 'DoiSearch', results: mock_search_results }
 
