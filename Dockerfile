@@ -1,7 +1,11 @@
-FROM harbor.k8s.libraries.psu.edu/library/ruby-2.7.1-node-12:20210223 as base
+FROM harbor.k8s.libraries.psu.edu/library/ruby-2.7.1-node-12:20210401 as base
 ARG UID=2000
 
 COPY bin/vaultshell /usr/local/bin/
+USER root
+RUN apt-get update && \
+   apt-get install --no-install-recommends -y shared-mime-info && \
+   rm -rf /var/lib/apt/lists*
 
 RUN useradd -u $UID app -d /app
 RUN mkdir /app/tmp

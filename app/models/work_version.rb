@@ -3,6 +3,10 @@
 class WorkVersion < ApplicationRecord
   include AASM
   include ViewStatistics
+  include AllDois
+
+  fields_with_dois :doi, :identifier
+
   has_paper_trail
 
   attr_writer :indexing_source,
@@ -274,7 +278,8 @@ class WorkVersion < ApplicationRecord
         WorkTypeSchema,
         CreatorSchema,
         PublishedDateSchema,
-        FacetSchema
+        FacetSchema,
+        DoiSchema
       )
     end
 end

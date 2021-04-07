@@ -25,22 +25,6 @@ RSpec.describe 'Editing multiple fields' do
       end
     end
 
-    it 'inserts new inputs with remove buttons', with_user: :user, js: true do
-      pending "I don't think this test is relevant anymore. The pages are dead now"
-      visit(edit_dashboard_work_version_path(work.latest_version))
-      check_field(:keyword)
-      check_field(:contributor)
-      check_field(:publisher)
-      check_field(:subject)
-      check_field(:language)
-      check_field(:identifier)
-      check_field(:based_near)
-      check_field(:related_url)
-      check_field(:source)
-    end
-  end
-
-  context 'when entering information into multiple fields' do
     def fill_in_multiple(field)
       within(parent_div(field)) do
         fill_in("work_version[#{field}][]", with: attributes_1[field])
@@ -51,37 +35,48 @@ RSpec.describe 'Editing multiple fields' do
     end
 
     def verify_multiple(field)
-      within(parent_div(field)) do
+      parent = parent_div(field)
+      within(parent) do
         page.all('.form-control').each_with_index do |input, index|
           expect(input.value).to eq(send("attributes_#{index + 1}")[field])
         end
       end
+
+      removeable_inputs = parent.find_all('div')
+      removeable_inputs[0].has_content?('remove')
+      removeable_inputs[1].has_content?('add another')
     end
 
-    it 'updates each field with the new information', with_user: :user, js: true do
-      pending "I don't think this test is relevant anymore. The pages are dead now"
-      visit(edit_dashboard_work_version_path(work.latest_version))
+    it 'inserts new inputs with remove buttons', with_user: :user, js: true do
+      visit dashboard_form_work_version_details_path(work.latest_version)
+      check_field(:keyword)
+      check_field(:publisher)
+      check_field(:identifier)
+      check_field(:related_url)
+      check_field(:subject)
+      check_field(:language)
+      check_field(:based_near)
+      check_field(:source)
+
       fill_in_multiple(:keyword)
-      fill_in_multiple(:contributor)
       fill_in_multiple(:publisher)
+      fill_in_multiple(:identifier)
+      fill_in_multiple(:related_url)
       fill_in_multiple(:subject)
       fill_in_multiple(:language)
-      fill_in_multiple(:identifier)
       fill_in_multiple(:based_near)
-      fill_in_multiple(:related_url)
       fill_in_multiple(:source)
 
       click_button('Save and Continue')
-      visit(edit_dashboard_work_version_path(work.latest_version))
+      visit dashboard_form_work_version_details_path(work.latest_version)
 
       verify_multiple(:keyword)
-      verify_multiple(:contributor)
       verify_multiple(:publisher)
+      verify_multiple(:identifier)
+      verify_multiple(:related_url)
       verify_multiple(:subject)
       verify_multiple(:language)
-      verify_multiple(:identifier)
       verify_multiple(:based_near)
-      verify_multiple(:related_url)
       verify_multiple(:source)
     end
   end

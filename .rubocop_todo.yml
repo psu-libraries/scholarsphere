@@ -69,6 +69,7 @@ Metrics/ClassLength:
     - 'app/models/collection.rb'
     - 'app/models/work_version.rb'
     - 'app/services/authorship_migration/work_version_creation_migration.rb'
+    - 'app/models/work.rb'
 
 # Offense count: 1
 # Configuration parameters: IgnoredMethods, Max.
@@ -94,12 +95,6 @@ RSpec/SubjectStub:
   Exclude:
     - 'spec/components/mintable_doi_component_spec.rb'
     - 'spec/lib/scholarsphere/solr_admin_spec.rb'
-
-# Offense count: 2
-Rails/OutputSafety:
-  Exclude:
-    - 'app/components/collection_metadata_component.rb'
-    - 'app/components/work_version_metadata_component.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.

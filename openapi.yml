@@ -72,6 +72,48 @@ paths:
   /collections:
     post:
       summary: "Creates a new collection"
+  /dois:
+    get:
+      summary: "List of all DOIs"
+      description: >-
+        Retrieve a dictionary of all DOIs known to Scholarsphere. The keys in
+        this dictionary will be the DOI, like `"doi:10.26207/002c-bb83"` and the
+        value will be an array of UUIDs of all resources that reference that DOI
+      security:
+        - APIKey: []
+      responses:
+        200:
+          description: A list of all DOIs
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/doi_list"
+  /dois/{doi}:
+    get:
+      summary: "Search for a DOI"
+      description: >-
+        Retrieve a list of resources that mention the given DOI.
+      security:
+        - APIKey: []
+      parameters:
+        - name: doi
+          in: path
+          description: >-
+            A DOI name, including the slash ("/"). Just put the slash right in
+            the url, like `/dois/10.26207/002c-bb83`
+          required: true
+          schema:
+            type: "string"
+            example: "10.26207/002c-bb83"
+      responses:
+        200:
+          description: "The DOI was found in one or more resources"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/doi_response"
+        404:
+          description: "The DOI was not found in any of ScholarSphere's resources"
   /files:
     put:
       summary: "Updates a file's metadata"
@@ -152,11 +194,43 @@ paths:
   /uploads:
     post:
       summary: "Requests a pre-signed URL to upload a file into ScholarSphere's S3 instance"
-
+      security:
+        - APIKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/uploads"
 
 # Array of Schema Objects used to define the concepts/models (see https://swagger.io/specification/#schemaObject)
 components:
   schemas:
+    doi_list:
+      type: "object"
+      additionalProperties:
+        type: "array"
+        description: "a list of resource UUIDs"
+        items:
+          type: "string"
+          description: "a resource UUID"
+          example: "a0fc525b-0d49-48e0-a385-f86bd13bce4d"
+      example:
+        "doi:10.26207/002c-bb83":
+          - "a0fc525b-0d49-48e0-a385-f86bd13bce4d"
+          - "146a74e3-ae66-4802-b5f8-471bcac80d58"
+        "doi:10.18113/dmnf-6dzs":
+          - "87287b53-76be-424e-b202-bc6d521c841b"
+    doi_response:
+      type: "array"
+      items:
+        type: "object"
+        properties:
+          url: 
+            type: "string"
+            format: "uri"
+            example: "/resources/a0fc525b-0d49-48e0-a385-f86bd13bce4d"
+            description: "path to a Scholarsphere resource"
     uuid:
       type: "object"
       properties:
@@ -354,6 +428,22 @@ components:
             active account in Penn State's identity management system.
         permissions:
           $ref: "#/components/schemas/permissions" 
+    uploads:
+      type: "object"
+      required:
+        - "extension"
+        - "content_md5"
+      properties:
+        extension:
+          type: "string"
+          description: >-
+            Three-letter file extension of the file your are requesting to upload into S3. This is used to created a
+            unique filename for the file in S3.
+        content_md5:
+          type: "string"
+          description: >-
+            Binary encoded md5 checksum of the file you are requesting to upload into S3. This is required so that we
+            can verify the integrity of the file when it is uploaded into S3.
     uploadedFile:
       type: "object"
     permissions:

@@ -44,6 +44,11 @@ Rails/SkipsModelValidations:
     - 'spec/services/doi_service_spec.rb'
     - 'spec/services/authorship_migration/collection_authorship_position_fix_spec.rb'
 
+Rails/OutputSafety:
+  Exclude:
+    - 'app/components/base_metadata_component.rb'
+    - 'app/decorators/resource_decorator.rb'
+
 RSpec/DescribeClass:
   Exclude:
     - 'spec/features/**/*'
@@ -68,6 +73,7 @@ RSpec/LeakyConstantDeclaration:
     - 'spec/models/permissions_builder_spec.rb'
     - 'spec/lib/healthchecks/queue_latency_check_spec.rb'
     - 'spec/system/active_job_system_spec.rb'
+    - 'spec/models/concerns/all_dois_spec.rb'
 
 RSpec/ExpectActual:
   Exclude:
@@ -92,6 +98,8 @@ RSpec/MultipleSubjects:
 RSpec/VerifiedDoubles:
   Exclude:
     - 'spec/components/mintable_doi_component_spec.rb'
+    - 'spec/components/work_versions/version_navigation_dropdown_component_spec.rb'
+    - 'spec/components/work_histories/work_history_component_spec.rb'
 
 Style/ClassVars:
   Exclude:
@@ -108,4 +116,5 @@ Style/MethodMissingSuper:
 Style/EmptyCaseCondition:
   Exclude:
     - 'app/services/doi_service.rb'
+    - 'app/controllers/dashboard/form/base_controller.rb'
 

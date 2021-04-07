@@ -534,6 +534,21 @@ h4,
     color: $mid-blue;
   }
 
+  // Display Featured Work's multi-fields as semicolon-delimited inline lists
+  ol.multiple-values {
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+
+    .multiple-member {
+      display: inline;
+
+      &:not(:last-child)::after {
+        content: '; ';
+      }
+    }
+  }
+
   &__img {
     margin-bottom: $spacer;
     max-width: 400px;
@@ -556,6 +571,20 @@ h4,
     padding-right: $spacer;
     padding-left: 0;
     min-width: 150px;
+  }
+
+  ol.multiple-values {
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+
+    .multiple-member {
+      margin-bottom: .2rem;
+
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+    }
   }
 }
 

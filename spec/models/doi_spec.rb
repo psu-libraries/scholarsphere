@@ -60,6 +60,19 @@ RSpec.describe Doi do
     its(:uri) { is_expected.to eq(URI('https://doi.org/10.1007/s10570-013-0029-x')) }
   end
 
+  context 'with a mult-segment doi like "doi:10.21345/asdf/qwer"' do
+    let(:doi) { 'doi:10.21345/asdf/qwer' }
+
+    it { is_expected.to be_valid }
+    it { is_expected.not_to be_managed }
+    its(:prefix) { is_expected.to eq('10.21345') }
+    its(:directory_indicator) { is_expected.to eq('10') }
+    its(:registrant_code) { is_expected.to eq('21345') }
+    its(:suffix) { is_expected.to eq('asdf/qwer') }
+    its(:to_s) { is_expected.to eq('doi:10.21345/asdf/qwer') }
+    its(:uri) { is_expected.to eq(URI('https://doi.org/10.21345/asdf/qwer')) }
+  end
+
   context 'with an invalid directory indicator' do
     let(:doi) { 'doi:12.1234/asdf' }
 
@@ -98,5 +111,16 @@ RSpec.describe Doi do
     it { is_expected.not_to be_managed }
     its(:directory_indicator) { is_expected.to eq('10') }
     its(:registrant_code) { is_expected.to eq('26207.10') }
+  end
+
+  context 'with various invalid inputs' do
+    it 'gracefully handles strange input' do
+      invalid_inputs = [nil, '', 1, true, []]
+
+      invalid_inputs.each do |invalid|
+        doi = described_class.new(invalid)
+        expect(doi).not_to be_valid
+      end
+    end
   end
 end

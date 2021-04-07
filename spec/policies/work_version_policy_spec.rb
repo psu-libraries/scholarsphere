@@ -171,6 +171,39 @@ RSpec.describe WorkVersionPolicy, type: :policy do
     end
   end
 
+  permissions :navigable? do
+    let(:depositor) { work_version.depositor.user }
+    let(:proxy) { build(:user) }
+    let(:edit_user) { build(:user) }
+    let(:other) { build(:user) }
+    let(:admin) { build(:user, :admin) }
+    let(:guest) { User.guest }
+
+    let(:work_version) { work.latest_version }
+
+    context 'when the version is published' do
+      let(:work) { create(:work, has_draft: false, proxy_depositor: proxy.actor, edit_users: [edit_user]) }
+
+      it { is_expected.to permit(depositor, work_version) }
+      it { is_expected.to permit(proxy, work_version) }
+      it { is_expected.to permit(edit_user, work_version) }
+      it { is_expected.to permit(other, work_version) }
+      it { is_expected.to permit(admin, work_version) }
+      it { is_expected.to permit(guest, work_version) }
+    end
+
+    context 'when the version is draft' do
+      let(:work) { create(:work, has_draft: true, proxy_depositor: proxy.actor, edit_users: [edit_user]) }
+
+      it { is_expected.to permit(depositor, work_version) }
+      it { is_expected.to permit(proxy, work_version) }
+      it { is_expected.to permit(edit_user, work_version) }
+      it { is_expected.to permit(admin, work_version) }
+      it { is_expected.not_to permit(other, work_version) }
+      it { is_expected.not_to permit(guest, work_version) }
+    end
+  end
+
   permissions :download? do
     let(:work_version) { work.latest_version }
 

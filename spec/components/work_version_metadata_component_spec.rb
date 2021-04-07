@@ -41,10 +41,25 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
     end
 
     it 'renders a multi-value field' do
-      expect(result.css('td.work-version-keyword .multiple-member').map(&:text))
+      expect(result.css('td.work-version-keyword li.multiple-member').map(&:text))
         .to contain_exactly('one', 'two')
+    end
 
-      expect(result.css('td.work-version-keyword').text).to include('; ')
+    it 'makes any url in the related_url field clickable' do
+      work_version.related_url = [
+        'http://psu.edu',
+        'not a link'
+      ]
+
+      related_urls = result.css('td.work-version-related-url .multiple-member').children
+
+      related_urls[0].tap do |link|
+        expect(link['href']).to eq 'http://psu.edu'
+        expect(link['target']).to eq '_blank'
+        expect(link.text).to eq 'http://psu.edu'
+      end
+
+      expect(related_urls[1]).to be_text
     end
 
     it 'does not render any fields that are empty' do
@@ -55,7 +70,7 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
       non_decorated_result = render_inline(described_class.new(work_version: work_version))
       expect(non_decorated_result.css('th.work-version-subtitle')).to be_present
 
-      decorated_result = render_inline(described_class.new(work_version: ResourceDecorator.new(work_version)))
+      decorated_result = render_inline(described_class.new(work_version: ResourceDecorator.decorate(work_version)))
       expect(decorated_result.css('th.work-version-subtitle')).to be_present
     end
   end
@@ -68,7 +83,6 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
       expect(result.css('th.work-version-title')).to be_present
       expect(result.css('th.work-version-subtitle')).to be_present
       expect(result.css('th.work-version-visibility-badge')).to be_present
-      expect(result.css('th.work-version-version-number')).to be_present
       expect(result.css('th.work-version-keyword')).to be_present
       expect(result.css('th.work-version-display-rights')).to be_present
       expect(result.css('th.work-version-resource-type')).not_to be_present
@@ -91,7 +105,6 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
       expect(result.css('td.work-version-title').text).to eq work_version[:title]
       expect(result.css('td.work-version-subtitle').text).to eq work_version[:subtitle]
       expect(result.css('td.work-version-creators').text).to include work_version.creators.map(&:display_name).first
-      expect(result.css('td.work-version-version-number').text).to eq work_version[:version_number].to_s
       expect(result.css('td.work-version-keyword').text).to include work_version[:keyword].first
       expect(result.css('td.work-version-display-rights a').attr('href').text).to eq work_version[:rights]
       expect(result.css('td.work-version-display-work-type').text).to eq decorated_work_version.display_work_type
@@ -118,7 +131,6 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
         expect(result.css('th.work-version-creators')).not_to be_present
         expect(result.css('th.work-version-first-creators')).to be_present
         expect(result.css('th.work-version-subtitle')).not_to be_present
-        expect(result.css('th.work-version-version-number')).not_to be_present
         expect(result.css('th.work-version-keyword')).not_to be_present
         expect(result.css('th.work-version-rights')).not_to be_present
         expect(result.css('th.work-version-display-work-type')).not_to be_present

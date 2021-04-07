@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-class WorkVersionMetadataComponent < ApplicationComponent
-  attr_reader :work_version,
-              :mini
+class WorkVersionMetadataComponent < BaseMetadataComponent
+  attr_reader :mini
 
   # A list of WorkVersion's attributes that you'd like rendered, in the order
   # that you want them to appear.
@@ -11,7 +10,6 @@ class WorkVersionMetadataComponent < ApplicationComponent
     :subtitle,
     :visibility_badge,
     :creators,
-    :version_number,
     :keyword,
     :display_rights,
     :display_work_type,
@@ -35,14 +33,14 @@ class WorkVersionMetadataComponent < ApplicationComponent
   ].freeze
 
   def initialize(work_version:, mini: false)
-    @work_version = decorate(work_version)
+    super(resource: work_version)
     @mini = mini
   end
 
   private
 
     def decorate(work_ver)
-      return work_ver if work_ver.is_a? WorkVersionDecorator
+      return work_ver if work_ver.respond_to?(:display_rights)
 
       WorkVersionDecorator.new(work_ver)
     end
@@ -51,40 +49,7 @@ class WorkVersionMetadataComponent < ApplicationComponent
       mini ? MINI_ATTRIBUTES : ATTRIBUTES
     end
 
-    def attributes
-      attributes_list
-        .map do |attr|
-          label = format_label(attr)
-          value = format_value(work_version.send(attr))
-          [attr, label, value]
-        end
-        .reject { |_attr, _label, val| val.blank? }
-    end
-
     def format_label(attr)
       WorkVersion.human_attribute_name(attr)
-    end
-
-    def format_value(value)
-      if value.is_a? Enumerable
-        value
-          .map { |member| format_value(member) }
-          .compact
-          .map { |member| %(<span class="multiple-member">#{member}</span>) }
-          .join('; ')
-          .html_safe
-      elsif value.respond_to?(:strftime) # Date/Time/DateTime/TimeWithZone etc
-        value.to_formatted_s(:long)
-      elsif value.is_a? Authorship
-        value.display_name
-      elsif value.is_a? ApplicationComponent
-        render value
-      else
-        value.to_s
-      end
-    end
-
-    def css_class(attr)
-      "work-version-#{attr.to_s.gsub('_', '-')}"
     end
 end

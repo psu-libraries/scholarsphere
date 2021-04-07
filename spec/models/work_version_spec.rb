@@ -7,6 +7,8 @@ RSpec.describe WorkVersion, type: :model do
     let(:resource) { create(:work_version) }
   end
 
+  it_behaves_like 'a resource that can provide all DOIs in', [:doi, :identifier]
+
   describe 'table' do
     it { is_expected.to have_db_column(:work_id) }
     it { is_expected.to have_db_index(:work_id) }
@@ -308,6 +310,7 @@ RSpec.describe WorkVersion, type: :model do
 
     its(:to_solr) do
       is_expected.to include(
+        all_dois_ssim: an_instance_of(Array),
         title_tesim: [work_version.title],
         latest_version_bsi: false,
         display_work_type_ssi: Work::Types.display(work_version.work_type),

@@ -81,7 +81,7 @@ Rails.application.routes.draw do
 
     resource :profile, only: %i[edit update]
 
-    resources :works, only: %i[edit update destroy] do
+    resources :works, only: %i[edit update] do
       resources :work_versions, except: [:new], shallow: true do
         get 'file_list', to: 'file_lists#edit'
         put 'file_list', to: 'file_lists#update'
@@ -143,6 +143,8 @@ Rails.application.routes.draw do
       resources :files, only: [:update]
       resources :featured_resources, only: [:create]
       resources :uploads, only: [:create]
+      resources :dois, only: [:index]
+      get '/dois/*doi', to: 'dois#show' # DOIs have a slash ("/") in them, hence the `*`
     end
   end
 
