@@ -164,7 +164,8 @@ class Collection < ApplicationRecord
         PublishedDateSchema,
         FacetSchema,
         WorkTypeSchema,
-        DoiSchema
+        DoiSchema,
+        TitleSchema
       )
     end
 end

@@ -9,6 +9,7 @@ class LatestPublishedVersionSchema < BaseSchema
       .merge(creator_schema.document)
       .merge(published_date_schema.document)
       .merge(facet_schema.document)
+      .merge(title_schema.document)
   end
 
   private
@@ -23,5 +24,9 @@ class LatestPublishedVersionSchema < BaseSchema
 
     def facet_schema
       FacetSchema.new(resource: resource.latest_published_version)
+    end
+
+    def title_schema
+      TitleSchema.new(resource: resource.latest_published_version)
     end
 end

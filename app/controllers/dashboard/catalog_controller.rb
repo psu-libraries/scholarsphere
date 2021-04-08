@@ -59,7 +59,7 @@ module Dashboard
 
       config.add_sort_field 'updated_at_dtsi desc', label: 'most recent'
       config.add_sort_field 'score desc', label: 'relevance'
-      config.add_sort_field 'title_tesim asc', label: 'title'
+      config.add_sort_field 'title_ssort asc', label: 'title'
     end
   end
 end
