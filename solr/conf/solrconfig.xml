@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <config>
   <!-- NOTE: various comments and unused configuration possibilities have been purged
-     from this file.  Please refer to http://wiki.apache.org/solr/SolrConfigXml,
-     as well as the default solrconfig file included with Solr -->
+    from this file.  Please refer to http://wiki.apache.org/solr/SolrConfigXml,
+  as well as the default solrconfig file included with Solr -->
 
   <abortOnConfigurationError>${solr.abortOnConfigurationError:true}</abortOnConfigurationError>
 
@@ -24,76 +24,76 @@
 
   <requestHandler name="search" class="solr.SearchHandler" default="true">
     <!-- default values for query parameters can be specified, these
-         will be overridden by parameters in the request
+      will be overridden by parameters in the request
+    -->
+    <lst name="defaults">
+      <str name="defType">edismax</str>
+      <str name="echoParams">explicit</str>
+      <str name="q.alt">*:*</str>
+      <str name="mm">2&lt;-1 5&lt;-2 6&lt;90%</str>
+      <int name="qs">1</int>
+      <int name="ps">2</int>
+      <float name="tie">0.01</float>
+      <!-- this qf and pf are used by default, if not otherwise specified by
+        client. The default blacklight_config will use these for the
+        "keywords" search. See the creator_qf/creator_pf, title_qf, etc
+        below, which the default blacklight_config will specify for
+        those searches. You may also be interested in:
+        http://wiki.apache.org/solr/LocalParams
       -->
-     <lst name="defaults">
-       <str name="defType">edismax</str>
-       <str name="echoParams">explicit</str>
-       <str name="q.alt">*:*</str>
-       <str name="mm">2&lt;-1 5&lt;-2 6&lt;90%</str>
-       <int name="qs">1</int>
-       <int name="ps">2</int>
-       <float name="tie">0.01</float>
-       <!-- this qf and pf are used by default, if not otherwise specified by
-            client. The default blacklight_config will use these for the
-            "keywords" search. See the author_qf/author_pf, title_qf, etc
-            below, which the default blacklight_config will specify for
-            those searches. You may also be interested in:
-            http://wiki.apache.org/solr/LocalParams
-       -->
-        <str name="qf">
-          id
-          full_title_tsim
-          short_title_tsim
-          alternative_title_tsim
-          active_fedora_model_ssi
-          title_tsim
-          author_tsim
-          subject_tsim
-          all_text_timv
-        </str>
-        <str name="pf">
-          all_text_timv^10
-        </str>
+      <str name="qf">
+        all_dois_ssim
+        based_near_tesim
+        contributor_tesim
+        creators_tesim
+        id
+        identifier_tesim
+        keyword_tesim
+        language_tesim
+        published_date_tesim
+        publisher_tesim
+        rights_tesim
+        source_tesim
+        subject_tesim
+        subtitle_tesim
+        title_tesim
+        work_type_ss
+      </str>
+      <str name="pf">
+        all_text_timv^10
+      </str>
 
-       <str name="author_qf">
-          author_tsim
-       </str>
-       <str name="author_pf">
-       </str>
-       <str name="title_qf">
-          title_tsim
-          full_title_tsim
-          short_title_tsim
-          alternative_title_tsim
-       </str>
-       <str name="title_pf">
-       </str>
-       <str name="subject_qf">
-          subject_tsim
-       </str>
-       <str name="subject_pf">
-       </str>
+      <str name="creator_qf">
+        creators_tesim
+      </str>
+      <str name="creator_pf">
+      </str>
+      <str name="title_qf">
+        title_tesim^10
+        subtitle_tesim
+      </str>
+      <str name="title_pf">
+      </str>
 
-       <str name="fl">
-         *,
-         score
-       </str>
+      <str name="fl">
+        *,
+        score
+      </str>
 
-       <str name="facet">true</str>
-       <str name="facet.mincount">1</str>
-       <str name="facet.limit">10</str>
-       <str name="facet.field">active_fedora_model_ssi</str>
-       <str name="facet.field">subject_ssim</str>
+      <str name="facet">true</str>
+      <str name="facet.mincount">1</str>
+      <str name="facet.limit">10</str>
+      <str name="facet.field">active_fedora_model_ssi</str>
+      <str name="facet.field">subject_ssim</str>
 
-       <str name="spellcheck">true</str>
-       <str name="spellcheck.dictionary">default</str>
-       <str name="spellcheck.onlyMorePopular">true</str>
-       <str name="spellcheck.extendedResults">true</str>
-       <str name="spellcheck.collate">false</str>
-       <str name="spellcheck.count">5</str>
+      <str name="spellcheck">true</str>
+      <str name="spellcheck.dictionary">default</str>
+      <str name="spellcheck.onlyMorePopular">true</str>
+      <str name="spellcheck.extendedResults">true</str>
+      <str name="spellcheck.collate">false</str>
+      <str name="spellcheck.count">5</str>
 
-     </lst>
+    </lst>
     <arr name="last-components">
       <str>spellcheck</str>
     </arr>
@@ -123,10 +123,10 @@
   </requestHandler>
 
   <requestHandler name="standard" class="solr.SearchHandler">
-     <lst name="defaults">
-       <str name="echoParams">explicit</str>
-       <str name="defType">lucene</str>
-     </lst>
+    <lst name="defaults">
+      <str name="echoParams">explicit</str>
+      <str name="defType">lucene</str>
+    </lst>
   </requestHandler>
 
 
@@ -134,7 +134,7 @@
     <str name="queryAnalyzerFieldType">textSpell</str>
     <!-- Multiple "Spell Checkers" can be declared and used by this component
       (e.g. for title_spell field)
-      -->
+    -->
     <lst name="spellchecker">
       <str name="name">default</str>
       <str name="field">spell</str>
@@ -142,9 +142,9 @@
       <str name="buildOnOptimize">true</str>
     </lst>
     <lst name="spellchecker">
-      <str name="name">author</str>
-      <str name="field">author_spell</str>
-      <str name="spellcheckIndexDir">./spell_author</str>
+      <str name="name">creator</str>
+      <str name="field">creator_spell</str>
+      <str name="spellcheckIndexDir">./spell_creator</str>
       <str name="accuracy">0.7</str>
       <str name="buildOnOptimize">true</str>
     </lst>
