@@ -358,6 +358,7 @@ RSpec.describe Work, type: :model do
           subject_sim
           subject_tesim
           subtitle_tesim
+          title_ssort
           title_tesim
           updated_at_dtsi
           uuid_ssi
