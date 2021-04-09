@@ -4,6 +4,7 @@ class TitleSchema < BaseSchema
   STOPWORDS = %w[
     a
     an
+    and
     the
   ].freeze
 
