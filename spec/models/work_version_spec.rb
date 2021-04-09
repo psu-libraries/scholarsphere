@@ -152,11 +152,12 @@ RSpec.describe WorkVersion, type: :model do
     it_behaves_like 'a singlevalued json field', :version_name
   end
 
-  it { is_expected.to delegate_method(:depositor).to(:work) }
-  it { is_expected.to delegate_method(:proxy_depositor).to(:work) }
-  it { is_expected.to delegate_method(:embargoed?).to(:work) }
-  it { is_expected.to delegate_method(:work_type).to(:work) }
   it { is_expected.to delegate_method(:deposited_at).to(:work) }
+  it { is_expected.to delegate_method(:depositor).to(:work) }
+  it { is_expected.to delegate_method(:embargoed?).to(:work) }
+  it { is_expected.to delegate_method(:embargoed_until).to(:work) }
+  it { is_expected.to delegate_method(:proxy_depositor).to(:work) }
+  it { is_expected.to delegate_method(:work_type).to(:work) }
 
   describe 'after save' do
     let(:work_version) { build :work_version, :published }

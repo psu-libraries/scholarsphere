@@ -137,7 +137,11 @@ Rails.application.routes.draw do
     end
   end
 
+  # GraphQL
+  get '/graphiql', to: 'application#graphiql'
+
   namespace :api do
+    post '/public', to: 'public#execute'
     namespace :v1 do
       resources :ingest, only: [:create]
       resources :collections, only: [:create]
