@@ -475,7 +475,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         FeatureHelpers::DashboardForm.publish
 
         expect(SolrIndexingJob).not_to have_received(:perform_now)
-        expect(SolrIndexingJob).not_to have_received(:perform_later)
+        expect(SolrIndexingJob).to have_received(:perform_later).once
 
         expect(page).to have_current_path(dashboard_form_publish_path(work_version))
 

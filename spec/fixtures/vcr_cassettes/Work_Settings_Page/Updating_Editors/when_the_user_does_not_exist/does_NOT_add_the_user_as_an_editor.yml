@@ -19,7 +19,7 @@ http_interactions:
       message: Not Found
     headers:
       Date:
-      - Thu, 25 Feb 2021 19:38:45 GMT
+      - Fri, 09 Apr 2021 18:12:42 GMT
       Content-Type:
       - application/vnd-psu.edu-v1+json
       Content-Length:
@@ -29,21 +29,21 @@ http_interactions:
       X-Content-Security-Policy:
       - frame-ancestors 'none'
       Set-Cookie:
-      - JSESSIONID=vGOYICLf4X3qumKeJbhlDKsPXXGFOX36b1YMR3Er.search-service-7cbccc979b-6n9bd;
+      - JSESSIONID=VAq6dtZVwtAmVCbLKWaeGhHSF1Cvc-p8KfPK6MVa.search-service-7cbccc979b-rzz4b;
         path=/search-service
       X-Request-Id:
-      - 3f1edefecea3592eb6f7533353dd640a
+      - c1d25f9d6ef5e0455afcd6b78e0b6de9
       X-Frame-Options:
       - DENY
       Content-Security-Policy:
       - frame-ancestors 'none'
       Uniqueid:
-      - bf57ead5-2a12-411d-8c59-5054af45cc22
+      - 01c783f9-5a80-4c2b-9094-cc5c01f125d5
       Strict-Transport-Security:
       - max-age=15724800; includeSubDomains
     body:
       encoding: UTF-8
       string: '{"status":{"code":404,"message":"NOT_FOUND"},"errorMessage":["No person
         matched the input userid: iamnotpennstate"],"link":null}'
-  recorded_at: Thu, 25 Feb 2021 19:38:45 GMT
+  recorded_at: Fri, 09 Apr 2021 18:12:42 GMT
 recorded_with: VCR 6.0.0

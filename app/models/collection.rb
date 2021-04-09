@@ -5,10 +5,9 @@ class Collection < ApplicationRecord
   include DepositedAtTimestamp
   include ViewStatistics
   include AllDois
+  include Indexing
 
   fields_with_dois :doi, :identifier
-
-  attr_writer :indexing_source
 
   jsonb_accessor :metadata,
                  title: :string,
@@ -66,8 +65,6 @@ class Collection < ApplicationRecord
                                 reject_if: :all_blank,
                                 allow_destroy: true
   after_initialize :set_defaults
-
-  after_save :perform_update_index
 
   after_destroy { SolrDeleteJob.perform_now(uuid) }
 
@@ -134,10 +131,6 @@ class Collection < ApplicationRecord
     CollectionIndexer.call(self, commit: commit)
   end
 
-  def indexing_source
-    @indexing_source ||= SolrIndexingJob.public_method(:perform_later)
-  end
-
   def work_type
     'collection'
   end
@@ -146,10 +139,6 @@ class Collection < ApplicationRecord
 
     def set_defaults
       self.visibility = Permissions::Visibility::OPEN unless access_controls.any?
-    end
-
-    def perform_update_index
-      indexing_source.call(self)
     end
 
     def strip_blanks_from_array(arr)

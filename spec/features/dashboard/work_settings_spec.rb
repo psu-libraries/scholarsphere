@@ -7,7 +7,20 @@ RSpec.describe 'Work Settings Page', with_user: :user do
   let(:work) { create :work, versions_count: 1, has_draft: false, depositor: user.actor }
 
   before do
-    allow(WorkIndexer).to receive(:call).and_call_original
+    mock_solr_indexing_job
+  end
+
+  # When stepping through each page of the form, we want to test whether the
+  # collection was indexed, and how, based on the buttons that were pressed.
+  # Because there can be multiple of these steps within each test, and because
+  # RSpec mocks _cumulatively_ record the number of times they've been called,
+  # we need a way to say "from this exact point, you should have been called
+  # once." We accomplish this by tearing down the mock and setting it back up.
+  def mock_solr_indexing_job
+    RSpec::Mocks.space.proxy_for(SolrIndexingJob)&.reset
+
+    allow(SolrIndexingJob).to receive(:perform_now).and_call_original
+    allow(SolrIndexingJob).to receive(:perform_later).and_call_original
   end
 
   it 'is available from the resource page' do
@@ -28,13 +41,14 @@ RSpec.describe 'Work Settings Page', with_user: :user do
       )
 
       choose authorized_checkbox_label
+      mock_solr_indexing_job
       click_button I18n.t('dashboard.works.edit.visibility.submit_button')
 
       expect(page).to have_content(I18n.t('dashboard.works.edit.heading', work_title: work.latest_version.title))
 
       work.reload
       expect(work.visibility).to eq Permissions::Visibility::AUTHORIZED
-      expect(WorkIndexer).to have_received(:call)
+      expect(SolrIndexingJob).to have_received(:perform_later).once
     end
   end
 
@@ -46,18 +60,21 @@ RSpec.describe 'Work Settings Page', with_user: :user do
 
     it 'works from the Settings page' do
       fill_in 'embargo_form_embargoed_until', with: '2030-11-11'
+      mock_solr_indexing_job
       click_button I18n.t('dashboard.works.edit.embargo.submit_button')
+      expect(SolrIndexingJob).to have_received(:perform_later).once
 
       expect(page).to have_content(I18n.t('dashboard.works.edit.heading', work_title: work.latest_version.title))
 
       work.reload
       expect(work.embargoed_until).to be_within(1.minute).of(Time.zone.local(2030, 11, 11, 0))
 
+      mock_solr_indexing_job
       click_button I18n.t('dashboard.works.edit.embargo.remove_button')
 
       work.reload
       expect(work.embargoed_until).to be_nil
-      expect(WorkIndexer).to have_received(:call).twice
+      expect(SolrIndexingJob).to have_received(:perform_later).once
     end
   end
 
@@ -97,11 +114,12 @@ RSpec.describe 'Work Settings Page', with_user: :user do
 
         expect(work.edit_users).to be_empty
         fill_in('Edit users', with: 'agw13')
+        mock_solr_indexing_job
         click_button('Update Editors')
 
         work.reload
         expect(work.edit_users.map(&:uid)).to contain_exactly('agw13')
-        expect(WorkIndexer).to have_received(:call)
+        expect(SolrIndexingJob).to have_received(:perform_later).once
       end
     end
 
@@ -114,26 +132,28 @@ RSpec.describe 'Work Settings Page', with_user: :user do
 
         expect(work.edit_users).to contain_exactly(editor)
         fill_in('Edit users', with: '')
+        mock_solr_indexing_job
         click_button('Update Editors')
 
         work.reload
         expect(work.edit_users).to be_empty
-        expect(WorkIndexer).to have_received(:call)
+        expect(SolrIndexingJob).to have_received(:perform_later).once
       end
     end
 
     context 'when the user does not exist' do
       let(:work) { create :work, depositor: user.actor }
 
-      it 'adds a user as an editor' do
+      it 'does NOT add the user as an editor' do
         visit edit_dashboard_work_path(work)
 
         fill_in('Edit users', with: 'iamnotpennstate')
+        mock_solr_indexing_job
         click_button('Update Editors')
 
         work.reload
         expect(work.edit_users).to be_empty
-        expect(WorkIndexer).to have_received(:call)
+        expect(SolrIndexingJob).not_to have_received(:perform_later)
       end
     end
 
@@ -147,11 +167,12 @@ RSpec.describe 'Work Settings Page', with_user: :user do
 
         expect(work.edit_groups).to be_empty
         select(group.name, from: 'Edit groups')
+        mock_solr_indexing_job
         click_button('Update Editors')
 
         work.reload
         expect(work.edit_groups).to contain_exactly(group)
-        expect(WorkIndexer).to have_received(:call)
+        expect(SolrIndexingJob).to have_received(:perform_later).once
       end
     end
   end

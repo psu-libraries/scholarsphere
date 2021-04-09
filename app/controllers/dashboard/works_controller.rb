@@ -4,8 +4,6 @@ module Dashboard
   class WorksController < BaseController
     layout 'frontend'
 
-    after_action :update_index, only: [:update]
-
     def edit
       @undecorated_work = Work.find(params[:id])
       authorize(@undecorated_work)
@@ -27,12 +25,6 @@ module Dashboard
     end
 
     private
-
-      # @note Work indexing is largely handled via the WorkVersion and not the actual work. Placing a callback on the
-      # Work could interfere with that process, so instead we reindex the work directly here in the controller.
-      def update_index
-        WorkIndexer.call(@undecorated_work, commit: true)
-      end
 
       def initialize_forms
         @work = WorkDecorator.new(@undecorated_work)

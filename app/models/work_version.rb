@@ -4,13 +4,13 @@ class WorkVersion < ApplicationRecord
   include AASM
   include ViewStatistics
   include AllDois
+  include Indexing
 
   fields_with_dois :doi, :identifier
 
   has_paper_trail
 
-  attr_writer :indexing_source,
-              :reload_on_index
+  attr_writer :reload_on_index
 
   jsonb_accessor :metadata,
                  title: :string,
@@ -139,8 +139,6 @@ class WorkVersion < ApplicationRecord
             presence: true,
             if: :published?
 
-  after_save :perform_update_index
-
   attr_accessor :force_destroy
 
   # Do not allow pubilshed works to be destroyed, unless specially flagged by
@@ -252,10 +250,6 @@ class WorkVersion < ApplicationRecord
     WorkIndexer.call(work, commit: commit, reload: reload_on_index)
   end
 
-  def indexing_source
-    @indexing_source ||= SolrIndexingJob.public_method(:perform_later)
-  end
-
   def reload_on_index
     @reload_on_index ||= false
   end
@@ -263,10 +257,6 @@ class WorkVersion < ApplicationRecord
   delegate :depositor, :proxy_depositor, :visibility, :embargoed?, :work_type, :deposited_at, to: :work
 
   private
-
-    def perform_update_index
-      indexing_source.call(self)
-    end
 
     def strip_blanks_from_array(arr)
       Array.wrap(arr).reject(&:blank?)

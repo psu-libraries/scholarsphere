@@ -4,6 +4,7 @@ class Work < ApplicationRecord
   include Permissions
   include DepositedAtTimestamp
   include AllDois
+  include Indexing
 
   fields_with_dois :doi
 
