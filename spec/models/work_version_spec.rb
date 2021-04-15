@@ -114,6 +114,28 @@ RSpec.describe WorkVersion, type: :model do
         expect(work_version).to allow_value('1999-uu-uu').for(:published_date)
         expect(work_version).not_to allow_value('not an EDTF formatted date').for(:published_date)
       end
+
+      context 'when publishing an idential work version' do
+        subject(:work_version) { BuildNewWorkVersion.call(work.versions[0]) }
+
+        let(:work) { create(:work, has_draft: false) }
+
+        it 'validates if the new version is identical to the previous one' do
+          work_version.validate
+          expect(work_version.errors[:work_version]).to eq(['is the same as the previous version'])
+        end
+      end
+
+      context 'when publishing an idential third work version' do
+        subject(:work_version) { BuildNewWorkVersion.call(work.versions[1]) }
+
+        let(:work) { create(:work, has_draft: false, versions_count: 2) }
+
+        it 'validates if the new version is identical to the previous one' do
+          work_version.validate
+          expect(work_version.errors[:work_version]).to eq(['is the same as the previous version'])
+        end
+      end
     end
 
     context 'with the version number' do
