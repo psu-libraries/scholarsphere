@@ -43,10 +43,6 @@ module Dashboard
             max_documents: 10_000
           )
         end
-
-        def redirect_upon_success
-          redirect_to dashboard_root_path, notice: 'Collection was updated successfully'
-        end
     end
   end
 end
