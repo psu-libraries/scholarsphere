@@ -486,6 +486,7 @@ en:
       home: 'Welcome to ScholarSphere'
       not_found: 'Page Not Found'
       server_error: 'Server Error'
+      graphql: 'GraphQL'
   resources:
     analytics: Analytics
     collections: Collections
