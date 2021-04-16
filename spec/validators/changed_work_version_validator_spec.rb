@@ -49,4 +49,18 @@ RSpec.describe ChangedWorkVersionValidator, type: :validator do
       expect(new_version.errors).to be_empty
     end
   end
+
+  context 'when changing the authorship' do
+    before do
+      new_version.save
+      new_version.reload
+      new_version.creators.first.update(display_name: Faker::Name.name)
+      validator.validate(new_version)
+    end
+
+    specify do
+      expect(old_version.creators.first.display_name).not_to eq(new_version.creators.first.display_name)
+      expect(new_version.errors).to be_empty
+    end
+  end
 end

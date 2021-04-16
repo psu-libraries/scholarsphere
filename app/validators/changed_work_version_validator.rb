@@ -20,7 +20,8 @@ class ChangedWorkVersionValidator < ActiveModel::Validator
       return false if previous_version.nil?
 
       (work_version.file_resources == previous_version.file_resources) &&
-        (metadata_token == metadata_token(previous_version))
+        (metadata_token == metadata_token(previous_version)) &&
+        (creators_token == creators_token(previous_version))
     end
 
     def previous_version
@@ -42,5 +43,23 @@ class ChangedWorkVersionValidator < ActiveModel::Validator
           .sort
           .join
       )
+    end
+
+    def creators_token(version = nil)
+      version ||= work_version
+
+      Digest::MD5.hexdigest(
+        version
+          .creators
+          .map { |creator| stringify(creator) }
+          .join
+      )
+    end
+
+    def stringify(creator)
+      creator
+        .attributes
+        .fetch_values('display_name', 'surname', 'given_name', 'email', 'position')
+        .join
     end
 end
