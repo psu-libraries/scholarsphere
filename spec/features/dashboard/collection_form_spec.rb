@@ -201,7 +201,7 @@ RSpec.describe 'Creating and editing collections', :inline_jobs, with_user: :use
       FeatureHelpers::DashboardForm.finish
       expect(SolrIndexingJob).to have_received(:perform_now).once
 
-      expect(page).to have_content('Collection was updated successfully')
+      expect(page).to have_content('Collection was successfully updated')
       expect(collection.works).to be_empty
     end
   end

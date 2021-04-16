@@ -49,8 +49,12 @@ module Dashboard
         end
 
         def redirect_upon_success
-          if save_and_exit?
-            redirect_to resource_path(@resource.uuid), notice: "#{@resource.model_name.human} was successfully updated."
+          if save_and_exit? || finish?
+            redirect_to resource_path(@resource.uuid),
+                        notice: I18n.t('dashboard.form.notices.success', resource: @resource.model_name.human)
+          elsif publish?
+            redirect_to resource_path(@resource.work.uuid),
+                        notice: I18n.t('dashboard.form.notices.publish')
           else
             redirect_to next_page_path
           end

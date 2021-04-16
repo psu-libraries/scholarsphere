@@ -533,8 +533,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
       work = Work.last
       version = work.versions.first
 
-      expect(page).to have_selector('h3', text: version.title)
-      expect(page).to have_selector('span.badge--content', text: 'PUBLISHED')
+      expect(page).to have_current_path(resource_path(work.uuid))
+      expect(page).to have_selector('h1', text: version.title)
 
       expect(version).to be_published
       expect(work.visibility).to eq(Permissions::Visibility::OPEN)
@@ -589,8 +589,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
       work = Work.last
       version = work.versions.first
 
-      expect(page).to have_selector('h3', text: version.title)
-      expect(page).to have_selector('span.badge--content', text: 'PUBLISHED')
+      expect(page).to have_current_path(resource_path(work.uuid))
+      expect(page).to have_selector('h1', text: version.title)
 
       expect(version).to be_published
       expect(work.visibility).to eq(Permissions::Visibility::AUTHORIZED)

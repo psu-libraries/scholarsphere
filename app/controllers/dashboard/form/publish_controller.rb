@@ -56,15 +56,6 @@ module Dashboard
           resource.aasm_state = initial_state
         end
 
-        def redirect_upon_success
-          notice = if publish?
-                     'Successfully published work!'
-                   else
-                     'Work version was successfully updated.'
-                   end
-          redirect_to dashboard_root_path, notice: notice
-        end
-
         def work_version_params
           params
             .require(:work_version)

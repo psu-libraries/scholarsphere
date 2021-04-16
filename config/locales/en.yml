@@ -324,11 +324,15 @@ en:
           draft: Draft
           work_version: Version
           confirm: "Are you sure you want to delete this %{type}? This cannot be undone."
+      notices:
+        success: "%{resource} was successfully updated."
+        publish: Successfully published work!
       details:
         about_collections: 
           label: About Collections
           message: >
-            Collections provide additional context for your related work. For example, a research group can use a collection to organize published reports and datasets.
+            Collections provide additional context for your related work. For example, a research group can use a
+            collection to organize published reports and datasets.
         required_metadata: Required Metadata
         required_to_publish_metadata: Needed to Publish
         additional_metadata: Optional Metadata
