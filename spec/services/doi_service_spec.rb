@@ -120,6 +120,7 @@ RSpec.describe DoiService do
         allow(work).to receive(:latest_version).and_return(latest_work_version)
         allow(work).to receive(:update_attribute)
         allow(work).to receive(:valid?).and_return(true)
+        allow(work).to receive(:update_index)
       end
 
       context "when the Work's doi field is empty" do
@@ -131,12 +132,14 @@ RSpec.describe DoiService do
           it 'registers a new doi' do
             call_service
             expect(client_mock).to have_received(:register)
+            expect(work).to have_received(:update_index)
           end
 
           it 'saves the doi on the Work db record' do
             allow(client_mock).to receive(:register).and_return(['new/doi', { some: :metadata }])
             call_service
             expect(work).to have_received(:update_attribute).with(:doi, 'new/doi')
+            expect(work).to have_received(:update_index)
           end
         end
 
@@ -157,12 +160,14 @@ RSpec.describe DoiService do
               doi: nil,
               metadata: { mocked: :metadata }
             )
+            expect(work).to have_received(:update_index)
           end
 
           it 'saves the doi on the Work db record' do
             allow(client_mock).to receive(:publish).and_return(['new/doi', { some: :metadata }])
             call_service
             expect(work).to have_received(:update_attribute).with(:doi, 'new/doi')
+            expect(work).to have_received(:update_index)
           end
         end
       end
@@ -177,6 +182,7 @@ RSpec.describe DoiService do
             call_service
             expect(client_mock).not_to have_received(:register)
             expect(client_mock).not_to have_received(:publish)
+            expect(work).not_to have_received(:update_index)
           end
         end
 
@@ -202,6 +208,7 @@ RSpec.describe DoiService do
           it 'does not update the Work db record' do
             call_service
             expect(work).not_to have_received(:update_attribute)
+            expect(work).not_to have_received(:update_index)
           end
         end
       end

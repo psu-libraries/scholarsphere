@@ -72,15 +72,23 @@ module DoiService
       when !has_doi_already && is_draft
         doi = register_new_doi
         resource.update_attribute(:doi, doi)
+        update_index
       when !has_doi_already && !is_draft
         doi = publish_doi(doi: nil)
         resource.update_attribute(:doi, doi)
+        update_index
       when has_doi_already && is_draft
         # No-op
       when has_doi_already && !is_draft
         publish_doi(doi: resource.doi)
         # No need to update resource
       end
+    end
+
+    def update_index
+      return unless resource.is_a? Work
+
+      resource.update_index
     end
 
     def client_source
