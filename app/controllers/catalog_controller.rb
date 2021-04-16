@@ -196,6 +196,7 @@ class CatalogController < ApplicationController
     # except in the relevancy case).
     config.add_sort_field 'score desc, deposited_at_dtsi desc', label: 'relevance'
     config.add_sort_field 'title_ssort asc', label: 'title'
+    config.add_sort_field 'deposited_at_dtsi desc', label: 'deposit date'
 
     # If there are more than this many search results, no spelling ("did you
     # mean") suggestion is offered.
