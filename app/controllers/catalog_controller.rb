@@ -182,23 +182,11 @@ class CatalogController < ApplicationController
       }
     end
 
-    config.add_search_field('author') do |field|
+    config.add_search_field('creator') do |field|
       field.solr_parameters = {
-        'spellcheck.dictionary': 'author',
-        qf: '${author_qf}',
-        pf: '${author_pf}'
-      }
-    end
-
-    # Specifying a :qt only to show it's possible, and so our internal automated
-    # tests can test it. In this case it's the same as
-    # config[:default_solr_parameters][:qt], so isn't actually neccesary.
-    config.add_search_field('subject') do |field|
-      field.qt = 'search'
-      field.solr_parameters = {
-        'spellcheck.dictionary': 'subject',
-        qf: '${subject_qf}',
-        pf: '${subject_pf}'
+        'spellcheck.dictionary': 'creator',
+        qf: '${creator_qf}',
+        pf: '${creator_pf}'
       }
     end
 
@@ -207,7 +195,8 @@ class CatalogController < ApplicationController
     # whether the sort is ascending or descending (it must be asc or desc
     # except in the relevancy case).
     config.add_sort_field 'score desc, deposited_at_dtsi desc', label: 'relevance'
-    config.add_sort_field 'title_tesim asc', label: 'title'
+    config.add_sort_field 'title_ssort asc', label: 'title'
+    config.add_sort_field 'deposited_at_dtsi desc', label: 'deposit date'
 
     # If there are more than this many search results, no spelling ("did you
     # mean") suggestion is offered.

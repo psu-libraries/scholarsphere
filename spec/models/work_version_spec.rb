@@ -114,6 +114,28 @@ RSpec.describe WorkVersion, type: :model do
         expect(work_version).to allow_value('1999-uu-uu').for(:published_date)
         expect(work_version).not_to allow_value('not an EDTF formatted date').for(:published_date)
       end
+
+      context 'when publishing an idential work version' do
+        subject(:work_version) { BuildNewWorkVersion.call(work.versions[0]) }
+
+        let(:work) { create(:work, has_draft: false) }
+
+        it 'validates if the new version is identical to the previous one' do
+          work_version.validate
+          expect(work_version.errors[:work_version]).to eq(['is the same as the previous version'])
+        end
+      end
+
+      context 'when publishing an idential third work version' do
+        subject(:work_version) { BuildNewWorkVersion.call(work.versions[1]) }
+
+        let(:work) { create(:work, has_draft: false, versions_count: 2) }
+
+        it 'validates if the new version is identical to the previous one' do
+          work_version.validate
+          expect(work_version.errors[:work_version]).to eq(['is the same as the previous version'])
+        end
+      end
     end
 
     context 'with the version number' do
@@ -152,11 +174,12 @@ RSpec.describe WorkVersion, type: :model do
     it_behaves_like 'a singlevalued json field', :version_name
   end
 
-  it { is_expected.to delegate_method(:depositor).to(:work) }
-  it { is_expected.to delegate_method(:proxy_depositor).to(:work) }
-  it { is_expected.to delegate_method(:embargoed?).to(:work) }
-  it { is_expected.to delegate_method(:work_type).to(:work) }
   it { is_expected.to delegate_method(:deposited_at).to(:work) }
+  it { is_expected.to delegate_method(:depositor).to(:work) }
+  it { is_expected.to delegate_method(:embargoed?).to(:work) }
+  it { is_expected.to delegate_method(:embargoed_until).to(:work) }
+  it { is_expected.to delegate_method(:proxy_depositor).to(:work) }
+  it { is_expected.to delegate_method(:work_type).to(:work) }
 
   describe 'after save' do
     let(:work_version) { build :work_version, :published }
@@ -311,6 +334,7 @@ RSpec.describe WorkVersion, type: :model do
     its(:to_solr) do
       is_expected.to include(
         all_dois_ssim: an_instance_of(Array),
+        title_ssort: kind_of(String),
         title_tesim: [work_version.title],
         latest_version_bsi: false,
         display_work_type_ssi: Work::Types.display(work_version.work_type),

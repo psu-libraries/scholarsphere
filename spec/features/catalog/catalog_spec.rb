@@ -119,6 +119,26 @@ RSpec.describe 'Blacklight catalog page', :inline_jobs do
     expect(page).to have_css('td.work-version-subtitle', text: work_version.subtitle)
   end
 
+  context 'when searching specific fields' do
+    it 'searches by title' do
+      visit search_catalog_path
+      select('Title', from: 'search_field')
+      fill_in('q', with: work_version.title.split(' ').sample)
+      click_button('search')
+
+      expect(page).to have_content(work_version.title)
+    end
+
+    it 'searches by creator' do
+      visit search_catalog_path
+      select('Creator', from: 'search_field')
+      fill_in('q', with: work_version.creators[0].display_name.split(' ').sample)
+      click_button('search')
+
+      expect(page).to have_content(work_version.title)
+    end
+  end
+
   context 'when the search returns no results' do
     it 'displays no search results', with_user: :user do
       visit(search_catalog_path(q: 'asdfasdfasdfasdfasdfasdfasdf'))

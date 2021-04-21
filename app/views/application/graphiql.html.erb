@@ -1,0 +1,8 @@
+<% content_for :navbar_heading do %>
+  <h1 class="navbar-brand navbar-brand--center slab-font"><%= t('navbar.heading.graphql') %></h1>
+<% end %>
+
+<div style="height: 100vh; width: 100vw; margin: 0;"
+     data-controller="graphiql"
+     data-graphiql-endpoint="<%= api_public_path %>">
+</div>

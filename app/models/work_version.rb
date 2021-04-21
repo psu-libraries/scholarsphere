@@ -139,6 +139,9 @@ class WorkVersion < ApplicationRecord
             presence: true,
             if: :published?
 
+  validates_with ChangedWorkVersionValidator,
+                 if: :published?
+
   after_save :perform_update_index
 
   attr_accessor :force_destroy
@@ -260,7 +263,13 @@ class WorkVersion < ApplicationRecord
     @reload_on_index ||= false
   end
 
-  delegate :depositor, :proxy_depositor, :visibility, :embargoed?, :work_type, :deposited_at, to: :work
+  delegate :deposited_at,
+           :depositor,
+           :embargoed?,
+           :embargoed_until,
+           :proxy_depositor,
+           :visibility,
+           :work_type, to: :work
 
   private
 
@@ -279,7 +288,8 @@ class WorkVersion < ApplicationRecord
         CreatorSchema,
         PublishedDateSchema,
         FacetSchema,
-        DoiSchema
+        DoiSchema,
+        TitleSchema
       )
     end
 end
