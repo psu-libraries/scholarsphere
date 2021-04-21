@@ -42,6 +42,7 @@ function drawChart (selection, data) {
     .ticks(5)
     .tickSizeOuter(0)
     .tickSizeInner(4)
+    .tickFormat(multiFormat)
 
   const line = d3.line()
     .x(d => x(d[0]))
@@ -149,4 +150,32 @@ function hideOverflowingTickLabels (svg, tickTextSelection) {
       return (tickLeft < svgLeft || svgRight < tickRight)
     })
     .style('visibility', 'hidden')
+}
+
+/**
+ * Custom multi-format override for the x-axis (time/date) tick labels.
+ *
+ * This is used to fix some rendering issues encountered when using the default tick formatter.
+ *
+ * Based on example from https://github.com/d3/d3-time-format#d3-time-format
+ * @param {Date} date
+ * @returns {String} Formatted string representation of the date
+ */
+export default function multiFormat (date) {
+  const formatMillisecond = d3.timeFormat('.%L')
+  const formatSecond = d3.timeFormat(':%S')
+  const formatMinute = d3.timeFormat('%I:%M')
+  const formatHour = d3.timeFormat('%I %p')
+  const formatDay = d3.timeFormat('%a %d')
+  const formatWeek = d3.timeFormat('%b %d')
+  const formatMonth = d3.timeFormat('%b')
+  const formatYear = d3.timeFormat('%Y')
+
+  return (d3.timeSecond(date) < date ? formatMillisecond
+    : d3.timeMinute(date) < date ? formatSecond
+      : d3.timeHour(date) < date ? formatMinute
+        : d3.timeDay(date) < date ? formatHour
+          : d3.timeMonth(date) < date ? (d3.timeWeek(date) < date ? formatDay : formatWeek)
+            : d3.timeYear(date) < date ? formatMonth
+              : formatYear)(date)
 }
