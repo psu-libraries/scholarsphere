@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
-class NullWorkVersion
+class NullActor
   include NullObjectPattern
 end

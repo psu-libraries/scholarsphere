@@ -31,4 +31,22 @@ RSpec.describe ExternalApp, type: :model do
     its(:token) { is_expected.to eq(app.api_tokens.first.token) }
     its(:contact_email) { is_expected.to eq(Rails.configuration.no_reply_email) }
   end
+
+  describe '#access_id' do
+    subject(:application) { build(:external_app) }
+
+    its(:access_id) { is_expected.to eq(application.name) }
+  end
+
+  describe '#guest?' do
+    it { is_expected.not_to be_guest }
+  end
+
+  describe '#admin?' do
+    it { is_expected.to be_admin }
+  end
+
+  describe '#actor' do
+    its(:actor) { is_expected.to be_a(NullActor) }
+  end
 end

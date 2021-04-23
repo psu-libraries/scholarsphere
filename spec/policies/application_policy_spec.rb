@@ -14,6 +14,12 @@ RSpec.describe ApplicationPolicy, type: :policy do
       it { is_expected.to permit(user, record) }
     end
 
+    context 'with an external application' do
+      let(:user) { build(:external_app) }
+
+      it { is_expected.to permit(user, record) }
+    end
+
     context 'with an authenticated user' do
       let(:user) { build(:user) }
 
@@ -34,6 +40,12 @@ RSpec.describe ApplicationPolicy, type: :policy do
       let(:user) { UserDecorator.new(build(:user)) }
 
       its(:user) { is_expected.to be_a(User) }
+    end
+
+    context 'with an ExternalApp' do
+      let(:user) { build(:external_app) }
+
+      its(:user) { is_expected.to be_an(ExternalApp) }
     end
   end
 

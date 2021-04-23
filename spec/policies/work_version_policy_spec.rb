@@ -74,6 +74,12 @@ RSpec.describe WorkVersionPolicy, type: :policy do
 
         it { is_expected.to permit(user, work_version) }
       end
+
+      context 'with an external application' do
+        let(:user) { build(:external_app) }
+
+        it { is_expected.to permit(user, work_version) }
+      end
     end
   end
 
@@ -83,6 +89,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
     let(:edit_user) { build(:user) }
     let(:other) { build(:user) }
     let(:admin) { build(:user, :admin) }
+    let(:application) { build(:external_app) }
 
     context 'with a draft version' do
       let(:work) do
@@ -94,6 +101,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
       it { is_expected.to permit(edit_user, work_version) }
       it { is_expected.not_to permit(other, work_version) }
       it { is_expected.to permit(admin, work_version) }
+      it { is_expected.to permit(application, work_version) }
     end
 
     context 'with a published version' do
@@ -106,6 +114,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
       it { is_expected.not_to permit(edit_user, work_version) }
       it { is_expected.not_to permit(other, work_version) }
       it { is_expected.not_to permit(admin, work_version) }
+      it { is_expected.not_to permit(application, work_version) }
     end
   end
 
@@ -115,6 +124,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
     let(:edit_user) { build(:user) }
     let(:other) { build(:user) }
     let(:admin) { build(:user, :admin) }
+    let(:application) { build(:external_app) }
 
     context 'with a draft version that has NOT been persisted' do
       let(:work) do
@@ -130,6 +140,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
       it { is_expected.not_to permit(edit_user, work_version) }
       it { is_expected.not_to permit(other, work_version) }
       it { is_expected.not_to permit(admin, work_version) }
+      it { is_expected.not_to permit(application, work_version) }
     end
 
     context 'with a draft version' do
@@ -142,6 +153,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
       it { is_expected.to permit(edit_user, work_version) }
       it { is_expected.not_to permit(other, work_version) }
       it { is_expected.to permit(admin, work_version) }
+      it { is_expected.to permit(application, work_version) }
     end
 
     context 'with the latest published version' do
@@ -154,6 +166,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
       it { is_expected.not_to permit(edit_user, work_version) }
       it { is_expected.not_to permit(other, work_version) }
       it { is_expected.to permit(admin, work_version) }
+      it { is_expected.to permit(application, work_version) }
     end
 
     context 'with a published version that is NOT the latest' do
@@ -168,6 +181,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
       it { is_expected.not_to permit(edit_user, work_version) }
       it { is_expected.not_to permit(other, work_version) }
       it { is_expected.not_to permit(admin, work_version) }
+      it { is_expected.not_to permit(application, work_version) }
     end
   end
 
@@ -177,6 +191,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
     let(:edit_user) { build(:user) }
     let(:other) { build(:user) }
     let(:admin) { build(:user, :admin) }
+    let(:application) { build(:external_app) }
     let(:guest) { User.guest }
 
     let(:work_version) { work.latest_version }
@@ -189,6 +204,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
       it { is_expected.to permit(edit_user, work_version) }
       it { is_expected.to permit(other, work_version) }
       it { is_expected.to permit(admin, work_version) }
+      it { is_expected.to permit(application, work_version) }
       it { is_expected.to permit(guest, work_version) }
     end
 
@@ -199,99 +215,87 @@ RSpec.describe WorkVersionPolicy, type: :policy do
       it { is_expected.to permit(proxy, work_version) }
       it { is_expected.to permit(edit_user, work_version) }
       it { is_expected.to permit(admin, work_version) }
+      it { is_expected.to permit(application, work_version) }
       it { is_expected.not_to permit(other, work_version) }
       it { is_expected.not_to permit(guest, work_version) }
     end
   end
 
   permissions :download? do
+    let(:depositor) { work_version.depositor.user }
+    let(:proxy) { build(:user) }
+    let(:edit_user) { build(:user) }
+    let(:other) { build(:user) }
+    let(:admin) { build(:user, :admin) }
+    let(:application) { build(:external_app) }
+    let(:guest) { User.guest }
+
     let(:work_version) { work.latest_version }
 
-    context 'with a public user' do
-      let(:user) { User.guest }
+    context 'with a published, publicly readable work' do
+      let(:work) { create(:work, has_draft: false, proxy_depositor: proxy.actor, edit_users: [edit_user]) }
 
-      context 'with a published, publicly readable work' do
-        let(:work) { create(:work, has_draft: false) }
-
-        it { is_expected.to permit(user, work_version) }
-      end
-
-      context 'with a publicly discoverable work' do
-        let(:work) { create(:work, :with_authorized_access, discover_groups: [Group.public_agent]) }
-
-        it { is_expected.not_to permit(user, work_version) }
-      end
-
-      context 'with a Penn State work' do
-        let(:work) { create(:work, :with_authorized_access, has_draft: false) }
-
-        it { is_expected.not_to permit(user, work_version) }
-      end
-
-      context 'with an embargoed public work' do
-        let(:work) { create(:work, embargoed_until: (Time.zone.now + 6.days), has_draft: false) }
-
-        it { is_expected.not_to permit(user, work_version) }
-      end
-
-      context 'with a draft work' do
-        let(:work) { create(:work, has_draft: true) }
-
-        it { is_expected.not_to permit(user, work_version) }
-      end
+      it { is_expected.to permit(depositor, work_version) }
+      it { is_expected.to permit(proxy, work_version) }
+      it { is_expected.to permit(edit_user, work_version) }
+      it { is_expected.to permit(other, work_version) }
+      it { is_expected.to permit(admin, work_version) }
+      it { is_expected.to permit(application, work_version) }
+      it { is_expected.to permit(guest, work_version) }
     end
 
-    context 'with an authenticated user' do
-      let(:me) { build(:user) }
-      let(:someone_else) { build(:user) }
+    context 'with a publicly discoverable work' do
+      let(:work) { create(:work, :with_authorized_access, has_draft: false, discover_groups: [Group.public_agent]) }
 
-      context 'with a published, publicly readable work' do
-        let(:work) { create(:work, has_draft: false, depositor: someone_else.actor) }
+      it { is_expected.to permit(depositor, work_version) }
+      it { is_expected.to permit(proxy, work_version) }
+      it { is_expected.to permit(edit_user, work_version) }
+      it { is_expected.to permit(other, work_version) }
+      it { is_expected.to permit(admin, work_version) }
+      it { is_expected.to permit(application, work_version) }
+      it { is_expected.not_to permit(guest, work_version) }
+    end
 
-        it { is_expected.to permit(me, work_version) }
+    context 'with a Penn State work' do
+      let(:work) { create(:work, :with_authorized_access, has_draft: false) }
+
+      it { is_expected.to permit(depositor, work_version) }
+      it { is_expected.to permit(proxy, work_version) }
+      it { is_expected.to permit(edit_user, work_version) }
+      it { is_expected.to permit(other, work_version) }
+      it { is_expected.to permit(admin, work_version) }
+      it { is_expected.to permit(application, work_version) }
+      it { is_expected.not_to permit(guest, work_version) }
+    end
+
+    context 'with an embargoed public work' do
+      let(:work) do
+        create :work,
+               has_draft: false,
+               embargoed_until: (Time.zone.now + 6.days),
+               edit_users: [edit_user],
+               proxy_depositor: proxy.actor
       end
 
-      context 'with a Penn State work' do
-        let(:work) { create(:work, :with_authorized_access, has_draft: false, depositor: someone_else.actor) }
+      it { is_expected.to permit(depositor, work_version) }
+      it { is_expected.to permit(proxy, work_version) }
+      it { is_expected.to permit(edit_user, work_version) }
+      it { is_expected.not_to permit(other, work_version) }
+      it { is_expected.to permit(admin, work_version) }
+      it { is_expected.to permit(application, work_version) }
+      it { is_expected.not_to permit(guest, work_version) }
+    end
 
-        it { is_expected.to permit(me, work_version) }
-      end
+    context 'with a draft work' do
+      let(:work) { create(:work, proxy_depositor: proxy.actor, edit_users: [edit_user]) }
 
-      context 'with a draft version I deposited' do
-        let(:work) { create(:work, depositor: me.actor) }
-
-        it { is_expected.to permit(me, work_version) }
-      end
-
-      context 'with a draft version I did NOT deposit' do
-        let(:work) { build(:work, depositor: someone_else.actor) }
-
-        it { is_expected.not_to permit(me, work_version) }
-      end
-
-      context 'with an embargoed public work' do
-        let(:work) { create(:work, has_draft: false, depositor: someone_else.actor, embargoed_until: (Time.zone.now + 6.days)) }
-
-        it { is_expected.not_to permit(me, work_version) }
-      end
-
-      context 'with an embargoed work I deposited' do
-        let(:work) { create(:work, has_draft: false, depositor: me.actor, embargoed_until: (Time.zone.now + 6.days)) }
-
-        it { is_expected.to permit(me, work_version) }
-      end
-
-      context 'with an embargoed work editable by me' do
-        let(:work) do
-          create :work,
-                 has_draft: false,
-                 depositor: someone_else.actor,
-                 embargoed_until: (Time.zone.now + 6.days),
-                 edit_users: [me]
-        end
-
-        it { is_expected.to permit(me, work_version) }
-      end
+      it { is_expected.to permit(depositor, work_version) }
+      it { is_expected.to permit(proxy, work_version) }
+      it { is_expected.to permit(edit_user, work_version) }
+      it { is_expected.not_to permit(other, work_version) }
+      it { is_expected.to permit(admin, work_version) }
+      it { is_expected.to permit(application, work_version) }
+      it { is_expected.not_to permit(guest, work_version) }
     end
   end
 
