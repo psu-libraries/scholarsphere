@@ -13,6 +13,8 @@ class ExternalApp < ApplicationRecord
   validates :contact_email,
             presence: true
 
+  alias_attribute :access_id, :name
+
   class MetadataListener
     NAME = 'Metadata Listener'
 
@@ -32,15 +34,19 @@ class ExternalApp < ApplicationRecord
     api_tokens.first.token
   end
 
-  # @note This is used in work histories, which (typically) display the names of users who have made changes to a work.
-  # If this pattern goes beyond here, it would be a good idea to refactor it into a decorator.
-  def access_id
-    name
-  end
-
-  # @note ExternalApp and User need to behave in similar ways. This could be extracted into a decorator. See above note
-  # for #access_id.
   def guest?
     false
+  end
+
+  # @note For all intensive purposes, external applications have admin rights: they aren't limited in what they can do.
+  # This may change later, giving them access controls or other mechanisms, which is a more involved process.
+  def admin?
+    true
+  end
+
+  # @note External applications cannot have associated actors. They are neither depositors nor proxies. However,
+  # they due behave like users, so they need a method that respond accordingly.
+  def actor
+    @actor ||= NullActor.new
   end
 end

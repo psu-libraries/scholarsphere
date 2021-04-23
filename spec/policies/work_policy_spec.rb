@@ -14,6 +14,7 @@ RSpec.describe WorkPolicy, type: :policy do
   let(:other_user) { build_stubbed :user }
   let(:public) { User.guest }
   let(:admin) { create(:user, :admin) }
+  let(:application) { create(:external_app) }
 
   permissions :show? do
     context 'with a public work' do
@@ -32,6 +33,7 @@ RSpec.describe WorkPolicy, type: :policy do
       it { is_expected.to permit(other_user, work) }
       it { is_expected.to permit(public, work) }
       it { is_expected.to permit(admin, work) }
+      it { is_expected.to permit(application, work) }
     end
 
     context 'with a restricted work' do
@@ -50,6 +52,7 @@ RSpec.describe WorkPolicy, type: :policy do
       it { is_expected.not_to permit(other_user, work) }
       it { is_expected.not_to permit(public, work) }
       it { is_expected.to permit(admin, work) }
+      it { is_expected.to permit(application, work) }
     end
 
     context 'with a draft work' do
@@ -68,6 +71,7 @@ RSpec.describe WorkPolicy, type: :policy do
       it { is_expected.not_to permit(other_user, work) }
       it { is_expected.not_to permit(public, work) }
       it { is_expected.not_to permit(admin, work) }
+      it { is_expected.not_to permit(application, work) }
     end
 
     context 'with a withdrawn work' do
@@ -86,6 +90,7 @@ RSpec.describe WorkPolicy, type: :policy do
       it { is_expected.not_to permit(other_user, work) }
       it { is_expected.not_to permit(public, work) }
       it { is_expected.not_to permit(admin, work) }
+      it { is_expected.not_to permit(application, work) }
     end
   end
 
@@ -105,6 +110,7 @@ RSpec.describe WorkPolicy, type: :policy do
     it { is_expected.not_to permit(other_user, work) }
     it { is_expected.not_to permit(public, work) }
     it { is_expected.to permit(admin, work) }
+    it { is_expected.to permit(application, work) }
   end
 
   permissions :create_version? do
@@ -124,6 +130,7 @@ RSpec.describe WorkPolicy, type: :policy do
       it { is_expected.not_to permit(other_user, work) }
       it { is_expected.not_to permit(public, work) }
       it { is_expected.not_to permit(admin, work) }
+      it { is_expected.not_to permit(application, work) }
     end
 
     context 'when no draft exists' do
@@ -142,6 +149,7 @@ RSpec.describe WorkPolicy, type: :policy do
       it { is_expected.not_to permit(other_user, work) }
       it { is_expected.not_to permit(public, work) }
       it { is_expected.to permit(admin, work) }
+      it { is_expected.to permit(application, work) }
     end
 
     context 'when the work is withdrawn' do
@@ -160,6 +168,7 @@ RSpec.describe WorkPolicy, type: :policy do
       it { is_expected.not_to permit(other_user, work) }
       it { is_expected.not_to permit(public, work) }
       it { is_expected.to permit(admin, work) }
+      it { is_expected.to permit(application, work) }
     end
   end
 
@@ -181,6 +190,7 @@ RSpec.describe WorkPolicy, type: :policy do
       it { is_expected.not_to permit(other_user, work) }
       it { is_expected.not_to permit(public, work) }
       it { is_expected.to permit(admin, work) }
+      it { is_expected.to permit(application, work) }
     end
 
     context 'when no published version exists' do
@@ -200,6 +210,7 @@ RSpec.describe WorkPolicy, type: :policy do
       it { is_expected.not_to permit(other_user, work) }
       it { is_expected.not_to permit(public, work) }
       it { is_expected.not_to permit(admin, work) }
+      it { is_expected.not_to permit(application, work) }
     end
   end
 end
