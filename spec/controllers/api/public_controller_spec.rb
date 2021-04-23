@@ -39,6 +39,31 @@ RSpec.describe Api::PublicController, type: :controller do
       end
     end
 
+    context 'when querying for authenticated-only content' do
+      let!(:api_key) { create :api_token }
+      let(:resource) { create(:work, :with_authorized_access, has_draft: false) }
+      let(:query) do
+        <<-QUERY
+          {
+            work(id: "#{resource.uuid}") {
+              files {
+                filename
+              }
+            }
+          }
+        QUERY
+      end
+
+      before do
+        request.headers[:'X-API-Key'] = api_key.token
+        post :execute, params: { query: query }
+      end
+
+      it 'returns a list of files' do
+        expect(json_response.dig('data', 'work', 'files')).not_to be_empty
+      end
+    end
+
     context 'when using variables' do
       let(:resource) { create(:work) }
       let(:query) do
