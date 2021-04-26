@@ -7,13 +7,21 @@ export default class extends Controller {
   static targets = ['field', 'suggestionTemplate', 'emptyResultTemplate', 'lastOptionTemplate']
 
   connect () {
+    // Prevent Enter key from submitting the form
+    this.fieldTarget.addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') {
+        e.preventDefault()
+      }
+    })
+
     const url = this.data.get('search')
     this.ac = autocomplete(
       this.fieldTarget,
       {
         hint: false,
         clearOnSelected: true,
-        openOnFocus: true
+        openOnFocus: true,
+        autoselect: true
       },
       [
         {
