@@ -2,7 +2,19 @@
 
 require 'spec_helper'
 
-RSpec.describe NullWorkVersion do
+RSpec.describe NullObjectPattern do
+  subject { NullTest.new }
+
+  before(:all) do
+    class NullTest
+      include NullObjectPattern
+    end
+  end
+
+  after(:all) do
+    ActiveSupport::Dependencies.remove_constant('NullTest')
+  end
+
   it { is_expected.to be_nil }
   it { is_expected.to be_empty }
   it { is_expected.to be_blank }

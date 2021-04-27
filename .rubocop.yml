@@ -74,6 +74,7 @@ RSpec/LeakyConstantDeclaration:
     - 'spec/lib/healthchecks/queue_latency_check_spec.rb'
     - 'spec/system/active_job_system_spec.rb'
     - 'spec/models/concerns/all_dois_spec.rb'
+    - 'spec/models/concerns/null_object_pattern_spec.rb'
 
 RSpec/ExpectActual:
   Exclude:
@@ -111,7 +112,7 @@ Style/EmptyMethod:
 
 Style/MethodMissingSuper:
   Exclude:
-   - 'app/models/null_work_version.rb'
+   - 'app/models/concerns/null_object_pattern.rb'
 
 Style/EmptyCaseCondition:
   Exclude:
