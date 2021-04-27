@@ -12,6 +12,7 @@ RSpec.describe CollectionPolicy, type: :policy do
   let(:other_user) { build_stubbed :user }
   let(:public) { User.guest }
   let(:admin) { create(:user, :admin) }
+  let(:application) { create(:external_app) }
 
   permissions '.scope' do
     subject(:scoped_collections) { described_class::Scope.new(depositor, Collection).resolve }
@@ -36,6 +37,7 @@ RSpec.describe CollectionPolicy, type: :policy do
       it { is_expected.to permit(other_user, collection) }
       it { is_expected.to permit(public, collection) }
       it { is_expected.to permit(admin, collection) }
+      it { is_expected.to permit(application, collection) }
     end
 
     context 'with a restricted collection' do
@@ -50,6 +52,7 @@ RSpec.describe CollectionPolicy, type: :policy do
       it { is_expected.not_to permit(other_user, collection) }
       it { is_expected.not_to permit(public, collection) }
       it { is_expected.to permit(admin, collection) }
+      it { is_expected.to permit(application, collection) }
     end
 
     context 'when granting discover access to a specific user' do
@@ -66,6 +69,7 @@ RSpec.describe CollectionPolicy, type: :policy do
       it { is_expected.not_to permit(other_user, collection) }
       it { is_expected.not_to permit(public, collection) }
       it { is_expected.to permit(admin, collection) }
+      it { is_expected.to permit(application, collection) }
     end
   end
 
@@ -82,6 +86,7 @@ RSpec.describe CollectionPolicy, type: :policy do
     it { is_expected.not_to permit(other_user, collection) }
     it { is_expected.not_to permit(public, collection) }
     it { is_expected.to permit(admin, collection) }
+    it { is_expected.to permit(application, collection) }
   end
 
   permissions :destroy? do
@@ -100,6 +105,7 @@ RSpec.describe CollectionPolicy, type: :policy do
       it { is_expected.not_to permit(other_user, collection) }
       it { is_expected.not_to permit(public, collection) }
       it { is_expected.to permit(admin, collection) }
+      it { is_expected.to permit(application, collection) }
     end
 
     context 'when the collection DOES have a doi' do
@@ -111,6 +117,7 @@ RSpec.describe CollectionPolicy, type: :policy do
       it { is_expected.not_to permit(other_user, collection) }
       it { is_expected.not_to permit(public, collection) }
       it { is_expected.to permit(admin, collection) }
+      it { is_expected.to permit(application, collection) }
     end
   end
 end

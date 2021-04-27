@@ -63,4 +63,33 @@ RSpec.describe FileResource, type: :model do
     its(:mime_type) { is_expected.to eq('image/png') }
     its(:original_filename) { is_expected.to eq('image.png') }
   end
+
+  describe '#etag' do
+    subject { create(:file_resource) }
+
+    before { allow(Aws::S3::Client).to receive(:new).and_return(client) }
+
+    context 'when the file exists' do
+      let(:client) do
+        Aws::S3::Client.new(
+          access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+          secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
+          region: ENV['AWS_REGION'],
+          endpoint: ENV['S3_ENDPOINT'],
+          force_path_style: true
+        )
+      end
+
+      its(:etag) { is_expected.to eq('33036b1bffe083c5d30824f1ff204b90') }
+    end
+
+    context 'when the file does NOT exist' do
+      let(:client) { instance_spy('Aws::S3::Client') }
+      let(:error) { Aws::S3::Errors::Forbidden.new('arg1', 'arg2') }
+
+      before { allow(client).to receive(:head_object).with(any_args).and_raise(error) }
+
+      its(:etag) { is_expected.to eq('[unavailable]') }
+    end
+  end
 end

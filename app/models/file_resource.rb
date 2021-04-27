@@ -11,4 +11,20 @@ class FileResource < ApplicationRecord
   has_many :legacy_identifiers,
            as: :resource,
            dependent: :destroy
+
+  # @note Using `head_object` will retrieve the metadata without retriving the entire object.
+  def etag
+    @etag ||= client
+      .head_object(bucket: ENV['AWS_BUCKET'], key: "#{file_data['storage']}/#{file_data['id']}")
+      .etag
+      .gsub('"', '')
+  rescue Aws::S3::Errors::Forbidden
+    '[unavailable]'
+  end
+
+  private
+
+    def client
+      @client ||= Aws::S3::Client.new
+    end
 end

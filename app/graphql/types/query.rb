@@ -9,6 +9,11 @@ module Types
       argument :id, Uuid, required: true
     end
 
+    field :file, File, null: true do
+      description 'Find a file using its legacy identifier from Scholarsphere 3 (available to administrators ONLY)'
+      argument :pid, String, required: true
+    end
+
     def work(id:)
       resource = FindResource.call(id)
 
@@ -18,5 +23,17 @@ module Types
         resource.latest_version
       end
     end
+
+    def file(pid:)
+      return unless user.admin?
+
+      LegacyIdentifier.find_by(old_id: pid).try(:resource)
+    end
+
+    private
+
+      def user
+        @user ||= context.fetch(:user, User.guest)
+      end
   end
 end
