@@ -36,9 +36,25 @@ module Api::V1
       end
 
       def metadata_params
-        params
-          .require(:metadata)
+        {
+          **virus_params,
+          fits: fits_params
+        }
+      end
+
+      def virus_params
+        metadata
           .permit(virus: [:status, :scanned_at])
+      end
+
+      def fits_params
+        metadata
+          .fetch('fits', {})
+          .permit!
+      end
+
+      def metadata
+        @metadata ||= params.require(:metadata)
       end
   end
 end
