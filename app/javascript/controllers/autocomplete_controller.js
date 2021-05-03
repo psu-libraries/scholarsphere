@@ -50,9 +50,11 @@ export default class extends Controller {
     return (q, callback) => {
       axios.get(url, { params: { q } }).then((response) => {
         const results = response.data
-        results.push(
-          { last_option: true, results_length: results.length }
-        )
+        results.push({
+          last_option: true,
+          results_length: results.length,
+          display_name: q
+        })
         callback(results)
       })
     }
