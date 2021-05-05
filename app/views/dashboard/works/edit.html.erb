@@ -33,7 +33,7 @@
     </div>
     <div class="col-lg-9">
       <h1 class="h2 mb-3"><%= t('.heading',
-                                work_title: (@work.latest_published_version || @work.latest_version).title) %></h1>
+                                work_title: @work.latest_version.title) %></h1>
 
       <div class="keyline keyline--left">
         <h2 id="<%= t('.visibility.heading').parameterize %>" class="h4"><%= t('.visibility.heading') %></h2>
