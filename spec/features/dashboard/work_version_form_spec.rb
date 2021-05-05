@@ -217,7 +217,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
           expect(page).to have_content('Nathan Andrew Weader')
         end
 
-        find_all('.aa-suggestion').first.click
+        find('#search-creators').set("\n")
 
         within('#creators') do
           expect(page).to have_content('CREATOR 1')
@@ -345,6 +345,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
           expect(page).to have_content('CREATOR 1')
           expect(page).to have_content('CREATOR 2')
           expect(page).to have_field('Display Name', count: 2)
+          expect(page).to have_field('Display Name', with: 'nobody')
           expect(page).to have_content('UNIDENTIFIED')
         end
 

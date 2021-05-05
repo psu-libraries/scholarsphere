@@ -18,7 +18,7 @@ RSpec.describe DownloadsController, type: :controller do
         }.to change {
           ViewStatistic.where(
             resource_type: 'FileResource',
-            resource_id: work_version.file_version_memberships[0].id
+            resource_id: work_version.file_version_memberships[0].file_resource.id
           ).count
         }.from(0).to(1)
       end
@@ -75,7 +75,7 @@ RSpec.describe DownloadsController, type: :controller do
           change {
             ViewStatistic.where(
               resource_type: 'FileResource',
-              resource_id: work_version.file_version_memberships[0].id
+              resource_id: work_version.file_version_memberships[0].file_resource.id
             ).count
           }
         )

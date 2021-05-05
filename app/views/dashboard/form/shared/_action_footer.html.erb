@@ -2,12 +2,12 @@
 <% secondary_action = current_user.admin? ? :admin_save : param_key %>
 
 <footer class="footer footer--actions footer--fixed d-flex justify-content-center">
-  <%= form.button t("dashboard.form.actions.save_and_exit.#{secondary_action}"), name: 'save_and_exit', class: 'btn btn-outline-primary btn--rounded pull-left' %>
-
   <div>
-    <%= link_to t('dashboard.form.actions.cancel'), cancel_path, class: 'btn btn-outline-dark btn--rounded' %>
-    <%= form.submit t("dashboard.form.actions.#{primary_action}"), name: primary_action, class: 'btn btn-primary btn--rounded ml-2' %>
+    <%= form.submit t("dashboard.form.actions.#{primary_action}"), name: primary_action, class: 'btn btn-primary btn--rounded' %>
+    <%= link_to t('dashboard.form.actions.cancel'), cancel_path, class: 'btn btn-outline-dark btn--rounded ml-2' %>
   </div>
+
+  <%= form.button t("dashboard.form.actions.save_and_exit.#{secondary_action}"), name: 'save_and_exit', class: 'btn btn-outline-primary btn--rounded pull-left' %>
 
   <% if form.object.persisted? && policy(form.object).destroy? %>
     <%= render DeleteResourceButtonComponent.new(

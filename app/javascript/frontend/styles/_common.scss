@@ -623,10 +623,18 @@ h4,
     }
 
     @include media-breakpoint-down(sm) {
+      display: block !important;
+
       .btn {
         font-size: $font-size-sm;
         padding-left: $spacer;
         padding-right: $spacer;
+        float: none;
+        display: block;
+        margin-bottom: .5rem;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        width: 100%;
       }
 
       .responsive-hide {
