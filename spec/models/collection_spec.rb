@@ -255,16 +255,63 @@ RSpec.describe Collection, type: :model do
     end
   end
 
-  describe '#update_index' do
+  describe '#perform_update_doi' do
     let(:collection) { described_class.new }
 
     before do
       allow(CollectionIndexer).to receive(:call)
+      allow(DoiUpdatingJob).to receive(:perform_later)
     end
 
-    it 'calls the CollectionIndexer' do
-      collection.update_index
-      expect(CollectionIndexer).to have_received(:call)
+    context 'when the doi is not flagged for update' do
+      let(:collection) { build(:collection) }
+
+      it 'does not send anything to DataCite' do
+        collection.save
+        expect(DoiUpdatingJob).not_to have_received(:perform_later)
+      end
+    end
+
+    context 'when the collection has a doi' do
+      let(:collection) { build(:collection) }
+
+      it 'updates the metadata with DataCite' do
+        collection.doi = 'a doi'
+        collection.update_doi = true
+        collection.save
+        expect(DoiUpdatingJob).to have_received(:perform_later).with(collection)
+      end
+    end
+
+    context 'when the collection does NOT have a doi' do
+      let(:collection) { build(:collection) }
+
+      it 'does NOT send any updates to DataCite' do
+        collection.doi = nil
+        collection.update_doi = true
+        collection.save
+        expect(DoiUpdatingJob).not_to have_received(:perform_later)
+      end
+    end
+  end
+
+  describe '#update_index' do
+    let(:collection) { build(:collection) }
+
+    before { allow(CollectionIndexer).to receive(:call) }
+
+    context 'with defaults' do
+      it 'calls the CollectionIndexer' do
+        collection.update_index
+        expect(CollectionIndexer).to have_received(:call).with(collection, commit: true)
+      end
+    end
+
+    context 'when specifing NOT to commit' do
+      it 'calls the CollectionIndexer' do
+        collection.update_index(commit: false)
+        expect(CollectionIndexer).to have_received(:call).with(collection, commit: false)
+      end
     end
   end
 

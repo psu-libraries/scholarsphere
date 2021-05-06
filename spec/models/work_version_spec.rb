@@ -356,6 +356,41 @@ RSpec.describe WorkVersion, type: :model do
     end
   end
 
+  describe '#perform_update_doi' do
+    before { allow(DoiUpdatingJob).to receive(:perform_later) }
+
+    context 'when the doi is not flagged for update' do
+      let(:work_version) { build(:work_version, :published) }
+
+      it 'does not send anything to DataCite' do
+        work_version.save
+        expect(DoiUpdatingJob).not_to have_received(:perform_later)
+      end
+    end
+
+    context 'when the version is published, the work has a Doi, and updated_doi is set to true' do
+      let(:work_version) { build(:work_version, :published) }
+
+      it 'updates the metadata with DataCite' do
+        work_version.work.doi = 'a doi'
+        work_version.update_doi = true
+        work_version.save
+        expect(DoiUpdatingJob).to have_received(:perform_later)
+      end
+    end
+
+    context 'when the version is published and the work does not have a Doi' do
+      let(:work_version) { build(:work_version, :published) }
+
+      it 'does NOT send any updates to DataCite' do
+        work_version.work.doi = nil
+        work_version.update_doi = true
+        work_version.save
+        expect(DoiUpdatingJob).not_to have_received(:perform_later)
+      end
+    end
+  end
+
   describe '#update_index' do
     let(:work_version) { described_class.new }
 

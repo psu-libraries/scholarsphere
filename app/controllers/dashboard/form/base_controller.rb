@@ -80,6 +80,7 @@ module Dashboard
 
         def save_resource(index: true)
           @resource.indexing_source = null_indexer if !index
+          @resource.update_doi = (publish? || finish? || save_and_exit?)
           @resource.save
         end
 

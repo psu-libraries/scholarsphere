@@ -5,6 +5,7 @@ class WorkVersion < ApplicationRecord
   include ViewStatistics
   include AllDois
   include GeneratedUuids
+  include UpdatingDois
 
   fields_with_dois :doi, :identifier
 
@@ -256,6 +257,10 @@ class WorkVersion < ApplicationRecord
 
   def reload_on_index
     @reload_on_index ||= false
+  end
+
+  def update_doi?
+    super && latest_published_version?
   end
 
   delegate :deposited_at,
