@@ -7,6 +7,10 @@ RSpec.describe Work, type: :model do
     let(:factory_name) { :work }
   end
 
+  it_behaves_like 'a resource with a generated uuid' do
+    let(:resource) { build(:work) }
+  end
+
   it_behaves_like 'a resource with a deposited at timestamp'
 
   it_behaves_like 'a resource that can provide all DOIs in', [:doi]
@@ -15,7 +19,6 @@ RSpec.describe Work, type: :model do
     it { is_expected.to have_db_column(:work_type).of_type(:string) }
     it { is_expected.to have_db_column(:depositor_id) }
     it { is_expected.to have_db_column(:proxy_id) }
-    it { is_expected.to have_db_column(:uuid).of_type(:uuid) }
     it { is_expected.to have_db_column(:doi).of_type(:string) }
     it { is_expected.to have_db_column(:embargoed_until).of_type(:datetime) }
     it { is_expected.to have_db_column(:deposit_agreed_at).of_type(:datetime) }
@@ -372,14 +375,6 @@ RSpec.describe Work, type: :model do
 
       its(:keys) { is_expected.to contain_exactly(*keys) }
     end
-  end
-
-  describe '#uuid' do
-    subject(:work) { create(:work) }
-
-    before { work.reload }
-
-    its(:uuid) { is_expected.to match(/[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}/) }
   end
 
   describe '::reindex_all' do

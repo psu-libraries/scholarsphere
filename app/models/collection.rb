@@ -5,6 +5,7 @@ class Collection < ApplicationRecord
   include DepositedAtTimestamp
   include ViewStatistics
   include AllDois
+  include GeneratedUuids
 
   fields_with_dois :doi, :identifier
 
@@ -124,13 +125,7 @@ class Collection < ApplicationRecord
     document_builder.generate(resource: self)
   end
 
-  # @note Postgres mints uuids, but they are not present until the record is reloaded from the database.  In most cases,
-  # this won't present a problem because we only index published versions, and at that point, the version will have
-  # already been saved and reloaded from the database. However, there could be edge cases or other unforseen siutations
-  # where the uuid is nil and the version needs to be indexed. Reloading it from Postgres will avoid those problems.
   def update_index(commit: true)
-    reload if uuid.nil?
-
     CollectionIndexer.call(self, commit: commit)
   end
 

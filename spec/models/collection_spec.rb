@@ -11,6 +11,10 @@ RSpec.describe Collection, type: :model do
     let(:resource) { create(:collection) }
   end
 
+  it_behaves_like 'a resource with a generated uuid' do
+    let(:resource) { build(:collection) }
+  end
+
   it_behaves_like 'a resource with a deposited at timestamp'
 
   it_behaves_like 'a resource that can provide all DOIs in', [:doi, :identifier]
@@ -18,7 +22,6 @@ RSpec.describe Collection, type: :model do
   describe 'table' do
     it { is_expected.to have_db_column(:depositor_id) }
     it { is_expected.to have_db_column(:metadata).of_type(:jsonb) }
-    it { is_expected.to have_db_column(:uuid).of_type(:uuid) }
     it { is_expected.to have_db_column(:doi).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:title).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:subtitle).of_type(:string) }
@@ -257,27 +260,11 @@ RSpec.describe Collection, type: :model do
 
     before do
       allow(CollectionIndexer).to receive(:call)
-      allow(collection).to receive(:reload)
     end
 
-    context 'when the uuid is nil' do
-      before { allow(collection).to receive(:uuid).and_return(nil) }
-
-      it 'reloads the version and calls the CollectionIndexer' do
-        collection.update_index
-        expect(collection).to have_received(:reload)
-        expect(CollectionIndexer).to have_received(:call)
-      end
-    end
-
-    context 'when the uuid is present' do
-      before { allow(collection).to receive(:uuid).and_return(SecureRandom.uuid) }
-
-      it 'does NOT reload the version and calls the CollectionIndexer' do
-        collection.update_index
-        expect(collection).not_to have_received(:reload)
-        expect(CollectionIndexer).to have_received(:call)
-      end
+    it 'calls the CollectionIndexer' do
+      collection.update_index
+      expect(CollectionIndexer).to have_received(:call)
     end
   end
 
