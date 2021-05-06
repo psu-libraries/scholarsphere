@@ -22,7 +22,6 @@ RSpec.describe 'Creating and editing collections', :inline_jobs, with_user: :use
   def mock_solr_indexing_job
     RSpec::Mocks.space.proxy_for(SolrIndexingJob)&.reset
 
-    allow(SolrIndexingJob).to receive(:perform_now).and_call_original
     allow(SolrIndexingJob).to receive(:perform_later).and_call_original
   end
 
@@ -45,7 +44,7 @@ RSpec.describe 'Creating and editing collections', :inline_jobs, with_user: :use
       expect(new_collection.works).to be_empty
 
       expect(page).to have_current_path(resource_path(new_collection.uuid))
-      expect(SolrIndexingJob).to have_received(:perform_now).once
+      expect(SolrIndexingJob).to have_received(:perform_later).once
     end
   end
 
@@ -72,8 +71,7 @@ RSpec.describe 'Creating and editing collections', :inline_jobs, with_user: :use
       FeatureHelpers::DashboardForm.fill_in_collection_details(metadata)
       FeatureHelpers::DashboardForm.save_and_continue
 
-      expect(SolrIndexingJob).to have_received(:perform_now).once
-      expect(SolrIndexingJob).not_to have_received(:perform_later)
+      expect(SolrIndexingJob).to have_received(:perform_later).once
 
       expect(Collection.count).to eq(initial_collection_count + 1)
 
@@ -129,8 +127,7 @@ RSpec.describe 'Creating and editing collections', :inline_jobs, with_user: :use
       mock_solr_indexing_job
       FeatureHelpers::DashboardForm.save_and_continue
 
-      expect(SolrIndexingJob).not_to have_received(:perform_now)
-      expect(SolrIndexingJob).to have_received(:perform_later)
+      expect(SolrIndexingJob).to have_received(:perform_later).once
 
       expect(new_collection.creators.map(&:surname)).to contain_exactly('Wead', actor.surname)
       expect(new_collection.works).to be_empty
@@ -153,8 +150,7 @@ RSpec.describe 'Creating and editing collections', :inline_jobs, with_user: :use
       mock_solr_indexing_job
       FeatureHelpers::DashboardForm.select_work(published_work.latest_published_version.title)
       FeatureHelpers::DashboardForm.finish
-      expect(SolrIndexingJob).to have_received(:perform_now).once
-      expect(SolrIndexingJob).not_to have_received(:perform_later)
+      expect(SolrIndexingJob).to have_received(:perform_later).once
 
       expect(new_collection.works).to contain_exactly(published_work)
     end
@@ -169,7 +165,7 @@ RSpec.describe 'Creating and editing collections', :inline_jobs, with_user: :use
       mock_solr_indexing_job
       FeatureHelpers::DashboardForm.fill_in_collection_details(metadata)
       FeatureHelpers::DashboardForm.save_and_exit
-      expect(SolrIndexingJob).to have_received(:perform_now).once
+      expect(SolrIndexingJob).to have_received(:perform_later).once
 
       collection.reload
       expect(collection.title).to eq metadata[:title]
@@ -199,7 +195,7 @@ RSpec.describe 'Creating and editing collections', :inline_jobs, with_user: :use
 
       mock_solr_indexing_job
       FeatureHelpers::DashboardForm.finish
-      expect(SolrIndexingJob).to have_received(:perform_now).once
+      expect(SolrIndexingJob).to have_received(:perform_later).once
 
       expect(page).to have_content('Collection was successfully updated')
       expect(collection.works).to be_empty
