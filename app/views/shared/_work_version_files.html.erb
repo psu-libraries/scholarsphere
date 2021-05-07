@@ -1,4 +1,4 @@
-<%= render(EmbargoDetailComponent.new(work_version: work_version)) %>
+<%= render(FilesVisibilityDetailComponent.new(work_version: work_version)) %>
 <%= render(WithdrawnDetailComponent.new(work_version: work_version)) %>
 
 <% if policy(work_version).download? %>
