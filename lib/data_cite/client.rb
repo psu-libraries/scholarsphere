@@ -58,6 +58,10 @@ module DataCite
       process_response connection.get("/dois/#{doi}")
     end
 
+    def search(params)
+      process_body connection.get('/dois', **params.merge('client-id' => username))
+    end
+
     def delete(doi:)
       process_response connection.delete("/dois/#{doi}")
     end
@@ -87,25 +91,28 @@ module DataCite
       end
 
       def process_response(response)
+        parsed_body = process_body(response)
+        doi = parsed_body.dig('data', 'id')
+
+        [doi, parsed_body]
+      end
+
+      def process_body(response)
         parsed_body = begin
                         JSON.parse(response.body)
                       rescue JSON::ParserError
                         {}
                       end
 
+        return parsed_body if response.success?
+
         # @todo Consider raising more specific errors, i.e.
         # MethodNotAllowedError under certain cases
-        unless response.success?
-          errors = parsed_body.fetch('errors', [])
-          stringified_errors = errors.inspect
-          message = stringified_errors.presence || "DataCite response returned #{response.status}"
+        errors = parsed_body.fetch('errors', [])
+        stringified_errors = errors.inspect
+        message = stringified_errors.presence || "DataCite response returned #{response.status}"
 
-          raise Error.new(message)
-        end
-
-        doi = parsed_body.dig('data', 'id')
-
-        [doi, parsed_body]
+        raise Error.new(message)
       end
 
       def connection
@@ -120,7 +127,7 @@ module DataCite
       end
 
       def username
-        @username ||= ENV['DATACITE_USERNAME']
+        @username ||= ENV.fetch('DATACITE_USERNAME', 'psu.ss-dev')
       end
 
       def password
