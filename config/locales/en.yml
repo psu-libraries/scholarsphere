@@ -139,16 +139,21 @@ en:
       migration_errors_sim: Migration Errors
       subject_sim: Subject
       visibility_ssi: Access
-  embargo:
-    heading: "Embargoed until %{date}"
-    public_message: "Files are not available during the embargo."
-    edit_message: "You have permission to access the files during the embargo."
+  files_message:
+    edit_message: "You have permission to access the files as an editor of the resource."
     link_text: "Public link"
-  withdrawn:
-    heading: "Withdrawn"
-    public_message: "Files are not available for works that have been withdrawn."
-    edit_message: "You have permission to access the files."
-    link_text: "Public link"
+    embargo:
+      heading: "Embargoed until %{date}"
+      public_message: "Files are not available during the embargo."
+    embargo_unauthorized:
+      heading: "Embargoed until %{date}"
+      public_message: "Files are not accessible during the embargo. After the embargo period, files will be accessible to users logged-in with a Penn State Access ID."
+    unauthorized:
+      heading: "Penn State Only"
+      public_message: "Files are only accessible to users logged-in with a Penn State Access ID."
+    withdrawn:
+      heading: "Withdrawn"
+      public_message: "This version of the work has been withdrawn. Its files are no longer accessible."
   errors:
     messages:
       invalid_edtf: is not a valid date in EDTF format

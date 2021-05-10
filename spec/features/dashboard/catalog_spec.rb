@@ -151,8 +151,8 @@ RSpec.describe 'Dashboard catalog page', :inline_jobs do
       end
 
       within('.alert') do
-        expect(page).to have_content(I18n.t('withdrawn.heading'))
-        expect(page).to have_content(I18n.t('withdrawn.edit_message'))
+        expect(page).to have_content(I18n.t('files_message.withdrawn.heading'))
+        expect(page).to have_content(I18n.t('files_message.edit_message'))
       end
     end
   end
