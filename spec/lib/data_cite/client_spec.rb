@@ -165,6 +165,28 @@ RSpec.describe DataCite::Client do
     end
   end
 
+  describe '#search' do
+    let(:results) { client.search(params) }
+
+    context 'when there are no results', :vcr do
+      let(:params) { { created: '2025', query: 'foo' } }
+
+      specify do
+        expect(results.dig('data')).to be_empty
+        expect(results.dig('links', 'self')).to end_with('created=2025&query=foo')
+      end
+    end
+
+    context 'when results are found', :vcr do
+      let(:params) { { created: '2018' } }
+
+      specify do
+        expect(results.dig('data').count).to eq(9)
+        expect(results.dig('links', 'self')).to end_with('created=2018')
+      end
+    end
+  end
+
   describe '#delete' do
     context 'with an existing DRAFT doi', :vcr do
       it 'deletes the doi' do

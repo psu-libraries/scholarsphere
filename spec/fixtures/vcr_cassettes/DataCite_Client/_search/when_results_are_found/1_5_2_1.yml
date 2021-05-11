@@ -1,0 +1,58 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.test.datacite.org/dois?client-id=psu.ss-dev&created=2018
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.3
+      Authorization:
+      - Basic cHN1LnNzLWRldjoyRDlENUZGMC1CQTE3LTRCMUYtQTc2Mi1CMTFBOUIwOEIzQUY=
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Mon, 10 May 2021 16:50:59 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Status:
+      - 200 OK
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Vary:
+      - Accept-Encoding, Origin
+      X-Credential-Username:
+      - psu.ss-dev
+      X-Request-Id:
+      - d054b90a-4eea-487e-9f43-3f7d2d06dff6
+      Etag:
+      - W/"ab500d1bd0bd65c795034326b92433b1"
+      X-Runtime:
+      - '0.115430'
+      X-Rack-Cors:
+      - miss; no-origin
+      X-Powered-By:
+      - Phusion Passenger(R) 6.0.8
+      Server:
+      - nginx/1.14.0 + Phusion Passenger(R) 6.0.8
+    body:
+      encoding: ASCII-8BIT
+      string: '{"data":[{"id":"10.33532/k5kj-hv11","type":"dois","attributes":{"doi":"10.33532/k5kj-hv11","identifiers":[{"identifier":null,"identifierType":"DOI"}],"creators":[],"titles":[],"publisher":null,"container":{},"publicationYear":null,"subjects":[],"contributors":[],"dates":[],"language":null,"types":{"ris":"GEN","bibtex":"misc","citeproc":"article","schemaOrg":"CreativeWork"},"relatedIdentifiers":[],"sizes":[],"formats":[],"version":null,"rightsList":[],"descriptions":[],"geoLocations":[],"fundingReferences":[],"url":"http://localhost:3000/concern/generic_works/ns1784m00v","contentUrl":null,"metadataVersion":0,"schemaVersion":"http://datacite.org/schema/kernel-4","source":"ez","isActive":true,"state":"findable","reason":null,"viewCount":0,"downloadCount":0,"referenceCount":0,"citationCount":0,"partCount":0,"partOfCount":0,"versionCount":0,"versionOfCount":0,"created":"2018-11-14T17:38:59Z","registered":"2018-11-14T17:39:01Z","published":null,"updated":"2018-12-14T00:31:59Z"},"relationships":{"client":{"data":{"id":"psu.ss-dev","type":"clients"}}}},{"id":"10.33532/ms2a-3102","type":"dois","attributes":{"doi":"10.33532/ms2a-3102","identifiers":[{"identifier":null,"identifierType":"DOI"}],"creators":[],"titles":[],"publisher":null,"container":{},"publicationYear":null,"subjects":[],"contributors":[],"dates":[],"language":null,"types":{"ris":"GEN","bibtex":"misc","citeproc":"article","schemaOrg":"CreativeWork"},"relatedIdentifiers":[],"sizes":[],"formats":[],"version":null,"rightsList":[],"descriptions":[],"geoLocations":[],"fundingReferences":[],"url":"http://localhost:3000/concern/generic_works/kh128nf32w","contentUrl":null,"metadataVersion":0,"schemaVersion":"http://datacite.org/schema/kernel-4","source":"ez","isActive":true,"state":"findable","reason":null,"viewCount":0,"downloadCount":0,"referenceCount":0,"citationCount":0,"partCount":0,"partOfCount":0,"versionCount":0,"versionOfCount":0,"created":"2018-11-14T17:51:44Z","registered":"2018-11-14T17:51:46Z","published":null,"updated":"2018-12-14T00:31:59Z"},"relationships":{"client":{"data":{"id":"psu.ss-dev","type":"clients"}}}},{"id":"10.33532/jdcj-tc22","type":"dois","attributes":{"doi":"10.33532/jdcj-tc22","identifiers":[{"identifier":null,"identifierType":"DOI"}],"creators":[],"titles":[],"publisher":null,"container":{},"publicationYear":null,"subjects":[],"contributors":[],"dates":[],"language":null,"types":{"ris":"GEN","bibtex":"misc","citeproc":"article","schemaOrg":"CreativeWork"},"relatedIdentifiers":[],"sizes":[],"formats":[],"version":null,"rightsList":[],"descriptions":[],"geoLocations":[],"fundingReferences":[],"url":"http://localhost:3000/concern/generic_works/ns1784m00v","contentUrl":null,"metadataVersion":0,"schemaVersion":"http://datacite.org/schema/kernel-4","source":"ez","isActive":true,"state":"findable","reason":null,"viewCount":0,"downloadCount":0,"referenceCount":0,"citationCount":0,"partCount":0,"partOfCount":0,"versionCount":0,"versionOfCount":0,"created":"2018-11-14T17:46:13Z","registered":"2018-11-14T17:46:13Z","published":null,"updated":"2018-12-14T00:31:59Z"},"relationships":{"client":{"data":{"id":"psu.ss-dev","type":"clients"}}}},{"id":"10.33532/bsa8-s147","type":"dois","attributes":{"doi":"10.33532/bsa8-s147","identifiers":[{"identifier":null,"identifierType":"DOI"}],"creators":[],"titles":[],"publisher":null,"container":{},"publicationYear":null,"subjects":[],"contributors":[],"dates":[],"language":null,"types":{"ris":"GEN","bibtex":"misc","citeproc":"article","schemaOrg":"CreativeWork"},"relatedIdentifiers":[],"sizes":[],"formats":[],"version":null,"rightsList":[],"descriptions":[],"geoLocations":[],"fundingReferences":[],"url":"http://localhost:3000/concern/generic_works/ns1784m00v","contentUrl":null,"metadataVersion":0,"schemaVersion":"http://datacite.org/schema/kernel-4","source":"ez","isActive":true,"state":"findable","reason":null,"viewCount":0,"downloadCount":0,"referenceCount":0,"citationCount":0,"partCount":0,"partOfCount":0,"versionCount":0,"versionOfCount":0,"created":"2018-11-14T15:20:40Z","registered":"2018-11-14T15:20:41Z","published":null,"updated":"2018-12-14T00:31:58Z"},"relationships":{"client":{"data":{"id":"psu.ss-dev","type":"clients"}}}},{"id":"10.33532/askd-zc78","type":"dois","attributes":{"doi":"10.33532/askd-zc78","identifiers":[{"identifier":null,"identifierType":"DOI"}],"creators":[],"titles":[],"publisher":null,"container":{},"publicationYear":null,"subjects":[],"contributors":[],"dates":[],"language":null,"types":{"ris":"GEN","bibtex":"misc","citeproc":"article","schemaOrg":"CreativeWork"},"relatedIdentifiers":[],"sizes":[],"formats":[],"version":null,"rightsList":[],"descriptions":[],"geoLocations":[],"fundingReferences":[],"url":"http://localhost:3000/concern/generic_works/ns1784m00v","contentUrl":null,"metadataVersion":0,"schemaVersion":"http://datacite.org/schema/kernel-4","source":"ez","isActive":true,"state":"findable","reason":null,"viewCount":0,"downloadCount":0,"referenceCount":0,"citationCount":0,"partCount":0,"partOfCount":0,"versionCount":0,"versionOfCount":0,"created":"2018-11-14T17:39:26Z","registered":"2018-11-14T17:39:26Z","published":null,"updated":"2018-12-14T00:31:57Z"},"relationships":{"client":{"data":{"id":"psu.ss-dev","type":"clients"}}}},{"id":"10.33532/1h0n-ms27","type":"dois","attributes":{"doi":"10.33532/1h0n-ms27","identifiers":[{"identifier":null,"identifierType":"DOI"}],"creators":[],"titles":[],"publisher":null,"container":{},"publicationYear":null,"subjects":[],"contributors":[],"dates":[],"language":null,"types":{"ris":"GEN","bibtex":"misc","citeproc":"article","schemaOrg":"CreativeWork"},"relatedIdentifiers":[],"sizes":[],"formats":[],"version":null,"rightsList":[],"descriptions":[],"geoLocations":[],"fundingReferences":[],"url":"http://localhost:3000/concern/generic_works/ns1784m00v","contentUrl":null,"metadataVersion":0,"schemaVersion":"http://datacite.org/schema/kernel-4","source":"ez","isActive":true,"state":"findable","reason":null,"viewCount":0,"downloadCount":0,"referenceCount":0,"citationCount":0,"partCount":0,"partOfCount":0,"versionCount":0,"versionOfCount":0,"created":"2018-11-14T17:35:08Z","registered":"2018-11-14T17:35:10Z","published":null,"updated":"2018-12-14T00:31:56Z"},"relationships":{"client":{"data":{"id":"psu.ss-dev","type":"clients"}}}},{"id":"10.33532/dqff-pe62","type":"dois","attributes":{"doi":"10.33532/dqff-pe62","identifiers":[{"identifier":null,"identifierType":"DOI"}],"creators":[],"titles":[],"publisher":null,"container":{},"publicationYear":null,"subjects":[],"contributors":[],"dates":[],"language":null,"types":{"ris":"GEN","bibtex":"misc","citeproc":"article","schemaOrg":"CreativeWork"},"relatedIdentifiers":[],"sizes":[],"formats":[],"version":null,"rightsList":[],"descriptions":[],"geoLocations":[],"fundingReferences":[],"url":"http://localhost:3000/concern/generic_works/ns1784m00v","contentUrl":null,"metadataVersion":0,"schemaVersion":"http://datacite.org/schema/kernel-4","source":"ez","isActive":true,"state":"findable","reason":null,"viewCount":0,"downloadCount":0,"referenceCount":0,"citationCount":0,"partCount":0,"partOfCount":0,"versionCount":0,"versionOfCount":0,"created":"2018-11-14T14:21:05Z","registered":"2018-11-14T14:21:05Z","published":null,"updated":"2018-12-12T22:32:19Z"},"relationships":{"client":{"data":{"id":"psu.ss-dev","type":"clients"}}}},{"id":"10.33532/rjy4-qe95","type":"dois","attributes":{"doi":"10.33532/rjy4-qe95","identifiers":[{"identifier":null,"identifierType":"DOI"}],"creators":[],"titles":[],"publisher":null,"container":{},"publicationYear":null,"subjects":[],"contributors":[],"dates":[],"language":null,"types":{"ris":"GEN","bibtex":"misc","citeproc":"article","schemaOrg":"CreativeWork"},"relatedIdentifiers":[],"sizes":[],"formats":[],"version":null,"rightsList":[],"descriptions":[],"geoLocations":[],"fundingReferences":[],"url":"http://localhost:3000/concern/generic_works/rv118rd96w","contentUrl":null,"metadataVersion":0,"schemaVersion":"http://datacite.org/schema/kernel-4","source":"ez","isActive":true,"state":"findable","reason":null,"viewCount":0,"downloadCount":0,"referenceCount":0,"citationCount":0,"partCount":0,"partOfCount":0,"versionCount":0,"versionOfCount":0,"created":"2018-11-14T17:48:06Z","registered":"2018-11-14T17:48:06Z","published":null,"updated":"2018-12-12T22:30:55Z"},"relationships":{"client":{"data":{"id":"psu.ss-dev","type":"clients"}}}},{"id":"10.33532/ztme-p784","type":"dois","attributes":{"doi":"10.33532/ztme-p784","identifiers":[{"identifier":null,"identifierType":"DOI"}],"creators":[],"titles":[],"publisher":null,"container":{},"publicationYear":null,"subjects":[],"contributors":[],"dates":[],"language":null,"types":{"ris":"GEN","bibtex":"misc","citeproc":"article","schemaOrg":"CreativeWork"},"relatedIdentifiers":[],"sizes":[],"formats":[],"version":null,"rightsList":[],"descriptions":[],"geoLocations":[],"fundingReferences":[],"url":"http://localhost:3000/concern/generic_works/ns1784m00v","contentUrl":null,"metadataVersion":0,"schemaVersion":"http://datacite.org/schema/kernel-4","source":"ez","isActive":true,"state":"findable","reason":null,"viewCount":0,"downloadCount":0,"referenceCount":0,"citationCount":0,"partCount":0,"partOfCount":0,"versionCount":0,"versionOfCount":0,"created":"2018-11-14T14:13:59Z","registered":"2018-11-14T14:14:00Z","published":null,"updated":"2018-12-12T07:03:02Z"},"relationships":{"client":{"data":{"id":"psu.ss-dev","type":"clients"}}}}],"meta":{"total":9,"totalPages":1,"page":1,"states":[{"id":"findable","title":"Findable","count":9}],"resourceTypes":[],"created":[{"id":"2018","title":"2018","count":9}],"published":[],"registered":[{"id":"2018","title":"2018","count":9}],"providers":[{"id":"psu","title":"Pennsylvania
+        State University","count":9}],"clients":[{"id":"psu.ss-dev","title":"Scholarsphere
+        Devlopement","count":9}],"affiliations":[],"prefixes":[{"id":"10.33532","title":"10.33532","count":9}],"certificates":[],"licenses":[],"schemaVersions":[{"id":"4","title":"Schema
+        4","count":9}],"linkChecksStatus":[],"subjects":[],"fieldsOfScience":[],"citations":[],"views":[],"downloads":[]},"links":{"self":"https://api.test.datacite.org/dois?client-id=psu.ss-dev&created=2018"}}'
+  recorded_at: Mon, 10 May 2021 16:51:01 GMT
+recorded_with: VCR 6.0.0
