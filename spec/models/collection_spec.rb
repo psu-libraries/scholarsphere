@@ -11,6 +11,10 @@ RSpec.describe Collection, type: :model do
     let(:resource) { create(:collection) }
   end
 
+  it_behaves_like 'a resource with a generated uuid' do
+    let(:resource) { build(:collection) }
+  end
+
   it_behaves_like 'a resource with a deposited at timestamp'
 
   it_behaves_like 'a resource that can provide all DOIs in', [:doi, :identifier]
@@ -18,7 +22,6 @@ RSpec.describe Collection, type: :model do
   describe 'table' do
     it { is_expected.to have_db_column(:depositor_id) }
     it { is_expected.to have_db_column(:metadata).of_type(:jsonb) }
-    it { is_expected.to have_db_column(:uuid).of_type(:uuid) }
     it { is_expected.to have_db_column(:doi).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:title).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:subtitle).of_type(:string) }
@@ -252,31 +255,62 @@ RSpec.describe Collection, type: :model do
     end
   end
 
-  describe '#update_index' do
+  describe '#perform_update_doi' do
     let(:collection) { described_class.new }
 
     before do
       allow(CollectionIndexer).to receive(:call)
-      allow(collection).to receive(:reload)
+      allow(DoiUpdatingJob).to receive(:perform_later)
     end
 
-    context 'when the uuid is nil' do
-      before { allow(collection).to receive(:uuid).and_return(nil) }
+    context 'when the doi is not flagged for update' do
+      let(:collection) { build(:collection) }
 
-      it 'reloads the version and calls the CollectionIndexer' do
-        collection.update_index
-        expect(collection).to have_received(:reload)
-        expect(CollectionIndexer).to have_received(:call)
+      it 'does not send anything to DataCite' do
+        collection.save
+        expect(DoiUpdatingJob).not_to have_received(:perform_later)
       end
     end
 
-    context 'when the uuid is present' do
-      before { allow(collection).to receive(:uuid).and_return(SecureRandom.uuid) }
+    context 'when the collection has a doi' do
+      let(:collection) { build(:collection) }
 
-      it 'does NOT reload the version and calls the CollectionIndexer' do
+      it 'updates the metadata with DataCite' do
+        collection.doi = 'a doi'
+        collection.update_doi = true
+        collection.save
+        expect(DoiUpdatingJob).to have_received(:perform_later).with(collection)
+      end
+    end
+
+    context 'when the collection does NOT have a doi' do
+      let(:collection) { build(:collection) }
+
+      it 'does NOT send any updates to DataCite' do
+        collection.doi = nil
+        collection.update_doi = true
+        collection.save
+        expect(DoiUpdatingJob).not_to have_received(:perform_later)
+      end
+    end
+  end
+
+  describe '#update_index' do
+    let(:collection) { build(:collection) }
+
+    before { allow(CollectionIndexer).to receive(:call) }
+
+    context 'with defaults' do
+      it 'calls the CollectionIndexer' do
         collection.update_index
-        expect(collection).not_to have_received(:reload)
-        expect(CollectionIndexer).to have_received(:call)
+        expect(CollectionIndexer).to have_received(:call).with(collection, commit: true)
+      end
+    end
+
+    context 'when specifing NOT to commit' do
+      it 'calls the CollectionIndexer' do
+        collection.update_index(commit: false)
+        expect(CollectionIndexer).to have_received(:call).with(collection, commit: false)
       end
     end
   end
