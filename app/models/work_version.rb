@@ -21,6 +21,7 @@ class WorkVersion < ApplicationRecord
                  keyword: [:string, array: true, default: []],
                  rights: :string,
                  description: :string,
+                 publisher_statement: :string,
                  resource_type: [:string, array: true, default: []],
                  contributor: [:string, array: true, default: []],
                  publisher: [:string, array: true, default: []],
@@ -199,6 +200,7 @@ class WorkVersion < ApplicationRecord
   %i[
     description
     published_date
+    publisher_statement
     rights
     subtitle
     version_name

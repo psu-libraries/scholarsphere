@@ -329,8 +329,8 @@ RSpec.describe Work, type: :model do
           based_near_tesim
           contributor_tesim
           created_at_dtsi
-          creators_tesim
           creators_sim
+          creators_tesim
           deposit_agreed_at_dtsi
           deposit_agreement_version_tesim
           deposited_at_dtsi
@@ -353,6 +353,7 @@ RSpec.describe Work, type: :model do
           published_date_dtrsi
           published_date_tesim
           publisher_tesim
+          publisher_statement_tesim
           read_groups_ssim
           read_users_ssim
           related_url_tesim

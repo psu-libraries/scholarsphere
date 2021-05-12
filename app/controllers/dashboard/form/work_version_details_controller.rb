@@ -36,6 +36,7 @@ module Dashboard
             .permit(
               :title,
               :description,
+              :publisher_statement,
               :subtitle,
               :rights,
               :version_name,
