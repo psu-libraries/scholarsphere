@@ -56,6 +56,17 @@ class SolrDocument
     Time.zone.parse(self[:deposited_at_dtsi])
   end
 
+  def embargoed_until
+    Time.zone.parse(fetch(:embargoed_until_dtsi, ''))
+  rescue ArgumentError
+  end
+
+  def embargoed?
+    return false if embargoed_until.nil?
+
+    embargoed_until > Time.zone.now
+  end
+
   def work_id
     self[:work_id_isi].to_i
   end

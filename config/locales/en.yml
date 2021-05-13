@@ -545,3 +545,6 @@ en:
       open: Open Access
       authenticated: Penn State
       restricted: Restricted
+      embargoed: Embargoed
+    tooltip:
+      embargoed: 'Embargoed until %{date}'
