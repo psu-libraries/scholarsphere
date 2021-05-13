@@ -21,7 +21,6 @@
 <div class="form-wrapper">
   <%= render 'form_fields/text_area', form: form, attribute: :description %>
   <%= render 'form_fields/text', form: form, attribute: :published_date %>
-  <%= render 'form_fields/multi_text', form: form, attribute: :keyword %>
 </div>
 
 <div class="form-wrapper form-wrapper--wide">
@@ -32,6 +31,8 @@
 
 <div class="form-wrapper">
   <%= render 'form_fields/text', form: form, attribute: :subtitle %>
+  <%= render 'form_fields/text_area', form: form, attribute: :publisher_statement %>
+  <%= render 'form_fields/multi_text', form: form, attribute: :keyword %>
   <%= render 'form_fields/multi_text', form: form, attribute: :publisher %>
   <%= render 'form_fields/multi_text', form: form, attribute: :identifier %>
   <%= render 'form_fields/multi_text', form: form, attribute: :related_url %>

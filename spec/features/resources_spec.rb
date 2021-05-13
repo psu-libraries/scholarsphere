@@ -24,7 +24,10 @@ RSpec.describe 'Public Resources', type: :feature do
 
         # Spot check meta tags
         expect(page.find('meta[property="og:title"]', visible: false)[:content]).to eq v2.title
-        expect(page.find('meta[property="og:description"]', visible: false)[:content]).to eq 'This has markdown'
+        expect(page.find('meta[property="og:description"]', visible: false)[:content]).to include(
+          'This has markdown',
+          v2.publisher_statement
+        )
         # Below was failing in CI due to hostnames getting weird
         expect(page.find('meta[property="og:url"]', visible: false)[:content])
           .to match(resource_path(work.uuid)).and match(/^https?:/)

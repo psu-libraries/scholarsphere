@@ -300,6 +300,12 @@ components:
           example: "2020-10-31"
           description: >-
             EDTF date formats are also supported. See https://www.loc.gov/standards/datetime/
+        publisher_statement:
+          type: "string"
+          example: >-
+            This is a pre-print from Joe Publisher, Inc. We are not responsible for anything.
+          description: >-
+            This is also referred to as a "set statement" and is often a required part for Open Access articles.
         keyword:
           type: "array"
           items:

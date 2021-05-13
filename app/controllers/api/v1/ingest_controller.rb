@@ -70,6 +70,7 @@ module Api::V1
             :published_date,
             :deposited_at,
             :description,
+            :publisher_statement,
             :doi,
             keyword: [],
             resource_type: [],

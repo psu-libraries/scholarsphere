@@ -55,6 +55,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(new_work_version.version_number).to eq 1
         expect(new_work_version.title).to eq metadata[:title]
         expect(new_work_version.description).to eq metadata[:description]
+        expect(new_work_version.publisher_statement).to eq metadata[:publisher_statement]
         expect(new_work_version.published_date).to eq metadata[:published_date]
         expect(new_work_version.keyword).to eq [metadata[:keyword]]
         expect(new_work_version.subtitle).to eq metadata[:subtitle]
@@ -119,6 +120,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(work_version.version_number).to eq 2
         expect(work_version.title).to eq metadata[:title]
         expect(work_version.description).to eq metadata[:description]
+        expect(work_version.publisher_statement).to eq metadata[:publisher_statement]
         expect(work_version.published_date).to eq metadata[:published_date]
         expect(work_version.keyword).to eq [metadata[:keyword]]
         expect(work_version.subtitle).to eq metadata[:subtitle]
@@ -531,6 +533,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       expect(version.version_number).to eq 1
       expect(version.title).to eq different_metadata[:title]
       expect(version.description).to eq different_metadata[:description]
+      expect(version.publisher_statement).to eq different_metadata[:publisher_statement]
       expect(version.published_date).to eq different_metadata[:published_date]
       expect(version.keyword).to eq [different_metadata[:keyword]]
       expect(version.publisher).to eq [different_metadata[:publisher]]
@@ -587,6 +590,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       expect(version.version_number).to eq 1
       expect(version.title).to eq different_metadata[:title]
       expect(version.description).to eq different_metadata[:description]
+      expect(version.publisher_statement).to eq different_metadata[:publisher_statement]
       expect(version.published_date).to eq different_metadata[:published_date]
       expect(version.keyword).to eq [different_metadata[:keyword]]
       expect(version.publisher).to eq [different_metadata[:publisher]]

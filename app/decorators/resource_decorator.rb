@@ -34,10 +34,9 @@ class ResourceDecorator < SimpleDelegator
   end
 
   def description_html
-    return unless respond_to?(:description)
-    return '' if description.blank?
+    return '' if combined_description.blank?
 
-    @description_html ||= render_markdown(description)
+    @description_html ||= render_markdown(combined_description)
   end
 
   def description_plain_text
@@ -76,6 +75,10 @@ class ResourceDecorator < SimpleDelegator
   end
 
   private
+
+    def combined_description
+      [try(:description), try(:publisher_statement)].join(' ')
+    end
 
     def render_markdown(str)
       markdown = Redcarpet::Markdown.new(

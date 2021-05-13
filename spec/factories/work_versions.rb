@@ -66,6 +66,7 @@ FactoryBot.define do
       subtitle { FactoryBotHelpers.work_title }
       keyword { Faker::Science.element }
       description { Faker::Lorem.paragraph }
+      publisher_statement { Faker::Lorem.paragraph }
       resource_type { Faker::House.furniture }
       contributor { Faker::Artist.name }
       publisher { Faker::Book.publisher }

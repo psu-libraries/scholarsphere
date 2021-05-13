@@ -26,6 +26,7 @@ RSpec.describe WorkVersion, type: :model do
     it { is_expected.to have_jsonb_accessor(:keyword).of_type(:string).is_array.with_default([]) }
     it { is_expected.to have_jsonb_accessor(:rights).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:description).of_type(:string) }
+    it { is_expected.to have_jsonb_accessor(:publisher_statement).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:resource_type).of_type(:string).is_array.with_default([]) }
     it { is_expected.to have_jsonb_accessor(:contributor).of_type(:string).is_array.with_default([]) }
     it { is_expected.to have_jsonb_accessor(:publisher).of_type(:string).is_array.with_default([]) }
@@ -171,6 +172,7 @@ RSpec.describe WorkVersion, type: :model do
 
   describe 'singlevalued fields' do
     it_behaves_like 'a singlevalued json field', :description
+    it_behaves_like 'a singlevalued json field', :publisher_statement
     it_behaves_like 'a singlevalued json field', :published_date
     it_behaves_like 'a singlevalued json field', :rights
     it_behaves_like 'a singlevalued json field', :subtitle

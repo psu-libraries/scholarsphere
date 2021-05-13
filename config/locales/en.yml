@@ -59,6 +59,7 @@ en:
         rights: License
         display_rights: License
         description: Description
+        publisher_statement: Publisher's Statement
         creators: Creators
         first_creators: Creators
         resource_type: Resource Type
@@ -184,6 +185,7 @@ en:
       work_version:
         title: The title as would appear in a bibliographic reference to the work (not a filename).
         description: Include the work abstract if available.
+        publisher_statement: If the original publisher requires a set statement to upload this work to ScholarSphere, include it here
         published_date: The publication date can be specific to the year (2020), month (2020-11), or day (2020-11-22).
         version_name: For datasets or software using semantic versioning (e.g., x.y.z)
         rights: The license you select determines how your work can be used by others.
