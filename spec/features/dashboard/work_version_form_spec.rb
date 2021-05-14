@@ -404,13 +404,13 @@ RSpec.describe 'Publishing a work', with_user: :user do
       end
 
       it 'saves the creator ordering' do
+        visit dashboard_form_contributors_path('work_version', work_version)
+
         # Sanity Check
         expect(work_version.reload.creators.map(&:display_name)).to eq(['Creator A', 'Creator B'])
 
-        visit dashboard_form_contributors_path('work_version', work_version)
-
         page.find_all('.js-move-down').first.click
-        FeatureHelpers::DashboardForm.save_as_draft_and_exit
+        FeatureHelpers::DashboardForm.save_and_continue
 
         expect(work_version.reload.creators.map(&:display_name)).to eq(['Creator B', 'Creator A'])
         expect(SolrIndexingJob).to have_received(:perform_later).once
