@@ -5,15 +5,13 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.7.1'
 
-# As of 4.7.3, Devise does not have a release that supports for omniauth 2.0 yet.
-gem 'devise', github: 'heartcombo/devise', ref: '0cd72a5'
-
 gem 'aasm'
 gem 'after_commit_everywhere', '~> 0.1', '>= 0.1.5'
 gem 'blacklight', '~> 7.13'
 gem 'bootsnap', '>= 1.4.2', require: false
 gem 'browser'
 gem 'cocoon'
+gem 'devise'
 gem 'diffy'
 gem 'edtf'
 gem 'edtf-humanize'
@@ -33,7 +31,7 @@ gem 'pg', '>= 0.18', '< 2.0'
 gem 'puma', '~> 3.12'
 gem 'pundit'
 gem 'qa'
-gem 'rails', '~> 6.0.0'
+gem 'rails', '>= 6.1.3.2'
 gem 'recaptcha'
 gem 'redcarpet', '~> 3.5'
 gem 'rsolr', '>= 1.0', '< 3'
@@ -80,7 +78,6 @@ group :test do
   gem 'rspec'
   gem 'rspec-its'
   gem 'rspec-rails', '~> 4.0.0.beta3'
-  gem 'scholarsphere-client'
   gem 'selenium-webdriver'
   gem 'shoulda-matchers', '~> 4.3'
   gem 'simplecov', '~> 0.17.1', require: false
