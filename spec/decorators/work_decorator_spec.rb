@@ -20,14 +20,14 @@ RSpec.describe WorkDecorator do
     end
   end
 
-  describe '#decorated_latest_published_version' do
-    let(:work) { instance_double 'Work', latest_published_version: latest_published_version }
-    let(:latest_published_version) { instance_double 'WorkVersion' }
+  describe '#decorated_representative_version' do
+    let(:work) { instance_double 'Work', representative_version: representative_version }
+    let(:representative_version) { instance_double 'WorkVersion' }
 
-    it 'returns a decorated latest published version' do
-      allow(WorkVersionDecorator).to receive(:new).with(latest_published_version).and_return(:decorated_version)
+    it 'returns a decorated representative version' do
+      allow(WorkVersionDecorator).to receive(:new).with(representative_version).and_return(:decorated_version)
 
-      expect(decorator.decorated_latest_published_version).to eq :decorated_version
+      expect(decorator.decorated_representative_version).to eq :decorated_version
     end
   end
 end

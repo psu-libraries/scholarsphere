@@ -13,7 +13,7 @@ RSpec.describe Dashboard::SearchBuilder do
     its(:default_processor_chain) do
       is_expected.to include(
         :log_solr_parameters,
-        :main_query,
+        :restrict_search_to_works_and_collections,
         :apply_gated_edit
       )
     end
@@ -22,12 +22,8 @@ RSpec.describe Dashboard::SearchBuilder do
   describe '#processed_parameters' do
     let(:parameters) { builder.processed_parameters }
 
-    it 'searches only latest work versions' do
-      expect(parameters['fq']).to include(
-        '(({!terms f=model_ssi}WorkVersion AND {!terms f=latest_version_bsi}true}) ' \
-        'OR ' \
-        '({!terms f=model_ssi}Collection))'
-      )
+    it 'searches works and collections' do
+      expect(parameters['fq']).to include('{!terms f=model_ssi}Work,Collection')
     end
 
     it "restricts search based on the users' permissions" do

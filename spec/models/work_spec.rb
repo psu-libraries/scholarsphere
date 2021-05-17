@@ -216,64 +216,95 @@ RSpec.describe Work, type: :model do
   end
 
   describe 'version accessors' do
-    subject(:work) { create :work, versions: [draft, v2, v1] }
-
     let(:draft) { build :work_version, :draft, title: 'Draft', work: nil, created_at: 1.day.ago, version_number: 3 }
     let(:v2) { build :work_version, :published, title: 'Published v2', work: nil, created_at: 2.days.ago, version_number: 2 }
     let(:v1) { build :work_version, :published, title: 'Published v1', work: nil, created_at: 3.days.ago, version_number: 1 }
+    let(:withdrawn) { build :work_version, :withdrawn, work: nil, created_at: 3.days.ago, version_number: 1 }
 
     before { work.reload }
 
-    describe '#latest_version' do
-      it 'returns the latest version regardless of status' do
-        expect(work.latest_version.title).to eq draft.title
-      end
+    context 'with draft, published, and withdrawn versions' do
+      subject(:work) { create :work, versions: [draft, v2, withdrawn] }
+
+      it { is_expected.not_to be_withdrawn }
+
+      its(:latest_version) { is_expected.to eq(draft) }
+      its(:latest_published_version) { is_expected.to eq(v2) }
+      its(:draft_version) { is_expected.to eq(draft) }
+      its(:withdrawn_version) { is_expected.to eq(withdrawn) }
+      its(:representative_version) { is_expected.to eq(v2) }
     end
 
-    describe '#latest_published_version' do
-      it 'returns the latest published version' do
-        expect(work.latest_published_version.title).to eq v2.title
-      end
+    context 'with draft and published versions' do
+      subject(:work) { create :work, versions: [draft, v2, v1] }
+
+      it { is_expected.not_to be_withdrawn }
+
+      its(:latest_version) { is_expected.to eq(draft) }
+      its(:latest_published_version) { is_expected.to eq(v2) }
+      its(:draft_version) { is_expected.to eq(draft) }
+      its(:withdrawn_version) { is_expected.to be_nil }
+      its(:representative_version) { is_expected.to eq(v2) }
     end
 
-    describe '#draft_version' do
-      context 'when a draft exists' do
-        its(:draft_version) { is_expected.to eq draft }
-      end
+    context 'with draft and withdrawn versions' do
+      subject(:work) { create :work, versions: [draft, withdrawn] }
 
-      context 'when no draft exists' do
-        subject(:work) { create :work, versions: [v2, v1] }
+      it { is_expected.to be_withdrawn }
 
-        its(:draft_version) { is_expected.to be_nil }
-      end
+      its(:latest_version) { is_expected.to eq(draft) }
+      its(:latest_published_version) { is_expected.to be_nil }
+      its(:draft_version) { is_expected.to eq(draft) }
+      its(:withdrawn_version) { is_expected.to eq(withdrawn) }
+      its(:representative_version) { is_expected.to eq(withdrawn) }
     end
 
-    describe '#withdrawn?' do
-      context "when the works's only version is withdrawn" do
-        subject(:work) { create :work, versions: [v1] }
+    context 'with published and withdrawn versions' do
+      subject(:work) { create :work, versions: [v2, withdrawn] }
 
-        let(:v1) { build :work_version, :withdrawn, work: nil, created_at: 3.days.ago, version_number: 1 }
+      it { is_expected.not_to be_withdrawn }
 
-        it { is_expected.to be_withdrawn }
-      end
+      its(:latest_version) { is_expected.to eq(v2) }
+      its(:latest_published_version) { is_expected.to eq(v2) }
+      its(:draft_version) { is_expected.to be_nil }
+      its(:withdrawn_version) { is_expected.to eq(withdrawn) }
+      its(:representative_version) { is_expected.to eq(v2) }
+    end
 
-      context 'when the work has a withdrawn version and a draft version' do
-        subject(:work) { create :work, versions: [v1, draft] }
+    context 'with only published versions' do
+      subject(:work) { create :work, versions: [v2, v1] }
 
-        let(:v1) { build :work_version, :withdrawn, work: nil, created_at: 3.days.ago, version_number: 1 }
-        let(:draft) { build :work_version, :draft, work: nil, created_at: 1.day.ago, version_number: 3 }
+      it { is_expected.not_to be_withdrawn }
 
-        it { is_expected.to be_withdrawn }
-      end
+      its(:latest_version) { is_expected.to eq(v2) }
+      its(:latest_published_version) { is_expected.to eq(v2) }
+      its(:draft_version) { is_expected.to be_nil }
+      its(:withdrawn_version) { is_expected.to be_nil }
+      its(:representative_version) { is_expected.to eq(v2) }
+    end
 
-      context 'when the work has a withdrawn version and a published version' do
-        subject(:work) { create :work, versions: [v1, v2] }
+    context 'with only a draft version' do
+      subject(:work) { create :work, versions: [draft] }
 
-        let(:v1) { build :work_version, :withdrawn, work: nil, created_at: 3.days.ago, version_number: 1 }
-        let(:v2) { build :work_version, :published, work: nil, created_at: 2.days.ago, version_number: 2 }
+      it { is_expected.not_to be_withdrawn }
 
-        it { is_expected.not_to be_withdrawn }
-      end
+      its(:latest_version) { is_expected.to eq(draft) }
+      its(:latest_published_version) { is_expected.to be_nil }
+      its(:draft_version) { is_expected.to eq(draft) }
+      its(:withdrawn_version) { is_expected.to be_nil }
+      its(:representative_version) { is_expected.to eq(draft) }
+    end
+
+    context 'with only a withdrawn version' do
+      subject(:work) { create :work, versions: [withdrawn] }
+
+      it { is_expected.to be_withdrawn }
+
+      its(:latest_version) { is_expected.to eq(withdrawn) }
+      its(:latest_published_version) { is_expected.to be_nil }
+      its(:draft_version) { is_expected.to be_nil }
+      its(:withdrawn_version) { is_expected.to eq(withdrawn) }
+      its(:representative_version) { is_expected.to eq(withdrawn) }
     end
   end
 

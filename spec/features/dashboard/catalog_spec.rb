@@ -22,7 +22,7 @@ RSpec.describe 'Dashboard catalog page', :inline_jobs do
     let(:work_versions) do
       Work
         .where(depositor: user.actor)
-        .map(&:latest_version)
+        .map(&:representative_version)
         .compact
     end
 
