@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-require 'scholarsphere/client'
 
 # @note While this is technically a controller test, because it's testing our REST API, we're really using it as a
 # feature test to ensure end-to-end functionality of our ingest API.
@@ -112,10 +111,11 @@ RSpec.describe Api::V1::IngestController, type: :controller do
     end
 
     context 'when uploading files from S3', vcr: VCRHelpers.depositor_cassette do
+      let(:s3_file) do
+        S3Helpers.shrine_upload(Pathname.new(fixture_path).join('image.png'))
+      end
+
       before do
-        path = Pathname.new(fixture_path).join('image.png')
-        file = Scholarsphere::S3::UploadedFile.new(path)
-        Scholarsphere::S3::Uploader.new.upload(file)
         post :create, params: {
           metadata: {
             title: metadata[:title],
@@ -126,7 +126,7 @@ RSpec.describe Api::V1::IngestController, type: :controller do
             rights: metadata[:rights],
             visibility: Permissions::Visibility::OPEN
           },
-          content: [{ file: file.to_shrine.to_json }],
+          content: [{ file: s3_file.to_json }],
           depositor: depositor
         }
       end
@@ -140,20 +140,21 @@ RSpec.describe Api::V1::IngestController, type: :controller do
     end
 
     context 'with missing parameters' do
+      let(:s3_file) do
+        S3Helpers.shrine_upload(Pathname.new(fixture_path).join('image.png'))
+      end
+
       before do
-        path = Pathname.new(fixture_path).join('image.png')
-        file = Scholarsphere::S3::UploadedFile.new(path)
         post :create, params: {
           metadata: { title: FactoryBotHelpers.work_title },
-          content: [{ file: file.to_shrine.to_json }]
+          content: [{ file: s3_file.to_json }]
         }
       end
 
       it 'reports the error with the missing parameter' do
         expect(response).to be_bad_request
-        expect(response.body).to eq(
-          '{"message":"Bad request","errors":["param is missing or the value is empty: depositor"]}'
-        )
+        expect(json_response['message']).to eq('Bad request')
+        expect(json_response['errors']).to include(/param is missing or the value is empty: depositor/)
       end
     end
 

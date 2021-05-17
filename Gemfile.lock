@@ -423,10 +423,6 @@ GEM
     sass-listen (4.0.0)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
-    scholarsphere-client (0.1.0)
-      aws-sdk-s3 (~> 1.49)
-      faraday (> 0.12)
-      marcel (~> 0.3)
     scss_lint (0.59.0)
       sass (~> 3.5, >= 3.5.5)
     seedbank (0.5.0)
@@ -561,7 +557,6 @@ DEPENDENCIES
   rubocop-rails (= 2.5.2)
   rubocop-rspec (= 1.39.0)
   rubyzip (~> 2.3.0)
-  scholarsphere-client
   seedbank
   selenium-webdriver
   shoulda-matchers (~> 4.3)

@@ -78,7 +78,6 @@ group :test do
   gem 'rspec'
   gem 'rspec-its'
   gem 'rspec-rails', '~> 4.0.0.beta3'
-  gem 'scholarsphere-client'
   gem 'selenium-webdriver'
   gem 'shoulda-matchers', '~> 4.3'
   gem 'simplecov', '~> 0.17.1', require: false
