@@ -1,36 +1,24 @@
 # frozen_string_literal: true
 
+# @abstract This is the main public search query. Both collections and publicly discoverable works are returned. Draft,
+# embargoed, or withdrawn works, even if they are public, are not available.
+
 class SearchBuilder < Blacklight::SearchBuilder
   include Blacklight::Solr::SearchBuilderBehavior
+  include CatalogSearchBehavior
 
   self.default_processor_chain += %i(
-    restrict_search_based_on_model_types
+    restrict_search_to_works_and_collections
     apply_gated_discovery
-    exclude_embargoed_works
+    limit_to_public_resources
     log_solr_parameters
   )
-
-  def restrict_search_based_on_model_types(solr_parameters)
-    solr_parameters[:fq] ||= []
-    solr_parameters[:fq] << '{!terms f=model_ssi}Work,Collection'
-  end
 
   def apply_gated_discovery(solr_parameters)
     return if current_user.admin?
 
     solr_parameters[:fq] ||= []
     solr_parameters[:fq] << gated_discovery_filters.compact.join(' OR ')
-  end
-
-  def log_solr_parameters(solr_parameters)
-    Rails.logger.debug("Solr parameters: #{solr_parameters.inspect}")
-  end
-
-  def exclude_embargoed_works(solr_parameters)
-    return if current_user.admin?
-
-    solr_parameters[:fq] ||= []
-    solr_parameters[:fq] << '-embargoed_until_dtsi:[NOW TO *]'
   end
 
   private
@@ -58,17 +46,5 @@ class SearchBuilder < Blacklight::SearchBuilder
       return if current_user.guest?
 
       escape_filter('discover_users_ssim', current_user.access_id)
-    end
-
-    def current_user
-      @current_user ||= @scope.context[:current_user]
-    end
-
-    def escape_filter(key, value)
-      [key, escape_value(value)].join(':')
-    end
-
-    def escape_value(value)
-      RSolr.solr_escape(value).gsub(/ /, '\ ')
     end
 end

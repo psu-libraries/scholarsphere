@@ -78,14 +78,10 @@ module Dashboard
           resource_klass.model_name.param_key
         end
 
-        def save_resource(index: true)
-          @resource.indexing_source = null_indexer if !index
+        def save_resource
+          @resource.indexing_source = nil # uses the default source
           @resource.update_doi = (publish? || finish? || save_and_exit?)
           @resource.save
-        end
-
-        def null_indexer
-          Proc.new { nil }
         end
     end
   end

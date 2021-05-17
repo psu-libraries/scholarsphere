@@ -12,9 +12,9 @@ RSpec.describe SearchBuilder do
   describe '.default_processor_chain' do
     its(:default_processor_chain) do
       is_expected.to include(
-        :restrict_search_based_on_model_types,
+        :restrict_search_to_works_and_collections,
         :apply_gated_discovery,
-        :exclude_embargoed_works,
+        :limit_to_public_resources,
         :log_solr_parameters
       )
     end

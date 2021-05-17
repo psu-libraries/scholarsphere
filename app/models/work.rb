@@ -145,6 +145,18 @@ class Work < ApplicationRecord
     versions.withdrawn.any? && versions.published.none?
   end
 
+  def withdrawn_version
+    versions.withdrawn.last
+  end
+
+  def representative_version
+    if latest_published_version.is_a?(NullWorkVersion)
+      withdrawn_version || draft_version
+    else
+      latest_published_version
+    end
+  end
+
   def resource_with_doi
     self
   end
@@ -183,7 +195,7 @@ class Work < ApplicationRecord
     def document_builder
       SolrDocumentBuilder.new(
         DefaultSchema,
-        LatestPublishedVersionSchema,
+        RepresentativeVersionSchema,
         PermissionsSchema,
         WorkTypeSchema,
         DoiSchema
