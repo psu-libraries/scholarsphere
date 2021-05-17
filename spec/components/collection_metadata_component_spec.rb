@@ -36,7 +36,7 @@ RSpec.describe CollectionMetadataComponent, type: :component do
     end
 
     it 'renders a date with a nice format' do
-      expect(result.css('td.collection-deposited-at').text).to eq 'January 15, 2020 16:07'
+      expect(result.css('td.collection-deposited-at').text).to eq 'January 15, 2020'
     end
 
     it 'renders a multi-value field' do
