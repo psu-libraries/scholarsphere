@@ -1,0 +1,55 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.test.datacite.org/dois?client-id=psu.ss-dev&state=draft
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.3
+      Authorization:
+      - Basic cHN1LnNzLWRldjoyRDlENUZGMC1CQTE3LTRCMUYtQTc2Mi1CMTFBOUIwOEIzQUY=
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Mon, 10 May 2021 18:36:54 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Status:
+      - 200 OK
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Vary:
+      - Accept-Encoding, Origin
+      X-Credential-Username:
+      - psu.ss-dev
+      X-Request-Id:
+      - 99abacd3-8003-4abb-b6b3-66356bacdd8e
+      Etag:
+      - W/"d6b571cf641651061a2512663be929d2"
+      X-Runtime:
+      - '0.087423'
+      X-Rack-Cors:
+      - miss; no-origin
+      X-Powered-By:
+      - Phusion Passenger(R) 6.0.8
+      Server:
+      - nginx/1.14.0 + Phusion Passenger(R) 6.0.8
+    body:
+      encoding: ASCII-8BIT
+      string: '{"data":[],"meta":{"total":0,"totalPages":0,"page":1},"links":{"self":"https://api.test.datacite.org/dois?client-id=psu.ss-dev&state=draft"}}'
+  recorded_at: Mon, 10 May 2021 18:36:55 GMT
+recorded_with: VCR 6.0.0

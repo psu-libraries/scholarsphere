@@ -4,6 +4,8 @@ class WorkVersion < ApplicationRecord
   include AASM
   include ViewStatistics
   include AllDois
+  include GeneratedUuids
+  include UpdatingDois
 
   fields_with_dois :doi, :identifier
 
@@ -19,6 +21,7 @@ class WorkVersion < ApplicationRecord
                  keyword: [:string, array: true, default: []],
                  rights: :string,
                  description: :string,
+                 publisher_statement: :string,
                  resource_type: [:string, array: true, default: []],
                  contributor: [:string, array: true, default: []],
                  publisher: [:string, array: true, default: []],
@@ -197,6 +200,7 @@ class WorkVersion < ApplicationRecord
   %i[
     description
     published_date
+    publisher_statement
     rights
     subtitle
     version_name
@@ -245,13 +249,7 @@ class WorkVersion < ApplicationRecord
     work.latest_version.try(:id) == id
   end
 
-  # @note Postgres mints uuids, but they are not present until the record is reloaded from the database.  In most cases,
-  # this won't present a problem because we only index published versions, and at that point, the version will have
-  # already been saved and reloaded from the database. However, there could be edge cases or other unforseen siutations
-  # where the uuid is nil and the version needs to be indexed. Reloading it from Postgres will avoid those problems.
   def update_index(commit: true)
-    reload if uuid.nil?
-
     WorkIndexer.call(work, commit: commit, reload: reload_on_index)
   end
 
@@ -261,6 +259,10 @@ class WorkVersion < ApplicationRecord
 
   def reload_on_index
     @reload_on_index ||= false
+  end
+
+  def update_doi?
+    super && latest_published_version?
   end
 
   delegate :deposited_at,

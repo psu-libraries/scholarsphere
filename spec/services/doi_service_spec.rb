@@ -114,10 +114,9 @@ RSpec.describe DoiService do
     context 'when given a Work' do
       let(:resource) { work }
       let(:work) { FactoryBot.build_stubbed :work }
-      let(:latest_work_version) { FactoryBot.build_stubbed :work_version, work: work }
 
       before do
-        allow(work).to receive(:latest_version).and_return(latest_work_version)
+        allow(work).to receive(:latest_published_version).and_return(latest_published_version)
         allow(work).to receive(:update_attribute)
         allow(work).to receive(:valid?).and_return(true)
         allow(work).to receive(:update_index)
@@ -126,34 +125,30 @@ RSpec.describe DoiService do
       context "when the Work's doi field is empty" do
         before { work.doi = nil }
 
-        context "when the work's latest version is a DRAFT version" do
-          before { allow(latest_work_version).to receive(:draft?).and_return(true) }
+        context 'when the work does NOT have a published version' do
+          let(:latest_published_version) { NullWorkVersion.new }
 
-          it 'registers a new doi' do
+          it 'does nothing' do
             call_service
-            expect(client_mock).to have_received(:register)
-            expect(work).to have_received(:update_index)
-          end
-
-          it 'saves the doi on the Work db record' do
-            allow(client_mock).to receive(:register).and_return(['new/doi', { some: :metadata }])
-            call_service
-            expect(work).to have_received(:update_attribute).with(:doi, 'new/doi')
-            expect(work).to have_received(:update_index)
+            expect(client_mock).not_to have_received(:register)
+            expect(client_mock).not_to have_received(:publish)
+            expect(work).not_to have_received(:update_index)
           end
         end
 
-        context "when the work's latest version is a PUBLISHED verison" do
+        context 'when the work has a latest published version' do
+          let(:latest_published_version) { FactoryBot.build_stubbed :work_version, work: work }
+
           before do
-            allow(latest_work_version).to receive(:draft?).and_return(false)
-            allow(latest_work_version).to receive(:published?).and_return(true)
+            allow(latest_published_version).to receive(:published?).and_return(true)
+            allow(latest_published_version).to receive(:draft?).and_return(false)
           end
 
           it 'publishes a new doi with metadata' do
             allow(work_version_metadata_mock).to receive(:attributes).and_return(mocked: :metadata)
             call_service
             expect(DataCite::Metadata::WorkVersion).to have_received(:new).with(
-              resource: latest_work_version,
+              resource: latest_published_version,
               public_identifier: work.uuid
             )
             expect(client_mock).to have_received(:publish).with(
@@ -175,8 +170,8 @@ RSpec.describe DoiService do
       context "when the Work's doi field is present" do
         before { work.doi = 'existing/doi' }
 
-        context "when the work's latest version is a DRAFT version" do
-          before { allow(latest_work_version).to receive(:draft?).and_return(true) }
+        context 'when the work does NOT have a published version' do
+          let(:latest_published_version) { NullWorkVersion.new }
 
           it 'does nothing' do
             call_service
@@ -186,17 +181,19 @@ RSpec.describe DoiService do
           end
         end
 
-        context "when the work's latest version is a PUBLISHED verison" do
+        context 'when the work has a published version' do
+          let(:latest_published_version) { FactoryBot.build_stubbed :work_version, work: work }
+
           before do
-            allow(latest_work_version).to receive(:draft?).and_return(false)
-            allow(latest_work_version).to receive(:published?).and_return(true)
+            allow(latest_published_version).to receive(:published?).and_return(true)
+            allow(latest_published_version).to receive(:draft?).and_return(false)
           end
 
           it 'publishes the doi with metadata' do
             allow(work_version_metadata_mock).to receive(:attributes).and_return(mocked: :metadata)
             call_service
             expect(DataCite::Metadata::WorkVersion).to have_received(:new).with(
-              resource: latest_work_version,
+              resource: latest_published_version,
               public_identifier: work.uuid
             )
             expect(client_mock).to have_received(:publish).with(

@@ -7,6 +7,10 @@ RSpec.describe WorkVersion, type: :model do
     let(:resource) { create(:work_version) }
   end
 
+  it_behaves_like 'a resource with a generated uuid' do
+    let(:resource) { build(:work_version) }
+  end
+
   it_behaves_like 'a resource that can provide all DOIs in', [:doi, :identifier]
 
   describe 'table' do
@@ -14,7 +18,6 @@ RSpec.describe WorkVersion, type: :model do
     it { is_expected.to have_db_index(:work_id) }
     it { is_expected.to have_db_column(:aasm_state) }
     it { is_expected.to have_db_column(:metadata).of_type(:jsonb) }
-    it { is_expected.to have_db_column(:uuid).of_type(:uuid) }
     it { is_expected.to have_db_column(:version_number).of_type(:integer) }
     it { is_expected.to have_db_column(:doi).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:title).of_type(:string) }
@@ -23,6 +26,7 @@ RSpec.describe WorkVersion, type: :model do
     it { is_expected.to have_jsonb_accessor(:keyword).of_type(:string).is_array.with_default([]) }
     it { is_expected.to have_jsonb_accessor(:rights).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:description).of_type(:string) }
+    it { is_expected.to have_jsonb_accessor(:publisher_statement).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:resource_type).of_type(:string).is_array.with_default([]) }
     it { is_expected.to have_jsonb_accessor(:contributor).of_type(:string).is_array.with_default([]) }
     it { is_expected.to have_jsonb_accessor(:publisher).of_type(:string).is_array.with_default([]) }
@@ -168,6 +172,7 @@ RSpec.describe WorkVersion, type: :model do
 
   describe 'singlevalued fields' do
     it_behaves_like 'a singlevalued json field', :description
+    it_behaves_like 'a singlevalued json field', :publisher_statement
     it_behaves_like 'a singlevalued json field', :published_date
     it_behaves_like 'a singlevalued json field', :rights
     it_behaves_like 'a singlevalued json field', :subtitle
@@ -258,14 +263,6 @@ RSpec.describe WorkVersion, type: :model do
       expect(wv.title).to eq 'my title'
       expect(wv.work.work_type).to eq Work::Types.all.first
     end
-  end
-
-  describe '#uuid' do
-    subject(:work_version) { create(:work_version) }
-
-    before { work_version.reload }
-
-    its(:uuid) { is_expected.to match(/[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}/) }
   end
 
   describe '#resource_with_doi' do
@@ -361,32 +358,51 @@ RSpec.describe WorkVersion, type: :model do
     end
   end
 
+  describe '#perform_update_doi' do
+    before { allow(DoiUpdatingJob).to receive(:perform_later) }
+
+    context 'when the doi is not flagged for update' do
+      let(:work_version) { build(:work_version, :published) }
+
+      it 'does not send anything to DataCite' do
+        work_version.save
+        expect(DoiUpdatingJob).not_to have_received(:perform_later)
+      end
+    end
+
+    context 'when the version is published, the work has a Doi, and updated_doi is set to true' do
+      let(:work_version) { build(:work_version, :published) }
+
+      it 'updates the metadata with DataCite' do
+        work_version.work.doi = 'a doi'
+        work_version.update_doi = true
+        work_version.save
+        expect(DoiUpdatingJob).to have_received(:perform_later)
+      end
+    end
+
+    context 'when the version is published and the work does not have a Doi' do
+      let(:work_version) { build(:work_version, :published) }
+
+      it 'does NOT send any updates to DataCite' do
+        work_version.work.doi = nil
+        work_version.update_doi = true
+        work_version.save
+        expect(DoiUpdatingJob).not_to have_received(:perform_later)
+      end
+    end
+  end
+
   describe '#update_index' do
     let(:work_version) { described_class.new }
 
     before do
       allow(WorkIndexer).to receive(:call)
-      allow(work_version).to receive(:reload)
     end
 
-    context 'when the uuid is nil' do
-      before { allow(work_version).to receive(:uuid).and_return(nil) }
-
-      it 'reloads the version and calls the WorkIndexer' do
-        work_version.update_index
-        expect(work_version).to have_received(:reload)
-        expect(WorkIndexer).to have_received(:call)
-      end
-    end
-
-    context 'when the uuid is present' do
-      before { allow(work_version).to receive(:uuid).and_return(SecureRandom.uuid) }
-
-      it 'does NOT reload the version and calls the WorkIndexer' do
-        work_version.update_index
-        expect(work_version).not_to have_received(:reload)
-        expect(WorkIndexer).to have_received(:call)
-      end
+    it 'calls the WorkIndexer' do
+      work_version.update_index
+      expect(WorkIndexer).to have_received(:call)
     end
   end
 

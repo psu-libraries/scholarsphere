@@ -4,6 +4,7 @@ class Work < ApplicationRecord
   include Permissions
   include DepositedAtTimestamp
   include AllDois
+  include GeneratedUuids
 
   fields_with_dois :doi
 

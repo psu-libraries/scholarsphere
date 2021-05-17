@@ -27,6 +27,11 @@ OkComputer::Registry.register(
   HealthChecks::VersionCheck.new
 )
 
+OkComputer::Registry.register(
+  'dois',
+  HealthChecks::Dois.new(ENV.fetch('DRAFT_DOI_THRESHOLD', 0).to_i)
+)
+
 # Reports as Failed, but continues to return 200 status code.
 # This is so a POD won't get restarted just for optional checks.
 OkComputer.make_optional %w(sidekiq sidekiq_deadset version)

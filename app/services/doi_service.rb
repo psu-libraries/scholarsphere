@@ -60,7 +60,7 @@ module DoiService
       @work_version = if resource.is_a? WorkVersion
                         resource
                       elsif resource.is_a? Work
-                        resource.latest_version
+                        resource.latest_published_version
                       end
     end
 
@@ -69,6 +69,8 @@ module DoiService
       is_draft = work_version.draft?
 
       case
+      when work_version.is_a?(NullWorkVersion)
+        # No-op
       when !has_doi_already && is_draft
         doi = register_new_doi
         resource.update_attribute(:doi, doi)

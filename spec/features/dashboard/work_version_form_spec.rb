@@ -8,7 +8,6 @@ RSpec.describe 'Publishing a work', with_user: :user do
   let(:metadata) { attributes_for(:work_version, :with_complete_metadata) }
 
   before do
-    allow(SolrIndexingJob).to receive(:perform_now).and_call_original
     allow(SolrIndexingJob).to receive(:perform_later)
   end
 
@@ -34,7 +33,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(new_work_version.version_number).to eq 1
 
         expect(page).to have_current_path(resource_path(new_work_version.uuid))
-        expect(SolrIndexingJob).to have_received(:perform_now).at_least(:once)
+        expect(SolrIndexingJob).to have_received(:perform_later).at_least(:once)
       end
     end
 
@@ -56,6 +55,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(new_work_version.version_number).to eq 1
         expect(new_work_version.title).to eq metadata[:title]
         expect(new_work_version.description).to eq metadata[:description]
+        expect(new_work_version.publisher_statement).to eq metadata[:publisher_statement]
         expect(new_work_version.published_date).to eq metadata[:published_date]
         expect(new_work_version.keyword).to eq [metadata[:keyword]]
         expect(new_work_version.subtitle).to eq metadata[:subtitle]
@@ -69,20 +69,18 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(new_work_version.source).to eq [metadata[:source]]
 
         expect(page).to have_current_path(dashboard_form_contributors_path('work_version', new_work_version))
-        expect(SolrIndexingJob).to have_received(:perform_now).at_least(:once)
+        expect(SolrIndexingJob).to have_received(:perform_later).at_least(:once)
       end
     end
 
     context 'when saving-and-continuing, then hitting cancel' do
-      it 'indexes the work the initial time' do
+      it 'returns to the resource page' do
         visit dashboard_form_work_versions_path
 
         FeatureHelpers::DashboardForm.fill_in_work_details(metadata)
         FeatureHelpers::DashboardForm.save_and_continue
 
         FeatureHelpers::DashboardForm.cancel
-
-        visit dashboard_root_path
 
         expect(page).to have_content metadata[:title]
       end
@@ -107,7 +105,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         work_version.reload
         expect(work_version.title).to eq metadata[:title]
-        expect(SolrIndexingJob).to have_received(:perform_now).once
+        expect(SolrIndexingJob).to have_received(:perform_later).once
       end
     end
 
@@ -122,6 +120,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(work_version.version_number).to eq 2
         expect(work_version.title).to eq metadata[:title]
         expect(work_version.description).to eq metadata[:description]
+        expect(work_version.publisher_statement).to eq metadata[:publisher_statement]
         expect(work_version.published_date).to eq metadata[:published_date]
         expect(work_version.keyword).to eq [metadata[:keyword]]
         expect(work_version.subtitle).to eq metadata[:subtitle]
@@ -135,8 +134,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(work_version.source).to eq [metadata[:source]]
 
         expect(page).to have_current_path(dashboard_form_contributors_path('work_version', work_version))
-        expect(SolrIndexingJob).not_to have_received(:perform_now)
-        expect(SolrIndexingJob).to have_received(:perform_later)
+        expect(SolrIndexingJob).to have_received(:perform_later).once
       end
     end
 
@@ -157,7 +155,6 @@ RSpec.describe 'Publishing a work', with_user: :user do
         end
 
         expect(page).to have_current_path(dashboard_form_contributors_path('work_version', work_version))
-        expect(SolrIndexingJob).not_to have_received(:perform_now)
         expect(SolrIndexingJob).not_to have_received(:perform_later)
       end
     end
@@ -193,8 +190,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(work_version.contributor).to eq [metadata[:contributor]]
 
         expect(page).to have_current_path(dashboard_form_files_path(work_version))
-        expect(SolrIndexingJob).not_to have_received(:perform_now)
-        expect(SolrIndexingJob).to have_received(:perform_later)
+        expect(SolrIndexingJob).to have_received(:perform_later).once
       end
     end
 
@@ -235,7 +231,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(work_version.creators[1].display_name).to eq('Adam Wead')
 
         expect(page).to have_current_path(dashboard_form_files_path(work_version))
-        expect(SolrIndexingJob).not_to have_received(:perform_now)
+        expect(SolrIndexingJob).to have_received(:perform_later).once
       end
     end
 
@@ -274,8 +270,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(work_version.creators[1].display_name).to eq('Dr. Adam Wead')
 
         expect(page).to have_current_path(dashboard_form_files_path(work_version))
-        expect(SolrIndexingJob).not_to have_received(:perform_now)
-        expect(SolrIndexingJob).to have_received(:perform_later)
+        expect(SolrIndexingJob).to have_received(:perform_later).once
       end
     end
 
@@ -316,8 +311,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(work_version.creators[1].display_name).to eq(existing_actor.display_name)
 
         expect(page).to have_current_path(dashboard_form_files_path(work_version))
-        expect(SolrIndexingJob).not_to have_received(:perform_now)
-        expect(SolrIndexingJob).to have_received(:perform_later)
+        expect(SolrIndexingJob).to have_received(:perform_later).once
       end
     end
 
@@ -366,8 +360,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(work_version.creators[1].surname).to eq(metadata[:surname])
 
         expect(page).to have_current_path(dashboard_form_files_path(work_version))
-        expect(SolrIndexingJob).not_to have_received(:perform_now)
-        expect(SolrIndexingJob).to have_received(:perform_later)
+        expect(SolrIndexingJob).to have_received(:perform_later).once
       end
     end
 
@@ -396,8 +389,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         expect(work_version.reload.creators.map(&:surname)).to contain_exactly(creators.last.surname)
         expect(page).to have_current_path(dashboard_form_files_path(work_version))
-        expect(SolrIndexingJob).not_to have_received(:perform_now)
-        expect(SolrIndexingJob).to have_received(:perform_later)
+        expect(SolrIndexingJob).to have_received(:perform_later).once
       end
     end
 
@@ -412,16 +404,16 @@ RSpec.describe 'Publishing a work', with_user: :user do
       end
 
       it 'saves the creator ordering' do
+        visit dashboard_form_contributors_path('work_version', work_version)
+
         # Sanity Check
         expect(work_version.reload.creators.map(&:display_name)).to eq(['Creator A', 'Creator B'])
 
-        visit dashboard_form_contributors_path('work_version', work_version)
-
         page.find_all('.js-move-down').first.click
-        FeatureHelpers::DashboardForm.save_as_draft_and_exit
+        FeatureHelpers::DashboardForm.save_and_continue
 
         expect(work_version.reload.creators.map(&:display_name)).to eq(['Creator B', 'Creator A'])
-        expect(SolrIndexingJob).to have_received(:perform_now).once
+        expect(SolrIndexingJob).to have_received(:perform_later).once
       end
     end
   end
@@ -441,7 +433,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
       # Save, reload the page, and ensure that it's now in the files table
       FeatureHelpers::DashboardForm.save_as_draft_and_exit
-      expect(SolrIndexingJob).to have_received(:perform_now).once
+      expect(SolrIndexingJob).to have_received(:perform_later).once
       visit dashboard_form_files_path(work_version)
 
       within('.table') do
@@ -475,7 +467,6 @@ RSpec.describe 'Publishing a work', with_user: :user do
         fill_in 'work_version_published_date', with: 'this is not a valid date'
         FeatureHelpers::DashboardForm.publish
 
-        expect(SolrIndexingJob).not_to have_received(:perform_now)
         expect(SolrIndexingJob).not_to have_received(:perform_later)
 
         expect(page).to have_current_path(dashboard_form_publish_path(work_version))
@@ -542,6 +533,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       expect(version.version_number).to eq 1
       expect(version.title).to eq different_metadata[:title]
       expect(version.description).to eq different_metadata[:description]
+      expect(version.publisher_statement).to eq different_metadata[:publisher_statement]
       expect(version.published_date).to eq different_metadata[:published_date]
       expect(version.keyword).to eq [different_metadata[:keyword]]
       expect(version.publisher).to eq [different_metadata[:publisher]]
@@ -598,6 +590,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       expect(version.version_number).to eq 1
       expect(version.title).to eq different_metadata[:title]
       expect(version.description).to eq different_metadata[:description]
+      expect(version.publisher_statement).to eq different_metadata[:publisher_statement]
       expect(version.published_date).to eq different_metadata[:published_date]
       expect(version.keyword).to eq [different_metadata[:keyword]]
       expect(version.publisher).to eq [different_metadata[:publisher]]
@@ -616,12 +609,22 @@ RSpec.describe 'Publishing a work', with_user: :user do
     let(:different_metadata) { attributes_for(:work_version, :with_complete_metadata) }
     let(:user) { create(:user, :admin) }
 
+    # RSpec mocks _cumulatively_ record the number of times they've been called,
+    # we need a way to say "from this exact point, you should have been called
+    # once." We accomplish this by tearing down the mock and setting it back up.
+    def mock_solr_indexing_job
+      RSpec::Mocks.space.proxy_for(SolrIndexingJob)&.reset
+
+      allow(SolrIndexingJob).to receive(:perform_later).and_call_original
+    end
+
     it 'allows an administrator to update the metadata' do
       visit dashboard_form_publish_path(work_version)
 
+      mock_solr_indexing_job
       FeatureHelpers::DashboardForm.fill_in_publishing_details(different_metadata)
       FeatureHelpers::DashboardForm.finish
-      expect(SolrIndexingJob).to have_received(:perform_now)
+      expect(SolrIndexingJob).to have_received(:perform_later).once
 
       work_version.reload
       expect(work_version.rights).to eq(different_metadata[:rights])

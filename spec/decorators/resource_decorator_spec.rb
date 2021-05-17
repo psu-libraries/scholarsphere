@@ -193,12 +193,18 @@ RSpec.describe ResourceDecorator do
 
         This paragraph has <h1>sneaky html</h1>
       MARKDOWN
+
+      allow(resource).to receive(:publisher_statement).and_return(<<-MARKDOWN.strip_heredoc)
+        ## Publisher's Statement
+
+        Here's some important stuff that you need to know.
+      MARKDOWN
     end
 
     it 'renders the description into markdown' do
       expect(description_html).to be_html_safe
 
-      expect(parsed.css('p').length).to eq 4
+      expect(parsed.css('p').length).to eq 5
 
       parsed.css('p').first.tap do |first_paragraph|
         expect(first_paragraph.css('em').text).to eq 'emphasized'
@@ -228,6 +234,7 @@ RSpec.describe ResourceDecorator do
     context 'when given nil' do
       before do
         allow(resource).to receive(:description).and_return(nil)
+        allow(resource).to receive(:publisher_statement).and_return(nil)
       end
 
       it { is_expected.to eq '' }
@@ -238,8 +245,12 @@ RSpec.describe ResourceDecorator do
         allow(Redcarpet::Markdown).to receive(:new).and_raise
       end
 
+      let(:combined_description) do
+        [resource.description, resource.publisher_statement].join("\r\n")
+      end
+
       it 'traps the error and returns the original string' do
-        expect(description_html).to eq resource.description
+        expect(description_html).to eq(combined_description)
         expect(description_html).not_to be_html_safe
       end
     end
@@ -254,16 +265,20 @@ RSpec.describe ResourceDecorator do
       allow(resource).to receive(:description).and_return(
         'This *is* _marked_ [down](http://psu.edu)'
       )
+      allow(resource).to receive(:publisher_statement).and_return(
+        '##Publisher Statement'
+      )
     end
 
     it 'returns plain text, without any markdown or html formatting' do
-      expect(description_plain_text).to eq 'This is marked down'
+      expect(description_plain_text).to match(/This is marked down\n\nPublisher Statement/)
       expect(description_plain_text).not_to be_html_safe
     end
 
     context 'when given nil' do
       before do
         allow(resource).to receive(:description).and_return(nil)
+        allow(resource).to receive(:publisher_statement).and_return(nil)
       end
 
       it { is_expected.to eq '' }

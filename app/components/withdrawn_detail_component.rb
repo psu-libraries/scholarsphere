@@ -6,7 +6,7 @@ class WithdrawnDetailComponent < FilesMessageComponent
   end
 
   def heading
-    I18n.t('withdrawn.heading')
+    I18n.t('files_message.withdrawn.heading')
   end
 
   def i18n_key

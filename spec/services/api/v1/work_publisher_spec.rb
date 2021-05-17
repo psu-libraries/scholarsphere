@@ -6,6 +6,8 @@ require 'rails_helper'
 # ActionController::Parameters which the IngestController would be passing to the service.
 
 RSpec.describe Api::V1::WorkPublisher do
+  include ActionDispatch::TestProcess::FixtureFile
+
   let(:user) { build(:user) }
   let(:work) { build(:work_version, :with_complete_metadata) }
   let(:depositor) { build(:person) }

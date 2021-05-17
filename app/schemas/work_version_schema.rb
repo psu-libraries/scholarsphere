@@ -27,17 +27,14 @@ class WorkVersionSchema < BaseSchema
 
     # @note Remove duplicate errors that come from the parent work.
     def migration_errors
-      errors = build_migration_errors
-      errors
-        .map { |error, _value| errors.delete(error) if error.match?(/^work/) }
-      errors.full_messages
-    end
-
-    def build_migration_errors
       current_state = resource.aasm_state
       resource.publish unless resource.published?
       resource.validate
       resource.aasm_state = current_state
-      resource.errors
+
+      resource
+        .errors
+        .map(&:full_message)
+        .reject { |message| message.match?(/^Work/) }
     end
 end
