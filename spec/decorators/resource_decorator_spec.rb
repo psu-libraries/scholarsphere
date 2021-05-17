@@ -246,7 +246,7 @@ RSpec.describe ResourceDecorator do
       end
 
       let(:combined_description) do
-        [resource.description, resource.publisher_statement].join(' ')
+        [resource.description, resource.publisher_statement].join("\r\n")
       end
 
       it 'traps the error and returns the original string' do
@@ -271,7 +271,7 @@ RSpec.describe ResourceDecorator do
     end
 
     it 'returns plain text, without any markdown or html formatting' do
-      expect(description_plain_text).to eq 'This is marked down ##Publisher Statement'
+      expect(description_plain_text).to match(/This is marked down\n\nPublisher Statement/)
       expect(description_plain_text).not_to be_html_safe
     end
 
