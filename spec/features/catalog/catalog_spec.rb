@@ -95,7 +95,7 @@ RSpec.describe 'Blacklight catalog page', :inline_jobs do
         end
 
         within('.meta-table') do
-          expect(page).to have_content(resource.deposited_at.to_formatted_s(:long))
+          expect(page).to have_content(resource.deposited_at.to_formatted_s(:long_without_time))
         end
       end
     end
