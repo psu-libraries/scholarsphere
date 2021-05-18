@@ -462,8 +462,9 @@ en:
   home:
     intro:
       heading: 'ScholarSphere Updates'
-      content: >
+      content: >-
         We have released a new version of ScholarSphere! The new platform includes an improved interface for uploading your work and better support for large files. We've also added support for ‘draft’ works and work versions. Additional features will be released in the coming months.
+      read_more: 'Read more about ScholarSphere'
     search:
       heading: 'Browse and search for works'
       placeholder: 'Search for titles, keywords, resource types, creators, etc.'
