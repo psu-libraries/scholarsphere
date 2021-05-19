@@ -36,25 +36,6 @@ RSpec.describe WorkPolicy, type: :policy do
       it { is_expected.to permit(application, work) }
     end
 
-    context 'with a restricted work' do
-      let(:work) do
-        create :work, :with_no_access, has_draft: false,
-               depositor: depositor_actor,
-               proxy_depositor: proxy_actor,
-               discover_users: [discover_user],
-               edit_users: [edit_user]
-      end
-
-      it { is_expected.to permit(depositor, work) }
-      it { is_expected.to permit(proxy, work) }
-      it { is_expected.not_to permit(edit_user, work) }
-      it { is_expected.not_to permit(discover_user, work) }
-      it { is_expected.not_to permit(other_user, work) }
-      it { is_expected.not_to permit(public, work) }
-      it { is_expected.to permit(admin, work) }
-      it { is_expected.to permit(application, work) }
-    end
-
     context 'with a draft work' do
       let(:work) do
         create :work, has_draft: true,
@@ -64,14 +45,14 @@ RSpec.describe WorkPolicy, type: :policy do
                edit_users: [edit_user]
       end
 
-      it { is_expected.not_to permit(depositor, work) }
-      it { is_expected.not_to permit(proxy, work) }
-      it { is_expected.not_to permit(edit_user, work) }
+      it { is_expected.to permit(depositor, work) }
+      it { is_expected.to permit(proxy, work) }
+      it { is_expected.to permit(edit_user, work) }
       it { is_expected.not_to permit(discover_user, work) }
       it { is_expected.not_to permit(other_user, work) }
       it { is_expected.not_to permit(public, work) }
-      it { is_expected.not_to permit(admin, work) }
-      it { is_expected.not_to permit(application, work) }
+      it { is_expected.to permit(admin, work) }
+      it { is_expected.to permit(application, work) }
     end
 
     context 'with a withdrawn work' do
@@ -83,14 +64,14 @@ RSpec.describe WorkPolicy, type: :policy do
                edit_users: [edit_user]
       end
 
-      it { is_expected.not_to permit(depositor, work) }
-      it { is_expected.not_to permit(proxy, work) }
-      it { is_expected.not_to permit(edit_user, work) }
+      it { is_expected.to permit(depositor, work) }
+      it { is_expected.to permit(proxy, work) }
+      it { is_expected.to permit(edit_user, work) }
       it { is_expected.not_to permit(discover_user, work) }
       it { is_expected.not_to permit(other_user, work) }
       it { is_expected.not_to permit(public, work) }
-      it { is_expected.not_to permit(admin, work) }
-      it { is_expected.not_to permit(application, work) }
+      it { is_expected.to permit(admin, work) }
+      it { is_expected.to permit(application, work) }
     end
   end
 

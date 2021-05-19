@@ -44,7 +44,11 @@ RSpec.describe 'Blacklight catalog page', :inline_jobs do
         'select',
         params: {
           q: '*:*',
-          fq: ['{!terms f=model_ssi}Work,Collection'],
+          fq: [
+            '{!terms f=model_ssi}Work,Collection',
+            '-aasm_state_tesim:draft',
+            '-aasm_state_tesim:withdrawn'
+          ],
           sort: 'deposited_at_dtsi desc',
           fl: ['title_tesim']
         }

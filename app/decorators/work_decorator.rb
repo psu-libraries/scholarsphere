@@ -5,7 +5,7 @@ class WorkDecorator < ResourceDecorator
     versions.map { |version| WorkVersionDecorator.new(version) }
   end
 
-  def decorated_latest_published_version
-    WorkVersionDecorator.new(latest_published_version)
+  def decorated_representative_version
+    WorkVersionDecorator.new(representative_version)
   end
 end
