@@ -10,33 +10,38 @@ RSpec.describe WorkVersionPolicy, type: :policy do
   let(:user) { instance_double 'User', admin?: false }
   let(:work_policy) { instance_double 'WorkPolicy' }
 
-  permissions :show?, :diff? do
+  permissions :show? do
+    it { is_expected.to permit(user, work_version) }
+  end
+
+  permissions :diff? do
     before { allow(Pundit).to receive(:policy).with(user, work).and_return(work_policy) }
 
-    context 'when the user has show access to the work' do
-      before { allow(work_policy).to receive(:show?).and_return(true) }
+    context 'when the record is published and not editable' do
+      before do
+        allow(work_version).to receive(:published?).and_return(true)
+        allow(work_policy).to receive(:edit?).and_return(false)
+      end
 
       it { is_expected.to permit(user, work_version) }
     end
 
-    context 'when the user has NO show access to the work' do
-      context 'when the user has edit access to the work' do
-        before do
-          allow(work_policy).to receive(:show?).and_return(false)
-          allow(work_policy).to receive(:edit?).and_return(true)
-        end
-
-        it { is_expected.to permit(user, work_version) }
+    context 'when the record is not published and is editable' do
+      before do
+        allow(work_version).to receive(:published?).and_return(false)
+        allow(work_policy).to receive(:edit?).and_return(true)
       end
 
-      context 'when the user has NO edit access to the work' do
-        before do
-          allow(work_policy).to receive(:show?).and_return(false)
-          allow(work_policy).to receive(:edit?).and_return(false)
-        end
+      it { is_expected.to permit(user, work_version) }
+    end
 
-        it { is_expected.not_to permit(user, work_version) }
+    context 'when the record is not published and not editable' do
+      before do
+        allow(work_version).to receive(:published?).and_return(false)
+        allow(work_policy).to receive(:edit?).and_return(false)
       end
+
+      it { is_expected.not_to permit(user, work_version) }
     end
   end
 

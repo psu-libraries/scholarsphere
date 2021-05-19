@@ -8,7 +8,7 @@ class WorkPolicy < ApplicationPolicy
   end
 
   def show?
-    published? || editable?
+    true
   end
 
   def edit?
