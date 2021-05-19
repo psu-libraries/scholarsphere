@@ -48,9 +48,9 @@ RSpec.describe WorkPolicy, type: :policy do
       it { is_expected.to permit(depositor, work) }
       it { is_expected.to permit(proxy, work) }
       it { is_expected.to permit(edit_user, work) }
-      it { is_expected.not_to permit(discover_user, work) }
-      it { is_expected.not_to permit(other_user, work) }
-      it { is_expected.not_to permit(public, work) }
+      it { is_expected.to permit(discover_user, work) }
+      it { is_expected.to permit(other_user, work) }
+      it { is_expected.to permit(public, work) }
       it { is_expected.to permit(admin, work) }
       it { is_expected.to permit(application, work) }
     end
@@ -67,9 +67,9 @@ RSpec.describe WorkPolicy, type: :policy do
       it { is_expected.to permit(depositor, work) }
       it { is_expected.to permit(proxy, work) }
       it { is_expected.to permit(edit_user, work) }
-      it { is_expected.not_to permit(discover_user, work) }
-      it { is_expected.not_to permit(other_user, work) }
-      it { is_expected.not_to permit(public, work) }
+      it { is_expected.to permit(discover_user, work) }
+      it { is_expected.to permit(other_user, work) }
+      it { is_expected.to permit(public, work) }
       it { is_expected.to permit(admin, work) }
       it { is_expected.to permit(application, work) }
     end
