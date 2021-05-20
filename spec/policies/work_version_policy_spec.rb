@@ -307,17 +307,17 @@ RSpec.describe WorkVersionPolicy, type: :policy do
   permissions :new? do
     before { allow(Pundit).to receive(:policy).with(user, work).and_return(work_policy) }
 
-    context 'when the parent work is elligible to create a new version' do
+    context 'when the parent work is eligible to create a new version' do
       before { allow(work_policy).to receive(:create_version?).and_return(true) }
 
       context 'when the given work version is the latest published version' do
-        before { allow(work).to receive(:latest_published_version).and_return(work_version) }
+        before { allow(work).to receive(:representative_version).and_return(work_version) }
 
         it { is_expected.to permit(user, work_version) }
       end
 
       context 'when the given work version is NOT the latest published version' do
-        before { allow(work).to receive(:latest_published_version).and_return(instance_double('WorkVersion')) }
+        before { allow(work).to receive(:representative_version).and_return(instance_double('WorkVersion')) }
 
         it { is_expected.not_to permit(user, work_version) }
       end
@@ -327,13 +327,13 @@ RSpec.describe WorkVersionPolicy, type: :policy do
       before { allow(work_policy).to receive(:create_version?).and_return(false) }
 
       context 'when the given work version is the latest published version' do
-        before { allow(work).to receive(:latest_published_version).and_return(work_version) }
+        before { allow(work).to receive(:representative_version).and_return(work_version) }
 
         it { is_expected.not_to permit(user, work_version) }
       end
 
       context 'when the given work version is NOT the latest published version' do
-        before { allow(work).to receive(:latest_published_version).and_return(instance_double('WorkVersion')) }
+        before { allow(work).to receive(:representative_version).and_return(instance_double('WorkVersion')) }
 
         it { is_expected.not_to permit(user, work_version) }
       end

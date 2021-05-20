@@ -54,7 +54,7 @@ class WorkVersionPolicy < ApplicationPolicy
 
   def new?
     Pundit.policy(user, record.work).create_version? &&
-      record == record.work.latest_published_version
+      record == record.work.representative_version
   end
 
   private
