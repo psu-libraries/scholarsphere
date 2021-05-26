@@ -9,6 +9,10 @@ RSpec.describe FileResource, type: :model do
     let(:resource) { create(:file_resource) }
   end
 
+  it_behaves_like 'a resource with a generated uuid' do
+    let(:resource) { build(:file_resource) }
+  end
+
   describe 'table' do
     it { is_expected.to have_db_column(:file_data).of_type(:jsonb) }
   end
@@ -23,6 +27,31 @@ RSpec.describe FileResource, type: :model do
     it { is_expected.to have_many(:work_versions).through(:file_version_memberships) }
     it { is_expected.to have_many(:view_statistics) }
     it { is_expected.to have_many(:legacy_identifiers) }
+  end
+
+  describe '::reindex_all' do
+    before do
+      create(:file_resource)
+      allow(IndexingService).to receive(:commit)
+      allow(SolrIndexingJob).to receive(:perform_now)
+      allow(SolrIndexingJob).to receive(:perform_later)
+    end
+
+    context 'with defaults' do
+      it 'reindexes all the files' do
+        described_class.reindex_all
+        expect(SolrIndexingJob).to have_received(:perform_now).once
+        expect(IndexingService).to have_received(:commit).once
+      end
+    end
+
+    context 'when async' do
+      it 'reindexes all the files' do
+        described_class.reindex_all(async: true)
+        expect(SolrIndexingJob).to have_received(:perform_later).once
+        expect(IndexingService).to have_received(:commit).once
+      end
+    end
   end
 
   describe '#save' do
@@ -51,6 +80,31 @@ RSpec.describe FileResource, type: :model do
         api_token: ExternalApp.metadata_listener.token,
         services: [:virus, :extracted_text]
       )
+    end
+  end
+
+  describe 'after save' do
+    let(:file_resource) { build(:file_resource) }
+
+    # I've heard it's bad practice to mock the object under test, but I can't
+    # think of a better way to do this without testing the contents of
+    # perform_update_index twice.
+
+    it 'calls #perform_update_index' do
+      allow(file_resource).to receive(:perform_update_index)
+      file_resource.save!
+      expect(file_resource).to have_received(:perform_update_index)
+    end
+  end
+
+  describe '#perform_update_index' do
+    let(:file_resource) { described_class.new }
+
+    before { allow(SolrIndexingJob).to receive(:perform_later) }
+
+    it 'provides itself to SolrIndexingJob.perform_later' do
+      file_resource.send(:perform_update_index)
+      expect(SolrIndexingJob).to have_received(:perform_later).with(file_resource)
     end
   end
 
@@ -112,6 +166,43 @@ RSpec.describe FileResource, type: :model do
       before { allow(client).to receive(:head_object).with(any_args).and_raise(error) }
 
       its(:etag) { is_expected.to eq('[unavailable]') }
+    end
+  end
+
+  describe '#to_solr' do
+    subject { create(:file_resource).to_solr }
+
+    let(:expected_keys) do
+      %w(
+        created_at_dtsi
+        deposited_at_dtsi
+        id
+        model_ssi
+        updated_at_dtsi
+        uuid_ssi
+      )
+    end
+
+    its(:keys) { is_expected.to contain_exactly(*expected_keys) }
+  end
+
+  describe '#update_index' do
+    let(:file_resource) { build(:file_resource) }
+
+    before { allow(IndexingService).to receive(:add_document) }
+
+    context 'with defaults' do
+      it 'calls the IndexingService' do
+        file_resource.update_index
+        expect(IndexingService).to have_received(:add_document).with(file_resource.to_solr, commit: true)
+      end
+    end
+
+    context 'when specifing NOT to commit' do
+      it 'calls the IndexingService and does not commit it to the index' do
+        file_resource.update_index(commit: false)
+        expect(IndexingService).to have_received(:add_document).with(file_resource.to_solr, commit: false)
+      end
     end
   end
 end

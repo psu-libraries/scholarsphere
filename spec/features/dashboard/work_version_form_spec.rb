@@ -433,7 +433,10 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
       # Save, reload the page, and ensure that it's now in the files table
       FeatureHelpers::DashboardForm.save_as_draft_and_exit
-      expect(SolrIndexingJob).to have_received(:perform_later).once
+
+      # Once for the work version, twice for the file. The second call for the file is most likely the promotion job.
+      expect(SolrIndexingJob).to have_received(:perform_later).thrice
+
       visit dashboard_form_files_path(work_version)
 
       within('.table') do
