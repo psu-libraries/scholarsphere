@@ -3,6 +3,7 @@
 class FileUploader < Shrine
   plugin :backgrounding
   plugin :add_metadata
+  plugin :derivatives
 
   def self.api_endpoint(record)
     File.join(
@@ -34,7 +35,8 @@ class FileUploader < Shrine
     MetadataListener::Job.perform_later(
       path: [file_data['storage'], file_data['id']].join('/'),
       endpoint: FileUploader.api_endpoint(record),
-      api_token: ExternalApp.metadata_listener.token
+      api_token: ExternalApp.metadata_listener.token,
+      services: [:virus, :extracted_text]
     )
   end
 

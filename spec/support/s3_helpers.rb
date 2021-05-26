@@ -8,10 +8,10 @@ class S3Helpers
   # well as some additional metadata that Shrine will use. Here, we are creating a component part of that last request
   # by uploading the file directly into S3 (bypassing the pre-signed url + post process) and returning a hash which can
   # be incorporated into the ingest request to Scholarsphere.
-  def self.shrine_upload(file)
+  def self.shrine_upload(file:, storage: Scholarsphere::ShrineConfig::CACHE_PREFIX)
     path = Pathname.new(file)
     id = "#{SecureRandom.uuid}#{path.extname}"
-    key = "#{Scholarsphere::ShrineConfig::CACHE_PREFIX}/#{id}"
+    key = "#{storage}/#{id}"
     options = Api::V1::UploadsController.new.send(:s3_options)
     client = Aws::S3::Client.new(options)
 
@@ -19,7 +19,7 @@ class S3Helpers
 
     {
       id: id,
-      storage: Scholarsphere::ShrineConfig::CACHE_PREFIX,
+      storage: storage,
       metadata: {
         size: file.size,
         filename: file.basename.to_s,

@@ -22,6 +22,10 @@ class FileResource < ApplicationRecord
     '[unavailable]'
   end
 
+  def extracted_text
+    file_derivatives[:text]
+  end
+
   private
 
     def client
