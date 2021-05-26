@@ -64,6 +64,27 @@ RSpec.describe Api::V1::FilesController, type: :controller do
       end
     end
 
+    context 'when adding derivatives' do
+      let(:upload) do
+        S3Helpers.shrine_upload(file: text_file, storage: Scholarsphere::ShrineConfig::DERIVATIVES_PREFIX)
+      end
+
+      before do
+        patch :update, params: {
+          id: file.id,
+          derivatives: {
+            text: upload
+          }
+        }
+      end
+
+      it 'adds the extracted text file to the record' do
+        expect(response).to be_ok
+        file.reload
+        expect(file.extracted_text.id).to eq(upload[:id])
+      end
+    end
+
     context 'when saving fails' do
       before do
         file.errors.add(:metadata, 'bad')

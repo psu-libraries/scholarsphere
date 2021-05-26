@@ -48,7 +48,8 @@ RSpec.describe FileResource, type: :model do
       expect(MetadataListener::Job).to have_received(:perform_later).with(
         path: "#{file_data['storage']}/#{file_data['id']}",
         endpoint: "http://#{Rails.application.routes.default_url_options[:host]}/api/v1/files/#{file_resource.id}",
-        api_token: ExternalApp.metadata_listener.token
+        api_token: ExternalApp.metadata_listener.token,
+        services: [:virus, :extracted_text]
       )
     end
   end
@@ -62,6 +63,27 @@ RSpec.describe FileResource, type: :model do
     its(:size) { is_expected.to eq(63960) }
     its(:mime_type) { is_expected.to eq('image/png') }
     its(:original_filename) { is_expected.to eq('image.png') }
+  end
+
+  describe '#derivatives' do
+    subject { file_resource.extracted_text }
+
+    let(:file_resource) { build(:file_resource, :with_processed_image) }
+    let(:upload) { S3Helpers.shrine_upload(file: text_file, storage: Scholarsphere::ShrineConfig::DERIVATIVES_PREFIX) }
+    let(:uploaded_file) do
+      Shrine.uploaded_file(
+        storage: Scholarsphere::ShrineConfig::DERIVATIVES_PREFIX,
+        id: upload[:id],
+        metadata: upload[:metadata]
+      )
+    end
+
+    before do
+      file_resource.file_attacher.merge_derivatives(text: uploaded_file)
+    end
+
+    it { is_expected.to be_a(Shrine::UploadedFile) }
+    its(:id) { is_expected.to eq(upload[:id]) }
   end
 
   describe '#etag' do
