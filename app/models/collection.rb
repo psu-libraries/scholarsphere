@@ -100,8 +100,14 @@ class Collection < ApplicationRecord
     end
   end
 
-  def self.reindex_all(relation: all)
-    relation.find_each { |collection| CollectionIndexer.call(collection, commit: false) }
+  def self.reindex_all(relation: all, async: false)
+    relation.find_each do |collection|
+      if async
+        SolrIndexingJob.perform_later(collection, commit: false)
+      else
+        SolrIndexingJob.perform_now(collection, commit: false)
+      end
+    end
     IndexingService.commit
   end
 
