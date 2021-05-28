@@ -119,12 +119,16 @@ RSpec.describe Collection, type: :model do
       create(:collection)
       allow(IndexingService).to receive(:commit)
       allow(CollectionIndexer).to receive(:call)
+      allow(SolrIndexingJob).to receive(:perform_later)
     end
 
-    it 'reindexes all the collections and their versions into solr' do
-      described_class.reindex_all
-      expect(CollectionIndexer).to have_received(:call).once
-      expect(IndexingService).to have_received(:commit).once
+    context 'with the defaults' do
+      it 'reindexes all the collections and their versions into solr' do
+        described_class.reindex_all
+        expect(SolrIndexingJob).not_to have_received(:perform_later)
+        expect(CollectionIndexer).to have_received(:call).once
+        expect(IndexingService).to have_received(:commit).once
+      end
     end
 
     context 'when given a relation' do
@@ -136,6 +140,15 @@ RSpec.describe Collection, type: :model do
         described_class.reindex_all(relation: only_special_collections)
         expect(CollectionIndexer).to have_received(:call).once
         expect(CollectionIndexer).to have_received(:call).with(special_collection, anything)
+      end
+    end
+
+    context 'when indexing async' do
+      it 'runs the job later' do
+        described_class.reindex_all(async: true)
+        expect(SolrIndexingJob).to have_received(:perform_later).once
+        expect(CollectionIndexer).not_to have_received(:call)
+        expect(IndexingService).to have_received(:commit).once
       end
     end
   end
