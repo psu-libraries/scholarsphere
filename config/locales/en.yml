@@ -509,6 +509,9 @@ en:
     old_version:
       link: View the current version.
       message: This is an older version of the work.
+    draft_version:
+      link: View the draft version.
+      message: An updated draft version for this work is available.
     work_history: Work History
     works: Works
     doi:
