@@ -17,9 +17,9 @@ RSpec.describe WorkIndexer, :inline_jobs do
     let(:work) { create(:work, has_draft: true) }
     let(:draft) { work.versions[0] }
 
-    it 'indexes ONLY the draft version and marks it as the latest' do
+    it 'indexes both the work and the draft version, marking it as the latest' do
       expect(SolrDocument.find(draft.uuid)[:latest_version_bsi]).to be(true)
-      expect { SolrDocument.find(work.uuid) }.to raise_error(Blacklight::Exceptions::RecordNotFound)
+      expect(SolrDocument.find(work.uuid)[:title_tesim]).to eq([draft.title])
     end
   end
 
@@ -41,11 +41,11 @@ RSpec.describe WorkIndexer, :inline_jobs do
     let(:work) { create(:work, has_draft: false) }
     let(:current_published) { work.versions[0] }
 
-    it 'reindexes the withdrawn version and removes the work' do
+    it 'both work and withdrawn version are indexed' do
       expect(SolrDocument.find(work.uuid)[:title_tesim]).to eq([current_published.title])
       current_published.withdraw!
       expect(SolrDocument.find(current_published.uuid)[:latest_version_bsi]).to be(true)
-      expect { SolrDocument.find(work.uuid) }.to raise_error(Blacklight::Exceptions::RecordNotFound)
+      expect(SolrDocument.find(work.uuid)[:title_tesim]).to eq([current_published.title])
     end
   end
 end

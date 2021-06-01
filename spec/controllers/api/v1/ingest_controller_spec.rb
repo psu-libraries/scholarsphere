@@ -112,7 +112,7 @@ RSpec.describe Api::V1::IngestController, type: :controller do
 
     context 'when uploading files from S3', vcr: VCRHelpers.depositor_cassette do
       let(:s3_file) do
-        S3Helpers.shrine_upload(Pathname.new(fixture_path).join('image.png'))
+        S3Helpers.shrine_upload(file: Pathname.new(fixture_path).join('image.png'))
       end
 
       before do
@@ -141,7 +141,7 @@ RSpec.describe Api::V1::IngestController, type: :controller do
 
     context 'with missing parameters' do
       let(:s3_file) do
-        S3Helpers.shrine_upload(Pathname.new(fixture_path).join('image.png'))
+        S3Helpers.shrine_upload(file: Pathname.new(fixture_path).join('image.png'))
       end
 
       before do

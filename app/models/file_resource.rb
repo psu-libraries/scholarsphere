@@ -4,6 +4,9 @@ class FileResource < ApplicationRecord
   include FileUploader::Attachment(:file)
   include DepositedAtTimestamp
   include ViewStatistics
+  include GeneratedUuids
+
+  attr_writer :indexing_source
 
   has_many :file_version_memberships, dependent: :destroy
   has_many :work_versions, through: :file_version_memberships
@@ -12,7 +15,20 @@ class FileResource < ApplicationRecord
            as: :resource,
            dependent: :destroy
 
-  # @note Using `head_object` will retrieve the metadata without retriving the entire object.
+  after_save :perform_update_index
+
+  def self.reindex_all(relation: all, async: false)
+    relation.find_each do |file|
+      if async
+        SolrIndexingJob.perform_later(file, commit: false)
+      else
+        SolrIndexingJob.perform_now(file, commit: false)
+      end
+    end
+    IndexingService.commit
+  end
+
+  # @note Using `head_object` will retrieve the metadata without retrieving the entire object.
   def etag
     @etag ||= client
       .head_object(bucket: ENV['AWS_BUCKET'], key: "#{file_data['storage']}/#{file_data['id']}")
@@ -22,9 +38,35 @@ class FileResource < ApplicationRecord
     '[unavailable]'
   end
 
+  def extracted_text
+    file_derivatives[:text]
+  end
+
+  def to_solr
+    document_builder.generate(resource: self)
+  end
+
+  def update_index(commit: true)
+    IndexingService.add_document(to_solr, commit: commit)
+  end
+
+  def indexing_source
+    @indexing_source ||= SolrIndexingJob.public_method(:perform_later)
+  end
+
   private
 
     def client
       @client ||= Aws::S3::Client.new
+    end
+
+    def document_builder
+      SolrDocumentBuilder.new(
+        FileResourceSchema
+      )
+    end
+
+    def perform_update_index
+      indexing_source.call(self)
     end
 end

@@ -24,10 +24,15 @@ namespace :solr do
 
   desc 'Reindexes all the collections into Solr'
   task reindex_collections: :environment do
-    Collection.reindex_all
+    Collection.reindex_all(async: true)
   end
 
-  desc 'Reindexes all works and collections into Solr'
-  task reindex_all: [:environment, :reindex_works, :reindex_collections] do
+  desc 'Reindexes all the files into Solr'
+  task reindex_files: :environment do
+    FileResource.reindex_all(async: true)
+  end
+
+  desc 'Reindexes all works, collections, and files into Solr'
+  task reindex_all: [:environment, :reindex_works, :reindex_collections, :reindex_files] do
   end
 end

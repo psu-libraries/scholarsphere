@@ -12,9 +12,10 @@ RSpec.describe SearchBuilder do
   describe '.default_processor_chain' do
     its(:default_processor_chain) do
       is_expected.to include(
-        :restrict_search_based_on_model_types,
+        :search_related_files,
+        :restrict_search_to_works_and_collections,
         :apply_gated_discovery,
-        :exclude_embargoed_works,
+        :limit_to_public_resources,
         :log_solr_parameters
       )
     end
@@ -57,6 +58,34 @@ RSpec.describe SearchBuilder do
         expect(parameters['fq']).to include(
           '-embargoed_until_dtsi:[NOW TO *]'
         )
+      end
+    end
+
+    context 'with user input _explicitly_ on all fields' do
+      let(:parameters) { builder.with({ search_field: 'all_fields' }).where('user query').processed_parameters }
+
+      it 'searches related files' do
+        expect(parameters['q']).to eq(
+          '{!lucene}{!dismax v=user query} {!join from=id to=file_resource_ids_ssim}{!dismax v=user query}'
+        )
+      end
+    end
+
+    context 'with user input _implicitly_ on all fields' do
+      let(:parameters) { builder.with({}).where('user query').processed_parameters }
+
+      it 'searches related files' do
+        expect(parameters['q']).to eq(
+          '{!lucene}{!dismax v=user query} {!join from=id to=file_resource_ids_ssim}{!dismax v=user query}'
+        )
+      end
+    end
+
+    context 'with user input on _specificly_ on a given field' do
+      let(:parameters) { builder.with({ search_field: 'my_field' }).where('user query').processed_parameters }
+
+      it 'does NOT search related fields' do
+        expect(parameters['q']).to eq('user query')
       end
     end
   end

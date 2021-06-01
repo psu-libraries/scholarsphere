@@ -10,33 +10,38 @@ RSpec.describe WorkVersionPolicy, type: :policy do
   let(:user) { instance_double 'User', admin?: false }
   let(:work_policy) { instance_double 'WorkPolicy' }
 
-  permissions :show?, :diff? do
+  permissions :show? do
+    it { is_expected.to permit(user, work_version) }
+  end
+
+  permissions :diff? do
     before { allow(Pundit).to receive(:policy).with(user, work).and_return(work_policy) }
 
-    context 'when the user has show access to the work' do
-      before { allow(work_policy).to receive(:show?).and_return(true) }
+    context 'when the record is published and not editable' do
+      before do
+        allow(work_version).to receive(:published?).and_return(true)
+        allow(work_policy).to receive(:edit?).and_return(false)
+      end
 
       it { is_expected.to permit(user, work_version) }
     end
 
-    context 'when the user has NO show access to the work' do
-      context 'when the user has edit access to the work' do
-        before do
-          allow(work_policy).to receive(:show?).and_return(false)
-          allow(work_policy).to receive(:edit?).and_return(true)
-        end
-
-        it { is_expected.to permit(user, work_version) }
+    context 'when the record is not published and is editable' do
+      before do
+        allow(work_version).to receive(:published?).and_return(false)
+        allow(work_policy).to receive(:edit?).and_return(true)
       end
 
-      context 'when the user has NO edit access to the work' do
-        before do
-          allow(work_policy).to receive(:show?).and_return(false)
-          allow(work_policy).to receive(:edit?).and_return(false)
-        end
+      it { is_expected.to permit(user, work_version) }
+    end
 
-        it { is_expected.not_to permit(user, work_version) }
+    context 'when the record is not published and not editable' do
+      before do
+        allow(work_version).to receive(:published?).and_return(false)
+        allow(work_policy).to receive(:edit?).and_return(false)
       end
+
+      it { is_expected.not_to permit(user, work_version) }
     end
   end
 
@@ -302,17 +307,17 @@ RSpec.describe WorkVersionPolicy, type: :policy do
   permissions :new? do
     before { allow(Pundit).to receive(:policy).with(user, work).and_return(work_policy) }
 
-    context 'when the parent work is elligible to create a new version' do
+    context 'when the parent work is eligible to create a new version' do
       before { allow(work_policy).to receive(:create_version?).and_return(true) }
 
       context 'when the given work version is the latest published version' do
-        before { allow(work).to receive(:latest_published_version).and_return(work_version) }
+        before { allow(work).to receive(:representative_version).and_return(work_version) }
 
         it { is_expected.to permit(user, work_version) }
       end
 
       context 'when the given work version is NOT the latest published version' do
-        before { allow(work).to receive(:latest_published_version).and_return(instance_double('WorkVersion')) }
+        before { allow(work).to receive(:representative_version).and_return(instance_double('WorkVersion')) }
 
         it { is_expected.not_to permit(user, work_version) }
       end
@@ -322,13 +327,13 @@ RSpec.describe WorkVersionPolicy, type: :policy do
       before { allow(work_policy).to receive(:create_version?).and_return(false) }
 
       context 'when the given work version is the latest published version' do
-        before { allow(work).to receive(:latest_published_version).and_return(work_version) }
+        before { allow(work).to receive(:representative_version).and_return(work_version) }
 
         it { is_expected.not_to permit(user, work_version) }
       end
 
       context 'when the given work version is NOT the latest published version' do
-        before { allow(work).to receive(:latest_published_version).and_return(instance_double('WorkVersion')) }
+        before { allow(work).to receive(:representative_version).and_return(instance_double('WorkVersion')) }
 
         it { is_expected.not_to permit(user, work_version) }
       end

@@ -18,8 +18,18 @@ module Api::V1
 
       def update_metadata
         file_resource.file_attacher.add_metadata(metadata_params)
+        add_extracted_text
         file_resource.file_attacher.write
         file_resource.save
+      end
+
+      def add_extracted_text
+        file_params = derivatives_params[:text]
+        return if file_params.nil?
+
+        file_resource.file_attacher.merge_derivatives(
+          text: Shrine.uploaded_file(file_params.to_h)
+        )
       end
 
       def updated_response
@@ -49,12 +59,18 @@ module Api::V1
 
       def fits_params
         metadata
-          .fetch('fits', {})
+          .fetch(:fits, {})
+          .permit!
+      end
+
+      def derivatives_params
+        params
+          .fetch(:derivatives, {})
           .permit!
       end
 
       def metadata
-        @metadata ||= params.require(:metadata)
+        @metadata ||= params.fetch(:metadata, {})
       end
   end
 end

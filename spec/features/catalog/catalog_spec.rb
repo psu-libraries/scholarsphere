@@ -44,7 +44,11 @@ RSpec.describe 'Blacklight catalog page', :inline_jobs do
         'select',
         params: {
           q: '*:*',
-          fq: ['{!terms f=model_ssi}Work,Collection'],
+          fq: [
+            '{!terms f=model_ssi}Work,Collection',
+            '-aasm_state_tesim:draft',
+            '-aasm_state_tesim:withdrawn'
+          ],
           sort: 'deposited_at_dtsi desc',
           fl: ['title_tesim']
         }
@@ -95,7 +99,7 @@ RSpec.describe 'Blacklight catalog page', :inline_jobs do
         end
 
         within('.meta-table') do
-          expect(page).to have_content(resource.deposited_at.to_formatted_s(:long))
+          expect(page).to have_content(resource.deposited_at.to_formatted_s(:long_without_time))
         end
       end
     end

@@ -8,9 +8,12 @@ class WorkVersionPolicy < ApplicationPolicy
   end
 
   def show?
-    Pundit.policy(user, record.work).show? || editable?
+    true
   end
-  alias_method :diff?, :show?
+
+  def diff?
+    record.published? || editable?
+  end
 
   def edit?
     return false if record.published? && !user.admin?
@@ -51,7 +54,7 @@ class WorkVersionPolicy < ApplicationPolicy
 
   def new?
     Pundit.policy(user, record.work).create_version? &&
-      record == record.work.latest_published_version
+      record == record.work.representative_version
   end
 
   private

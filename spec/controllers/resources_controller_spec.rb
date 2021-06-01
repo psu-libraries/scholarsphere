@@ -60,10 +60,9 @@ RSpec.describe ResourcesController, type: :controller do
     context 'when requesting a draft WorkVersion' do
       let(:work_version) { create :work_version, :draft }
 
-      it do
-        expect {
-          get :show, params: { id: work_version.uuid }
-        }.to raise_error(Pundit::NotAuthorizedError)
+      it 'loads the WorkVersion' do
+        get :show, params: { id: work_version.uuid }
+        expect(assigns[:resource]).to eq work_version
       end
     end
 
@@ -84,13 +83,12 @@ RSpec.describe ResourcesController, type: :controller do
       end
     end
 
-    context 'when the resource is valid, but not publicly accessible' do
+    context 'when the resource is valid with no access' do
       let(:work) { create(:work, :with_no_access) }
 
-      it do
-        expect {
-          get :show, params: { id: work.uuid }
-        }.to raise_error(Pundit::NotAuthorizedError)
+      it 'loads the resource' do
+        get :show, params: { id: work.uuid }
+        expect(assigns[:resource]).to eq work
       end
     end
 

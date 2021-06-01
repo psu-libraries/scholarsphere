@@ -12,9 +12,10 @@ RSpec.describe Dashboard::MemberWorksSearchBuilder do
   describe '.default_processor_chain' do
     its(:default_processor_chain) do
       is_expected.to include(
-        :log_solr_parameters,
+        :restrict_search_to_work_titles,
         :apply_gated_edit,
-        :main_query
+        :limit_to_public_resources,
+        :log_solr_parameters
       )
     end
   end

@@ -11,6 +11,8 @@ RSpec.describe 'Home page', type: :feature do
     it 'displays the landing page with selected featured works' do
       visit(root_path)
 
+      expect(page).to have_selector('meta[name=description]', visible: :hidden)
+
       within('header') do
         expect(page).to have_link('ScholarSphere')
       end
@@ -22,6 +24,8 @@ RSpec.describe 'Home page', type: :feature do
       expect(page).to have_selector('h2', text: 'ScholarSphere Updates')
       expect(page).to have_selector('h2', text: 'Browse and search for works')
       expect(page).to have_selector('h2', text: 'Featured Works')
+
+      expect(page).to have_link('Read more about ScholarSphere')
 
       within('div.search') do
         expect(page).to have_selector('form')
