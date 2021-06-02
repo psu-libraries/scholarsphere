@@ -16,7 +16,7 @@ RSpec.describe FileVersionMembershipDiff do
     let(:updated_second_image) { comparison_version.file_version_memberships[1] }
 
     before do
-      comparison_version.file_version_memberships.last.update(title: 'Image 2.png')
+      comparison_version.file_version_memberships.last.update(title: 'z.png')
     end
 
     it { is_expected.to eq(renamed: [[original_second_image, updated_second_image]], added: [], deleted: []) }

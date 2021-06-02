@@ -59,6 +59,24 @@ RSpec.describe WorkVersion, type: :model do
 
       it_behaves_like 'a resource with orderable creators'
     end
+
+    describe '#file_version_memberships' do
+      let(:resource) { create(:work_version, :with_files, file_count: 2) }
+
+      it 'orders the files by title in ascending order' do
+        n1 = (resource.file_version_memberships[0].title.match /image-(\d+).png/)[1].to_i
+        n2 = n1 + 1
+
+        expect(resource.file_version_memberships.map(&:title)).to eq(["image-#{n1}.png", "image-#{n2}.png"])
+
+        resource.file_version_memberships[0].update(title: 'z.png')
+        resource.file_version_memberships[1].update(title: 'a.png')
+
+        resource.file_version_memberships.reload
+
+        expect(resource.file_version_memberships.map(&:title)).to eq(['a.png', 'z.png'])
+      end
+    end
   end
 
   describe 'states' do
