@@ -38,8 +38,11 @@ class FileResource < ApplicationRecord
     '[unavailable]'
   end
 
+  # @note Shrine is returning ASCII-8BIT encoding, but we can safely assume it is UTF-8
   def extracted_text
-    file_derivatives[:text]
+    @extracted_text ||= file_derivatives.fetch(:text, StringIO.new)
+      .read
+      .force_encoding('UTF-8')
   end
 
   def to_solr
