@@ -123,7 +123,12 @@ RSpec.describe FileResource, type: :model do
     subject { file_resource.extracted_text }
 
     let(:file_resource) { build(:file_resource, :with_processed_image) }
-    let(:upload) { S3Helpers.shrine_upload(file: text_file, storage: Scholarsphere::ShrineConfig::DERIVATIVES_PREFIX) }
+    let(:sample_file) { FileHelpers.text_file }
+
+    let(:upload) do
+      FileHelpers.shrine_upload(file: sample_file, storage: Scholarsphere::ShrineConfig::DERIVATIVES_PREFIX)
+    end
+
     let(:uploaded_file) do
       Shrine.uploaded_file(
         storage: Scholarsphere::ShrineConfig::DERIVATIVES_PREFIX,
@@ -136,8 +141,7 @@ RSpec.describe FileResource, type: :model do
       file_resource.file_attacher.merge_derivatives(text: uploaded_file)
     end
 
-    it { is_expected.to be_a(Shrine::UploadedFile) }
-    its(:id) { is_expected.to eq(upload[:id]) }
+    it { is_expected.to eq(sample_file.read) }
   end
 
   describe '#etag' do
@@ -174,8 +178,9 @@ RSpec.describe FileResource, type: :model do
 
     let(:expected_keys) do
       %w(
-        created_at_dtsi
         deposited_at_dtsi
+        extracted_text_tei
+        created_at_dtsi
         id
         model_ssi
         updated_at_dtsi
