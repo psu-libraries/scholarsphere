@@ -4,6 +4,8 @@ class FileVersionMembership < ApplicationRecord
   belongs_to :work_version
   belongs_to :file_resource
 
+  default_scope { order(title: :asc) }
+
   before_validation :initialize_title, on: :create
 
   validates :title,

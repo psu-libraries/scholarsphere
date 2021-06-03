@@ -15,13 +15,9 @@ RSpec.describe FileResourceSchema do
     end
 
     context 'when there is an extracted text file' do
-      let(:extracted_text_file) { text_file }
+      let(:extracted_text) { Faker::String.random }
 
-      let(:extracted_text) do
-        Shrine.upload(extracted_text_file.open, :store, metadata: false)
-      end
-
-      its(:document) { is_expected.to eq({ extracted_text_tei: extracted_text_file.read }) }
+      its(:document) { is_expected.to eq({ extracted_text_tei: extracted_text }) }
     end
   end
 end

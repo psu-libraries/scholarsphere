@@ -14,19 +14,10 @@ class FileResourceSchema < BaseSchema
   private
 
     def extracted_text_document
-      return {} if extracted_text.nil?
+      return {} if resource.extracted_text.nil?
 
       {
-        extracted_text_tei: text_content
+        extracted_text_tei: resource.extracted_text
       }
-    end
-
-    def extracted_text
-      @extracted_text ||= resource.extracted_text
-    end
-
-    def text_content
-      extracted_text.rewind
-      extracted_text.read
     end
 end

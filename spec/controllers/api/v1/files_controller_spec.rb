@@ -65,8 +65,10 @@ RSpec.describe Api::V1::FilesController, type: :controller do
     end
 
     context 'when adding derivatives' do
+      let(:extracted_text_file) { FileHelpers.text_file }
+
       let(:upload) do
-        S3Helpers.shrine_upload(file: text_file, storage: Scholarsphere::ShrineConfig::DERIVATIVES_PREFIX)
+        FileHelpers.shrine_upload(file: extracted_text_file, storage: Scholarsphere::ShrineConfig::DERIVATIVES_PREFIX)
       end
 
       before do
@@ -81,7 +83,7 @@ RSpec.describe Api::V1::FilesController, type: :controller do
       it 'adds the extracted text file to the record' do
         expect(response).to be_ok
         file.reload
-        expect(file.extracted_text.id).to eq(upload[:id])
+        expect(file.extracted_text).to eq(extracted_text_file.read)
       end
     end
 

@@ -47,14 +47,7 @@
 
 <div class="container-fluid">
 
-  <% unless (work_version.latest_published_version? || work_version.draft? || work_version.withdrawn?) %>
-    <div class="alert alert-warning" role="alert">
-      <%= t 'resources.old_version.message' %>
-      <%= link_to t('resources.old_version.link'),
-                  resource_path(work_version.work.uuid),
-                  class: 'alert-link' %>
-    </div>
-  <% end %>
+  <%= render WorkVersionDetailComponent.new(work_version: work_version) %>
 
   <article class="row">
     <div class="col-lg-7">
