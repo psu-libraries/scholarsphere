@@ -31,9 +31,9 @@ class GoogleScholarMetadataComponent < ApplicationComponent
     Date.edtf(published_date).year
   end
 
-  def file_resources
-    return [] unless policy.download?
+  def file_version_memberships
+    return FileVersionMembership.none unless policy.download?
 
-    resource.file_resources
+    resource.file_version_memberships
   end
 end
