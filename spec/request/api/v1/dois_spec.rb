@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 describe 'API V1 DOIs', type: :request do
-  let!(:collection) { create :collection, doi: 'doi:10.26207/utaj-jfhi' }
+  let!(:collection) { create :collection, doi: '10.26207/utaj-jfhi' }
 
   let(:api_token) { create(:api_token).token }
   let(:json_response) { JSON.parse(response.body) }

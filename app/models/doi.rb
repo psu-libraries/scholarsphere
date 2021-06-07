@@ -6,6 +6,14 @@ class Doi
 
   MANAGED_PREFIXES = ['10.26207', '10.18113'].freeze
 
+  # @note If the DOI is valid from Datacite's point of view, it will be valid from our perspective, as well as have one
+  # of our managed prefixes, _and_ have a particular format that the Datacite API can interpret.
+  def self.valid_datacite_doi?(doi)
+    formatted_doi = new(doi)
+
+    formatted_doi.valid? && formatted_doi.managed? && doi == formatted_doi.to_datacite
+  end
+
   # @param [String] doi
   def initialize(doi)
     @doi = begin
@@ -39,6 +47,10 @@ class Doi
 
   def uri
     URI("https://doi.org/#{prefix}/#{suffix}")
+  end
+
+  def to_datacite
+    "#{prefix}/#{suffix}"
   end
 
   private

@@ -286,10 +286,9 @@ RSpec.describe Collection, type: :model do
     end
 
     context 'when the collection has a doi' do
-      let(:collection) { build(:collection) }
+      let(:collection) { build(:collection, :with_a_doi) }
 
       it 'updates the metadata with DataCite' do
-        collection.doi = 'a doi'
         collection.update_doi = true
         collection.save
         expect(DoiUpdatingJob).to have_received(:perform_later).with(collection)
