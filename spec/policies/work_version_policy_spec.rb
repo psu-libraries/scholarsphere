@@ -48,8 +48,11 @@ RSpec.describe WorkVersionPolicy, type: :policy do
   permissions :edit?, :update? do
     before { allow(Pundit).to receive(:policy).with(user, work).and_return(work_policy) }
 
-    context 'when the version is NOT published' do
-      before { allow(work_version).to receive(:published?).and_return(false) }
+    context 'when the version is NOT published or withdrawn' do
+      before do
+        allow(work_version).to receive(:published?).and_return(false)
+        allow(work_version).to receive(:withdrawn?).and_return(false)
+      end
 
       context 'when the user has the access to the work' do
         before { allow(work_policy).to receive(:edit?).and_return(true) }
@@ -67,6 +70,31 @@ RSpec.describe WorkVersionPolicy, type: :policy do
     context 'when the version is published' do
       before do
         allow(work_version).to receive(:published?).and_return(true)
+        allow(work_version).to receive(:withdrawn?).and_return(false)
+        allow(work_policy).to receive(:edit?).and_return(true)
+      end
+
+      context 'when the user has the access to the work' do
+        it { is_expected.not_to permit(user, work_version) }
+      end
+
+      context 'when the user is an admin' do
+        let(:user) { build(:user, :admin) }
+
+        it { is_expected.to permit(user, work_version) }
+      end
+
+      context 'with an external application' do
+        let(:user) { build(:external_app) }
+
+        it { is_expected.to permit(user, work_version) }
+      end
+    end
+
+    context 'when the version is withdrawn' do
+      before do
+        allow(work_version).to receive(:published?).and_return(false)
+        allow(work_version).to receive(:withdrawn?).and_return(true)
         allow(work_policy).to receive(:edit?).and_return(true)
       end
 

@@ -14,10 +14,7 @@ class WorkPolicy < ApplicationPolicy
   def edit?
     editable?
   end
-
-  def update?
-    edit?
-  end
+  alias_method :update?, :edit?
 
   # @note Even though this is not imposed at the database level, no one should be able to create a
   # new version if a draft one already exists.
