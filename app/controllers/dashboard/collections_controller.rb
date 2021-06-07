@@ -4,15 +4,13 @@ module Dashboard
   class CollectionsController < BaseController
     layout 'frontend'
 
+    before_action :authorize_collection
+
     def edit
-      @collection = Collection.find(params[:id])
-      authorize(@collection)
       initialize_forms
     end
 
     def update
-      @collection = Collection.find(params[:id])
-      authorize(@collection)
       initialize_forms
 
       form = select_form_model
@@ -27,8 +25,6 @@ module Dashboard
     # DELETE /collections/1
     # DELETE /collections/1.json
     def destroy
-      @collection = current_user.collections.find(params[:id])
-      authorize(@collection)
       @collection.destroy
       respond_to do |format|
         format.html { redirect_to dashboard_root_path, notice: t('.success') }
@@ -37,6 +33,11 @@ module Dashboard
     end
 
     private
+
+      def authorize_collection
+        @collection = Collection.find(params[:id])
+        authorize(@collection)
+      end
 
       def initialize_forms
         @collection.attributes = collection_params

@@ -114,13 +114,25 @@ RSpec.describe Dashboard::CollectionsController, type: :controller do
         end
       end
 
+      context 'with an admin' do
+        let!(:collection) { someone_elses_collection }
+
+        let(:user) { create(:user, :admin) }
+
+        it "destroys the other user's collection" do
+          expect {
+            delete :destroy, params: { id: collection.to_param }
+          }.to change(Collection, :count).by(-1)
+        end
+      end
+
       context 'when the user does not own the collection' do
         let!(:collection) { someone_elses_collection }
 
-        it '404s' do
+        it 'raises a Pundit error' do
           expect {
             delete :destroy, params: { id: collection.to_param }
-          }.to raise_error(ActiveRecord::RecordNotFound)
+          }.to raise_error(Pundit::NotAuthorizedError)
         end
       end
     end
