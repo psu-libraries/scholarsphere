@@ -41,7 +41,7 @@ FactoryBot.define do
     end
 
     trait :with_a_doi do
-      doi { FactoryBotHelpers.valid_doi }
+      doi { FactoryBotHelpers.datacite_doi }
     end
   end
 end

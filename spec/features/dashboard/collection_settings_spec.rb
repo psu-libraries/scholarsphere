@@ -100,7 +100,7 @@ RSpec.describe 'Collection Settings Page', with_user: :user do
     context 'when an admin user' do
       let(:user) { create :user, :admin }
 
-      before { collection.update!(doi: FactoryBotHelpers.valid_doi) }
+      before { collection.update!(doi: FactoryBotHelpers.datacite_doi) }
 
       it 'allows a collection to be deleted' do
         visit edit_dashboard_collection_path(collection)

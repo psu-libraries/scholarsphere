@@ -8,6 +8,7 @@ RSpec.describe Doi do
   context 'with doi:10.26207/jc7z-sa94' do
     let(:doi) { 'doi:10.26207/jc7z-sa94' }
 
+    specify { expect(described_class).not_to be_valid_datacite_doi(doi) }
     it { is_expected.to be_valid }
     it { is_expected.to be_managed }
     its(:prefix) { is_expected.to eq('10.26207') }
@@ -15,12 +16,14 @@ RSpec.describe Doi do
     its(:registrant_code) { is_expected.to eq('26207') }
     its(:suffix) { is_expected.to eq('jc7z-sa94') }
     its(:to_s) { is_expected.to eq('doi:10.26207/jc7z-sa94') }
+    its(:to_datacite) { is_expected.to eq('10.26207/jc7z-sa94') }
     its(:uri) { is_expected.to eq(URI('https://doi.org/10.26207/jc7z-sa94')) }
   end
 
   context 'with doi:10.18113/S1X934' do
     let(:doi) { 'doi:10.18113/S1X934' }
 
+    specify { expect(described_class).not_to be_valid_datacite_doi(doi) }
     it { is_expected.to be_valid }
     it { is_expected.to be_managed }
   end
@@ -30,13 +33,19 @@ RSpec.describe Doi do
 
     before { ENV['DATACITE_PREFIX'] = "10.#{Faker::Number.number(digits: 5)}" }
 
+    specify { expect(described_class).not_to be_valid_datacite_doi(doi) }
     it { is_expected.to be_valid }
     it { is_expected.to be_managed }
+  end
+
+  context 'with a valid Datacite DOI' do
+    specify { expect(described_class).to be_valid_datacite_doi(FactoryBotHelpers.datacite_doi) }
   end
 
   context 'with https://doi.org/10.1515/pol-2020-2011' do
     let(:doi) { 'https://doi.org/10.1515/pol-2020-2011' }
 
+    specify { expect(described_class).not_to be_valid_datacite_doi(doi) }
     it { is_expected.to be_valid }
     it { is_expected.not_to be_managed }
     its(:prefix) { is_expected.to eq('10.1515') }
@@ -44,12 +53,14 @@ RSpec.describe Doi do
     its(:registrant_code) { is_expected.to eq('1515') }
     its(:suffix) { is_expected.to eq('pol-2020-2011') }
     its(:to_s) { is_expected.to eq('doi:10.1515/pol-2020-2011') }
+    its(:to_datacite) { is_expected.to eq('10.1515/pol-2020-2011') }
     its(:uri) { is_expected.to eq(URI('https://doi.org/10.1515/pol-2020-2011')) }
   end
 
   context 'with 10.1007/s10570-013-0029-x' do
     let(:doi) { '10.1007/s10570-013-0029-x' }
 
+    specify { expect(described_class).not_to be_valid_datacite_doi(doi) }
     it { is_expected.to be_valid }
     it { is_expected.not_to be_managed }
     its(:prefix) { is_expected.to eq('10.1007') }
@@ -57,12 +68,14 @@ RSpec.describe Doi do
     its(:registrant_code) { is_expected.to eq('1007') }
     its(:suffix) { is_expected.to eq('s10570-013-0029-x') }
     its(:to_s) { is_expected.to eq('doi:10.1007/s10570-013-0029-x') }
+    its(:to_datacite) { is_expected.to eq('10.1007/s10570-013-0029-x') }
     its(:uri) { is_expected.to eq(URI('https://doi.org/10.1007/s10570-013-0029-x')) }
   end
 
   context 'with a mult-segment doi like "doi:10.21345/asdf/qwer"' do
     let(:doi) { 'doi:10.21345/asdf/qwer' }
 
+    specify { expect(described_class).not_to be_valid_datacite_doi(doi) }
     it { is_expected.to be_valid }
     it { is_expected.not_to be_managed }
     its(:prefix) { is_expected.to eq('10.21345') }
@@ -70,6 +83,7 @@ RSpec.describe Doi do
     its(:registrant_code) { is_expected.to eq('21345') }
     its(:suffix) { is_expected.to eq('asdf/qwer') }
     its(:to_s) { is_expected.to eq('doi:10.21345/asdf/qwer') }
+    its(:to_datacite) { is_expected.to eq('10.21345/asdf/qwer') }
     its(:uri) { is_expected.to eq(URI('https://doi.org/10.21345/asdf/qwer')) }
   end
 

@@ -396,7 +396,7 @@ RSpec.describe WorkVersion, type: :model do
       let(:work_version) { build(:work_version, :published) }
 
       it 'updates the metadata with DataCite' do
-        work_version.work.doi = 'a doi'
+        work_version.work.doi = FactoryBotHelpers.datacite_doi
         work_version.update_doi = true
         work_version.save
         expect(DoiUpdatingJob).to have_received(:perform_later)

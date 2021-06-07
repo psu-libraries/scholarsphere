@@ -7,6 +7,11 @@ RSpec.describe AllDois do
 
   before(:all) do
     class TestModel
+      # @note This is to fake ActiveRecord integration
+      def self.validates(*args)
+        # noop
+      end
+
       include AllDois
       fields_with_dois :doi, :identifier, :other
 

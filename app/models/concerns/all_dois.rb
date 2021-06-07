@@ -16,6 +16,11 @@ module AllDois
       symbolized_args = args.map(&:to_sym)
       define_method(:fields_with_dois) { symbolized_args }
     end
+
+    # Validates the Datacite DOI field to ensure it's in the correct format for the API
+    validates :doi,
+              datacite_doi: true,
+              unless: -> { doi.blank? }
   end
 
   # Returns an arary of all valid dois found within the methods specified by the
