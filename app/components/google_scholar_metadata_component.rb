@@ -28,7 +28,7 @@ class GoogleScholarMetadataComponent < ApplicationComponent
   def citation_publication_date
     return deposited_at.year unless EdtfDate.valid?(published_date)
 
-    Date.edtf(published_date).year
+    Date.edtf(published_date).try(:year) || deposited_at.year
   end
 
   def file_version_memberships
