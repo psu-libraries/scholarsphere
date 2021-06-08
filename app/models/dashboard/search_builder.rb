@@ -12,7 +12,6 @@ module Dashboard
       search_related_files
       restrict_search_to_works_and_collections
       apply_gated_edit
-      log_solr_parameters
     )
   end
 end

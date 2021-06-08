@@ -17,10 +17,6 @@ module CatalogSearchBehavior
     solr_parameters[:fq] << '{!terms f=model_ssi}Work,Collection'
   end
 
-  def log_solr_parameters(solr_parameters)
-    Rails.logger.debug("Solr parameters: #{solr_parameters.inspect}")
-  end
-
   def limit_to_public_resources(solr_parameters)
     return if current_user.admin?
 
