@@ -12,7 +12,6 @@ RSpec.describe Dashboard::SearchBuilder do
   describe '.default_processor_chain' do
     its(:default_processor_chain) do
       is_expected.to include(
-        :log_solr_parameters,
         :search_related_files,
         :restrict_search_to_works_and_collections,
         :apply_gated_edit

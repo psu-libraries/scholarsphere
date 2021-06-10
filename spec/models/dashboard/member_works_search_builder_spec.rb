@@ -14,8 +14,7 @@ RSpec.describe Dashboard::MemberWorksSearchBuilder do
       is_expected.to include(
         :restrict_search_to_work_titles,
         :apply_gated_edit,
-        :limit_to_public_resources,
-        :log_solr_parameters
+        :limit_to_public_resources
       )
     end
   end
