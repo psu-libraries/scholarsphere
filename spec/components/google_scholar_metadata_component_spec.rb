@@ -67,5 +67,11 @@ RSpec.describe GoogleScholarMetadataComponent, type: :component do
 
       its(:citation_publication_date) { is_expected.to eq(2002) }
     end
+
+    context 'with valid EDTF interval' do
+      let(:resource) { build(:work_version, published_date: '2010/2020') }
+
+      its(:citation_publication_date) { is_expected.to eq(Time.zone.now.year) }
+    end
   end
 end
