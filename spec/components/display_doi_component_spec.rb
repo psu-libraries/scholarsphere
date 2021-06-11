@@ -17,7 +17,7 @@ RSpec.describe DisplayDoiComponent, type: :component do
     let(:doi) { FactoryBotHelpers.valid_doi }
 
     its(:css_class) { is_expected.to eq('text-primary') }
-    its(:tooltip) { is_expected.to eq(I18n.t('resources.doi.valid')) }
+    its(:tooltip) { is_expected.to eq(I18n.t!('resources.doi.valid')) }
 
     specify { expect(element.text).to include(doi) }
   end
@@ -26,7 +26,7 @@ RSpec.describe DisplayDoiComponent, type: :component do
     let(:doi) { FactoryBotHelpers.invalid_doi }
 
     its(:css_class) { is_expected.to eq('text-danger') }
-    its(:tooltip) { is_expected.to eq(I18n.t('resources.doi.invalid')) }
+    its(:tooltip) { is_expected.to eq(I18n.t!('resources.doi.invalid')) }
 
     specify { expect(element.text).to include(doi) }
   end
@@ -35,7 +35,7 @@ RSpec.describe DisplayDoiComponent, type: :component do
     let(:doi) { FactoryBotHelpers.unmanaged_doi }
 
     its(:css_class) { is_expected.to eq('text-secondary') }
-    its(:tooltip) { is_expected.to eq(I18n.t('resources.doi.unmanaged')) }
+    its(:tooltip) { is_expected.to eq(I18n.t!('resources.doi.unmanaged')) }
 
     specify { expect(element.text).to include(doi) }
   end

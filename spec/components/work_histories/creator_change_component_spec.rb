@@ -57,7 +57,7 @@ RSpec.describe WorkHistories::CreatorChangeComponent, type: :component do
       # It: renders the null-user properly
       #
       expect(result.css('.version-timeline__change-user').text)
-        .to eq I18n.t('dashboard.work_history.unknown_user')
+        .to eq I18n.t!('dashboard.work_history.unknown_user')
 
       ##########################################################################
       #

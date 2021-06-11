@@ -20,7 +20,7 @@ RSpec.describe Api::V1::RestController, type: :controller do
       before { get :index }
 
       its(:status) { is_expected.to eq 401 }
-      its(:body) { is_expected.to include(I18n.t('api.errors.not_authorized')) }
+      its(:body) { is_expected.to include(I18n.t!('api.errors.not_authorized')) }
     end
 
     context 'when providing a bad token' do
@@ -36,7 +36,7 @@ RSpec.describe Api::V1::RestController, type: :controller do
       before { get :index }
 
       its(:status) { is_expected.to eq 401 }
-      its(:body) { is_expected.to include(I18n.t('api.errors.not_authorized')) }
+      its(:body) { is_expected.to include(I18n.t!('api.errors.not_authorized')) }
     end
   end
 
@@ -55,7 +55,7 @@ RSpec.describe Api::V1::RestController, type: :controller do
 
     context 'when the application is read-only', :read_only do
       its(:status) { is_expected.to eq 401 }
-      its(:body) { is_expected.to include(I18n.t('api.errors.not_authorized')) }
+      its(:body) { is_expected.to include(I18n.t!('api.errors.not_authorized')) }
     end
   end
 
