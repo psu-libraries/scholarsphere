@@ -6,7 +6,7 @@ module Dashboard
       work = Work.find(params[:work_id])
       authorize(work, :create_version?)
 
-      @work_version = BuildNewWorkVersion.call(work.latest_version)
+      @work_version = BuildNewWorkVersion.call(work.representative_version)
 
       respond_to do |format|
         if @work_version.save
