@@ -25,7 +25,7 @@ RSpec.describe DataciteDoiValidator do
     it 'is expected not to be valid' do
       expect(model).not_to be_valid
       expect(model.errors[:doi_field]).to contain_exactly(
-        I18n.t('errors.messages.invalid_doi')
+        I18n.t!('errors.messages.invalid_doi')
       )
     end
   end

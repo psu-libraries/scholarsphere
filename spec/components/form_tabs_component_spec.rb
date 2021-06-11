@@ -16,7 +16,7 @@ RSpec.describe FormTabsComponent, type: :component do
     end
 
     it "renders the current controller's tab as active" do
-      expect(tabs.css('.nav-item.active').text).to eq I18n.t('dashboard.form.tabs.work_version_details')
+      expect(tabs.css('.nav-item.active').text).to eq I18n.t!('dashboard.form.tabs.work_version_details')
     end
   end
 
@@ -26,11 +26,11 @@ RSpec.describe FormTabsComponent, type: :component do
 
     it 'renders the inactive tabs as links' do
       expect(tabs.css('a.nav-item').length).to eq 3
-      expect(tabs.css('a.nav-item').map(&:text)).not_to include(I18n.t('dashboard.form.tabs.work_version_details'))
+      expect(tabs.css('a.nav-item').map(&:text)).not_to include(I18n.t!('dashboard.form.tabs.work_version_details'))
     end
 
     it 'renders the active tab as a non-link' do
-      expect(tabs.css('.nav-item.active').text).to eq I18n.t('dashboard.form.tabs.work_version_details')
+      expect(tabs.css('.nav-item.active').text).to eq I18n.t!('dashboard.form.tabs.work_version_details')
     end
   end
 
@@ -44,7 +44,7 @@ RSpec.describe FormTabsComponent, type: :component do
     end
 
     it "renders the current controller's tab as active" do
-      expect(tabs.css('.nav-item.active').text).to eq I18n.t('dashboard.form.tabs.collection_details')
+      expect(tabs.css('.nav-item.active').text).to eq I18n.t!('dashboard.form.tabs.collection_details')
     end
   end
 
@@ -54,11 +54,11 @@ RSpec.describe FormTabsComponent, type: :component do
 
     it 'renders the inactive tabs as links' do
       expect(tabs.css('a.nav-item').length).to eq 2
-      expect(tabs.css('a.nav-item').map(&:text)).not_to include(I18n.t('dashboard.form.tabs.collection_details'))
+      expect(tabs.css('a.nav-item').map(&:text)).not_to include(I18n.t!('dashboard.form.tabs.collection_details'))
     end
 
     it 'renders the active tab as a non-link' do
-      expect(tabs.css('.nav-item.active').text).to eq I18n.t('dashboard.form.tabs.collection_details')
+      expect(tabs.css('.nav-item.active').text).to eq I18n.t!('dashboard.form.tabs.collection_details')
     end
   end
 end

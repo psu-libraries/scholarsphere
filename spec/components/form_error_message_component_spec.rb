@@ -30,7 +30,7 @@ RSpec.describe FormErrorMessageComponent, type: :component do
     let(:heading) { nil }
 
     it 'renders the default heading' do
-      expected_error_msg = I18n.t(
+      expected_error_msg = I18n.t!(
         'dashboard.form.heading.error_message',
         error: pluralize(record.errors.count, 'error')
       )

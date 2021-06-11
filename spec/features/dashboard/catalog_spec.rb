@@ -116,8 +116,8 @@ RSpec.describe 'Dashboard catalog page', :inline_jobs do
     it 'displays no search results', with_user: :user do
       visit(dashboard_root_path(q: 'asdfasdfasdfasdfasdfasdfasdf'))
 
-      expect(page).to have_selector('h4', text: I18n.t('dashboard.catalog.zero_results.info.heading'))
-      expect(page).to have_content(I18n.t('dashboard.catalog.zero_results.info.content'))
+      expect(page).to have_selector('h4', text: I18n.t!('dashboard.catalog.zero_results.info.heading'))
+      expect(page).to have_content(I18n.t!('dashboard.catalog.zero_results.info.content'))
     end
   end
 
@@ -126,7 +126,7 @@ RSpec.describe 'Dashboard catalog page', :inline_jobs do
       visit(dashboard_root_path)
 
       within('.alert-warning') do
-        expect(page).to have_content(I18n.t('read_only'))
+        expect(page).to have_content(I18n.t!('read_only'))
       end
       expect(page).to have_link('Login', class: 'disabled')
     end
@@ -151,8 +151,8 @@ RSpec.describe 'Dashboard catalog page', :inline_jobs do
       end
 
       within('.alert') do
-        expect(page).to have_content(I18n.t('files_message.withdrawn.heading'))
-        expect(page).to have_content(I18n.t('files_message.edit_message'))
+        expect(page).to have_content(I18n.t!('files_message.withdrawn.heading'))
+        expect(page).to have_content(I18n.t!('files_message.edit_message'))
       end
     end
   end

@@ -8,8 +8,8 @@ RSpec.describe 'Collection Settings Page', with_user: :user do
 
   it 'is available from the resource page' do
     visit resource_path(collection.uuid)
-    click_on I18n.t('resources.settings_button.text', type: 'Collection')
-    expect(page).to have_content(I18n.t('dashboard.collections.edit.heading', title: collection.title))
+    click_on I18n.t!('resources.settings_button.text', type: 'Collection')
+    expect(page).to have_content(I18n.t!('dashboard.collections.edit.heading', title: collection.title))
   end
 
   describe 'Minting a DOI' do
@@ -19,10 +19,10 @@ RSpec.describe 'Collection Settings Page', with_user: :user do
     end
 
     it 'works from the Settings page' do
-      click_button I18n.t('resources.doi.create')
+      click_button I18n.t!('resources.doi.create')
 
       expect(page).to have_current_path(edit_dashboard_collection_path(collection))
-      expect(page).not_to have_button I18n.t('resources.doi.create')
+      expect(page).not_to have_button I18n.t!('resources.doi.create')
     end
   end
 

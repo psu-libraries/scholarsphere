@@ -24,7 +24,7 @@ RSpec.describe EdtfDateValidator do
     it 'is expected not to be valid' do
       expect(model).not_to be_valid
       expect(model.errors[:date_field]).to contain_exactly(
-        I18n.t('errors.messages.invalid_edtf')
+        I18n.t!('errors.messages.invalid_edtf')
       )
     end
   end
