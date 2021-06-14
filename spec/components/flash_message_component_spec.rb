@@ -64,7 +64,7 @@ RSpec.describe FlashMessageComponent, type: :component do
       let(:flash) { [] }
 
       specify do
-        expect(result.css('div.alert-warning').text).to match(/#{I18n.t('read_only')}/)
+        expect(result.css('div.alert-warning').text).to match(/#{I18n.t!('read_only')}/)
       end
     end
 

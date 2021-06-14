@@ -16,7 +16,7 @@ class WorkVersionPolicy < ApplicationPolicy
   end
 
   def edit?
-    return false if record.published? && !user.admin?
+    return false if (record.published? || record.withdrawn?) && !user.admin?
 
     editable?
   end

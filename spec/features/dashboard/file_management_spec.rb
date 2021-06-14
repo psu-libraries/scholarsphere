@@ -11,12 +11,12 @@ RSpec.describe 'Dashboard File Management', with_user: :user do
     visit(dashboard_work_version_file_list_path(work_version))
 
     within "##{dom_id(file_membership)}" do
-      click_link I18n.t('dashboard.file_list.edit.rename')
+      click_link I18n.t!('dashboard.file_list.edit.rename')
     end
 
     edited_filename = "EDITED#{File.extname(file_membership.title)}"
     fill_in FileVersionMembership.human_attribute_name('title'), with: edited_filename
-    click_button I18n.t('dashboard.file_version_memberships.edit.save')
+    click_button I18n.t!('dashboard.file_version_memberships.edit.save')
 
     expect(file_membership.reload.title).to eq edited_filename
 
@@ -31,9 +31,9 @@ RSpec.describe 'Dashboard File Management', with_user: :user do
     edited_filename = "EDITED#{File.extname(file_membership.title)}"
 
     within "##{dom_id(file_membership)}" do
-      click_link I18n.t('dashboard.file_list.edit.rename')
+      click_link I18n.t!('dashboard.file_list.edit.rename')
       fill_in FileVersionMembership.human_attribute_name('title'), with: edited_filename
-      click_button I18n.t('dashboard.file_version_memberships.edit.save')
+      click_button I18n.t!('dashboard.file_version_memberships.edit.save')
 
       # Note, there's an implicit trick here to make Capybara wait for AJAX
       expect(find('.filename')).to have_content edited_filename
@@ -46,7 +46,7 @@ RSpec.describe 'Dashboard File Management', with_user: :user do
     visit(dashboard_work_version_file_list_path(work_version))
 
     within "##{dom_id(file_membership)}" do
-      click_link I18n.t('dashboard.file_list.edit.delete')
+      click_link I18n.t!('dashboard.file_list.edit.delete')
     end
 
     expect { file_membership.reload }.to raise_error(ActiveRecord::RecordNotFound)

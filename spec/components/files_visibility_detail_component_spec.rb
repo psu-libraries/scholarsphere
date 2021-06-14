@@ -24,8 +24,8 @@ RSpec.describe FilesVisibilityDetailComponent, type: :component do
       let(:work_version) { build(:work_version, :published, work: work) }
 
       it 'displays a message' do
-        expect(content).to include I18n.t('files_message.embargo.heading', date: embargo_date.strftime('%Y-%m-%d'))
-        expect(content).to include I18n.t('files_message.embargo.public_message')
+        expect(content).to include I18n.t!('files_message.embargo.heading', date: embargo_date.strftime('%Y-%m-%d'))
+        expect(content).to include I18n.t!('files_message.embargo.public_message')
       end
     end
 
@@ -34,8 +34,8 @@ RSpec.describe FilesVisibilityDetailComponent, type: :component do
       let(:user) { work.depositor.user }
 
       it 'displays a message' do
-        expect(content).to include I18n.t('files_message.embargo.heading', date: embargo_date.strftime('%Y-%m-%d'))
-        expect(content).to include I18n.t('files_message.edit_message')
+        expect(content).to include I18n.t!('files_message.embargo.heading', date: embargo_date.strftime('%Y-%m-%d'))
+        expect(content).to include I18n.t!('files_message.edit_message')
       end
     end
 
@@ -45,9 +45,9 @@ RSpec.describe FilesVisibilityDetailComponent, type: :component do
       let(:controller_name) { 'work_versions' }
 
       it 'displays a message' do
-        expect(content).to include I18n.t('files_message.embargo.heading', date: embargo_date.strftime('%Y-%m-%d'))
-        expect(content).to include I18n.t('files_message.edit_message')
-        expect(content).to include I18n.t('files_message.link_text')
+        expect(content).to include I18n.t!('files_message.embargo.heading', date: embargo_date.strftime('%Y-%m-%d'))
+        expect(content).to include I18n.t!('files_message.edit_message')
+        expect(content).to include I18n.t!('files_message.link_text')
       end
     end
 
@@ -57,9 +57,9 @@ RSpec.describe FilesVisibilityDetailComponent, type: :component do
       let(:work) { build(:work, visibility: Permissions::Visibility::AUTHORIZED, embargoed_until: embargo_date) }
 
       it 'displays a message' do
-        expect(content).to include I18n.t('files_message.embargo_unauthorized.heading',
-                                          date: embargo_date.strftime('%Y-%m-%d'))
-        expect(content).to include I18n.t('files_message.embargo_unauthorized.public_message')
+        expect(content).to include I18n.t!('files_message.embargo_unauthorized.heading',
+                                           date: embargo_date.strftime('%Y-%m-%d'))
+        expect(content).to include I18n.t!('files_message.embargo_unauthorized.public_message')
       end
     end
   end
@@ -78,8 +78,8 @@ RSpec.describe FilesVisibilityDetailComponent, type: :component do
       let(:work) { build(:work, visibility: Permissions::Visibility::AUTHORIZED) }
 
       it 'displays a message' do
-        expect(content).to include I18n.t('files_message.unauthorized.heading')
-        expect(content).to include I18n.t('files_message.unauthorized.public_message')
+        expect(content).to include I18n.t!('files_message.unauthorized.heading')
+        expect(content).to include I18n.t!('files_message.unauthorized.public_message')
       end
     end
   end

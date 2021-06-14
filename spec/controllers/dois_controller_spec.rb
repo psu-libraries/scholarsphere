@@ -38,7 +38,7 @@ RSpec.describe DoisController, type: :controller do
       end
 
       context 'with a Work that already has a DOI' do
-        let(:resource) { create :work, doi: '123/456' }
+        let(:resource) { create :work, doi: FactoryBotHelpers.datacite_doi }
 
         it 'does NOT mint a new doi' do
           do_post

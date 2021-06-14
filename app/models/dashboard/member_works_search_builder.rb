@@ -13,7 +13,6 @@ module Dashboard
       restrict_search_to_work_titles
       apply_gated_edit
       limit_to_public_resources
-      log_solr_parameters
     )
 
     # @note Builds a Solr query to return a list of all the works a user may add to a collection

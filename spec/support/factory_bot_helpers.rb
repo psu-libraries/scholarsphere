@@ -46,4 +46,8 @@ module FactoryBotHelpers
   def self.unmanaged_doi
     "doi:10.#{Faker::Number.number(digits: 5)}/#{Faker::Alphanumeric.alphanumeric(number: 8).insert(4, '-')}"
   end
+
+  def self.datacite_doi
+    "#{Doi::MANAGED_PREFIXES.sample}/#{Faker::Alphanumeric.alphanumeric(number: 8).insert(4, '-')}"
+  end
 end

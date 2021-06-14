@@ -12,8 +12,8 @@ RSpec.describe 'Work Settings Page', with_user: :user do
 
   it 'is available from the resource page' do
     visit resource_path(work.uuid)
-    click_on I18n.t('resources.settings_button.text', type: 'Work')
-    expect(page).to have_content(I18n.t('dashboard.works.edit.heading', work_title: work.latest_version.title))
+    click_on I18n.t!('resources.settings_button.text', type: 'Work')
+    expect(page).to have_content(I18n.t!('dashboard.works.edit.heading', work_title: work.latest_version.title))
   end
 
   describe 'Updating visibility' do
@@ -28,9 +28,9 @@ RSpec.describe 'Work Settings Page', with_user: :user do
       )
 
       choose authorized_checkbox_label
-      click_button I18n.t('dashboard.works.edit.visibility.submit_button')
+      click_button I18n.t!('dashboard.works.edit.visibility.submit_button')
 
-      expect(page).to have_content(I18n.t('dashboard.works.edit.heading', work_title: work.latest_version.title))
+      expect(page).to have_content(I18n.t!('dashboard.works.edit.heading', work_title: work.latest_version.title))
 
       work.reload
       expect(work.visibility).to eq Permissions::Visibility::AUTHORIZED
@@ -46,14 +46,14 @@ RSpec.describe 'Work Settings Page', with_user: :user do
 
     it 'works from the Settings page' do
       fill_in 'embargo_form_embargoed_until', with: '2030-11-11'
-      click_button I18n.t('dashboard.works.edit.embargo.submit_button')
+      click_button I18n.t!('dashboard.works.edit.embargo.submit_button')
 
-      expect(page).to have_content(I18n.t('dashboard.works.edit.heading', work_title: work.latest_version.title))
+      expect(page).to have_content(I18n.t!('dashboard.works.edit.heading', work_title: work.latest_version.title))
 
       work.reload
       expect(work.embargoed_until).to be_within(1.minute).of(Time.zone.local(2030, 11, 11, 0))
 
-      click_button I18n.t('dashboard.works.edit.embargo.remove_button')
+      click_button I18n.t!('dashboard.works.edit.embargo.remove_button')
 
       work.reload
       expect(work.embargoed_until).to be_nil
@@ -71,10 +71,10 @@ RSpec.describe 'Work Settings Page', with_user: :user do
       let(:work) { create :work, versions_count: 1, has_draft: false, depositor: user.actor }
 
       it 'works from the Settings page' do
-        click_button I18n.t('resources.doi.create')
+        click_button I18n.t!('resources.doi.create')
 
         expect(page).to have_current_path(edit_dashboard_work_path(work))
-        expect(page).not_to have_button I18n.t('resources.doi.create')
+        expect(page).not_to have_button I18n.t!('resources.doi.create')
       end
     end
 
@@ -82,8 +82,8 @@ RSpec.describe 'Work Settings Page', with_user: :user do
       let(:work) { create :work, versions_count: 1, has_draft: true, depositor: user.actor }
 
       it 'is not allowed' do
-        expect(page).not_to have_content I18n.t('resources.doi.create')
-        expect(page).to have_content I18n.t('dashboard.works.edit.doi.not_allowed')
+        expect(page).not_to have_content I18n.t!('resources.doi.create')
+        expect(page).to have_content I18n.t!('dashboard.works.edit.doi.not_allowed')
       end
     end
   end

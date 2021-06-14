@@ -22,8 +22,8 @@ RSpec.describe WithdrawnDetailComponent, type: :component do
     let(:work_version) { build(:work_version, :withdrawn, work: work) }
 
     it 'displays a message' do
-      expect(content).to include I18n.t('files_message.withdrawn.heading')
-      expect(content).to include I18n.t('files_message.withdrawn.public_message')
+      expect(content).to include I18n.t!('files_message.withdrawn.heading')
+      expect(content).to include I18n.t!('files_message.withdrawn.public_message')
     end
   end
 
@@ -32,8 +32,8 @@ RSpec.describe WithdrawnDetailComponent, type: :component do
     let(:user) { work.depositor.user }
 
     it 'displays a message' do
-      expect(content).to include I18n.t('files_message.withdrawn.heading')
-      expect(content).to include I18n.t('files_message.edit_message')
+      expect(content).to include I18n.t!('files_message.withdrawn.heading')
+      expect(content).to include I18n.t!('files_message.edit_message')
     end
   end
 

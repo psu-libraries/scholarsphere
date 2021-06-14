@@ -24,8 +24,8 @@ RSpec.describe 'Profile', type: :feature, with_user: :user do
       expect(user.actor.surname).to eq(attributes[:surname])
       expect(user.actor.orcid).to eq(attributes[:orcid])
       expect(user.actor.psu_id).to eq(user.access_id)
-      expect(page).to have_content(I18n.t('navbar.heading.dashboard'))
-      expect(page).to have_content(I18n.t('dashboard.profiles.update.success'))
+      expect(page).to have_content(I18n.t!('navbar.heading.dashboard'))
+      expect(page).to have_content(I18n.t!('dashboard.profiles.update.success'))
     end
   end
 
@@ -38,8 +38,8 @@ RSpec.describe 'Profile', type: :feature, with_user: :user do
       expect(page).to have_content('Edit Profile')
       expect(page).to have_field('ORCiD', text: '')
       click_button 'Save'
-      expect(page).to have_content(I18n.t('navbar.heading.dashboard'))
-      expect(page).to have_content(I18n.t('dashboard.profiles.update.success'))
+      expect(page).to have_content(I18n.t!('navbar.heading.dashboard'))
+      expect(page).to have_content(I18n.t!('dashboard.profiles.update.success'))
     end
   end
 
@@ -49,7 +49,7 @@ RSpec.describe 'Profile', type: :feature, with_user: :user do
     it 'offers the option to enable admin privileges' do
       visit edit_dashboard_profile_path
       within('#topbar') do
-        expect(page).to have_content(I18n.t('navbar.admin_name'))
+        expect(page).to have_content(I18n.t!('navbar.admin_name'))
         expect(page).to have_link('Sidekiq')
         expect(page).to have_link('Health Checks')
       end
@@ -59,8 +59,8 @@ RSpec.describe 'Profile', type: :feature, with_user: :user do
       click_button 'Save'
       user.reload
       expect(user.admin_enabled).to be(false)
-      expect(page).to have_content(I18n.t('navbar.heading.dashboard'))
-      expect(page).to have_content(I18n.t('dashboard.profiles.update.success'))
+      expect(page).to have_content(I18n.t!('navbar.heading.dashboard'))
+      expect(page).to have_content(I18n.t!('dashboard.profiles.update.success'))
       within('#topbar') do
         expect(page).to have_content(user.access_id)
         expect(page).not_to have_link('Sidekiq')

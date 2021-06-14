@@ -144,14 +144,14 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         fill_in 'work_version_title', with: "Changed #{metadata[:title]}"
 
-        dismiss_confirm(I18n.t('dashboard.form.unsaved_changes_prompt')) do
-          click_on I18n.t('dashboard.form.tabs.contributors')
+        dismiss_confirm(I18n.t!('dashboard.form.unsaved_changes_prompt')) do
+          click_on I18n.t!('dashboard.form.tabs.contributors')
         end
 
         expect(page).to have_current_path(dashboard_form_work_version_details_path(work_version))
 
-        accept_confirm(I18n.t('dashboard.form.unsaved_changes_prompt')) do
-          click_on I18n.t('dashboard.form.tabs.contributors')
+        accept_confirm(I18n.t!('dashboard.form.unsaved_changes_prompt')) do
+          click_on I18n.t!('dashboard.form.tabs.contributors')
         end
 
         expect(page).to have_current_path(dashboard_form_contributors_path('work_version', work_version))
@@ -475,7 +475,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).to have_current_path(dashboard_form_publish_path(work_version))
 
         within '#error_explanation' do
-          expect(page).to have_content(I18n.t('errors.messages.invalid_edtf'))
+          expect(page).to have_content(I18n.t!('errors.messages.invalid_edtf'))
         end
 
         work_version.reload

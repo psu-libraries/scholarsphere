@@ -12,7 +12,7 @@ RSpec.describe BackToWorkButtonComponent, type: :component do
     let(:work) { create :work, has_draft: false, versions_count: 1 }
 
     it "renders a link back to the _Work's_ resource page" do
-      expect(result.text).to eq I18n.t('dashboard.works.edit.back', raise: true)
+      expect(result.text).to eq I18n.t!('dashboard.works.edit.back', raise: true)
       expect(result[:href]).to eq resource_path(work.uuid)
     end
   end

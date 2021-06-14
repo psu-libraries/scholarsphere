@@ -12,7 +12,6 @@ class SearchBuilder < Blacklight::SearchBuilder
     restrict_search_to_works_and_collections
     apply_gated_discovery
     limit_to_public_resources
-    log_solr_parameters
   )
 
   def apply_gated_discovery(solr_parameters)

@@ -34,7 +34,7 @@ RSpec.describe MintableDoiComponent, type: :component do
       expect(html.css('form').attribute('action').value)
         .to eq resource_doi_path(resource.uuid)
 
-      expect(html.css('input').attribute('value').text).to eq I18n.t('resources.doi.create')
+      expect(html.css('input').attribute('value').text).to eq I18n.t!('resources.doi.create')
     end
   end
 
