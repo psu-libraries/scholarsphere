@@ -127,6 +127,11 @@ h4,
   }
 }
 
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 //
 // Utility Classes
 //
