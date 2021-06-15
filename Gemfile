@@ -62,10 +62,10 @@ group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'flog'
-  gem 'listen', '>= 3.0.5', '< 3.2'
+  gem 'listen', '~> 3.3'
   gem 'spring'
   gem 'spring-commands-rspec'
-  gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'spring-watcher-listen'
   gem 'web-console', '>= 3.3.0'
 end
 
@@ -77,7 +77,7 @@ group :test do
   gem 'rails-controller-testing'
   gem 'rspec'
   gem 'rspec-its'
-  gem 'rspec-rails', '~> 4.0.0.beta3'
+  gem 'rspec-rails'
   gem 'selenium-webdriver'
   gem 'shoulda-matchers', '~> 4.3'
   gem 'simplecov', '~> 0.17.1', require: false
