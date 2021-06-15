@@ -178,11 +178,14 @@ RSpec.describe FileResource, type: :model do
 
     let(:expected_keys) do
       %w(
+        created_at_dtsi
         deposited_at_dtsi
         extracted_text_tei
-        created_at_dtsi
         id
+        mime_type_ssi
         model_ssi
+        original_filename_ssi
+        size_isi
         updated_at_dtsi
         uuid_ssi
       )
