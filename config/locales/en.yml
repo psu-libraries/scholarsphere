@@ -513,6 +513,7 @@ en:
     draft_version:
       link: View the draft version.
       message: An updated draft version for this work is available.
+    versions: Versions
     work_history: Work History
     works: Works
     doi:

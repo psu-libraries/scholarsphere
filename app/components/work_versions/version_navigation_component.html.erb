@@ -1,0 +1,17 @@
+<div class="version-navigation" data-controller="version-navigation">
+  <div class="card">
+    <ul class="list-group list-group-flush">
+    <% version_options.each do |version, path, list_classes, link_classes| %>
+      <li class="list-group-item <%= list_classes %>">
+        <%= link_to path, class: "card-link stretched-link #{link_classes}" do %>
+          <%= version.display_version_short %>
+
+          <%= render WorkVersions::StatusBadgeComponent.new(work_version: version) %>
+        <% end %>
+
+        <span class="float-right"><%= version.created_at.to_formatted_s(:long_without_time) %></span>
+      </li>
+    <% end %>
+    </ul>
+  </div>
+</div>
