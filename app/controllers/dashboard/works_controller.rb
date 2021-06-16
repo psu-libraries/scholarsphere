@@ -40,6 +40,7 @@ module Dashboard
 
         @embargo_form = EmbargoForm.new(work: @undecorated_work, params: embargo_params)
         @editors_form = EditorsForm.new(resource: @undecorated_work, user: current_user, params: editors_params)
+        @depositor_form = DepositorForm.new(resource: @undecorated_work, params: depositor_params)
       end
 
       def select_form_model
@@ -47,6 +48,8 @@ module Dashboard
           @embargo_form
         elsif params[:editors_form].present?
           @editors_form
+        elsif params[:depositor_form].present?
+          @depositor_form
         else
           @work
         end
@@ -76,6 +79,14 @@ module Dashboard
           .permit(
             edit_users: [],
             edit_groups: []
+          )
+      end
+
+      def depositor_params
+        params
+          .fetch(:depositor_form, {})
+          .permit(
+            :psu_id
           )
       end
   end

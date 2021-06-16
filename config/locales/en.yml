@@ -96,6 +96,9 @@ en:
             rights:
               blank: is required to publish the work
   activemodel:
+    attributes:
+      depositor_form:
+        psu_id: Access Account
     errors:
       models:
         editors_form:
@@ -103,6 +106,10 @@ en:
             edit_users:
               not_found: "User %{access_id} could not be found"
               unexpected: "%{access_id} is not a valid user"
+        depositor_form:
+          attributes:
+            psu_id:
+              not_found: "User %{psu_id} could not be found"
         embargo_form:
           attributes:
             embargoed_until:
@@ -178,6 +185,8 @@ en:
     hint:
       editors_form:
         edit_users: Requires the user's Penn State Access ID (e.g., xyz500)
+      depositor_form:
+        psu_id: Enter the user's Penn State Access ID (e.g., xyz500)
       permissions:
         visibility:
           authenticated: >
@@ -267,6 +276,10 @@ en:
         explanation: "Gives the ability for other users from Penn State to edit your %{type}. This can be done on a per-user basis, or a group basis."
         submit_button: Update Editors
         depositor: "%{depositor_name} (%{depositor_id}) deposited this %{type} and will always have edit access."
+      depositor_form:
+        heading: Depositor
+        explanation: "Changes the depositor of the work. Currently, only existing Penn State users are allowed."
+        submit_button: Update Depositor
     works:
       index:
         heading: "Your ScholarSphere Deposits"
@@ -288,16 +301,24 @@ en:
           submit_button: Update Access Settings
         embargo:
           heading: Embargo
-          explanation: Files will be restricted (not downloadable) until after the embargo date. When the embargo lifts, files may be accessed based on the access settings above.
+          explanation: >
+            Files will be restricted (not downloadable) until after the embargo date. When the embargo lifts, files may
+            be accessed based on the access settings above.
           submit_button: Update Embargo Settings
           remove_button: Remove Embargo
         doi:
           heading: DOI
           explanation: A Digital Object Identifier (DOI) is a persistent identifier that can be used in print or on the web.
-          not_allowed: A DOI may only be created on published works. Since this work is a draft, you'll need to wait until it's published to create a DOI for it.
+          not_allowed: >
+            A DOI may only be created on published works. Since this work is a draft, you'll need to wait until it's
+            published to create a DOI for it.
         danger:
           heading: Danger
-          explanation: Only the most recent version can be deleted. Deleting a version cannot be undone. If the most recent version is the only version of the work, the work itself will be deleted (regardless of publication status). If the work has a DOI, it will no longer resolve; you are responsible for updating the DOI to a new URI.
+          explanation: >
+              Only the most recent version can be deleted. Deleting a version cannot be undone. If the most recent
+              version is the only version of the work, the work itself will be deleted (regardless of publication
+              status). If the work has a DOI, it will no longer resolve; you are responsible for updating the DOI to a
+              new URI.
       update:
         success: "Work settings successfully updated."
     form: 
