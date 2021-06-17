@@ -109,4 +109,28 @@ RSpec.describe 'Collection Settings Page', with_user: :user do
       end
     end
   end
+
+  describe 'Changing the depositor' do
+    context 'with a standard user' do
+      it 'does not allow the change' do
+        visit edit_dashboard_collection_path(collection)
+        expect(page).not_to have_content(I18n.t!('dashboard.shared.depositor_form.heading'))
+        expect(page).not_to have_link(I18n.t!('dashboard.shared.depositor_form.submit_button'))
+      end
+    end
+
+    context 'with an admin user' do
+      let(:user) { create :user, :admin }
+      let(:actor) { create(:actor) }
+
+      it 'allows the change' do
+        visit edit_dashboard_collection_path(collection)
+        fill_in('Access Account', with: actor.psu_id)
+        click_on(I18n.t!('dashboard.shared.depositor_form.submit_button'))
+        expect(page).to have_content(I18n.t!('dashboard.collections.update.success'))
+        collection.reload
+        expect(collection.depositor).to eq(actor)
+      end
+    end
+  end
 end

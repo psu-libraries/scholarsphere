@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require Rails.root.join('spec', 'support', 'file_helpers')
+
 FactoryBot.define do
   factory :file_resource do
     # Fast version with no image processing.
