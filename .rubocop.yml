@@ -30,6 +30,11 @@ Metrics/CyclomaticComplexity:
     - 'app/services/doi_service.rb'
     - 'app/services/authorship_migration/work_version_creation_migration.rb'
 
+
+Rails/DynamicFindBy:
+  Exclude:
+    - 'spec/models/file_resource_spec.rb'
+
 Rails/FilePath:
   EnforcedStyle: arguments
 
