@@ -991,10 +991,18 @@ h4,
     padding-right: .85rem;
   }
 
+  &--edit i {
+    position: relative;
+    margin-left: 2px;
+    margin-right: -6px;
+    margin-top: -6px;
+    top: 6px;
+  }
+
   &--settings i {
     position: relative;
     margin-top: -6px;
-    top: 4px;
+    top: 6px;
   }
 
   &--collapse-normal {
