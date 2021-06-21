@@ -28,6 +28,11 @@ class FileResource < ApplicationRecord
     IndexingService.commit
   end
 
+  # @param [String, Symbol, Array]
+  def self.find_by_mime_type(types)
+    FindByMimeType.call(mime_types: types)
+  end
+
   # @note Using `head_object` will retrieve the metadata without retrieving the entire object.
   def etag
     @etag ||= client

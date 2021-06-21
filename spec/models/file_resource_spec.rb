@@ -54,6 +54,15 @@ RSpec.describe FileResource, type: :model do
     end
   end
 
+  describe '::find_by_mime_type' do
+    before { allow(FindByMimeType).to receive(:call) }
+
+    it 'delegates the query to FindByMimeType' do
+      described_class.find_by_mime_type('mime_type')
+      expect(FindByMimeType).to have_received(:call).with(mime_types: 'mime_type')
+    end
+  end
+
   describe '#save' do
     let(:file_resource) { described_class.new }
     let(:file) { File.open(File.join(fixture_path, 'image.png')) }
