@@ -1,7 +1,9 @@
 <div class="alert alert-warning" role="alert">
   <%= t "resources.#{i18n_key}.message" %>
 
-  <%= link_to t("resources.#{i18n_key}.link"),
-              resource_path(linked_version),
-              class: 'alert-link' %>
+  <% if !current_representative_version? %>
+    <%= link_to t("resources.#{i18n_key}.link"),
+                resource_path(work.uuid),
+                class: 'alert-link' %>
+  <% end %>
 </div>

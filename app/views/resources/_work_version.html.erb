@@ -40,10 +40,11 @@
   <% end %>
 <% end %>
 
-<div class="container-fluid">
-
+<%- content_for :detail_components do %>
   <%= render WorkVersionDetailComponent.new(work_version: work_version) %>
+<% end %>
 
+<div class="container-fluid">
   <article class="row">
     <div class="col-lg-7">
       <h1 class="h2 mb-3"><%= work_version.title %></h1>
