@@ -47,7 +47,7 @@ RSpec.describe 'Public Resources', type: :feature do
         end
 
         ## Ensure we cannot navigate to the draft version
-        within('.navbar .dropdown--versions') do
+        within('.version-navigation .list-group') do
           expect(page).not_to have_content 'V3'
           expect(page).not_to have_content 'draft'
         end
@@ -59,7 +59,7 @@ RSpec.describe 'Public Resources', type: :feature do
         end
 
         ## Navigate to an old version
-        within('.navbar .dropdown--versions') { click_on 'V1' }
+        within('.version-navigation .list-group') { click_on 'V1' }
 
         expect(page).to have_content(v1.title)
         expect(page).to have_content(I18n.t!('resources.old_version.message'))
@@ -78,7 +78,7 @@ RSpec.describe 'Public Resources', type: :feature do
         end
 
         ## Does have draft in the navigation menu
-        within('.navbar .dropdown--versions') do
+        within('.version-navigation .list-group') do
           expect(page).to have_content 'V3'
         end
 
@@ -113,7 +113,7 @@ RSpec.describe 'Public Resources', type: :feature do
           end
 
           ## Navigate to an old version
-          within('.navbar .dropdown--versions') { click_on 'V1' }
+          within('.version-navigation .list-group') { click_on 'V1' }
 
           within('header') do
             ## Edit and create draft buttons are now both disabled
@@ -141,7 +141,7 @@ RSpec.describe 'Public Resources', type: :feature do
           end
 
           ## Navigate to draft version
-          within('.navbar .dropdown--versions') { click_on 'V3' }
+          within('.version-navigation .list-group') { click_on 'V3' }
 
           within('header') do
             ## Edit button enabled, create button disabled

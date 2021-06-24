@@ -7,13 +7,8 @@
 <% end %>
 
 <%= content_for :navbar_items do %>
-  <%= render WorkVersions::VersionNavigationDropdownComponent.new(
-        current_version: work_version,
-        work: work_version.decorated_work
-      ) %>
-
   <% if policy(work_version.work).edit? %>
-    <li class="nav-item">
+    <li class="nav-item py-1">
       <%= render LinkDisabledByTooltipComponent.new(
             enabled: policy(work_version).edit?,
             text: I18n.t('resources.work_version.edit_button.text', version: work_version.display_version_short),
@@ -23,7 +18,7 @@
           ) %>
     </li>
 
-    <li class="nav-item">
+    <li class="nav-item py-1">
       <%= render LinkDisabledByTooltipComponent.new(
             enabled: policy(work_version).new?,
             text: I18n.t('resources.work_version.create_button.text', version: work_version.display_version_short),
@@ -34,7 +29,7 @@
           ) %>
     </li>
 
-    <li class="nav-item">
+    <li class="nav-item py-1">
       <%= link_to(edit_dashboard_work_path(work_version.work),
                   class: 'btn btn-outline-light btn--squish mr-lg-2 btn--settings') do %>
           <%= t('resources.settings_button.text', type: 'Work') %>
@@ -67,6 +62,15 @@
       </div>
 
       <%= render WorkVersionMetadataComponent.new(work_version: work_version) %>
+
+      <div class="keyline keyline--left">
+        <h2 class="h4"><%= t('resources.versions') %></h2>
+      </div>
+
+      <%= render WorkVersions::VersionNavigationComponent.new(
+            current_version: work_version,
+            work: work_version.decorated_work
+          ) %>
 
       <div class="keyline keyline--left">
         <h2 class="h4"><%= t('resources.analytics') %></h2>

@@ -146,7 +146,7 @@ RSpec.describe 'Dashboard catalog page', :inline_jobs do
       expect(page).to have_selector('span.badge--content', text: 'withdrawn')
       click_link(work.versions.first.title)
 
-      within('.dropdown--versions') do
+      within('.version-navigation .list-group') do
         expect(page).to have_link('V1 withdrawn')
       end
 

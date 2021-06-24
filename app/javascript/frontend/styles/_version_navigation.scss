@@ -1,0 +1,19 @@
+.version-navigation {
+  max-height: 200px;
+  overflow-y: auto;
+
+  .list-group-item {
+    &:not(.active):hover {
+      background-color: $light;
+    }
+  }
+
+  .stretched-link.disabled {
+    color: $white;
+    pointer-events: none;
+
+    &::after {
+      pointer-events: none;
+    }
+  }
+}
