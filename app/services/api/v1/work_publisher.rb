@@ -85,10 +85,10 @@ module Api
 
           BuildNewActor.call(psu_id: psu_id, orcid: orcid)
         rescue PennState::SearchService::NotFound
-          _errors.add(:psu_id, "access id #{psu_id} does not exist")
+          _errors.add(:psu_id, "access id #{psu_id} was not found at Penn State")
           nil
         rescue Orcid::NotFound
-          _errors.add(:orcid, "id #{orcid} does not exist")
+          _errors.add(:orcid, "id #{orcid} was not found in ORCiD")
           nil
         end
 
