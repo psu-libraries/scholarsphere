@@ -106,7 +106,7 @@ RSpec.describe 'Dashboard catalog page', :inline_jobs do
       expect(page).not_to have_text(restricted_work.versions.first.title)
       expect(page).not_to have_text(restricted_collection.title)
       click_link(editable_work.versions.first.title)
-      expect(page).to have_link('Edit V1')
+      expect(page).to have_link('Update Work')
     end
   end
 

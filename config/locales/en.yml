@@ -549,18 +549,16 @@ en:
       confirm: 'Do you want to create a DOI? This DOI will always resolve to the most recently published version of this work.'
       disable_with: 'Creating...'
     work_version:
-      edit_button:
-        text: 'Edit %{version}'
-        tooltip: 'Only a draft can be edited. Create a new version to add changes to the published work.'
-      create_button:
-        text: 'Create New Version From %{version}'
-        tooltip: 'A new draft version can only be created from the latest published version. Only one draft version may exist at any time.'
+      admin_edit_button: 'Edit %{version}'
     collection:
-      edit_button: 'Edit'
       delete_button: 'Delete'
       delete_confirm: "Are you sure you want to delete this collection? This cannot be undone."
+    edit_button:
+      text: 'Update %{type}'
+      tooltip: 'Change resource description or content.'
     settings_button:
       text: '%{type} Settings'
+      tooltip: 'Manage access settings, embargoes, DOIs, and more.'
   shared:
     search:
       heading: 'Browse and search for works'

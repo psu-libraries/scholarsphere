@@ -7,33 +7,27 @@
 <% end %>
 
 <%= content_for :navbar_items do %>
+  <% if current_user.admin? %>
+    <li class="nav-item py-1">
+      <a class="btn btn-outline-light btn--squish mr-lg-2 qa-edit-version"
+          href="<%= dashboard_form_work_version_details_path(work_version.id) %>">
+        <%= I18n.t('resources.work_version.admin_edit_button', version: work_version.display_version_short) %>
+      </a>
+    </li>
+  <% end %>
+
   <% if policy(work_version.work).edit? %>
     <li class="nav-item py-1">
-      <%= render LinkDisabledByTooltipComponent.new(
-            enabled: policy(work_version).edit?,
-            text: I18n.t('resources.work_version.edit_button.text', version: work_version.display_version_short),
-            path: dashboard_form_work_version_details_path(work_version.id),
-            tooltip: I18n.t('resources.work_version.edit_button.tooltip'),
-            class_list: 'btn btn-outline-light btn--squish mr-lg-2 qa-edit-version'
-          ) %>
+      <%= render EditResourceButton.new(resource: work_version, policy: policy(work_version.work.representative_version)) %>
     </li>
 
     <li class="nav-item py-1">
-      <%= render LinkDisabledByTooltipComponent.new(
-            enabled: policy(work_version).new?,
-            text: I18n.t('resources.work_version.create_button.text', version: work_version.display_version_short),
-            path: dashboard_work_work_versions_path(work_version.work),
-            method: :post,
-            tooltip: I18n.t('resources.work_version.create_button.tooltip'),
-            class_list: 'btn btn-outline-light btn--squish mr-lg-4 qa-create-draft'
-          ) %>
-    </li>
-
-    <li class="nav-item py-1">
-      <%= link_to(edit_dashboard_work_path(work_version.work),
-                  class: 'btn btn-outline-light btn--squish mr-lg-2 btn--settings') do %>
+      <%= link_to edit_dashboard_work_path(work_version.work),
+                  class: 'btn btn-outline-light btn--squish mr-lg-2 btn--settings',
+                  title: t('resources.settings_button.tooltip'),
+                  data: { toggle: 'tooltip', placement: 'bottom' } do %>
           <%= t('resources.settings_button.text', type: 'Work') %>
-          <i class="material-icons">settings</i>
+          <i class="material-icons" aria-hidden="true">settings</i>
       <% end %>
     </li>
 
