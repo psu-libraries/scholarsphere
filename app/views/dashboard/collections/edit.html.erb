@@ -19,11 +19,18 @@
           <li class="nav-item">
             <%= link_to t('dashboard.shared.editors_form.heading'), "##{t('dashboard.shared.editors_form.heading').parameterize}", class: 'nav-link' %>
           </li>
+
           <% if current_user.admin? && policy(@collection).destroy? %>
+            <li class="nav-item">
+              <%= link_to t('dashboard.shared.depositor_form.heading'),
+                          "##{t('dashboard.shared.depositor_form.heading').parameterize}",
+                          class: 'nav-link' %>
+            </li>
             <li class="nav-item">
               <a class="nav-link" href="#<%= t('.danger.heading').parameterize %>"><%= t('.danger.heading') %></a>
             </li>
           <% end %>
+
         </ul>
       </aside>
     </div>
@@ -52,6 +59,13 @@
       </div>
 
       <% if current_user.admin? && policy(@collection).destroy? %>
+        <div class="keyline keyline--left">
+          <h2 id="<%= t('dashboard.shared.depositor_form.heading').parameterize %>" class="h4"><%= t('dashboard.shared.depositor_form.heading') %></h2>
+        </div>
+
+        <div class="actions mb-3">
+          <%= render 'dashboard/shared/depositor_form', depositor_form: @depositor_form, url: dashboard_collection_path(@collection) %>
+        </div>
         <div class="keyline keyline--left">
           <h2 id="<%= t('.danger.heading').parameterize %>" class="h4"><%= t('.danger.heading') %></h2>
         </div>

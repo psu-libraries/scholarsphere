@@ -1,4 +1,4 @@
-FROM harbor.k8s.libraries.psu.edu/library/ruby-2.7.3-node-15:20210611 as base
+FROM harbor.k8s.libraries.psu.edu/library/ruby-2.7.3-node-15:20210620 as base
 ARG UID=2000
 
 COPY bin/vaultshell /usr/local/bin/
@@ -14,7 +14,8 @@ USER app
 
 COPY Gemfile Gemfile.lock /app/
 COPY --chown=app vendor/ vendor/
-RUN gem install bundler:2.1.4
+# in the event that bundler runs outside of docker, we get in sync with it's bundler version
+RUN gem install bundler -v "$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)"
 RUN bundle config set path 'vendor/bundle'
 RUN bundle install && \
   rm -rf /app/.bundle/cache && \

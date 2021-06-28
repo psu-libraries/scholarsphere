@@ -425,8 +425,8 @@ RSpec.describe Api::V1::WorkPublisher do
     it 'retains all the creators and returns the work with errors' do
       expect(new_work.versions.first.creators.length).to eq(3)
       expect(publisher.errors.full_messages).to include(
-        'Psu access id missing-id does not exist',
-        'Orcid id missing-orcid does not exist'
+        'Psu access id missing-id was not found at Penn State',
+        'Orcid id missing-orcid was not found in ORCiD'
       )
     end
   end

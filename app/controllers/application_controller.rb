@@ -10,6 +10,10 @@ class ApplicationController < ActionController::Base
 
   ActionDispatch::ExceptionWrapper.rescue_responses['Pundit::NotAuthorizedError'] = :not_found
 
+  before_action do
+    Rack::MiniProfiler.authorize_request if current_user.admin?
+  end
+
   def current_user
     return User.guest if Rails.application.read_only?
 

@@ -42,11 +42,14 @@ module Dashboard
       def initialize_forms
         @collection.attributes = collection_params
         @editors_form = EditorsForm.new(resource: @collection, user: current_user, params: editors_params)
+        @depositor_form = DepositorForm.new(resource: @collection, params: depositor_params)
       end
 
       def select_form_model
         if params[:editors_form].present?
           @editors_form
+        elsif params[:depositor_form].present?
+          @depositor_form
         else
           @collection
         end
@@ -67,6 +70,14 @@ module Dashboard
           .permit(
             edit_users: [],
             edit_groups: []
+          )
+      end
+
+      def depositor_params
+        params
+          .fetch(:depositor_form, {})
+          .permit(
+            :psu_id
           )
       end
   end

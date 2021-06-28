@@ -5,6 +5,7 @@ class FileResourceSchema < BaseSchema
     DefaultSchema.new(resource: resource)
       .document
       .merge(extracted_text_document)
+      .merge(metadata_document)
   end
 
   def reject
@@ -18,6 +19,14 @@ class FileResourceSchema < BaseSchema
 
       {
         extracted_text_tei: resource.extracted_text
+      }
+    end
+
+    def metadata_document
+      {
+        mime_type_ssi: resource.file.mime_type,
+        size_isi: resource.file.size,
+        original_filename_ssi: resource.file.original_filename
       }
     end
 end

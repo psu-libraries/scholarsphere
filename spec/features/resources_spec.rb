@@ -42,12 +42,12 @@ RSpec.describe 'Public Resources', type: :feature do
 
         ## Does not have edit controls
         within('header') do
-          expect(page).not_to have_content(I18n.t!('resources.work_version.edit_button.text', version: 'V2'))
+          expect(page).not_to have_content(I18n.t!('resources.work_version.admin_edit_button', version: 'V2'))
           expect(page).not_to have_content(I18n.t!('resources.settings_button.text', type: 'Work'))
         end
 
         ## Ensure we cannot navigate to the draft version
-        within('.navbar .dropdown--versions') do
+        within('.version-navigation .list-group') do
           expect(page).not_to have_content 'V3'
           expect(page).not_to have_content 'draft'
         end
@@ -59,7 +59,7 @@ RSpec.describe 'Public Resources', type: :feature do
         end
 
         ## Navigate to an old version
-        within('.navbar .dropdown--versions') { click_on 'V1' }
+        within('.version-navigation .list-group') { click_on 'V1' }
 
         expect(page).to have_content(v1.title)
         expect(page).to have_content(I18n.t!('resources.old_version.message'))
@@ -73,12 +73,12 @@ RSpec.describe 'Public Resources', type: :feature do
 
         ## Does not have edit controls
         within('header') do
-          expect(page).not_to have_content(I18n.t!('resources.work_version.edit_button.text', version: 'V3'))
+          expect(page).not_to have_content(I18n.t!('resources.work_version.admin_edit_button', version: 'V3'))
           expect(page).not_to have_content(I18n.t!('resources.settings_button.text', type: 'Work'))
         end
 
         ## Does have draft in the navigation menu
-        within('.navbar .dropdown--versions') do
+        within('.version-navigation .list-group') do
           expect(page).to have_content 'V3'
         end
 
@@ -101,24 +101,22 @@ RSpec.describe 'Public Resources', type: :feature do
           expect(page).to have_content(v2.title) # Sanity
 
           within('header') do
-            ## Edit controls are visible
-            expect(page).to have_content(I18n.t!('resources.work_version.edit_button.text', version: 'V2'))
-              .and have_content(I18n.t!('resources.work_version.create_button.text', version: 'V2'))
-              .and have_content(I18n.t!('resources.settings_button.text', type: 'Work'))
+            ## Edit Version button is hidden, but Update Work and Work Settings buttons are shown
+            expect(page).not_to have_content(I18n.t!('resources.work_version.admin_edit_button', version: 'V2'))
 
-            ## Edit button is disabled, create draft button is enabled
-            expect(page).to have_selector('.qa-edit-version.disabled')
-            expect(page).to have_selector('.qa-create-draft')
-            expect(page).not_to have_selector('.qa-create-draft.disabled')
+            expect(page).to have_content(I18n.t!('resources.edit_button.text', type: 'Work'))
+              .and have_content(I18n.t!('resources.settings_button.text', type: 'Work'))
           end
 
           ## Navigate to an old version
-          within('.navbar .dropdown--versions') { click_on 'V1' }
+          within('.version-navigation .list-group') { click_on 'V1' }
 
           within('header') do
-            ## Edit and create draft buttons are now both disabled
-            expect(page).to have_selector('.qa-edit-version.disabled')
-            expect(page).to have_selector('.qa-create-draft.disabled')
+            ## Edit Version button is still hidden, and Update Work and Work Settings buttons are still shown
+            expect(page).not_to have_content(I18n.t!('resources.work_version.admin_edit_button', version: 'V1'))
+
+            expect(page).to have_content(I18n.t!('resources.edit_button.text', type: 'Work'))
+              .and have_content(I18n.t!('resources.settings_button.text', type: 'Work'))
           end
         end
       end
@@ -130,9 +128,11 @@ RSpec.describe 'Public Resources', type: :feature do
           expect(page).to have_content(v2.title) # Sanity
 
           within('header') do
-            ## Edit and create buttons are disabled
-            expect(page).to have_selector('.qa-edit-version.disabled')
-            expect(page).to have_selector('.qa-create-draft.disabled')
+            ## Edit Version button is hidden, but Update Work and Work Settings buttons are shown
+            expect(page).not_to have_content(I18n.t!('resources.work_version.admin_edit_button', version: 'V2'))
+
+            expect(page).to have_content(I18n.t!('resources.edit_button.text', type: 'Work'))
+              .and have_content(I18n.t!('resources.settings_button.text', type: 'Work'))
           end
 
           ## Does have draft in work history
@@ -141,14 +141,29 @@ RSpec.describe 'Public Resources', type: :feature do
           end
 
           ## Navigate to draft version
-          within('.navbar .dropdown--versions') { click_on 'V3' }
+          within('.version-navigation .list-group') { click_on 'V3' }
 
           within('header') do
-            ## Edit button enabled, create button disabled
-            expect(page).to have_selector('.qa-edit-version')
-            expect(page).not_to have_selector('.qa-edit-version.disabled')
-            expect(page).to have_selector('.qa-create-draft.disabled')
+            ## Edit Version button is still hidden, and Update Work and Work Settings buttons are still shown
+            expect(page).not_to have_content(I18n.t!('resources.work_version.admin_edit_button', version: 'V3'))
+
+            expect(page).to have_content(I18n.t!('resources.edit_button.text', type: 'Work'))
+              .and have_content(I18n.t!('resources.settings_button.text', type: 'Work'))
           end
+        end
+      end
+    end
+
+    context 'when logged in as an admin', with_user: :user do
+      let(:user) { build(:user, :admin) }
+
+      before do
+        visit resource_path(work.uuid)
+      end
+
+      it 'displays the "Edit Work Version" button' do
+        within ('header') do
+          expect(page).to have_content(I18n.t!('resources.work_version.admin_edit_button', version: 'V2'))
         end
       end
     end
@@ -225,7 +240,7 @@ RSpec.describe 'Public Resources', type: :feature do
         expect(page.title).to include(collection.title)
 
         within('header') do
-          expect(page).to have_content(I18n.t!('resources.collection.edit_button'))
+          expect(page).to have_content(I18n.t!('resources.edit_button.text', type: 'Collection'))
         end
       end
     end

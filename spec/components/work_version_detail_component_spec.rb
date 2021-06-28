@@ -7,59 +7,38 @@ RSpec.describe WorkVersionDetailComponent, type: :component do
 
   let(:work) { build_stubbed(:work) }
   let(:work_version) { build_stubbed(:work_version, work: work) }
-  let(:user) { build_stubbed(:user) }
-  let(:controller_name) { 'application' }
-  let(:mock_controller) do
-    instance_double('ApplicationController', current_user: user, controller_name: controller_name)
-  end
+  let(:representative_version) { build_stubbed(:work_version, work: work) }
 
   before do
-    allow_any_instance_of(described_class).to receive(:controller).and_return(mock_controller)
+    allow(work).to receive(:representative_version).and_return(representative_version)
   end
 
-  context 'when a current (editable) draft version exists' do
-    let(:user) { work.depositor.user }
+  context 'when the work version is draft state' do
+    before { allow(work_version).to receive(:draft?).and_return(true) }
 
-    context 'when the work version is the current draft version' do
-      before { allow(work).to receive(:draft_version).and_return(work_version) }
+    context 'with no other existing versions' do
+      let(:representative_version) { work_version }
 
-      it { is_expected.to be_empty }
+      it { is_expected.to include('This is a draft version of the work') }
+      it { is_expected.not_to include(work.uuid) }
     end
 
-    context 'when another version is the draft version' do
-      let(:other_version) { build_stubbed(:work_version) }
-
-      before { allow(work).to receive(:draft_version).and_return(other_version) }
-
-      it { is_expected.to include('An updated draft version for this work is available') }
-      it { is_expected.to include(other_version.uuid) }
+    context 'with other versions available' do
+      it { is_expected.to include('This is a draft version of the work') }
+      it { is_expected.to include(work.uuid) }
     end
   end
 
-  context 'when a current (editable) draft version does NOT exist' do
-    context 'when the work version is the current draft version' do
-      before { allow(work).to receive(:draft_version).and_return(work_version) }
+  context 'when the work version is NOT in draft state' do
+    before { allow(work_version).to receive(:draft?).and_return(false) }
+
+    context 'with no other existing versions' do
+      let(:representative_version) { work_version }
 
       it { is_expected.to be_empty }
     end
 
-    context 'when the work version is the current published version' do
-      before do
-        allow(work).to receive(:representative_version).and_return(work_version)
-        allow(work_version).to receive(:published?).and_return(true)
-      end
-
-      it { is_expected.to be_empty }
-    end
-
-    context 'when another version is the current published version' do
-      let(:other_version) { build_stubbed(:work_version) }
-
-      before do
-        allow(work).to receive(:representative_version).and_return(other_version)
-        allow(other_version).to receive(:published?).and_return(true)
-      end
-
+    context 'with newer versions available' do
       it { is_expected.to include('This is an older version of the work') }
       it { is_expected.to include(work.uuid) }
     end

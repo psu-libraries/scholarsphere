@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class WorkVersions::VersionNavigationDropdownComponent < ApplicationComponent
+class WorkVersions::VersionNavigationComponent < ApplicationComponent
   include Rails.application.routes.url_helpers
 
   attr_writer :navigable_policy_source
@@ -15,7 +15,7 @@ class WorkVersions::VersionNavigationDropdownComponent < ApplicationComponent
     attr_reader :work,
                 :current_version
 
-    def drop_down_menu_options
+    def version_options
       work
         .decorated_versions
         .reverse
@@ -24,7 +24,8 @@ class WorkVersions::VersionNavigationDropdownComponent < ApplicationComponent
         [
           version,
           path_for(version),
-          classes_for(version)
+          list_classes_for(version),
+          link_classes_for(version)
         ]
       end
     end
@@ -37,10 +38,12 @@ class WorkVersions::VersionNavigationDropdownComponent < ApplicationComponent
       end
     end
 
-    def classes_for(version)
-      classes = []
-      classes << 'disabled' if current?(version)
-      classes.join(' ')
+    def list_classes_for(version)
+      'active' if current?(version)
+    end
+
+    def link_classes_for(version)
+      'disabled' if current?(version)
     end
 
     def current?(version)

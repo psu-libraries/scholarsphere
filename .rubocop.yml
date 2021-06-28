@@ -30,6 +30,11 @@ Metrics/CyclomaticComplexity:
     - 'app/services/doi_service.rb'
     - 'app/services/authorship_migration/work_version_creation_migration.rb'
 
+
+Rails/DynamicFindBy:
+  Exclude:
+    - 'spec/models/file_resource_spec.rb'
+
 Rails/FilePath:
   EnforcedStyle: arguments
 
@@ -98,8 +103,9 @@ RSpec/MultipleSubjects:
 
 RSpec/VerifiedDoubles:
   Exclude:
+    - 'spec/components/edit_resource_button_spec.rb'
     - 'spec/components/mintable_doi_component_spec.rb'
-    - 'spec/components/work_versions/version_navigation_dropdown_component_spec.rb'
+    - 'spec/components/work_versions/version_navigation_component_spec.rb'
     - 'spec/components/work_histories/work_history_component_spec.rb'
 
 Style/ClassVars:

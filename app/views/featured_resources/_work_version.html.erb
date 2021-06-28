@@ -1,6 +1,6 @@
 <div class="col-xl">
   <div class="surface ft-work">
-    <h3><%= link_to work_version.title, resource_path(work_version.uuid) %></h3>
+    <h3 class="ellipsis"><%= link_to work_version.title, resource_path(work_version.uuid) %></h3>
     <div class="row">
       <%= render ThumbnailComponent.new(resource: work_version, featured: true) %>
       <%= render FeaturedWorkMetadataComponent.new(work_version: work_version) %>

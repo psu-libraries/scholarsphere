@@ -1,0 +1,8 @@
+<%= link_to path,
+            method: method,
+            class: 'btn btn-outline-light btn--squish btn--edit mr-lg-2',
+            title: t('resources.edit_button.tooltip'),
+            data: { toggle: 'tooltip', placement: 'bottom' } do %>
+            <%= label %>
+            <i class="material-icons" aria-hidden="true">edit</i>
+<% end %>

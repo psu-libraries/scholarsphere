@@ -127,6 +127,11 @@ h4,
   }
 }
 
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 //
 // Utility Classes
 //
@@ -568,8 +573,8 @@ h4,
   }
 
   th {
-    padding-right: $spacer;
     padding-left: 0;
+    padding-right: 0;
     min-width: 150px;
   }
 
@@ -986,10 +991,18 @@ h4,
     padding-right: .85rem;
   }
 
+  &--edit i {
+    position: relative;
+    margin-left: 2px;
+    margin-right: -6px;
+    margin-top: -6px;
+    top: 6px;
+  }
+
   &--settings i {
     position: relative;
     margin-top: -6px;
-    top: 4px;
+    top: 6px;
   }
 
   &--collapse-normal {
@@ -1126,7 +1139,7 @@ h4,
     color: $white;
 
     &.badge--outline {
-      background: transparent;
+      background: $white;
       border: 1px solid $dark-blue;
       color: $dark-blue;
     }
@@ -1137,7 +1150,7 @@ h4,
     color: $white;
 
     &.badge--outline {
-      background: transparent;
+      background: $white;
       border: 1px solid $dark-red;
       color: $dark-red;
     }
@@ -1148,7 +1161,7 @@ h4,
     color: $white;
 
     &.badge--outline {
-      background: transparent;
+      background: $white;
       border: 1px solid $gray-800;
       color: $gray-800;
     }
@@ -1156,7 +1169,7 @@ h4,
 
   &-primary {
     &.badge--outline {
-      background: transparent;
+      background: $white;
       border: 1px solid $blue;
       color: $blue;
     }
@@ -1164,7 +1177,7 @@ h4,
 
   &-dark {
     &.badge--outline {
-      background: transparent;
+      background: $white;
       border: 1px solid $body-color;
       color: $body-color;
     }
@@ -1172,7 +1185,7 @@ h4,
 
   &-light {
     &.badge--outline {
-      background: transparent;
+      background: $white;
       border: 1px solid $light;
       color: $light;
     }
@@ -1183,7 +1196,7 @@ h4,
     color: $dark-red;
 
     &.badge--outline {
-      background: transparent;
+      background: $white;
       border: 1px solid $light;
       color: $light;
     }

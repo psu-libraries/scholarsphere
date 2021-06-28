@@ -1,0 +1,18 @@
+<p><%= t('.explanation') %></p>
+
+<%- depositor_form_id = "edit_depositor_#{dom_id depositor_form.resource}" %>
+<%= form_for depositor_form,
+             url: url,
+             method: :patch,
+             remote: false,
+             html: { id: depositor_form_id, class: 'edit-resource-depositor' } do |form| %>
+
+  <%= hidden_field_tag 'form_id', depositor_form_id %>
+  <%= render FormErrorMessageComponent.new(form: form) %>
+
+  <%= render 'form_fields/text', form: form, attribute: :psu_id, required: true %>
+
+  <div class="actions mt-1 mb-3">
+    <%= form.submit t('.submit_button'), class: 'btn btn-primary' %>
+  </div>
+<% end %>
