@@ -2,10 +2,11 @@
 
 require 'rails_helper'
 
-RSpec.describe EditResourceButton, type: :component do
+RSpec.describe ResourceEditButton, type: :component do
   include Rails.application.routes.url_helpers
 
   let(:button) { node.css('a').first }
+  let(:icon) { node.css('i').first }
 
   context 'when the resource is a work version' do
     let(:work) { WorkDecorator.new(create(:work, versions_count: 2, has_draft: true)) }
@@ -19,8 +20,9 @@ RSpec.describe EditResourceButton, type: :component do
 
     context 'when a work has an existing draft' do
       specify do
-        expect(button.attributes['href'].value).to eq "/dashboard/form/work_versions/#{v2.id}/details"
+        expect(button.attributes['href'].value).to eq dashboard_form_work_version_details_path(v2.id)
         expect(button.attributes['data-method']).to be_nil
+        expect(icon.text).to include 'edit'
         expect(button.text).to include 'Update Work'
       end
     end
@@ -30,8 +32,9 @@ RSpec.describe EditResourceButton, type: :component do
 
       specify do
         expect(v1.work.draft_version).to be_nil
-        expect(button.attributes['href'].value).to eq "/dashboard/works/#{work.id}/work_versions"
+        expect(button.attributes['href'].value).to eq dashboard_work_work_versions_path(work)
         expect(button.attributes['data-method'].value).to eq 'post'
+        expect(icon.text).to include 'edit'
         expect(button.text).to include 'Update Work'
       end
     end
