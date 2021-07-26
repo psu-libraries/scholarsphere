@@ -1,13 +1,6 @@
 # frozen_string_literal: true
 
-class EditResourceButton < ApplicationComponent
-  attr_reader :resource, :policy
-
-  def initialize(resource:, policy:)
-    @resource = resource
-    @policy = policy
-  end
-
+class ResourceEditButton < ResourceButton
   def path
     if collection?
       dashboard_form_collection_details_path(resource.id)
@@ -24,25 +17,17 @@ class EditResourceButton < ApplicationComponent
     I18n.t('resources.edit_button.text', type: type)
   end
 
+  def tooltip
+    I18n.t('resources.edit_button.tooltip')
+  end
+
+  def icon
+    'edit'
+  end
+
   def method
     return if collection? || has_draft?
 
     'post'
   end
-
-  private
-
-    def has_draft?
-      return false if collection?
-
-      resource.work.draft_version.present?
-    end
-
-    def collection?
-      resource.is_a?(CollectionDecorator)
-    end
-
-    def type
-      collection? ? 'Collection' : 'Work'
-    end
 end

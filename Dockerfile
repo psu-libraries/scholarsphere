@@ -1,4 +1,4 @@
-FROM harbor.k8s.libraries.psu.edu/library/ruby-2.7.3-node-15:20210620 as base
+FROM harbor.k8s.libraries.psu.edu/library/ruby-2.7.3-node-15:20210722 as base
 ARG UID=2000
 
 COPY bin/vaultshell /usr/local/bin/

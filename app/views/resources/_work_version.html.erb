@@ -18,19 +18,12 @@
 
   <% if policy(work_version.work).edit? %>
     <li class="nav-item py-1">
-      <%= render EditResourceButton.new(resource: work_version, policy: policy(work_version.work.representative_version)) %>
+      <%= render ResourceEditButton.new(resource: work_version, policy: policy(work_version.work.representative_version)) %>
     </li>
 
     <li class="nav-item py-1">
-      <%= link_to edit_dashboard_work_path(work_version.work),
-                  class: 'btn btn-outline-light btn--squish mr-lg-2 btn--settings',
-                  title: t('resources.settings_button.tooltip'),
-                  data: { toggle: 'tooltip', placement: 'bottom' } do %>
-          <%= t('resources.settings_button.text', type: 'Work') %>
-          <i class="material-icons" aria-hidden="true">settings</i>
-      <% end %>
+      <%= render ResourceSettingsButton.new(resource: work_version.work) %>
     </li>
-
   <% end %>
 <% end %>
 
