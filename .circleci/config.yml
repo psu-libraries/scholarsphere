@@ -7,7 +7,7 @@ orbs:
 jobs:
   release_image:
     docker:
-      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v1.0.6
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:$CI_UTILS_IMG_TAG
     environment:
       REGISTRY_HOST: harbor.k8s.libraries.psu.edu
       REGISTRY_REPO: library/scholarsphere
@@ -27,7 +27,7 @@ jobs:
 
   test:
     docker:
-      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v1.0.6
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:$CI_UTILS_IMG_TAG
     environment:
       REGISTRY_HOST: harbor.k8s.libraries.psu.edu
       REGISTRY_REPO: library/scholarsphere
@@ -88,7 +88,7 @@ jobs:
           fail_only: true
   deploy:
     docker:
-      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v0.1.6
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:$CI_UTILS_IMG_TAG
     environment:
       CONFIG_REPO: git@github.com:psu-libraries/scholarsphere-config.git
       IMAGE_REPOSITORY: harbor.k8s.libraries.psu.edu/library/scholarsphere
@@ -111,6 +111,7 @@ workflows:
   scholarsphere:
     jobs:
       - release_image:
+          context: org-global
           name: "release image"
           filters:
             tags:
@@ -120,6 +121,7 @@ workflows:
               ignore:
                 - /.*/
       - test:
+          context: org-global
           name: test-no-publish
           publish: false
           filters:
@@ -127,6 +129,7 @@ workflows:
               only:
                 - /^((?!preview|main|develop).)*$/
       - test:
+          context: org-global
           name: test-publish
           publish: true
           filters:
@@ -136,6 +139,7 @@ workflows:
                 - develop
                 - /preview\/.*/
       - deploy:
+          context: org-global
           config_env: qa
           requires:
             - test-publish
@@ -144,6 +148,7 @@ workflows:
               only:
                 - develop
       - deploy:
+          context: org-global
           config_env: stage
           requires:
             - test-publish
@@ -152,6 +157,7 @@ workflows:
               only:
                 - main
       - deploy:
+          context: org-global
           config_env: dev
           requires:
             - test-publish
