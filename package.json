@@ -11,7 +11,7 @@
     "@uppy/dashboard": "^1.20.1",
     "@uppy/xhr-upload": "^1.7.4",
     "autocomplete.js": "^0.38.0",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "blacklight-frontend": "^7.7.0",
     "bootstrap": "^4.5.2",
     "caniuse-lite": "^1.0.30001115",
