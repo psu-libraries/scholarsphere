@@ -553,7 +553,7 @@ RSpec.describe WorkVersion, type: :model do
           ['Apache 2.0', 'http://www.apache.org/licenses/LICENSE-2.0'],
           ['GNU General Public License (GPLv3)', 'https://www.gnu.org/licenses/gpl.html'],
           ['In Copyright (Rights Reserved)', 'https://rightsstatements.org/page/InC/1.0/'],
-          ['No Copyright','https://rightsstatements.org/page/NoC-US/1.0/']
+          ['No Copyright', 'https://rightsstatements.org/page/NoC-US/1.0/']
         )
       end
     end
