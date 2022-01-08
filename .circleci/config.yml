@@ -80,7 +80,7 @@ jobs:
                 name: "Publishing the image"
                 command: |
                   docker build -t $REGISTRY_HOST/$REGISTRY_REPO:$CIRCLE_SHA1 .
-                  docker login -u $DOCKER_USERNAME -p $HARBOR_PASSWORD $REGISTRY_HOST
+                  docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $REGISTRY_HOST
                   docker push $REGISTRY_HOST/$REGISTRY_REPO:$CIRCLE_SHA1
       - slack/status:
           fail_only: true
