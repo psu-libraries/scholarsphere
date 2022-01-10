@@ -30,7 +30,7 @@ services:
   selenium:
     image: selenium/standalone-chrome:3.141.59-xenon
   redis:
-    image: redis:6.0.6-alpine3.12
+    image: redis:6.2.6
     command: redis-server --requirepass redispassword
     volumes:
       - redis-data:/data
