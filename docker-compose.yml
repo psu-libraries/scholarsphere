@@ -5,6 +5,7 @@ x-web_env: &web_env
       REDIS_HOST: redis
       SOLR_USERNAME: scholarsphere
       SOLR_PASSWORD: scholarsphere
+      BUNDLE_DEFAULT_INSTALL_USES_PATH: vendor/bundle
       REDIS_PASSWORD: redispassword
       OAUTH_APP_ID: ${OAUTH_APP_ID}
       OAUTH_APP_SECRET: ${OAUTH_APP_SECRET}
@@ -63,7 +64,7 @@ services:
     - node-data:/app/node_modules
     - type: bind
       source: ./
-      target: /app/
+      target: /app
     ports:
       - "3000:3000"
   minio:
@@ -81,10 +82,10 @@ services:
     - -c 
     - mkdir -p /data/scholarsphere; minio --compat server --address ':9000' /data
   solr:
-    image: psul/solr:8.5.2-slim
+    image: solr:8.11.1-slim
     restart: always
     environment:
-      SOLR_STOP_WAIT: 5
+      SOLR_STOP_WAIT: 10
       SOLR_USERNAME: scholarsphere
       SOLR_PASSWORD: scholarsphere
     volumes:
@@ -92,7 +93,9 @@ services:
     ports:
     - ${SOLR_PORT:-8983}:8983
     command: [
-      "/usr/local/bin/start-solr.sh"
+      "/bin/bash",
+      "-c",
+      "solr -c && solr auth enable -credentials $$SOLR_USERNAME:$$SOLR_PASSWORD -z localhost:9983; solr stop && solr -c -f",
     ]
 
   adminer:
