@@ -81,18 +81,21 @@ services:
     - -c 
     - mkdir -p /data/scholarsphere; minio --compat server --address ':9000' /data
   solr:
-    image: psul/solr:8.5.2-slim
+    image: solr:8.11.1-slim
     restart: always
     environment:
       SOLR_STOP_WAIT: 5
       SOLR_USERNAME: scholarsphere
       SOLR_PASSWORD: scholarsphere
     volumes:
+    - ${PWD}/bin/start-solr.sh:/usr/local/bin/start-solr.sh
     - solr-data:/var/solr
     ports:
     - ${SOLR_PORT:-8983}:8983
     command: [
-      "/usr/local/bin/start-solr.sh"
+      "/bin/bash",
+      "-c",
+      "chmod +x /usr/local/bin/start-solr.sh && /usr/local/bin/start-solr.sh"
     ]
 
   adminer:
