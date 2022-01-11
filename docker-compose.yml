@@ -88,7 +88,7 @@ services:
       SOLR_USERNAME: scholarsphere
       SOLR_PASSWORD: scholarsphere
     volumes:
-    - ${PWD}/bin/start-solr.sh:/usr/local/bin/start-solr.sh
+    - ${PWD}/bin:/usr/local/bin
     - solr-data:/var/solr
     ports:
     - ${SOLR_PORT:-8983}:8983
