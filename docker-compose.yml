@@ -80,22 +80,32 @@ services:
     - /bin/sh
     - -c 
     - mkdir -p /data/scholarsphere; minio --compat server --address ':9000' /data
-  solr:
+  solrauth:
     image: solr:8.11.1-slim
-    restart: always
     environment:
       SOLR_STOP_WAIT: 5
       SOLR_USERNAME: scholarsphere
       SOLR_PASSWORD: scholarsphere
-    volumes:
-    - ${PWD}/bin:/usr/local/bin
-    - solr-data:/var/solr
-    ports:
-    - ${SOLR_PORT:-8983}:8983
+      ZK_CLIENT_TIMEOUT: 60000
     command: [
       "/bin/bash",
       "-c",
-      "/usr/local/bin/start-solr.sh"
+      "solr auth enable -credentials $$SOLR_USERNAME:$$SOLR_PASSWORD -blockUnknown true -z solr:9983 || true"
+    ]
+  solr:
+    depends_on:
+      - solrauth
+    image: solr:8.11.1-slim
+    restart: always
+    volumes:
+    - solr-data:/var/solr
+    ports:
+    - ${SOLR_PORT:-8983}:8983
+    - 9983:9983
+    command: [
+      "solr",
+      "-f",
+      "-c"
     ]
 
   adminer:
