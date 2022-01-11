@@ -95,7 +95,7 @@ services:
     command: [
       "/bin/bash",
       "-c",
-      "chmod +x /usr/local/bin/start-solr.sh && /usr/local/bin/start-solr.sh"
+      "/usr/local/bin/start-solr.sh"
     ]
 
   adminer:
