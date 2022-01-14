@@ -1,0 +1,7 @@
+# Get values from vault
+# vault kv get secret/devteam/scholarsphere
+export OAUTH_APP_ID=
+export OAUTH_APP_SECRET=
+export OAUTH_APP_URL=
+export OAUTH_AUTHORIZE_URL=
+export OAUTH_TOKEN_URL=
