@@ -22,7 +22,7 @@ x-web_env: &web_env
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-scholarsphere}
       AWS_BUCKET: scholarsphere
       AWS_REGION: us-east-1
-      S3_ENDPOINT: http://minio:9000
+      S3_ENDPOINT: ${S3_ENDPOINT:-http://docker.for.mac.localhost:9000}
       RAILS_ENV: ${RAILS_ENV:-development}
       SOLR_HOST: solr
       SOLR_COLLECTION: scholarsphere
