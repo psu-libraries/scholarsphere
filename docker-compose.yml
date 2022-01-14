@@ -37,21 +37,6 @@ services:
       - redis-data:/data
     ports:
     - "6379:6379"
-  sidekiq:
-    tty: true
-    stdin_open: true
-    <<: *web_env
-    build:
-      context: . 
-      target: base
-    command:
-      - /app/bin/sidekiq
-    volumes:
-    - bundle-data:/app/vendor/bundle
-    - node-data:/app/node_modules
-    - type: bind
-      source: ./
-      target: /app/
   web:
     tty: true
     stdin_open: true
@@ -97,12 +82,6 @@ services:
       "-c",
       "solr -c && solr auth enable -credentials $$SOLR_USERNAME:$$SOLR_PASSWORD -z localhost:9983; solr stop && solr -c -f",
     ]
-
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-    - "8080:8080"
   db:
     environment:
       POSTGRES_PASSWORD: scholarsphere
