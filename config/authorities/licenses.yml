@@ -36,7 +36,7 @@ terms:
     term: In Copyright (Rights Reserved)
     active: true
   - id: https://rightsstatements.org/page/NoC-US/1.0/
-    term: No Copyright
+    term: No Copyright - U.S.
     active: true
   - id: http://creativecommons.org/licenses/by/3.0/us/
     term: Attribution 3.0 United States
