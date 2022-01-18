@@ -50,6 +50,10 @@ if [ ! -f ${REPORTER_BIN} ]; then
   chmod 755 ${REPORTER_BIN}
 fi
 
+# update chromedriver
+bundle exec rails webdrivers:chromedriver:update
+
+
 echo "Running RSpec with coverage reporting"
 ./${REPORTER_BIN} before-build
 bundle exec rspec
