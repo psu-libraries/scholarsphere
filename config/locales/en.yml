@@ -182,6 +182,7 @@ en:
     description: 'A service of the University Libraries.'
     copyright_statement: 'Copyright © 2020 The Pennsylvania State University'
   helpers:
+    # Note, for hints (and only hints) you can use Markdown
     hint:
       editors_form:
         edit_users: Requires the user's Penn State Access ID (e.g., xyz500)
