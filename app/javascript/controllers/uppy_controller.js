@@ -32,7 +32,8 @@ export default class extends Controller {
         target: this.element,
         inline: 'true',
         showProgressDetails: true,
-        height: 350
+        height: 350,
+        doneButtonHandler: null
       }).use(AwsS3Multipart, {
         companionUrl: '/'
       })
