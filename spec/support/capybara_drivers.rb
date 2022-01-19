@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
 RSpec.configure do |_config|
-  Capybara.javascript_driver = if ci_build?
+  Capybara.javascript_driver = if ENV['SELENIUM']
                                  :selenium_remote
                                else
                                  :selenium_chrome_headless
-                                 # :selenium_chrome # For debugging in dev
                                end
 end
 
