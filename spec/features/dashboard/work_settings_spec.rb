@@ -160,7 +160,7 @@ RSpec.describe 'Work Settings Page', with_user: :user do
     context 'when a regular user' do
       it 'does not allow a regular user to delete a work version' do
         visit edit_dashboard_work_path(work)
-        expect(page).not_to have_content(I18n.t!('dashboard.works.edit.danger.explanation'))
+        expect(page).not_to have_content(I18n.t!('dashboard.works.edit.danger.delete_draft.explanation'))
         expect(page).not_to have_link(I18n.t!('dashboard.form.actions.destroy.button'))
       end
     end
@@ -196,6 +196,27 @@ RSpec.describe 'Work Settings Page', with_user: :user do
         expect(page).to have_content(I18n.t!('dashboard.works.update.success'))
         work.reload
         expect(work.depositor).to eq(actor)
+      end
+    end
+  end
+
+  describe 'Withdrawing a version' do
+    context 'with a standard user' do
+      it 'does not allow the change' do
+        visit edit_dashboard_work_path(work)
+        expect(page).not_to have_content(I18n.t!('dashboard.works.edit.danger.withdraw_versions.heading'))
+        expect(page).not_to have_button(I18n.t!('dashboard.works.withdraw_versions_form.submit_button'))
+      end
+    end
+
+    context 'with an admin user' do
+      let(:user) { create :user, :admin }
+
+      it 'allows the version to be withdrawn' do
+        visit edit_dashboard_work_path(work)
+        select('V1', from: 'withdraw_versions_form_work_version_id')
+        click_button(I18n.t!('dashboard.works.withdraw_versions_form.submit_button'))
+        expect(work.versions.first.reload).to be_withdrawn
       end
     end
   end

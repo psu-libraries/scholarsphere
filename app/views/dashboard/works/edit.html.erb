@@ -122,10 +122,14 @@
         </div>
 
         <div class="border border-danger rounded p-2">
+          <div class="keyline keyline--left">
+            <h2 id="<%= t('dashboard.works.edit.danger.delete_draft.heading').parameterize %>" class="h4"><%= t('dashboard.works.edit.danger.delete_draft.heading') %></h2>
+          </div>
+
           <div class="actions">
             <div class="d-flex">
               <div class="mr-auto">
-                <p><%= t('.danger.explanation') %></p>
+                <p><%= t('.danger.delete_draft.explanation') %></p>
               </div>
               <div>
                 <%= render DeleteResourceButtonComponent.new(
@@ -134,9 +138,18 @@
                       hide_if_published: false
                     ) %>
               </div>
+            </div>
           </div>
-        </div>
+
+          <div class="keyline keyline--left">
+            <h2 id="<%= t('.danger.withdraw_versions.heading').parameterize %>" class="h4"><%= t('.danger.withdraw_versions.heading') %></h2>
+          </div>
+
+          <div class="actions mb-3">
+            <%= render 'dashboard/works/withdraw_versions_form', versions_form: @withdraw_versions_form, url: dashboard_work_path(@work) %>
+          </div>
       <% end %>
+        </div>
     </div>
   </article>
 </div>
