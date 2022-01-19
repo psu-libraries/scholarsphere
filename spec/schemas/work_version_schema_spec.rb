@@ -11,6 +11,11 @@ RSpec.describe WorkVersionSchema, type: :schema do
     context 'when a work has migration errors' do
       let(:resource) { create(:work).versions.first }
 
+      before do
+        resource.creators = []
+        resource.file_resources = []
+      end
+
       it { expect(errors).not_to include(
         "Work versions file resources can't be blank",
         "Work versions creator aliases can't be blank"
