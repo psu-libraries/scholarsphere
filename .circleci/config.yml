@@ -119,9 +119,9 @@ jobs:
         name: "Yarn"
         command: |
           yarn install --cache-folder ~/.cache/yarn --frozen-lockfile
-    # - run:
-    #     name: "Wait for Redis"
-    #     command: dockerize -wait tcp://localhost:6379 -timeout 1m
+    - run:
+        name: "Wait for Redis"
+        command: dockerize -wait tcp://localhost:6379 -timeout 1m
     - run:
         name: "Wait for Solr"
         command: dockerize -wait tcp://localhost:8983 -timeout 2m
