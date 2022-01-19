@@ -169,6 +169,7 @@ workflows:
           filters:
             branches:
               only:
+                - develop
                 - main
                 - /preview\/.*/
       - deploy:
@@ -180,5 +181,6 @@ workflows:
           filters:
             branches:
               only:
+                - develop
                 - main
                 - /preview\/.*/
