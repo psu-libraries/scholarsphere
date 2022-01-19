@@ -17,7 +17,7 @@
     "caniuse-lite": "^1.0.30001115",
     "cocoon-js": "^0.0.5",
     "d3": "^5.16.0",
-    "graphiql": "^1.4.2",
+    "graphiql": "^1.4.7",
     "graphql": "^15.5.0",
     "inputmask": "^5.0.5",
     "is-svg": "^4.2.2",

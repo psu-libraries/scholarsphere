@@ -1,7 +1,4 @@
-<%- field_id = form_field_id(form, attribute) %>
-<%- hint_id = "#{field_id}-hint" %>
-<%- hint_i18n_key = ['helpers', 'hint', form.object.class.model_name.i18n_key, attribute].join('.') %>
-<%- has_hint = I18n.exists?(hint_i18n_key) %>
+<%- hint = FieldHintComponent.new(form: form, attribute: attribute) %>
 
 <div class="form-group has-float-label mb-3">
   <%= form.text_area attribute,
@@ -10,14 +7,12 @@
                      cols: 40,
                      placeholder: true,
                      required: local_assigns[:required].presence,
-                     aria: { describedby: (has_hint && hint_id).presence } %>
+                     aria: { describedby: hint.dom_id } %>
   <%= form.label attribute %>
 
   <% if form.object.errors.include?(attribute) %>
     <small class="form-text feedback-invalid"><%= form.object.errors[attribute].join('; ') %></small>
   <% end %>
 
-  <% if has_hint %>
-    <small id="<%= hint_id %>" class="form-text text-muted"><%= t hint_i18n_key %></small>
-  <% end %>
+  <%= render hint %>
 </div>

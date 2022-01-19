@@ -47,3 +47,4 @@ cc-test-reporter
 .cache
 .yarnrc
 doc/api/*
+.envrc

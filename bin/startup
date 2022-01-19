@@ -3,10 +3,13 @@ set -e
 
 if [ "${RAILS_ENV:-development}" != "production" ]; then
   bundle check || bundle
+  echo "Initalizing the database and solr"
+  bundle exec rails solr:init
+  bundle exec rails db:create db:migrate
+  bundle exec rails db:seed:groups
 fi
 
 echo "starting rails"
 rm -f tmp/pids/server.pid
-bundle exec rails db:create db:migrate db:seed
-bundle exec rails solr:init
+
 bundle exec rails s -b '0.0.0.0'
