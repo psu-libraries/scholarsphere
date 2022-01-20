@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe DoiSearch do
-  let!(:work_version_1) { create :work_version, doi: '10.26207/rb4s-33xs' }
+  let!(:work_version) { create :work_version, doi: '10.26207/rb4s-33xs' }
   let!(:work) { create :work, doi: '10.18113/dmnf-6dzs' }
   let!(:collection_1) { create :collection, doi: '10.18113/dmnf-6dzs', identifier: ['doi:10.26207/upw2-pkx3'] }
   let!(:collection_2) { create :collection, doi: '10.18113/qi03-b693' }
@@ -32,7 +32,7 @@ RSpec.describe DoiSearch do
         .to contain_exactly(collection_2.uuid)
 
       # Cannot find a work version
-      expect(described_class.new(doi: work_version_1.doi).results)
+      expect(described_class.new(doi: work_version.doi).results)
         .to eq []
 
       # Find a collection, with non-canonical formatting
