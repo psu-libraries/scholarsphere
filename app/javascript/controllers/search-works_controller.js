@@ -10,6 +10,15 @@ export default class extends Controller {
           const suggestion = { work_id: state.id }
           this.element.dispatchEvent(this.afterSelectedEvent(suggestion))
         }
+      },
+      ajax: {
+        url: '/works',
+        dataType: 'json',
+        processResults: (data) => {
+          return {
+            results: data
+          }
+        }
       }
     })
   }

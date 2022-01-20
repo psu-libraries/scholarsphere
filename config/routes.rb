@@ -137,6 +137,9 @@ Rails.application.routes.draw do
     end
   end
 
+  # TODO move this to final place
+  get '/works', to: 'work_search#index', as: :work_search
+
   # GraphQL
   get '/graphiql', to: 'application#graphiql'
 

@@ -16,11 +16,6 @@
               class="form-control"
               data-target="search-works.field"
               aria-describedby="search-works-description">
-
-        <option></option>
-        <%- @member_works.documents.map do |doc| %>
-          <option value="<%= doc.work_id %>"><%= doc.title %></option>
-        <% end %>
       </select>
 
       <label for="search-works" class="sr-only">
