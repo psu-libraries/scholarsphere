@@ -41,7 +41,7 @@ RSpec.describe DoiSearch do
 
       # Find the work and collection combo
       expect(described_class.new(doi: collection_1.doi).results)
-          .to contain_exactly(work.uuid, collection_1.uuid)
+        .to contain_exactly(work.uuid, collection_1.uuid)
 
       # Find nothing
       expect(described_class.new(doi: 'nothing to see here').results)
