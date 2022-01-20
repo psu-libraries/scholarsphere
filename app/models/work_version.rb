@@ -290,7 +290,6 @@ class WorkVersion < ApplicationRecord
         CreatorSchema,
         PublishedDateSchema,
         FacetSchema,
-        DoiSchema,
         TitleSchema,
         MemberFilesSchema
       )
