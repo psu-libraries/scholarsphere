@@ -34,6 +34,10 @@ module AllDois
   # automatically flattened. All valid dois found are returned as formatted
   # strings in an array.
   def all_dois
+    # WorkVersions should only be included here if they are the
+    # latest_published_version? and their associated Work does not have a DOI
+    return [] if forbidden_work_version?
+
     fields_with_dois
       .flat_map { |field_name| send(field_name) }
       .lazy
@@ -43,4 +47,13 @@ module AllDois
       .uniq
       .to_a
   end
+
+  private
+
+    def forbidden_work_version?
+      return false unless self.class == WorkVersion
+
+      !self.latest_published_version? || (self.latest_published_version? &&
+              self.work.fields_with_dois.collect { |field| self.work.send(field).present? }.include?(true))
+    end
 end
