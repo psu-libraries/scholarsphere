@@ -350,6 +350,7 @@ RSpec.describe WorkVersion, type: :model do
 
     its(:to_solr) do
       is_expected.to include(
+        all_dois_ssim: an_instance_of(Array),
         depositor_id_isi: work_version.work.depositor.id,
         discover_groups_ssim: [Group::PUBLIC_AGENT_NAME],
         discover_users_ssim: [],

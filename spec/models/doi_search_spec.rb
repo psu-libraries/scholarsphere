@@ -6,7 +6,7 @@ RSpec.describe DoiSearch do
   let!(:work_version_1) { create :work_version, :published, doi: '10.26207/rb4s-33xs' }
   let!(:work_version_2) { create :work_version, :published, doi: '10.26207/jjd7-0is4', work: work_1 }
   let!(:work_1) { create :work, doi: '10.18113/dmnf-6dzs' }
-  let!(:work_2) { create :work, doi: '10.18113/d3hg-4h6y', versions_count: 4, has_draft: false, doi: nil }
+  let(:work_2) { create :work, versions_count: 4, has_draft: false, doi: nil }
   let!(:collection_1) { create :collection, doi: '10.18113/dmnf-6dzs', identifier: ['doi:10.26207/upw2-pkx3'] }
   let!(:collection_2) { create :collection, doi: '10.18113/qi03-b693' }
 
@@ -16,7 +16,7 @@ RSpec.describe DoiSearch do
   end
 
   describe '.all' do
-    it 'returns all unique DOIs in the index (Works and Collections but not WorkVersions)' do
+    it 'returns all unique DOIs in the index' do
       expect(described_class.all).to match(
         {
           'doi:10.26207/rb4s-33xs' => [work_version_1.uuid],
@@ -36,9 +36,9 @@ RSpec.describe DoiSearch do
 
       # Find work version 1 because it is the latest published version and its work has no doi
       expect(described_class.new(doi: work_version_1.doi).results)
-          .to contain_exactly(work_version_1.uuid)
+        .to contain_exactly(work_version_1.uuid)
 
-      # Cannot find a work version 2 because work 1 has a doi
+      # Cannot find work version 2 because work 1 has a doi
       expect(described_class.new(doi: work_version_2.doi).results)
         .to eq []
 

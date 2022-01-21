@@ -50,8 +50,10 @@ RSpec.describe AllDois do
     end
 
     context 'when resource is a WorkVersion' do
-      let!(:work) { create :work, versions_count: 2, has_draft: false }
       subject(:instance) { work.versions.last }
+
+      let!(:work) { create :work, versions_count: 2, has_draft: false }
+
       before do
         instance.update doi: '10.18113/s9k3-x5gh'
       end
