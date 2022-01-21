@@ -180,7 +180,7 @@ en:
   footer:
     heading: 'ScholarSphere'
     description: 'A service of the University Libraries.'
-    copyright_statement: 'Copyright © 2020 The Pennsylvania State University'
+    copyright_statement: 'Copyright © 2022 The Pennsylvania State University'
   helpers:
     # Note, for hints (and only hints) you can use Markdown
     hint:
