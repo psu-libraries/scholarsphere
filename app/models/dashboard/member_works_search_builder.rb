@@ -21,6 +21,7 @@ module Dashboard
       solr_parameters[:fq] << '{!terms f=model_ssi}Work'
       solr_parameters[:rows] = max_documents
       solr_parameters[:facet] = false
+      solr_parameters[:qf] = 'title_tesim'
     end
 
     private
