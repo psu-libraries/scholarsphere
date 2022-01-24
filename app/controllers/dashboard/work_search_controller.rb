@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class WorkSearchController < ApplicationController
+class Dashboard::WorkSearchController < Dashboard::BaseController
   def index
     query = params[:q]
 

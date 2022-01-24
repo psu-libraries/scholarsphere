@@ -9,7 +9,7 @@ export default class extends Controller {
     $(this.fieldTarget).select2({
       ajax: {
         delay: 250,
-        url: '/works',
+        url: '/dashboard/work_search',
         dataType: 'json',
         processResults: (data) => {
           return {

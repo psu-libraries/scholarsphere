@@ -82,6 +82,8 @@ Rails.application.routes.draw do
 
     resource :profile, only: %i[edit update]
 
+    get 'work_search', to: 'work_search#index'
+
     resources :works, only: %i[edit update] do
       resources :work_versions, except: [:new], shallow: true do
         get 'file_list', to: 'file_lists#edit'
@@ -136,9 +138,6 @@ Rails.application.routes.draw do
       post ':resource_klass/:id/authorships/new', to: 'authorships#new', as: 'authorships'
     end
   end
-
-  # TODO move this to final place
-  get '/works', to: 'work_search#index', as: :work_search
 
   # GraphQL
   get '/graphiql', to: 'application#graphiql'
