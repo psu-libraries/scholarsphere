@@ -265,6 +265,11 @@ class WorkVersion < ApplicationRecord
     super && latest_published_version?
   end
 
+  def null_doi?
+    !latest_published_version? || (latest_published_version? &&
+        work.fields_with_dois.map { |field| work.send(field).present? }.include?(true))
+  end
+
   delegate :deposited_at,
            :depositor,
            :embargoed?,
