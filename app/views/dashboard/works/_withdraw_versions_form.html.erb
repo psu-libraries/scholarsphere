@@ -1,0 +1,26 @@
+<p><%= t('.explanation') %></p>
+
+<%- versions_form_id = "withdraw_versions_#{dom_id versions_form.work}" %>
+<%= form_for versions_form,
+             url: url,
+             method: :patch,
+             remote: false,
+             html: { id: versions_form_id, class: 'versions' } do |form| %>
+
+  <%= hidden_field_tag 'form_id', versions_form_id %>
+  <%= render FormErrorMessageComponent.new(form: form) %>
+
+  <div class="d-flex align-items-center">
+    <div class="mr-auto flex-grow-1 ">
+    <%= render 'form_fields/select',
+               form: form,
+               attribute: :work_version_id,
+               options_for_select: form.object.version_options,
+               include_blank: true,
+               multiple: false %>
+    </div>
+    <div class="ml-lg-2 mb-3">
+      <%= form.submit t('.submit_button'), class: 'btn btn-outline-danger' %>
+    </div>
+  </div>
+<% end %>
