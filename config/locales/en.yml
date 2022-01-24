@@ -327,7 +327,10 @@ en:
       update:
         success: "Work settings successfully updated."
       withdraw_versions_form:
-        explanation: "Withdraw the selected version of the work."
+        explanation: >
+              Withdrawing a work version will make its associated files inaccessible to users without edit permissions
+              for the work. Withdrawing the only published version of a work will remove this work from public search
+              results.
         submit_button: Withdraw Version
     form:
       unsaved_changes_prompt: You have unsaved changes on this page. Are you sure you want to leave and discard these changes? 
