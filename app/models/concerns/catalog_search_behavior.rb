@@ -7,7 +7,7 @@ module CatalogSearchBehavior
   def search_related_files(solr_parameters)
     return if blacklight_params[:q].blank? || blacklight_params.fetch(:search_field, 'all_fields') != 'all_fields'
 
-    user_query = blacklight_params[:q]
+    user_query = escape(blacklight_params[:q])
     solr_parameters[:q] = "{!lucene}#{dismax_query(user_query)} #{related_file_resources(user_query)}"
     solr_parameters[:defType] = 'lucene'
   end
@@ -89,5 +89,10 @@ module CatalogSearchBehavior
 
     def escape_value(value)
       RSolr.solr_escape(value).gsub(/ /, '\ ')
+    end
+
+    def escape(value)
+      # Need to escape hyphen since it is a lucene special character
+      value.gsub(/-/, ' \1')
     end
 end

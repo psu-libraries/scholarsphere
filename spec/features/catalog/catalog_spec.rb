@@ -152,6 +152,16 @@ RSpec.describe 'Blacklight catalog page', :inline_jobs do
     end
   end
 
+  context 'when the search term has a lucene special character in it' do
+    let(:work_version) { create(:work_version, :published, title: 'Title with-dash') }
+
+    it 'displays search results correctly', with_user: :user do
+      visit(search_catalog_path(q: work_version.title))
+
+      expect(page).to have_selector('h3', text: work_version.title)
+    end
+  end
+
   context 'when the application is read-only', :read_only do
     it 'displays a message' do
       visit(search_catalog_path)
