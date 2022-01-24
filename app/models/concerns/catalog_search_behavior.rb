@@ -92,7 +92,6 @@ module CatalogSearchBehavior
     end
 
     def escape(value)
-      # Need to escape hyphen since it is a lucene special character
-      value.gsub(/-/, ' \1')
+      CGI.escape(value)
     end
 end
