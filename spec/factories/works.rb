@@ -24,12 +24,20 @@ FactoryBot.define do
       num_drafts_to_build = evaluator.has_draft ? 1 : 0
       num_published_to_build = evaluator.versions_count - num_drafts_to_build
 
+      # We are going to use these to create the same actors across all the
+      # authorships in all the work versions we create below, so that the
+      # authors will stay the same across versions
+      author_actors = build_list(:actor, 2)
+
       num_published_to_build.times do |n|
         work.versions << build(:work_version,
                                :published,
                                :with_complete_metadata,
                                work: work,
-                               version_number: (n + 1))
+                               version_number: (n + 1),
+                               creators: author_actors.each_with_index.map do |actor, index|
+                                           Authorship.new(actor: actor, position: index + 1)
+                                         end)
       end
 
       if evaluator.has_draft
@@ -37,7 +45,11 @@ FactoryBot.define do
                                :draft,
                                :with_complete_metadata,
                                work: work,
-                               version_number: (num_published_to_build + 1))
+                               version_number: (num_published_to_build + 1),
+                               creators: author_actors.each_with_index.map do |actor, index|
+                                           Authorship.new(actor: actor, position: index + 1)
+                                         end)
+
       end
     end
   end
