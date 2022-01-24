@@ -107,6 +107,7 @@ RSpec/VerifiedDoubles:
     - 'spec/components/resource_edit_button_spec.rb'
     - 'spec/components/work_versions/version_navigation_component_spec.rb'
     - 'spec/components/work_histories/work_history_component_spec.rb'
+    - 'spec/controllers/dashboard/work_search_controller_spec.rb'
 
 Style/ClassVars:
   Exclude:
