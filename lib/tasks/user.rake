@@ -21,7 +21,7 @@ namespace :user do
         user.active = false
       end
       user.save!
-    rescue  PsuIdentity::SearchService::Error, Net::ReadTimeout, Net::OpenTimeout, SocketError
+    rescue PsuIdentity::SearchService::Error, Net::ReadTimeout, Net::OpenTimeout, SocketError
       next
     end
   end

@@ -41,8 +41,8 @@ class UserRegistrationService
       end
     end
 
-    # @note PsuIdentity::SearchService does not return any group information, but this would be updated once the user logs
-    # into the application.
+    # @note PsuIdentity::SearchService does not return any group information, but this would be updated once the
+    # user logs into the application.
     def info_hash
       OmniAuth::AuthHash::InfoHash.new(
         access_id: found_user.user_id,
