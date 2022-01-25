@@ -500,7 +500,7 @@ RSpec.describe WorkVersion, type: :model do
     describe '::DEFAULT' do
       subject { described_class::DEFAULT }
 
-      it { is_expected.to eq('http://www.europeana.eu/portal/rights/rr-r.html') }
+      it { is_expected.to eq('https://rightsstatements.org/page/InC/1.0/') }
     end
 
     describe '::all' do
@@ -508,6 +508,7 @@ RSpec.describe WorkVersion, type: :model do
 
       it { is_expected.to include(inactive_license) }
       it { is_expected.to include(active_license) }
+      it { is_expected.to include(hash_including(id: described_class::DEFAULT)) }
     end
 
     describe '::active' do

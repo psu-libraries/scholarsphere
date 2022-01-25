@@ -59,7 +59,7 @@ class WorkVersion < ApplicationRecord
 
   module Licenses
     # @note This is when we are unable to determine a license. It should not be used as a default option for the user.
-    DEFAULT = 'http://www.europeana.eu/portal/rights/rr-r.html'
+    DEFAULT = 'https://rightsstatements.org/page/InC/1.0/'
 
     class << self
       def all
