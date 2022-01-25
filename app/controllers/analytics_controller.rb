@@ -9,6 +9,8 @@ class AnalyticsController < ApplicationController
       format.html { head :unsupported_media_type }
       format.json { render json: view_statistics }
     end
+  rescue ActiveRecord::RecordNotFound
+    head 404, content_type: 'text/plain'
   end
 
   private

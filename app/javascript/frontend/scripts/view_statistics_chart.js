@@ -13,6 +13,7 @@ function loadChart () {
   d3.json(url)
     .then(parseData)
     .then((parsedData) => drawChart(d3.select(this), parsedData))
+    .catch(() => { })
 }
 
 function parseData (data) {
