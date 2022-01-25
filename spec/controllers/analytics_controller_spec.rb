@@ -44,5 +44,11 @@ RSpec.describe AnalyticsController, type: :controller do
         it { is_expected.to have_http_status(:unsupported_media_type) }
       end
     end
+
+    context "when the requested resource can't be found" do
+      before { get(:show, params: { resource_id: 'not-a-resource' }) }
+
+      specify { expect(response).to have_http_status(:not_found) }
+    end
   end
 end
