@@ -1,0 +1,49 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://identity.apps.psu.edu/search-service/resources/people/userid/cam156
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v1.0.1
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Date:
+      - Tue, 25 Jan 2022 15:52:46 GMT
+      Content-Type:
+      - application/vnd-psu.edu-v1+json
+      Content-Length:
+      - '119'
+      Connection:
+      - keep-alive
+      X-Content-Security-Policy:
+      - frame-ancestors 'none'
+      Set-Cookie:
+      - JSESSIONID=ew83QOGoR_eHa1fGvoQuEUjYV-lsUaPipyRkJcup.search-service-7687876fb-2vkqt;
+        path=/search-service
+      X-Request-Id:
+      - e8bd450f095ca825453e64ef6fc93719
+      X-Frame-Options:
+      - DENY
+      Content-Security-Policy:
+      - frame-ancestors 'none'
+      Uniqueid:
+      - e8bd450f095ca825453e64ef6fc93719
+      Strict-Transport-Security:
+      - max-age=15724800; includeSubDomains
+    body:
+      encoding: UTF-8
+      string: '{"status":{"code":404,"message":"NOT_FOUND"},"errorMessage":["No person
+        matched the input userid: cam156"],"link":null}'
+  recorded_at: Tue, 25 Jan 2022 15:52:46 GMT
+recorded_with: VCR 6.0.0

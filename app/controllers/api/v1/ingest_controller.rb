@@ -2,7 +2,7 @@
 
 module Api::V1
   class IngestController < RestController
-    rescue_from PennState::SearchService::NotFound do
+    rescue_from PsuIdentity::SearchService::NotFound do
       render json: depositor_not_found, status: :unprocessable_entity
     end
 

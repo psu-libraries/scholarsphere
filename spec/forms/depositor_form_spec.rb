@@ -51,7 +51,7 @@ RSpec.describe DepositorForm, type: :model do
       before do
         allow(BuildNewActor).to receive(:call)
           .with(psu_id: user_attributes[:access_id])
-          .and_raise(PennState::SearchService::NotFound)
+          .and_raise(PsuIdentity::SearchService::NotFound)
       end
 
       it 'returns a new actor' do

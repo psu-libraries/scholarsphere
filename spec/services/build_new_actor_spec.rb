@@ -41,7 +41,7 @@ RSpec.describe BuildNewActor, type: :model do
       it 'raises an error' do
         expect {
           described_class.call(psu_id: 'abc123')
-        }.to raise_error(PennState::SearchService::NotFound)
+        }.to raise_error(PsuIdentity::SearchService::NotFound)
       end
     end
   end
@@ -86,7 +86,7 @@ RSpec.describe BuildNewActor, type: :model do
       it 'raises an error' do
         expect {
           described_class.call(orcid: '0000000184856532', psu_id: 'abc123')
-        }.to raise_error(PennState::SearchService::NotFound)
+        }.to raise_error(PsuIdentity::SearchService::NotFound)
       end
     end
 

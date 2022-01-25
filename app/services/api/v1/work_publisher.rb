@@ -84,7 +84,7 @@ module Api
           return depositor if psu_id == depositor.psu_id
 
           BuildNewActor.call(psu_id: psu_id, orcid: orcid)
-        rescue PennState::SearchService::NotFound
+        rescue PsuIdentity::SearchService::NotFound
           _errors.add(:psu_id, "access id #{psu_id} was not found at Penn State")
           nil
         rescue Orcid::NotFound

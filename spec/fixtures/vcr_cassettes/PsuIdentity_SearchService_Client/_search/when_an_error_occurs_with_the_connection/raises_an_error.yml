@@ -8,7 +8,7 @@ http_interactions:
       string: ''
     headers:
       User-Agent:
-      - Faraday v0.17.0
+      - Faraday v1.0.1
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
@@ -18,21 +18,20 @@ http_interactions:
       code: 404
       message: Not Found
     headers:
+      Date:
+      - Tue, 25 Jan 2022 15:52:45 GMT
       Content-Type:
       - text/plain; charset=utf-8
-      Vary:
-      - Accept-Encoding
-      X-Content-Type-Options:
-      - nosniff
-      Date:
-      - Tue, 07 Apr 2020 13:35:50 GMT
       Content-Length:
-      - '19'
+      - '21'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=15724800; includeSubDomains
+      X-Request-Id:
+      - '0794936ec7de93aefaa918ca4e29c9a4'
     body:
       encoding: UTF-8
-      string: '404 page not found
-
-        '
-    http_version: 
-  recorded_at: Tue, 07 Apr 2020 13:35:50 GMT
-recorded_with: VCR 5.0.0
+      string: default backend - 404
+  recorded_at: Tue, 25 Jan 2022 15:52:45 GMT
+recorded_with: VCR 6.0.0
