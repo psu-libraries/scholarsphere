@@ -2,7 +2,7 @@
 
 class Dashboard::WorkSearchController < Dashboard::BaseController
   def index
-    query = params[:q]
+    query = "#{params[:q]}*"
 
     (member_works, _deprecated_document_list) = search_service(query).search_results
 
