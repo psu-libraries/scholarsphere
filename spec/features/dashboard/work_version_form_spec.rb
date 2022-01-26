@@ -478,6 +478,10 @@ RSpec.describe 'Publishing a work', with_user: :user do
           expect(page).to have_content(I18n.t!('errors.messages.invalid_edtf'))
         end
 
+        within '.footer--actions' do
+          expect(page).to have_button(I18n.t!('dashboard.form.actions.publish'))
+        end
+
         work_version.reload
         expect(work_version).not_to be_published
         expect(work_version.published_date).to eq 'this is not a valid date'
@@ -609,6 +613,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
   describe 'Editing a published work' do
     let(:work_version) { create :work_version, :published }
+    let(:invalid_metadata) { attributes_for(:work_version, :with_complete_metadata, description: '') }
     let(:different_metadata) { attributes_for(:work_version, :with_complete_metadata) }
     let(:user) { create(:user, :admin) }
 
@@ -625,6 +630,21 @@ RSpec.describe 'Publishing a work', with_user: :user do
       visit dashboard_form_publish_path(work_version)
 
       mock_solr_indexing_job
+
+      # Fill out form with errors to check error handling
+      FeatureHelpers::DashboardForm.fill_in_work_details(invalid_metadata)
+      FeatureHelpers::DashboardForm.finish
+
+      within '#error_explanation' do
+        expect(page).to have_content(I18n.t!('activerecord.errors.models.work_version.attributes.description.blank'))
+      end
+
+      within '.footer--actions' do
+        expect(page).to have_button(I18n.t!('dashboard.form.actions.finish'))
+      end
+
+      # Fill out form properly
+      FeatureHelpers::DashboardForm.fill_in_work_details(different_metadata)
       FeatureHelpers::DashboardForm.fill_in_publishing_details(different_metadata)
       FeatureHelpers::DashboardForm.finish
       expect(SolrIndexingJob).to have_received(:perform_later).once
