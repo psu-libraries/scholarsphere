@@ -4,11 +4,7 @@ class UpdateUserActiveStatuses
   class << self
     def call
       User.find_each do |user|
-        begin
-          user.active = active?(user)
-        rescue PsuIdentity::SearchService::NotFound
-          user.active = false
-        end
+        user.active = active?(user)
         user.save!
       rescue PsuIdentity::SearchService::Error, Net::ReadTimeout, Net::OpenTimeout, SocketError
         next
@@ -20,6 +16,8 @@ class UpdateUserActiveStatuses
       def active?(user)
         identity = PsuIdentity::SearchService::Client.new.userid(user.access_id)
         identity.affiliation != ['MEMBER']
+      rescue PsuIdentity::SearchService::NotFound
+        false
       end
   end
 end
