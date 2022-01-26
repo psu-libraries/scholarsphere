@@ -138,13 +138,17 @@ RSpec.describe 'Creating and editing collections', :inline_jobs, with_user: :use
 
       expect(page).to have_current_path(dashboard_form_members_path(new_collection))
 
-      within('#search-works') do
-        expect(page.find_all('option').map(&:value)).to include(published_work.id.to_s)
-        expect(page.find_all('option').map(&:value)).to include(published_work_with_draft.id.to_s)
-        expect(page.find_all('option').map(&:value)).to include(proxy_work.id.to_s)
-        expect(page.find_all('option').map(&:value)).to include(edit_work.id.to_s)
-        expect(page.find_all('option').map(&:value)).not_to include(draft_work.id.to_s)
-        expect(page.find_all('option').map(&:value)).not_to include(other_work.id.to_s)
+      find_all('.select2').first.click
+
+      expect(page).to have_selector('li[data-select2-id]', count: 4)
+
+      within('div[data-controller="search-works"]') do
+        expect(page).to have_selector("li[data-select-2-id=\"#{published_work.id}\"]")
+        expect(page).to have_selector("li[data-select-2-id=\"#{published_work_with_draft.id}\"]")
+        expect(page).to have_selector("li[data-select-2-id=\"#{proxy_work.id}\"]")
+        expect(page).to have_selector("li[data-select-2-id=\"#{edit_work.id}\"]")
+        expect(page).not_to have_selector("li[data-select-2-id=\"#{draft_work.id}\"]")
+        expect(page).not_to have_selector("li[data-select-2-id=\"#{other_work.id}\"]")
       end
 
       mock_solr_indexing_job
