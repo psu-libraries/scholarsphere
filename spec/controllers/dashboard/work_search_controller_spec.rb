@@ -37,7 +37,7 @@ RSpec.describe Dashboard::WorkSearchController, type: :controller do
           expect(params[:search_builder_class]).to eq Dashboard::MemberWorksSearchBuilder
           expect(params[:current_user]).to be_an_instance_of(UserDecorator)
           expect(params[:current_user].id).to eq user.id
-          expect(params[:user_params]).to eq({ q: 'test query' })
+          expect(params[:user_params]).to eq({ q: 'test query*' })
           expect(params[:max_documents]).to be_an_instance_of(Integer)
         end
 
