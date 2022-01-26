@@ -33,7 +33,6 @@ Rails.application.routes.draw do
   get 'agreement-1.0', to: 'markdown#show', page: 'agreement_1_0'
   get 'agreement-2.0', to: 'markdown#show', page: 'agreement_2_0'
   get 'agreement', to: 'markdown#show', page: 'agreement_2_0'
-  get 'licenses', to: 'markdown#show', page: 'licenses'
 
   get 'contact', to: 'incidents#new'
   resources :incidents, only: [:new, :create]

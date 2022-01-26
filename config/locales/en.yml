@@ -532,7 +532,6 @@ en:
       not_found: 'Page Not Found'
       server_error: 'Server Error'
       graphql: 'GraphQL'
-      licenses: 'Choosing a License'
   resources:
     analytics: Analytics
     collections: Collections
