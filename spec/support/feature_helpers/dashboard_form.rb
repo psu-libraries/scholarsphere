@@ -49,7 +49,6 @@ module FeatureHelpers
     end
 
     def self.select_work(title)
-      page.find('.select2-selection--single').click
       page
         .find_all('.select2-results__option')
         .select { |option| option.text == title }

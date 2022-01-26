@@ -142,14 +142,12 @@ RSpec.describe 'Creating and editing collections', :inline_jobs, with_user: :use
 
       expect(page).to have_selector('li[data-select2-id]', count: 4)
 
-      within('div[data-controller="search-works"]') do
-        expect(page).to have_selector("li[data-select-2-id=\"#{published_work.id}\"]")
-        expect(page).to have_selector("li[data-select-2-id=\"#{published_work_with_draft.id}\"]")
-        expect(page).to have_selector("li[data-select-2-id=\"#{proxy_work.id}\"]")
-        expect(page).to have_selector("li[data-select-2-id=\"#{edit_work.id}\"]")
-        expect(page).not_to have_selector("li[data-select-2-id=\"#{draft_work.id}\"]")
-        expect(page).not_to have_selector("li[data-select-2-id=\"#{other_work.id}\"]")
-      end
+      expect(page).to have_selector('li[data-select2-id]', text: published_work.representative_version.title)
+      expect(page).to have_selector('li[data-select2-id]', text: published_work_with_draft.representative_version.title)
+      expect(page).to have_selector('li[data-select2-id]', text: proxy_work.representative_version.title)
+      expect(page).to have_selector('li[data-select2-id]', text: edit_work.representative_version.title)
+      expect(page).not_to have_selector('li[data-select2-id]', text: draft_work.representative_version.title)
+      expect(page).not_to have_selector('li[data-select2-id]', text: other_work.representative_version.title)
 
       mock_solr_indexing_job
       FeatureHelpers::DashboardForm.select_work(published_work.latest_published_version.title)
