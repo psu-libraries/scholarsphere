@@ -8,6 +8,7 @@ Penn State's [open access policy](https://openaccess.psu.edu/)  (AC02: Open Acce
 
 ### Additional Resources
 
+- [Documentation](https://docs.scholarsphere.psu.edu)
 - [Policies for Deposit, Access, Curation, and Preservation](/policies)
 - [Depositor’s Agreement](/agreement)
 - [Terms of Use](/terms)
