@@ -63,5 +63,7 @@ module Scholarsphere
 
     # Use our own custom exceptions
     config.exceptions_app = routes
+
+    config.docs_url = ENV.fetch('DOCS_URL', 'https://docs.scholarsphere.psu.edu')
   end
 end
