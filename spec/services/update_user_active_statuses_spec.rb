@@ -44,8 +44,8 @@ describe UpdateUserActiveStatuses do
   context 'when no user is found' do
     before do
       allow_any_instance_of(PsuIdentity::SearchService::Client)
-          .to receive(:userid)
-                  .and_raise PsuIdentity::SearchService::NotFound
+        .to receive(:userid)
+        .and_raise PsuIdentity::SearchService::NotFound
     end
 
     it 'updates user active status to false' do
