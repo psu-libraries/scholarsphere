@@ -5,11 +5,12 @@ export default class extends Controller {
 
   connect () {
     const $select2 = $(this.fieldTarget)
+    const endpoint = this.data.get('endpoint')
 
     $(this.fieldTarget).select2({
       ajax: {
         delay: 250,
-        url: '/dashboard/work_search',
+        url: endpoint,
         dataType: 'json',
         processResults: (data) => {
           return {
