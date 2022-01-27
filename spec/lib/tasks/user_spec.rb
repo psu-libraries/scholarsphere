@@ -4,7 +4,10 @@ require 'rails_helper'
 
 describe 'User rake tasks', type: :task do
   describe ':monthly_stats_email', :inline_jobs do
-    before { allow_any_instance_of(ActorStatsPresenter).to receive(:file_downloads).and_return(3) }
+    before do
+      allow_any_instance_of(ActorStatsPresenter).to receive(:file_downloads).and_return(3)
+      allow(UpdateUserActiveStatuses).to receive(:call).and_return nil
+    end
 
     after { Rake::Task['user:monthly_stats_email'].reenable }
 

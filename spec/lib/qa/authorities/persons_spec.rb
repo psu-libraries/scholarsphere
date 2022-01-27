@@ -4,13 +4,13 @@ require 'rails_helper'
 
 RSpec.describe Qa::Authorities::Persons, type: :authority do
   let(:authority) { described_class.new }
-  let(:mock_client) { instance_spy('PennState::SearchService::Client') }
+  let(:mock_client) { instance_spy('PsuIdentity::SearchService::Client') }
 
   describe '#search' do
     subject(:results) { authority.search(search_term) }
 
     before do
-      allow(PennState::SearchService::Client).to receive(:new).and_return(mock_client)
+      allow(PsuIdentity::SearchService::Client).to receive(:new).and_return(mock_client)
       allow(mock_client).to receive(:search).and_return(mock_identity_response)
     end
 

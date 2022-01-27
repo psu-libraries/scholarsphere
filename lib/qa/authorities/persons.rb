@@ -5,7 +5,6 @@
 # that can be used by the forms for adding creators to work versions and collections. This class can remove duplicate
 # results from the different sources ensuring that Actor records are preferred over the other two.
 
-require 'penn_state/search_service'
 require 'orcid'
 
 module Qa
@@ -27,10 +26,10 @@ module Qa
 
       private
 
-        # @note if the same person exists as a PennState::SearchService::Person and an Actor, prefer the Actor
+        # @note if the same person exists as a PsuIdentity::SearchService::Person and an Actor, prefer the Actor
         def persons
           (creators + identities + orcid).reject do |person|
-            person.is_a?(PennState::SearchService::Person) && creator_ids.include?(person.user_id)
+            person.is_a?(PsuIdentity::SearchService::Person) && creator_ids.include?(person.user_id)
           end
         end
 
@@ -54,7 +53,7 @@ module Qa
         end
 
         def identities
-          @identities ||= PennState::SearchService::Client.new.search(text: term)
+          @identities ||= PsuIdentity::SearchService::Client.new.search(text: term)
         end
 
         # @note If the person already exists in Scholarsphere with the given orcid, return the Actor record instead.
@@ -75,7 +74,7 @@ module Qa
           case result
           when Actor
             formatted_creator(result)
-          when PennState::SearchService::Person
+          when PsuIdentity::SearchService::Person
             formatted_person(result)
           when Orcid::Public::Person
             formatted_orcid(result)

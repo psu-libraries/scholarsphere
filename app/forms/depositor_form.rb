@@ -29,7 +29,7 @@ class DepositorForm
 
     def find_or_build_actor
       Actor.find_by(psu_id: @psu_id) || BuildNewActor.call(psu_id: @psu_id)
-    rescue PennState::SearchService::NotFound
+    rescue PsuIdentity::SearchService::NotFound
       errors.add(:psu_id, :not_found, psu_id: @psu_id)
       resource.depositor
     end

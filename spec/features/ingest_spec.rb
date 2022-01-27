@@ -8,7 +8,7 @@ RSpec.describe 'Publishing works from the API', :inline_jobs, type: :feature do
   let(:user) { create(:user, access_id: VCRHelpers.depositor) }
   let(:work) { attributes_for(:work_version, :with_complete_metadata) }
   let(:creator) { attributes_for(:authorship) }
-  let(:mock_client) { instance_spy(PennState::SearchService::Client) }
+  let(:mock_client) { instance_spy(PsuIdentity::SearchService::Client) }
 
   let(:metadata) do
     HashWithIndifferentAccess.new(

@@ -4,10 +4,10 @@ require 'rails_helper'
 
 RSpec.describe UserRegistrationService do
   describe '.call' do
-    let(:mock_client) { instance_spy('PennState::SearchService::Client') }
+    let(:mock_client) { instance_spy('PsuIdentity::SearchService::Client') }
 
     before do
-      allow(PennState::SearchService::Client).to receive(:new).and_return(mock_client)
+      allow(PsuIdentity::SearchService::Client).to receive(:new).and_return(mock_client)
     end
 
     context 'when the user exists at Penn State' do
@@ -43,7 +43,7 @@ RSpec.describe UserRegistrationService do
       let(:user_id) { 'nothere401' }
 
       before do
-        allow(mock_client).to receive(:userid).with(user_id).and_raise(PennState::SearchService::NotFound)
+        allow(mock_client).to receive(:userid).with(user_id).and_raise(PsuIdentity::SearchService::NotFound)
       end
 
       it 'returns nil with no changes to the database' do

@@ -8,7 +8,7 @@ module Qa
     class Users < Persons
       private
 
-        # @return Array<PennState::SearchService::Person>
+        # @return Array<PsuIdentity::SearchService::Person>
         def persons
           identities
         end

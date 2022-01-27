@@ -104,7 +104,7 @@ RSpec.describe CreateNewCollection do
   context 'when specifying additional permissions on the collection' do
     let(:edit_user) { build(:person) }
     let(:edit_group) { build(:group) }
-    let(:mock_client) { instance_spy('PennState::SearchService::Client') }
+    let(:mock_client) { instance_spy('PsuIdentity::SearchService::Client') }
     let(:new_collection) do
       described_class.call(
         metadata: HashWithIndifferentAccess.new(collection.metadata.merge(
@@ -133,7 +133,7 @@ RSpec.describe CreateNewCollection do
     # @note Save specific groups and users prior to the test so our expectations reflect the changes that the service
     # is making, as opposed to the additional changes due to an empty database.
     before do
-      allow(PennState::SearchService::Client).to receive(:new).and_return(mock_client)
+      allow(PsuIdentity::SearchService::Client).to receive(:new).and_return(mock_client)
       allow(mock_client).to receive(:userid).with(edit_user.user_id).and_return(edit_user)
       user.save
       Group.public_agent

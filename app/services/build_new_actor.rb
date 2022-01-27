@@ -14,7 +14,7 @@ class BuildNewActor
     def build_with_psu_id(psu_id, orcid)
       return if psu_id.nil?
 
-      user = PennState::SearchService::Client.new.userid(psu_id)
+      user = PsuIdentity::SearchService::Client.new.userid(psu_id)
 
       Actor.find_or_initialize_by(psu_id: user.user_id) do |actor|
         actor.given_name = user.preferred_given_name

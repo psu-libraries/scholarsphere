@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # @abstract Registers a user from the API by checking the provided Penn State user id against Penn State's identity
-# management service via our PennState::SearchService::Client. If the user exists, they are registered the same way as
+# management service via our PsuIdentity::SearchService::Client. If the user exists, they are registered the same way as
 # if they had logged in, using User.from_omniauth. If the user does not exist, no changes are made and service returns
 # nil.
 
@@ -28,8 +28,8 @@ class UserRegistrationService
   private
 
     def penn_state_user(uid)
-      PennState::SearchService::Client.new.userid(uid)
-    rescue PennState::SearchService::NotFound
+      PsuIdentity::SearchService::Client.new.userid(uid)
+    rescue PsuIdentity::SearchService::NotFound
       nil
     end
 
@@ -41,8 +41,8 @@ class UserRegistrationService
       end
     end
 
-    # @note PennState::SearchService does not return any group information, but this would be updated once the user logs
-    # into the application.
+    # @note PsuIdentity::SearchService does not return any group information, but this would be updated once the
+    # user logs into the application.
     def info_hash
       OmniAuth::AuthHash::InfoHash.new(
         access_id: found_user.user_id,
