@@ -20,6 +20,7 @@
                    form: form,
                    attribute: :orcid,
                    data: { controller: 'inputmask' } %>
+        <%= render 'user_fields', form: form %>
         <%= render 'admin_fields', form: form if @actor.user.admin_available? %>
       </div>
 
