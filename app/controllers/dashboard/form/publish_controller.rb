@@ -57,6 +57,22 @@ module Dashboard
           resource.aasm_state = initial_state
         end
 
+        # This controller can be used in two ways, either by a user to publish
+        # a new WorkVersion (most common scenario), or by an admin to edit an
+        # already published version. When we render the form (and re-render the
+        # form with errors) we need to know which action the user is
+        # attempting, so we can render the proper buttons.
+        helper_method :form_should_publish?
+        def form_should_publish?
+          not_published = !@resource.published?
+          marked_as_published_but_not_persisted = (
+            @resource.aasm.from_state != :published &&
+              @resource.aasm.to_state == :published
+          )
+
+          not_published || marked_as_published_but_not_persisted
+        end
+
         def work_version_params
           params
             .require(:work_version)

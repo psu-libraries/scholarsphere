@@ -46,7 +46,7 @@
 
             <%= render 'dashboard/form/shared/action_footer',
                        form: form,
-                       primary_action: form.object.published? ? :finish : :publish %>
+                       primary_action: form_should_publish? ? :publish : :finish %>
 
           <% end %>
 
