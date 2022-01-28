@@ -7,7 +7,7 @@ RSpec.describe 'Profile', type: :feature, with_user: :user do
   let(:updated_display_name) { "Dr. #{attributes[:display_name]}" }
 
   context 'with a standard user' do
-    let(:user) { create(:user) }
+    let(:user) { create(:user, opt_out_stats_email: true) }
 
     it 'displays and updates my profile information' do
       visit edit_dashboard_profile_path
@@ -17,6 +17,7 @@ RSpec.describe 'Profile', type: :feature, with_user: :user do
       fill_in 'Family Name', with: attributes[:surname]
       fill_in 'Email', with: attributes[:email]
       fill_in 'ORCiD', with: attributes[:orcid]
+      uncheck('Opt out of monthly reports on downloads and views')
       expect(page).not_to have_content('Administrative privileges enabled')
       click_button 'Save'
       user.actor.reload
@@ -24,6 +25,8 @@ RSpec.describe 'Profile', type: :feature, with_user: :user do
       expect(user.actor.surname).to eq(attributes[:surname])
       expect(user.actor.orcid).to eq(attributes[:orcid])
       expect(user.actor.psu_id).to eq(user.access_id)
+      user.reload
+      expect(user.opt_out_stats_email).to be(false)
       expect(page).to have_content(I18n.t!('navbar.heading.dashboard'))
       expect(page).to have_content(I18n.t!('dashboard.profiles.update.success'))
     end

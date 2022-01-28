@@ -1,0 +1,11 @@
+<%= form.fields_for :user do |user_fields| %>
+
+  <div class="form-group">
+    <div class="form-check">
+      <%= user_fields.check_box :opt_out_stats_email, class: 'form-check-input' %>
+
+      <%= user_fields.label :opt_out_stats_email, class: 'form-check-label' %>
+    </div>
+  </div>
+
+<% end %>
