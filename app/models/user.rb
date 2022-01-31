@@ -68,6 +68,11 @@ class User < ApplicationRecord
       actor.email = actor.email.presence || auth.info.email
       actor.given_name = actor.given_name.presence || auth.info.given_name
       actor.surname = actor.surname.presence || auth.info.surname || auth.info.family_name
+      begin
+        actor.orcid = PsuIdentity::DirectoryService::Client.new.userid(auth.uid).orc_id
+      rescue StandardError => e
+        logger.error(e)
+      end
     end
 
     transaction do

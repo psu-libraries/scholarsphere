@@ -27,6 +27,7 @@ Metrics/BlockLength:
 
 Metrics/CyclomaticComplexity:
   Exclude:
+    - 'app/models/user.rb'
     - 'app/services/doi_service.rb'
     - 'app/services/authorship_migration/work_version_creation_migration.rb'
 

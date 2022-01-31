@@ -61,11 +61,6 @@ class Actor < ApplicationRecord
             uniqueness: {
               case_sensitive: false,
               allow_nil: true
-            },
-            format: {
-              with: /\A\d{15,15}[0-9X]{1,1}\z/,
-              message: 'must be valid',
-              allow_nil: true
             }
 
   validates :orcid,
