@@ -81,7 +81,7 @@ en:
         deposited_at: Deposited
       user:
         admin_enabled: Administrative privileges enabled
-        opt_out_stats_email: Opt out of monthly reports on downloads and views
+        opt_in_stats_email: Receive monthly report on downloads and views
     errors:
       models:
         file_version_membership:
