@@ -9,6 +9,13 @@ RSpec.describe 'Profile', type: :feature, with_user: :user do
   context 'with a standard user' do
     let(:user) { create(:user, opt_out_stats_email: true) }
 
+    it 'does not have an editable orcid field' do
+      visit edit_dashboard_profile_path
+      expect(page).to have_content('Edit Profile')
+      expect(page).to have_field('ORCiD', readonly: true)
+      expect(page).to have_field('Email', readonly: false)
+    end
+
     it 'displays and updates my profile information' do
       visit edit_dashboard_profile_path
       expect(page).to have_content('Edit Profile')
@@ -23,7 +30,6 @@ RSpec.describe 'Profile', type: :feature, with_user: :user do
       user.actor.reload
       expect(user.actor.given_name).to eq(attributes[:given_name])
       expect(user.actor.surname).to eq(attributes[:surname])
-      expect(user.actor.orcid).to eq(attributes[:orcid])
       expect(user.actor.psu_id).to eq(user.access_id)
       user.reload
       expect(user.opt_out_stats_email).to be(false)

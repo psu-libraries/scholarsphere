@@ -202,7 +202,7 @@ en:
         version_name: For datasets or software using semantic versioning (e.g., x.y.z)
         rights: The license you select determines how your work can be used by others. [Read More](https://docs.scholarsphere.psu.edu/guides/licenses/)
       actor:
-        orcid: "This is a 16-digit identifier in the format ####-####-####-####"
+        orcid: "[Click here to link your ORCiD](https://guides.libraries.psu.edu/orcid)"
         display_name: >
           When you create new works, this will be used as the initial value for the Creator field. For example, if your
           first and last name are Pat Researcher, you might wish to set this to "Dr. Pat Q. Researcher PhD."
