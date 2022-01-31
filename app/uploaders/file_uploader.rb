@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require "image_processing/mini_magick"
 
 class FileUploader < Shrine
   plugin :backgrounding
@@ -11,6 +12,13 @@ class FileUploader < Shrine
       ENV.fetch('API_URL_HOST', Rails.application.routes.default_url_options[:host]),
       Rails.application.routes.url_helpers.api_v1_file_path(record.id)
     ).to_s
+  end
+
+  Attacher.derivatives do |original|
+    magick = ImageProcessing::MiniMagick.source(original)
+    {
+      thumbnail: magick.resize_to_fill!(400,400)
+    }
   end
 
   # @note This sets the default metadata when a file is uploaded. Virus information is nil until updated by our external
