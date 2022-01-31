@@ -17,6 +17,8 @@ FactoryBot.define do
       end
 
       after(:build, :stub) do |work_version, evaluator|
+        next if work_version.creators.any? # Skip if there are already creators specified
+
         work_version.creators = build_list(:authorship, evaluator.creator_count) do |creator, index|
           creator.resource = work_version
           creator.position = index

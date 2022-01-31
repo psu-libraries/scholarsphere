@@ -41,6 +41,7 @@ module Dashboard
         @embargo_form = EmbargoForm.new(work: @undecorated_work, params: embargo_params)
         @editors_form = EditorsForm.new(resource: @undecorated_work, user: current_user, params: editors_params)
         @depositor_form = DepositorForm.new(resource: @undecorated_work, params: depositor_params)
+        @withdraw_versions_form = WithdrawVersionsForm.new(work: @undecorated_work, params: withdraw_versions_params)
       end
 
       def select_form_model
@@ -50,6 +51,8 @@ module Dashboard
           @editors_form
         elsif params[:depositor_form].present?
           @depositor_form
+        elsif params[:withdraw_versions_form].present?
+          @withdraw_versions_form
         else
           @work
         end
@@ -87,6 +90,14 @@ module Dashboard
           .fetch(:depositor_form, {})
           .permit(
             :psu_id
+          )
+      end
+
+      def withdraw_versions_params
+        params
+          .fetch(:withdraw_versions_form, {})
+          .permit(
+            :work_version_id
           )
       end
   end

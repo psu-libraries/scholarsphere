@@ -7,7 +7,6 @@ module Dashboard
         @resource = Collection
           .includes(collection_work_memberships: [:work])
           .find(params[:id])
-        (@member_works, _deprecated_document_list) = search_service.search_results
         authorize(@resource)
       end
 
@@ -33,15 +32,6 @@ module Dashboard
                 :position
               ]
             )
-        end
-
-        def search_service
-          @search_service ||= ::Blacklight::SearchService.new(
-            config: Blacklight::Configuration.new,
-            search_builder_class: MemberWorksSearchBuilder,
-            current_user: current_user,
-            max_documents: 10_000
-          )
         end
     end
   end

@@ -3,7 +3,7 @@
 require Rails.root.join('spec', 'support', 'factory_bot_helpers')
 
 FactoryBot.define do
-  factory :person, class: 'PennState::SearchService::Person' do
+  factory :person, class: 'PsuIdentity::SearchService::Person' do
     skip_create
 
     transient do

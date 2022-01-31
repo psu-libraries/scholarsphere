@@ -65,7 +65,7 @@ RSpec.describe SearchBuilder do
 
       it 'searches related files' do
         expect(parameters['q']).to eq(
-          '{!lucene}{!dismax v=user query} {!join from=id to=file_resource_ids_ssim}{!dismax v=user query}'
+          '{!lucene}{!dismax v=user+query} {!join from=id to=file_resource_ids_ssim}{!dismax v=user+query}'
         )
       end
     end
@@ -75,7 +75,7 @@ RSpec.describe SearchBuilder do
 
       it 'searches related files' do
         expect(parameters['q']).to eq(
-          '{!lucene}{!dismax v=user query} {!join from=id to=file_resource_ids_ssim}{!dismax v=user query}'
+          '{!lucene}{!dismax v=user+query} {!join from=id to=file_resource_ids_ssim}{!dismax v=user+query}'
         )
       end
     end

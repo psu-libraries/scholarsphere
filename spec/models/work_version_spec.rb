@@ -484,7 +484,7 @@ RSpec.describe WorkVersion, type: :model do
     let(:active_license) do
       {
         id: 'https://creativecommons.org/licenses/by/4.0/',
-        label: 'Attribution 4.0 International (CC BY 4.0)',
+        label: 'CC BY 4.0 (Attribution)',
         active: true
       }
     end
@@ -500,7 +500,7 @@ RSpec.describe WorkVersion, type: :model do
     describe '::DEFAULT' do
       subject { described_class::DEFAULT }
 
-      it { is_expected.to eq('http://www.europeana.eu/portal/rights/rr-r.html') }
+      it { is_expected.to eq('https://rightsstatements.org/page/InC/1.0/') }
     end
 
     describe '::all' do
@@ -508,6 +508,7 @@ RSpec.describe WorkVersion, type: :model do
 
       it { is_expected.to include(inactive_license) }
       it { is_expected.to include(active_license) }
+      it { is_expected.to include(hash_including(id: described_class::DEFAULT)) }
     end
 
     describe '::active' do
@@ -523,36 +524,36 @@ RSpec.describe WorkVersion, type: :model do
       specify do
         expect(options).to contain_exactly(
           [
-            'Attribution 4.0 International (CC BY 4.0)',
+            'CC BY 4.0 (Attribution)',
             'https://creativecommons.org/licenses/by/4.0/'
           ],
           [
-            'Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)',
+            'CC BY-SA 4.0 (Attribution-ShareAlike)',
             'https://creativecommons.org/licenses/by-sa/4.0/'
           ],
           [
-            'Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)',
+            'CC BY-NC 4.0 (Attribution-NonCommercial)',
             'https://creativecommons.org/licenses/by-nc/4.0/'
           ],
           [
-            'Attribution-NoDerivatives 4.0 International (CC BY-ND 4.0)',
+            'CC BY-ND 4.0 (Attribution-NoDerivatives)',
             'https://creativecommons.org/licenses/by-nd/4.0/'
           ],
           [
-            'Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)',
+            'CC BY-NC-ND 4.0 (Attribution-NonCommercial-NoDerivatives)',
             'https://creativecommons.org/licenses/by-nc-nd/4.0/'
           ],
           [
-            'Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)',
+            'CC BY-NC-SA 4.0 (Attribution-NonCommercial-ShareAlike)',
             'https://creativecommons.org/licenses/by-nc-sa/4.0/'
           ],
-          ['Public Domain Mark 1.0', 'http://creativecommons.org/publicdomain/mark/1.0/'],
-          ['CC0 1.0 Universal', 'http://creativecommons.org/publicdomain/zero/1.0/'],
-          ['All rights reserved', 'https://rightsstatements.org/page/InC/1.0/'],
+          ['CC0 1.0 (Public Domain Dedication)', 'http://creativecommons.org/publicdomain/zero/1.0/'],
+          ['MIT License', 'https://opensource.org/licenses/MIT'],
+          ['BSD 3-Clause License', 'https://opensource.org/licenses/BSD-3-Clause'],
           ['Apache 2.0', 'http://www.apache.org/licenses/LICENSE-2.0'],
           ['GNU General Public License (GPLv3)', 'https://www.gnu.org/licenses/gpl.html'],
-          ['MIT License', 'https://opensource.org/licenses/MIT'],
-          ['BSD 3-Clause License', 'https://opensource.org/licenses/BSD-3-Clause']
+          ['In Copyright (Rights Reserved)', 'https://rightsstatements.org/page/InC/1.0/'],
+          ['No Copyright - U.S.', 'https://rightsstatements.org/page/NoC-US/1.0/']
         )
       end
     end

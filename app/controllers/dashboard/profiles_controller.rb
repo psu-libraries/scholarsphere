@@ -30,7 +30,8 @@ module Dashboard
             :orcid,
             user_attributes: [
               :id,
-              :admin_enabled
+              :admin_enabled,
+              :opt_out_stats_email
             ]
           )
       end

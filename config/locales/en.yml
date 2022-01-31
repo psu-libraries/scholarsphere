@@ -81,6 +81,7 @@ en:
         deposited_at: Deposited
       user:
         admin_enabled: Administrative privileges enabled
+        opt_out_stats_email: Opt out of monthly reports on downloads and views
     errors:
       models:
         file_version_membership:
@@ -180,7 +181,7 @@ en:
   footer:
     heading: 'ScholarSphere'
     description: 'A service of the University Libraries.'
-    copyright_statement: 'Copyright © 2020 The Pennsylvania State University'
+    copyright_statement: 'Copyright © 2022 The Pennsylvania State University'
   helpers:
     # Note, for hints (and only hints) you can use Markdown
     hint:
@@ -199,7 +200,7 @@ en:
         publisher_statement: If the original publisher requires a set statement to upload this work to ScholarSphere, include it here
         published_date: The publication date can be specific to the year (2020), month (2020-11), or day (2020-11-22).
         version_name: For datasets or software using semantic versioning (e.g., x.y.z)
-        rights: The license you select determines how your work can be used by others.
+        rights: The license you select determines how your work can be used by others. [Read More](https://docs.scholarsphere.psu.edu/guides/licenses/)
       actor:
         orcid: "This is a 16-digit identifier in the format ####-####-####-####"
         display_name: >
@@ -315,14 +316,24 @@ en:
             published to create a DOI for it.
         danger:
           heading: Danger
-          explanation: >
+          delete_draft:
+            heading: Delete Draft
+            explanation: >
               Only the most recent version can be deleted. Deleting a version cannot be undone. If the most recent
               version is the only version of the work, the work itself will be deleted (regardless of publication
               status). If the work has a DOI, it will no longer resolve; you are responsible for updating the DOI to a
               new URI.
+          withdraw_versions:
+            heading: Withdraw A Version
       update:
         success: "Work settings successfully updated."
-    form: 
+      withdraw_versions_form:
+        explanation: >
+              Withdrawing a work version will make its associated files inaccessible to users without edit permissions
+              for the work. Withdrawing the only published version of a work will remove this work from public search
+              results.
+        submit_button: Withdraw Version
+    form:
       unsaved_changes_prompt: You have unsaved changes on this page. Are you sure you want to leave and discard these changes? 
       heading:
         error_message: "%{error} prohibited this from being saved:"
@@ -510,7 +521,6 @@ en:
     admin_name: 'Administrator'
     heading:
       about: 'About'
-      help: 'Documentation & Support'
       contact: 'Contact'
       policies_2_0: 'Policies'
       policies_1_0: 'Policies'

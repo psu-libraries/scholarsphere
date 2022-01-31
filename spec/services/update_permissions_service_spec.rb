@@ -49,11 +49,11 @@ RSpec.describe UpdatePermissionsService do
 
   context 'when we allow new users to be created' do
     context 'with a user who is currently at Penn State' do
-      let(:mock_client) { instance_spy('PennState::SearchService::Client') }
+      let(:mock_client) { instance_spy('PsuIdentity::SearchService::Client') }
       let(:person) { create(:person) }
 
       before do
-        allow(PennState::SearchService::Client).to receive(:new).and_return(mock_client)
+        allow(PsuIdentity::SearchService::Client).to receive(:new).and_return(mock_client)
         allow(mock_client).to receive(:userid).with(person.user_id).and_return(person)
       end
 
@@ -103,11 +103,11 @@ RSpec.describe UpdatePermissionsService do
     end
 
     context 'with a user who is NOT at Penn State' do
-      let(:mock_client) { instance_spy('PennState::SearchService::Client') }
+      let(:mock_client) { instance_spy('PsuIdentity::SearchService::Client') }
       let(:person) { create(:person) }
 
       before do
-        allow(PennState::SearchService::Client).to receive(:new).and_return(mock_client)
+        allow(PsuIdentity::SearchService::Client).to receive(:new).and_return(mock_client)
         allow(mock_client).to receive(:userid).with(person.user_id).and_return(nil)
       end
 

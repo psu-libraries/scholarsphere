@@ -11,11 +11,11 @@ RSpec.describe Api::V1::WorkPublisher do
   let(:user) { build(:user) }
   let(:work) { build(:work_version, :with_complete_metadata) }
   let(:depositor) { build(:person) }
-  let(:mock_client) { instance_spy(PennState::SearchService::Client) }
+  let(:mock_client) { instance_spy(PsuIdentity::SearchService::Client) }
   let(:new_work) { publisher.work }
 
   before do
-    allow(PennState::SearchService::Client).to receive(:new).and_return(mock_client)
+    allow(PsuIdentity::SearchService::Client).to receive(:new).and_return(mock_client)
     allow(mock_client).to receive(:userid).with(depositor.user_id).and_return(depositor)
   end
 
@@ -414,7 +414,7 @@ RSpec.describe Api::V1::WorkPublisher do
     end
 
     before do
-      allow(mock_client).to receive(:userid).with('missing-id').and_raise(PennState::SearchService::NotFound)
+      allow(mock_client).to receive(:userid).with('missing-id').and_raise(PsuIdentity::SearchService::NotFound)
       allow(Orcid::Public).to receive(:get).with(action: 'person', id: 'missingorcid').and_raise(Orcid::NotFound)
     end
 
@@ -453,11 +453,11 @@ RSpec.describe Api::V1::WorkPublisher do
 
     before do
       allow(mock_client).to receive(:userid).with(creator.user_id).and_return(creator)
-      allow(mock_client).to receive(:userid).with('missing-id').and_raise(PennState::SearchService::NotFound)
+      allow(mock_client).to receive(:userid).with('missing-id').and_raise(PsuIdentity::SearchService::NotFound)
     end
 
     it 'raises an error' do
-      expect { publisher }.to raise_error(PennState::SearchService::NotFound)
+      expect { publisher }.to raise_error(PsuIdentity::SearchService::NotFound)
     end
   end
 end
