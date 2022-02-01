@@ -5,7 +5,11 @@ class Shrine::PromotionJob < ApplicationJob
 
   def perform(record:, name:, file_data:)
     attacher = Shrine::Attacher.retrieve(model: record, name: name.to_sym, file: file_data)
-    attacher.create_derivatives
+    begin
+      attacher.create_derivatives
+    rescue StandardError => e 
+      logger.error(e)
+    end
     attacher.atomic_promote
   rescue Shrine::AttachmentChanged, ActiveRecord::RecordNotFound
     # attachment has changed or record has been deleted, nothing to do
