@@ -96,6 +96,7 @@ en:
               blank: is required to publish the work
             rights:
               blank: is required to publish the work
+              incompatible_license_for_authorized_visibility: The access and license settings conflict with each other. Please set access to "Public" (preferred), or set the license to "In Copyright (Rights Reserved)."
   activemodel:
     attributes:
       depositor_form:

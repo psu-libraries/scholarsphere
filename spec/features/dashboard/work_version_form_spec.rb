@@ -556,6 +556,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
   describe 'Publishing a Penn State only work', js: true do
     let(:different_metadata) { attributes_for(:work_version, :with_complete_metadata) }
+    let(:correct_rights) { WorkVersion::Licenses::ids_for_authorized_visibility.first }
+    let(:incorrect_rights) { (WorkVersion::Licenses.ids - WorkVersion::Licenses::ids_for_authorized_visibility).first }
 
     it 'routes the user through the workflow' do
       visit dashboard_form_work_versions_path
@@ -577,8 +579,26 @@ RSpec.describe 'Publishing a work', with_user: :user do
       # On the review page, change all the details metadata to ensure the params
       # are submitted correctly
       FeatureHelpers::DashboardForm.fill_in_work_details(different_metadata)
+
+      # Pick the wrong license
       FeatureHelpers::DashboardForm.fill_in_publishing_details(
-        metadata,
+        metadata.merge(rights: incorrect_rights),
+        visibility: Permissions::Visibility::AUTHORIZED
+      )
+      FeatureHelpers::DashboardForm.publish
+
+      # Ensure that there is an error on the rights
+      within 'div#error_explanation' do
+        expect(page).to have_content(
+          I18n.t!(
+            'activerecord.errors.models.work_version.attributes.rights.incompatible_license_for_authorized_visibility'
+          )
+        )
+      end
+
+      # Pick the correct license
+      FeatureHelpers::DashboardForm.fill_in_publishing_details(
+        metadata.merge(rights: correct_rights),
         visibility: Permissions::Visibility::AUTHORIZED
       )
       FeatureHelpers::DashboardForm.publish
@@ -604,7 +624,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       expect(version.subject).to eq [different_metadata[:subject]]
       expect(version.language).to eq [different_metadata[:language]]
       expect(version.related_url).to eq [different_metadata[:related_url]]
-      expect(version.rights).to eq metadata[:rights]
+      expect(version.rights).to eq correct_rights
 
       expect(version.creators.length).to eq 1
       expect(version.creators.first.display_name).to eq user.actor.display_name
@@ -615,6 +635,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
     let(:work_version) { create :work_version, :published }
     let(:invalid_metadata) { attributes_for(:work_version, :with_complete_metadata, description: '') }
     let(:different_metadata) { attributes_for(:work_version, :with_complete_metadata) }
+    let(:incorrect_rights) { (WorkVersion::Licenses.ids - WorkVersion::Licenses::ids_for_authorized_visibility).first }
     let(:user) { create(:user, :admin) }
 
     # RSpec mocks _cumulatively_ record the number of times they've been called,
@@ -645,12 +666,18 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
       # Fill out form properly
       FeatureHelpers::DashboardForm.fill_in_work_details(different_metadata)
-      FeatureHelpers::DashboardForm.fill_in_publishing_details(different_metadata)
+      # Note that an admin can pick the "incorrect" rights/visibility combo
+      # Pick the wrong license
+      FeatureHelpers::DashboardForm.fill_in_publishing_details(
+        different_metadata.merge(rights: incorrect_rights),
+        visibility: Permissions::Visibility::AUTHORIZED
+      )
       FeatureHelpers::DashboardForm.finish
       expect(SolrIndexingJob).to have_received(:perform_later).once
 
       work_version.reload
-      expect(work_version.rights).to eq(different_metadata[:rights])
+      expect(work_version.rights).to eq(incorrect_rights)
+      expect(work_version.visibility).to eq(Permissions::Visibility::AUTHORIZED)
     end
   end
 

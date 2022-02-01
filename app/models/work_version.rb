@@ -70,6 +70,12 @@ class WorkVersion < ApplicationRecord
         all.map { |license| license[:id] }
       end
 
+      def ids_for_authorized_visibility
+        %w(
+          https://rightsstatements.org/page/InC/1.0/
+        )
+      end
+
       def active
         all.map.select do |license|
           license[:active] == true
@@ -130,6 +136,19 @@ class WorkVersion < ApplicationRecord
             inclusion: {
               in: WorkVersion::Licenses.ids,
               allow_nil: true # Avoid duplicating the above presence validation
+            },
+            if: :published?
+
+  # You'll notice this validation is almost identical to the one above. It
+  # introduces a tighter set of valid licenses if the work is set to
+  # Authorized visibility, and if the optional validation context is used
+  validates :rights,
+            inclusion: {
+              allow_nil: true,
+              in: WorkVersion::Licenses.ids_for_authorized_visibility,
+              message: :incompatible_license_for_authorized_visibility,
+              if: -> { visibility == Permissions::Visibility::AUTHORIZED },
+              on: :user_publish
             },
             if: :published?
 
