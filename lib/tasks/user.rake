@@ -5,7 +5,7 @@ namespace :user do
   task monthly_stats_email: :environment do
     Rails.logger.info('Starting monthly stats task...')
     UpdateUserActiveStatuses.call
-    User.where(provider: 'azure_oauth', opt_out_stats_email: false, active: true).each do |user|
+    User.where(provider: 'azure_oauth', opt_in_stats_email: true, active: true).each do |user|
       Rails.logger.info("Putting Job on the queue for #{user.actor.email}")
       ActorMailer.with(actor: user.actor).monthly_stats.deliver_later
     end

@@ -23,7 +23,7 @@ describe 'User rake tasks', type: :task do
       end
 
       context 'when they have opted NOT to receive emails' do
-        before { create(:user, opt_out_stats_email: true) }
+        before { create(:user, opt_in_stats_email: false) }
 
         it 'does NOT send an email to the user' do
           expect {
