@@ -7,7 +7,7 @@ class Shrine::PromotionJob < ApplicationJob
     attacher = Shrine::Attacher.retrieve(model: record, name: name.to_sym, file: file_data)
     begin
       attacher.create_derivatives
-    rescue StandardError => e 
+    rescue StandardError => e
       logger.error(e)
     end
     attacher.atomic_promote
