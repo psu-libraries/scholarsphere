@@ -5,6 +5,7 @@ module Scholarsphere
     CACHE_PREFIX = ENV.fetch('SHRINE_CACHE_PREFIX', 'cache')
     PROMOTION_PREFIX = ENV.fetch('SHRINE_PROMOTION_PREFIX', 'store')
     DERIVATIVES_PREFIX = ENV.fetch('SHRINE_DERIVATIVES_PREFIX', 'derivatives')
+    THUMBNAILS_PREFIX = ENV.fetch('SHRINE_THUMBNAILS_PREFIX', 'thumbnails')
 
     class << self
       # @note :cache and :store keys shouldn't be changed because Shrine relies on them heavily; however, we can add
@@ -13,7 +14,12 @@ module Scholarsphere
         {
           cache: Shrine::Storage::S3.new(prefix: CACHE_PREFIX, **s3_options),
           store: Shrine::Storage::S3.new(prefix: PROMOTION_PREFIX, **s3_options),
-          derivatives: Shrine::Storage::S3.new(prefix: DERIVATIVES_PREFIX, **s3_options)
+          derivatives: Shrine::Storage::S3.new(prefix: DERIVATIVES_PREFIX, **s3_options),
+          thumbnails: Shrine::Storage::S3.new(
+            public: true,
+            prefix: THUMBNAILS_PREFIX,
+            **s3_options.merge(upload_options: { acl: 'public-read' })
+          )
         }
       end
 
