@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-require "image_processing/mini_magick"
+
+require 'image_processing/mini_magick'
 
 class FileUploader < Shrine
   plugin :backgrounding
@@ -17,7 +18,7 @@ class FileUploader < Shrine
   Attacher.derivatives do |original|
     magick = ImageProcessing::MiniMagick.source(original)
     {
-      thumbnail: magick.resize_to_fill!(400,400)
+      thumbnail: magick.resize_to_fill!(400, 400)
     }
   end
 
