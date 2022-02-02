@@ -150,7 +150,13 @@ RSpec.describe 'Creating and editing collections', :inline_jobs, with_user: :use
       expect(page).not_to have_selector('li[data-select2-id]', text: other_work.representative_version.title)
 
       mock_solr_indexing_job
-      FeatureHelpers::DashboardForm.select_work(published_work.latest_published_version.title)
+      FeatureHelpers::DashboardForm.select_work(published_work.representative_version.title)
+
+      # Test that the work that was selected no longer appears in the dropdown
+      find_all('.select2').first.click
+      expect(page).to have_selector('li[data-select2-id]', count: 3)
+      expect(page).not_to have_selector('li[data-select2-id]', text: published_work.representative_version.title)
+
       FeatureHelpers::DashboardForm.finish
       expect(SolrIndexingJob).to have_received(:perform_later).once
 
