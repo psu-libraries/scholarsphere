@@ -18,23 +18,29 @@ RSpec.describe 'Work Settings Page', with_user: :user do
 
   describe 'Updating visibility' do
     before do
-      work.update(visibility: Permissions::Visibility::OPEN)
+      work.update(visibility: Permissions::Visibility::AUTHORIZED)
       visit edit_dashboard_work_path(work)
     end
 
     it 'works from the Settings page' do
-      authorized_checkbox_label = Permissions::Visibility.display(
-        Permissions::Visibility::AUTHORIZED
+      open_checkbox_label = Permissions::Visibility.display(
+        Permissions::Visibility::OPEN
       )
 
-      choose authorized_checkbox_label
+      # regular user is allowed to update visibility from authorized to open
+      choose open_checkbox_label
       click_button I18n.t!('dashboard.works.edit.visibility.submit_button')
 
       expect(page).to have_content(I18n.t!('dashboard.works.edit.heading', work_title: work.latest_version.title))
 
       work.reload
-      expect(work.visibility).to eq Permissions::Visibility::AUTHORIZED
+      expect(work.visibility).to eq Permissions::Visibility::OPEN
       expect(WorkIndexer).to have_received(:call)
+
+      # regular user is NOT allowed to update visibility from open to authorized
+      expect(page).to have_content(ActionController::Base.helpers.strip_tags(
+                                     I18n.t!('dashboard.works.edit.visibility.not_allowed_html')
+                                   ))
     end
   end
 
