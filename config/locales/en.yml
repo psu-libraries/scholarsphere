@@ -84,6 +84,10 @@ en:
         opt_out_stats_email: Opt out of monthly reports on downloads and views
     errors:
       models:
+        collection:
+          attributes:
+            base:
+              duplicate_works: cannot contain the same work twice
         file_version_membership:
           attributes:
             title:
