@@ -11,4 +11,9 @@ class CollectionWorkMembership < ApplicationRecord
   # we'd want to order the works _not_ according to their explicitly defined
   # position, so I think this is a good solution in this case.
   default_scope -> { order(position: :asc) }
+
+  validates :collection_id,
+            uniqueness: {
+              scope: :work_id
+            }
 end
