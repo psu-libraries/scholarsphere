@@ -16,9 +16,9 @@ module Dashboard
           end
         end
 
-        def process_response(on_error:)
+        def process_response(on_error:, validation_context: nil)
           respond_to do |format|
-            if save_resource
+            if save_resource(validation_context: validation_context)
               format.html do
                 redirect_upon_success
               end
@@ -78,10 +78,10 @@ module Dashboard
           resource_klass.model_name.param_key
         end
 
-        def save_resource
+        def save_resource(validation_context: nil)
           @resource.indexing_source = nil # uses the default source
           @resource.update_doi = (publish? || finish? || save_and_exit?)
-          @resource.save
+          @resource.save(context: validation_context)
         end
     end
   end
