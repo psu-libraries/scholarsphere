@@ -28,13 +28,15 @@ class FileUploader < Shrine
     case file.mime_type
     when 'application/pdf'
       process_derivatives(:pdf, original)
+    else
+      {}
     end
   end
 
   Attacher.derivatives :pdf do |original|
     magick = ImageProcessing::MiniMagick.source(original).loader(page: 0).convert('png')
     {
-      thumbnail: magick.resize_to_fill!(400, 400)
+      thumbnail: magick.resize_to_fill!(200, 200)
     }
   end
 
