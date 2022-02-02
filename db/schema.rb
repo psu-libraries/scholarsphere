@@ -13,6 +13,7 @@
 ActiveRecord::Schema.define(version: 2022_02_02_210126) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
 
@@ -191,9 +192,9 @@ ActiveRecord::Schema.define(version: 2022_02_02_210126) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "actor_id", null: false
-    t.boolean "opt_out_stats_email", default: false
     t.boolean "active", default: true
     t.boolean "admin_enabled", default: false
+    t.boolean "opt_in_stats_email", default: true
     t.index ["access_id"], name: "index_users_on_access_id", unique: true
     t.index ["actor_id"], name: "index_users_on_actor_id"
   end
