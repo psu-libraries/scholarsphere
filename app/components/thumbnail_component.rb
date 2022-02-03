@@ -9,8 +9,12 @@ class ThumbnailComponent < ApplicationComponent
     @featured = featured
   end
 
-  def thumbnail_url
-    file_resources.present? ? file_resources.last.file_derivatives[:thumbnail]&.url : nil
+  def thumbnail
+    if thumbnail_url.present?
+      "<img src=#{thumbnail_url}></img>".html_safe
+    else
+      "<i class='material-icons material-icons--thumbnail'>#{icon}</i>".html_safe
+    end
   end
 
   def icon
@@ -27,16 +31,8 @@ class ThumbnailComponent < ApplicationComponent
 
   private
 
-    def file_resources
-      work.latest_published_version.file_resources
-    end
-
-    def work
-      resource.is_a?(Collection) ? resource.works.first.work : solr_doc_to_work(resource)
-    end
-
-    def solr_doc_to_work(solr_doc)
-      solr_doc["model_ssi"] == 'Collection' ? Collection.find_by(uuid: solr_doc.id).works.first : Work.find(resource.work_id)
+    def thumbnail_url
+      ThumbnailUrlService.new(resource).url
     end
 
     def featured?
