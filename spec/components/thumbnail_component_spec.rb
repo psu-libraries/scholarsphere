@@ -54,4 +54,15 @@ RSpec.describe ThumbnailComponent, type: :component do
       expect(result.css('div').first.text).to include('bar_chart')
     end
   end
+
+  context 'when thumbnail_url is present' do
+    let(:resource) { WorkVersion.new }
+    let(:component) { described_class.new(resource: resource) }
+
+    it 'renders a thumbnail with image tag' do
+      allow_any_instance_of(ThumbnailUrlService).to receive(:url).and_return 'url.com/path/file'
+      expect(result.css('div').first.classes).to contain_exactly('thumbnail')
+      expect(result.css('img').attribute('src').value).to include('url.com/path/file')
+    end
+  end
 end

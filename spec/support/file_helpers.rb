@@ -43,6 +43,29 @@ class FileHelpers
       }
     end
 
+    def pdf_data(file_name)
+      attacher = Shrine::Attacher.new
+      attacher.set(uploaded_pdf(file_name))
+
+      JSON.parse(attacher.column_data)
+    end
+
+    def uploaded_pdf(file_name)
+      path = Rails.root.join('spec', 'fixtures', 'ipsum.pdf')
+      file = File.open(path, binmode: true)
+      file_size = file.size
+
+      uploaded_file = Shrine.upload(file, :store, metadata: false)
+      uploaded_file.metadata.merge!(
+        'size' => file_size,
+        'mime_type' => 'application/pdf',
+        'filename' => file_name
+
+      )
+
+      uploaded_file
+    end
+
     # @note See https://github.com/shrinerb/shrine/blob/master/doc/testing.md#test-data
     def image_data(file_name)
       attacher = Shrine::Attacher.new

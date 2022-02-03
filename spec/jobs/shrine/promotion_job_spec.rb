@@ -12,7 +12,7 @@ RSpec.describe Shrine::PromotionJob, type: :job do
 
     before do
       allow(Shrine::Attacher).to receive(:retrieve).and_return(mock_attacher)
-      allow(Shrine::ThumbnailJob).to receive(:perform).and return(mock_attacher)
+      allow(Shrine::ThumbnailJob).to receive(:perform_later)
     end
 
     it 'promotes a file from cache to storage' do
