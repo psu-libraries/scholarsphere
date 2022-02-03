@@ -43,7 +43,7 @@ class FileUploader < Shrine
   Attacher.derivatives :other do |original|
     magick = ImageProcessing::MiniMagick.source(original)
     {
-        thumbnail: magick.resize_to_fill!(200, 200)
+      thumbnail: magick.resize_to_fill!(200, 200)
     }
   end
 

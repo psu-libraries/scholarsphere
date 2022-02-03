@@ -12,9 +12,9 @@ class ThumbnailComponent < ApplicationComponent
 
   def thumbnail
     if thumbnail_url.present?
-      "<img src=#{thumbnail_url}></img>".html_safe
+      "<img src=#{thumbnail_url}></img>"
     else
-      "<i class='material-icons material-icons--thumbnail'>#{icon}</i>".html_safe
+      "<i class='material-icons material-icons--thumbnail'>#{icon}</i>"
     end
   end
 

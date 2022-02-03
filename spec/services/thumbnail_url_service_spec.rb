@@ -10,57 +10,63 @@ describe ThumbnailUrlService do
     allow(mock_attacher).to receive(:url).with(:thumbnail).and_return 'url.com/path/file'
   end
 
-  describe "#url" do
-    context "when resource is a SolrDocument" do
-      context "when SolrDocument encapsulates a Collection" do
+  describe '#url' do
+    context 'when resource is a SolrDocument' do
+      context 'when SolrDocument encapsulates a Collection' do
         let!(:collection) { create :collection }
-        let!(:work) { create :work, versions_count: 2, collections: [collection] }
         let(:resource) { SolrDocument.new(collection.to_solr) }
 
-        it "return thumbnail url" do
+        before do
+          create :work, versions_count: 2, collections: [collection]
+        end
+
+        it 'return thumbnail url' do
           allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
           expect(service.url).to eq 'url.com/path/file'
         end
       end
 
-      context "when SolrDocument encapsulates a Work" do
+      context 'when SolrDocument encapsulates a Work' do
         let!(:work) { create :work, versions_count: 2 }
         let(:resource) { SolrDocument.new(work.to_solr) }
 
-        it "return thumbnail url" do
+        it 'return thumbnail url' do
           allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
           expect(service.url).to eq 'url.com/path/file'
         end
       end
     end
 
-    context "when resource is a WorkVersion" do
+    context 'when resource is a WorkVersion' do
       let!(:work) { create :work }
       let!(:work_version) { create :work_version, :with_files, work: work }
       let(:resource) { work_version }
 
-      it "return thumbnail url" do
+      it 'return thumbnail url' do
         allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
         expect(service.url).to eq 'url.com/path/file'
       end
     end
 
-    context "when resource is a Work" do
+    context 'when resource is a Work' do
       let!(:work) { create :work, versions_count: 2 }
       let(:resource) { work }
 
-      it "return thumbnail url" do
+      it 'return thumbnail url' do
         allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
         expect(service.url).to eq 'url.com/path/file'
       end
     end
 
-    context "when resource is a Collection" do
+    context 'when resource is a Collection' do
       let!(:collection) { create :collection }
-      let!(:work) { create :work, versions_count: 2, collections: [collection] }
       let(:resource) { collection }
 
-      it "return thumbnail url" do
+      before do
+        create :work, versions_count: 2, collections: [collection]
+      end
+
+      it 'return thumbnail url' do
         allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
         expect(service.url).to eq 'url.com/path/file'
       end
@@ -72,9 +78,9 @@ describe ThumbnailUrlService do
     let!(:work_version) { create :work_version, work: work }
     let(:resource) { work_version }
 
-    it "returns nil" do
+    it 'returns nil' do
       allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
-      expect(mock_attacher).not_to receive(:url).with(:thumbnail)
+      expect(mock_attacher).not_to have_received(:url).with(:thumbnail)
       expect(service.url).to eq nil
     end
   end
@@ -85,7 +91,7 @@ describe ThumbnailUrlService do
     let!(:work_version) { create :work_version, :with_files, work: work }
     let(:resource) { work_version }
 
-    it "returns nil" do
+    it 'returns nil' do
       allow(mock_attacher).to receive(:url).with(:thumbnail).and_return nil
       allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
       expect(service.url).to eq nil

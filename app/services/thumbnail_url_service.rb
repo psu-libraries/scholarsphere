@@ -14,17 +14,27 @@ class ThumbnailUrlService
   private
 
     def file_resources
-      resource.class.to_s.include?('WorkVersion') ? resource.file_resources : work&.latest_published_version&.file_resources
+      if resource.class.to_s.include?('WorkVersion')
+        resource.file_resources
+      else
+        work&.latest_published_version&.file_resources
+      end
     end
 
     def work
-      resource.class.to_s.include?('SolrDocument') ? solr_doc_to_work(resource) : non_solr_doc_to_work(resource)
+      if resource.class.to_s.include?('SolrDocument')
+        solr_doc_to_work(resource)
+      else
+        non_solr_doc_to_work(resource)
+      end
     end
 
     def solr_doc_to_work(solr_doc)
-      solr_doc.model.include?('Collection') ?
-          Collection.find_by(uuid: solr_doc.id).works.first :
-          Work.find(resource.work_id)
+      if solr_doc.model.include?('Collection')
+        Collection.find_by(uuid: solr_doc.id).works.first
+      else
+        Work.find(resource.work_id)
+      end
     end
 
     def non_solr_doc_to_work(resource)
