@@ -60,7 +60,6 @@ class FileHelpers
         'size' => file_size,
         'mime_type' => 'application/pdf',
         'filename' => file_name
-
       )
 
       uploaded_file

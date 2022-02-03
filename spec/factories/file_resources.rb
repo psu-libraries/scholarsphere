@@ -3,7 +3,6 @@
 require Rails.root.join('spec', 'support', 'file_helpers')
 
 FactoryBot.define do
-
   factory :file_resource do
     # Fast version with no image processing.
     # The sequence is used to provide a unique filename to each file, thereby
@@ -12,7 +11,7 @@ FactoryBot.define do
     sequence(:file_data) { |n| FileHelpers.image_data "image-#{n}.png" }
 
     trait :pdf do
-      file_data {|n| FileHelpers.pdf_data "pdf-#{n}.pdf"}
+      file_data { |n| FileHelpers.pdf_data "pdf-#{n}.pdf" }
     end
 
     # Slow version with full image processing
