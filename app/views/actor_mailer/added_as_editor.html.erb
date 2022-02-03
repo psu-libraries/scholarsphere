@@ -1,0 +1,18 @@
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  </head>
+  <body>
+    <p>
+      Dear <%= @actor.display_name %>,
+    </p>
+    <p>
+      You have been given edit access to the following <%= @resource.class.name.downcase %> on ScholarSphere:<br>
+      <%= link_to @decorated_resource.title, resource_url(@resource.uuid) %>
+    </p>
+
+    <p>
+      If you believe you have been given edit access in error, please contact {scholarsphere contact email}
+    </p>
+  </body>
+</html>

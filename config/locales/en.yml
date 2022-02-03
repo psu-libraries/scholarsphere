@@ -519,6 +519,8 @@ en:
       monthly_stats:
         subject: "ScholarSphere - Reporting Monthly Downloads and Views"
         heading: "Latest Report for the Month of %{date}"
+      added_as_editor:
+        subject: Edit Access for %{title}
   modal:
     close:
       icon: "\u00D7"

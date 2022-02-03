@@ -35,9 +35,17 @@ class EditorsForm
     user_list = build_users
     return false if errors.present?
 
+    new_users = user_list - resource.edit_users
+
     resource.edit_users = user_list
     resource.edit_groups = group_list
-    resource.save
+    resource.save!
+
+    send_emails(new_users: new_users)
+
+    true
+  rescue ActiveRecord::RecordInvalid
+    false
   end
 
   private
@@ -64,5 +72,11 @@ class EditorsForm
       UserRegistrationService.call(uid: access_id)
     rescue URI::InvalidURIError
       errors.add(:edit_users, :unexpected, access_id: access_id) && access_id
+    end
+
+    def send_emails(new_users:)
+      new_users.each do |user|
+        ActorMailer.with(actor: user.actor, resource: resource).added_as_editor.deliver_later if user.actor.present?
+      end
     end
 end

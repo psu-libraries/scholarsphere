@@ -84,6 +84,26 @@ RSpec.describe EditorsForm, type: :model do
             expect(resource.edit_users).to contain_exactly(user)
           end
         end
+
+        context 'when the resource already has some edit users' do
+          let(:existing_user) { create(:user) }
+          let(:resource) { create(resource_type, edit_users: [existing_user]) }
+          let(:mailer_spy) { instance_spy('MailerSpy') }
+
+          before do
+            allow(ActorMailer).to receive(:with).and_return(mailer_spy)
+          end
+
+          it 'sends an email to any new users' do
+            form.save
+
+            expect(ActorMailer).to have_received(:with).with(actor: user.actor, resource: resource)
+            expect(ActorMailer).not_to have_received(:with).with(actor: existing_user.actor, resource: resource)
+
+            expect(mailer_spy).to have_received(:added_as_editor)
+            expect(mailer_spy).to have_received(:deliver_later)
+          end
+        end
       end
     end
 
@@ -91,7 +111,10 @@ RSpec.describe EditorsForm, type: :model do
       let(:params) { { 'edit_users' => [access_id] } }
       let(:access_id) { build(:user).uid }
 
-      before { allow(UserRegistrationService).to receive(:call).with(uid: access_id).and_return(nil) }
+      before do
+        allow(UserRegistrationService).to receive(:call).with(uid: access_id).and_return(nil)
+        allow(ActorMailer).to receive(:with)
+      end
 
       it 'does not add the user and reports an error' do
         expect(resource.edit_users).to be_empty
@@ -102,13 +125,21 @@ RSpec.describe EditorsForm, type: :model do
           I18n.t!('activemodel.errors.models.editors_form.attributes.edit_users.not_found', access_id: access_id)
         )
       end
+
+      it 'does not send any emails' do
+        form.save
+        expect(ActorMailer).not_to have_received(:with)
+      end
     end
 
     context 'when the service returns URI::InvalidURIError' do
       let(:params) { { 'edit_users' => [access_id] } }
       let(:access_id) { build(:user).email }
 
-      before { allow(UserRegistrationService).to receive(:call).with(uid: access_id).and_raise(URI::InvalidURIError) }
+      before do
+        allow(UserRegistrationService).to receive(:call).with(uid: access_id).and_raise(URI::InvalidURIError)
+        allow(ActorMailer).to receive(:with)
+      end
 
       it 'does not add the user and reports an error' do
         expect(resource.edit_users).to be_empty
@@ -119,16 +150,33 @@ RSpec.describe EditorsForm, type: :model do
           I18n.t!('activemodel.errors.models.editors_form.attributes.edit_users.unexpected', access_id: access_id)
         )
       end
+
+      it 'does not send any emails' do
+        form.save
+        expect(ActorMailer).not_to have_received(:with)
+      end
     end
 
     context 'when the service returns an unexpected error' do
       let(:params) { { 'edit_users' => [access_id] } }
       let(:access_id) { build(:user).email }
 
-      before { allow(UserRegistrationService).to receive(:call).with(uid: access_id).and_raise(StandardError, 'oops!') }
+      before do
+        allow(UserRegistrationService).to receive(:call).with(uid: access_id).and_raise(StandardError, 'oops!')
+        allow(ActorMailer).to receive(:with)
+      end
 
       it 'raises the error' do
         expect { form.save }.to raise_error(StandardError, 'oops!')
+      end
+
+      it 'does not send any emails' do
+        begin
+          form.save
+        rescue StandardError
+        end
+
+        expect(ActorMailer).not_to have_received(:with)
       end
     end
 

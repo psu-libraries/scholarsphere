@@ -14,4 +14,15 @@ class ActorMailer < ApplicationMailer
       subject: ::I18n.t('mailers.actor.monthly_stats.subject')
     )
   end
+
+  def added_as_editor
+    @actor = params[:actor]
+    @resource = params[:resource]
+    @decorated_resource = ResourceDecorator.decorate(@resource)
+
+    mail(
+      to: @actor.email,
+      subject: ::I18n.t('mailers.actor.added_as_editor.subject', title: @decorated_resource.title.truncate(30))
+    )
+  end
 end
