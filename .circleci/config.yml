@@ -113,7 +113,8 @@ jobs:
     - run:
         name: "Install dependencies for thumbnails"
         command: | 
-          apt-get install -y imagemagick ghostscript
+          sudo apt-get update
+          sudo apt-get install -y imagemagick ghostscript
           cp config/policy.xml /etc/ImageMagick-6/policy.xml
     - run:
         name: "Bundle"
