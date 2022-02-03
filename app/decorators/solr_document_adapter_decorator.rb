@@ -12,6 +12,6 @@ class SolrDocumentAdapterDecorator < SimpleDelegator
   end
 
   def model
-    self.class.to_s
+    to_model.class.to_s
   end
 end
