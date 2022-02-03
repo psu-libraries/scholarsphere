@@ -115,7 +115,7 @@ jobs:
         command: | 
           sudo apt-get update
           sudo apt-get install -y imagemagick ghostscript
-          cp config/policy.xml /etc/ImageMagick-6/policy.xml
+          sudo cp config/policy.xml /etc/ImageMagick-6/policy.xml
     - run:
         name: "Bundle"
         command: |
