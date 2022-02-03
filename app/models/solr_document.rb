@@ -70,4 +70,8 @@ class SolrDocument
   def work_id
     self[:work_id_isi].to_i
   end
+
+  def model
+    self[:model_ssi]
+  end
 end
