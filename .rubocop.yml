@@ -35,6 +35,10 @@ Rails/DynamicFindBy:
   Exclude:
     - 'spec/models/file_resource_spec.rb'
 
+Style/IfInsideElse:
+  Exclude:
+    - 'app/components/thumbnail_component.rb'
+
 Rails/FilePath:
   EnforcedStyle: arguments
 

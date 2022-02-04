@@ -28,7 +28,7 @@ class FileUploader < Shrine
     case file.mime_type
     when 'application/pdf'
       process_derivatives(:pdf, original)
-    when (file.mime_type.include?("image"))
+    when file.mime_type.include?('image')
       process_derivatives(:image, original)
     else
       {}
