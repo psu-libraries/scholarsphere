@@ -20,9 +20,17 @@ class ThumbnailComponent < ApplicationComponent
 
   def html_classes
     if featured?
-      'thumbnail col-xxl-6 ft-work__img'
+      if thumbnail_url.present?
+        'thumbnail-image col-xxl-6 ft-work__img'
+      else
+        'thumbnail-icon col-xxl-6 ft-work__img'
+      end
     else
-      'thumbnail'
+      if thumbnail_url.blank?
+        'thumbnail-icon'
+      else
+        'thumbnail-image'
+      end
     end
   end
 

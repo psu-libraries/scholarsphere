@@ -1379,10 +1379,14 @@ h4,
 
 }
 
-.thumbnail {
+.thumbnail-icon {
   background: $gray-85;
 }
 
+.thumbnail-image {
+  min-height: 200px;
+  min-width: 200px;
+}
 
 form.edit-work-visibility .label {
   display: none;
