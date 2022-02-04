@@ -65,6 +65,26 @@ class FileHelpers
       uploaded_file
     end
 
+    def doc_data(file_name)
+      attacher = Shrine::Attacher.new
+      attacher.set(uploaded_doc(file_name))
+    end
+
+    def uploaded_doc(file_name)
+      path = Rails.root.join('spec', 'fixtures', 'future.docx')
+      file = File.open(path, binmode: true)
+      file_size = file.size
+
+      uploaded_file = Shrine.upload(file, :store, metadata: false)
+      uploaded_file.metadata.merge!(
+        'size' => file_size,
+        'mime_type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'filename' => file_name
+      )
+
+      uploaded_file
+    end
+
     # @note See https://github.com/shrinerb/shrine/blob/master/doc/testing.md#test-data
     def image_data(file_name)
       attacher = Shrine::Attacher.new

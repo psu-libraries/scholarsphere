@@ -14,6 +14,10 @@ FactoryBot.define do
       file_data { |n| FileHelpers.pdf_data "pdf-#{n}.pdf" }
     end
 
+    trait :doc do
+      file_data { |n| FileHelpers.doc_data "doc-#{n}.docx" }
+    end
+
     # Slow version with full image processing
     trait :with_processed_image do
       file_data { nil }
