@@ -26,10 +26,10 @@ class ThumbnailComponent < ApplicationComponent
         'thumbnail-icon col-xxl-6 ft-work__img'
       end
     else
-      if thumbnail_url.blank?
-        'thumbnail-icon'
-      else
+      if thumbnail_url.present?
         'thumbnail-image'
+      else
+        'thumbnail-icon'
       end
     end
   end
