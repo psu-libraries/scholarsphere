@@ -5,7 +5,7 @@ class Shrine::ThumbnailJob < ApplicationJob
 
   def perform(record)
     attacher = record.file_attacher
-    attacher.create_derivatives
+    attacher.create_derivatives :thumbnail
     record.save
   rescue Shrine::AttachmentChanged, ActiveRecord::RecordNotFound
     # attachment has changed or record has been deleted, nothing to do
