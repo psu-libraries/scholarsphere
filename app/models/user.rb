@@ -68,6 +68,7 @@ class User < ApplicationRecord
       actor.email = actor.email.presence || auth.info.email
       actor.given_name = actor.given_name.presence || auth.info.given_name
       actor.surname = actor.surname.presence || auth.info.surname || auth.info.family_name
+      actor.orcid = actor.orcid.presence || directory_orcid(auth.uid)
     end
 
     transaction do
@@ -102,5 +103,13 @@ class User < ApplicationRecord
 
   def name
     actor.display_name
+  end
+
+  def self.directory_orcid(uid)
+    linked_orcid = PsuIdentity::DirectoryService::Client.new.userid(uid).orc_id
+    OrcidId.new(linked_orcid).to_s
+  rescue StandardError => e
+    logger.error(e)
+    nil
   end
 end

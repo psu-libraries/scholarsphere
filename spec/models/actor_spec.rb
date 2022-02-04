@@ -47,32 +47,6 @@ RSpec.describe Actor, type: :model do
 
       it { is_expected.not_to be_valid }
     end
-
-    context 'when orcid is present but psu_id is not' do
-      subject { build(:actor, psu_id: nil) }
-
-      it { is_expected.to be_valid }
-    end
-
-    context 'when psu_id is present but orcid is not' do
-      subject { build(:actor, orcid: nil) }
-
-      it { is_expected.to be_valid }
-    end
-
-    context 'when the psu_id is present and the orcid is invalid' do
-      subject { build(:actor, orcid: 'asdf') }
-
-      it { is_expected.not_to be_valid }
-    end
-
-    context 'when the orcid is present and the psu_id is invalid' do
-      subject { build(:actor, psu_id: 'abc123') }
-
-      before { create(:actor, psu_id: 'abc123') }
-
-      it { is_expected.not_to be_valid }
-    end
   end
 
   describe 'after_save' do
@@ -158,23 +132,5 @@ RSpec.describe Actor, type: :model do
     it_behaves_like 'a singlevalued field', :email
     it_behaves_like 'a singlevalued field', :psu_id
     it_behaves_like 'a singlevalued field', :orcid
-  end
-
-  describe '#orcid' do
-    context 'when set to valid value' do
-      subject { described_class.new(surname: 'Valid Orcid', orcid: FactoryBotHelpers.generate_orcid) }
-
-      it { is_expected.to be_valid }
-    end
-
-    context 'when set to an invalid value' do
-      subject { actor.errors.full_messages }
-
-      let(:actor) { described_class.new(orcid: Faker::Number.leading_zero_number(digits: 15)) }
-
-      before { actor.validate }
-
-      it { is_expected.to include('ORCiD must be valid') }
-    end
   end
 end

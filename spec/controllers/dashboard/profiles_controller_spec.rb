@@ -10,8 +10,7 @@ RSpec.describe Dashboard::ProfilesController, type: :controller do
       'display_name' => "Dr. #{actor_attrs[:given_name]} #{actor_attrs[:surname]} PhD",
       'given_name' => actor_attrs[:given_name],
       'surname' => actor_attrs[:surname],
-      'email' => actor_attrs[:email],
-      'orcid' => actor_attrs[:orcid]
+      'email' => actor_attrs[:email]
     }
   }
 
@@ -61,7 +60,6 @@ RSpec.describe Dashboard::ProfilesController, type: :controller do
           expect(actor.given_name).to eq actor_attrs[:given_name]
           expect(actor.surname).to eq actor_attrs[:surname]
           expect(actor.email).to eq actor_attrs[:email]
-          expect(actor.orcid).to eq actor_attrs[:orcid]
         end
 
         it "redirects to the user's dashboard" do

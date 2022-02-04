@@ -27,7 +27,6 @@ module Dashboard
             :surname,
             :display_name,
             :email,
-            :orcid,
             user_attributes: [
               :id,
               :admin_enabled,
