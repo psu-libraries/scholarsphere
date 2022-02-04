@@ -8,7 +8,8 @@
 <%- index = form.try(:index) || 0 %>
 <%- work_version = form.object.work.latest_published_version %>
 
-<div class="nested-fields mb-3 contributor-wrapper js-work-wrapper">
+<div class="nested-fields mb-3 contributor-wrapper js-work-wrapper"
+     data-work-id="<%= work_version.work.id %>">
   <div class="row">
     <div class="col-2">
       <span class="badge badge-dark badge--outline">

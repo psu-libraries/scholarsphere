@@ -94,6 +94,16 @@ RSpec.describe Collection, type: :model do
       expect(collection).to allow_value('1999-uu-uu').for(:published_date)
       expect(collection).not_to allow_value('not an EDTF formatted date').for(:published_date)
     end
+
+    it 'validates that a work cannot be added twice' do
+      work = create :work
+
+      collection.works = [work, work]
+      expect(collection).not_to be_valid
+      expect(collection.errors[:base]).to include(
+        I18n.t!('activerecord.errors.models.collection.attributes.base.duplicate_works')
+      )
+    end
   end
 
   describe 'multivalued fields' do

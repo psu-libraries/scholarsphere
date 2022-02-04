@@ -13,8 +13,13 @@ export default class extends Controller {
         url: endpoint,
         dataType: 'json',
         processResults: (data) => {
+          // filter out works already in the collection from the search results
+          const workWrappers = $('.js-work-wrapper[data-work-id]:visible')
+          const workIdsInCollection = [...workWrappers].map(w => w.dataset.workId)
+          const filteredWorks = data.filter(d => !workIdsInCollection.includes(`${d.id}`))
+
           return {
-            results: data
+            results: filteredWorks
           }
         }
       },
