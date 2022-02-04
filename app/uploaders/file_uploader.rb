@@ -15,34 +15,13 @@ class FileUploader < Shrine
     ).to_s
   end
 
-  # TODO this is supposed to return a hash
-  # if we're processing files that we don't support, we should maybe return
-  # an empty hash, or check a level above, or both?
   Attacher.derivatives_storage do |name|
     if name == :thumbnail
       :thumbnails
     end
   end
 
-  Attacher.derivatives do |original|
-    case file.mime_type
-    when 'application/pdf'
-      process_derivatives(:pdf, original)
-    when file.mime_type.include?('image')
-      process_derivatives(:image, original)
-    else
-      {}
-    end
-  end
-
-  Attacher.derivatives :image do |original|
-    magick = ImageProcessing::MiniMagick.source(original).convert('png')
-    {
-      thumbnail: magick.resize_to_fill!(200, 200)
-    }
-  end
-
-  Attacher.derivatives :pdf do |original|
+  Attacher.derivatives :thumbnail do |original|
     magick = ImageProcessing::MiniMagick.source(original).loader(page: 0).convert('png')
     {
       thumbnail: magick.resize_to_fill!(200, 200)

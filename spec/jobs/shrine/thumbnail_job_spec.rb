@@ -13,15 +13,14 @@ RSpec.describe Shrine::ThumbnailJob, type: :job do
       expect(pdf_record.file_attacher.url(:thumbnail)).to include('thumbnails')
     end
 
-    it 'does not yet create thumbnails from docx' do 
+    it 'does create thumbnails from docx' do
       described_class.perform_now(doc_record)
-      expect(doc_record.file_attacher.url(:thumbnail)).to be_nil
+      expect(doc_record.file_attacher.url(:thumbnail)).to include('thumbnails')
     end
 
-    it 'does create a thumbnail from an image' do 
+    it 'does create a thumbnail from an image' do
       described_class.perform_now(image_record)
       expect(image_record.file_attacher.url(:thumbnail)).to include('thumbnails')
     end
-
   end
 end

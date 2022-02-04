@@ -11,9 +11,8 @@ class Shrine::PromotionJob < ApplicationJob
     # attachment has changed or record has been deleted, nothing to do
   end
 
-
   def perform_thumbnail?(record)
-    # we perform the thumbnail job if the mime_type is supported 
+    # we perform the thumbnail job if the mime_type is supported
     mime_type = record.file_data['metadata']['mime_type']
     return true if mime_type.include?('image')
     return true if mime_type == 'application/pdf'
