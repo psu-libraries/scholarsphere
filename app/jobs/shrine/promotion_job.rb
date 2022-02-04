@@ -13,7 +13,7 @@ class Shrine::PromotionJob < ApplicationJob
 
   def perform_thumbnail?(record)
     # we perform the thumbnail job if the mime_type is supported
-    mime_type = record.file_data['metadata']['mime_type']
+    mime_type = record.file_data['metadata']['mime_type'] || ""
     return true if mime_type.include?('image')
     return true if mime_type == 'application/pdf'
 
