@@ -306,6 +306,7 @@ en:
           heading: Access
           explanation: Access settings affect who can download files associated with the work.
           submit_button: Update Access Settings
+          not_allowed_html: This work is <b>Public</b>. Access can be changed to <b>Penn State Only</b> by request.
         embargo:
           heading: Embargo
           explanation: >

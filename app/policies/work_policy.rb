@@ -28,6 +28,12 @@ class WorkPolicy < ApplicationPolicy
     published? && editable?
   end
 
+  def edit_visibility?
+    return true if user.admin?
+
+    (editable? && !published?) || (editable? && !open_access?)
+  end
+
   private
 
     def editable?
@@ -46,5 +52,9 @@ class WorkPolicy < ApplicationPolicy
 
     def published?
       record.latest_published_version.present?
+    end
+
+    def open_access?
+      record.open_access?
     end
 end
