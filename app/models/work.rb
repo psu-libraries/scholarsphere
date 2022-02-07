@@ -191,7 +191,7 @@ class Work < ApplicationRecord
   end
 
   def thumbnail_url
-    latest_published_version.file_resources&.last&.thumbnail_url
+    auto_generate_thumbnail? ? latest_published_version.file_resources&.last&.thumbnail_url : nil
   end
 
   private

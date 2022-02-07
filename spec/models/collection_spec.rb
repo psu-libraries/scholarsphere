@@ -31,6 +31,7 @@ RSpec.describe Collection, type: :model do
     it { is_expected.to have_db_column(:depositor_id) }
     it { is_expected.to have_db_column(:metadata).of_type(:jsonb) }
     it { is_expected.to have_db_column(:doi).of_type(:string) }
+    it { is_expected.to have_db_column(:auto_generate_thumbnail).of_type(:boolean).with_options(default: false) }
     it { is_expected.to have_jsonb_accessor(:title).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:subtitle).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:keyword).of_type(:string).is_array.with_default([]) }
@@ -246,6 +247,7 @@ RSpec.describe Collection, type: :model do
         visibility_ssi
         work_type_ss
         thumbnail_url_ssi
+        auto_generate_thumbnail_tesim
       )
     end
 

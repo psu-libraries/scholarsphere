@@ -13,11 +13,6 @@ RSpec.describe FileResource, type: :model do
     let(:resource) { build(:file_resource) }
   end
 
-  it_behaves_like 'a resource with a thumbnail url' do
-    let!(:file_resource) { create :file_resource }
-    let(:resource) { file_resource }
-  end
-
   describe 'table' do
     it { is_expected.to have_db_column(:file_data).of_type(:jsonb) }
   end

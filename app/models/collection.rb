@@ -145,7 +145,7 @@ class Collection < ApplicationRecord
   end
 
   def thumbnail_url
-    works.first&.thumbnail_url
+    auto_generate_thumbnail? ? works.first&.latest_published_version&.file_resources&.last&.thumbnail_url : nil
   end
 
   private
