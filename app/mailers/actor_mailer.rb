@@ -22,6 +22,7 @@ class ActorMailer < ApplicationMailer
 
     mail(
       to: @actor.email,
+      from: Rails.configuration.contact_email,
       subject: ::I18n.t('mailers.actor.added_as_editor.subject', title: @decorated_resource.title.truncate(30))
     )
   end

@@ -38,6 +38,7 @@ RSpec.describe ActorMailer, type: :mailer do
       it 'sends an email to the user' do
         expect(mail.subject).to match(/Edit Access for.*Some Collection/)
         expect(mail.to).to contain_exactly(actor.email)
+        expect(mail.from).to contain_exactly(Rails.configuration.contact_email)
         expect(mail.body.raw_source).to match(/Some Collection/)
       end
     end
@@ -50,6 +51,7 @@ RSpec.describe ActorMailer, type: :mailer do
       it 'sends an email to the user' do
         expect(mail.subject).to match(/Edit Access for.*Some Work/)
         expect(mail.to).to contain_exactly(actor.email)
+        expect(mail.from).to contain_exactly(Rails.configuration.contact_email)
         expect(mail.body.raw_source).to match(/Some Work/)
       end
     end
