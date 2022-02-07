@@ -41,7 +41,7 @@ class ThumbnailComponent < ApplicationComponent
     end
 
     def thumbnail_url
-      ThumbnailUrlService.new(resource).url
+      resource.thumbnail_url
     end
 
     def featured?

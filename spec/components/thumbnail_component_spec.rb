@@ -16,7 +16,7 @@ RSpec.describe ThumbnailComponent, type: :component do
 
     context 'when thumbnail_url is present' do
       it 'renders a thumbnail with image tag' do
-        allow_any_instance_of(ThumbnailUrlService).to receive(:url).and_return 'url.com/path/file'
+        allow(resource).to receive(:thumbnail_url).and_return 'url.com/path/file'
         expect(result.css('div').first.classes).to contain_exactly('col-xxl-6', 'ft-work__img', 'thumbnail-image')
         expect(result.css('img').attribute('src').value).to include('url.com/path/file')
       end
@@ -68,7 +68,7 @@ RSpec.describe ThumbnailComponent, type: :component do
     let(:component) { described_class.new(resource: resource) }
 
     it 'renders a thumbnail with image tag' do
-      allow_any_instance_of(ThumbnailUrlService).to receive(:url).and_return 'url.com/path/file'
+      allow(resource).to receive(:thumbnail_url).and_return 'url.com/path/file'
       expect(result.css('div').first.classes).to contain_exactly('thumbnail-image')
       expect(result.css('img').attribute('src').value).to include('url.com/path/file')
     end

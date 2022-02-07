@@ -62,6 +62,10 @@ class FileResource < ApplicationRecord
     @indexing_source ||= SolrIndexingJob.public_method(:perform_later)
   end
 
+  def thumbnail_url
+    file_attacher.url(:thumbnail)
+  end
+
   private
 
     def client

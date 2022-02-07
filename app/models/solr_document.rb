@@ -71,7 +71,7 @@ class SolrDocument
     self[:work_id_isi].to_i
   end
 
-  def model
-    self[:model_ssi]
+  def thumbnail_url
+    self[:thumbnail_url_ssi]
   end
 end

@@ -15,6 +15,11 @@ RSpec.describe Work, type: :model do
 
   it_behaves_like 'a resource that can provide all DOIs in', [:doi]
 
+  it_behaves_like 'a resource with a thumbnail url' do
+    let!(:work) { create :work, versions_count: 2 }
+    let(:resource) { work }
+  end
+
   describe 'table' do
     it { is_expected.to have_db_column(:work_type).of_type(:string) }
     it { is_expected.to have_db_column(:depositor_id) }
@@ -344,6 +349,7 @@ RSpec.describe Work, type: :model do
           uuid_ssi
           visibility_ssi
           work_type_ss
+          thumbnail_url_ssi
         )
       end
 
@@ -404,6 +410,7 @@ RSpec.describe Work, type: :model do
           visibility_ssi
           work_id_isi
           work_type_ss
+          thumbnail_url_ssi
         )
       end
 

@@ -13,6 +13,11 @@ RSpec.describe WorkVersion, type: :model do
 
   it_behaves_like 'a resource that can provide all DOIs in', [:doi, :identifier]
 
+  it_behaves_like 'a resource with a thumbnail url' do
+    let!(:work) { create :work }
+    let!(:resource) { create :work_version, :with_files, work: work }
+  end
+
   describe 'table' do
     it { is_expected.to have_db_column(:work_id) }
     it { is_expected.to have_db_index(:work_id) }
@@ -571,6 +576,33 @@ RSpec.describe WorkVersion, type: :model do
         let(:license) { { 'id' => 'bogus' } }
 
         it { is_expected.to be_nil }
+      end
+    end
+  end
+
+  describe '#thumbnail_url' do
+    let(:mock_attacher) { instance_double FileUploader::Attacher }
+    let!(:work) { create :work, versions_count: 2 }
+
+    context 'when thumbnail url exists' do
+      before do
+        allow(mock_attacher).to receive(:url).with(:thumbnail).and_return 'url.com/path/file'
+      end
+
+      it 'returns thumbnail url' do
+        allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
+        expect(work.thumbnail_url).to eq 'url.com/path/file'
+      end
+    end
+
+    context 'when thumbnail url does not exist' do
+      before do
+        allow(mock_attacher).to receive(:url).with(:thumbnail).and_return nil
+      end
+
+      it 'returns nil' do
+        allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
+        expect(work.thumbnail_url).to eq nil
       end
     end
   end

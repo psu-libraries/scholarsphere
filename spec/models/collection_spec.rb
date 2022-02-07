@@ -19,6 +19,14 @@ RSpec.describe Collection, type: :model do
 
   it_behaves_like 'a resource that can provide all DOIs in', [:doi, :identifier]
 
+  it_behaves_like 'a resource with a thumbnail url' do
+    let!(:resource) { create :collection }
+
+    before do
+      create :work, versions_count: 2, collections: [resource]
+    end
+  end
+
   describe 'table' do
     it { is_expected.to have_db_column(:depositor_id) }
     it { is_expected.to have_db_column(:metadata).of_type(:jsonb) }
@@ -237,6 +245,7 @@ RSpec.describe Collection, type: :model do
         uuid_ssi
         visibility_ssi
         work_type_ss
+        thumbnail_url_ssi
       )
     end
 

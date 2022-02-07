@@ -144,6 +144,10 @@ class Collection < ApplicationRecord
     'collection'
   end
 
+  def thumbnail_url
+    works.first&.thumbnail_url
+  end
+
   private
 
     def set_defaults

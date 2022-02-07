@@ -271,6 +271,10 @@ class WorkVersion < ApplicationRecord
     super
   end
 
+  def thumbnail_url
+    file_resources&.last&.thumbnail_url
+  end
+
   delegate :deposited_at,
            :depositor,
            :embargoed?,

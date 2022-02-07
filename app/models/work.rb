@@ -190,6 +190,10 @@ class Work < ApplicationRecord
     )
   end
 
+  def thumbnail_url
+    latest_published_version.file_resources&.last&.thumbnail_url
+  end
+
   private
 
     def document_builder
