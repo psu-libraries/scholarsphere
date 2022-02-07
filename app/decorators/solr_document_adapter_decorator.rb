@@ -10,8 +10,4 @@ class SolrDocumentAdapterDecorator < SimpleDelegator
   def itemtype
     'http://schema.org/Thing'
   end
-
-  def model
-    to_model.class.to_s
-  end
 end

@@ -12,10 +12,12 @@ RSpec.describe SolrDocumentBuilder do
       let(:resource) { build(:work_version) }
 
       it 'returns a hash' do
+        allow(resource).to receive(:thumbnail_url).and_return 'url.com/path/file'
         expect(document).to include(
           title_tesim: [resource.title],
           model_ssi: 'WorkVersion',
-          id: resource.uuid
+          id: resource.uuid,
+          thumbnail_url_ssi: 'url.com/path/file'
         )
       end
     end
