@@ -4,15 +4,15 @@ ARG UID=2000
 COPY bin/vaultshell /usr/local/bin/
 USER root
 RUN apt-get update && \
-   apt-get install --no-install-recommends -y shared-mime-info imagemagick ghostscript && \
+   apt-get install --no-install-recommends -y shared-mime-info imagemagick ghostscript libreoffice && \
    rm -rf /var/lib/apt/lists*
 
 COPY config/policy.xml /etc/ImageMagick-6/policy.xml
-
 RUN useradd -u $UID app -d /app
 RUN mkdir /app/tmp
 RUN chown -R app /app
 USER app
+
 
 COPY Gemfile Gemfile.lock /app/
 # in the event that bundler runs outside of docker, we get in sync with it's bundler version
@@ -35,6 +35,23 @@ ENTRYPOINT [ "/app/bin/entrypoint" ]
 
 CMD ["/app/bin/startup"]
 
+FROM base as dev
+
+USER root
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+    && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
+
+RUN apt-get update && apt-get install -y x11vnc \
+    xvfb \
+    fluxbox \
+    wget \
+    sqlite3 \
+    libsqlite3-dev \
+    libnss3 \
+    wmctrl \
+    google-chrome-stable
+
+USER app
 
 # Final Target
 FROM base as production
