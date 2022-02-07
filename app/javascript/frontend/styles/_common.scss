@@ -1391,3 +1391,17 @@ h4,
 form.edit-work-visibility .label {
   display: none;
 }
+
+.auto-generate-thumbnail {
+  padding-bottom: 20px;
+
+  .form-check-input {
+    min-height: 25px;
+    min-width: 25px;
+  }
+
+  .form-check-label {
+    margin-top: 6px;
+    margin-left: 20px;
+  }
+}

@@ -246,6 +246,9 @@ en:
       edit:
         heading: "Settings for %{title}"
         back: Back to Collection
+        auto_generate_thumbnail:
+          heading: Thumbnail
+          description: Auto-generate thumbnail from uploaded files.
         doi:
           heading: DOI
           explanation: A Digital Object Identifier (DOI) is a persistent identifier that can be used in print or on the web.
@@ -273,6 +276,9 @@ en:
       update:
         success: 'Your profile was saved successfully.'
     shared:
+      auto_generate_thumbnail_form:
+        explanation: Auto-generate thumbnail from uploaded files.
+        submit_button: Update Auto-generate Thumbnail
       editors_form:
         heading: Editors
         explanation: "Gives the ability for other users from Penn State to edit your %{type}. This can be done on a per-user basis, or a group basis."
@@ -297,6 +303,9 @@ en:
       edit:
         heading: "Settings for %{work_title}"
         back: Back to Work
+        auto_generate_thumbnail:
+          heading: Thumbnail
+          description: Auto-generate thumbnail from uploaded files.
         visibility:
           heading: Access
           explanation: Access settings affect who can download files associated with the work.

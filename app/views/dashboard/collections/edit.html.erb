@@ -51,6 +51,14 @@
       </div>
 
       <div class="keyline keyline--left">
+        <h2 id="<%= t('.auto_generate_thumbnail.heading').parameterize %>" class="h4"><%= t('.auto_generate_thumbnail.heading') %></h2>
+      </div>
+
+      <div class="actions mb-3">
+        <%= render 'dashboard/shared/auto_generate_thumbnail_form', auto_generate_thumbnail_form: @auto_generate_thumbnail_form, url: dashboard_collection_path(@collection) %>
+      </div>
+
+      <div class="keyline keyline--left">
         <h2 id="<%= t('dashboard.shared.editors_form.heading').parameterize %>" class="h4"><%= t('dashboard.shared.editors_form.heading') %></h2>
       </div>
 
