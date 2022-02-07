@@ -86,10 +86,10 @@ module Dashboard
 
       def auto_generate_thumbnail_params
         params
-            .fetch(:auto_generate_thumbnail_form, {})
-            .permit(
-                :auto_generate_thumbnail
-            )
+          .fetch(:auto_generate_thumbnail_form, {})
+          .permit(
+            :auto_generate_thumbnail
+          )
       end
   end
 end

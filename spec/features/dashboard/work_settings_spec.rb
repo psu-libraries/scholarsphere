@@ -88,6 +88,28 @@ RSpec.describe 'Work Settings Page', with_user: :user do
     end
   end
 
+  describe 'Updating Auto-generate thumbnail' do
+    before do
+      visit edit_dashboard_work_path(work)
+    end
+
+    it 'works from the Settings page' do
+      check(I18n.t!('dashboard.works.edit.auto_generate_thumbnail.description'), allow_label_click: true)
+      click_button 'Update Auto-generate Thumbnail'
+      expect(page).to have_checked_field(I18n.t!('dashboard.works.edit.auto_generate_thumbnail.description'))
+
+      work.reload
+      expect(work.auto_generate_thumbnail).to eq true
+
+      uncheck(I18n.t!('dashboard.works.edit.auto_generate_thumbnail.description'), allow_label_click: true)
+      click_button 'Update Auto-generate Thumbnail'
+      expect(page).to have_no_checked_field(I18n.t!('dashboard.works.edit.auto_generate_thumbnail.description'))
+
+      work.reload
+      expect(work.auto_generate_thumbnail).to eq false
+    end
+  end
+
   describe 'Updating Editors', :vcr do
     context 'when adding a new editor' do
       let(:work) { create :work, depositor: user.actor }

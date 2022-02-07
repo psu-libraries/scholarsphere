@@ -277,7 +277,7 @@ en:
         success: 'Your profile was saved successfully.'
     shared:
       auto_generate_thumbnail_form:
-        explanation: Auto-generate thumbnail from uploaded files.
+        explanation: "Auto-generate thumbnail from uploaded files."
         submit_button: Update Auto-generate Thumbnail
       editors_form:
         heading: Editors

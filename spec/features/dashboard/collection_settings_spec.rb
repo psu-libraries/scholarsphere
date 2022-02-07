@@ -26,6 +26,28 @@ RSpec.describe 'Collection Settings Page', with_user: :user do
     end
   end
 
+  describe 'Updating Auto-generate thumbnail' do
+    before do
+      visit edit_dashboard_collection_path(collection)
+    end
+
+    it 'works from the Settings page' do
+      check(I18n.t!('dashboard.works.edit.auto_generate_thumbnail.description'), allow_label_click: true)
+      click_button 'Update Auto-generate Thumbnail'
+      expect(page).to have_checked_field(I18n.t!('dashboard.works.edit.auto_generate_thumbnail.description'))
+
+      collection.reload
+      expect(collection.auto_generate_thumbnail).to eq true
+
+      uncheck(I18n.t!('dashboard.works.edit.auto_generate_thumbnail.description'), allow_label_click: true)
+      click_button 'Update Auto-generate Thumbnail'
+      expect(page).to have_no_checked_field(I18n.t!('dashboard.works.edit.auto_generate_thumbnail.description'))
+
+      collection.reload
+      expect(collection.auto_generate_thumbnail).to eq false
+    end
+  end
+
   describe 'Updating Editors', :vcr do
     context 'when adding a new editor' do
       it 'adds a user as an editor' do
