@@ -23,6 +23,7 @@ RSpec.describe Work, type: :model do
     it { is_expected.to have_db_column(:embargoed_until).of_type(:datetime) }
     it { is_expected.to have_db_column(:deposit_agreed_at).of_type(:datetime) }
     it { is_expected.to have_db_column(:deposit_agreement_version) }
+    it { is_expected.to have_db_column(:notify_editors).of_type(:boolean) }
 
     it { is_expected.to have_db_index(:depositor_id) }
     it { is_expected.to have_db_index(:proxy_id) }
@@ -344,6 +345,7 @@ RSpec.describe Work, type: :model do
           uuid_ssi
           visibility_ssi
           work_type_ss
+          notify_editors_tesim
         )
       end
 
@@ -404,6 +406,7 @@ RSpec.describe Work, type: :model do
           visibility_ssi
           work_id_isi
           work_type_ss
+          notify_editors_tesim
         )
       end
 

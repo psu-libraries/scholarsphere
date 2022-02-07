@@ -25,6 +25,13 @@
              include_blank: true,
              multiple: true %>
 
+  <div class="form-group mb-3">
+    <div class="form-check">
+      <%= form.check_box :notify_editors, class: 'form-check-input' %>
+      <%= form.label :notify_editors, t('.notify_editors'), class: 'form-check-label' %>
+    </div>
+  </div>
+
   <div class="actions mt-1 mb-3">
     <%= form.submit t('.submit_button'), class: 'btn btn-primary' %>
   </div>

@@ -283,6 +283,7 @@ en:
         explanation: "Gives the ability for other users from Penn State to edit your %{type}. This can be done on a per-user basis, or a group basis."
         submit_button: Update Editors
         depositor: "%{depositor_name} (%{depositor_id}) deposited this %{type} and will always have edit access."
+        notify_editors: Send notification email
       depositor_form:
         heading: Depositor
         explanation: "Changes the depositor of the work. Currently, only existing Penn State users are allowed."

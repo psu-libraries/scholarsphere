@@ -68,8 +68,9 @@ RSpec.describe EditorsForm, type: :model do
 
   describe '#save' do
     context 'when the user exists' do
-      let(:params) { { 'edit_users' => [user.access_id] } }
+      let(:params) { { 'edit_users' => [user.access_id], 'notify_editors' => notify_editors } }
       let(:user) { create(:user) }
+      let(:notify_editors) { false }
 
       before { allow(UserRegistrationService).to receive(:call).with(uid: user.access_id).and_return(user) }
 
@@ -94,14 +95,26 @@ RSpec.describe EditorsForm, type: :model do
             allow(ActorMailer).to receive(:with).and_return(mailer_spy)
           end
 
-          it 'sends an email to any new users' do
-            form.save
+          context 'when the send notification email is checked' do
+            let(:notify_editors) { true }
 
-            expect(ActorMailer).to have_received(:with).with(actor: user.actor, resource: resource)
-            expect(ActorMailer).not_to have_received(:with).with(actor: existing_user.actor, resource: resource)
+            it 'sends an email to any new users' do
+              form.save
 
-            expect(mailer_spy).to have_received(:added_as_editor)
-            expect(mailer_spy).to have_received(:deliver_later)
+              expect(ActorMailer).to have_received(:with).with(actor: user.actor, resource: resource)
+              expect(ActorMailer).not_to have_received(:with).with(actor: existing_user.actor, resource: resource)
+
+              expect(mailer_spy).to have_received(:added_as_editor)
+              expect(mailer_spy).to have_received(:deliver_later)
+            end
+          end
+
+          context 'when the send notification email is not checked' do
+            it 'sends an email to any new users' do
+              form.save
+
+              expect(ActorMailer).not_to have_received(:with)
+            end
           end
         end
       end

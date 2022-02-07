@@ -4,6 +4,7 @@ class EditorsForm
   include ActiveModel::Model
 
   attr_reader :resource, :user
+  attr_writer :notify_editors
 
   def initialize(resource:, params:, user:)
     @resource = resource
@@ -17,6 +18,10 @@ class EditorsForm
 
   def edit_users=(access_ids)
     @edit_users = access_ids.reject(&:blank?)
+  end
+
+  def notify_editors
+    @notify_editors || resource.notify_editors
   end
 
   def edit_groups
@@ -39,9 +44,10 @@ class EditorsForm
 
     resource.edit_users = user_list
     resource.edit_groups = group_list
+    resource.notify_editors = notify_editors
     resource.save!
 
-    send_emails(new_users: new_users)
+    send_emails(new_users: new_users) if notify_editors
 
     true
   rescue ActiveRecord::RecordInvalid
