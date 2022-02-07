@@ -42,7 +42,8 @@ module Dashboard
         @editors_form = EditorsForm.new(resource: @undecorated_work, user: current_user, params: editors_params)
         @depositor_form = DepositorForm.new(resource: @undecorated_work, params: depositor_params)
         @withdraw_versions_form = WithdrawVersionsForm.new(work: @undecorated_work, params: withdraw_versions_params)
-        @auto_generate_thumbnail_form = AutoGenerateThumbnailForm.new(resource: @undecorated_work, params: auto_generate_thumbnail_params)
+        @auto_generate_thumbnail_form = AutoGenerateThumbnailForm.new(resource: @undecorated_work,
+                                                                      params: auto_generate_thumbnail_params)
       end
 
       def select_form_model

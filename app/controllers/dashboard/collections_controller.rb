@@ -43,7 +43,8 @@ module Dashboard
         @collection.attributes = collection_params
         @editors_form = EditorsForm.new(resource: @collection, user: current_user, params: editors_params)
         @depositor_form = DepositorForm.new(resource: @collection, params: depositor_params)
-        @auto_generate_thumbnail_form = AutoGenerateThumbnailForm.new(resource: @collection, params: auto_generate_thumbnail_params)
+        @auto_generate_thumbnail_form = AutoGenerateThumbnailForm.new(resource: @collection,
+                                                                      params: auto_generate_thumbnail_params)
       end
 
       def select_form_model

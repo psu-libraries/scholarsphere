@@ -3,7 +3,7 @@
 RSpec.shared_examples 'a resource with a thumbnail url' do
   let(:mock_attacher) { instance_double FileUploader::Attacher }
 
-  context 'when resource #auto_generate_thumbnail? is false' do
+  context 'when resource #auto_generate_thumbnail? is true' do
     before do
       allow(resource).to receive(:auto_generate_thumbnail?).and_return true
     end
