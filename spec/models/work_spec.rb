@@ -532,7 +532,7 @@ RSpec.describe Work, type: :model do
       end
     end
 
-    context 'when a thumbnail url is found' do
+    context 'when a thumbnail url is not found' do
       before do
         allow(mock_attacher).to receive(:url).with(:thumbnail).and_return nil
       end

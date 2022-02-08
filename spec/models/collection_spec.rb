@@ -358,6 +358,7 @@ RSpec.describe Collection, type: :model do
   describe '#thumbnail_present?' do
     let(:mock_attacher) { instance_double FileUploader::Attacher }
     let!(:collection) { create :collection }
+
     before do
       create :work, versions_count: 2, collections: [collection]
     end
@@ -373,7 +374,7 @@ RSpec.describe Collection, type: :model do
       end
     end
 
-    context 'when a thumbnail url is found' do
+    context 'when a thumbnail url is not found' do
       before do
         allow(mock_attacher).to receive(:url).with(:thumbnail).and_return nil
       end
