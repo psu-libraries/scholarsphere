@@ -64,7 +64,7 @@ describe MergeCollection do
         work2.save(validate: false)
       end
 
-      it 'adds any ActiveRecord valication errors on the new work to the errors array' do
+      it 'adds any ActiveRecord validation errors on the new work to the errors array' do
         expect(merge_result.errors).to include(a_string_matching(/work type can't be blank/i))
       end
     end

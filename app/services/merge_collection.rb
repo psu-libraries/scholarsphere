@@ -67,33 +67,8 @@ class MergeCollection
   end
 
   def validate
-    collection_works = collection.works
-    canonical_metadata = work_metadata(canonical_work)
-
-    collection_works.each do |w|
-      w_metadata = work_metadata(w)
-      work_metadata_diff = MetadataDiff.call(
-        OpenStruct.new(metadata: canonical_metadata),
-        OpenStruct.new(metadata: w_metadata)
-      )
-
-      if w_metadata[:num_work_versions] != 1
-        errors << "Work-#{w.id} has #{w_metadata[:num_work_versions]} work versions, but must only have 1"
-      end
-
-      if w_metadata[:num_files] != 1
-        errors << "Work-#{w.id} has #{w_metadata[:num_files]} files, but must only have 1"
-      end
-
-      if work_metadata_diff.any?
-        diff = work_metadata_diff.inspect
-        errors << "Work-#{canonical_work.id} has different work metadata than Work-#{w.id}\n#{diff}"
-      end
-
-      if !w.representative_version.published?
-        errors << "Work-#{canonical_work.id} is not published"
-      end
-
+    collection.works.each do |w|
+      validate_work_metadata(w)
       validate_access_controls(w)
       validate_work_version_metadata(w)
       validate_creators(w)
@@ -108,6 +83,10 @@ class MergeCollection
 
     def canonical_work
       @canonical_work ||= collection.works.first
+    end
+
+    def canonical_work_metadata
+      @canonical_work_metadata ||= work_metadata(canonical_work)
     end
 
     def canonical_work_version
@@ -139,6 +118,32 @@ class MergeCollection
         diff = "#{canonical_creators}\n#{w_creators}"
 
         errors << "Work-#{canonical_work.id} has different creators than Work-#{work.id}\n#{diff}"
+      end
+    end
+
+    def validate_work_metadata(work)
+      w_metadata = work_metadata(work)
+
+      work_metadata_diff = MetadataDiff.call(
+        OpenStruct.new(metadata: canonical_work_metadata),
+        OpenStruct.new(metadata: w_metadata)
+      )
+
+      if w_metadata[:num_work_versions] != 1
+        errors << "Work-#{work.id} has #{w_metadata[:num_work_versions]} work versions, but must only have 1"
+      end
+
+      if w_metadata[:num_files] != 1
+        errors << "Work-#{work.id} has #{w_metadata[:num_files]} files, but must only have 1"
+      end
+
+      if work_metadata_diff.any?
+        diff = work_metadata_diff.inspect
+        errors << "Work-#{canonical_work.id} has different work metadata than Work-#{work.id}\n#{diff}"
+      end
+
+      if !work.representative_version.published?
+        errors << "Work-#{canonical_work.id} is not published"
       end
     end
 
@@ -178,7 +183,8 @@ class MergeCollection
         doi: canonical_work.doi,
         depositor: canonical_work.depositor,
         proxy_depositor: canonical_work.proxy_depositor,
-        deposited_at: deposited_at
+        deposited_at: deposited_at,
+        notify_editors: canonical_work.notify_editors
       )
 
       work.access_controls = canonical_work.access_controls.map(&:dup)
@@ -201,6 +207,7 @@ class MergeCollection
         doi: work.doi,
         depositor_id: work.depositor&.id,
         proxy_depositor_id: work.proxy_depositor&.id,
+        notify_editors: work.notify_editors,
         num_work_versions: work.versions.count,
         num_files: work.representative_version&.file_resources&.count
       }
