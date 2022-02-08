@@ -541,6 +541,7 @@ en:
       not_found: 'Page Not Found'
       server_error: 'Server Error'
       graphql: 'GraphQL'
+      reports: 'Reports'
   resources:
     analytics: Analytics
     collections: Collections

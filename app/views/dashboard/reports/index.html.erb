@@ -1,0 +1,11 @@
+<% content_for :navbar_heading do %>
+  <h1 class="navbar-brand navbar-brand--center slab-font"><%= t('navbar.heading.reports') %></h1>
+<% end %>
+
+<div class="container">
+  <div class="row row--md-mb-3">
+    <div class="col-md">
+      <%= link_to 'All Works Report', dashboard_reports_all_works_path %>
+    </div>
+  </div>
+</div>
