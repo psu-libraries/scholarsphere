@@ -110,7 +110,7 @@ RSpec.describe EditorsForm, type: :model do
           end
 
           context 'when the send notification email is not checked' do
-            it 'sends an email to any new users' do
+            it 'does not send an email to any new users' do
               form.save
 
               expect(ActorMailer).not_to have_received(:with)
