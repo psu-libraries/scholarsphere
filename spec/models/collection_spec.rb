@@ -354,4 +354,34 @@ RSpec.describe Collection, type: :model do
 
     it_behaves_like 'a resource with orderable creators'
   end
+
+  describe '#thumbnail_present?' do
+    let(:mock_attacher) { instance_double FileUploader::Attacher }
+    let!(:collection) { create :collection }
+    before do
+      create :work, versions_count: 2, collections: [collection]
+    end
+
+    context 'when a thumbnail url is found' do
+      before do
+        allow(mock_attacher).to receive(:url).with(:thumbnail).and_return 'url.com/path/file'
+      end
+
+      it 'returns true' do
+        allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
+        expect(collection.thumbnail_present?).to eq true
+      end
+    end
+
+    context 'when a thumbnail url is found' do
+      before do
+        allow(mock_attacher).to receive(:url).with(:thumbnail).and_return nil
+      end
+
+      it 'returns false' do
+        allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
+        expect(collection.thumbnail_present?).to eq false
+      end
+    end
+  end
 end

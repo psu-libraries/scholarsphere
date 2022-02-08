@@ -27,24 +27,37 @@ RSpec.describe 'Collection Settings Page', with_user: :user do
   end
 
   describe 'Updating Auto-generate thumbnail' do
-    before do
-      visit edit_dashboard_collection_path(collection)
+    context 'when no thumbnail exists for the collection' do
+      before do
+        visit edit_dashboard_collection_path(collection)
+      end
+
+      it 'does not display thumbnail section' do
+        expect(page).not_to have_content 'Thumbnail'
+      end
     end
 
-    it 'works from the Settings page' do
-      check(I18n.t!('dashboard.works.edit.auto_generate_thumbnail.description'), allow_label_click: true)
-      click_button 'Update Auto-generate Thumbnail'
-      expect(page).to have_checked_field(I18n.t!('dashboard.works.edit.auto_generate_thumbnail.description'))
+    context 'when thumbnail exists for the collection' do
+      before do
+        allow_any_instance_of(Collection).to receive(:thumbnail_present?).and_return true
+        visit edit_dashboard_collection_path(collection)
+      end
 
-      collection.reload
-      expect(collection.auto_generate_thumbnail).to eq true
+      it 'works from the Settings page' do
+        check(I18n.t!('dashboard.works.edit.auto_generate_thumbnail.description'), allow_label_click: true)
+        click_button 'Update Auto-generate Thumbnail'
+        expect(page).to have_checked_field(I18n.t!('dashboard.works.edit.auto_generate_thumbnail.description'))
 
-      uncheck(I18n.t!('dashboard.works.edit.auto_generate_thumbnail.description'), allow_label_click: true)
-      click_button 'Update Auto-generate Thumbnail'
-      expect(page).to have_no_checked_field(I18n.t!('dashboard.works.edit.auto_generate_thumbnail.description'))
+        collection.reload
+        expect(collection.auto_generate_thumbnail).to eq true
 
-      collection.reload
-      expect(collection.auto_generate_thumbnail).to eq false
+        uncheck(I18n.t!('dashboard.works.edit.auto_generate_thumbnail.description'), allow_label_click: true)
+        click_button 'Update Auto-generate Thumbnail'
+        expect(page).to have_no_checked_field(I18n.t!('dashboard.works.edit.auto_generate_thumbnail.description'))
+
+        collection.reload
+        expect(collection.auto_generate_thumbnail).to eq false
+      end
     end
   end
 

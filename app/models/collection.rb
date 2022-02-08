@@ -145,10 +145,18 @@ class Collection < ApplicationRecord
   end
 
   def thumbnail_url
-    auto_generate_thumbnail? ? works.first&.latest_published_version&.file_resources&.last&.thumbnail_url : nil
+    auto_generate_thumbnail? ? thumbnail : nil
+  end
+
+  def thumbnail_present?
+    thumbnail.present?
   end
 
   private
+
+    def thumbnail
+      works.first&.latest_published_version&.file_resources&.last&.thumbnail_url
+    end
 
     def set_defaults
       self.visibility = Permissions::Visibility::OPEN unless access_controls.any?

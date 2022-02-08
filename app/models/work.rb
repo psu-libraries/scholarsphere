@@ -191,10 +191,18 @@ class Work < ApplicationRecord
   end
 
   def thumbnail_url
-    auto_generate_thumbnail? ? latest_published_version.file_resources&.last&.thumbnail_url : nil
+    auto_generate_thumbnail? ? thumbnail : nil
+  end
+
+  def thumbnail_present?
+    thumbnail.present?
   end
 
   private
+
+    def thumbnail
+      latest_published_version.file_resources&.last&.thumbnail_url
+    end
 
     def document_builder
       SolrDocumentBuilder.new(

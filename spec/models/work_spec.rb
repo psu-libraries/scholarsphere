@@ -516,4 +516,31 @@ RSpec.describe Work, type: :model do
       expect(AggregateViewStatistics).to have_received(:call).with(models: work.versions.published)
     end
   end
+
+  describe '#thumbnail_present?' do
+    let(:mock_attacher) { instance_double FileUploader::Attacher }
+    let!(:work) { create :work, versions_count: 2 }
+
+    context 'when a thumbnail url is found' do
+      before do
+        allow(mock_attacher).to receive(:url).with(:thumbnail).and_return 'url.com/path/file'
+      end
+
+      it 'returns true' do
+        allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
+        expect(work.thumbnail_present?).to eq true
+      end
+    end
+
+    context 'when a thumbnail url is found' do
+      before do
+        allow(mock_attacher).to receive(:url).with(:thumbnail).and_return nil
+      end
+
+      it 'returns false' do
+        allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
+        expect(work.thumbnail_present?).to eq false
+      end
+    end
+  end
 end
