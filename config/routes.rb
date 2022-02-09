@@ -86,6 +86,7 @@ Rails.application.routes.draw do
 
     get 'reports', to: 'reports#index'
     get 'reports/all_works', to: 'reports#all_works'
+    get 'reports/all_work_versions', to: 'reports#all_work_versions'
 
     resources :works, only: %i[edit update] do
       resources :work_versions, except: [:new], shallow: true do

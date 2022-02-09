@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 class AllWorksReport
+  def name
+    'all_works'
+  end
+
   def headers
     %w[
       id
