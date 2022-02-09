@@ -47,7 +47,7 @@ RSpec.describe 'Collection Settings Page', with_user: :user do
       it 'works from the Settings page' do
         check(I18n.t!('dashboard.collections.edit.auto_generate_thumbnail.description'), allow_label_click: true)
         expect(page).to have_content(I18n.t!('helpers.hint.auto_generate_thumbnail_form.auto_generate_thumbnail'))
-        expect(page).to have_xpath("//img[@src=\"url.com/path/file\"]")
+        expect(page).to have_xpath('//img[@src="url.com/path/file"]')
         click_button I18n.t!('dashboard.shared.auto_generate_thumbnail_form.submit_button')
         expect(page).to have_checked_field(I18n.t!('dashboard.collections.edit.auto_generate_thumbnail.description'))
 
