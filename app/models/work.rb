@@ -191,17 +191,18 @@ class Work < ApplicationRecord
   end
 
   def thumbnail_url
-    auto_generate_thumbnail? ? thumbnail : nil
+    auto_generate_thumbnail? ? thumbnail_urls.last : nil
   end
 
   def thumbnail_present?
-    thumbnail.present?
+    thumbnail_urls.present?
   end
 
   private
 
-    def thumbnail
-      latest_published_version.file_resources&.last&.thumbnail_url
+    def thumbnail_urls
+      recent_file_resources = latest_published_version.file_resources
+      recent_file_resources.present? ? recent_file_resources.collect(&:thumbnail_url).compact : nil
     end
 
     def document_builder

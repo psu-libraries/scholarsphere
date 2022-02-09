@@ -11,9 +11,9 @@
 
     <%= form.label :auto_generate_thumbnail, t('.explanation'), class: 'form-check-label' %>
   </div>
-  <div class="p-2">
+  <div class="p-1">
     <%= render FieldHintComponent.new(form: form, attribute: :auto_generate_thumbnail) %>
-    <div class="thumbnail-image">
+    <div class="thumbnail-image p-1">
       <img src="<%= auto_generate_thumbnail_form.resource.thumbnail_url %>">
     </div>
   </div>

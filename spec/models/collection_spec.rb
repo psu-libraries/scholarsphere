@@ -385,4 +385,27 @@ RSpec.describe Collection, type: :model do
       end
     end
   end
+
+  describe '#thumbnail_urls' do
+    let(:mock_attacher) { instance_double FileUploader::Attacher }
+    let!(:collection) { create :collection }
+
+    before do
+      create :work, versions_count: 2, collections: [collection]
+      create :work, versions_count: 3, collections: [collection]
+    end
+
+    context 'when collection has many works with thumbnail urls' do
+      before do
+        allow(mock_attacher).to receive(:url).with(:thumbnail).and_return 'url.com/path/file'
+      end
+
+      it "returns an array containing each work's latest_published_version's thumbnail urls" do
+        allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
+        expect(collection.send(:thumbnail_urls).count).to eq 2
+        expect(collection.send(:thumbnail_urls).class).to eq Array
+        expect(collection.send(:thumbnail_urls).last).to eq 'url.com/path/file'
+      end
+    end
+  end
 end

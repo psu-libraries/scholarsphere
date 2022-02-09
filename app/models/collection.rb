@@ -145,17 +145,18 @@ class Collection < ApplicationRecord
   end
 
   def thumbnail_url
-    auto_generate_thumbnail? ? thumbnail : nil
+    auto_generate_thumbnail? ? thumbnail_urls.last : nil
   end
 
   def thumbnail_present?
-    thumbnail.present?
+    thumbnail_urls.present?
   end
 
   private
 
-    def thumbnail
-      works.first&.latest_published_version&.file_resources&.last&.thumbnail_url
+    def thumbnail_urls
+      works.collect { |work| work&.latest_published_version&.file_resources }
+          &.flatten&.collect { |fr| fr&.thumbnail_url }.compact
     end
 
     def set_defaults
