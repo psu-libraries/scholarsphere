@@ -11,6 +11,10 @@
 
     <%= form.label :auto_generate_thumbnail, t('.explanation'), class: 'form-check-label' %>
   </div>
+  <div>
+    <%= render FieldHintComponent.new(form: form, attribute: :auto_generate_thumbnail) %>
+    <img src=<%= auto_generate_thumbnail_form.resource.thumbnail_url %>>
+  </div>
   <%= hidden_field_tag 'form_id', auto_generate_thumbnail_form_id %>
   <%= render FormErrorMessageComponent.new(form: form) %>
 

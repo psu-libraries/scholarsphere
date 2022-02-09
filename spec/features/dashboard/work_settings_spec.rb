@@ -102,19 +102,22 @@ RSpec.describe 'Work Settings Page', with_user: :user do
     context 'when thumbnail exists for the work' do
       before do
         allow_any_instance_of(Work).to receive(:thumbnail_present?).and_return true
+        allow_any_instance_of(Work).to receive(:thumbnail_url).and_return 'url.com/path/file'
         visit edit_dashboard_work_path(work)
       end
 
       it 'works from the Settings page' do
         check(I18n.t!('dashboard.works.edit.auto_generate_thumbnail.description'), allow_label_click: true)
-        click_button 'Update Auto-generate Thumbnail'
+        expect(page).to have_content(I18n.t!('helpers.hint.auto_generate_thumbnail_form.auto_generate_thumbnail'))
+        expect(page).to have_xpath"//img[@src='url.com/path/file']"
+        click_button I18n.t!('dashboard.shared.auto_generate_thumbnail_form.submit_button')
         expect(page).to have_checked_field(I18n.t!('dashboard.works.edit.auto_generate_thumbnail.description'))
 
         work.reload
         expect(work.auto_generate_thumbnail).to eq true
 
         uncheck(I18n.t!('dashboard.works.edit.auto_generate_thumbnail.description'), allow_label_click: true)
-        click_button 'Update Auto-generate Thumbnail'
+        click_button I18n.t!('dashboard.shared.auto_generate_thumbnail_form.submit_button')
         expect(page).to have_no_checked_field(I18n.t!('dashboard.works.edit.auto_generate_thumbnail.description'))
 
         work.reload
