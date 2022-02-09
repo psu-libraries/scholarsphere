@@ -272,7 +272,7 @@ class WorkVersion < ApplicationRecord
   end
 
   def thumbnail_url
-    auto_generate_thumbnail? ? file_resources&.collect { |fr| fr&.thumbnail_url }&.last : nil
+    auto_generate_thumbnail? ? file_resources&.map { |fr| fr&.thumbnail_url }&.last : nil
   end
 
   delegate :deposited_at,

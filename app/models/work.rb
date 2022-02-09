@@ -202,7 +202,7 @@ class Work < ApplicationRecord
 
     def thumbnail_urls
       recent_file_resources = latest_published_version.file_resources
-      recent_file_resources.present? ? recent_file_resources.collect(&:thumbnail_url).compact : nil
+      recent_file_resources.present? ? recent_file_resources.map(&:thumbnail_url).compact : nil
     end
 
     def document_builder

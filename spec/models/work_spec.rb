@@ -555,7 +555,7 @@ RSpec.describe Work, type: :model do
         allow(mock_attacher).to receive(:url).with(:thumbnail).and_return 'url.com/path/file'
       end
 
-      it "returns an array containing each of the thumbnail urls from the file_resources" do
+      it 'returns an array containing each of the thumbnail urls from the file_resources' do
         allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
         expect(work.send(:thumbnail_urls).count).to eq 2
         expect(work.send(:thumbnail_urls).class).to eq Array

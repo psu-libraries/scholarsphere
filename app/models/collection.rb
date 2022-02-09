@@ -155,8 +155,8 @@ class Collection < ApplicationRecord
   private
 
     def thumbnail_urls
-      works.collect { |work| work&.latest_published_version&.file_resources }
-          &.flatten&.collect { |fr| fr&.thumbnail_url }.compact
+      works.map { |work| work&.latest_published_version&.file_resources }
+          &.flatten&.map { |fr| fr&.thumbnail_url }&.compact
     end
 
     def set_defaults
