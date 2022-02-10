@@ -22,4 +22,16 @@ RSpec.describe CollectionWorkMembership, type: :model do
     it { is_expected.to belong_to(:collection) }
     it { is_expected.to belong_to(:work) }
   end
+
+  describe 'validations' do
+    let(:work) { create :work }
+    let(:collection) { create :collection }
+
+    it 'validates that a collection cannot contain the same work twice' do
+      create :collection_work_membership, collection: collection, work: work
+
+      second_one = build :collection_work_membership, collection: collection, work: work
+      expect(second_one).not_to be_valid
+    end
+  end
 end

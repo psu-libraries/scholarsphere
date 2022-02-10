@@ -60,6 +60,8 @@ class Collection < ApplicationRecord
             edtf_date: true,
             allow_blank: true
 
+  validate :works_are_unique
+
   accepts_nested_attributes_for :creators,
                                 reject_if: :all_blank,
                                 allow_destroy: true
@@ -186,5 +188,18 @@ class Collection < ApplicationRecord
         DoiSchema,
         TitleSchema
       )
+    end
+
+    def works_are_unique
+      # Due to Rails weirdness before a Collection is saved to the db,
+      # and because we have `has_many :works, through: :collection_work_memberships`
+      # we therefore need to check both the `work` and `collection_work_memberships`
+      # associations for duplicated work ids
+      work_ids = works.map(&:id)
+      collection_work_mem_ids = collection_work_memberships.map(&:work_id)
+
+      errors.add(:base, :duplicate_works) if
+        work_ids != work_ids.uniq ||
+          collection_work_mem_ids != collection_work_mem_ids.uniq
     end
 end

@@ -30,7 +30,8 @@ module Dashboard
           @resource.publish
         end
 
-        process_response(on_error: :edit)
+        validation_context = current_user.admin? ? nil : :user_publish
+        process_response(on_error: :edit, validation_context: validation_context)
       end
 
       private

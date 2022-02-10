@@ -51,20 +51,24 @@
         <h2 id="<%= t('.visibility.heading').parameterize %>" class="h4"><%= t('.visibility.heading') %></h2>
       </div>
 
-      <p><%= t('.visibility.explanation') %></p>
+      <% if policy(@work).edit_visibility? %>
+        <p><%= t('.visibility.explanation') %></p>
 
-      <%- visibility_form_id = "edit_visibility_#{dom_id @work}" %>
-      <%= form_for [:dashboard, @work], remote: false, html: { id: visibility_form_id, class: 'edit-work-visibility' } do |visibility_form| %>
-        <%= hidden_field_tag 'form_id', visibility_form_id %>
-        <% if params['form_id'] == visibility_form_id %>
-          <%= render FormErrorMessageComponent.new(form: visibility_form) %>
+        <%- visibility_form_id = "edit_visibility_#{dom_id @work}" %>
+        <%= form_for [:dashboard, @work], remote: false, html: { id: visibility_form_id, class: 'edit-work-visibility' } do |visibility_form| %>
+          <%= hidden_field_tag 'form_id', visibility_form_id %>
+          <% if params['form_id'] == visibility_form_id %>
+            <%= render FormErrorMessageComponent.new(form: visibility_form) %>
+          <% end %>
+
+          <%= render 'dashboard/form/publish/visibility_field', form: visibility_form %>
+
+          <div class="actions mt-5 mb-3">
+            <%= visibility_form.submit t('.visibility.submit_button'), class: 'btn btn-primary' %>
+          </div>
         <% end %>
-
-        <%= render 'dashboard/form/publish/visibility_field', form: visibility_form %>
-
-        <div class="actions mt-5 mb-3">
-          <%= visibility_form.submit t('.visibility.submit_button'), class: 'btn btn-primary' %>
-        </div>
+      <% else %>
+        <p><%= t('.visibility.not_allowed_html') %></p>
       <% end %>
 
       <div class="keyline keyline--left">

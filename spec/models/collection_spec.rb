@@ -32,6 +32,7 @@ RSpec.describe Collection, type: :model do
     it { is_expected.to have_db_column(:metadata).of_type(:jsonb) }
     it { is_expected.to have_db_column(:doi).of_type(:string) }
     it { is_expected.to have_db_column(:auto_generate_thumbnail).of_type(:boolean).with_options(default: false) }
+    it { is_expected.to have_db_column(:notify_editors).of_type(:boolean) }
     it { is_expected.to have_jsonb_accessor(:title).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:subtitle).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:keyword).of_type(:string).is_array.with_default([]) }
@@ -102,6 +103,16 @@ RSpec.describe Collection, type: :model do
       expect(collection).to allow_value('').for(:published_date)
       expect(collection).to allow_value('1999-uu-uu').for(:published_date)
       expect(collection).not_to allow_value('not an EDTF formatted date').for(:published_date)
+    end
+
+    it 'validates that a work cannot be added twice' do
+      work = create :work
+
+      collection.works = [work, work]
+      expect(collection).not_to be_valid
+      expect(collection.errors[:base]).to include(
+        I18n.t!('activerecord.errors.models.collection.attributes.base.duplicate_works')
+      )
     end
   end
 
@@ -248,6 +259,7 @@ RSpec.describe Collection, type: :model do
         work_type_ss
         thumbnail_url_ssi
         auto_generate_thumbnail_tesim
+        notify_editors_tesim
       )
     end
 

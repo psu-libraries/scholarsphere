@@ -81,9 +81,13 @@ en:
         deposited_at: Deposited
       user:
         admin_enabled: Administrative privileges enabled
-        opt_out_stats_email: Opt out of monthly reports on downloads and views
+        opt_in_stats_email: Receive monthly report on downloads and views
     errors:
       models:
+        collection:
+          attributes:
+            base:
+              duplicate_works: cannot contain the same work twice
         file_version_membership:
           attributes:
             title:
@@ -96,6 +100,7 @@ en:
               blank: is required to publish the work
             rights:
               blank: is required to publish the work
+              incompatible_license_for_authorized_visibility: The access and license settings conflict with each other. Please set access to "Public" (preferred), or set the license to "In Copyright (Rights Reserved)."
   activemodel:
     attributes:
       depositor_form:
@@ -204,7 +209,7 @@ en:
         version_name: For datasets or software using semantic versioning (e.g., x.y.z)
         rights: The license you select determines how your work can be used by others. [Read More](https://docs.scholarsphere.psu.edu/guides/licenses/)
       actor:
-        orcid: "This is a 16-digit identifier in the format ####-####-####-####"
+        orcid: "[Click here to link your ORCiD](https://guides.libraries.psu.edu/orcid)"
         display_name: >
           When you create new works, this will be used as the initial value for the Creator field. For example, if your
           first and last name are Pat Researcher, you might wish to set this to "Dr. Pat Q. Researcher PhD."
@@ -285,6 +290,7 @@ en:
         explanation: "Gives the ability for other users from Penn State to edit your %{type}. This can be done on a per-user basis, or a group basis."
         submit_button: Update Editors
         depositor: "%{depositor_name} (%{depositor_id}) deposited this %{type} and will always have edit access."
+        notify_editors: Send notification email
       depositor_form:
         heading: Depositor
         explanation: "Changes the depositor of the work. Currently, only existing Penn State users are allowed."
@@ -310,6 +316,7 @@ en:
           heading: Access
           explanation: Access settings affect who can download files associated with the work.
           submit_button: Update Access Settings
+          not_allowed_html: This work is <b>Public</b>. Access can be changed to <b>Penn State Only</b> by request.
         embargo:
           heading: Embargo
           explanation: >
@@ -522,6 +529,8 @@ en:
       monthly_stats:
         subject: "ScholarSphere - Reporting Monthly Downloads and Views"
         heading: "Latest Report for the Month of %{date}"
+      added_as_editor:
+        subject: Edit Access for %{title}
   modal:
     close:
       icon: "\u00D7"

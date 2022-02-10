@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_07_171558) do
+ActiveRecord::Schema.define(version: 2022_02_07_221742) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -94,6 +94,7 @@ ActiveRecord::Schema.define(version: 2022_02_07_171558) do
     t.integer "position"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["collection_id", "work_id"], name: "index_collection_work_memberships_on_collection_id_and_work_id", unique: true
     t.index ["collection_id"], name: "index_collection_work_memberships_on_collection_id"
     t.index ["work_id"], name: "index_collection_work_memberships_on_work_id"
   end
@@ -107,6 +108,7 @@ ActiveRecord::Schema.define(version: 2022_02_07_171558) do
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "deposited_at"
     t.boolean "auto_generate_thumbnail", default: false
+    t.boolean "notify_editors", default: false
     t.index ["depositor_id"], name: "index_collections_on_depositor_id"
   end
 
@@ -200,9 +202,9 @@ ActiveRecord::Schema.define(version: 2022_02_07_171558) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "actor_id", null: false
-    t.boolean "opt_out_stats_email", default: false
     t.boolean "active", default: true
     t.boolean "admin_enabled", default: false
+    t.boolean "opt_in_stats_email", default: true
     t.index ["access_id"], name: "index_users_on_access_id", unique: true
     t.index ["actor_id"], name: "index_users_on_actor_id"
   end
@@ -261,6 +263,7 @@ ActiveRecord::Schema.define(version: 2022_02_07_171558) do
     t.string "deposit_agreement_version"
     t.datetime "deposit_agreed_at"
     t.boolean "auto_generate_thumbnail", default: false
+    t.boolean "notify_editors", default: false
     t.index ["depositor_id"], name: "index_works_on_depositor_id"
     t.index ["proxy_id"], name: "index_works_on_proxy_id"
   end

@@ -83,6 +83,7 @@ module Dashboard
         params
           .fetch(:editors_form, {})
           .permit(
+            :notify_editors,
             edit_users: [],
             edit_groups: []
           )

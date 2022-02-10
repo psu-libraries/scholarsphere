@@ -27,11 +27,10 @@ module Dashboard
             :surname,
             :display_name,
             :email,
-            :orcid,
             user_attributes: [
               :id,
               :admin_enabled,
-              :opt_out_stats_email
+              :opt_in_stats_email
             ]
           )
       end

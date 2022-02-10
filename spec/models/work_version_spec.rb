@@ -142,7 +142,44 @@ RSpec.describe WorkVersion, type: :model do
         expect(work_version).not_to allow_value('not an EDTF formatted date').for(:published_date)
       end
 
-      context 'when publishing an idential work version' do
+      context 'when visibility is set to AUTHORIZED' do
+        before do
+          work_version.work.access_controls.destroy_all
+          work_version.work.grant_authorized_access
+        end
+
+        context 'when the validation context is `:user_publish`' do
+          let(:valid_licenses) { described_class::Licenses.ids_for_authorized_visibility }
+          let(:invalid_licenses) { described_class::Licenses.ids - valid_licenses }
+
+          it 'requires #rights to be in WorkVersion::Licenses::ids_for_authorized_visibility' do
+            expect(work_version).to(
+              validate_inclusion_of(:rights)
+              .in_array(valid_licenses)
+              .on(:user_publish)
+              .with_message(:incompatible_license_for_authorized_visibility)
+            )
+
+            invalid_licenses.each do |invalid_license|
+              expect(work_version).not_to(
+                allow_value(invalid_license)
+                .for(:rights)
+                .on(:user_publish)
+              )
+            end
+          end
+        end
+
+        context 'when the validation context is something other than `:user_publish`' do
+          let(:valid_licenses) { described_class::Licenses.ids }
+
+          it 'allows #rights to be any value in WorkVersion::Licenses::ids' do
+            expect(work_version).to validate_inclusion_of(:rights).in_array(valid_licenses)
+          end
+        end
+      end
+
+      context 'when publishing an identical work version' do
         subject(:work_version) { BuildNewWorkVersion.call(work.versions[0]) }
 
         let(:work) { create(:work, has_draft: false) }
@@ -153,7 +190,7 @@ RSpec.describe WorkVersion, type: :model do
         end
       end
 
-      context 'when publishing an idential third work version' do
+      context 'when publishing an identical third work version' do
         subject(:work_version) { BuildNewWorkVersion.call(work.versions[1]) }
 
         let(:work) { create(:work, has_draft: false, versions_count: 2) }
@@ -506,6 +543,12 @@ RSpec.describe WorkVersion, type: :model do
       subject { described_class::DEFAULT }
 
       it { is_expected.to eq('https://rightsstatements.org/page/InC/1.0/') }
+    end
+
+    describe '::ids_for_authorized_visibility' do
+      subject { described_class.ids_for_authorized_visibility }
+
+      it { is_expected.to contain_exactly('https://rightsstatements.org/page/InC/1.0/') }
     end
 
     describe '::all' do

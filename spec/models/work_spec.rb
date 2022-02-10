@@ -29,6 +29,7 @@ RSpec.describe Work, type: :model do
     it { is_expected.to have_db_column(:deposit_agreed_at).of_type(:datetime) }
     it { is_expected.to have_db_column(:deposit_agreement_version) }
     it { is_expected.to have_db_column(:auto_generate_thumbnail).of_type(:boolean).with_options(default: false) }
+    it { is_expected.to have_db_column(:notify_editors).of_type(:boolean) }
 
     it { is_expected.to have_db_index(:depositor_id) }
     it { is_expected.to have_db_index(:proxy_id) }
@@ -352,6 +353,7 @@ RSpec.describe Work, type: :model do
           work_type_ss
           thumbnail_url_ssi
           auto_generate_thumbnail_tesim
+          notify_editors_tesim
         )
       end
 
@@ -414,6 +416,7 @@ RSpec.describe Work, type: :model do
           work_type_ss
           thumbnail_url_ssi
           auto_generate_thumbnail_tesim
+          notify_editors_tesim
         )
       end
 

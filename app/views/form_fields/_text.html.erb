@@ -6,6 +6,7 @@
                       placeholder: true,
                       required: local_assigns[:required].presence,
                       data: local_assigns[:data],
+                      readonly: local_assigns[:readonly].presence,
                       aria: { describedby: hint.dom_id } %>
   <%= form.label attribute %>
 

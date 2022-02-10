@@ -30,4 +30,13 @@ RSpec.describe WorkDecorator do
       expect(decorator.decorated_representative_version).to eq :decorated_version
     end
   end
+
+  describe '#title' do
+    let(:work) { instance_double 'Work', representative_version: representative_version }
+    let(:representative_version) { instance_double 'WorkVersion', title: 'My Title' }
+
+    it 'delegates to representative_version' do
+      expect(decorator.title).to eq 'My Title'
+    end
+  end
 end
