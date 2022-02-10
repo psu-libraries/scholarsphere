@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe AutoGenerateThumbnailForm, type: :model do
+RSpec.describe ThumbnailForm, type: :model do
   subject(:form) { described_class.new(resource: work, params: params) }
 
   let(:work) { create(:work, versions_count: 2, has_draft: true) }

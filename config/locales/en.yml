@@ -185,7 +185,7 @@ en:
   helpers:
     # Note, for hints (and only hints) you can use Markdown
     hint:
-      auto_generate_thumbnail_form:
+      thumbnail_form:
         auto_generate_thumbnail: "Auto-generated thumbnail:"
       editors_form:
         edit_users: Requires the user's Penn State Access ID (e.g., xyz500)
@@ -248,9 +248,8 @@ en:
       edit:
         heading: "Settings for %{title}"
         back: Back to Collection
-        auto_generate_thumbnail:
+        thumbnail:
           heading: Thumbnail
-          description: Use auto-generated thumbnail
         doi:
           heading: DOI
           explanation: A Digital Object Identifier (DOI) is a persistent identifier that can be used in print or on the web.
@@ -278,9 +277,9 @@ en:
       update:
         success: 'Your profile was saved successfully.'
     shared:
-      auto_generate_thumbnail_form:
+      thumbnail_form:
         explanation: Use auto-generated thumbnail
-        submit_button: Update Auto-generate Thumbnail
+        submit_button: Update Thumbnail Settings
       editors_form:
         heading: Editors
         explanation: "Gives the ability for other users from Penn State to edit your %{type}. This can be done on a per-user basis, or a group basis."
@@ -305,9 +304,8 @@ en:
       edit:
         heading: "Settings for %{work_title}"
         back: Back to Work
-        auto_generate_thumbnail:
+        thumbnail:
           heading: Thumbnail
-          description: Use auto-generated thumbnail
         visibility:
           heading: Access
           explanation: Access settings affect who can download files associated with the work.

@@ -43,8 +43,7 @@ module Dashboard
         @collection.attributes = collection_params
         @editors_form = EditorsForm.new(resource: @collection, user: current_user, params: editors_params)
         @depositor_form = DepositorForm.new(resource: @collection, params: depositor_params)
-        @auto_generate_thumbnail_form = AutoGenerateThumbnailForm.new(resource: @collection,
-                                                                      params: auto_generate_thumbnail_params)
+        @thumbnail_form = ThumbnailForm.new(resource: @collection, params: thumbnail_params)
       end
 
       def select_form_model
@@ -52,8 +51,8 @@ module Dashboard
           @editors_form
         elsif params[:depositor_form].present?
           @depositor_form
-        elsif params[:auto_generate_thumbnail_form].present?
-          @auto_generate_thumbnail_form
+        elsif params[:thumbnail_form].present?
+          @thumbnail_form
         else
           @collection
         end
@@ -85,9 +84,9 @@ module Dashboard
           )
       end
 
-      def auto_generate_thumbnail_params
+      def thumbnail_params
         params
-          .fetch(:auto_generate_thumbnail_form, {})
+          .fetch(:thumbnail_form, {})
           .permit(
             :auto_generate_thumbnail
           )

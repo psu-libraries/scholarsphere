@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AutoGenerateThumbnailForm
+class ThumbnailForm
   include ActiveModel::Model
 
   attr_reader :resource

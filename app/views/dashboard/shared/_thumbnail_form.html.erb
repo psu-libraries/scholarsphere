@@ -1,9 +1,9 @@
-<%- auto_generate_thumbnail_form_id = "edit_auto_generate_thumbnail_#{dom_id auto_generate_thumbnail_form.resource}" %>
-<%= form_for auto_generate_thumbnail_form,
+<%- thumbnail_form_id = "edit_thumbnail_#{dom_id thumbnail_form.resource}" %>
+<%= form_for thumbnail_form,
              url: url,
              method: :patch,
              remote: false,
-             html: { id: auto_generate_thumbnail_form_id, class: 'edit-resource-depositor' } do |form| %>
+             html: { id: thumbnail_form_id, class: 'edit-resource-depositor' } do |form| %>
 
   <div class="form-check auto-generate-thumbnail">
     <%= form.check_box :auto_generate_thumbnail,
@@ -14,10 +14,10 @@
   <div class="p-1">
     <%= render FieldHintComponent.new(form: form, attribute: :auto_generate_thumbnail) %>
     <div class="thumbnail-image p-1">
-      <img src="<%= auto_generate_thumbnail_form.resource.thumbnail_url %>">
+      <img src="<%= thumbnail_form.resource.thumbnail_url %>">
     </div>
   </div>
-  <%= hidden_field_tag 'form_id', auto_generate_thumbnail_form_id %>
+  <%= hidden_field_tag 'form_id', thumbnail_form_id %>
   <%= render FormErrorMessageComponent.new(form: form) %>
 
   <div class="actions mt-1 mb-3">
