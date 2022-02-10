@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Shrine::ThumbnailJob < ApplicationJob
-  queue_as :shrine
+  queue_as :thumbnails
 
   def perform(record)
     attacher = record.file_attacher
