@@ -23,7 +23,7 @@ RSpec.describe Collection, type: :model do
     let!(:resource) { create :collection }
 
     before do
-      create :work, versions_count: 2, collections: [resource]
+      resource.works = [(create :work, versions_count: 2)]
     end
   end
 
@@ -372,7 +372,7 @@ RSpec.describe Collection, type: :model do
     let!(:collection) { create :collection }
 
     before do
-      create :work, versions_count: 2, collections: [collection]
+      collection.works = [(create :work, versions_count: 2)]
     end
 
     context 'when a thumbnail url is found' do
@@ -403,8 +403,7 @@ RSpec.describe Collection, type: :model do
     let!(:collection) { create :collection }
 
     before do
-      create :work, versions_count: 2, collections: [collection]
-      create :work, versions_count: 3, collections: [collection]
+      collection.works = [(create :work, versions_count: 2), (create :work, versions_count: 3)]
     end
 
     context 'when collection has many works with thumbnail urls' do
@@ -426,8 +425,7 @@ RSpec.describe Collection, type: :model do
     let!(:collection) { create :collection }
 
     before do
-      create :work, versions_count: 2, collections: [collection]
-      create :work, versions_count: 3, collections: [collection]
+      collection.works = [(create :work, versions_count: 2), (create :work, versions_count: 3)]
     end
 
     context 'when collection has many works with thumbnail urls' do
