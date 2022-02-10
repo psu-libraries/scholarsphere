@@ -145,7 +145,11 @@ class Collection < ApplicationRecord
   end
 
   def thumbnail_url
-    auto_generate_thumbnail? ? thumbnail_urls.last : nil
+    auto_generate_thumbnail? ? auto_generated_thumbnail_url : nil
+  end
+
+  def auto_generated_thumbnail_url
+    thumbnail_urls.last
   end
 
   def thumbnail_present?

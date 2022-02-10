@@ -563,4 +563,35 @@ RSpec.describe Work, type: :model do
       end
     end
   end
+
+  describe '#auto_generated_thumbnail_url' do
+    let(:mock_attacher) { instance_double FileUploader::Attacher }
+    let!(:work) { create :work, versions_count: 2 }
+
+    context "when work's latest_published_version has thumbnail urls" do
+      before do
+        work.latest_published_version.file_resources << (create :file_resource)
+        work.save
+        allow(mock_attacher).to receive(:url).with(:thumbnail).and_return 'url.com/path/file'
+      end
+
+      it 'returns the last thumbnail url from the file_resources' do
+        allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
+        expect(work.auto_generated_thumbnail_url).to eq 'url.com/path/file'
+      end
+    end
+
+    context "when work's latest_published_version has no thumbnail urls" do
+      before do
+        work.latest_published_version.file_resources << (create :file_resource)
+        work.save
+        allow(mock_attacher).to receive(:url).with(:thumbnail).and_return nil
+      end
+
+      it 'returns nil' do
+        allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
+        expect(work.auto_generated_thumbnail_url).to eq nil
+      end
+    end
+  end
 end

@@ -14,7 +14,7 @@
   <div class="p-1">
     <%= render FieldHintComponent.new(form: form, attribute: :auto_generate_thumbnail) %>
     <div class="thumbnail-image p-1">
-      <img src="<%= thumbnail_form.resource.thumbnail_url %>">
+      <img src="<%= thumbnail_form.resource.auto_generated_thumbnail_url %>">
     </div>
   </div>
   <%= hidden_field_tag 'form_id', thumbnail_form_id %>

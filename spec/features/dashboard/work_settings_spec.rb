@@ -102,7 +102,7 @@ RSpec.describe 'Work Settings Page', with_user: :user do
     context 'when thumbnail exists for the work' do
       before do
         allow_any_instance_of(Work).to receive(:thumbnail_present?).and_return true
-        allow_any_instance_of(Work).to receive(:thumbnail_url).and_return 'url.com/path/file'
+        allow_any_instance_of(Work).to receive(:auto_generated_thumbnail_url).and_return 'url.com/path/file'
         visit edit_dashboard_work_path(work)
       end
 

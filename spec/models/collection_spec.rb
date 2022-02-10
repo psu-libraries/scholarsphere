@@ -408,4 +408,36 @@ RSpec.describe Collection, type: :model do
       end
     end
   end
+
+  describe '#auto_generated_thumbnail_url' do
+    let(:mock_attacher) { instance_double FileUploader::Attacher }
+    let!(:collection) { create :collection }
+
+    before do
+      create :work, versions_count: 2, collections: [collection]
+      create :work, versions_count: 3, collections: [collection]
+    end
+
+    context 'when collection has many works with thumbnail urls' do
+      before do
+        allow(mock_attacher).to receive(:url).with(:thumbnail).and_return 'url.com/path/file'
+      end
+
+      it "returns the last file resource's thumbnail url" do
+        allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
+        expect(collection.auto_generated_thumbnail_url).to eq 'url.com/path/file'
+      end
+    end
+
+    context 'when collection has no thumbnail urls' do
+      before do
+        allow(mock_attacher).to receive(:url).with(:thumbnail).and_return nil
+      end
+
+      it 'returns nil' do
+        allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
+        expect(collection.auto_generated_thumbnail_url).to eq nil
+      end
+    end
+  end
 end

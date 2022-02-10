@@ -40,7 +40,7 @@ RSpec.describe 'Collection Settings Page', with_user: :user do
     context 'when thumbnail exists for the collection' do
       before do
         allow_any_instance_of(Collection).to receive(:thumbnail_present?).and_return true
-        allow_any_instance_of(Collection).to receive(:thumbnail_url).and_return 'url.com/path/file'
+        allow_any_instance_of(Collection).to receive(:auto_generated_thumbnail_url).and_return 'url.com/path/file'
         visit edit_dashboard_collection_path(collection)
       end
 
