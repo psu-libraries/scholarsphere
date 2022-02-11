@@ -72,6 +72,7 @@ class AllWorksReport
           :depositor,
           :access_controls
         )
+        .order(id: :asc)
     end
 
     # Returns a hash of { work_id => num_views }
@@ -89,7 +90,7 @@ class AllWorksReport
     # Returns a hash of { work_id => num_downloads }
     def load_downloads_by_work(work_batch)
       ViewStatistic
-        .joins('INNER JOIN file_version_memberships ON view_statistics.resource_id = file_version_memberships.work_version_id')
+        .joins('INNER JOIN file_version_memberships ON view_statistics.resource_id = file_version_memberships.file_resource_id')
         .joins('INNER JOIN work_versions ON file_version_memberships.work_version_id = work_versions.id')
         .where(
           resource_type: 'FileResource',
@@ -97,5 +98,7 @@ class AllWorksReport
         )
         .group('work_versions.work_id')
         .sum(:count)
+
+##ViewStatistic.joins('INNER JOIN file_version_memberships ON view_statistics.resource_id = file_version_memberships.file_resource_id').joins('INNER JOIN work_versions ON file_version_memberships.work_version_id = work_versions.id').where(  resource_type: 'FileResource').group('work_versions.work_id').sum(:count)
     end
 end

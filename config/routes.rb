@@ -85,6 +85,7 @@ Rails.application.routes.draw do
     get 'work_search', to: 'work_search#index'
 
     get 'reports', to: 'reports#index'
+    get 'reports/all_files', to: 'reports#all_files'
     get 'reports/all_works', to: 'reports#all_works'
     get 'reports/all_work_versions', to: 'reports#all_work_versions'
 

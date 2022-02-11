@@ -173,6 +173,8 @@ en:
       invalid_edtf: is not a valid date in EDTF format
       invalid_orcid: is not a valid ORCiD id
       invalid_doi: is not a properly formatted DOI from our Datacite service
+    not_authorized:
+      heading: "401: Request not authorized."
     not_found:
       heading: Resource not found or unavailable
       content: >

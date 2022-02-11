@@ -6,8 +6,11 @@
   <div class="row row--md-mb-3">
     <div class="col-md">
       <ul>
-        <li><%= link_to 'All Works Report', dashboard_reports_all_works_path %></li>
-        <li><%= link_to 'All Work Versions Report', dashboard_reports_all_work_versions_path %></li>
+        <% if current_user.admin? %>
+          <li><%= link_to 'All Files Report', dashboard_reports_all_files_path %></li>
+          <li><%= link_to 'All Works Report', dashboard_reports_all_works_path %></li>
+          <li><%= link_to 'All Work Versions Report', dashboard_reports_all_work_versions_path %></li>
+        <% end %>
       </ul>
     </div>
   </div>
