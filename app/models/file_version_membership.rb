@@ -36,6 +36,10 @@ class FileVersionMembership < ApplicationRecord
     !!@changed_by_system
   end
 
+  def signature(type: 'md5')
+    file_resource.file.metadata[type]
+  end
+
   private
 
     def uploader
