@@ -66,6 +66,15 @@ class FileResource < ApplicationRecord
     file_attacher.url(:thumbnail)
   end
 
+  def thumbnailable?
+    mime_type = file_data['metadata']['mime_type'] || ''
+    return true if mime_type.include?('image')
+    return true if mime_type == 'application/pdf'
+    return true if mime_type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+
+    false
+  end
+
   private
 
     def client

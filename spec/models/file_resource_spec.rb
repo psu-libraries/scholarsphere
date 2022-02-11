@@ -223,4 +223,52 @@ RSpec.describe FileResource, type: :model do
       end
     end
   end
+
+  describe '#thumbnailable' do
+    let!(:file_resource) { create :file_resource }
+    let(:file_data) { { 'metadata' => { 'mime_type' => mime_type } } }
+    before do
+      allow(file_resource).to receive(:file_data).and_return file_data
+    end
+
+    context 'when file is a supported mime type' do
+      context 'when mime type is image/png' do
+        let(:mime_type) { 'image/png' }
+
+        it 'returns true' do
+          expect(file_resource.thumbnailable?).to eq true
+        end
+      end
+    end
+
+    context 'when file is a supported mime type' do
+      context 'when mime type is application/pdf' do
+        let(:mime_type) { 'application/pdf' }
+
+        it 'returns true' do
+          expect(file_resource.thumbnailable?).to eq true
+        end
+      end
+    end
+
+    context 'when file is a supported mime type' do
+      context 'when mime type is application/vnd.openxmlformats-officedocument.wordprocessingml.document' do
+        let(:mime_type) { 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' }
+
+        it 'returns true' do
+          expect(file_resource.thumbnailable?).to eq true
+        end
+      end
+    end
+
+    context 'when file is not a supported mime type' do
+      context 'when mime type is application/zip-compressed' do
+        let(:mime_type) { 'application/zip-compressed' }
+
+        it 'returns false' do
+          expect(file_resource.thumbnailable?).to eq false
+        end
+      end
+    end
+  end
 end
