@@ -227,6 +227,7 @@ RSpec.describe FileResource, type: :model do
   describe '#thumbnailable' do
     let!(:file_resource) { create :file_resource }
     let(:file_data) { { 'metadata' => { 'mime_type' => mime_type } } }
+
     before do
       allow(file_resource).to receive(:file_data).and_return file_data
     end
@@ -239,9 +240,7 @@ RSpec.describe FileResource, type: :model do
           expect(file_resource.thumbnailable?).to eq true
         end
       end
-    end
 
-    context 'when file is a supported mime type' do
       context 'when mime type is application/pdf' do
         let(:mime_type) { 'application/pdf' }
 
@@ -249,9 +248,7 @@ RSpec.describe FileResource, type: :model do
           expect(file_resource.thumbnailable?).to eq true
         end
       end
-    end
 
-    context 'when file is a supported mime type' do
       context 'when mime type is application/vnd.openxmlformats-officedocument.wordprocessingml.document' do
         let(:mime_type) { 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' }
 

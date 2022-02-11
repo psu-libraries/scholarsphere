@@ -10,12 +10,12 @@ class ThumbnailComponent < ApplicationComponent
     @featured = featured
   end
 
-  def thumbnail
-    if thumbnail_url.present?
-      "<img src=#{thumbnail_url}></img>"
-    else
-      "<i class='material-icons material-icons--thumbnail'>#{icon}</i>"
-    end
+  def thumbnail_url
+    resource.thumbnail_url
+  end
+
+  def icon
+    icon_map.fetch(icon_key, 'bar_chart')
   end
 
   def html_classes
@@ -25,24 +25,14 @@ class ThumbnailComponent < ApplicationComponent
       else
         'thumbnail-icon col-xxl-6 ft-work__img'
       end
+    elsif thumbnail_url.present?
+      'thumbnail-image'
     else
-      if thumbnail_url.present?
-        'thumbnail-image'
-      else
-        'thumbnail-icon'
-      end
+      'thumbnail-icon'
     end
   end
 
   private
-
-    def icon
-      icon_map.fetch(icon_key, 'bar_chart')
-    end
-
-    def thumbnail_url
-      resource.thumbnail_url
-    end
 
     def featured?
       @featured != false

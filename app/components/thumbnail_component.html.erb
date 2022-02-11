@@ -1,3 +1,7 @@
 <div class="<%= html_classes %>">
-  <%= thumbnail.html_safe %>
+  <% if thumbnail_url.present? %>
+    <img src="<%= thumbnail_url %>">
+  <% else %>
+    <i class='material-icons material-icons--thumbnail'><%= icon %></i>
+  <% end %>
 </div>
