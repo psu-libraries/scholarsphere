@@ -15,8 +15,7 @@
             <span class="meta__size">size: <%= number_to_human_size file.size %></span> |
             <span class="meta__type">mime_type: <%= file.mime_type %></span> |
             <span class="meta__date">date: <%= file.file_resource.deposited_at.to_s(:short_date) %></span>
-            <%= render(FileSignatureComponent.new(file: file, type: 'md5')) %>
-            <%= render(FileSignatureComponent.new(file: file, type: 'sha256')) %>
+            <%= render(FileSignatureComponent.new(file: file)) %>
           </p>
         </div>
       </li>

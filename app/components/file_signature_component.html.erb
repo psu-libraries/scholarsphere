@@ -1,4 +1,13 @@
-|
-<span class="meta__signature" data-toggle="tooltip" data-placement="top" title="<%= tooltip %>">
-  <%= type %>: <%= signature_display %>
+| 
+<span data-controller="clipboard">
+  <span class="meta__signature" data-target="clipboard.source" data-signature="<%= value %>">
+    <%= label %>: <%= signature_display %>
+  </span>
+  <button class="btn btn-sm btn-link px-0"
+          data-toggle="tooltip"
+          data-placement="top"
+          title="<%= value %>"
+          data-action="clipboard#copy">
+    <span class="material-icons material-icons--copy">content_paste</span>
+  </button>
 </span>

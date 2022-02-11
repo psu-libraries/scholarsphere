@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 class FileSignatureComponent < ApplicationComponent
-  attr_reader :type
+  attr_reader :label, :value
 
-  def initialize(file:, type:)
+  def initialize(file:)
     @file = file
-    @type = type
+    @signature = signature
   end
 
   def render?
@@ -13,16 +13,26 @@ class FileSignatureComponent < ApplicationComponent
   end
 
   def signature_display
-    signature.truncate(10)
-  end
-
-  def tooltip
-    signature
+    @value.truncate(10)
   end
 
   private
 
     def signature
-      @file.signature(type: type)
+      if sha256
+        @label = 'sha256'
+        @value = sha256
+      elsif md5
+        @label = 'md5'
+        @value = md5
+      end
+    end
+
+    def md5
+      @file.signature(type: 'md5')
+    end
+
+    def sha256
+      @file.signature(type: 'sha256')
     end
 end
