@@ -28,16 +28,14 @@ class AllWorkVersionsReport
       based_near
       related_url
       source
-      downloads
       views
     ]
   end
 
   def rows
     work_versions.in_batches do |work_version_batch|
-      # Load out aggregates of views and downloads for this batch
+      # Load out aggregates of views for this batch
       views_by_work_version_id = load_views_by_work_version(work_version_batch)
-      downloads_by_work_version_id = load_downloads_by_work_version(work_version_batch)
 
       # Iterate through each work version in this batch, yielding the CSV row
       work_version_batch.each do |wv|
@@ -48,7 +46,6 @@ class AllWorkVersionsReport
         #  .max_by(&:version_number)
 
         views = views_by_work_version_id[wv.id] || 0
-        downloads = downloads_by_work_version_id[wv.id] || 0
 
         row = [
           wv.uuid,
@@ -72,7 +69,6 @@ class AllWorkVersionsReport
           wv.based_near,
           wv.related_url,
           wv.source,
-          downloads,
           views
         ]
 
@@ -84,40 +80,19 @@ class AllWorkVersionsReport
   private
 
     def work_versions
-      WorkVersion.all
-    end
-
-    def works
-      Work
-        .includes(
-          :versions,
-          :depositor,
-          :access_controls
-        )
+      WorkVersion
+        .includes(:work)
+        .order('work_id, id asc')
     end
 
     # Returns a hash of { work_version_id => num_views }
     def load_views_by_work_version(work_version_batch)
       ViewStatistic
-        .joins('INNER JOIN work_versions ON view_statistics.resource_id = work_versions.id')
         .where(
           resource_type: 'WorkVersion',
-          work_versions: { id: work_version_batch }
+          resource_id: work_version_batch
         )
-        .group('work_versions.id')
-        .sum(:count)
-    end
-
-    # Returns a hash of { work_version_id => num_downloads }
-    def load_downloads_by_work_version(work_version_batch)
-      ViewStatistic
-        .joins('INNER JOIN file_version_memberships ON view_statistics.resource_id = file_version_memberships.file_resource_id')
-        .joins('INNER JOIN work_versions ON file_version_memberships.work_version_id = work_versions.id')
-        .where(
-          resource_type: 'FileResource',
-          work_versions: { id: work_version_batch }
-        )
-        .group('work_versions.id')
+        .group('resource_id')
         .sum(:count)
     end
 end

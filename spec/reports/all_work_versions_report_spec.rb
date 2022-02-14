@@ -10,7 +10,30 @@ RSpec.describe AllWorkVersionsReport do
   end
 
   describe '#headers' do
-    specify { expect(report.headers).to eq %w[id depositor work_type title doi deposited_at deposit_agreed_at embargoed_until visibility latest_published_version downloads views] }
+    specify { expect(report.headers).to eq %w[
+      id
+      work_id
+      state
+      version_number
+      title
+      subtitle
+      version_name
+      keyword
+      rights
+      description
+      publisher_statement
+      resource_type
+      contributor
+      publisher
+      published_date
+      subject
+      language
+      identifier
+      based_near
+      related_url
+      source
+      views
+    ] }
   end
 
   describe '#name' do
@@ -26,16 +49,6 @@ RSpec.describe AllWorkVersionsReport do
       work_published.versions.each do |work_version|
         create :view_statistic, resource: work_version, count: 1
       end
-
-      # Set all versions of the published work to point to the same single file
-      version1_file = work_published.latest_published_version.file_resources.first
-      work_published.versions.each do |work_version|
-        work_version.file_resources = [version1_file]
-        work_version.save!
-      end
-
-      # Create view statistics for that single file
-      create :view_statistic, resource: version1_file, count: 1
     end
 
     it 'yields each row to the given block' do
@@ -44,52 +57,40 @@ RSpec.describe AllWorkVersionsReport do
         yielded_rows << row
       end
 
-      work_published_row, work_published_and_draft_row, work_draft_only_row = yielded_rows
-
-      # work.uuid,
-      # work.depositor.psu_id,
-      # work.work_type,
-      # latest_version.title,
-      # work.doi,
-      # work.deposited_at,
-      # work.deposit_agreed_at,
-      # work.embargoed_until,
-      # work.visibility,
-      # latest_published_version&.uuid,
-      # downloads,
-      # views
-
       # Test ordering by PK
-      expect(yielded_rows[0][0]).to eq work_published.uuid
-      expect(yielded_rows[1][0]).to eq work_published_and_draft.uuid
+      expect(yielded_rows[0][0]).to eq work_published.versions[0].uuid
+      expect(yielded_rows[1][0]).to eq work_published.versions[1].uuid
 
-      # Test row for without draft
-      expect(work_published_row[1]).to eq work_published.depositor.psu_id
-      expect(work_published_row[2]).to eq work_published.work_type
-      expect(work_published_row[3]).to eq work_published.latest_published_version.title
-      expect(work_published_row[4]).to eq work_published.doi
-      expect(work_published_row[5]).to eq work_published.deposited_at # TODO: spec the date format (iso8601?)?
-      expect(work_published_row[6]).to eq work_published.deposit_agreed_at # TODO spec date format?
-      expect(work_published_row[7]).to eq work_published.embargoed_until
-      expect(work_published_row[8]).to eq work_published.visibility
-      expect(work_published_row[9]).to eq work_published.latest_published_version.uuid
+      # Test row for published
+      yielded_rows.first.tap do |row|
+        version = work_published.versions.first
 
-      # Spot check variations on title
-      expect(work_published_row[3]).to eq work_published.latest_published_version.title
-      expect(work_published_and_draft_row[3]).to eq work_published_and_draft.draft_version.title
-      expect(work_draft_only_row[3]).to eq work_draft_only.draft_version.title
-
-      # Spot check variations on latest_published_version
-      expect(work_published_row[9]).to eq work_published.latest_published_version.uuid
-      expect(work_published_and_draft_row[9]).to eq work_published_and_draft.latest_published_version.uuid
-      expect(work_draft_only_row[9]).to be_blank
-
-      # Spot check downloads
-      expect(work_published_row[10]).to eq 1
-      expect(work_published_and_draft_row[10]).to eq 2
+        expect(row[0]).to eq version.uuid
+        expect(row[1]).to eq version.work.uuid
+        expect(row[2]).to eq version.aasm_state
+        expect(row[3]).to eq version.version_number
+        expect(row[4]).to eq version.title
+        expect(row[5]).to eq version.subtitle
+        expect(row[6]).to eq version.version_name
+        expect(row[7]).to eq version.keyword
+        expect(row[8]).to eq version.rights
+        expect(row[9]).to eq version.description
+        expect(row[10]).to eq version.publisher_statement
+        expect(row[11]).to eq version.resource_type
+        expect(row[12]).to eq version.contributor
+        expect(row[13]).to eq version.publisher
+        expect(row[14]).to eq version.published_date
+        expect(row[15]).to eq version.subject
+        expect(row[16]).to eq version.language
+        expect(row[17]).to eq version.identifier
+        expect(row[18]).to eq version.based_near
+        expect(row[19]).to eq version.related_url
+        expect(row[20]).to eq version.source
+      end
 
       # Spot check view statistics
-      expect(work_published_row[11]).to eq 2
+      expect(yielded_rows[0][21]).to eq 1
+      expect(yielded_rows[1][21]).to eq 1
     end
   end
 end
