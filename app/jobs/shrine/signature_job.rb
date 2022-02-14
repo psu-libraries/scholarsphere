@@ -2,7 +2,7 @@
 
 class Shrine::SignatureJob < ApplicationJob
   Shrine.plugin :signature
-  queue_as :shrine
+  queue_as :signature
 
   def perform(file_resource:)
     attacher = file_resource.file_attacher
