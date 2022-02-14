@@ -14,7 +14,9 @@ class SolrDocumentBuilder
     raise Error, "#{resource.class} has no uuid defined" unless resource.respond_to?(:uuid)
 
     builders = schemas.map { |schema| schema.new(resource: resource) }
-    base_document = HashWithIndifferentAccess.new(id: resource.uuid, model_ssi: resource.class.to_s)
+    base_document = HashWithIndifferentAccess.new(id: resource.uuid,
+                                                  model_ssi: resource.class.to_s,
+                                                  thumbnail_url_ssi: resource.thumbnail_url)
     reject = builders.map(&:reject).flatten.uniq
     builders
       .map(&:document)

@@ -190,7 +190,26 @@ class Work < ApplicationRecord
     )
   end
 
+  # TODO Potential Refactoring: #thumbnail_url, #auto_generated_thumbnail_url,
+  # TODO and #thumbnail_present? methods here are identical to the methods in Collection
+  def thumbnail_url
+    auto_generate_thumbnail? ? auto_generated_thumbnail_url : nil
+  end
+
+  def auto_generated_thumbnail_url
+    thumbnail_urls.last
+  end
+
+  def thumbnail_present?
+    thumbnail_urls.present?
+  end
+
   private
+
+    def thumbnail_urls
+      recent_file_resources = latest_published_version.file_resources
+      recent_file_resources.present? ? recent_file_resources.map(&:thumbnail_url).compact : nil
+    end
 
     def document_builder
       SolrDocumentBuilder.new(

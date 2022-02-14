@@ -70,4 +70,8 @@ class SolrDocument
   def work_id
     self[:work_id_isi].to_i
   end
+
+  def thumbnail_url
+    self[:thumbnail_url_ssi]
+  end
 end

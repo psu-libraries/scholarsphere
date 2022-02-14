@@ -62,6 +62,19 @@ class FileResource < ApplicationRecord
     @indexing_source ||= SolrIndexingJob.public_method(:perform_later)
   end
 
+  def thumbnail_url
+    file_attacher.url(:thumbnail)
+  end
+
+  def thumbnailable?
+    mime_type = file_data.dig('metadata', 'mime_type') || ''
+    return true if mime_type.include?('image')
+    return true if mime_type == 'application/pdf'
+    return true if mime_type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+
+    false
+  end
+
   private
 
     def client

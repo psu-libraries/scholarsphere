@@ -146,7 +146,25 @@ class Collection < ApplicationRecord
     'collection'
   end
 
+  # TODO Potential Refactoring: #thumbnail_url, #auto_generated_thumbnail_url,
+  # TODO and #thumbnail_present? methods here are identical to the methods in Work
+  def thumbnail_url
+    auto_generate_thumbnail? ? auto_generated_thumbnail_url : nil
+  end
+
+  def auto_generated_thumbnail_url
+    thumbnail_urls.last
+  end
+
+  def thumbnail_present?
+    thumbnail_urls.present?
+  end
+
   private
+
+    def thumbnail_urls
+      works.flat_map { |work| work&.latest_published_version&.file_resources }&.map { |fr| fr&.thumbnail_url }&.compact
+    end
 
     def set_defaults
       self.visibility = Permissions::Visibility::OPEN unless access_controls.any?

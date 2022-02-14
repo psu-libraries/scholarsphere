@@ -3,10 +3,15 @@
 class ThumbnailComponent < ApplicationComponent
   attr_reader :resource, :featured
 
-  # @param [SolrDocument, WorkVersion, Collection] resource
+  # @resource could be a SolrDocument or SolrDocumentAdapterDecorator (containing a Collection or Work),
+  # Collection, Work, WorkVersion, CollectionDecorator, WorkDecorator, or WorkVersionDecorator
   def initialize(resource:, featured: false)
     @resource = resource
     @featured = featured
+  end
+
+  def thumbnail_url
+    resource.thumbnail_url
   end
 
   def icon
@@ -14,11 +19,15 @@ class ThumbnailComponent < ApplicationComponent
   end
 
   def html_classes
-    if featured?
-      'thumbnail col-xxl-6 ft-work__img'
-    else
-      'thumbnail'
-    end
+    classes = []
+    classes << if thumbnail_url.present?
+                 'thumbnail-image'
+               else
+                 'thumbnail-icon'
+               end
+    classes << 'col-xxl-6 ft-work__img' if featured?
+
+    classes.join(' ')
   end
 
   private

@@ -20,6 +20,11 @@
           <li class="nav-item">
             <a class="nav-link" href="#<%= t('.doi.heading').parameterize %>"><%= t('.doi.heading') %></a>
           </li>
+          <% if @work.thumbnail_present? %>
+            <li class="nav-item">
+              <a class="nav-link" href="#<%= t('.thumbnail.heading').parameterize %>"><%= t('.thumbnail.heading') %></a>
+            </li>
+          <% end %>
           <li class="nav-item">
             <%= link_to t('dashboard.shared.editors_form.heading'), "##{t('dashboard.shared.editors_form.heading').parameterize}", class: 'nav-link' %>
           </li>
@@ -103,6 +108,16 @@
           <p><%= t('.doi.not_allowed') %></p>
         <% end %>
       </div>
+
+      <% if @work.thumbnail_present? %>
+        <div class="keyline keyline--left">
+          <h2 id="<%= t('.thumbnail.heading').parameterize %>" class="h4"><%= t('.thumbnail.heading') %></h2>
+        </div>
+
+        <div class="actions mb-3">
+          <%= render 'dashboard/shared/thumbnail_form', thumbnail_form: @thumbnail_form, url: dashboard_work_path(@work) %>
+        </div>
+      <% end %>
 
       <div class="keyline keyline--left">
         <h2 id="<%= t('dashboard.shared.editors_form.heading').parameterize %>" class="h4"><%= t('dashboard.shared.editors_form.heading') %></h2>

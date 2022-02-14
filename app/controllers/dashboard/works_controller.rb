@@ -42,6 +42,7 @@ module Dashboard
         @editors_form = EditorsForm.new(resource: @undecorated_work, user: current_user, params: editors_params)
         @depositor_form = DepositorForm.new(resource: @undecorated_work, params: depositor_params)
         @withdraw_versions_form = WithdrawVersionsForm.new(work: @undecorated_work, params: withdraw_versions_params)
+        @thumbnail_form = ThumbnailForm.new(resource: @undecorated_work, params: thumbnail_params)
       end
 
       def select_form_model
@@ -53,6 +54,8 @@ module Dashboard
           @depositor_form
         elsif params[:withdraw_versions_form].present?
           @withdraw_versions_form
+        elsif params[:thumbnail_form].present?
+          @thumbnail_form
         else
           @work
         end
@@ -99,6 +102,14 @@ module Dashboard
           .fetch(:withdraw_versions_form, {})
           .permit(
             :work_version_id
+          )
+      end
+
+      def thumbnail_params
+        params
+          .fetch(:thumbnail_form, {})
+          .permit(
+            :auto_generate_thumbnail
           )
       end
   end

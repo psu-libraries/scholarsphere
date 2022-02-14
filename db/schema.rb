@@ -108,6 +108,7 @@ ActiveRecord::Schema.define(version: 2022_02_07_221742) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "deposited_at"
+    t.boolean "auto_generate_thumbnail", default: false
     t.boolean "notify_editors", default: false
     t.index ["depositor_id"], name: "index_collections_on_depositor_id"
   end
@@ -174,6 +175,15 @@ ActiveRecord::Schema.define(version: 2022_02_07_221742) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_searches_on_user_id"
+  end
+
+  create_table "thumbnails", force: :cascade do |t|
+    t.bigint "file_resource_id", null: false
+    t.bigint "work_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["file_resource_id"], name: "index_thumbnails_on_file_resource_id"
+    t.index ["work_id"], name: "index_thumbnails_on_work_id"
   end
 
   create_table "user_group_memberships", force: :cascade do |t|
@@ -253,6 +263,7 @@ ActiveRecord::Schema.define(version: 2022_02_07_221742) do
     t.datetime "deposited_at"
     t.string "deposit_agreement_version"
     t.datetime "deposit_agreed_at"
+    t.boolean "auto_generate_thumbnail", default: false
     t.boolean "notify_editors", default: false
     t.index ["depositor_id"], name: "index_works_on_depositor_id"
     t.index ["proxy_id"], name: "index_works_on_proxy_id"
@@ -265,6 +276,8 @@ ActiveRecord::Schema.define(version: 2022_02_07_221742) do
   add_foreign_key "collections", "actors", column: "depositor_id"
   add_foreign_key "file_version_memberships", "file_resources"
   add_foreign_key "file_version_memberships", "work_versions"
+  add_foreign_key "thumbnails", "file_resources"
+  add_foreign_key "thumbnails", "works"
   add_foreign_key "user_group_memberships", "groups"
   add_foreign_key "user_group_memberships", "users"
   add_foreign_key "users", "actors"

@@ -10,7 +10,10 @@ RSpec.describe Shrine::PromotionJob, type: :job do
   context 'with valid input' do
     let(:mock_attacher) { instance_spy(FileUploader::Attacher) }
 
-    before { allow(Shrine::Attacher).to receive(:retrieve).and_return(mock_attacher) }
+    before do
+      allow(Shrine::Attacher).to receive(:retrieve).and_return(mock_attacher)
+      allow(Shrine::ThumbnailJob).to receive(:perform_later)
+    end
 
     it 'promotes a file from cache to storage' do
       described_class.perform_now(record: record, name: name, file_data: file_data)
