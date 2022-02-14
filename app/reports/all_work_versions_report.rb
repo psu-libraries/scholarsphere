@@ -42,7 +42,7 @@ class AllWorkVersionsReport
       # Iterate through each work version in this batch, yielding the CSV row
       work_version_batch.each do |wv|
         # Work#latest_published_version will hit the database, which we don't want here
-        #latest_published_version = work
+        # latest_published_version = work
         #  .versions
         #  .filter(&:published?)
         #  .max_by(&:version_number)

@@ -31,7 +31,7 @@ RSpec.describe AllWorkVersionsReport do
       version1_file = work_published.latest_published_version.file_resources.first
       work_published.versions.each do |work_version|
         work_version.file_resources = [version1_file]
-        work_version.save! 
+        work_version.save!
       end
 
       # Create view statistics for that single file
@@ -78,7 +78,7 @@ RSpec.describe AllWorkVersionsReport do
       expect(work_published_row[3]).to eq work_published.latest_published_version.title
       expect(work_published_and_draft_row[3]).to eq work_published_and_draft.draft_version.title
       expect(work_draft_only_row[3]).to eq work_draft_only.draft_version.title
-      
+
       # Spot check variations on latest_published_version
       expect(work_published_row[9]).to eq work_published.latest_published_version.uuid
       expect(work_published_and_draft_row[9]).to eq work_published_and_draft.latest_published_version.uuid

@@ -40,6 +40,7 @@ class AllFilesReport
   end
 
   private
+
     def file_version_memberships
       FileVersionMembership
         .includes(:file_resource)
@@ -48,7 +49,7 @@ class AllFilesReport
 
     def load_downloads_by_file_resource(fvm_batch)
       resource_ids = Set[]
-      
+
       fvm_batch.each do |fvm|
         resource_ids << fvm.file_resource_id
       end
@@ -66,7 +67,7 @@ class AllFilesReport
       results = ActiveRecord::Base.connection.execute(query)
 
       downloads_by_file_resource = {}
-      
+
       results.each do |result|
         downloads_by_file_resource[result['resource_id']] = result['sum']
       end

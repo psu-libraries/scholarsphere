@@ -10,7 +10,20 @@ RSpec.describe AllWorksReport do
   end
 
   describe '#headers' do
-    specify { expect(report.headers).to eq %w[id depositor work_type title doi deposited_at deposit_agreed_at embargoed_until visibility latest_published_version downloads views] }
+    specify { expect(report.headers).to eq %w[
+      id
+      depositor
+      work_type
+      title
+      doi
+      deposited_at
+      deposit_agreed_at
+      embargoed_until
+      visibility
+      latest_published_version
+      downloads
+      views
+    ] }
   end
 
   describe '#name' do
@@ -23,19 +36,43 @@ RSpec.describe AllWorksReport do
     let!(:work_draft_only) { create :work, has_draft: true, versions_count: 1 }
 
     before do
+      #
+      # Create some test data for work views
+      #
+
+      # Create some views for every version of a work
       work_published.versions.each do |work_version|
-        create :view_statistic, resource: work_version, count: 1
+        create :view_statistic, resource: work_version, count: 1, date: Time.zone.yesterday
+        create :view_statistic, resource: work_version, count: 1, date: Time.zone.today
       end
 
+      #
+      # Create some test data for file downloads
+      #
+
       # Set all versions of the published work to point to the same single file
+      # which more accurately reflects our real production data
       version1_file = work_published.latest_published_version.file_resources.first
       work_published.versions.each do |work_version|
         work_version.file_resources = [version1_file]
-        work_version.save! 
+        work_version.save!
       end
 
-      # Create view statistics for that single file
-      create :view_statistic, resource: version1_file, count: 1
+      # Create downloads (stored as view statistics) for that single file created above
+      create :view_statistic, resource: version1_file, count: 1, date: Time.zone.yesterday
+      create :view_statistic, resource: version1_file, count: 1, date: Time.zone.today
+
+      # Make another file on the latest version of the work above
+      another_file = create :file_resource
+      work_published.latest_published_version.file_resources << another_file
+      work_published.save!
+      create :view_statistic, resource: another_file, count: 100, date: Time.zone.today
+
+      # Create a download for another work
+      create :view_statistic,
+             resource: work_published_and_draft.latest_published_version.file_resources.first,
+             count: 5,
+             date: Time.zone.today
     end
 
     it 'yields each row to the given block' do
@@ -45,19 +82,6 @@ RSpec.describe AllWorksReport do
       end
 
       work_published_row, work_published_and_draft_row, work_draft_only_row = yielded_rows
-
-      # work.uuid,
-      # work.depositor.psu_id,
-      # work.work_type,
-      # latest_version.title,
-      # work.doi,
-      # work.deposited_at,
-      # work.deposit_agreed_at,
-      # work.embargoed_until,
-      # work.visibility,
-      # latest_published_version&.uuid,
-      # downloads,
-      # views
 
       # Test ordering by PK
       expect(yielded_rows[0][0]).to eq work_published.uuid
@@ -78,18 +102,18 @@ RSpec.describe AllWorksReport do
       expect(work_published_row[3]).to eq work_published.latest_published_version.title
       expect(work_published_and_draft_row[3]).to eq work_published_and_draft.draft_version.title
       expect(work_draft_only_row[3]).to eq work_draft_only.draft_version.title
-      
+
       # Spot check variations on latest_published_version
       expect(work_published_row[9]).to eq work_published.latest_published_version.uuid
       expect(work_published_and_draft_row[9]).to eq work_published_and_draft.latest_published_version.uuid
       expect(work_draft_only_row[9]).to be_blank
 
       # Spot check downloads
-      expect(work_published_row[10]).to eq 1
-      expect(work_published_and_draft_row[10]).to eq 2
+      expect(work_published_row[10]).to eq 102
+      expect(work_published_and_draft_row[10]).to eq 5
 
       # Spot check view statistics
-      expect(work_published_row[11]).to eq 2
+      expect(work_published_row[11]).to eq 4
     end
   end
 end
