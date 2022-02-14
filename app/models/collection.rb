@@ -146,6 +146,8 @@ class Collection < ApplicationRecord
     'collection'
   end
 
+  # TODO Potential Refactoring: #thumbnail_url, #auto_generated_thumbnail_url,
+  # TODO and #thumbnail_present? methods here are identical to the methods in Work
   def thumbnail_url
     auto_generate_thumbnail? ? auto_generated_thumbnail_url : nil
   end
@@ -161,8 +163,7 @@ class Collection < ApplicationRecord
   private
 
     def thumbnail_urls
-      works.map { |work| work&.latest_published_version&.file_resources }
-          &.flatten&.map { |fr| fr&.thumbnail_url }&.compact
+      works.flat_map { |work| work&.latest_published_version&.file_resources }&.map { |fr| fr&.thumbnail_url }&.compact
     end
 
     def set_defaults

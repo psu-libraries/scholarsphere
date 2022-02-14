@@ -19,17 +19,15 @@ class ThumbnailComponent < ApplicationComponent
   end
 
   def html_classes
-    if featured?
-      if thumbnail_url.present?
-        'thumbnail-image col-xxl-6 ft-work__img'
-      else
-        'thumbnail-icon col-xxl-6 ft-work__img'
-      end
-    elsif thumbnail_url.present?
-      'thumbnail-image'
-    else
-      'thumbnail-icon'
-    end
+    classes = []
+    classes << if thumbnail_url.present?
+                 'thumbnail-image'
+               else
+                 'thumbnail-icon'
+               end
+    classes << 'col-xxl-6 ft-work__img' if featured?
+
+    classes.join(' ')
   end
 
   private

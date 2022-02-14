@@ -190,6 +190,8 @@ class Work < ApplicationRecord
     )
   end
 
+  # TODO Potential Refactoring: #thumbnail_url, #auto_generated_thumbnail_url,
+  # TODO and #thumbnail_present? methods here are identical to the methods in Collection
   def thumbnail_url
     auto_generate_thumbnail? ? auto_generated_thumbnail_url : nil
   end
