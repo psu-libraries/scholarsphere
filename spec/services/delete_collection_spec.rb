@@ -7,8 +7,8 @@ describe DeleteCollection do
 
   let(:collection) { create(:collection, works: [work1, work2]) }
 
-  let(:work1) { create(:work, has_draft: false, versions_count: 1) }
-  let(:work2) { create(:work, has_draft: false, versions_count: 2) }
+  let!(:work1) { create(:work, has_draft: false, versions_count: 1) }
+  let!(:work2) { create(:work, has_draft: false, versions_count: 2) }
 
   context 'when the collection cannot be found' do
     it 'returns false' do
@@ -21,13 +21,13 @@ describe DeleteCollection do
   context 'when the collection is found' do
     context 'when the collection is able to be deleted' do
       it 'deletes the collection and all of its works and their versions' do
-        expect(delete_result).to be_successful
-
-        expect { delete_result }.to change(WorkVersion, :count).by 3
+        expect { delete_result }.to change(WorkVersion, :count).by -3
 
         expect { collection.reload }.to raise_error(ActiveRecord::RecordNotFound)
         expect { work1.reload }.to raise_error(ActiveRecord::RecordNotFound)
         expect { work2.reload }.to raise_error(ActiveRecord::RecordNotFound)
+
+        expect(delete_result).to be_successful
       end
     end
 
@@ -45,6 +45,8 @@ describe DeleteCollection do
           end
         }.not_to change(WorkVersion, :count)
 
+        expect(work1.reload).to be_present
+        expect(work2.reload).to be_present
         expect(collection.reload).to be_present
       end
     end

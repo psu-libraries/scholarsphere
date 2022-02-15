@@ -20,16 +20,13 @@ class DeleteCollection
     ActiveRecord::Base.transaction do
       works = collection.works.map(&:itself)
 
-      collection.works = []
-      collection.save!
+      collection.destroy!
 
       works.each do |work|
-        work.versions.each do |version|
-          DestroyWorkVersion.call(version, force: true)
+        while work.versions.any?
+          DestroyWorkVersion.call(work.versions.last, force: true)
         end
       end
-
-      collection.destroy!
     end
 
     @successful = true
