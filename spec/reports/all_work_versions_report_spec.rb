@@ -41,29 +41,41 @@ RSpec.describe AllWorkVersionsReport do
   end
 
   describe '#rows' do
-    let!(:work_published) { create :work, has_draft: false, versions_count: 2 }
-    let!(:work_published_and_draft) { create :work, has_draft: true, versions_count: 2 }
-    let!(:work_draft_only) { create :work, has_draft: true, versions_count: 1 }
+    # Due to our data model, it's much easier to create Works, then pluck the
+    # versions off them, rather that create WorkVersions here
+    let!(:published_work) { create :work, has_draft: false, versions_count: 1 }
+    let!(:draft_work) { create :work, has_draft: true, versions_count: 1 }
+    let!(:work_with_two_versions) { create :work, has_draft: true, versions_count: 2 }
+
+    let(:published_version) { published_work.versions.first }
+    let(:draft_version) { draft_work.versions.first }
 
     before do
-      work_published.versions.each do |work_version|
-        create :view_statistic, resource: work_version, count: 1
-      end
+      # Add some view statistics
+      create :view_statistic, resource: published_version, count: 5, date: Time.zone.yesterday
+      create :view_statistic, resource: published_version, count: 1, date: Time.zone.today
+
+      create :view_statistic, resource: work_with_two_versions.versions.first, count: 1
     end
 
     it 'yields each row to the given block' do
+      # Sanity check that factories behaved as expected
+      expect(WorkVersion.count).to eq(4)
+
       yielded_rows = []
       report.rows do |row|
         yielded_rows << row
       end
 
       # Test ordering by PK
-      expect(yielded_rows[0][0]).to eq work_published.versions[0].uuid
-      expect(yielded_rows[1][0]).to eq work_published.versions[1].uuid
+      expect(yielded_rows[0][0]).to eq published_version.uuid
+      expect(yielded_rows[1][0]).to eq draft_version.uuid
+      expect(yielded_rows[2][0]).to eq work_with_two_versions.versions[0].uuid
+      expect(yielded_rows[3][0]).to eq work_with_two_versions.versions[1].uuid
 
       # Test row for published
       yielded_rows.first.tap do |row|
-        version = work_published.versions.first
+        version = published_version
 
         expect(row[0]).to eq version.uuid
         expect(row[1]).to eq version.work.uuid
@@ -89,8 +101,10 @@ RSpec.describe AllWorkVersionsReport do
       end
 
       # Spot check view statistics
-      expect(yielded_rows[0][21]).to eq 1
-      expect(yielded_rows[1][21]).to eq 1
+      expect(yielded_rows[0][21]).to eq 6
+      expect(yielded_rows[1][21]).to eq 0
+      expect(yielded_rows[2][21]).to eq 1
+      expect(yielded_rows[3][21]).to eq 0
     end
   end
 end
