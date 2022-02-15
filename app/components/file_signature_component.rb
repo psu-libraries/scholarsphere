@@ -13,7 +13,7 @@ class FileSignatureComponent < ApplicationComponent
   end
 
   def signature_display
-    @value.truncate(10)
+    @value[0, 7]
   end
 
   private
