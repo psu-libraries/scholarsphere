@@ -1,9 +1,9 @@
-import { Controller } from "stimulus"
+import { Controller } from 'stimulus'
 
 export default class extends Controller {
-  static targets = [ "source" ]
+  static targets = ['source']
 
-  copy() {
+  copy () {
     navigator.clipboard.writeText(this.sourceTarget.dataset.signature)
   }
 }

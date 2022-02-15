@@ -1,4 +1,4 @@
-| 
+<span> | </span>
 <span data-controller="clipboard">
   <span class="meta__signature" data-target="clipboard.source" data-signature="<%= value %>">
     <%= label %>: <%= signature_display %>
@@ -8,6 +8,6 @@
           data-placement="top"
           title="<%= value %>"
           data-action="clipboard#copy">
-    <span class="material-icons material-icons--copy">content_paste</span>
+    <span class="material-icons material-icons--copy"><%= t('resources.signature.copy_icon') %></span>
   </button>
 </span>

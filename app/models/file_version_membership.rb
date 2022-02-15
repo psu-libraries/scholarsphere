@@ -16,7 +16,7 @@ class FileVersionMembership < ApplicationRecord
 
   validate :filename_extentions_cannot_change
 
-  delegate :size, :mime_type, :original_filename, :virus, to: :uploader
+  delegate :size, :mime_type, :original_filename, :virus, :md5, :sha256, to: :uploader
 
   attr_writer :changed_by_system
 
@@ -34,10 +34,6 @@ class FileVersionMembership < ApplicationRecord
   # Force changed_by_system to a boolean
   def changed_by_system
     !!@changed_by_system
-  end
-
-  def signature(type: 'md5')
-    file_resource.file.metadata[type]
   end
 
   private

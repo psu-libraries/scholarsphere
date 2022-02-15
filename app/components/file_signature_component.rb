@@ -29,10 +29,10 @@ class FileSignatureComponent < ApplicationComponent
     end
 
     def md5
-      @file.signature(type: 'md5')
+      @file.md5
     end
 
     def sha256
-      @file.signature(type: 'sha256')
+      @file.sha256
     end
 end
