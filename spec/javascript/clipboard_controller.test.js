@@ -12,7 +12,7 @@ describe('ClipboardController', () => {
 
   beforeEach(() => {
     document.body.innerHTML =
-      '<span data-controller="clipboard" data-target="clipboard.source" data-signature="test">' +
+      '<span data-controller="clipboard" data-target="clipboard.source" data-source="test">' +
       '  <button id="btn" data-action="clipboard#copy">' +
       '</span>'
 
