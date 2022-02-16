@@ -33,12 +33,13 @@ class AllWorkVersionsReport
   end
 
   def rows
-    work_versions.in_batches do |work_version_batch|
+    work_versions.find_in_batches do |work_versions|
       # Load out aggregates of views for this batch
-      views_by_work_version_id = load_views_by_work_version(work_version_batch)
+      work_version_batch_ids = work_versions.map(&:id)
+      views_by_work_version_id = load_views_by_work_version(work_version_batch_ids)
 
       # Iterate through each work version in this batch, yielding the CSV row
-      work_version_batch.each do |wv|
+      work_versions.each do |wv|
         views = views_by_work_version_id[wv.id] || 0
 
         row = [
