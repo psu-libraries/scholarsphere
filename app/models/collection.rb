@@ -50,6 +50,9 @@ class Collection < ApplicationRecord
            dependent: :destroy,
            inverse_of: :resource
 
+  has_one :thumbnail_upload,
+          as: :resource
+
   validates :title,
             presence: true
 

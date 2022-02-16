@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_07_221742) do
+ActiveRecord::Schema.define(version: 2022_02_14_181309) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -177,6 +177,17 @@ ActiveRecord::Schema.define(version: 2022_02_07_221742) do
     t.index ["user_id"], name: "index_searches_on_user_id"
   end
 
+  create_table "thumbnail_uploads", force: :cascade do |t|
+    t.string "resource_type"
+    t.bigint "resource_id"
+    t.bigint "file_resource_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["file_resource_id"], name: "index_thumbnail_uploads_on_file_resource_id"
+    t.index ["resource_type", "resource_id"], name: "index_thumbnail_uploads_on_resource"
+    t.index ["resource_type", "resource_id"], name: "index_thumbnail_uploads_on_type_and_resource_id", unique: true
+  end
+
   create_table "user_group_memberships", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "group_id", null: false
@@ -267,6 +278,7 @@ ActiveRecord::Schema.define(version: 2022_02_07_221742) do
   add_foreign_key "collections", "actors", column: "depositor_id"
   add_foreign_key "file_version_memberships", "file_resources"
   add_foreign_key "file_version_memberships", "work_versions"
+  add_foreign_key "thumbnail_uploads", "file_resources"
   add_foreign_key "user_group_memberships", "groups"
   add_foreign_key "user_group_memberships", "users"
   add_foreign_key "users", "actors"

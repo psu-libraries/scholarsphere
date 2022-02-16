@@ -283,7 +283,13 @@ en:
         success: 'Your profile was saved successfully.'
     shared:
       thumbnail_form:
-        explanation: Use auto-generated thumbnail
+        auto_generate_thumbnail:
+          explanation: Use auto-generated thumbnail (Overrides uploaded thumbnail)
+        thumbnail_upload:
+          explanation: "Upload a thumbnail:"
+          display: "Your uploaded thumbnail:"
+          file_table_header: "Name"
+          delete: "Remove"
         submit_button: Update Thumbnail Settings
       editors_form:
         heading: Editors

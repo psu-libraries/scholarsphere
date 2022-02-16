@@ -9,52 +9,34 @@ export default class extends Controller {
     this.parentForm = document.getElementById(this.data.get('parentForm'))
     this.blacklist = JSON.parse(this.data.get('blacklist') || '[]')
 
-    this.initializeUppy()
+    this.initializeUppyThumbnail()
   }
 
-  initializeUppy () {
-    const shared_uppy_options = {
-      id: 'uppy_' + (new Date().getTime()),
+  initializeUppyThumbnail () {
+    var uppy_thumbnail = Uppy({
+      id: 'uppy_thumbnail_' + (new Date().getTime()),
       autoProceed: true,
       onBeforeFileAdded: (currentFile, files) => {
         const filename = currentFile.name
         const isBlacklisted = this.blacklist.includes(filename)
 
         if (isBlacklisted) {
-          uppy.info(`Error: ${filename} has already been uploaded`, 'error', 10000)
+          uppy_thumbnail.info(`Error: ${filename} has already been uploaded.`, 'error', 10000)
           return false
         }
       }
-    };
-
-    const shared_dashboard_options = {
-      id: 'dashboard',
-      target: this.element,
-      inline: 'true',
-      showProgressDetails: true,
-      doneButtonHandler: null
-    };
-
-    var is_thumbnail_form = this.parentForm.attributes.class?.nodeValue === 'edit-thumbnail';
-
-    var uppy_options =
-      (is_thumbnail_form) ?
-        uppy_options = Object.assign({ allowMultipleUploads: false }, shared_uppy_options)
-      :
-        uppy_options = Object.assign({ allowMultipleUploads: true }, shared_uppy_options)
-      ;
-
-    var dashboard_options =
-      (is_thumbnail_form) ?
-        dashboard_options = Object.assign({ height: 250, width: 350 }, shared_dashboard_options)
-      :
-        dashboard_options = Object.assign({ height: 350 }, shared_dashboard_options)
-      ;
-
-    var uppy = Uppy(uppy_options).use(Dashboard, dashboard_options)
-        .use(AwsS3Multipart, {
-          companionUrl: '/'
-        }).on('complete', result => this.onUppyComplete(result));
+    })
+      .use(Dashboard, {
+        id: 'dashboard',
+        target: 'uppy_thumbnail',
+        inline: 'true',
+        showProgressDetails: true,
+        height: 350,
+        doneButtonHandler: null
+      }).use(AwsS3Multipart, {
+        companionUrl: '/'
+      })
+      .on('complete', result => this.onUppyComplete(result))
   }
 
   onUppyComplete (result) {

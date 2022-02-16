@@ -15,6 +15,10 @@ class FileResource < ApplicationRecord
            as: :resource,
            dependent: :destroy
 
+  has_one :thumbnail_upload,
+          required: false,
+          dependent: :destroy
+
   after_save :perform_update_index
 
   def self.reindex_all(relation: all, async: false)

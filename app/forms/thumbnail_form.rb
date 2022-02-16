@@ -18,6 +18,19 @@ class ThumbnailForm
     @auto_generate_thumbnail = auto_generate_thumbnail
   end
 
+  def thumbnail_upload=(thumbnail_upload)
+    resource.thumbnail_upload.destroy! if resource.thumbnail_upload.present?
+
+    tu = ThumbnailUpload.new resource: resource
+    tu.attributes = { file_resource_attributes: { file: JSON.parse(thumbnail_upload) } }
+    tu.file_resource.save
+    tu.save
+  end
+
+  def _destroy=(_destroy)
+    resource.thumbnail_upload.destroy! if _destroy == "true"
+  end
+
   def save
     resource.auto_generate_thumbnail = @auto_generate_thumbnail
     return false if errors.present?

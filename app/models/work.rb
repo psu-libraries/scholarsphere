@@ -36,6 +36,9 @@ class Work < ApplicationRecord
            through: :collection_work_memberships,
            inverse_of: :works
 
+  has_one :thumbnail_upload,
+          as: :resource
+
   accepts_nested_attributes_for :versions
 
   module Types
