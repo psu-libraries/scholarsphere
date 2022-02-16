@@ -92,7 +92,7 @@ RSpec.describe AllWorksReport do
       expect(work_published_row[2]).to eq work_published.work_type
       expect(work_published_row[3]).to eq work_published.latest_published_version.title
       expect(work_published_row[4]).to eq work_published.doi
-      expect(work_published_row[5]).to eq work_published.deposited_at # TODO: spec the date format (iso8601?)?
+      expect(work_published_row[5]).to be_within(1.second).of(work_published.deposited_at) # TODO: spec the date format (iso8601?)?
       expect(work_published_row[6]).to eq work_published.deposit_agreed_at # TODO spec date format?
       expect(work_published_row[7]).to eq work_published.embargoed_until
       expect(work_published_row[8]).to eq work_published.visibility
