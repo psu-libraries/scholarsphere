@@ -10,7 +10,7 @@ RSpec.describe AllFilesReport do
   end
 
   describe '#headers' do
-    specify { expect(report.headers).to eq %w[id version_id filename mime_type size downloads] }
+    specify { expect(report.headers).to eq %w[id version_id filename mime_type size md5 sha256 downloads] }
   end
 
   describe '#name' do
@@ -18,78 +18,81 @@ RSpec.describe AllFilesReport do
   end
 
   describe '#rows' do
+    let!(:file1) { create :file_resource }
+    let!(:file2) { create :file_resource }
+
     let!(:work_published) { create :work, has_draft: false, versions_count: 2 }
-    let!(:work_published_and_draft) { create :work, has_draft: true, versions_count: 2 }
-    let!(:work_draft_only) { create :work, has_draft: true, versions_count: 1 }
+
+    let(:version1) { work_published.versions[0] }
+    let(:version2) { work_published.versions[1] }
 
     before do
+      # Set all versions of the published work to point to the same files,
+      # which more accurately reflects production data
       work_published.versions.each do |work_version|
-        create :view_statistic, resource: work_version, count: 1
-      end
-
-      # Set all versions of the published work to point to the same single file
-      version1_file = work_published.latest_published_version.file_resources.first
-      work_published.versions.each do |work_version|
-        work_version.file_resources = [version1_file]
+        work_version.file_resources = [file1, file2]
         work_version.save!
       end
 
-      # Create view statistics for that single file
-      create :view_statistic, resource: version1_file, count: 1
+      # Create view (download) statistics for file(s)
+      create :view_statistic, resource: file1, count: 1
+      create :view_statistic, resource: file1, count: 3
+
+      # Create checksums for one of the files
+      # TODO: checksums are not currently implemented, but will be soon. This may need to be updated
+      file1.file_attacher.tap do |attacher|
+        attacher.file.add_metadata('md5' => 'md5offile1', 'sha256' => 'sha256offile1')
+        attacher.write
+      end
+      file1.save!
+
+      # Change the filename of file2-version2's membership
+      version2
+        .file_version_memberships
+        .find_by(file_resource_id: file2)
+        .update!(title: 'a-new-filename.png')
+
+      # Delete all other files (which were created as a side effect of factorybot)
+      FileResource
+        .where.not(id: [file1, file2])
+        .destroy_all
     end
 
     it 'yields each row to the given block' do
+      # Sanity Check
+      expect(FileResource.count).to eq 2
+
       yielded_rows = []
       report.rows do |row|
         yielded_rows << row
       end
 
-      work_published_row, work_published_and_draft_row, work_draft_only_row = yielded_rows
+      # Test that there is one row for each FileResource x WorkVersion combo
+      # This test is a litte complicated because order is not guaranteed when using `find_each`
+      expect(yielded_rows.map { |row| [row[0], row[1]] }).to contain_exactly(
+        [file1.uuid, version1.uuid],
+        [file1.uuid, version2.uuid],
+        [file2.uuid, version1.uuid],
+        [file2.uuid, version2.uuid]
+      )
 
-      # work.uuid,
-      # work.depositor.psu_id,
-      # work.work_type,
-      # latest_version.title,
-      # work.doi,
-      # work.deposited_at,
-      # work.deposit_agreed_at,
-      # work.embargoed_until,
-      # work.visibility,
-      # latest_published_version&.uuid,
-      # downloads,
-      # views
+      # Grab a known row
+      file1_version1_row = yielded_rows
+        .find { |file_uuid, version_uuid, *_rest| file_uuid == file1.uuid && version_uuid == version1.uuid }
+      expect(file1_version1_row[2]).to eq version1.file_version_memberships.find_by(file_resource_id: file1).title
+      expect(file1_version1_row[3]).to eq file1.file.metadata['mime_type']
+      expect(file1_version1_row[4]).to eq file1.file.metadata['size']
+      expect(file1_version1_row[5]).to eq 'md5offile1'
+      expect(file1_version1_row[6]).to eq 'sha256offile1'
+      expect(file1_version1_row[7]).to eq 4
 
-      # Test ordering by PK
-      expect(yielded_rows[0][0]).to eq work_published.uuid
-      expect(yielded_rows[1][0]).to eq work_published_and_draft.uuid
-
-      # Test row for without draft
-      expect(work_published_row[1]).to eq work_published.depositor.psu_id
-      expect(work_published_row[2]).to eq work_published.work_type
-      expect(work_published_row[3]).to eq work_published.latest_published_version.title
-      expect(work_published_row[4]).to eq work_published.doi
-      expect(work_published_row[5]).to eq work_published.deposited_at # TODO: spec the date format (iso8601?)?
-      expect(work_published_row[6]).to eq work_published.deposit_agreed_at # TODO spec date format?
-      expect(work_published_row[7]).to eq work_published.embargoed_until
-      expect(work_published_row[8]).to eq work_published.visibility
-      expect(work_published_row[9]).to eq work_published.latest_published_version.uuid
-
-      # Spot check variations on title
-      expect(work_published_row[3]).to eq work_published.latest_published_version.title
-      expect(work_published_and_draft_row[3]).to eq work_published_and_draft.draft_version.title
-      expect(work_draft_only_row[3]).to eq work_draft_only.draft_version.title
-
-      # Spot check variations on latest_published_version
-      expect(work_published_row[9]).to eq work_published.latest_published_version.uuid
-      expect(work_published_and_draft_row[9]).to eq work_published_and_draft.latest_published_version.uuid
-      expect(work_draft_only_row[9]).to be_blank
-
-      # Spot check downloads
-      expect(work_published_row[10]).to eq 1
-      expect(work_published_and_draft_row[10]).to eq 2
-
-      # Spot check view statistics
-      expect(work_published_row[11]).to eq 2
+      # Spot check another row
+      file2_version2_row = yielded_rows
+        .find { |file_uuid, version_uuid, *_rest| file_uuid == file2.uuid && version_uuid == version2.uuid }
+      expect(file2_version2_row[2]).to eq 'a-new-filename.png'
+      expect(file2_version2_row[5]).to be_blank # No md5
+      expect(file2_version2_row[6]).to be_blank # No sha
+      expect(file2_version2_row[7]).to eq 0 # No downloads
     end
   end
 end
