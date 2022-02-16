@@ -88,6 +88,8 @@ Rails.application.routes.draw do
     get 'reports/all_files', to: 'reports#all_files'
     get 'reports/all_works', to: 'reports#all_works'
     get 'reports/all_work_versions', to: 'reports#all_work_versions'
+    get 'reports/monthly_work_versions', to: 'reports#monthly_work_versions'
+    get 'reports/monthly_user_work_versions', to: 'reports#monthly_user_work_versions'
 
     resources :works, only: %i[edit update] do
       resources :work_versions, except: [:new], shallow: true do

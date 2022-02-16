@@ -23,6 +23,27 @@ class Dashboard::ReportsController < Dashboard::BaseController
     generate_csv(AllWorkVersionsReport.new)
   end
 
+  def monthly_work_versions
+    date = Date.new(
+      params[:report_date][:year].to_i,
+      params[:report_date][:month].to_i,
+      params[:report_date][:day].to_i
+    )
+
+    generate_csv(MonthlyWorksReport.new(date: date))
+  end
+
+  def monthly_user_work_versions
+    depositor = Actor.find_by!(psu_id: params['psu_id'])
+    date = Date.new(
+      params[:report_date][:year].to_i,
+      params[:report_date][:month].to_i,
+      params[:report_date][:day].to_i
+    )
+
+    generate_csv(MonthlyUserWorksReport.new(actor: depositor, date: date))
+  end
+
   private
 
     def deny_request
