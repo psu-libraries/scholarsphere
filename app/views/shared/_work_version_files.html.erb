@@ -7,7 +7,9 @@
       <li class="file-card__item">
         <div class="file-card__content">
           <h3>
-            <%= link_to resource_download_path(file.id, resource_id: work_version.uuid), title: t('resources.download', name: file.title) do %>
+            <%= link_to resource_download_path(file.id, resource_id: work_version.uuid),
+                        title: t('resources.download', name: file.title),
+                        rel: 'nofollow' do %>
               <%= file.title %>
             <% end %>
           </h3>
