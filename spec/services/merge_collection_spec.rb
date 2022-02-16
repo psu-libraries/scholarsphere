@@ -23,9 +23,9 @@ describe MergeCollection do
     work1.versions.first.update(title: 'work1.png')
     work2.versions.first.update(title: 'work2.png')
 
-    work1.versions.first.creators = collection.creators.map(&:dup)
-    work2.versions.first.creators = collection.creators.map(&:dup)
-    work1.save!
+    collection.creators = work1.versions.first.creators.map(&:dup)
+    work2.versions.first.creators = work1.versions.first.creators.map(&:dup)
+    collection.save!
     work2.save!
   end
 
@@ -216,8 +216,8 @@ describe MergeCollection do
 
       # check file names
       new_file_names = [
-        work1.versions.first.title,
-        work2.versions.first.title
+        'work1.png',
+        'work2.png'
       ]
       expect(version.file_version_memberships.map(&:title)).to match_array(new_file_names)
 
