@@ -38,11 +38,9 @@ namespace :resource do
     result = DeleteCollection.call(uuid)
 
     if result.successful?
-      puts 'Collection deleted successfully'
+      puts 'Collection deleted successfully.'
     else
-      result.errors.each do |err|
-        puts err
-      end
+      puts 'Failed to delete collection.'
     end
   end
 end
