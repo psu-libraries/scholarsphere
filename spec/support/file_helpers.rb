@@ -99,11 +99,14 @@ class FileHelpers
       file_size = file.size
 
       # for performance we skip metadata extraction and assign test metadata
+      Shrine.plugin :signature
       uploaded_file = Shrine.upload(file, :store, metadata: false)
       uploaded_file.metadata.merge!(
         'size' => file_size,
         'mime_type' => 'image/png',
-        'filename' => file_name
+        'filename' => file_name,
+        'sha256' => Shrine.calculate_signature(uploaded_file, :sha256),
+        'md5' => Shrine.calculate_signature(uploaded_file, :md5)
       )
 
       uploaded_file

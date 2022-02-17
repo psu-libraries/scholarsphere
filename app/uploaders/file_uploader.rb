@@ -65,5 +65,13 @@ class FileUploader < Shrine
     def virus
       metadata.dig('virus', 'status')
     end
+
+    def md5
+      metadata.dig('md5')
+    end
+
+    def sha256
+      metadata.dig('sha256')
+    end
   end
 end

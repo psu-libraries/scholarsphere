@@ -60,6 +60,16 @@ RSpec.describe FileVersionMembership, type: :model do
       membership.virus
       expect(mock_uploader).to have_received(:virus)
     end
+
+    it "delegates #sha256 to the FileResource's uploader" do
+      membership.sha256
+      expect(mock_uploader).to have_received(:sha256)
+    end
+
+    it "delegates #md5 to the FileResource's uploader" do
+      membership.md5
+      expect(mock_uploader).to have_received(:md5)
+    end
   end
 
   describe 'PaperTrail::Versions', versioning: true do

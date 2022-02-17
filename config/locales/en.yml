@@ -588,6 +588,8 @@ en:
     settings_button:
       text: '%{type} Settings'
       tooltip: 'Manage access settings, embargoes, DOIs, and more.'
+    signature:
+      copy_icon: content_paste
   shared:
     search:
       heading: 'Browse and search for works'
