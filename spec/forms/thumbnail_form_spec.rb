@@ -20,7 +20,7 @@ RSpec.describe ThumbnailForm, type: :model do
       end
     end
 
-    context '#thumbnail_upload' do
+    describe '#thumbnail_upload' do
       context 'when a thumbnail_upload already exists' do
         let(:params) do
           { thumbnail_upload:
@@ -33,7 +33,7 @@ RSpec.describe ThumbnailForm, type: :model do
           form.save
           expect { thumbnail_upload.reload }.to raise_error ActiveRecord::RecordNotFound
           expect(work.reload.thumbnail_upload).to be_present
-          expect(work.reload.thumbnail_upload.file_resource.file_data["metadata"]["filename"]).to eq 'image.png'
+          expect(work.reload.thumbnail_upload.file_resource.file_data['metadata']['filename']).to eq 'image.png'
         end
       end
 
@@ -46,12 +46,12 @@ RSpec.describe ThumbnailForm, type: :model do
         it 'create a thumbnail_upload and file_resource' do
           form.save
           expect(work.reload.thumbnail_upload).to be_present
-          expect(work.reload.thumbnail_upload.file_resource.file_data["metadata"]["filename"]).to eq 'image.png'
+          expect(work.reload.thumbnail_upload.file_resource.file_data['metadata']['filename']).to eq 'image.png'
         end
       end
     end
 
-    context '#_destroy' do
+    describe '#_destroy' do
       let!(:thumbnail_upload) { create :thumbnail_upload, resource: work }
 
       context 'when _destroy == "true"' do
