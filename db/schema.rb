@@ -178,14 +178,13 @@ ActiveRecord::Schema.define(version: 2022_02_14_181309) do
   end
 
   create_table "thumbnail_uploads", force: :cascade do |t|
-    t.string "resource_type"
-    t.bigint "resource_id"
+    t.string "resource_type", null: false
+    t.bigint "resource_id", null: false
     t.bigint "file_resource_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["file_resource_id"], name: "index_thumbnail_uploads_on_file_resource_id"
-    t.index ["resource_type", "resource_id"], name: "index_thumbnail_uploads_on_resource"
-    t.index ["resource_type", "resource_id"], name: "index_thumbnail_uploads_on_type_and_resource_id", unique: true
+    t.index ["file_resource_id"], name: "index_thumbnail_uploads_on_file_resource_id", unique: true
+    t.index ["resource_type", "resource_id"], name: "index_thumbnail_uploads_on_resource", unique: true
   end
 
   create_table "user_group_memberships", force: :cascade do |t|

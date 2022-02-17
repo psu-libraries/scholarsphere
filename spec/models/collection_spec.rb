@@ -62,6 +62,7 @@ RSpec.describe Collection, type: :model do
     it { is_expected.to have_many(:works).through(:collection_work_memberships) }
     it { is_expected.to have_many(:creators) }
     it { is_expected.to have_many(:view_statistics) }
+    it { is_expected.to have_one(:thumbnail_upload) }
 
     describe 'default order of works' do
       let(:collection) { build :collection }

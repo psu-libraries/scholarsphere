@@ -47,6 +47,7 @@ RSpec.describe Work, type: :model do
     it { is_expected.to have_many(:legacy_identifiers) }
     it { is_expected.to have_many(:collection_work_memberships) }
     it { is_expected.to have_many(:collections).through(:collection_work_memberships) }
+    it { is_expected.to have_one(:thumbnail_upload) }
 
     it { is_expected.to accept_nested_attributes_for(:versions) }
   end
