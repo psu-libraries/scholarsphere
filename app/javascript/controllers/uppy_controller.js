@@ -4,7 +4,6 @@ import AwsS3Multipart from '@uppy/aws-s3-multipart'
 import Dashboard from '@uppy/dashboard'
 
 export default class extends Controller {
-
   connect () {
     this.uploadSubmit = document.querySelector('.upload-submit')
     this.parentForm = document.getElementById(this.data.get('parentForm'))
@@ -14,11 +13,11 @@ export default class extends Controller {
   }
 
   initializeUppy () {
-    var is_thumbnail_form = this.parentForm.attributes.class?.nodeValue === 'edit-thumbnail';
+    var isThumbnailForm = this.parentForm.attributes.class?.nodeValue === 'edit-thumbnail'
 
-    var info_mssg = (is_thumbnail_form) ? ' has already been uploaded' : ' already exists in this version';
+    var infoMssg = (isThumbnailForm) ? ' has already been uploaded' : ' already exists in this version'
 
-    const shared_uppy_options = {
+    const sharedUppyOptions = {
       id: 'uppy_' + (new Date().getTime()),
       autoProceed: true,
       onBeforeFileAdded: (currentFile, files) => {
@@ -26,38 +25,32 @@ export default class extends Controller {
         const isBlacklisted = this.blacklist.includes(filename)
 
         if (isBlacklisted) {
-          uppy.info(`Error: ${filename + info_mssg}`, 'error', 10000)
+          uppy.info(`Error: ${filename + infoMssg}`, 'error', 10000)
           return false
         }
       }
-    };
+    }
 
-    const shared_dashboard_options = {
+    const sharedDashboardOptions = {
       id: 'dashboard',
       target: this.element,
       inline: 'true',
       showProgressDetails: true,
       doneButtonHandler: null
-    };
+    }
 
-    var uppy_options =
-      (is_thumbnail_form) ?
-        uppy_options = Object.assign({ allowMultipleUploads: false }, shared_uppy_options)
-      :
-        uppy_options = Object.assign({ allowMultipleUploads: true }, shared_uppy_options)
-      ;
+    var uppyOptions = (isThumbnailForm)
+      ? Object.assign({ allowMultipleUploads: false }, sharedUppyOptions)
+      : Object.assign({ allowMultipleUploads: true }, sharedUppyOptions)
 
-    var dashboard_options =
-      (is_thumbnail_form) ?
-        dashboard_options = Object.assign({ height: 250, width: 350 }, shared_dashboard_options)
-      :
-        dashboard_options = Object.assign({ height: 350 }, shared_dashboard_options)
-      ;
+    var dashboardOptions = (isThumbnailForm)
+      ? Object.assign({ height: 250, width: 350 }, sharedDashboardOptions)
+      : Object.assign({ height: 350 }, sharedDashboardOptions)
 
-    var uppy = Uppy(uppy_options).use(Dashboard, dashboard_options)
-        .use(AwsS3Multipart, {
-          companionUrl: '/'
-        }).on('complete', result => this.onUppyComplete(result));
+    var uppy = Uppy(uppyOptions).use(Dashboard, dashboardOptions)
+      .use(AwsS3Multipart, {
+        companionUrl: '/'
+      }).on('complete', result => this.onUppyComplete(result))
   }
 
   onUppyComplete (result) {

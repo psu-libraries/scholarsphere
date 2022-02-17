@@ -100,7 +100,7 @@ RSpec.describe 'Work Settings Page', with_user: :user do
         visit edit_dashboard_work_path(work)
       end
 
-      it 'does not display thumbnail section' do
+      it 'does not display auto-generate thumbnail section' do
         expect(page).not_to have_content I18n.t!('dashboard.shared.thumbnail_form.auto_generate_thumbnail.explanation')
       end
     end
