@@ -290,6 +290,7 @@ en:
           display: "Your uploaded thumbnail:"
           file_table_header: "Name"
           delete: "Remove"
+          divider: '-------- OR --------'
         submit_button: Update Thumbnail Settings
       editors_form:
         heading: Editors

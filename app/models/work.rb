@@ -37,6 +37,7 @@ class Work < ApplicationRecord
            inverse_of: :works
 
   has_one :thumbnail_upload,
+          dependent: :destroy,
           as: :resource
 
   accepts_nested_attributes_for :versions

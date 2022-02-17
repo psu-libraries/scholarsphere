@@ -28,7 +28,7 @@ class ThumbnailForm
   end
 
   def _destroy=(_destroy)
-    resource.thumbnail_upload.destroy! if _destroy == "true"
+    resource.thumbnail_upload.destroy! if _destroy == 'true'
   end
 
   def save

@@ -5,7 +5,7 @@
              remote: false,
              html: { id: thumbnail_form_id, class: 'edit-thumbnail' } do |form| %>
 
-  <p><%= t(".thumbnail_upload.explanation") %></p>
+  <p><%= t('.thumbnail_upload.explanation') %></p>
   <div class="row p-1">
     <div
       class="mb-2 col-sm-4"
@@ -29,7 +29,7 @@
           <tbody class="work-files__file">
           <tr id="<%= dom_id thumbnail_form.resource.thumbnail_upload %>">
             <td>
-              <span class="filename"><%= thumbnail_form.resource.thumbnail_upload.file_resource.file_data["metadata"]["filename"] %></span>
+              <span class="filename"><%= thumbnail_form.resource.thumbnail_upload.file_resource.file_data['metadata']['filename'] %></span>
             </td>
             <td>
               <%= link_to t('.thumbnail_upload.delete'),
@@ -46,7 +46,7 @@
   </div>
 
   <% if thumbnail_form.resource.thumbnail_present? %>
-    <p>------- OR -------</p>
+    <p><%= t('.thumbnail_upload.divider') %></p>
     <div class="form-check auto-generate-thumbnail">
       <%= form.check_box :auto_generate_thumbnail,
                          class: 'form-check-input' %>
