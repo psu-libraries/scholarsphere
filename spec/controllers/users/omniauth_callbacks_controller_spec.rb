@@ -20,16 +20,37 @@ RSpec.describe Users::OmniauthCallbacksController, type: :controller do
 
   describe '#azure_oauth' do
     context 'when the user persists correctly' do
-      before do
-        get :azure_oauth
+      context 'when the login is not initiated from a storable location' do
+        before do
+          get :azure_oauth
+        end
+
+        it 'signs in the user' do
+          expect(warden.authenticated?(:user)).to eq true
+        end
+
+        it 'sets current_user' do
+          expect(controller.current_user).to eq user
+        end
+
+        it { is_expected.to redirect_to root_path }
       end
 
-      it 'signs in the user' do
-        expect(warden.authenticated?(:user)).to eq true
-      end
+      context 'when the login is initiated from a storable location' do
+        before do
+          controller.store_location_for(:user, about_path)
+          get :azure_oauth
+        end
 
-      it 'sets current_user' do
-        expect(controller.current_user).to eq user
+        it 'signs in the user' do
+          expect(warden.authenticated?(:user)).to eq true
+        end
+
+        it 'sets current_user' do
+          expect(controller.current_user).to eq user
+        end
+
+        it { is_expected.to redirect_to about_path }
       end
     end
 
