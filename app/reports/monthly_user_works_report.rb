@@ -36,6 +36,7 @@ class MonthlyUserWorksReport < MonthlyWorksReport
     def generate_row(work:, views:, downloads:)
       latest_version = work
         .versions
+        .reject(&:withdrawn?)
         .max_by(&:version_number)
 
       title = latest_version.title

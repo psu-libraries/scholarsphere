@@ -36,6 +36,7 @@ class AllWorksReport
 
       latest_version = work
         .versions
+        .reject(&:withdrawn?)
         .max_by(&:version_number)
 
       views = views_by_work_id[work.id] || 0
