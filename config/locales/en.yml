@@ -279,6 +279,13 @@ en:
         error_message: "%{error} prohibited your profile from being saved:"
       update:
         success: 'Your profile was saved successfully.'
+    reports:
+      admin_reports: 'Admin Reports'
+      all_files_report: 'All Files Report'
+      all_works_report: 'All Works Report'
+      all_work_versions_report: 'All Work Versions Report'
+      monthly_report: 'Monthly Report (All Users)'
+      monthly_user_report: "Monthly Report for %{user}"
     shared:
       editors_form:
         heading: Editors

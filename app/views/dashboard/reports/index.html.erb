@@ -5,26 +5,50 @@
 <div class="container">
   <div class="row row--md-mb-3">
     <div class="col-md">
-      <ul>
-        <% if current_user.admin? %>
-          <li><%= link_to 'All Files Report', dashboard_reports_all_files_path %></li>
-          <li><%= link_to 'All Works Report', dashboard_reports_all_works_path %></li>
-          <li><%= link_to 'All Work Versions Report', dashboard_reports_all_work_versions_path %></li>
-          <li>
-            <%= form_tag dashboard_reports_monthly_work_versions_path, method: :get do |f| %>
-              <%= select_date(Date.today, prefix: 'report_date', order: [:month, :year], discard_day: true) %>
-              <%= submit_tag 'Monthly Report', class: 'btn btn-primary' %>
-            <% end %>
-          </li>
-        <% end %>
+      <% if current_user.admin? %>
+        <h2><%= t('dashboard.reports.admin_reports') %></h2>
+        <hr>
+        <h3><%= link_to t('dashboard.reports.all_files_report'), dashboard_reports_all_files_path %></h3>
+        <h3><%= link_to t('dashboard.reports.all_works_report'), dashboard_reports_all_works_path %></h3>
+        <h3><%= link_to t('dashboard.reports.all_work_versions_report'), dashboard_reports_all_work_versions_path %></h3>
 
-        <li>
-          <%= form_tag dashboard_reports_monthly_user_work_versions_path, method: :get do |f| %>
-            <%= select_date(Date.today, prefix: 'report_date', order: [:month, :year], discard_day: true) %>
-            <%= submit_tag "User's Monthly Report", class: 'btn btn-primary' %>
-          <% end %>
-        </li>
-      </ul>
+        <%= form_tag dashboard_reports_monthly_work_versions_path, method: :get do |f| %>
+          <h3><%= t('dashboard.reports.monthly_report') %></h3>
+          <div class="row">
+            <div class="col-4">
+              <%= select_date(
+                    Date.today,
+                    options = {
+                      prefix: 'report_date',
+                      order: [:month, :year],
+                      discard_day: true
+                    },
+                    html_options = { class: 'form-control form-control-sm mb-2' }
+                  ) %>
+              <%= submit_tag 'Generate Report', class: 'btn btn-primary' %>
+            </div>
+          </div>
+        <% end %>
+        <hr>
+      <% end %>
+
+      <%= form_tag dashboard_reports_monthly_user_work_versions_path, method: :get do |f| %>
+        <h3><%= t('dashboard.reports.monthly_user_report', user: current_user.display_name) %></h3>
+        <div class="row">
+          <div class="col-4">
+            <%= select_date(
+                  Date.today,
+                  options = {
+                    prefix: 'report_date',
+                    order: [:month, :year],
+                    discard_day: true
+                  },
+                  html_options = { class: 'form-control form-control-sm mb-2' }
+                ) %>
+            <%= submit_tag 'Generate Report', class: 'btn btn-primary' %>
+          </div>
+        </div>
+      <% end %>
     </div>
   </div>
 </div>
