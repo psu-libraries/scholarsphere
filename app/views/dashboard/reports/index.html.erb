@@ -16,14 +16,14 @@
               <%= submit_tag 'Monthly Report', class: 'btn btn-primary' %>
             <% end %>
           </li>
-          <li>
-            <%= form_tag dashboard_reports_monthly_user_work_versions_path, method: :get do |f| %>
-              <%= text_field_tag 'psu_id', '', placeholder: 'Depositor PSU ID' %>
-              <%= select_date(Date.today, prefix: 'report_date', order: [:month, :year], discard_day: true) %>
-              <%= submit_tag "User's Monthly Report", class: 'btn btn-primary' %>
-            <% end %>
-          </li>
         <% end %>
+
+        <li>
+          <%= form_tag dashboard_reports_monthly_user_work_versions_path, method: :get do |f| %>
+            <%= select_date(Date.today, prefix: 'report_date', order: [:month, :year], discard_day: true) %>
+            <%= submit_tag "User's Monthly Report", class: 'btn btn-primary' %>
+          <% end %>
+        </li>
       </ul>
     </div>
   </div>
