@@ -3,8 +3,6 @@
 require 'csv'
 
 class Dashboard::ReportsController < Dashboard::BaseController
-  def show; end
-
   def all_files
     return deny_request unless current_user.admin?
 
@@ -24,6 +22,8 @@ class Dashboard::ReportsController < Dashboard::BaseController
   end
 
   def monthly_work_versions
+    return deny_request unless current_user.admin?
+
     date = Date.new(
       params[:report_date][:year].to_i,
       params[:report_date][:month].to_i,
@@ -34,7 +34,7 @@ class Dashboard::ReportsController < Dashboard::BaseController
   end
 
   def monthly_user_work_versions
-    depositor = Actor.find_by!(psu_id: params['psu_id'])
+    depositor = Actor.find_by!(psu_id: current_user.actor.psu_id)
     date = Date.new(
       params[:report_date][:year].to_i,
       params[:report_date][:month].to_i,
