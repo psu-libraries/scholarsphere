@@ -49,14 +49,16 @@ RSpec.describe 'Collection Settings Page', with_user: :user do
         expect(page).to have_content(I18n.t!('helpers.hint.thumbnail_form.auto_generate_thumbnail'))
         expect(page).to have_xpath('//img[@src="url.com/path/file"]')
         click_button I18n.t!('dashboard.shared.thumbnail_form.submit_button')
-        expect(page).to have_checked_field(I18n.t!('dashboard.shared.thumbnail_form.auto_generate_thumbnail.explanation'))
+        expect(page)
+          .to have_checked_field(I18n.t!('dashboard.shared.thumbnail_form.auto_generate_thumbnail.explanation'))
 
         collection.reload
         expect(collection.auto_generate_thumbnail).to eq true
 
         uncheck(I18n.t!('dashboard.shared.thumbnail_form.auto_generate_thumbnail.explanation'), allow_label_click: true)
         click_button I18n.t!('dashboard.shared.thumbnail_form.submit_button')
-        expect(page).to have_no_checked_field(I18n.t!('dashboard.shared.thumbnail_form.auto_generate_thumbnail.explanation'))
+        expect(page)
+          .to have_no_checked_field(I18n.t!('dashboard.shared.thumbnail_form.auto_generate_thumbnail.explanation'))
 
         collection.reload
         expect(collection.auto_generate_thumbnail).to eq false
