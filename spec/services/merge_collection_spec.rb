@@ -200,7 +200,7 @@ describe MergeCollection do
       version = new_work.versions.first
 
       # spot check attributes
-      expect(new_work.doi).to eq collection.doi
+      expect(new_work.doi).to be_nil
       expect(version).not_to be_published
       expect(version.title).to eq collection.title
       expect(version.description).to eq collection[:description]

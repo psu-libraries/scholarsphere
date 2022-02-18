@@ -193,7 +193,6 @@ class MergeCollection
       work = Work.build_with_empty_version(
         work_type: canonical_work.work_type,
         embargoed_until: canonical_work.embargoed_until,
-        doi: collection.doi,
         depositor: canonical_work.depositor,
         proxy_depositor: canonical_work.proxy_depositor,
         deposited_at: deposited_at,
@@ -223,7 +222,6 @@ class MergeCollection
       {
         work_type: work.work_type,
         embargoed_until: work.embargoed_until,
-        doi: work.doi,
         depositor_id: work.depositor&.id,
         proxy_depositor_id: work.proxy_depositor&.id,
         notify_editors: work.notify_editors,
