@@ -34,7 +34,8 @@ RSpec.describe 'Collection Settings Page', with_user: :user do
         end
 
         it 'does not display auto-generate thumbnail section' do
-          expect(page).not_to have_content I18n.t!('dashboard.shared.thumbnail_form.auto_generate_thumbnail.explanation')
+          expect(page)
+            .not_to have_content I18n.t!('dashboard.shared.thumbnail_form.auto_generate_thumbnail.explanation')
         end
       end
 
@@ -56,7 +57,8 @@ RSpec.describe 'Collection Settings Page', with_user: :user do
           collection.reload
           expect(collection.auto_generate_thumbnail).to eq true
 
-          uncheck(I18n.t!('dashboard.shared.thumbnail_form.auto_generate_thumbnail.explanation'), allow_label_click: true)
+          uncheck(I18n.t!('dashboard.shared.thumbnail_form.auto_generate_thumbnail.explanation'),
+                  allow_label_click: true)
           click_button I18n.t!('dashboard.shared.thumbnail_form.submit_button')
           expect(page)
             .to have_no_checked_field(I18n.t!('dashboard.shared.thumbnail_form.auto_generate_thumbnail.explanation'))
@@ -77,8 +79,8 @@ RSpec.describe 'Collection Settings Page', with_user: :user do
           FeatureHelpers::DashboardForm.upload_file(Rails.root.join('spec', 'fixtures', 'image.png'))
         end
         expect { click_button I18n.t!('dashboard.shared.thumbnail_form.submit_button') }
-            .to change(ThumbnailUpload, :count).by 1
-        expect(ThumbnailUpload.last.file_resource.file_data["metadata"]["filename"]).to eq 'image.png'
+          .to change(ThumbnailUpload, :count).by 1
+        expect(ThumbnailUpload.last.file_resource.file_data['metadata']['filename']).to eq 'image.png'
         expect(ThumbnailUpload.last.resource).to eq collection
 
         expect(page).to have_content('Your uploaded thumbnail:')
