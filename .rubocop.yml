@@ -24,6 +24,8 @@ Metrics/BlockLength:
     - 'config/environments/development.rb'
     - 'spec/**/*'
     - 'lib/tasks/**/*'
+    - 'app/reports/**/*'
+    - 'spec/reports/**/*'
 
 Metrics/CyclomaticComplexity:
   Exclude:

@@ -173,6 +173,8 @@ en:
       invalid_edtf: is not a valid date in EDTF format
       invalid_orcid: is not a valid ORCiD id
       invalid_doi: is not a properly formatted DOI from our Datacite service
+    not_authorized:
+      heading: "401: Request not authorized."
     not_found:
       heading: Resource not found or unavailable
       content: >
@@ -281,6 +283,13 @@ en:
         error_message: "%{error} prohibited your profile from being saved:"
       update:
         success: 'Your profile was saved successfully.'
+    reports:
+      admin_reports: 'Admin Reports'
+      all_files_report: 'All Files Report'
+      all_works_report: 'All Works Report'
+      all_work_versions_report: 'All Work Versions Report'
+      monthly_report: 'Monthly Report (All Users)'
+      monthly_user_report: "Monthly Report for %{user}"
     shared:
       thumbnail_form:
         explanation: Use auto-generated thumbnail
@@ -550,6 +559,7 @@ en:
       not_found: 'Page Not Found'
       server_error: 'Server Error'
       graphql: 'GraphQL'
+      reports: 'Reports'
   resources:
     analytics: Analytics
     collections: Collections

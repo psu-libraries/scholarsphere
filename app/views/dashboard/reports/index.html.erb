@@ -1,0 +1,54 @@
+<% content_for :navbar_heading do %>
+  <h1 class="navbar-brand navbar-brand--center slab-font"><%= t('navbar.heading.reports') %></h1>
+<% end %>
+
+<div class="container">
+  <div class="row row--md-mb-3">
+    <div class="col-md">
+      <% if current_user.admin? %>
+        <h2><%= t('dashboard.reports.admin_reports') %></h2>
+        <hr>
+        <h3><%= link_to t('dashboard.reports.all_files_report'), dashboard_reports_all_files_path %></h3>
+        <h3><%= link_to t('dashboard.reports.all_works_report'), dashboard_reports_all_works_path %></h3>
+        <h3><%= link_to t('dashboard.reports.all_work_versions_report'), dashboard_reports_all_work_versions_path %></h3>
+
+        <%= form_tag dashboard_reports_monthly_work_versions_path, method: :get do |f| %>
+          <h3><%= t('dashboard.reports.monthly_report') %></h3>
+          <div class="row">
+            <div class="col-4">
+              <%= select_date(
+                    Date.today,
+                    options = {
+                      prefix: 'report_date',
+                      order: [:month, :year],
+                      discard_day: true
+                    },
+                    html_options = { class: 'form-control form-control-sm mb-2' }
+                  ) %>
+              <%= submit_tag 'Generate Report', class: 'btn btn-primary' %>
+            </div>
+          </div>
+        <% end %>
+        <hr>
+      <% end %>
+
+      <%= form_tag dashboard_reports_monthly_user_work_versions_path, method: :get do |f| %>
+        <h3><%= t('dashboard.reports.monthly_user_report', user: current_user.display_name) %></h3>
+        <div class="row">
+          <div class="col-4">
+            <%= select_date(
+                  Date.today,
+                  options = {
+                    prefix: 'report_date',
+                    order: [:month, :year],
+                    discard_day: true
+                  },
+                  html_options = { class: 'form-control form-control-sm mb-2' }
+                ) %>
+            <%= submit_tag 'Generate Report', class: 'btn btn-primary' %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
