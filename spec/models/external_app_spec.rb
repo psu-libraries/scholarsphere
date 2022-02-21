@@ -16,6 +16,7 @@ RSpec.describe ExternalApp, type: :model do
 
   describe 'associations' do
     it { is_expected.to have_many(:api_tokens) }
+    it { is_expected.to have_many(:work_versions).dependent(:nullify) }
   end
 
   describe 'validations' do

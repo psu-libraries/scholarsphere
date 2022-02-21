@@ -417,6 +417,7 @@ RSpec.describe Work, type: :model do
           thumbnail_url_ssi
           auto_generate_thumbnail_tesim
           notify_editors_tesim
+          external_app_id_isi
         )
       end
 
