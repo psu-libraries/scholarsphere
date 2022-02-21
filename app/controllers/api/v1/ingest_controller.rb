@@ -52,7 +52,8 @@ module Api::V1
           metadata: metadata_params,
           depositor_access_id: depositor_params,
           content: content_params,
-          permissions: permission_params
+          permissions: permission_params,
+          external_app: api_token.application
         )
       end
 

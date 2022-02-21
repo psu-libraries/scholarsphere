@@ -13,6 +13,7 @@ RSpec.describe Api::V1::WorkPublisher do
   let(:depositor) { build(:person) }
   let(:mock_client) { instance_spy(PsuIdentity::SearchService::Client) }
   let(:new_work) { publisher.work }
+  let(:external_app) { build(:external_app) }
 
   before do
     allow(PsuIdentity::SearchService::Client).to receive(:new).and_return(mock_client)
@@ -35,7 +36,8 @@ RSpec.describe Api::V1::WorkPublisher do
         content: [
           HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_path, 'image.png'))),
           HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_path, 'ipsum.pdf')))
-        ]
+        ],
+        external_app: external_app
       )
     end
 
@@ -57,6 +59,10 @@ RSpec.describe Api::V1::WorkPublisher do
 
     it 'does NOT create a User record for the depositor' do
       expect { new_work }.not_to change(User, :count)
+    end
+
+    it 'links the created WorkVersion to the given ExternalApp' do
+      expect(new_work.latest_version.external_app).to eq external_app
     end
   end
 
