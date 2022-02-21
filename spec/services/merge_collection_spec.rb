@@ -3,9 +3,10 @@
 require 'rails_helper'
 
 describe MergeCollection do
-  subject(:merge_result) { described_class.call(collection.uuid) }
+  subject(:merge_result) { described_class.call(collection.uuid, force: force_merge) }
 
-  let(:collection) { create(:collection, works: [work1, work2]) }
+  let(:force_merge) { false }
+  let(:collection) { create(:collection, :with_a_doi, works: [work1, work2]) }
   let(:user) { create(:user) }
   let(:actor) { user.actor }
 
@@ -15,10 +16,16 @@ describe MergeCollection do
 
   # Update both works to have identical metadata on their versions, so we can induce various error states easily
   before do
+    collection.update(keyword: common_metadata[:keyword])
     work1.versions.first.update(common_metadata)
     work2.versions.first.update(common_metadata)
 
+    work1.versions.first.update(title: 'work1.png')
+    work2.versions.first.update(title: 'work2.png')
+
+    collection.creators = work1.versions.first.creators.map(&:dup)
     work2.versions.first.creators = work1.versions.first.creators.map(&:dup)
+    collection.save!
     work2.save!
   end
 
@@ -74,10 +81,21 @@ describe MergeCollection do
         work1.versions.first.update(description: 'new description')
       end
 
-      it 'returns an error message' do
-        error_msg = /Work-#{work1.id} has different WorkVersion metadata than Work-#{work2.id}/i
-        expect(merge_result.errors).to include(a_string_matching(error_msg))
-        expect(merge_result.errors).to include(a_string_matching(/new description/i))
+      context 'when the force param is false' do
+        it 'returns an error message' do
+          error_msg = /Work-#{work1.id} has different WorkVersion metadata than Work-#{work2.id}/i
+          expect(merge_result.errors).to include(a_string_matching(error_msg))
+          expect(merge_result.errors).to include(a_string_matching(/new description/i))
+        end
+      end
+
+      context 'when the force param is true' do
+        let(:force_merge) { true }
+
+        it 'does not return an error message' do
+          expect(merge_result).to be_successful
+          expect(merge_result.errors.length).to eq 0
+        end
       end
     end
 
@@ -108,16 +126,49 @@ describe MergeCollection do
         work2.save!
       end
 
+      context 'when the force param is false' do
+        it 'returns an error message' do
+          error_msg = /Collection-#{collection.id} has different creators than Work-#{work2.id}/i
+          expect(merge_result.errors).to include(a_string_matching(error_msg))
+        end
+      end
+
+      context 'when the force param is true' do
+        let(:force_merge) { true }
+
+        it 'does not return an error message' do
+          expect(merge_result).to be_successful
+          expect(merge_result.errors.length).to eq 0
+        end
+      end
+    end
+  end
+
+  context 'when the works in the collection have mismatched keywords' do
+    before do
+      work2.versions.first.update(keyword: 'new keyword')
+    end
+
+    context 'when the force param is false' do
       it 'returns an error message' do
-        error_msg = /Work-#{work1.id} has different creators than Work-#{work2.id}/i
+        error_msg = /Collection-#{collection.id} has different keywords than Work-#{work2.id}/i
         expect(merge_result.errors).to include(a_string_matching(error_msg))
+      end
+    end
+
+    context 'when the force param is true' do
+      let(:force_merge) { true }
+
+      it 'does not return an error message' do
+        expect(merge_result).to be_successful
+        expect(merge_result.errors.length).to eq 0
       end
     end
   end
 
   context 'when the database transaction fails' do
     before do
-      allow(DestroyWorkVersion).to receive(:call).and_raise(StandardError)
+      allow(WorkIndexer).to receive(:call).and_raise(StandardError)
     end
 
     it 'rolls back all changes' do
@@ -149,10 +200,11 @@ describe MergeCollection do
       version = new_work.versions.first
 
       # spot check attributes
-      expect(version).to be_published
+      expect(new_work.doi).to be_nil
+      expect(version).not_to be_published
       expect(version.title).to eq collection.title
+      expect(version.description).to eq collection[:description]
       expect(version.rights).to eq common_metadata[:rights]
-      expect(version.description).to eq common_metadata[:description]
       expect(version.published_date).to eq common_metadata[:published_date]
 
       # check files
@@ -161,6 +213,13 @@ describe MergeCollection do
         work2.versions.first.file_resources
       ].flatten
       expect(version.file_resources).to match_array(original_files)
+
+      # check file names
+      new_file_names = [
+        'work1.png',
+        'work2.png'
+      ]
+      expect(version.file_version_memberships.map(&:title)).to match_array(new_file_names)
 
       # check creators
       expect(version.creators.map(&:display_name)).to match_array(work1.versions.first.creators.map(&:display_name))
@@ -172,24 +231,6 @@ describe MergeCollection do
                          [Date.parse('2022-02-06'), 1],
                          [Date.parse('2022-02-07'), 2]
                        ])
-    end
-
-    context 'when the delete_collection param is true' do
-      it 'deletes the original collection and its works' do
-        merge_result
-        expect { collection.reload }.to raise_error(ActiveRecord::RecordNotFound)
-        expect { work1.reload }.to raise_error(ActiveRecord::RecordNotFound)
-        expect { work2.reload }.to raise_error(ActiveRecord::RecordNotFound)
-      end
-    end
-
-    context 'when the delete_collection param is false' do
-      it 'does not delete the original collection or its works' do
-        described_class.call(collection.uuid, delete_collection: false)
-        expect(collection.reload).to be_present
-        expect(work1.reload).to be_present
-        expect(work2.reload).to be_present
-      end
     end
   end
 end
