@@ -82,4 +82,23 @@ RSpec.describe DownloadsController, type: :controller do
       end
     end
   end
+
+  context 'when downloading a file twice' do
+    let(:work_version) { create(:work_version, :published, :with_files, file_count: 2) }
+
+    it 'counts the download once' do
+      expect {
+        2.times {
+          get :content, params: { resource_id: work_version.uuid, id: work_version.file_version_memberships[0].id }
+        }
+      }.to(
+        change {
+          ViewStatistic.find_by(
+            resource_type: 'FileResource',
+            resource_id: work_version.file_version_memberships[0].file_resource_id
+          )&.count || 0
+        }.by(1)
+      )
+    end
+  end
 end
