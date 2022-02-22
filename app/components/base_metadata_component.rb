@@ -72,4 +72,8 @@ class BaseMetadataComponent < ApplicationComponent
         .join('-')
         .dasherize
     end
+
+    def display_thumbnail?
+      controller.class.to_s == "ResourcesController" && resource.thumbnail_url.present?
+    end
 end

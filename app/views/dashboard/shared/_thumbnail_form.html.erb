@@ -45,7 +45,7 @@
     <% end %>
   </div>
 
-  <% if thumbnail_form.resource.thumbnail_present? %>
+  <% if thumbnail_form.resource.auto_generated_thumbnail_url.present? %>
     <p><%= t('.thumbnail_upload.divider') %></p>
     <div class="form-check auto-generate-thumbnail">
       <%= form.check_box :auto_generate_thumbnail,

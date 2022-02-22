@@ -153,20 +153,24 @@ class Collection < ApplicationRecord
   # TODO Potential Refactoring: #thumbnail_url, #auto_generated_thumbnail_url,
   # TODO and #thumbnail_present? methods here are identical to the methods in Work
   def thumbnail_url
-    auto_generate_thumbnail? ? auto_generated_thumbnail_url : nil
+    uploaded_thumbnail_url.presence || (auto_generate_thumbnail? ? auto_generated_thumbnail_url : nil)
   end
 
   def auto_generated_thumbnail_url
-    thumbnail_urls.last
+    auto_generated_thumbnail_urls.last
   end
 
   def thumbnail_present?
-    thumbnail_urls.present?
+    uploaded_thumbnail_url.present? || auto_generated_thumbnail_urls.present?
   end
 
   private
 
-    def thumbnail_urls
+    def uploaded_thumbnail_url
+      thumbnail_upload&.file_resource&.thumbnail_url
+    end
+
+    def auto_generated_thumbnail_urls
       works.flat_map { |work| work&.latest_published_version&.file_resources }&.map { |fr| fr&.thumbnail_url }&.compact
     end
 
