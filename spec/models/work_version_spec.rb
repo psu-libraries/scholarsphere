@@ -13,11 +13,6 @@ RSpec.describe WorkVersion, type: :model do
 
   it_behaves_like 'a resource that can provide all DOIs in', [:doi, :identifier]
 
-  it_behaves_like 'a resource with a thumbnail url' do
-    let!(:work) { create :work }
-    let!(:resource) { create :work_version, :with_files, work: work }
-  end
-
   describe 'table' do
     it { is_expected.to have_db_column(:work_id) }
     it { is_expected.to have_db_index(:work_id) }

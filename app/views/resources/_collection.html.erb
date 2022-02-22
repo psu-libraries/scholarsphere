@@ -35,8 +35,15 @@
 
     <div class="col-lg-5">
       <div class="keyline keyline--left">
+        <h2 class="h4"><%= I18n.t('shared.thumbnail_heading') %></h2>
+      </div>
+
+      <div class="p-2 thumbnail-meta"><%= render ThumbnailComponent.new(resource: collection) %></div>
+
+      <div class="keyline keyline--left">
         <h2 class="h4"><%= t('resources.metadata') %></h2>
       </div>
+
       <%= render CollectionMetadataComponent.new(collection: collection) %>
 
       <div class="keyline keyline--left">

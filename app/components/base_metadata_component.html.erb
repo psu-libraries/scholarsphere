@@ -1,11 +1,5 @@
 <table class="table meta-table">
   <tbody>
-  <% if display_thumbnail? %>
-    <tr>
-      <th scope="row" class="<%= css_class :thumbnail %>"><%= I18n.t('shared.thumbnail_heading') %></th>
-      <td><%= render ThumbnailComponent.new(resource: resource) %></td>
-    </tr>
-  <% end %>
   <% attributes.each do |attr, label, value| %>
     <tr>
       <th scope="row" class="<%= css_class attr %>"><%= label %></th>
