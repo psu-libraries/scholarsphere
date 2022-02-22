@@ -36,6 +36,9 @@ class WorkVersion < ApplicationRecord
   belongs_to :work,
              inverse_of: :versions
 
+  belongs_to :external_app,
+             optional: true
+
   has_many :file_version_memberships,
            dependent: :destroy
 

@@ -25,6 +25,7 @@ RSpec.describe WorkVersion, type: :model do
     it { is_expected.to have_db_column(:metadata).of_type(:jsonb) }
     it { is_expected.to have_db_column(:version_number).of_type(:integer) }
     it { is_expected.to have_db_column(:doi).of_type(:string) }
+    it { is_expected.to have_db_column(:external_app_id) }
     it { is_expected.to have_jsonb_accessor(:title).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:subtitle).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:version_name).of_type(:string) }
@@ -50,6 +51,7 @@ RSpec.describe WorkVersion, type: :model do
 
   describe 'associations' do
     it { is_expected.to belong_to(:work) }
+    it { is_expected.to belong_to(:external_app).optional(true) }
     it { is_expected.to have_many(:file_version_memberships) }
     it { is_expected.to have_many(:file_resources).through(:file_version_memberships) }
     it { is_expected.to have_many(:creators) }

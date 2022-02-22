@@ -6,7 +6,7 @@ require 'rails_helper'
 # feature test to ensure end-to-end functionality of our ingest API.
 
 RSpec.describe Api::V1::IngestController, type: :controller do
-  let(:api_token) { create(:api_token).token }
+  let(:api_token) { create(:api_token) }
   let(:depositor) { VCRHelpers.depositor }
   let(:creator) do
     {
@@ -19,7 +19,9 @@ RSpec.describe Api::V1::IngestController, type: :controller do
   let(:json_response) { HashWithIndifferentAccess.new(JSON.parse(response.body)) }
 
   before do
-    request.headers[:'X-API-Key'] = api_token
+    allow(Api::V1::WorkPublisher).to receive(:call).and_call_original
+
+    request.headers[:'X-API-Key'] = api_token.token
   end
 
   describe 'POST #create' do
@@ -44,6 +46,9 @@ RSpec.describe Api::V1::IngestController, type: :controller do
         expect(response).to be_ok
         expect(response.body).to eq(
           "{\"message\":\"Work was successfully created\",\"url\":\"/resources/#{Work.last.uuid}\"}"
+        )
+        expect(Api::V1::WorkPublisher).to have_received(:call).with(
+          a_hash_including(external_app: api_token.application)
         )
       end
     end

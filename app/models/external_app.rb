@@ -6,6 +6,9 @@ class ExternalApp < ApplicationRecord
            foreign_key: 'application_id',
            inverse_of: 'application'
 
+  has_many :work_versions,
+           dependent: :nullify
+
   validates :name,
             presence: true,
             uniqueness: true
