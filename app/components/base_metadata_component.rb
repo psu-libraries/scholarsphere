@@ -74,6 +74,6 @@ class BaseMetadataComponent < ApplicationComponent
     end
 
     def display_thumbnail?
-      controller.class.to_s == "ResourcesController" && resource.thumbnail_url.present?
+      controller.class.to_s == 'ResourcesController' && resource.thumbnail_url.present?
     end
 end

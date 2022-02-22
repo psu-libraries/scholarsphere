@@ -253,8 +253,6 @@ en:
       edit:
         heading: "Settings for %{title}"
         back: Back to Collection
-        thumbnail:
-          heading: Thumbnail
         doi:
           heading: DOI
           explanation: A Digital Object Identifier (DOI) is a persistent identifier that can be used in print or on the web.
@@ -317,8 +315,6 @@ en:
       edit:
         heading: "Settings for %{work_title}"
         back: Back to Work
-        thumbnail:
-          heading: Thumbnail
         visibility:
           heading: Access
           explanation: Access settings affect who can download files associated with the work.
@@ -603,6 +599,7 @@ en:
       submit: 'search'
       subheading: Or
       browse: 'Browse & Filter All Works'
+    thumbnail_heading: 'Thumbnail'
   visibility_badge_component:
     label:
       open: Open Access
