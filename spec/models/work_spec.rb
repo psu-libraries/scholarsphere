@@ -561,9 +561,9 @@ RSpec.describe Work, type: :model do
 
       it 'returns an array containing each of the thumbnail urls from the file_resources' do
         allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
-        expect(work.send(:thumbnail_urls).count).to eq 2
-        expect(work.send(:thumbnail_urls).class).to eq Array
-        expect(work.send(:thumbnail_urls).last).to eq 'url.com/path/file'
+        expect(work.send(:auto_generated_thumbnail_urls).count).to eq 2
+        expect(work.send(:auto_generated_thumbnail_urls).class).to eq Array
+        expect(work.send(:auto_generated_thumbnail_urls).last).to eq 'url.com/path/file'
       end
     end
   end

@@ -157,7 +157,7 @@ class Collection < ApplicationRecord
   end
 
   def auto_generated_thumbnail_url
-    auto_generated_thumbnail_urls.last
+    auto_generated_thumbnail_urls&.last
   end
 
   def thumbnail_present?

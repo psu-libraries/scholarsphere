@@ -414,9 +414,9 @@ RSpec.describe Collection, type: :model do
 
       it "returns an array containing each work's latest_published_version's thumbnail urls" do
         allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
-        expect(collection.send(:thumbnail_urls).count).to eq 2
-        expect(collection.send(:thumbnail_urls).class).to eq Array
-        expect(collection.send(:thumbnail_urls).last).to eq 'url.com/path/file'
+        expect(collection.send(:auto_generated_thumbnail_urls).count).to eq 2
+        expect(collection.send(:auto_generated_thumbnail_urls).class).to eq Array
+        expect(collection.send(:auto_generated_thumbnail_urls).last).to eq 'url.com/path/file'
       end
     end
   end
