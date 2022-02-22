@@ -43,4 +43,18 @@ namespace :resource do
       puts 'Failed to delete collection.'
     end
   end
+
+  desc 'Deletes a collection and its works + migrates its identifiers to a target work'
+  task :migrate_collection_ids, [:collection_uuid, :work_uuid] => :environment do |_task, args|
+    collection_uuid = args[:collection_uuid]
+    work_uuid = args[:work_uuid]
+
+    result = MigrateCollectionIds.call(collection_uuid, work_uuid)
+
+    if result.successful?
+      puts 'Collection IDs migrated successfully.'
+    else
+      puts 'Failed to migrate collection IDs.'
+    end
+  end
 end
