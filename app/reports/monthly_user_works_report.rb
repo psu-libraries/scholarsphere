@@ -39,7 +39,7 @@ class MonthlyUserWorksReport < MonthlyWorksReport
         .reject(&:withdrawn?)
         .max_by(&:version_number)
 
-      title = latest_version.title
+      title = latest_version&.title
 
       [
         work.uuid,

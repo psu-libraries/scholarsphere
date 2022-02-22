@@ -46,7 +46,7 @@ class AllWorksReport
         work.uuid,
         work.depositor.psu_id,
         work.work_type,
-        latest_version.title,
+        latest_version&.title,
         work.doi,
         work.deposited_at,
         work.deposit_agreed_at,
