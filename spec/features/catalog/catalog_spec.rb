@@ -70,6 +70,7 @@ RSpec.describe 'Blacklight catalog page', :inline_jobs do
                            2,
                            :with_creators,
                            :with_complete_metadata,
+                           :with_published_works,
                            deposited_at: Faker::Date.between(from: 1.year.ago, to: Time.zone.now))
   end
 

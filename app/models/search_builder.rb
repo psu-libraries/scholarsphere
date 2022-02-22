@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 # @abstract This is the main public search query. Both collections and publicly discoverable works are returned. Draft,
-# embargoed, or withdrawn works, even if they are public, are not available.
+# embargoed, or withdrawn works, even if they are public, are not available. Empty collections are considered as draft
+# and are not available either.
 
 class SearchBuilder < Blacklight::SearchBuilder
   include Blacklight::Solr::SearchBuilderBehavior
@@ -12,6 +13,7 @@ class SearchBuilder < Blacklight::SearchBuilder
     restrict_search_to_works_and_collections
     apply_gated_discovery
     limit_to_public_resources
+    exclude_empty_collections
   )
 
   def apply_gated_discovery(solr_parameters)
