@@ -38,14 +38,6 @@ RSpec.describe AllFilesReport do
       create :view_statistic, resource: file1, count: 1
       create :view_statistic, resource: file1, count: 3
 
-      # Create checksums for one of the files
-      # TODO: checksums are not currently implemented, but will be soon. This may need to be updated
-      file1.file_attacher.tap do |attacher|
-        attacher.file.add_metadata('md5' => 'md5offile1', 'sha256' => 'sha256offile1')
-        attacher.write
-      end
-      file1.save!
-
       # Change the filename of file2-version2's membership
       version2
         .file_version_memberships
@@ -82,16 +74,16 @@ RSpec.describe AllFilesReport do
       expect(file1_version1_row[2]).to eq version1.file_version_memberships.find_by(file_resource_id: file1).title
       expect(file1_version1_row[3]).to eq file1.file.metadata['mime_type']
       expect(file1_version1_row[4]).to eq file1.file.metadata['size']
-      expect(file1_version1_row[5]).to eq 'md5offile1'
-      expect(file1_version1_row[6]).to eq 'sha256offile1'
+      expect(file1_version1_row[5]).to eq file1.file.metadata['md5']
+      expect(file1_version1_row[6]).to eq file1.file.metadata['sha256']
       expect(file1_version1_row[7]).to eq 4
 
       # Spot check another row
       file2_version2_row = yielded_rows
         .find { |file_uuid, version_uuid, *_rest| file_uuid == file2.uuid && version_uuid == version2.uuid }
       expect(file2_version2_row[2]).to eq 'a-new-filename.png'
-      expect(file2_version2_row[5]).to be_blank # No md5
-      expect(file2_version2_row[6]).to be_blank # No sha
+      expect(file2_version2_row[5]).to eq file2.file.metadata['md5']
+      expect(file2_version2_row[6]).to eq file2.file.metadata['sha256']
       expect(file2_version2_row[7]).to eq 0 # No downloads
     end
   end
