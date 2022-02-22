@@ -34,6 +34,8 @@ RSpec.describe AllWorksReport do
     let!(:work_published) { create :work, has_draft: false, versions_count: 2 }
     let!(:work_published_and_draft) { create :work, has_draft: true, versions_count: 2 }
     let!(:work_draft_only) { create :work, has_draft: true, versions_count: 1 }
+    let!(:work_withdrawn_only) { create :work, versions: [withdrawn_version] }
+    let(:withdrawn_version) { build :work_version, :withdrawn, work: nil }
 
     before do
       #
@@ -81,7 +83,7 @@ RSpec.describe AllWorksReport do
         yielded_rows << row
       end
 
-      work_published_row, work_published_and_draft_row, work_draft_only_row = yielded_rows
+      work_published_row, work_published_and_draft_row, work_draft_only_row, work_withdrawn_only_row = yielded_rows
 
       # Test ordering by PK
       expect(yielded_rows[0][0]).to eq work_published.uuid
@@ -107,6 +109,10 @@ RSpec.describe AllWorksReport do
       expect(work_published_row[9]).to eq work_published.latest_published_version.uuid
       expect(work_published_and_draft_row[9]).to eq work_published_and_draft.latest_published_version.uuid
       expect(work_draft_only_row[9]).to be_blank
+
+      # Spot check withdrawn only work
+      expect(work_withdrawn_only_row[0]).to eq work_withdrawn_only.uuid
+      expect(work_withdrawn_only_row[3]).to be_blank # title should be blank
 
       # Spot check downloads
       expect(work_published_row[10]).to eq 102

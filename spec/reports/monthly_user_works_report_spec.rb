@@ -41,6 +41,8 @@ RSpec.describe MonthlyUserWorksReport do
     let!(:work_published) { create :work, has_draft: false, versions_count: 2, depositor: depositor }
     let!(:work_published_and_draft) { create :work, has_draft: true, versions_count: 2, depositor: depositor }
     let!(:other_users_work) { create :work, has_draft: false, versions_count: 1, depositor: build(:actor) }
+    let!(:work_withdrawn_only) { create :work, versions: [withdrawn_version], depositor: depositor }
+    let(:withdrawn_version) { build :work_version, :withdrawn, work: nil }
 
     before do
       #
@@ -101,12 +103,13 @@ RSpec.describe MonthlyUserWorksReport do
       # Test that it generates one row for each work
       # Note that order is not guaranteed with `find_each` or `find_in_batches`
       expect(yielded_rows.map { |r| r[0] })
-        .to contain_exactly(work_published.uuid, work_published_and_draft.uuid)
+        .to contain_exactly(work_published.uuid, work_published_and_draft.uuid, work_withdrawn_only.uuid)
 
       expect(yielded_rows.map { |r| r[0] }).not_to include(other_users_work.uuid)
 
       work_published_row = yielded_rows.find { |r| r[0] == work_published.uuid }
       work_published_and_draft_row = yielded_rows.find { |r| r[0] == work_published_and_draft.uuid }
+      work_withdrawn_only_row = yielded_rows.find { |r| r[0] == work_withdrawn_only.uuid }
 
       # Test row for without draft
       expect(work_published_row[1]).to eq work_published.latest_published_version.title
@@ -114,6 +117,9 @@ RSpec.describe MonthlyUserWorksReport do
       expect(work_published_row[3]).to eq '2022'
       expect(work_published_row[4]).to eq 103 # downloads
       expect(work_published_row[5]).to eq 6
+
+      # Test withdrawn only row
+      expect(work_withdrawn_only_row[1]).to be_blank # title should be blank
 
       # Spot check downloads
       expect(work_published_row[4]).to eq 103
