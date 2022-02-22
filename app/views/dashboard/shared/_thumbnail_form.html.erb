@@ -6,7 +6,7 @@
              html: { id: thumbnail_form_id, class: 'edit-thumbnail' } do |form| %>
 
   <p><%= t('.thumbnail_upload.explanation') %></p>
-  <div class="row p-1">
+  <div class="row p-2">
     <div
       class="mb-2 col-sm-4"
       data-controller="uppy"
@@ -17,7 +17,7 @@
     <% if thumbnail_form.resource.thumbnail_upload.present? %>
       <div class="col-sm-5">
         <p><%= t('.thumbnail_upload.display') %></p>
-        <div class="thumbnail-image">
+        <div class="thumbnail-image m-2">
           <img src="<%= thumbnail_form.resource.thumbnail_upload.file_resource.thumbnail_url %>">
         </div>
         <table class="table">
@@ -46,7 +46,13 @@
   </div>
 
   <% if thumbnail_form.resource.auto_generated_thumbnail_url.present? %>
-    <p><%= t('.thumbnail_upload.divider') %></p>
+
+    <div class="row p-1">
+      <div class="col-sm-2"><hr></div>
+      <div class="col-auto align-self-center"><%= I18n.t('dashboard.shared.thumbnail_form.thumbnail_upload.divider') %></div>
+      <div class="col-sm-6"><hr></div>
+    </div>
+
     <div class="form-check auto-generate-thumbnail">
       <%= form.check_box :auto_generate_thumbnail,
                          class: 'form-check-input' %>

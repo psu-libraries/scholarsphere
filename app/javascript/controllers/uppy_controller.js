@@ -40,7 +40,15 @@ export default class extends Controller {
     }
 
     var uppyOptions = (isThumbnailForm)
-      ? Object.assign({ allowMultipleUploads: false }, sharedUppyOptions)
+      ? Object.assign(
+        {
+          allowMultipleUploads: false,
+          restrictions: {
+            maxNumberOfFiles: 1,
+            allowedFileTypes: ['image/*']
+          }
+        }, sharedUppyOptions
+      )
       : Object.assign({ allowMultipleUploads: true }, sharedUppyOptions)
 
     var dashboardOptions = (isThumbnailForm)

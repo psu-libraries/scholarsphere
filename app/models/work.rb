@@ -197,7 +197,7 @@ class Work < ApplicationRecord
   # TODO Potential Refactoring: #thumbnail_url, #auto_generated_thumbnail_url,
   # TODO and #thumbnail_present? methods here are identical to the methods in Collection
   def thumbnail_url
-    uploaded_thumbnail_url.presence || (auto_generate_thumbnail? ? auto_generated_thumbnail_url : nil)
+    auto_generate_thumbnail? ? auto_generated_thumbnail_url : uploaded_thumbnail_url.presence
   end
 
   def auto_generated_thumbnail_url
