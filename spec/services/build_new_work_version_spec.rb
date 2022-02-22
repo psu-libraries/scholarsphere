@@ -55,6 +55,11 @@ RSpec.describe BuildNewWorkVersion, type: :model do
       end
     end
 
+    it "doesn't copy over the ExternalApp, if present" do
+      initial_work_version.external_app = build(:external_app)
+      expect(new_version.external_app).to be_nil
+    end
+
     it "doesn't change the database" do
       expect { new_version }.not_to change(WorkVersion, :count)
       expect { new_version }.not_to change(FileResource, :count)
