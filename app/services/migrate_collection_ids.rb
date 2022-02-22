@@ -54,8 +54,7 @@ class MigrateCollectionIds
 
     def migrate_legacy_identifiers(legacy_ids)
       legacy_ids.each do |legacy_id|
-        legacy_id.resource_type = 'Work'
-        legacy_id.resource_id = work.id
+        legacy_id.resource = work
         legacy_id.save!
       end
     end
