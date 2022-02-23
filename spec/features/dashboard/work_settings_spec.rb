@@ -135,10 +135,15 @@ RSpec.describe 'Work Settings Page', with_user: :user do
   describe 'Updating Editors', :vcr do
     context 'when adding a new editor' do
       let(:work) { create :work, depositor: user.actor }
+      let(:mailer_spy) { instance_spy('MailerSpy') }
+
+      before do
+        allow(ActorMailer).to receive(:with).and_return(mailer_spy)
+
+        visit edit_dashboard_work_path(work)
+      end
 
       it 'adds a user as an editor' do
-        visit edit_dashboard_work_path(work)
-
         expect(work.edit_users).to be_empty
         fill_in('Edit users', with: 'agw13')
         click_button('Update Editors')
@@ -146,6 +151,29 @@ RSpec.describe 'Work Settings Page', with_user: :user do
         work.reload
         expect(work.edit_users.map(&:uid)).to contain_exactly('agw13')
         expect(WorkIndexer).to have_received(:call)
+      end
+
+      it 'notify editors if send notification email is checked' do
+        expect(work.notify_editors).to eq false
+        check 'editors_form_notify_editors'
+        fill_in('Edit users', with: 'agw13')
+
+        click_button('Update Editors')
+
+        work.reload
+        expect(work.notify_editors).to eq true
+        expect(mailer_spy).to have_received(:deliver_later)
+      end
+
+      it 'does not notify editors if send notification email is not checked' do
+        expect(work.notify_editors).to eq false
+        fill_in('Edit users', with: 'agw13')
+
+        click_button('Update Editors')
+
+        work.reload
+        expect(work.notify_editors).to eq false
+        expect(mailer_spy).not_to have_received(:deliver_later)
       end
     end
 

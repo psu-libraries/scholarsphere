@@ -47,7 +47,7 @@ class EditorsForm
     resource.notify_editors = notify_editors
     resource.save!
 
-    send_emails(new_users: new_users) if notify_editors
+    send_emails(new_users: new_users) if resource.notify_editors
 
     true
   rescue ActiveRecord::RecordInvalid
