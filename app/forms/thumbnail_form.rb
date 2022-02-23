@@ -33,7 +33,7 @@ class ThumbnailForm
   end
 
   def _destroy=(_destroy)
-     @_destroy = _destroy
+    @_destroy = _destroy
   end
 
   def save

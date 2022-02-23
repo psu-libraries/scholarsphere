@@ -6,6 +6,10 @@ RSpec.describe 'Collection Settings Page', with_user: :user do
   let(:user) { create :user }
   let(:collection) { create :collection, depositor: user.actor }
 
+  it_behaves_like 'a resource with thumbnail settings' do
+    let(:resource) { collection }
+  end
+
   it 'is available from the resource page' do
     visit resource_path(collection.uuid)
     click_on I18n.t!('resources.settings_button.text', type: 'Collection')
@@ -23,81 +27,6 @@ RSpec.describe 'Collection Settings Page', with_user: :user do
 
       expect(page).to have_current_path(edit_dashboard_collection_path(collection))
       expect(page).not_to have_button I18n.t!('resources.doi.create')
-    end
-  end
-
-  describe 'Updating thumbnail settings' do
-    describe 'toggling auto-generate thumbnail' do
-      context 'when no thumbnail exists for the collection' do
-        before do
-          visit edit_dashboard_collection_path(collection)
-        end
-
-        it 'does not display auto-generate thumbnail section' do
-          expect(page)
-            .not_to have_content I18n.t!('dashboard.shared.auto_generate_thumbnail_form.explanation')
-        end
-      end
-
-      context 'when thumbnail exists for the collection' do
-        before do
-          allow_any_instance_of(Collection).to receive(:thumbnail_present?).and_return true
-          allow_any_instance_of(Collection).to receive(:auto_generated_thumbnail_url).and_return 'url.com/path/file'
-          visit edit_dashboard_collection_path(collection)
-        end
-
-        it 'works from the Settings page' do
-          check(I18n.t!('dashboard.shared.auto_generate_thumbnail_form.explanation'), allow_label_click: true)
-          expect(page).to have_content(I18n.t!('helpers.hint.thumbnail_form.auto_generate_thumbnail'))
-          expect(page).to have_xpath('//img[@src="url.com/path/file"]')
-          click_button I18n.t!('dashboard.shared.thumbnail_form.submit_button')
-          expect(page)
-            .to have_checked_field(I18n.t!('dashboard.shared.auto_generate_thumbnail_form.explanation'))
-
-          collection.reload
-          expect(collection.auto_generate_thumbnail).to eq true
-
-          uncheck(I18n.t!('dashboard.shared.auto_generate_thumbnail_form.explanation'),
-                  allow_label_click: true)
-          click_button I18n.t!('dashboard.shared.thumbnail_form.submit_button')
-          expect(page)
-            .to have_no_checked_field(I18n.t!('dashboard.shared.auto_generate_thumbnail_form.explanation'))
-
-          collection.reload
-          expect(collection.auto_generate_thumbnail).to eq false
-        end
-      end
-    end
-
-    describe 'uploading and deleting a thumbnail', js: true do
-      before do
-        visit edit_dashboard_collection_path(collection)
-      end
-
-      it 'uploads and deletes a thumbnail' do
-        within('.edit-thumbnail') do
-          FeatureHelpers::DashboardForm.upload_file(Rails.root.join('spec', 'fixtures', 'image.png'))
-        end
-        expect { click_button I18n.t!('dashboard.shared.thumbnail_form.submit_button') }
-          .to change(ThumbnailUpload, :count).by 1
-        expect(ThumbnailUpload.last.file_resource.file_data['metadata']['filename']).to eq 'image.png'
-        expect(ThumbnailUpload.last.resource).to eq collection
-
-        expect(page).to have_content('Your uploaded thumbnail:')
-        expect(page).to have_content('image.png')
-        within('.edit-thumbnail') do
-          accept_confirm do
-            click_link('Remove')
-          end
-        end
-        sleep 0.1
-
-        expect(ThumbnailUpload.count).to eq 0
-        expect(FileResource.count).to eq 0
-
-        expect(page).not_to have_content('Your uploaded thumbnail:')
-        expect(page).not_to have_content('image.png')
-      end
     end
   end
 

@@ -20,7 +20,7 @@ RSpec.describe ThumbnailForm, type: :model do
       end
     end
 
-    describe '#thumbnail_upload' do
+    describe 'when updating #thumbnail_upload' do
       context 'when a thumbnail_upload already exists' do
         let(:params) do
           { thumbnail_upload:
@@ -51,7 +51,7 @@ RSpec.describe ThumbnailForm, type: :model do
       end
     end
 
-    describe '#_destroy' do
+    describe 'when activating #_destroy' do
       let!(:thumbnail_upload) { create :thumbnail_upload, resource: work }
 
       context 'when _destroy == "true"' do
