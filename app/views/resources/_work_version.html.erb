@@ -45,11 +45,7 @@
 
     </div>
     <div class="col-lg-5">
-      <div class="keyline keyline--left">
-        <h2 class="h4"><%= I18n.t('shared.thumbnail_heading') %></h2>
-      </div>
-
-      <div class="m-2 thumbnail-meta mx-auto"><%= render ThumbnailComponent.new(resource: work_version.work) %></div>
+      <%= render partial: 'resources/thumbnail_section', locals: { resource: work_version.work } %>
 
       <div class="keyline keyline--left">
         <h2 class="h4"><%= t('resources.metadata') %></h2>
