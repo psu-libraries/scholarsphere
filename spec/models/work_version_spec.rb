@@ -240,6 +240,7 @@ RSpec.describe WorkVersion, type: :model do
   it { is_expected.to delegate_method(:embargoed_until).to(:work) }
   it { is_expected.to delegate_method(:proxy_depositor).to(:work) }
   it { is_expected.to delegate_method(:work_type).to(:work) }
+  it { is_expected.to delegate_method(:thumbnail_url).to(:work) }
 
   describe 'after save' do
     let(:work_version) { build :work_version, :published }

@@ -521,33 +521,6 @@ RSpec.describe Work, type: :model do
     end
   end
 
-  describe '#thumbnail_present?' do
-    let(:mock_attacher) { instance_double FileUploader::Attacher }
-    let!(:work) { create :work, versions_count: 2 }
-
-    context 'when a thumbnail url is found' do
-      before do
-        allow(mock_attacher).to receive(:url).with(:thumbnail).and_return 'url.com/path/file'
-      end
-
-      it 'returns true' do
-        allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
-        expect(work.thumbnail_present?).to eq true
-      end
-    end
-
-    context 'when a thumbnail url is not found' do
-      before do
-        allow(mock_attacher).to receive(:url).with(:thumbnail).and_return nil
-      end
-
-      it 'returns false' do
-        allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
-        expect(work.thumbnail_present?).to eq false
-      end
-    end
-  end
-
   describe '#thumbnail_urls' do
     let(:mock_attacher) { instance_double FileUploader::Attacher }
     let!(:work) { create :work, versions_count: 2 }
@@ -564,37 +537,6 @@ RSpec.describe Work, type: :model do
         expect(work.send(:auto_generated_thumbnail_urls).count).to eq 2
         expect(work.send(:auto_generated_thumbnail_urls).class).to eq Array
         expect(work.send(:auto_generated_thumbnail_urls).last).to eq 'url.com/path/file'
-      end
-    end
-  end
-
-  describe '#auto_generated_thumbnail_url' do
-    let(:mock_attacher) { instance_double FileUploader::Attacher }
-    let!(:work) { create :work, versions_count: 2 }
-
-    context "when work's latest_published_version has thumbnail urls" do
-      before do
-        work.latest_published_version.file_resources << (create :file_resource)
-        work.save
-        allow(mock_attacher).to receive(:url).with(:thumbnail).and_return 'url.com/path/file'
-      end
-
-      it 'returns the last thumbnail url from the file_resources' do
-        allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
-        expect(work.auto_generated_thumbnail_url).to eq 'url.com/path/file'
-      end
-    end
-
-    context "when work's latest_published_version has no thumbnail urls" do
-      before do
-        work.latest_published_version.file_resources << (create :file_resource)
-        work.save
-        allow(mock_attacher).to receive(:url).with(:thumbnail).and_return nil
-      end
-
-      it 'returns nil' do
-        allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
-        expect(work.auto_generated_thumbnail_url).to eq nil
       end
     end
   end
