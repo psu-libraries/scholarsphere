@@ -281,15 +281,15 @@ en:
         success: 'Your profile was saved successfully.'
     shared:
       thumbnail_form:
-        auto_generate_thumbnail:
-          explanation: Use auto-generated thumbnail (Overrides uploaded thumbnail)
-        thumbnail_upload:
-          explanation: "Upload a thumbnail:"
-          display: "Your uploaded thumbnail:"
-          file_table_header: "Name"
-          delete: "Remove"
-          divider: 'OR'
         submit_button: Update Thumbnail Settings
+      auto_generate_thumbnail_form:
+        explanation: Use auto-generated thumbnail (Overrides uploaded thumbnail)
+        divider: 'OR'
+      thumbnail_upload_form:
+        explanation: "Upload a thumbnail:"
+        display: "Your uploaded thumbnail:"
+        file_table_header: "Name"
+        delete: "Remove"
       editors_form:
         heading: Editors
         explanation: "Gives the ability for other users from Penn State to edit your %{type}. This can be done on a per-user basis, or a group basis."

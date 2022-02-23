@@ -5,67 +5,12 @@
              remote: false,
              html: { id: thumbnail_form_id, class: 'edit-thumbnail' } do |form| %>
 
-  <p><%= t('.thumbnail_upload.explanation') %></p>
-  <div class="row p-2">
-    <div
-      class="mb-2 col-sm-4"
-      data-controller="uppy"
-      data-uppy-input-name="thumbnail_form[thumbnail_upload]"
-      data-uppy-parent-form="<%= thumbnail_form_id %>">
-    </div>
+  <%= render partial: 'dashboard/shared/thumbnail_upload_form', locals: { thumbnail_form: thumbnail_form,
+                                                                          thumbnail_form_id: thumbnail_form_id,
+                                                                          url: url } %>
 
-    <% if thumbnail_form.resource.thumbnail_upload.present? %>
-      <div class="col-sm-5">
-        <p><%= t('.thumbnail_upload.display') %></p>
-        <div class="thumbnail-image m-2">
-          <img src="<%= thumbnail_form.resource.thumbnail_upload.file_resource.thumbnail_url %>">
-        </div>
-        <table class="table">
-          <thead>
-          <tr>
-            <th><%= t('.thumbnail_upload.file_table_header') %></th>
-          </tr>
-          </thead>
-          <tbody class="work-files__file">
-          <tr id="<%= dom_id thumbnail_form.resource.thumbnail_upload %>">
-            <td>
-              <span class="filename"><%= thumbnail_form.resource.thumbnail_upload.file_resource.file_data['metadata']['filename'] %></span>
-            </td>
-            <td>
-              <%= link_to t('.thumbnail_upload.delete'),
-                          url + '?' + { thumbnail_form: { _destroy: true } }.to_param,
-                          method: :patch,
-                          class: 'remove',
-                          data: { confirm: 'Are you sure?' } %>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-    <% end %>
-  </div>
-
-  <% if thumbnail_form.resource.auto_generated_thumbnail_url.present? %>
-
-    <div class="row p-1">
-      <div class="col-sm-2"><hr></div>
-      <div class="col-auto align-self-center"><%= I18n.t('dashboard.shared.thumbnail_form.thumbnail_upload.divider') %></div>
-      <div class="col-sm-6"><hr></div>
-    </div>
-
-    <div class="form-check auto-generate-thumbnail">
-      <%= form.check_box :auto_generate_thumbnail,
-                         class: 'form-check-input' %>
-
-      <%= form.label :auto_generate_thumbnail, t('.auto_generate_thumbnail.explanation'), class: 'form-check-label' %>
-    </div>
-    <div class="p-3">
-      <%= render FieldHintComponent.new(form: form, attribute: :auto_generate_thumbnail) %>
-      <div class="thumbnail-image p-1">
-        <img src="<%= thumbnail_form.resource.auto_generated_thumbnail_url %>">
-      </div>
-    </div>
-  <% end %>
+  <%= render partial: 'dashboard/shared/auto_generate_thumbnail_form', locals: { thumbnail_form: thumbnail_form,
+                                                                                 form: form } %>
 
   <%= hidden_field_tag 'form_id', thumbnail_form_id %>
   <%= render FormErrorMessageComponent.new(form: form) %>

@@ -101,7 +101,7 @@ RSpec.describe 'Work Settings Page', with_user: :user do
       end
 
       it 'does not display auto-generate thumbnail section' do
-        expect(page).not_to have_content I18n.t!('dashboard.shared.thumbnail_form.auto_generate_thumbnail.explanation')
+        expect(page).not_to have_content I18n.t!('dashboard.shared.auto_generate_thumbnail_form.explanation')
       end
     end
 
@@ -113,20 +113,20 @@ RSpec.describe 'Work Settings Page', with_user: :user do
       end
 
       it 'works from the Settings page' do
-        check(I18n.t!('dashboard.shared.thumbnail_form.auto_generate_thumbnail.explanation'), allow_label_click: true)
+        check(I18n.t!('dashboard.shared.auto_generate_thumbnail_form.explanation'), allow_label_click: true)
         expect(page).to have_content(I18n.t!('helpers.hint.thumbnail_form.auto_generate_thumbnail'))
         expect(page).to have_xpath("//img[@src='url.com/path/file']")
         click_button I18n.t!('dashboard.shared.thumbnail_form.submit_button')
         expect(page)
-          .to have_checked_field(I18n.t!('dashboard.shared.thumbnail_form.auto_generate_thumbnail.explanation'))
+          .to have_checked_field(I18n.t!('dashboard.shared.auto_generate_thumbnail_form.explanation'))
 
         work.reload
         expect(work.auto_generate_thumbnail).to eq true
 
-        uncheck(I18n.t!('dashboard.shared.thumbnail_form.auto_generate_thumbnail.explanation'), allow_label_click: true)
+        uncheck(I18n.t!('dashboard.shared.auto_generate_thumbnail_form.explanation'), allow_label_click: true)
         click_button I18n.t!('dashboard.shared.thumbnail_form.submit_button')
         expect(page)
-          .to have_no_checked_field(I18n.t!('dashboard.shared.thumbnail_form.auto_generate_thumbnail.explanation'))
+          .to have_no_checked_field(I18n.t!('dashboard.shared.auto_generate_thumbnail_form.explanation'))
 
         work.reload
         expect(work.auto_generate_thumbnail).to eq false
