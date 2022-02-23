@@ -452,11 +452,11 @@ RSpec.describe Collection, type: :model do
     end
   end
 
-  describe '#draft?' do
+  describe '#empty?' do
     let(:collection) { create(:collection) }
 
     context 'when collection has no published works present' do
-      it { is_expected.to be_draft }
+      it { is_expected.to be_empty }
     end
 
     context 'when collection has published works' do
@@ -464,8 +464,8 @@ RSpec.describe Collection, type: :model do
         collection.works = [(create :work, versions_count: 2)]
       end
 
-      it 'is not draft' do
-        expect(collection).not_to be_draft
+      it 'is not empty' do
+        expect(collection).not_to be_empty
       end
     end
   end

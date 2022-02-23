@@ -160,9 +160,9 @@ class Collection < ApplicationRecord
     thumbnail_urls.present?
   end
 
-  def draft?
+  def empty?
     works
-      .select { |work| work.representative_version.aasm_state == 'published' }
+      .select { |work| work.representative_version.published? }
       .empty?
   end
 

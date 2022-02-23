@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 # @abstract This is the main public search query. Both collections and publicly discoverable works are returned. Draft,
-# embargoed, or withdrawn works, even if they are public, are not available. Empty collections are considered as draft
-# and are not available either.
+# embargoed, or withdrawn works, even if they are public, are not available. Collections with no published work are
+# considered empty and are not available either.
 
 class SearchBuilder < Blacklight::SearchBuilder
   include Blacklight::Solr::SearchBuilderBehavior

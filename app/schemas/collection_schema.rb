@@ -2,10 +2,10 @@
 
 class CollectionSchema < BaseSchema
   def document
-    return {} unless resource.respond_to?(:draft?)
+    return {} unless resource.respond_to?(:empty?)
 
     {
-      is_empty_bi: resource.draft?
+      is_empty_bi: resource.empty?
     }
   end
 end
