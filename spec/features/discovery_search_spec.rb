@@ -11,6 +11,13 @@ RSpec.describe 'Searching discoverable resources', :inline_jobs do
   let!(:public_collection) { create(:collection, visibility: Permissions::Visibility::OPEN) }
   let!(:authorized_collection) { create(:collection, visibility: Permissions::Visibility::AUTHORIZED) }
 
+  before do
+    public_collection.works = [public_work]
+    public_collection.save!
+    authorized_collection.works = [authorized_work]
+    authorized_collection.save!
+  end
+
   context 'with a public user' do
     it 'searches public and Penn State works' do
       visit search_catalog_path

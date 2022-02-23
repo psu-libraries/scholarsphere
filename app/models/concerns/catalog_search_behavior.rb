@@ -17,6 +17,11 @@ module CatalogSearchBehavior
     solr_parameters[:fq] << '{!terms f=model_ssi}Work,Collection'
   end
 
+  def exclude_empty_collections(solr_parameters)
+    solr_parameters[:fq] ||= []
+    solr_parameters[:fq] << '-is_empty_bi:true'
+  end
+
   def limit_to_public_resources(solr_parameters)
     return if current_user.admin?
 

@@ -160,6 +160,12 @@ class Collection < ApplicationRecord
     thumbnail_urls.present?
   end
 
+  def empty?
+    works
+      .select { |work| work.representative_version.published? }
+      .empty?
+  end
+
   private
 
     def thumbnail_urls
@@ -187,7 +193,8 @@ class Collection < ApplicationRecord
         FacetSchema,
         WorkTypeSchema,
         DoiSchema,
-        TitleSchema
+        TitleSchema,
+        CollectionSchema
       )
     end
 
