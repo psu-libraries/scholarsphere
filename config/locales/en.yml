@@ -449,7 +449,7 @@ en:
         move_up: "Move %{name} one position earlier"
         move_down: "Move %{name} one position later"
         search: >
-          You can search for works by title
+          You can search for works by title. Draft works will not appear on the collection's public page until they are published.
         search_heading: Add works to collection
         search_label: Search works
         search_results: Search Results

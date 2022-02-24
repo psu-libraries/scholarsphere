@@ -14,7 +14,8 @@ RSpec.describe Dashboard::MemberWorksSearchBuilder do
       is_expected.to include(
         :restrict_search_to_work_titles,
         :apply_gated_edit,
-        :limit_to_public_resources
+        :limit_to_public_resources,
+        :exclude_withdrawn_resources
       )
     end
   end
@@ -22,9 +23,15 @@ RSpec.describe Dashboard::MemberWorksSearchBuilder do
   describe '#processed_parameters' do
     let(:parameters) { builder.processed_parameters }
 
-    it 'searches only published work versions' do
+    it 'searches published and draft work versions' do
       expect(parameters['fq']).to include(
         '{!terms f=model_ssi}Work'
+      )
+    end
+
+    it 'excludes withdrawn works' do
+      expect(parameters['fq']).to include(
+        '-aasm_state_tesim:withdrawn'
       )
     end
   end

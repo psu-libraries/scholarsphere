@@ -16,6 +16,7 @@ RSpec.describe SearchBuilder do
         :restrict_search_to_works_and_collections,
         :apply_gated_discovery,
         :limit_to_public_resources,
+        :limit_to_published_resources,
         :exclude_empty_collections
       )
     end
@@ -29,6 +30,13 @@ RSpec.describe SearchBuilder do
         expect(parameters['fq']).to include(
           "({!terms f=discover_groups_ssim}#{Group::PUBLIC_AGENT_NAME})",
           '{!terms f=model_ssi}Work,Collection'
+        )
+      end
+
+      it 'restricts to published works' do
+        expect(parameters['fq']).to include(
+          '-aasm_state_tesim:draft',
+          '-aasm_state_tesim:withdrawn'
         )
       end
 
@@ -50,6 +58,13 @@ RSpec.describe SearchBuilder do
 
       it 'excludes empty collections' do
         expect(parameters['fq']).to include('-is_empty_bi:true')
+      end
+
+      it 'restricts to published works' do
+        expect(parameters['fq']).to include(
+          '-aasm_state_tesim:draft',
+          '-aasm_state_tesim:withdrawn'
+        )
       end
     end
 
