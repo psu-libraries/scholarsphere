@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_14_181309) do
+ActiveRecord::Schema.define(version: 2022_02_24_191232) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -108,8 +108,8 @@ ActiveRecord::Schema.define(version: 2022_02_14_181309) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "deposited_at"
-    t.boolean "auto_generate_thumbnail", default: false
     t.boolean "notify_editors", default: false
+    t.string "thumbnail_selection"
     t.index ["depositor_id"], name: "index_collections_on_depositor_id"
   end
 
@@ -265,7 +265,7 @@ ActiveRecord::Schema.define(version: 2022_02_14_181309) do
     t.string "deposit_agreement_version"
     t.datetime "deposit_agreed_at"
     t.boolean "notify_editors", default: false
-    t.boolean "auto_generate_thumbnail", default: false
+    t.string "thumbnail_selection"
     t.index ["depositor_id"], name: "index_works_on_depositor_id"
     t.index ["proxy_id"], name: "index_works_on_proxy_id"
   end

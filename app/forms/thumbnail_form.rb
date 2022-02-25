@@ -10,48 +10,34 @@ class ThumbnailForm
     super(params)
   end
 
-  def auto_generate_thumbnail
-    @auto_generate_thumbnail ||= resource.auto_generate_thumbnail
-  end
-
-  def auto_generate_thumbnail=(auto_generate_thumbnail)
-    @auto_generate_thumbnail = auto_generate_thumbnail
-  end
-
   def thumbnail_upload
     return nil if @thumbnail_upload.blank?
 
-    JSON.parse(@thumbnail_upload)
+    @thumbnail_upload
   end
 
   def thumbnail_upload=(thumbnail_upload)
     @thumbnail_upload = thumbnail_upload
   end
 
-  def _destroy
-    @_destroy == 'true'
+  def thumbnail_selection
+    @thumbnail_selection ||= resource.thumbnail_selection
   end
 
-  def _destroy=(_destroy)
-    @_destroy = _destroy
+  def thumbnail_selection=(thumbnail_selection)
+    @thumbnail_selection = thumbnail_selection
   end
 
   def save
-    if _destroy
-      resource.thumbnail_upload.destroy!
-    else
-      resource.auto_generate_thumbnail = auto_generate_thumbnail
+    resource.thumbnail_selection = thumbnail_selection
+    if thumbnail_selection == ThumbnailSelections::UPLOADED_IMAGE && thumbnail_upload.present?
+      resource.thumbnail_upload.destroy! if resource.thumbnail_upload.present?
 
-      if thumbnail_upload.present?
-        resource.thumbnail_upload.destroy! if resource.thumbnail_upload.present?
-
-        tu = ThumbnailUpload.new resource: resource
-        tu.attributes = { file_resource_attributes: { file: thumbnail_upload } }
-        tu.file_resource.save
-        tu.save
-      end
+      tu = ThumbnailUpload.new resource: resource
+      tu.attributes = { file_resource_attributes: { file: thumbnail_upload } }
+      tu.file_resource.save
+      tu.save
     end
-
     return false if errors.present?
 
     resource.save

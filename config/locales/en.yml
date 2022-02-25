@@ -191,7 +191,8 @@ en:
     # Note, for hints (and only hints) you can use Markdown
     hint:
       thumbnail_form:
-        auto_generate_thumbnail: "Auto-generated thumbnail:"
+        thumbnail_upload: "Upload a New File:"
+        thumbnail_upload_details: "The uploaded thumbnail should be a jpeg or png file, 200x200 pixels."
       editors_form:
         edit_users: Requires the user's Penn State Access ID (e.g., xyz500)
       depositor_form:
@@ -281,15 +282,8 @@ en:
         success: 'Your profile was saved successfully.'
     shared:
       thumbnail_form:
-        submit_button: Update Thumbnail Settings
-      auto_generate_thumbnail_form:
-        explanation: Use auto-generated thumbnail (Overrides uploaded thumbnail)
-        divider: 'OR'
-      thumbnail_upload_form:
-        explanation: "Upload a thumbnail:"
-        display: "Your uploaded thumbnail:"
-        file_table_header: "Name"
-        delete: "Remove"
+        submit_button: Save Thumbnail Settings
+        no_image: 'No Image'
       editors_form:
         heading: Editors
         explanation: "Gives the ability for other users from Penn State to edit your %{type}. This can be done on a per-user basis, or a group basis."

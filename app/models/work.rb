@@ -5,6 +5,7 @@ class Work < ApplicationRecord
   include DepositedAtTimestamp
   include AllDois
   include GeneratedUuids
+  include ThumbnailSelections
 
   fields_with_dois :doi
 
@@ -197,7 +198,7 @@ class Work < ApplicationRecord
   # TODO Potential Refactoring: #thumbnail_url, #auto_generated_thumbnail_url,
   # TODO and #thumbnail_present? methods here are identical to the methods in Collection
   def thumbnail_url
-    auto_generate_thumbnail? ? auto_generated_thumbnail_url : uploaded_thumbnail_url.presence
+    auto_generated_thumbnail? ? auto_generated_thumbnail_url : uploaded_thumbnail_url.presence
   end
 
   def auto_generated_thumbnail_url

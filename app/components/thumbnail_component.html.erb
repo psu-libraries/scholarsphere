@@ -1,5 +1,5 @@
 <div class="<%= html_classes %>">
-  <% if thumbnail_url.present? %>
+  <% if display_thumbnail? %>
     <img src="<%= thumbnail_url %>">
   <% else %>
     <i class='material-icons material-icons--thumbnail'><%= icon %></i>

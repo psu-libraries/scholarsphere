@@ -297,6 +297,8 @@ class WorkVersion < ApplicationRecord
            :proxy_depositor,
            :visibility,
            :work_type,
+           :uploaded_thumbnail?,
+           :auto_generated_thumbnail?,
            :thumbnail_url, to: :work
 
   private

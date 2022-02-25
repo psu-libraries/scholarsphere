@@ -13,52 +13,31 @@ export default class extends Controller {
   }
 
   initializeUppy () {
-    var isThumbnailForm = this.parentForm.attributes.class?.nodeValue === 'edit-thumbnail'
-
-    var infoMssg = (isThumbnailForm) ? ' has already been uploaded' : ' already exists in this version'
-
-    const sharedUppyOptions = {
+    var uppy = Uppy({
       id: 'uppy_' + (new Date().getTime()),
       autoProceed: true,
+      allowMultipleUploads: true,
       onBeforeFileAdded: (currentFile, files) => {
         const filename = currentFile.name
         const isBlacklisted = this.blacklist.includes(filename)
 
         if (isBlacklisted) {
-          uppy.info(`Error: ${filename + infoMssg}`, 'error', 10000)
+          uppy.info(`Error: ${filename} already exists in this version`, 'error', 10000)
           return false
         }
       }
-    }
-
-    const sharedDashboardOptions = {
-      id: 'dashboard',
-      target: this.element,
-      inline: 'true',
-      showProgressDetails: true,
-      doneButtonHandler: null
-    }
-
-    var uppyOptions = (isThumbnailForm)
-      ? Object.assign(
-        {
-          allowMultipleUploads: false,
-          restrictions: {
-            maxNumberOfFiles: 1,
-            allowedFileTypes: ['image/*']
-          }
-        }, sharedUppyOptions
-      )
-      : Object.assign({ allowMultipleUploads: true }, sharedUppyOptions)
-
-    var dashboardOptions = (isThumbnailForm)
-      ? Object.assign({ height: 250, width: 350 }, sharedDashboardOptions)
-      : Object.assign({ height: 350 }, sharedDashboardOptions)
-
-    var uppy = Uppy(uppyOptions).use(Dashboard, dashboardOptions)
-      .use(AwsS3Multipart, {
+    })
+      .use(Dashboard, {
+        id: 'dashboard',
+        target: this.element,
+        inline: 'true',
+        showProgressDetails: true,
+        height: 350,
+        doneButtonHandler: null
+      }).use(AwsS3Multipart, {
         companionUrl: '/'
-      }).on('complete', result => this.onUppyComplete(result))
+      })
+      .on('complete', result => this.onUppyComplete(result))
   }
 
   onUppyComplete (result) {

@@ -1,0 +1,7 @@
+<% if thumbnail_form.resource.thumbnail_upload.present? %>
+  <div class="thumbnail-image" id="uploaded-thumbnail-image">
+    <img src="<%= thumbnail_form.resource.thumbnail_upload.file_resource.thumbnail_url %>">
+  </div>
+<% else %>
+  <%= render partial: 'dashboard/shared/no_image' %>
+<% end %>

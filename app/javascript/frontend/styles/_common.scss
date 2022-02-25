@@ -1381,11 +1381,19 @@ h4,
 
 .thumbnail-icon {
   background: $gray-85;
+  min-height: 200px;
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .thumbnail-image {
   min-height: 200px;
   min-width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .thumbnail-meta {

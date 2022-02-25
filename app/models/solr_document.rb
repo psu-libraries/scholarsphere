@@ -74,4 +74,12 @@ class SolrDocument
   def thumbnail_url
     self[:thumbnail_url_ssi]
   end
+
+  def auto_generated_thumbnail?
+    Array.wrap(self[:thumbnail_selection_tesim]).first == ThumbnailSelections::AUTO_GENERATED
+  end
+
+  def uploaded_thumbnail?
+    Array.wrap(self[:thumbnail_selection_tesim]).first == ThumbnailSelections::UPLOADED_IMAGE
+  end
 end

@@ -10,6 +10,10 @@ class ThumbnailComponent < ApplicationComponent
     @featured = featured
   end
 
+  def display_thumbnail?
+    resource.uploaded_thumbnail? || resource.auto_generated_thumbnail?
+  end
+
   def thumbnail_url
     resource.thumbnail_url
   end
@@ -20,7 +24,7 @@ class ThumbnailComponent < ApplicationComponent
 
   def html_classes
     classes = []
-    classes << if thumbnail_url.present?
+    classes << if display_thumbnail?
                  'thumbnail-image'
                else
                  'thumbnail-icon'

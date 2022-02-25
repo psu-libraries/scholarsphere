@@ -5,12 +5,58 @@
              remote: false,
              html: { id: thumbnail_form_id, class: 'edit-thumbnail' } do |form| %>
 
-  <%= render partial: 'dashboard/shared/thumbnail_upload_form', locals: { thumbnail_form: thumbnail_form,
-                                                                          thumbnail_form_id: thumbnail_form_id,
-                                                                          url: url } %>
+  <div class="row p-1">
+    <div class="col-sm-4 border-right d-flex align-items-center justify-content-center">
+      <i class='material-icons material-icons--thumbnail'><%= ThumbnailComponent.new(resource: thumbnail_form.resource).icon %></i>
+    </div>
 
-  <%= render partial: 'dashboard/shared/auto_generate_thumbnail_form', locals: { thumbnail_form: thumbnail_form,
-                                                                                 form: form } %>
+    <div class="col-sm-4 d-flex align-items-center justify-content-center">
+      <%= render partial: 'dashboard/shared/uploaded_thumbnail', locals: { thumbnail_form: thumbnail_form,
+                                                                              form: form } %>
+    </div>
+
+    <div class="col-sm-4 border-left d-flex align-items-center justify-content-center">
+      <%= render partial: 'dashboard/shared/auto_generated_thumbnail', locals: { thumbnail_form: thumbnail_form } %>
+    </div>
+  </div>
+
+  <div class="row p-2">
+    <%= fields_for :thumbnail_form, thumbnail_form do |field| %>
+      <div class="col-sm-4 d-flex justify-content-center">
+        <div>
+          <%= field.radio_button :thumbnail_selection, ThumbnailSelections::DEFAULT_ICON.to_sym %>
+          <%= field.label :thumbnail_selection,
+                          'Use Default Icon',
+                          value: ThumbnailSelections::DEFAULT_ICON.to_sym %>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="row d-flex justify-content-center">
+            <div class="mr-1">
+              <%= field.radio_button :thumbnail_selection, ThumbnailSelections::UPLOADED_IMAGE.to_sym %>
+            </div>
+            <div>
+              <%= field.label :thumbnail_selection,
+                              'Use Uploaded Image',
+                              value: ThumbnailSelections::UPLOADED_IMAGE.to_sym %>
+            </div>
+        </div>
+        <%= render FieldHintComponent.new(form: form, attribute: :thumbnail_upload) %>
+        <div class="m-1">
+          <%= form.file_field :thumbnail_upload, accept: 'image/*' %>
+        </div>
+        <%= render FieldHintComponent.new(form: form, attribute: :thumbnail_upload_details) %>
+      </div>
+      <div class="col-sm-4 d-flex justify-content-center">
+        <div>
+          <%= field.radio_button :thumbnail_selection, ThumbnailSelections::AUTO_GENERATED.to_sym %>
+          <%= field.label :thumbnail_selection,
+                          'Use Automatically Generated Image',
+                          value: ThumbnailSelections::AUTO_GENERATED.to_sym %>
+        </div>
+      </div>
+    <% end %>
+  </div>
 
   <%= hidden_field_tag 'form_id', thumbnail_form_id %>
   <%= render FormErrorMessageComponent.new(form: form) %>
