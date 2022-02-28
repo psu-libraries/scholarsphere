@@ -11,12 +11,11 @@ export default class extends Controller {
       ajax: {
         delay: 250,
         url: endpoint,
+        data: (params) => this.buildParams(params),
         dataType: 'json',
         processResults: (data) => {
           // filter out works already in the collection from the search results
-          const workWrappers = $('.js-work-wrapper[data-work-id]:visible')
-          const workIdsInCollection = [...workWrappers].map(w => w.dataset.workId)
-          const filteredWorks = data.filter(d => !workIdsInCollection.includes(`${d.id}`))
+          const filteredWorks = data.filter(d => !this.workIdsInCollection().includes(`${d.id}`))
 
           return {
             results: filteredWorks
@@ -40,5 +39,20 @@ export default class extends Controller {
 
   afterSelectedEvent (suggestion) {
     return new CustomEvent('autocomplete:after-selected', { bubbles: true, detail: { suggestion: suggestion } })
+  }
+
+  buildParams (params) {
+    const maxDocuments = 50 + this.workIdsInCollection().length
+
+    const queryParameters = {
+      q: params.term,
+      max_documents: maxDocuments
+    }
+    return queryParameters
+  }
+
+  workIdsInCollection () {
+    const workWrappers = $('.js-work-wrapper[data-work-id]:visible')
+    return [...workWrappers].map(w => w.dataset.workId)
   }
 }
