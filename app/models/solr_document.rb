@@ -2,6 +2,7 @@
 
 class SolrDocument
   include Blacklight::Solr::Document
+  include BlacklightOaiProvider::SolrDocument
 
   # self.unique_key = 'id'
 
@@ -17,6 +18,34 @@ class SolrDocument
   # and Blacklight::Document::SemanticFields#to_semantic_values
   # Recommendation: Use field names from Dublin Core
   use_extension(Blacklight::Document::DublinCore)
+
+  field_semantics.merge!(
+    contributor: 'contributor_tesim',
+    # coverage,
+    creator: 'creators_tesim',
+    date: 'published_date_tesim',
+    description: 'description_tesim',
+    # format,
+    identifier: ['id', 'identifier_tesim', 'all_dois_ssim'],
+    language: 'language_tesim',
+    publisher: 'publisher_tesim',
+    # relation,
+    rights: 'rights_tesim',
+    source: 'source_tesim',
+    subject: 'subject_tesim',
+    title: 'title_tesim',
+    type: 'display_work_type_ssi'
+  )
+
+  def to_semantic_values
+    hash = super
+
+    root_url = Rails.application.routes.url_helpers.root_url.chop
+    resource_path = Rails.application.routes.url_helpers.resource_path(hash[:identifier].first)
+    hash[:identifier][0] = "#{root_url}#{resource_path}"
+
+    hash
+  end
 
   def visibility
     self[:visibility_ssi]

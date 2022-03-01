@@ -2,6 +2,7 @@
 
 class CatalogController < ApplicationController
   include Blacklight::Catalog
+  include BlacklightOaiProvider::Controller
 
   # @note pass the current user in the @context hash of Blacklight::SearchService which allows the SearchBuilder to have
   # access to the current user in order to enforce access controls in Solr queries.
@@ -208,6 +209,20 @@ class CatalogController < ApplicationController
     # if the name of the solr.SuggestComponent provided in your solrcongig.xml is not the
     # default 'mySuggester', uncomment and provide it below
     # config.autocomplete_suggester = 'mySuggester'
+
+    config.oai = {
+      provider: {
+        record_prefix: 'oai:scholarsphere.psu.edu',
+        sample_id: '5014d106-4c7c-489b-9aef-0d56cc197e21',
+        admin_email: Rails.configuration.contact_email
+      },
+      document: {
+        set_model: ScholarsphereListSet,
+        set_fields: [
+          { label: 'visibility', solr_field: 'visibility_ssi' }
+        ]
+      }
+    }
   end
 
   private

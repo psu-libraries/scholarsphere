@@ -5,7 +5,9 @@ module CatalogSearchBehavior
 
   # @note This applies the lucene query parser because edismax doesn't seem to work with the Solr join
   def search_related_files(solr_parameters)
-    return if blacklight_params[:q].blank? || blacklight_params.fetch(:search_field, 'all_fields') != 'all_fields'
+    return if blacklight_params[:q].blank? ||
+      !(blacklight_params[:q].is_a? String) ||
+      blacklight_params.fetch(:search_field, 'all_fields') != 'all_fields'
 
     user_query = escape(blacklight_params[:q])
     solr_parameters[:q] = "{!lucene}#{dismax_query(user_query)} #{related_file_resources(user_query)}"

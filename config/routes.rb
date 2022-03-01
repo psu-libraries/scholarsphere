@@ -38,9 +38,11 @@ Rails.application.routes.draw do
   resources :incidents, only: [:new, :create]
 
   concern :searchable, Blacklight::Routes::Searchable.new
+  concern :oai_provider, BlacklightOaiProvider::Routes.new
 
   resource :catalog, only: [:index], as: 'catalog', path: '/catalog', controller: 'catalog' do
     concerns :searchable
+    concerns :oai_provider
   end
   concern :exportable, Blacklight::Routes::Exportable.new
 
