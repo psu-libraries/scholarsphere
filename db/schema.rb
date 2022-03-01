@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_28_193340) do
+ActiveRecord::Schema.define(version: 2022_03_01_182323) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -239,6 +239,9 @@ ActiveRecord::Schema.define(version: 2022_02_28_193340) do
     t.integer "version_number", null: false
     t.string "doi"
     t.bigint "external_app_id"
+    t.datetime "published_at"
+    t.datetime "withdrawn_at"
+    t.datetime "removed_at"
     t.index ["external_app_id"], name: "index_work_versions_on_external_app_id"
     t.index ["work_id", "version_number"], name: "index_work_versions_on_work_id_and_version_number", unique: true
     t.index ["work_id"], name: "index_work_versions_on_work_id"

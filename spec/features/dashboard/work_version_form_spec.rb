@@ -485,6 +485,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         work_version.reload
         expect(work_version).not_to be_published
         expect(work_version.published_date).to eq 'this is not a valid date'
+        expect(work_version.published_at).to be_nil
       end
     end
   end
@@ -536,6 +537,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       expect(page).to have_selector('h1', text: version.title)
 
       expect(version).to be_published
+      expect(version.published_at).to be_present.and be_within(2.seconds).of(Time.zone.now)
       expect(work.visibility).to eq(Permissions::Visibility::OPEN)
       expect(version.version_number).to eq 1
       expect(version.title).to eq different_metadata[:title]

@@ -416,6 +416,9 @@ RSpec.describe Work, type: :model do
           auto_generate_thumbnail_tesim
           notify_editors_tesim
           external_app_id_isi
+          published_at_dtsi
+          removed_at_dtsi
+          withdrawn_at_dtsi
         )
       end
 

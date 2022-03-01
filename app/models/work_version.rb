@@ -178,7 +178,7 @@ class WorkVersion < ApplicationRecord
     raise ArgumentError, 'cannot delete published versions' if prevent_destroy
   end
 
-  aasm do
+  aasm timestamps: true do
     state :draft, intial: true
     state :published, :withdrawn, :removed
 
