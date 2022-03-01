@@ -10,7 +10,7 @@ RSpec.describe CollectionSchema do
       let(:resource) { build(:collection) }
 
       its(:document) do
-        is_expected.to eq(is_empty_bi: true)
+        is_expected.to eq(is_empty_bsi: true)
       end
     end
 
@@ -22,7 +22,7 @@ RSpec.describe CollectionSchema do
       end
 
       its(:document) do
-        is_expected.to eq(is_empty_bi: false)
+        is_expected.to eq(is_empty_bsi: false)
       end
     end
   end

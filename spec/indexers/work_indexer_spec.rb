@@ -48,4 +48,28 @@ RSpec.describe WorkIndexer, :inline_jobs do
       expect(SolrDocument.find(work.uuid)[:title_tesim]).to eq([current_published.title])
     end
   end
+
+  context 'when the work belongs to a collection' do
+    let(:work) { create(:work, :with_authorized_access) }
+    let(:work_version) { create :work_version, :able_to_be_published, work: work }
+    let(:collection) { create(:collection) }
+
+    before do
+      collection.collection_work_memberships.build(work: work)
+      collection.save!
+    end
+
+    it 'indexes the work collection' do
+      expect(SolrDocument.find(collection.uuid)[:title_tesim]).to eq([collection.title])
+    end
+
+    context 'when the collection is empty and only draft work changes state from draft to published' do
+      it 'indexes the collection as not empty' do
+        expect(SolrDocument.find(collection.uuid)[:is_empty_bsi]).to be(true)
+        work_version.publish
+        work_version.save!
+        expect(SolrDocument.find(collection.uuid)[:is_empty_bsi]).to be(false)
+      end
+    end
+  end
 end

@@ -5,7 +5,7 @@ class CollectionSchema < BaseSchema
     return {} unless resource.respond_to?(:empty?)
 
     {
-      is_empty_bi: resource.empty?
+      is_empty_bsi: resource.empty?
     }
   end
 end
