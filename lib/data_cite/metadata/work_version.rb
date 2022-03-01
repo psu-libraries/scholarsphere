@@ -8,7 +8,6 @@ module DataCite
         'audio' => 'Sound',
         'book' => 'Text',
         'capstone_project' => 'Text',
-        'collection' => 'Collection',
         'conference_proceeding' => 'Text',
         'dataset' => 'Dataset',
         'dissertation' => 'Text',

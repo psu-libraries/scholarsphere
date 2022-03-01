@@ -45,7 +45,6 @@ class Work < ApplicationRecord
         audio
         book
         capstone_project
-        collection
         conference_proceeding
         dataset
         dissertation

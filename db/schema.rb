@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_21_170447) do
+ActiveRecord::Schema.define(version: 2022_02_28_193340) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -108,8 +108,8 @@ ActiveRecord::Schema.define(version: 2022_02_21_170447) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "deposited_at"
-    t.boolean "auto_generate_thumbnail", default: false
     t.boolean "notify_editors", default: false
+    t.boolean "auto_generate_thumbnail", default: false
     t.index ["depositor_id"], name: "index_collections_on_depositor_id"
   end
 
