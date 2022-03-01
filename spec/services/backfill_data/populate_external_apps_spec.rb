@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe PopulateExternalApps, type: :model, versioning: true do
+RSpec.describe BackfillData::PopulateExternalApps, type: :model, versioning: true do
   subject(:call_service) { described_class.call }
 
   let(:external_app) { create :external_app }
