@@ -35,8 +35,7 @@ RSpec.describe Collection, type: :model do
     it { is_expected.to have_db_column(:depositor_id) }
     it { is_expected.to have_db_column(:metadata).of_type(:jsonb) }
     it { is_expected.to have_db_column(:doi).of_type(:string) }
-    it { is_expected.to have_db_column(:thumbnail_selection)
-                            .of_type(:string).with_options(default: ThumbnailSelections::DEFAULT_ICON) }
+    it { is_expected.to have_db_column(:thumbnail_selection).of_type(:string).with_options(default: ThumbnailSelections::DEFAULT_ICON) }
     it { is_expected.to have_db_column(:notify_editors).of_type(:boolean) }
     it { is_expected.to have_jsonb_accessor(:title).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:subtitle).of_type(:string) }

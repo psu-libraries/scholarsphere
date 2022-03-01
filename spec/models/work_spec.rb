@@ -21,7 +21,8 @@ RSpec.describe Work, type: :model do
   end
 
   it_behaves_like 'a resource with a thumbnail selection' do
-    let!(:resource) { create :work, versions_count: 2 }
+    let!(:work) { create :work, versions_count: 2 }
+    let(:resource) { work }
   end
 
   describe 'table' do
@@ -32,8 +33,7 @@ RSpec.describe Work, type: :model do
     it { is_expected.to have_db_column(:embargoed_until).of_type(:datetime) }
     it { is_expected.to have_db_column(:deposit_agreed_at).of_type(:datetime) }
     it { is_expected.to have_db_column(:deposit_agreement_version) }
-    it { is_expected.to have_db_column(:thumbnail_selection)
-                            .of_type(:string).with_options(default: ThumbnailSelections::DEFAULT_ICON) }
+    it { is_expected.to have_db_column(:thumbnail_selection).of_type(:string).with_options(default: ThumbnailSelections::DEFAULT_ICON) }
     it { is_expected.to have_db_column(:notify_editors).of_type(:boolean) }
 
     it { is_expected.to have_db_index(:depositor_id) }

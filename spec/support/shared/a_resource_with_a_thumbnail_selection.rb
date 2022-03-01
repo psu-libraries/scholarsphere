@@ -5,10 +5,12 @@ RSpec.shared_examples 'a resource with a thumbnail selection' do
     subject { resource }
 
     it { is_expected.to validate_presence_of(:thumbnail_selection) }
-    it { is_expected.to validate_inclusion_of(:thumbnail_selection).in_array([ThumbnailSelections::DEFAULT_ICON,
-                                                                              ThumbnailSelections::AUTO_GENERATED,
-                                                                              ThumbnailSelections::UPLOADED_IMAGE]) }
 
+    it do
+      expect(subject).to validate_inclusion_of(:thumbnail_selection).in_array([ThumbnailSelections::DEFAULT_ICON,
+                                                                               ThumbnailSelections::AUTO_GENERATED,
+                                                                               ThumbnailSelections::UPLOADED_IMAGE])
+    end
   end
 
   describe '#auto_generated_thumbnail?' do
