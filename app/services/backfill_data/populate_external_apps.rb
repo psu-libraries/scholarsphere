@@ -9,7 +9,7 @@
 #
 # This class will be run once to migrate the old data over, then can (and
 # should) be deleted
-class PopulateExternalApps
+class BackfillData::PopulateExternalApps
   class << self
     def call
       work_versions.each do |wv|
