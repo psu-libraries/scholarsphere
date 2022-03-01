@@ -12,7 +12,7 @@ module ThumbnailSelections
               inclusion: [DEFAULT_ICON,
                           UPLOADED_IMAGE,
                           AUTO_GENERATED],
-              allow_blank: true
+              presence: true
   end
 
   def auto_generated_thumbnail?
@@ -24,6 +24,6 @@ module ThumbnailSelections
   end
 
   def default_thumbnail?
-    thumbnail_selection == DEFAULT_ICON || thumbnail_selection.blank?
+    thumbnail_selection == DEFAULT_ICON
   end
 end

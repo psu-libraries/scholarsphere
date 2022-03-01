@@ -49,9 +49,6 @@ RSpec.shared_examples 'a resource with thumbnail settings' do
 
     it 'uploads and deletes a thumbnail' do
       file_resource_count = FileResource.count
-      within('.edit-thumbnail') do
-        FeatureHelpers::DashboardForm.upload_file(Rails.root.join('spec', 'fixtures', 'image.png'))
-      end
       expect { click_button I18n.t!('dashboard.shared.thumbnail_form.submit_button') }
         .to change(ThumbnailUpload, :count).by 1
       expect(ThumbnailUpload.last.file_resource.file_data['metadata']['filename']).to eq 'image.png'

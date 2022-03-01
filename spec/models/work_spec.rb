@@ -20,6 +20,10 @@ RSpec.describe Work, type: :model do
     let(:resource) { work }
   end
 
+  it_behaves_like 'a resource with a thumbnail selection' do
+    let!(:resource) { create :work, versions_count: 2 }
+  end
+
   describe 'table' do
     it { is_expected.to have_db_column(:work_type).of_type(:string) }
     it { is_expected.to have_db_column(:depositor_id) }
@@ -28,7 +32,8 @@ RSpec.describe Work, type: :model do
     it { is_expected.to have_db_column(:embargoed_until).of_type(:datetime) }
     it { is_expected.to have_db_column(:deposit_agreed_at).of_type(:datetime) }
     it { is_expected.to have_db_column(:deposit_agreement_version) }
-    it { is_expected.to have_db_column(:auto_generate_thumbnail).of_type(:boolean).with_options(default: false) }
+    it { is_expected.to have_db_column(:thumbnail_selection)
+                            .of_type(:string).with_options(default: ThumbnailSelections::DEFAULT_ICON) }
     it { is_expected.to have_db_column(:notify_editors).of_type(:boolean) }
 
     it { is_expected.to have_db_index(:depositor_id) }
@@ -353,7 +358,7 @@ RSpec.describe Work, type: :model do
           visibility_ssi
           work_type_ss
           thumbnail_url_ssi
-          auto_generate_thumbnail_tesim
+          thumbnail_selection_tesim
           notify_editors_tesim
         )
       end
@@ -416,7 +421,7 @@ RSpec.describe Work, type: :model do
           work_id_isi
           work_type_ss
           thumbnail_url_ssi
-          auto_generate_thumbnail_tesim
+          thumbnail_selection_tesim
           notify_editors_tesim
         )
       end

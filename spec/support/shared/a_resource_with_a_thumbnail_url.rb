@@ -10,9 +10,9 @@ RSpec.shared_examples 'a resource with a thumbnail url' do
   end
 
   describe '#thumbnail_url' do
-    context 'when resource #auto_generate_thumbnail? is true' do
+    context "when resource #thumbnail_selection is '#{ThumbnailSelections::AUTO_GENERATED}'" do
       before do
-        allow(resource).to receive(:auto_generate_thumbnail?).and_return true
+        resource.update thumbnail_selection: ThumbnailSelections::AUTO_GENERATED
       end
 
       context 'when auto generated thumbnail url exists' do
@@ -46,9 +46,9 @@ RSpec.shared_examples 'a resource with a thumbnail url' do
       end
     end
 
-    context 'when resource #auto_generate_thumbnail? is false' do
+    context "when resource #thumbnail_selection is not '#{ThumbnailSelections::AUTO_GENERATED}'" do
       before do
-        allow(resource).to receive(:auto_generate_thumbnail?).and_return false
+        resource.update thumbnail_selection: ThumbnailSelections::DEFAULT_ICON
       end
 
       context 'when uploaded thumbnail url is present' do

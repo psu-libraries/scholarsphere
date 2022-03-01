@@ -27,11 +27,16 @@ RSpec.describe Collection, type: :model do
     end
   end
 
+  it_behaves_like 'a resource with a thumbnail selection' do
+    let!(:resource) { create :collection }
+  end
+
   describe 'table' do
     it { is_expected.to have_db_column(:depositor_id) }
     it { is_expected.to have_db_column(:metadata).of_type(:jsonb) }
     it { is_expected.to have_db_column(:doi).of_type(:string) }
-    it { is_expected.to have_db_column(:auto_generate_thumbnail).of_type(:boolean).with_options(default: false) }
+    it { is_expected.to have_db_column(:thumbnail_selection)
+                            .of_type(:string).with_options(default: ThumbnailSelections::DEFAULT_ICON) }
     it { is_expected.to have_db_column(:notify_editors).of_type(:boolean) }
     it { is_expected.to have_jsonb_accessor(:title).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:subtitle).of_type(:string) }
@@ -259,7 +264,7 @@ RSpec.describe Collection, type: :model do
         visibility_ssi
         work_type_ss
         thumbnail_url_ssi
-        auto_generate_thumbnail_tesim
+        thumbnail_selection_tesim
         notify_editors_tesim
       )
     end
