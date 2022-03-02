@@ -30,7 +30,7 @@ class ThumbnailForm
 
   def save
     resource.thumbnail_selection = thumbnail_selection
-    if thumbnail_selection == ThumbnailSelections::UPLOADED_IMAGE && thumbnail_upload.present?
+    if thumbnail_upload.present?
       resource.thumbnail_upload.destroy! if resource.thumbnail_upload.present?
 
       tu = ThumbnailUpload.new resource: resource

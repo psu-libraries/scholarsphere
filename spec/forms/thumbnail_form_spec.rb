@@ -8,11 +8,7 @@ RSpec.describe ThumbnailForm, type: :model do
   let(:work) { create(:work, versions_count: 2, has_draft: true) }
 
   describe '#save' do
-    describe "when thumbnail_selection is #{ThumbnailSelections::UPLOADED_IMAGE}" do
-      before do
-        work.update thumbnail_selection: ThumbnailSelections::UPLOADED_IMAGE
-      end
-
+    describe 'when user uploads a thumbnail' do
       context 'when a thumbnail_upload already exists' do
         let(:params) do
           { thumbnail_upload:
@@ -43,8 +39,13 @@ RSpec.describe ThumbnailForm, type: :model do
       end
     end
 
-    describe "when thumbnail selection is not #{ThumbnailSelections::UPLOADED_IMAGE}" do
+    describe 'updating thumbnail_selection' do
+      let(:params) do
+        { thumbnail_selection: ThumbnailSelections::AUTO_GENERATED }
+      end
+
       it 'updates thumbnail_selection' do
+        expect { form.save }.to change { work.reload.thumbnail_selection }.to ThumbnailSelections::AUTO_GENERATED
       end
     end
   end

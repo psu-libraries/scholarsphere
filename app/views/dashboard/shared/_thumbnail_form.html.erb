@@ -20,43 +20,7 @@
     </div>
   </div>
 
-  <div class="row p-2">
-    <%= fields_for :thumbnail_form, thumbnail_form do |field| %>
-      <div class="col-sm-4 d-flex justify-content-center">
-        <div>
-          <%= field.radio_button :thumbnail_selection, ThumbnailSelections::DEFAULT_ICON.to_sym %>
-          <%= field.label :thumbnail_selection,
-                          'Use Default Icon',
-                          value: ThumbnailSelections::DEFAULT_ICON.to_sym %>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div class="row d-flex justify-content-center">
-            <div class="mr-1">
-              <%= field.radio_button :thumbnail_selection, ThumbnailSelections::UPLOADED_IMAGE.to_sym %>
-            </div>
-            <div>
-              <%= field.label :thumbnail_selection,
-                              'Use Uploaded Image',
-                              value: ThumbnailSelections::UPLOADED_IMAGE.to_sym %>
-            </div>
-        </div>
-        <%= render FieldHintComponent.new(form: form, attribute: :thumbnail_upload) %>
-        <div class="m-1">
-          <%= form.file_field :thumbnail_upload, accept: 'image/*' %>
-        </div>
-        <%= render FieldHintComponent.new(form: form, attribute: :thumbnail_upload_details) %>
-      </div>
-      <div class="col-sm-4 d-flex justify-content-center">
-        <div>
-          <%= field.radio_button :thumbnail_selection, ThumbnailSelections::AUTO_GENERATED.to_sym %>
-          <%= field.label :thumbnail_selection,
-                          'Use Automatically Generated Image',
-                          value: ThumbnailSelections::AUTO_GENERATED.to_sym %>
-        </div>
-      </div>
-    <% end %>
-  </div>
+  <%= render partial: 'dashboard/shared/thumbnail_form_fields', locals: { thumbnail_form: thumbnail_form, form: form } %>
 
   <%= hidden_field_tag 'form_id', thumbnail_form_id %>
   <%= render FormErrorMessageComponent.new(form: form) %>
