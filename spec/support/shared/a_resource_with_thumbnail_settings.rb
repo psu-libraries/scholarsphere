@@ -16,7 +16,7 @@ RSpec.shared_examples 'a resource with thumbnail settings' do
     context 'when auto generated thumbnail exists for the resource' do
       # This test will blow up if you `js: true` it.  Idk why.  Good thing it doesn't need js.
       before do
-        allow_any_instance_of(FileResource).to receive(:thumbnail_url).and_return 'url.com/path/file'
+        allow_any_instance_of(resource.class).to receive(:auto_generated_thumbnail_url).and_return 'url.com/path/file'
         visit Rails.application.routes.url_helpers.send("edit_dashboard_#{resource.class.to_s.downcase}_path", resource)
       end
 
