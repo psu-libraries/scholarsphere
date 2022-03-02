@@ -54,7 +54,7 @@ module FeatureHelpers
         .select { |option| option.text == title }
         .first
         .click
-      while page.has_no_selector?('h3', text: title)
+      while page.has_no_selector?('h3', text: /#{title}/i)
         sleep 0.1
       end
     end

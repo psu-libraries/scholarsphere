@@ -13,6 +13,10 @@ class WorkIndexer
       IndexingService.add_document(version.to_solr, commit: false)
     end
 
+    work.collections.map do |collection|
+      IndexingService.add_document(collection.to_solr, commit: false)
+    end
+
     IndexingService.add_document(work.to_solr, commit: commit)
     Blacklight.default_index.connection.commit if commit
   end

@@ -260,7 +260,7 @@ RSpec.describe Collection, type: :model do
         thumbnail_url_ssi
         auto_generate_thumbnail_tesim
         notify_editors_tesim
-        is_empty_bi
+        is_empty_bsi
       )
     end
 
