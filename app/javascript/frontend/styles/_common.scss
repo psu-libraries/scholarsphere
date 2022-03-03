@@ -1398,6 +1398,8 @@ h4,
 
 .thumbnail-meta {
   width: 200px;
+  min-width: 200px;
+  display: inline-block;
 }
 
 form.edit-work-visibility .label {
