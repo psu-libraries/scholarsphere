@@ -23,7 +23,6 @@ RSpec.describe 'Public Resources', type: :feature do
         expect(page).to have_content(v2.title)
 
         # Check generic icon appears as thumbnail
-        expect(page).to have_content(I18n.t!('shared.thumbnail_heading'))
         expect(page).to have_css('i.material-icons.material-icons--thumbnail')
 
         # Spot check meta tags
@@ -201,7 +200,6 @@ RSpec.describe 'Public Resources', type: :feature do
         expect(page.title).to include(collection.title)
 
         # Check generic icon appears as thumbnail
-        expect(page).to have_content(I18n.t!('shared.thumbnail_heading'))
         expect(page).to have_css('i.material-icons.material-icons--thumbnail')
 
         # Spot check meta tags
