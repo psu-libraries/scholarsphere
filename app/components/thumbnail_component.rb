@@ -25,7 +25,7 @@ class ThumbnailComponent < ApplicationComponent
   def html_classes
     classes = []
     classes << if display_thumbnail?
-                 'thumbnail-image m-1'
+                 'thumbnail-image'
                else
                  'thumbnail-icon'
                end

@@ -1,6 +1,6 @@
-<div class="<%= html_classes %>">
+<div class="<%= html_classes %> m-1">
   <% if display_thumbnail? %>
-    <img src="<%= thumbnail_url %>">
+    <img src="<%= thumbnail_url %>" class="bordered-thumbnail-image">
   <% else %>
     <i class='material-icons material-icons--thumbnail'><%= icon %></i>
   <% end %>
