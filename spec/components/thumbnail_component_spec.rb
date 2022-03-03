@@ -12,7 +12,7 @@ RSpec.describe ThumbnailComponent, type: :component do
     context 'when default thumbnail' do
       it 'renders a thumbnail for a featured work' do
         allow(resource).to receive(:default_thumbnail?).and_return true
-        expect(result.css('div').first.classes).to contain_exactly('col-xxl-6', 'ft-work__img', 'thumbnail-icon')
+        expect(result.css('div').first.classes).to contain_exactly('col-xxl-6', 'ft-work__img', 'm-1', 'thumbnail-icon')
         expect(result.css('div').first.text).to include('analytics')
       end
     end
@@ -22,7 +22,10 @@ RSpec.describe ThumbnailComponent, type: :component do
         allow(resource).to receive(:auto_generated_thumbnail?).and_return false
         allow(resource).to receive(:default_thumbnail?).and_return false
         allow(resource).to receive(:thumbnail_url).and_return 'url.com/path/file'
-        expect(result.css('div').first.classes).to contain_exactly('col-xxl-6', 'ft-work__img', 'thumbnail-image')
+        expect(result.css('div').first.classes).to contain_exactly('col-xxl-6',
+                                                                   'ft-work__img',
+                                                                   'm-1',
+                                                                   'thumbnail-image')
         expect(result.css('img').attribute('src').value).to include('url.com/path/file')
       end
     end
@@ -36,7 +39,7 @@ RSpec.describe ThumbnailComponent, type: :component do
       it 'renders a thumbnail' do
         allow(resource).to receive(:default_thumbnail?).and_return true
         allow(resource).to receive(:auto_generated_thumbnail?).and_return false
-        expect(result.css('div').first.classes).to contain_exactly('thumbnail-icon')
+        expect(result.css('div').first.classes).to contain_exactly('m-1', 'thumbnail-icon')
       end
     end
 
@@ -45,7 +48,7 @@ RSpec.describe ThumbnailComponent, type: :component do
         allow(resource).to receive(:auto_generated_thumbnail?).and_return false
         allow(resource).to receive(:default_thumbnail?).and_return false
         allow(resource).to receive(:thumbnail_url).and_return 'url.com/path/file'
-        expect(result.css('div').first.classes).to contain_exactly('thumbnail-image')
+        expect(result.css('div').first.classes).to contain_exactly('m-1', 'thumbnail-image')
         expect(result.css('img').attribute('src').value).to include('url.com/path/file')
       end
     end
@@ -56,7 +59,7 @@ RSpec.describe ThumbnailComponent, type: :component do
     let(:component) { described_class.new(resource: resource) }
 
     it 'renders a thumbnail' do
-      expect(result.css('div').first.classes).to contain_exactly('thumbnail-icon')
+      expect(result.css('div').first.classes).to contain_exactly('m-1', 'thumbnail-icon')
       expect(result.css('div').first.text).to include('view_carousel')
     end
   end
@@ -66,7 +69,7 @@ RSpec.describe ThumbnailComponent, type: :component do
     let(:component) { described_class.new(resource: resource) }
 
     it 'renders a thumbnail' do
-      expect(result.css('div').first.classes).to contain_exactly('thumbnail-icon')
+      expect(result.css('div').first.classes).to contain_exactly('m-1', 'thumbnail-icon')
       expect(result.css('div').first.text).to include('view_carousel')
     end
   end
