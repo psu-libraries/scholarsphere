@@ -21,18 +21,7 @@
 <div class="container-fluid">
   <article class="row">
     <div class="col-lg-7">
-      <div class="row mb-3">
-        <div class="thumbnail-meta ml-3 d-flex align-items-center">
-          <div><%= render ThumbnailComponent.new(resource: collection) %></div>
-        </div>
-        <div class="col-sm-9">
-          <div class="mt-3">
-            <h1 class="h2"><%= collection.title %></h1>
-
-            <p><%= collection.description_html %></p>
-          </div>
-        </div>
-      </div>
+      <%= render partial: 'resources/thumbnail_display', locals: { resource: collection } %>
 
       <div class="keyline keyline--left mb-3">
         <h2 class="h4"><%= t('resources.works') %></h2>

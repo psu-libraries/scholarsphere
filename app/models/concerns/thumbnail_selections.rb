@@ -19,10 +19,6 @@ module ThumbnailSelections
     thumbnail_selection == AUTO_GENERATED
   end
 
-  def uploaded_thumbnail?
-    thumbnail_selection == UPLOADED_IMAGE
-  end
-
   def default_thumbnail?
     thumbnail_selection == DEFAULT_ICON
   end

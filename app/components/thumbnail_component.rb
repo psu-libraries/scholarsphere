@@ -11,7 +11,7 @@ class ThumbnailComponent < ApplicationComponent
   end
 
   def display_thumbnail?
-    resource.uploaded_thumbnail? || resource.auto_generated_thumbnail?
+    !resource.default_thumbnail?
   end
 
   def thumbnail_url

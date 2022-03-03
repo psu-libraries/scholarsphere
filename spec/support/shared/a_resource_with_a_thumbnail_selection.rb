@@ -35,28 +35,6 @@ RSpec.shared_examples 'a resource with a thumbnail selection' do
     end
   end
 
-  describe '#uploaded_thumbnail?' do
-    context "when thumbnail_selection is '#{ThumbnailSelections::UPLOADED_IMAGE}'" do
-      before do
-        resource.update thumbnail_selection: ThumbnailSelections::UPLOADED_IMAGE
-      end
-
-      it 'returns true' do
-        expect(resource.uploaded_thumbnail?).to eq true
-      end
-    end
-
-    context "when thumbnail_selection is not '#{ThumbnailSelections::UPLOADED_IMAGE}'" do
-      before do
-        resource.update thumbnail_selection: ThumbnailSelections::AUTO_GENERATED
-      end
-
-      it 'returns false' do
-        expect(resource.uploaded_thumbnail?).to eq false
-      end
-    end
-  end
-
   describe '#default_thumbnail?' do
     context "when thumbnail_selection is '#{ThumbnailSelections::DEFAULT_ICON}'" do
       before do

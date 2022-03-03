@@ -79,7 +79,7 @@ class SolrDocument
     Array.wrap(self[:thumbnail_selection_tesim]).first == ThumbnailSelections::AUTO_GENERATED
   end
 
-  def uploaded_thumbnail?
-    Array.wrap(self[:thumbnail_selection_tesim]).first == ThumbnailSelections::UPLOADED_IMAGE
+  def default_thumbnail?
+    Array.wrap(self[:thumbnail_selection_tesim]).first == ThumbnailSelections::DEFAULT_ICON
   end
 end
