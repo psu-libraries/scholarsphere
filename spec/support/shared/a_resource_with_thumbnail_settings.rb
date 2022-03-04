@@ -9,6 +9,7 @@ RSpec.shared_examples 'a resource with thumbnail settings' do
 
       it '"Use Automatically Generated Image" radio button is disabled', js: true do
         expect(page).to have_content('No Image').twice
+        expect(page).to have_content(I18n.t!('helpers.hint.thumbnail_form.no_auto_generated_thumbnail'))
         expect(page).to have_selector('input[id=thumbnail_form_thumbnail_selection_auto_generated][disabled=disabled]')
       end
     end
@@ -21,6 +22,7 @@ RSpec.shared_examples 'a resource with thumbnail settings' do
       end
 
       it 'shows auto-generated image and the radio button is enabled' do
+        expect(page).not_to have_content(I18n.t!('helpers.hint.thumbnail_form.no_auto_generated_thumbnail'))
         expect(page).to have_selector('img[src="url.com/path/file"]')
         expect(page).to have_content('No Image').once
         expect(page)

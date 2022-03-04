@@ -192,7 +192,8 @@ en:
     hint:
       thumbnail_form:
         thumbnail_upload: "Upload a New File:"
-        thumbnail_upload_details: "The uploaded thumbnail should be a jpeg or png file, 200x200 pixels."
+        thumbnail_upload_details: "Notice: The uploaded thumbnail should be a jpeg or png file, 200x200 pixels."
+        no_auto_generated_thumbnail: "Notice: A thumbnail could not be generated from your uploaded files."
       editors_form:
         edit_users: Requires the user's Penn State Access ID (e.g., xyz500)
       depositor_form:
