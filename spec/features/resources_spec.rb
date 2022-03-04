@@ -189,7 +189,7 @@ RSpec.describe 'Public Resources', type: :feature do
 
       it 'displays the thumbnail' do
         expect(page).to have_css("img[src='url.com/path/file']")
-        expect(page).to have_css(".thumbnail-card")
+        expect(page).to have_css('.thumbnail-card')
       end
     end
 
@@ -203,7 +203,7 @@ RSpec.describe 'Public Resources', type: :feature do
 
       it 'does not display thumbnail' do
         expect(page).not_to have_css("img[src='url.com/path/file']")
-        expect(page).not_to have_css(".thumbnail-card")
+        expect(page).not_to have_css('.thumbnail-card')
       end
     end
   end
@@ -275,7 +275,7 @@ RSpec.describe 'Public Resources', type: :feature do
 
     context 'when collection has a thumbnail' do
       let(:collection) { create :collection }
-      
+
       before do
         allow_any_instance_of(Collection).to receive(:default_thumbnail?).and_return false
         allow_any_instance_of(ThumbnailComponent).to receive(:display_thumbnail?).and_return true
@@ -285,7 +285,7 @@ RSpec.describe 'Public Resources', type: :feature do
 
       it 'displays the thumbnail' do
         expect(page).to have_css("img[src='url.com/path/file']")
-        expect(page).to have_css(".thumbnail-card")
+        expect(page).to have_css('.thumbnail-card')
       end
     end
 
@@ -301,7 +301,7 @@ RSpec.describe 'Public Resources', type: :feature do
 
       it 'does not display thumbnail' do
         expect(page).not_to have_css("img[src='url.com/path/file']")
-        expect(page).not_to have_css(".thumbnail-card")
+        expect(page).not_to have_css('.thumbnail-card')
       end
     end
   end
