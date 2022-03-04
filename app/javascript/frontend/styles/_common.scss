@@ -1386,6 +1386,7 @@ h4,
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 5px;
 }
 
 .thumbnail-image {
@@ -1394,15 +1395,35 @@ h4,
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 5px;
 }
 
 .thumbnail-card {
+  float: left;
   min-width: 250px;
-  min-height: 225px;
+  min-height: 250px;
+  max-height: 250px;
+  box-shadow: $box-shadow-sm;
+  background: $gray-100;
+  border-right: 1px solid $gray-200;
+  border-radius: $border-radius;
+  margin-right: 25px;
+  margin-bottom: 10px;
+}
+
+.thumbnail-card-index {
+  min-width: 215px;
+  height: 215px;
   box-shadow: $box-shadow-sm;
   background: $gray-100;
   border: 1px solid $gray-200;
   border-radius: $border-radius;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
 .resource-page-thumbnail {
@@ -1415,6 +1436,7 @@ h4,
   min-height: 200px;
   min-width: 200px;
   border: 1px solid $gray-200;
+  background-color: $white;
 }
 
 form.edit-work-visibility .label {

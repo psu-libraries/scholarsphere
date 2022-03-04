@@ -1,21 +1,13 @@
-<div class="row mb-3 no-gutters">
+<div class="row mb-3 no-gutters d-inline-block">
   <% if resource.default_thumbnail? %>
-    <div class="col-sm-12">
-      <h1 class="h2 mb-3"><%= resource.title %></h1>
-
-      <%= resource.description_html %>
-    </div>
+    <h1 class="h2 mb-3"><%= resource.title %></h1>
   <% else %>
     <div class="thumbnail-card d-flex align-items-center">
       <div class="resource-page-thumbnail">
         <div><%= render ThumbnailComponent.new(resource: resource) %></div>
       </div>
     </div>
-
-    <div class="col-sm-8 ml-3">
-      <h1 class="h2 mt-2 mb-3"><%= resource.title %></h1>
-
-      <%= resource.description_html %>
-    </div>
+    <h1 class="h2 mt-1 mb-3"><%= resource.title %></h1>
   <% end %>
+  <%= resource.description_html %>
 </div>
