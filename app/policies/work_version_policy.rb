@@ -57,6 +57,10 @@ class WorkVersionPolicy < ApplicationPolicy
       record == record.work.representative_version
   end
 
+  def edit_initial_draft?
+    editable? && record.initial_draft?
+  end
+
   private
 
     def editable?

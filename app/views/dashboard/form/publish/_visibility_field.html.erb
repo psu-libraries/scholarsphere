@@ -1,6 +1,10 @@
-<div class="form-group">
-  <p class="label font-weight-bold mt-3"><%= WorkVersion.human_attribute_name(:visibility) %></p>
+<div class="keyline keyline--left">
+  <h2 id="<%= WorkVersion.human_attribute_name(:visibility).parameterize %>" class="h4">
+    <%= WorkVersion.human_attribute_name(:visibility) %>
+  </h2>
+</div>
 
+<div class="form-group">
   <% Permissions::Visibility.options_for_select_box.each do |lbl, val| %>
     <div class="form-check form-check-inline">
       <%= form.radio_button :visibility, val, class: 'form-check-input' %>

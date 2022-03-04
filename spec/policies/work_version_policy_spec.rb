@@ -367,4 +367,45 @@ RSpec.describe WorkVersionPolicy, type: :policy do
       end
     end
   end
+
+  permissions :edit_initial_draft? do
+    let(:depositor) { work_version.depositor.user }
+    let(:proxy) { build(:user) }
+    let(:edit_user) { build(:user) }
+    let(:other) { build(:user) }
+    let(:admin) { build(:user, :admin) }
+    let(:application) { build(:external_app) }
+    let(:guest) { User.guest }
+
+    let(:work_version) { work.latest_version }
+    let(:work) { create(:work,
+                        has_draft: true,
+                        versions_count: 1,
+                        proxy_depositor: proxy.actor,
+                        edit_users: [edit_user]) }
+
+    context 'when the work version is an initial draft' do
+      before { allow(work_version).to receive(:initial_draft?).and_return(true) }
+
+      it { is_expected.to permit(depositor, work_version) }
+      it { is_expected.to permit(proxy, work_version) }
+      it { is_expected.to permit(edit_user, work_version) }
+      it { is_expected.not_to permit(other, work_version) }
+      it { is_expected.to permit(admin, work_version) }
+      it { is_expected.to permit(application, work_version) }
+      it { is_expected.not_to permit(guest, work_version) }
+    end
+
+    context 'when the work version is NOT an initial draft' do
+      before { allow(work_version).to receive(:initial_draft?).and_return(false) }
+
+      it { is_expected.not_to permit(depositor, work_version) }
+      it { is_expected.not_to permit(proxy, work_version) }
+      it { is_expected.not_to permit(edit_user, work_version) }
+      it { is_expected.not_to permit(other, work_version) }
+      it { is_expected.not_to permit(admin, work_version) }
+      it { is_expected.not_to permit(application, work_version) }
+      it { is_expected.not_to permit(guest, work_version) }
+    end
+  end
 end

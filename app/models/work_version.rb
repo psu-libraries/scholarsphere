@@ -293,6 +293,15 @@ class WorkVersion < ApplicationRecord
     super
   end
 
+  def thumbnail_url
+    auto_generate_thumbnail? ? file_resources&.map { |fr| fr&.thumbnail_url }&.last : nil
+  end
+
+  def initial_draft?
+    version_number == 1 &&
+      (draft? || temporarily_published_draft?)
+  end
+
   delegate :deposited_at,
            :depositor,
            :embargoed?,
@@ -325,5 +334,9 @@ class WorkVersion < ApplicationRecord
         TitleSchema,
         MemberFilesSchema
       )
+    end
+
+    def temporarily_published_draft?
+      aasm.from_state == :draft && aasm.to_state == :published
     end
 end
