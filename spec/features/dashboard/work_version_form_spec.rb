@@ -460,10 +460,10 @@ RSpec.describe 'Publishing a work', with_user: :user do
   end
 
   describe 'The Publish tab' do
-    let(:work_version) { create :work_version, :draft }
-    let(:user) { work_version.work.depositor.user }
-
     context 'when submitting the form with publication errors' do
+      let(:user) { work_version.work.depositor.user }
+      let(:work_version) { create :work_version, :draft }
+
       it 'does NOT publish the work, but DOES save the changes to the draft' do
         visit dashboard_form_publish_path(work_version)
 
@@ -488,9 +488,32 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(work_version.published_at).to be_nil
       end
     end
+
+    context 'with a non v1 draft version' do
+      let(:user) { work_version.work.depositor.user }
+      let(:work_version) { create :work_version }
+
+      it 'does not display visibility fields' do
+        visit dashboard_form_publish_path(work_version)
+
+        expect(page).not_to have_content(WorkVersion.human_attribute_name(:visibility))
+      end
+    end
+
+    context 'with a v1 draft version' do
+      let(:work) { create :work, versions_count: 1, has_draft: true }
+      let(:work_version) { work.versions.first }
+      let(:user) { work.depositor.user }
+
+      it 'displays visibility fields' do
+        visit dashboard_form_publish_path(work_version)
+
+        expect(page).to have_content(WorkVersion.human_attribute_name(:visibility))
+      end
+    end
   end
 
-  describe 'Publising a new work from end-to-end', js: true do
+  describe 'Publishing a new work from end-to-end', js: true do
     let(:different_metadata) { attributes_for(:work_version, :with_complete_metadata) }
 
     it 'routes the user through the workflow' do
@@ -669,18 +692,17 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
       # Fill out form properly
       FeatureHelpers::DashboardForm.fill_in_work_details(different_metadata)
-      # Note that an admin can pick the "incorrect" rights/visibility combo
-      # Pick the wrong license
-      FeatureHelpers::DashboardForm.fill_in_publishing_details(
-        different_metadata.merge(rights: incorrect_rights),
-        visibility: Permissions::Visibility::AUTHORIZED
+      # Note that visibility fields are not editable for published work
+      # Pick a license
+      FeatureHelpers::DashboardForm.fill_in_publishing_details_published(
+        different_metadata.merge(rights: incorrect_rights)
       )
       FeatureHelpers::DashboardForm.finish
       expect(SolrIndexingJob).to have_received(:perform_later).once
 
       work_version.reload
       expect(work_version.rights).to eq(incorrect_rights)
-      expect(work_version.visibility).to eq(Permissions::Visibility::AUTHORIZED)
+      expect(work_version.visibility).to eq(Permissions::Visibility::OPEN)
     end
   end
 

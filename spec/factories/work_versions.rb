@@ -26,6 +26,13 @@ FactoryBot.define do
       end
     end
 
+    trait :initial_draft do
+      after(:build, :stub) do |work_version, evaluator|
+        evaluator.work.versions.destroy_all
+        work_version.version_number = 1
+      end
+    end
+
     trait :with_files do
       transient do
         file_count { 1 }
