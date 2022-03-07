@@ -33,6 +33,12 @@ describe MigrateCollectionIds do
   end
 
   context 'when the collection and work are found' do
+    before do
+      create(:view_statistic, resource: collection, date: Date.parse('2022-02-06'), count: 1)
+      create(:view_statistic, resource: collection, date: Date.parse('2022-02-07'), count: 1)
+      create(:view_statistic, resource: work1.versions.first, date: Date.parse('2022-02-07'), count: 1)
+    end
+
     context 'when the ids are eligible to be merged' do
       before { migrate_result }
 
@@ -62,6 +68,13 @@ describe MigrateCollectionIds do
         expect(legacy_id.resource_type).to eq 'Work'
         expect(legacy_id.resource_id).to eq target_work.id
         expect(legacy_id.version).to eq 3
+
+        expect(
+          target_work.latest_version.view_statistics.map { |vs| [vs.date, vs.count] }
+        ).to match_array([
+                           [Date.parse('2022-02-06'), 1],
+                           [Date.parse('2022-02-07'), 2]
+                         ])
       end
     end
 
@@ -77,7 +90,7 @@ describe MigrateCollectionIds do
           rescue StandardError
             # noop
           end
-        }.not_to change(WorkVersion, :count)
+        }.not_to(change { { work_versions: WorkVersion.count, view_statistics: ViewStatistic.count } })
 
         expect(work1.reload).to be_present
         expect(work2.reload).to be_present

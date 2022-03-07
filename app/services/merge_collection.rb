@@ -205,7 +205,6 @@ class MergeCollection
       version.metadata = canonical_work_version.metadata
       version.creators = canonical_work_version.creators.map(&:dup)
       version.file_resources = all_file_resources
-      version.view_statistics = aggregate_view_statistics
       version.title = collection.title
       version.description = collection.description
       version.metadata['keyword'] = collection.metadata['keyword']
@@ -228,18 +227,5 @@ class MergeCollection
         num_work_versions: work.versions.count,
         num_files: work.representative_version&.file_resources&.count
       }
-    end
-
-    def aggregate_view_statistics
-      models_to_aggregate = [
-        collection,
-        collection.works.map(&:representative_version)
-      ].flatten
-
-      aggregated_stats = AggregateViewStatistics.call(models: models_to_aggregate)
-
-      aggregated_stats.map do |date, count, _running_total|
-        ViewStatistic.new(date: date, count: count)
-      end
     end
 end
