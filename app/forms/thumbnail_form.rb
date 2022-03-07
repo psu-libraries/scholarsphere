@@ -11,9 +11,7 @@ class ThumbnailForm
   end
 
   def thumbnail_upload
-    return nil if @thumbnail_upload.blank?
-
-    @thumbnail_upload
+    @thumbnail_upload.presence
   end
 
   def thumbnail_upload=(thumbnail_upload)
@@ -29,14 +27,16 @@ class ThumbnailForm
   end
 
   def save
-    resource.thumbnail_selection = thumbnail_selection
-    if thumbnail_upload.present?
-      resource.thumbnail_upload.destroy! if resource.thumbnail_upload.present?
+    ActiveRecord::Base.transaction do
+      resource.thumbnail_selection = thumbnail_selection
+      if thumbnail_upload.present?
+        resource.thumbnail_upload.destroy! if resource.thumbnail_upload.present?
 
-      tu = ThumbnailUpload.new resource: resource
-      tu.attributes = { file_resource_attributes: { file: thumbnail_upload } }
-      tu.file_resource.save
-      tu.save
+        tu = ThumbnailUpload.new resource: resource
+        tu.attributes = { file_resource_attributes: { file: thumbnail_upload } }
+        tu.file_resource.save
+        tu.save
+      end
     end
     return false if errors.present?
 
