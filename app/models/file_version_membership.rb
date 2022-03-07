@@ -16,7 +16,7 @@ class FileVersionMembership < ApplicationRecord
 
   validate :filename_extentions_cannot_change
 
-  delegate :size, :mime_type, :original_filename, :virus, to: :uploader
+  delegate :size, :mime_type, :original_filename, :virus, :md5, :sha256, to: :uploader
 
   attr_writer :changed_by_system
 

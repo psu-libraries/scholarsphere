@@ -20,6 +20,10 @@ RSpec.describe WorkVersion, type: :model do
     it { is_expected.to have_db_column(:metadata).of_type(:jsonb) }
     it { is_expected.to have_db_column(:version_number).of_type(:integer) }
     it { is_expected.to have_db_column(:doi).of_type(:string) }
+    it { is_expected.to have_db_column(:external_app_id) }
+    it { is_expected.to have_db_column(:published_at).of_type(:datetime) }
+    it { is_expected.to have_db_column(:withdrawn_at).of_type(:datetime) }
+    it { is_expected.to have_db_column(:removed_at).of_type(:datetime) }
     it { is_expected.to have_jsonb_accessor(:title).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:subtitle).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:version_name).of_type(:string) }
@@ -45,6 +49,7 @@ RSpec.describe WorkVersion, type: :model do
 
   describe 'associations' do
     it { is_expected.to belong_to(:work) }
+    it { is_expected.to belong_to(:external_app).optional(true) }
     it { is_expected.to have_many(:file_version_memberships) }
     it { is_expected.to have_many(:file_resources).through(:file_version_memberships) }
     it { is_expected.to have_many(:creators) }
@@ -477,6 +482,14 @@ RSpec.describe WorkVersion, type: :model do
       work.reload
       expect(work.deposit_agreement_version).to eq(Work::DepositAgreement::CURRENT_VERSION)
       expect(work.deposit_agreed_at).to be_within(1.minute).of(Time.zone.now)
+    end
+
+    it 'updates the published_at timestamp' do
+      work_version.save
+      expect(work_version.published_at).to be_nil
+      work_version.publish!
+      expect(work_version).to be_published
+      expect(work_version.reload.published_at).to be_present.and be_within(1.second).of(Time.zone.now)
     end
   end
 

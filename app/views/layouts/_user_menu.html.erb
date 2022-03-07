@@ -21,6 +21,7 @@
       <%= link_to_dropdown_item('Dashboard', dashboard_root_path) %>
       <%= link_to_dropdown_item('Create New Work', dashboard_form_work_versions_path) %>
       <%= link_to_dropdown_item('Create New Collection', dashboard_form_collections_path) %>
+      <%= link_to_dropdown_item('Reports', dashboard_reports_path) %>
       <% if current_user.admin? %>
         <div class="dropdown-divider"></div>
         <%= link_to_dropdown_item('Sidekiq', admin_sidekiq_web_path, target: :_blank) %>

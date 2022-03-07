@@ -23,6 +23,14 @@ FactoryBot.define do
       end
     end
 
+    trait :with_published_works do
+      transient do
+        published_work { create(:work, has_draft: false) }
+      end
+
+      works { [published_work] }
+    end
+
     trait :with_complete_metadata do
       title { "Collection #{generate(:work_title)}" }
       subtitle { FactoryBotHelpers.work_title }

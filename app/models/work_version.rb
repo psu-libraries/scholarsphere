@@ -36,6 +36,9 @@ class WorkVersion < ApplicationRecord
   belongs_to :work,
              inverse_of: :versions
 
+  belongs_to :external_app,
+             optional: true
+
   has_many :file_version_memberships,
            dependent: :destroy
 
@@ -175,7 +178,7 @@ class WorkVersion < ApplicationRecord
     raise ArgumentError, 'cannot delete published versions' if prevent_destroy
   end
 
-  aasm do
+  aasm timestamps: true do
     state :draft, intial: true
     state :published, :withdrawn, :removed
 

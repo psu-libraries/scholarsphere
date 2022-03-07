@@ -265,6 +265,7 @@ RSpec.describe Collection, type: :model do
         thumbnail_url_ssi
         thumbnail_selection_tesim
         notify_editors_tesim
+        is_empty_bsi
       )
     end
 
@@ -390,6 +391,24 @@ RSpec.describe Collection, type: :model do
         expect(collection.send(:auto_generated_thumbnail_urls).count).to eq 2
         expect(collection.send(:auto_generated_thumbnail_urls).class).to eq Array
         expect(collection.send(:auto_generated_thumbnail_urls).last).to eq 'url.com/path/file'
+      end
+    end
+  end
+
+  describe '#empty?' do
+    let(:collection) { create(:collection) }
+
+    context 'when collection has no published works present' do
+      it { is_expected.to be_empty }
+    end
+
+    context 'when collection has published works' do
+      before do
+        collection.works = [(create :work, versions_count: 2)]
+      end
+
+      it 'is not empty' do
+        expect(collection).not_to be_empty
       end
     end
   end

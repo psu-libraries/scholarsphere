@@ -6,7 +6,7 @@ RSpec.describe Dashboard::WorkSearchController, type: :controller do
   let(:user) { create :user }
 
   describe 'GET #index' do
-    let(:perform_request) { get :index, params: { q: 'test query' } }
+    let(:perform_request) { get :index, params: { q: 'test query', max_documents: 20 } }
 
     let(:mock_search_service) { instance_spy('Blacklight::SearchService') }
     let(:mock_results) { [
@@ -38,7 +38,7 @@ RSpec.describe Dashboard::WorkSearchController, type: :controller do
           expect(params[:current_user]).to be_an_instance_of(UserDecorator)
           expect(params[:current_user].id).to eq user.id
           expect(params[:user_params]).to eq({ q: 'test query*' })
-          expect(params[:max_documents]).to be_an_instance_of(Integer)
+          expect(params[:max_documents]).to eq 20
         end
 
         expect(mock_search_service).to have_received(:search_results)
@@ -49,6 +49,16 @@ RSpec.describe Dashboard::WorkSearchController, type: :controller do
             { 'id' => 456, 'text' => 'title2' }
           ]
         )
+      end
+
+      context 'when the max_documents param is not provided in the request' do
+        let(:perform_request) { get :index, params: { q: 'test query' } }
+
+        it 'requests the default number of documents from the search service' do
+          expect(Blacklight::SearchService).to have_received(:new) do |params|
+            expect(params[:max_documents]).to eq 50
+          end
+        end
       end
     end
 

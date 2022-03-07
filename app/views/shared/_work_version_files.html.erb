@@ -7,18 +7,20 @@
       <li class="file-card__item">
         <div class="file-card__content">
           <h3>
-            <%= link_to resource_download_path(file.id, resource_id: work_version.uuid), title: t('resources.download', name: file.title) do %>
+            <%= link_to resource_download_path(file.id, resource_id: work_version.uuid),
+                        title: t('resources.download', name: file.title),
+                        rel: 'nofollow' do %>
               <%= file.title %>
             <% end %>
           </h3>
           <p class="meta mb-0">
-            <span class="meta__size"><%= number_to_human_size file.size %></span> |
-            <span class="meta__type"><%= file.mime_type %></span> |
-            <span class="meta__date"><%= file.file_resource.deposited_at.to_s(:short_date) %></span>
+            <span class="meta__size">size: <%= number_to_human_size file.size %></span> |
+            <span class="meta__type">mime_type: <%= file.mime_type %></span> |
+            <span class="meta__date">date: <%= file.file_resource.deposited_at.to_s(:short_date) %></span>
+            <%= render(FileSignatureComponent.new(file: file)) %>
           </p>
         </div>
       </li>
     <% end %>
   </ul>
-
 <% end %>

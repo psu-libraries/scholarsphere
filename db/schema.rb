@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_24_191232) do
+ActiveRecord::Schema.define(version: 2022_03_01_182323) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -110,6 +110,7 @@ ActiveRecord::Schema.define(version: 2022_02_24_191232) do
     t.datetime "deposited_at"
     t.boolean "notify_editors", default: false
     t.string "thumbnail_selection", default: "default_icon"
+    t.boolean "auto_generate_thumbnail", default: false
     t.index ["depositor_id"], name: "index_collections_on_depositor_id"
   end
 
@@ -248,6 +249,11 @@ ActiveRecord::Schema.define(version: 2022_02_24_191232) do
     t.uuid "uuid", default: -> { "uuid_generate_v4()" }
     t.integer "version_number", null: false
     t.string "doi"
+    t.bigint "external_app_id"
+    t.datetime "published_at"
+    t.datetime "withdrawn_at"
+    t.datetime "removed_at"
+    t.index ["external_app_id"], name: "index_work_versions_on_external_app_id"
     t.index ["work_id", "version_number"], name: "index_work_versions_on_work_id_and_version_number", unique: true
     t.index ["work_id"], name: "index_work_versions_on_work_id"
   end
@@ -281,6 +287,7 @@ ActiveRecord::Schema.define(version: 2022_02_24_191232) do
   add_foreign_key "user_group_memberships", "groups"
   add_foreign_key "user_group_memberships", "users"
   add_foreign_key "users", "actors"
+  add_foreign_key "work_versions", "external_apps"
   add_foreign_key "work_versions", "works"
   add_foreign_key "works", "actors", column: "depositor_id"
   add_foreign_key "works", "actors", column: "proxy_id"

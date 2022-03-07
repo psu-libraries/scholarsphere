@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 # @abstract Builds a search query of all resources the user has edit access to. This is used to power the dashboard
-# search interface. Draft, embargoed, and withdrawn works are eligible if the user has edit access to them.
+# search interface. Empty collections, draft, embargoed, and withdrawn works are eligible if the user has edit access
+# to them.
 
 module Dashboard
   class SearchBuilder < Blacklight::SearchBuilder

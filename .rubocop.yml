@@ -24,6 +24,8 @@ Metrics/BlockLength:
     - 'config/environments/development.rb'
     - 'spec/**/*'
     - 'lib/tasks/**/*'
+    - 'app/reports/**/*'
+    - 'spec/reports/**/*'
 
 Metrics/CyclomaticComplexity:
   Exclude:
@@ -109,6 +111,7 @@ RSpec/VerifiedDoubles:
     - 'spec/components/work_versions/version_navigation_component_spec.rb'
     - 'spec/components/work_histories/work_history_component_spec.rb'
     - 'spec/controllers/dashboard/work_search_controller_spec.rb'
+    - 'spec/services/session_view_stats_cache_spec.rb'
 
 Style/ClassVars:
   Exclude:

@@ -173,6 +173,8 @@ en:
       invalid_edtf: is not a valid date in EDTF format
       invalid_orcid: is not a valid ORCiD id
       invalid_doi: is not a properly formatted DOI from our Datacite service
+    not_authorized:
+      heading: "401: Request not authorized."
     not_found:
       heading: Resource not found or unavailable
       content: >
@@ -281,6 +283,13 @@ en:
         error_message: "%{error} prohibited your profile from being saved:"
       update:
         success: 'Your profile was saved successfully.'
+    reports:
+      admin_reports: 'Admin Reports'
+      all_files_report: 'All Files Report'
+      all_works_report: 'All Works Report'
+      all_work_versions_report: 'All Work Versions Report'
+      monthly_report: 'Monthly Report (All Users)'
+      monthly_user_report: "Monthly Report for %{user}"
     shared:
       thumbnail_form:
         submit_button: Save Thumbnail Settings
@@ -438,7 +447,7 @@ en:
         move_up: "Move %{name} one position earlier"
         move_down: "Move %{name} one position later"
         search: >
-          You can search for works by title
+          You can search for works by title. Draft works will not appear on the collection's public page until they are published.
         search_heading: Add works to collection
         search_label: Search works
         search_results: Search Results
@@ -548,6 +557,7 @@ en:
       not_found: 'Page Not Found'
       server_error: 'Server Error'
       graphql: 'GraphQL'
+      reports: 'Reports'
   resources:
     analytics: Analytics
     collections: Collections
@@ -586,6 +596,8 @@ en:
     settings_button:
       text: '%{type} Settings'
       tooltip: 'Manage access settings, embargoes, DOIs, and more.'
+    signature:
+      copy_icon: content_paste
   shared:
     search:
       heading: 'Browse and search for works'

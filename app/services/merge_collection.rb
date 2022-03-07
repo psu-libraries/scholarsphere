@@ -2,20 +2,20 @@
 
 class MergeCollection
   class << self
-    def call(uuid, delete_collection: true)
-      instance = new(uuid, delete_collection)
+    def call(uuid, force: false)
+      instance = new(uuid, force)
       instance.save
       instance
     end
   end
 
   attr_reader :uuid,
-              :delete_collection,
+              :force,
               :errors
 
-  def initialize(uuid, delete_collection)
+  def initialize(uuid, force)
     @uuid = uuid
-    @delete_collection = delete_collection
+    @force = force
     @errors = []
     @successful = false # updated by #save
   end
@@ -37,24 +37,14 @@ class MergeCollection
 
         new_work.update_index
       end
-
-      if delete_collection?
-        collection.destroy!
-
-        collection.works.each do |work|
-          work.versions.each do |version|
-            DestroyWorkVersion.call(version, force: true)
-          end
-        end
-      end
     end
 
     @successful = true
     true
   end
 
-  def delete_collection?
-    @delete_collection
+  def force?
+    @force
   end
 
   def valid?
@@ -71,7 +61,8 @@ class MergeCollection
       validate_work_metadata(w)
       validate_access_controls(w)
       validate_work_version_metadata(w)
-      validate_creators(w)
+      validate_creators(w) unless force?
+      validate_keywords(w) unless force?
     end
   end
 
@@ -112,12 +103,25 @@ class MergeCollection
     end
 
     def validate_creators(work)
-      if canonical_work_version.creators.map(&:actor_id) != work.representative_version.creators.map(&:actor_id)
-        w_creators = work.representative_version.creators.inspect
-        canonical_creators = canonical_work_version.creators.inspect
-        diff = "#{canonical_creators}\n#{w_creators}"
+      collection_actor_ids = Set.new(collection.creators.map(&:actor_id))
+      work_actor_ids = Set.new(work.representative_version.creators.map(&:actor_id))
 
-        errors << "Work-#{canonical_work.id} has different creators than Work-#{work.id}\n#{diff}"
+      if collection_actor_ids != work_actor_ids
+        w_creators = work.representative_version.creators.inspect
+        collection_creators = collection.creators.inspect
+        diff = "#{collection_creators}\n#{w_creators}"
+
+        errors << "Collection-#{collection.id} has different creators than Work-#{work.id}\n#{diff}"
+      end
+    end
+
+    def validate_keywords(work)
+      collection_keywords = Set.new(collection.metadata['keyword'])
+      work_keywords = Set.new(work.representative_version.metadata['keyword'])
+
+      if collection_keywords != work_keywords
+        diff = "#{collection_keywords.to_a}\n#{work_keywords.to_a}"
+        errors << "Collection-#{collection.id} has different keywords than Work-#{work.id}\n#{diff}"
       end
     end
 
@@ -153,7 +157,9 @@ class MergeCollection
         work.representative_version
       )
 
-      attributes_we_dont_care_about = %i[title]
+      attributes_we_dont_care_about = %i[title keyword]
+      attributes_we_dont_care_about << :description if force?
+
       work_version_metadata_diff = work_version_metadata_diff.reject do |k, _v|
         attributes_we_dont_care_about.include?(k.to_sym)
       end
@@ -177,10 +183,16 @@ class MergeCollection
         .map(&:file_resources)
         .flatten
 
+      new_file_names = {}
+
+      collection.works.map(&:representative_version).each do |v|
+        file_resource_id = v.file_version_memberships.first.file_resource_id
+        new_file_names[file_resource_id] = v.title
+      end
+
       work = Work.build_with_empty_version(
         work_type: canonical_work.work_type,
         embargoed_until: canonical_work.embargoed_until,
-        doi: canonical_work.doi,
         depositor: canonical_work.depositor,
         proxy_depositor: canonical_work.proxy_depositor,
         deposited_at: deposited_at,
@@ -195,7 +207,13 @@ class MergeCollection
       version.file_resources = all_file_resources
       version.view_statistics = aggregate_view_statistics
       version.title = collection.title
-      version.publish
+      version.description = collection.description
+      version.metadata['keyword'] = collection.metadata['keyword']
+
+      # overwrite file names with the names of the work the file was originally associated with
+      version.file_version_memberships.each do |fvm|
+        fvm.title = new_file_names[fvm.file_resource_id]
+      end
 
       work
     end
@@ -204,7 +222,6 @@ class MergeCollection
       {
         work_type: work.work_type,
         embargoed_until: work.embargoed_until,
-        doi: work.doi,
         depositor_id: work.depositor&.id,
         proxy_depositor_id: work.proxy_depositor&.id,
         notify_editors: work.notify_editors,

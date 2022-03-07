@@ -10,15 +10,17 @@ module Api
         publisher
       end
 
-      attr_reader :metadata, :depositor, :content, :permissions
+      attr_reader :metadata, :depositor, :content, :permissions, :external_app
 
       # @param [ActionController::Parameters] metadata
       # @param [String] depositor
       # @param [Array<ActionController::Parameters>] content
       # @param [ActionController::Parameters] permissions
-      def initialize(metadata:, depositor_access_id:, content:, permissions: {})
+      # @param [ExternalApp] external_app
+      def initialize(metadata:, depositor_access_id:, content:, permissions: {}, external_app: nil)
         @metadata = metadata
         @depositor = BuildNewActor.call(psu_id: depositor_access_id)
+        @external_app = external_app
         @content = content
         @permissions = permissions
       end
@@ -51,7 +53,10 @@ module Api
           deposited_at: metadata.delete(:deposited_at),
           doi: metadata.delete(:doi),
           versions_attributes: [
-            metadata.merge!('creators' => build_authorships)
+            metadata.merge!(
+              'creators' => build_authorships,
+              'external_app' => external_app
+            )
           ]
         )
       end

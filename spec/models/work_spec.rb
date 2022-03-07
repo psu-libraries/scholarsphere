@@ -74,7 +74,6 @@ RSpec.describe Work, type: :model do
           'audio',
           'book',
           'capstone_project',
-          'collection',
           'conference_proceeding',
           'dataset',
           'dissertation',
@@ -166,7 +165,6 @@ RSpec.describe Work, type: :model do
           audio: 'audio',
           book: 'book',
           capstone_project: 'capstone_project',
-          collection: 'collection',
           conference_proceeding: 'conference_proceeding',
           dataset: 'dataset',
           dissertation: 'dissertation',
@@ -423,6 +421,10 @@ RSpec.describe Work, type: :model do
           thumbnail_url_ssi
           thumbnail_selection_tesim
           notify_editors_tesim
+          external_app_id_isi
+          published_at_dtsi
+          removed_at_dtsi
+          withdrawn_at_dtsi
         )
       end
 

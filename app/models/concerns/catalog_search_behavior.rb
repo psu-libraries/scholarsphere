@@ -17,12 +17,30 @@ module CatalogSearchBehavior
     solr_parameters[:fq] << '{!terms f=model_ssi}Work,Collection'
   end
 
+  def exclude_empty_collections(solr_parameters)
+    solr_parameters[:fq] ||= []
+    solr_parameters[:fq] << '-is_empty_bsi:true'
+  end
+
   def limit_to_public_resources(solr_parameters)
     return if current_user.admin?
 
     solr_parameters[:fq] ||= []
     solr_parameters[:fq] << '-embargoed_until_dtsi:[NOW TO *]'
+  end
+
+  def limit_to_published_resources(solr_parameters)
+    return if current_user.admin?
+
+    solr_parameters[:fq] ||= []
     solr_parameters[:fq] << '-aasm_state_tesim:draft'
+    solr_parameters[:fq] << '-aasm_state_tesim:withdrawn'
+  end
+
+  def exclude_withdrawn_resources(solr_parameters)
+    return if current_user.admin?
+
+    solr_parameters[:fq] ||= []
     solr_parameters[:fq] << '-aasm_state_tesim:withdrawn'
   end
 

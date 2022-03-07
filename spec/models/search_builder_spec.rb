@@ -15,7 +15,9 @@ RSpec.describe SearchBuilder do
         :search_related_files,
         :restrict_search_to_works_and_collections,
         :apply_gated_discovery,
-        :limit_to_public_resources
+        :limit_to_public_resources,
+        :limit_to_published_resources,
+        :exclude_empty_collections
       )
     end
   end
@@ -30,6 +32,17 @@ RSpec.describe SearchBuilder do
           '{!terms f=model_ssi}Work,Collection'
         )
       end
+
+      it 'restricts to published works' do
+        expect(parameters['fq']).to include(
+          '-aasm_state_tesim:draft',
+          '-aasm_state_tesim:withdrawn'
+        )
+      end
+
+      it 'excludes empty collections' do
+        expect(parameters['fq']).to include('-is_empty_bsi:true')
+      end
     end
 
     context 'with a registered user' do
@@ -42,13 +55,25 @@ RSpec.describe SearchBuilder do
           '{!terms f=model_ssi}Work,Collection'
         )
       end
+
+      it 'excludes empty collections' do
+        expect(parameters['fq']).to include('-is_empty_bsi:true')
+      end
+
+      it 'restricts to published works' do
+        expect(parameters['fq']).to include(
+          '-aasm_state_tesim:draft',
+          '-aasm_state_tesim:withdrawn'
+        )
+      end
     end
 
     context 'with an admin user' do
       let(:user) { build(:user, :admin) }
 
-      it 'shows all Works' do
-        expect(parameters['fq']).to contain_exactly('{!terms f=model_ssi}Work,Collection')
+      it 'shows all Works and excludes empty Collections' do
+        expect(parameters['fq']).to contain_exactly('-is_empty_bsi:true',
+                                                    '{!terms f=model_ssi}Work,Collection')
       end
     end
 

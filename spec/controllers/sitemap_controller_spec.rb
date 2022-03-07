@@ -15,7 +15,7 @@ RSpec.describe SitemapController, type: :controller do
     let(:public_work) { build(:work, has_draft: false) }
     let(:psu_work) { build(:work, :with_authorized_access, has_draft: false) }
     let(:private_work) { build(:work, :with_private_access, has_draft: false) }
-    let(:collection) { build(:collection) }
+    let(:collection) { build(:collection, :with_published_works) }
 
     let(:ids_0) { Array.new(4) { "0#{Faker::Number.number(digits: 7)}" } }
     let(:ids_1) { Array.new(4) { "1#{Faker::Number.number(digits: 7)}" } }
