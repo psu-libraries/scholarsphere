@@ -29,6 +29,17 @@ class ThumbnailForm
   def save
     ActiveRecord::Base.transaction do
       resource.thumbnail_selection = thumbnail_selection
+
+      save_thumbnail_upload
+    end
+    return false if errors.present?
+
+    resource.save
+  end
+
+  private
+
+    def save_thumbnail_upload
       if thumbnail_upload.present?
         resource.thumbnail_upload.destroy! if resource.thumbnail_upload.present?
 
@@ -38,8 +49,4 @@ class ThumbnailForm
         tu.save
       end
     end
-    return false if errors.present?
-
-    resource.save
-  end
 end
