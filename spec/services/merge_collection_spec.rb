@@ -185,12 +185,6 @@ describe MergeCollection do
   end
 
   context 'when the works in the collection are eligible to be merged' do
-    before do
-      create(:view_statistic, resource: collection, date: Date.parse('2022-02-06'), count: 1)
-      create(:view_statistic, resource: collection, date: Date.parse('2022-02-07'), count: 1)
-      create(:view_statistic, resource: work1.versions.first, date: Date.parse('2022-02-07'), count: 1)
-    end
-
     it 'merges the works into a single work' do
       expect(merge_result).to be_successful
 
@@ -223,14 +217,6 @@ describe MergeCollection do
 
       # check creators
       expect(version.creators.map(&:display_name)).to match_array(work1.versions.first.creators.map(&:display_name))
-
-      # check view stats
-      expect(
-        version.view_statistics.map { |vs| [vs.date, vs.count] }
-      ).to match_array([
-                         [Date.parse('2022-02-06'), 1],
-                         [Date.parse('2022-02-07'), 2]
-                       ])
     end
   end
 end
