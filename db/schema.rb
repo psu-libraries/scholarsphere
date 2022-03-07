@@ -110,7 +110,6 @@ ActiveRecord::Schema.define(version: 2022_03_01_182323) do
     t.datetime "deposited_at"
     t.boolean "notify_editors", default: false
     t.string "thumbnail_selection", default: "default_icon"
-    t.boolean "auto_generate_thumbnail", default: false
     t.index ["depositor_id"], name: "index_collections_on_depositor_id"
   end
 

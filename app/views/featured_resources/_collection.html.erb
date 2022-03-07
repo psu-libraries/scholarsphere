@@ -2,7 +2,9 @@
   <div class="surface ft-work">
     <h3 class="ellipsis"><%= link_to collection.title, resource_path(collection.uuid) %></h3>
     <div class="row">
-      <%= render ThumbnailComponent.new(resource: collection, featured: true) %>
+      <div class="thumbnail-card-index ml-3">
+        <%= render ThumbnailComponent.new(resource: collection, featured: true) %>
+      </div>
       <%# @note This can serve as the collection's metadata component until such time as it needs to be different %>
       <%= render FeaturedWorkMetadataComponent.new(work_version: collection) %>
     </div>

@@ -29,7 +29,7 @@ class ThumbnailComponent < ApplicationComponent
                else
                  'thumbnail-icon'
                end
-    classes << 'col-xxl-6 ft-work__img' if featured?
+    classes << 'ft-work__img' if featured?
 
     classes.join(' ')
   end
