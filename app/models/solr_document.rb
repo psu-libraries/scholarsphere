@@ -80,6 +80,9 @@ class SolrDocument
   end
 
   def default_thumbnail?
-    Array.wrap(self[:thumbnail_selection_tesim]).first == ThumbnailSelections::DEFAULT_ICON
+    thumbnail_selection = Array.wrap(self[:thumbnail_selection_tesim]).first
+    return true if thumbnail_selection.blank?
+
+    thumbnail_selection == ThumbnailSelections::DEFAULT_ICON
   end
 end
