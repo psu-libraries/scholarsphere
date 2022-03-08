@@ -13,11 +13,6 @@ RSpec.describe WorkVersion, type: :model do
 
   it_behaves_like 'a resource that can provide all DOIs in', [:doi, :identifier]
 
-  it_behaves_like 'a resource with a thumbnail url' do
-    let!(:work) { create :work }
-    let!(:resource) { create :work_version, :with_files, work: work }
-  end
-
   describe 'table' do
     it { is_expected.to have_db_column(:work_id) }
     it { is_expected.to have_db_index(:work_id) }
@@ -250,6 +245,7 @@ RSpec.describe WorkVersion, type: :model do
   it { is_expected.to delegate_method(:embargoed_until).to(:work) }
   it { is_expected.to delegate_method(:proxy_depositor).to(:work) }
   it { is_expected.to delegate_method(:work_type).to(:work) }
+  it { is_expected.to delegate_method(:thumbnail_url).to(:work) }
 
   describe 'after save' do
     let(:work_version) { build :work_version, :published }

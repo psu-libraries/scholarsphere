@@ -9,15 +9,21 @@ RSpec.describe ThumbnailComponent, type: :component do
     let(:resource) { instance_spy('Resource', work_type: 'dataset') }
     let(:component) { described_class.new(resource: resource, featured: true) }
 
-    it 'renders a thumbnail for a featured work' do
-      expect(result.css('div').first.classes).to contain_exactly('col-xxl-6', 'ft-work__img', 'thumbnail-icon')
-      expect(result.css('div').first.text).to include('analytics')
+    context 'when default thumbnail' do
+      it 'renders a thumbnail for a featured work' do
+        allow(resource).to receive(:default_thumbnail?).and_return true
+        expect(result.css('div').first.classes).to contain_exactly('ft-work__img', 'thumbnail-icon')
+        expect(result.css('div').first.text).to include('analytics')
+      end
     end
 
-    context 'when thumbnail_url is present' do
+    context 'when uploaded thumbnail' do
       it 'renders a thumbnail with image tag' do
+        allow(resource).to receive(:auto_generated_thumbnail?).and_return false
+        allow(resource).to receive(:default_thumbnail?).and_return false
         allow(resource).to receive(:thumbnail_url).and_return 'url.com/path/file'
-        expect(result.css('div').first.classes).to contain_exactly('col-xxl-6', 'ft-work__img', 'thumbnail-image')
+        expect(result.css('div').first.classes).to contain_exactly('ft-work__img',
+                                                                   'thumbnail-image')
         expect(result.css('img').attribute('src').value).to include('url.com/path/file')
       end
     end
@@ -27,9 +33,22 @@ RSpec.describe ThumbnailComponent, type: :component do
     let(:resource) { instance_spy('Resource', work_type: 'dataset') }
     let(:component) { described_class.new(resource: resource) }
 
-    it 'renders a thumbnail for a featured work' do
-      expect(result.css('div').first.classes).to contain_exactly('thumbnail-icon')
-      expect(result.css('div').first.text).to include('analytics')
+    context 'when default thumbnail' do
+      it 'renders a thumbnail' do
+        allow(resource).to receive(:default_thumbnail?).and_return true
+        allow(resource).to receive(:auto_generated_thumbnail?).and_return false
+        expect(result.css('div').first.classes).to contain_exactly('thumbnail-icon')
+      end
+    end
+
+    context 'when uploaded thumbnail' do
+      it 'renders a thumbnail with image tag' do
+        allow(resource).to receive(:auto_generated_thumbnail?).and_return false
+        allow(resource).to receive(:default_thumbnail?).and_return false
+        allow(resource).to receive(:thumbnail_url).and_return 'url.com/path/file'
+        expect(result.css('div').first.classes).to contain_exactly('thumbnail-image')
+        expect(result.css('img').attribute('src').value).to include('url.com/path/file')
+      end
     end
   end
 
@@ -50,27 +69,6 @@ RSpec.describe ThumbnailComponent, type: :component do
     it 'renders a thumbnail' do
       expect(result.css('div').first.classes).to contain_exactly('thumbnail-icon')
       expect(result.css('div').first.text).to include('view_carousel')
-    end
-  end
-
-  context 'with an unexpected class' do
-    let(:resource) { instance_spy('UnknownResource') }
-    let(:component) { described_class.new(resource: resource) }
-
-    it 'renders a default thumbnail' do
-      expect(result.css('div').first.classes).to contain_exactly('thumbnail-icon')
-      expect(result.css('div').first.text).to include('bar_chart')
-    end
-  end
-
-  context 'when thumbnail_url is present' do
-    let(:resource) { WorkVersion.new }
-    let(:component) { described_class.new(resource: resource) }
-
-    it 'renders a thumbnail with image tag' do
-      allow(resource).to receive(:thumbnail_url).and_return 'url.com/path/file'
-      expect(result.css('div').first.classes).to contain_exactly('thumbnail-image')
-      expect(result.css('img').attribute('src').value).to include('url.com/path/file')
     end
   end
 end

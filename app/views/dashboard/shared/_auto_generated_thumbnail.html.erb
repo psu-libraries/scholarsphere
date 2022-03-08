@@ -1,0 +1,7 @@
+<% if thumbnail_form.resource.auto_generated_thumbnail_url.present? %>
+  <div class="thumbnail-image" id="auto-generated-thumbnail-image">
+    <img src="<%= thumbnail_form.resource.auto_generated_thumbnail_url %>" class="bordered-thumbnail-image">
+  </div>
+<% else %>
+  <%= render partial: 'dashboard/shared/no_image' %>
+<% end %>

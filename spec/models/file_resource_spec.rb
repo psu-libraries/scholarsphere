@@ -27,6 +27,7 @@ RSpec.describe FileResource, type: :model do
     it { is_expected.to have_many(:work_versions).through(:file_version_memberships) }
     it { is_expected.to have_many(:view_statistics) }
     it { is_expected.to have_many(:legacy_identifiers) }
+    it { is_expected.to have_one(:thumbnail_upload) }
   end
 
   describe '::reindex_all' do

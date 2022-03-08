@@ -7,6 +7,7 @@ class Collection < ApplicationRecord
   include AllDois
   include GeneratedUuids
   include UpdatingDois
+  include ThumbnailSelections
 
   fields_with_dois :doi, :identifier
 
@@ -49,6 +50,10 @@ class Collection < ApplicationRecord
            class_name: 'Authorship',
            dependent: :destroy,
            inverse_of: :resource
+
+  has_one :thumbnail_upload,
+          dependent: :destroy,
+          as: :resource
 
   validates :title,
             presence: true
@@ -149,15 +154,15 @@ class Collection < ApplicationRecord
   # TODO Potential Refactoring: #thumbnail_url, #auto_generated_thumbnail_url,
   # TODO and #thumbnail_present? methods here are identical to the methods in Work
   def thumbnail_url
-    auto_generate_thumbnail? ? auto_generated_thumbnail_url : nil
+    auto_generated_thumbnail? ? auto_generated_thumbnail_url : uploaded_thumbnail_url.presence
   end
 
   def auto_generated_thumbnail_url
-    thumbnail_urls.last
+    auto_generated_thumbnail_urls&.last
   end
 
   def thumbnail_present?
-    thumbnail_urls.present?
+    uploaded_thumbnail_url.present? || auto_generated_thumbnail_urls.present?
   end
 
   def empty?
@@ -168,7 +173,11 @@ class Collection < ApplicationRecord
 
   private
 
-    def thumbnail_urls
+    def uploaded_thumbnail_url
+      thumbnail_upload&.file_resource&.thumbnail_url
+    end
+
+    def auto_generated_thumbnail_urls
       works.flat_map { |work| work&.latest_published_version&.file_resources }&.map { |fr| fr&.thumbnail_url }&.compact
     end
 

@@ -3,20 +3,25 @@
              url: url,
              method: :patch,
              remote: false,
-             html: { id: thumbnail_form_id, class: 'edit-resource-depositor' } do |form| %>
+             html: { id: thumbnail_form_id, class: 'edit-thumbnail' } do |form| %>
 
-  <div class="form-check auto-generate-thumbnail">
-    <%= form.check_box :auto_generate_thumbnail,
-                       class: 'form-check-input' %>
+  <div class="row p-1">
+    <div class="col-sm-4 border-right d-flex align-items-center justify-content-center">
+      <i class='material-icons material-icons--thumbnail'><%= ThumbnailComponent.new(resource: thumbnail_form.resource).icon %></i>
+    </div>
 
-    <%= form.label :auto_generate_thumbnail, t('.explanation'), class: 'form-check-label' %>
-  </div>
-  <div class="p-1">
-    <%= render FieldHintComponent.new(form: form, attribute: :auto_generate_thumbnail) %>
-    <div class="thumbnail-image p-1">
-      <img src="<%= thumbnail_form.resource.auto_generated_thumbnail_url %>">
+    <div class="col-sm-4 d-flex align-items-center justify-content-center">
+      <%= render partial: 'dashboard/shared/uploaded_thumbnail', locals: { thumbnail_form: thumbnail_form,
+                                                                           form: form } %>
+    </div>
+
+    <div class="col-sm-4 border-left d-flex align-items-center justify-content-center">
+      <%= render partial: 'dashboard/shared/auto_generated_thumbnail', locals: { thumbnail_form: thumbnail_form } %>
     </div>
   </div>
+
+  <%= render partial: 'dashboard/shared/thumbnail_form_fields', locals: { thumbnail_form: thumbnail_form, form: form } %>
+
   <%= hidden_field_tag 'form_id', thumbnail_form_id %>
   <%= render FormErrorMessageComponent.new(form: form) %>
 

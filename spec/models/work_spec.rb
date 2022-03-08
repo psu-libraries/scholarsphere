@@ -20,6 +20,11 @@ RSpec.describe Work, type: :model do
     let(:resource) { work }
   end
 
+  it_behaves_like 'a resource with a thumbnail selection' do
+    let!(:work) { create :work, versions_count: 2 }
+    let(:resource) { work }
+  end
+
   describe 'table' do
     it { is_expected.to have_db_column(:work_type).of_type(:string) }
     it { is_expected.to have_db_column(:depositor_id) }
@@ -28,7 +33,7 @@ RSpec.describe Work, type: :model do
     it { is_expected.to have_db_column(:embargoed_until).of_type(:datetime) }
     it { is_expected.to have_db_column(:deposit_agreed_at).of_type(:datetime) }
     it { is_expected.to have_db_column(:deposit_agreement_version) }
-    it { is_expected.to have_db_column(:auto_generate_thumbnail).of_type(:boolean).with_options(default: false) }
+    it { is_expected.to have_db_column(:thumbnail_selection).of_type(:string).with_options(default: ThumbnailSelections::DEFAULT_ICON) }
     it { is_expected.to have_db_column(:notify_editors).of_type(:boolean) }
 
     it { is_expected.to have_db_index(:depositor_id) }
@@ -47,6 +52,7 @@ RSpec.describe Work, type: :model do
     it { is_expected.to have_many(:legacy_identifiers) }
     it { is_expected.to have_many(:collection_work_memberships) }
     it { is_expected.to have_many(:collections).through(:collection_work_memberships) }
+    it { is_expected.to have_one(:thumbnail_upload) }
 
     it { is_expected.to accept_nested_attributes_for(:versions) }
   end
@@ -350,7 +356,7 @@ RSpec.describe Work, type: :model do
           visibility_ssi
           work_type_ss
           thumbnail_url_ssi
-          auto_generate_thumbnail_tesim
+          thumbnail_selection_tesim
           notify_editors_tesim
         )
       end
@@ -413,7 +419,7 @@ RSpec.describe Work, type: :model do
           work_id_isi
           work_type_ss
           thumbnail_url_ssi
-          auto_generate_thumbnail_tesim
+          thumbnail_selection_tesim
           notify_editors_tesim
           external_app_id_isi
           published_at_dtsi
@@ -522,33 +528,6 @@ RSpec.describe Work, type: :model do
     end
   end
 
-  describe '#thumbnail_present?' do
-    let(:mock_attacher) { instance_double FileUploader::Attacher }
-    let!(:work) { create :work, versions_count: 2 }
-
-    context 'when a thumbnail url is found' do
-      before do
-        allow(mock_attacher).to receive(:url).with(:thumbnail).and_return 'url.com/path/file'
-      end
-
-      it 'returns true' do
-        allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
-        expect(work.thumbnail_present?).to eq true
-      end
-    end
-
-    context 'when a thumbnail url is not found' do
-      before do
-        allow(mock_attacher).to receive(:url).with(:thumbnail).and_return nil
-      end
-
-      it 'returns false' do
-        allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
-        expect(work.thumbnail_present?).to eq false
-      end
-    end
-  end
-
   describe '#thumbnail_urls' do
     let(:mock_attacher) { instance_double FileUploader::Attacher }
     let!(:work) { create :work, versions_count: 2 }
@@ -562,40 +541,9 @@ RSpec.describe Work, type: :model do
 
       it 'returns an array containing each of the thumbnail urls from the file_resources' do
         allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
-        expect(work.send(:thumbnail_urls).count).to eq 2
-        expect(work.send(:thumbnail_urls).class).to eq Array
-        expect(work.send(:thumbnail_urls).last).to eq 'url.com/path/file'
-      end
-    end
-  end
-
-  describe '#auto_generated_thumbnail_url' do
-    let(:mock_attacher) { instance_double FileUploader::Attacher }
-    let!(:work) { create :work, versions_count: 2 }
-
-    context "when work's latest_published_version has thumbnail urls" do
-      before do
-        work.latest_published_version.file_resources << (create :file_resource)
-        work.save
-        allow(mock_attacher).to receive(:url).with(:thumbnail).and_return 'url.com/path/file'
-      end
-
-      it 'returns the last thumbnail url from the file_resources' do
-        allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
-        expect(work.auto_generated_thumbnail_url).to eq 'url.com/path/file'
-      end
-    end
-
-    context "when work's latest_published_version has no thumbnail urls" do
-      before do
-        work.latest_published_version.file_resources << (create :file_resource)
-        work.save
-        allow(mock_attacher).to receive(:url).with(:thumbnail).and_return nil
-      end
-
-      it 'returns nil' do
-        allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
-        expect(work.auto_generated_thumbnail_url).to eq nil
+        expect(work.send(:auto_generated_thumbnail_urls).count).to eq 2
+        expect(work.send(:auto_generated_thumbnail_urls).class).to eq Array
+        expect(work.send(:auto_generated_thumbnail_urls).last).to eq 'url.com/path/file'
       end
     end
   end

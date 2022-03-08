@@ -21,8 +21,7 @@
 <div class="container-fluid">
   <article class="row">
     <div class="col-lg-7">
-      <h1 class="h2 mb-3"><%= collection.title %></h1>
-      <p><%= collection.description_html %></p>
+      <%= render partial: 'resources/heading_display', locals: { resource: collection } %>
 
       <div class="keyline keyline--left mb-3">
         <h2 class="h4"><%= t('resources.works') %></h2>
@@ -37,6 +36,7 @@
       <div class="keyline keyline--left">
         <h2 class="h4"><%= t('resources.metadata') %></h2>
       </div>
+
       <%= render CollectionMetadataComponent.new(collection: collection) %>
 
       <div class="keyline keyline--left">

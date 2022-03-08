@@ -27,11 +27,15 @@ RSpec.describe Collection, type: :model do
     end
   end
 
+  it_behaves_like 'a resource with a thumbnail selection' do
+    let!(:resource) { create :collection }
+  end
+
   describe 'table' do
     it { is_expected.to have_db_column(:depositor_id) }
     it { is_expected.to have_db_column(:metadata).of_type(:jsonb) }
     it { is_expected.to have_db_column(:doi).of_type(:string) }
-    it { is_expected.to have_db_column(:auto_generate_thumbnail).of_type(:boolean).with_options(default: false) }
+    it { is_expected.to have_db_column(:thumbnail_selection).of_type(:string).with_options(default: ThumbnailSelections::DEFAULT_ICON) }
     it { is_expected.to have_db_column(:notify_editors).of_type(:boolean) }
     it { is_expected.to have_jsonb_accessor(:title).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:subtitle).of_type(:string) }
@@ -62,6 +66,7 @@ RSpec.describe Collection, type: :model do
     it { is_expected.to have_many(:works).through(:collection_work_memberships) }
     it { is_expected.to have_many(:creators) }
     it { is_expected.to have_many(:view_statistics) }
+    it { is_expected.to have_one(:thumbnail_upload) }
 
     describe 'default order of works' do
       let(:collection) { build :collection }
@@ -258,7 +263,7 @@ RSpec.describe Collection, type: :model do
         visibility_ssi
         work_type_ss
         thumbnail_url_ssi
-        auto_generate_thumbnail_tesim
+        thumbnail_selection_tesim
         notify_editors_tesim
         is_empty_bsi
       )
@@ -368,38 +373,7 @@ RSpec.describe Collection, type: :model do
     it_behaves_like 'a resource with orderable creators'
   end
 
-  describe '#thumbnail_present?' do
-    let(:mock_attacher) { instance_double FileUploader::Attacher }
-    let!(:collection) { create :collection }
-
-    before do
-      collection.works = [(create :work, versions_count: 2)]
-    end
-
-    context 'when a thumbnail url is found' do
-      before do
-        allow(mock_attacher).to receive(:url).with(:thumbnail).and_return 'url.com/path/file'
-      end
-
-      it 'returns true' do
-        allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
-        expect(collection.thumbnail_present?).to eq true
-      end
-    end
-
-    context 'when a thumbnail url is not found' do
-      before do
-        allow(mock_attacher).to receive(:url).with(:thumbnail).and_return nil
-      end
-
-      it 'returns false' do
-        allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
-        expect(collection.thumbnail_present?).to eq false
-      end
-    end
-  end
-
-  describe '#thumbnail_urls' do
+  describe '#auto_generated_thumbnail_urls' do
     let(:mock_attacher) { instance_double FileUploader::Attacher }
     let!(:collection) { create :collection }
 
@@ -414,40 +388,9 @@ RSpec.describe Collection, type: :model do
 
       it "returns an array containing each work's latest_published_version's thumbnail urls" do
         allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
-        expect(collection.send(:thumbnail_urls).count).to eq 2
-        expect(collection.send(:thumbnail_urls).class).to eq Array
-        expect(collection.send(:thumbnail_urls).last).to eq 'url.com/path/file'
-      end
-    end
-  end
-
-  describe '#auto_generated_thumbnail_url' do
-    let(:mock_attacher) { instance_double FileUploader::Attacher }
-    let!(:collection) { create :collection }
-
-    before do
-      collection.works = [(create :work, versions_count: 2), (create :work, versions_count: 3)]
-    end
-
-    context 'when collection has many works with thumbnail urls' do
-      before do
-        allow(mock_attacher).to receive(:url).with(:thumbnail).and_return 'url.com/path/file'
-      end
-
-      it "returns the last file resource's thumbnail url" do
-        allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
-        expect(collection.auto_generated_thumbnail_url).to eq 'url.com/path/file'
-      end
-    end
-
-    context 'when collection has no thumbnail urls' do
-      before do
-        allow(mock_attacher).to receive(:url).with(:thumbnail).and_return nil
-      end
-
-      it 'returns nil' do
-        allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
-        expect(collection.auto_generated_thumbnail_url).to eq nil
+        expect(collection.send(:auto_generated_thumbnail_urls).count).to eq 2
+        expect(collection.send(:auto_generated_thumbnail_urls).class).to eq Array
+        expect(collection.send(:auto_generated_thumbnail_urls).last).to eq 'url.com/path/file'
       end
     end
   end

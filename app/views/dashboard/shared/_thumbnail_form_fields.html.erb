@@ -1,0 +1,65 @@
+<div class="row p-2">
+  <%= fields_for :thumbnail_form, thumbnail_form do |field| %>
+    <div class="col-sm-4 d-flex justify-content-center">
+      <div>
+        <%= field.radio_button :thumbnail_selection, ThumbnailSelections::DEFAULT_ICON.to_sym %>
+        <%= field.label :thumbnail_selection,
+                        'Use Default Icon',
+                        value: ThumbnailSelections::DEFAULT_ICON.to_sym %>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="row d-flex justify-content-center">
+        <% if thumbnail_form.resource.thumbnail_upload.present? %>
+          <div class="mr-1">
+            <%= field.radio_button :thumbnail_selection, ThumbnailSelections::UPLOADED_IMAGE.to_sym %>
+          </div>
+          <div>
+            <%= field.label :thumbnail_selection,
+                            'Use Uploaded Image',
+                            value: ThumbnailSelections::UPLOADED_IMAGE.to_sym %>
+          </div>
+        <% else %>
+          <div class="mr-1">
+            <%= field.radio_button :thumbnail_selection, ThumbnailSelections::UPLOADED_IMAGE.to_sym, disabled: true %>
+          </div>
+          <div>
+            <%= field.label :thumbnail_selection,
+                            'Use Uploaded Image',
+                            value: ThumbnailSelections::UPLOADED_IMAGE.to_sym,
+                            class: 'text-muted' %>
+          </div>
+        <% end %>
+      </div>
+      <%= render FieldHintComponent.new(form: form, attribute: :thumbnail_upload) %>
+      <div class="m-1">
+        <%= form.file_field :thumbnail_upload, accept: 'image/*' %>
+      </div>
+      <%= render FieldHintComponent.new(form: form, attribute: :thumbnail_upload_details) %>
+    </div>
+    <% if thumbnail_form.resource.auto_generated_thumbnail_url.present? %>
+      <div class="col-sm-4">
+        <div class="d-flex justify-content-center">
+          <div class="mr-1">
+            <%= field.radio_button :thumbnail_selection, ThumbnailSelections::AUTO_GENERATED.to_sym %>
+          </div>
+          <%= field.label :thumbnail_selection,
+                          'Use Automatically Generated Image',
+                          value: ThumbnailSelections::AUTO_GENERATED.to_sym %>
+        </div>
+      </div>
+    <% else %>
+      <div class="col-sm-4">
+        <div class="d-flex justify-content-center">
+          <div class="mr-1">
+            <%= field.radio_button :thumbnail_selection, ThumbnailSelections::AUTO_GENERATED.to_sym, disabled: true %>
+          </div>
+          <%= field.label :thumbnail_selection,
+                          'Use Automatically Generated Image',
+                          value: ThumbnailSelections::AUTO_GENERATED.to_sym, class: 'text-muted' %>
+        </div>
+        <%= render FieldHintComponent.new(form: form, attribute: :no_auto_generated_thumbnail) %>
+      </div>
+    <% end %>
+  <% end %>
+</div>

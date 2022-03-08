@@ -178,6 +178,34 @@ RSpec.describe 'Public Resources', type: :feature do
         expect(page).to have_link(collection.title)
       end
     end
+
+    context 'when work has a thumbnail' do
+      before do
+        allow_any_instance_of(Work).to receive(:default_thumbnail?).and_return false
+        allow_any_instance_of(ThumbnailComponent).to receive(:display_thumbnail?).and_return true
+        allow_any_instance_of(ThumbnailComponent).to receive(:thumbnail_url).and_return 'url.com/path/file'
+        visit resource_path(work.uuid)
+      end
+
+      it 'displays the thumbnail' do
+        expect(page).to have_css("img[src='url.com/path/file']")
+        expect(page).to have_css('.thumbnail-card')
+      end
+    end
+
+    context 'when work does not have a thumbnail' do
+      before do
+        allow_any_instance_of(Work).to receive(:default_thumbnail?).and_return true
+        allow_any_instance_of(ThumbnailComponent).to receive(:display_thumbnail?).and_return true
+        allow_any_instance_of(ThumbnailComponent).to receive(:thumbnail_url).and_return 'url.com/path/file'
+        visit resource_path(work.uuid)
+      end
+
+      it 'does not display thumbnail' do
+        expect(page).not_to have_css("img[src='url.com/path/file']")
+        expect(page).not_to have_css('.thumbnail-card')
+      end
+    end
   end
 
   describe 'a collection' do
@@ -242,6 +270,38 @@ RSpec.describe 'Public Resources', type: :feature do
         within('header') do
           expect(page).to have_content(I18n.t!('resources.edit_button.text', type: 'Collection'))
         end
+      end
+    end
+
+    context 'when collection has a thumbnail' do
+      let(:collection) { create :collection }
+
+      before do
+        allow_any_instance_of(Collection).to receive(:default_thumbnail?).and_return false
+        allow_any_instance_of(ThumbnailComponent).to receive(:display_thumbnail?).and_return true
+        allow_any_instance_of(ThumbnailComponent).to receive(:thumbnail_url).and_return 'url.com/path/file'
+        visit resource_path(collection.uuid)
+      end
+
+      it 'displays the thumbnail' do
+        expect(page).to have_css("img[src='url.com/path/file']")
+        expect(page).to have_css('.thumbnail-card')
+      end
+    end
+
+    context 'when collection does not have a thumbnail' do
+      let(:collection) { create :collection }
+
+      before do
+        allow_any_instance_of(Collection).to receive(:default_thumbnail?).and_return true
+        allow_any_instance_of(ThumbnailComponent).to receive(:display_thumbnail?).and_return true
+        allow_any_instance_of(ThumbnailComponent).to receive(:thumbnail_url).and_return 'url.com/path/file'
+        visit resource_path(collection.uuid)
+      end
+
+      it 'does not display thumbnail' do
+        expect(page).not_to have_css("img[src='url.com/path/file']")
+        expect(page).not_to have_css('.thumbnail-card')
       end
     end
   end

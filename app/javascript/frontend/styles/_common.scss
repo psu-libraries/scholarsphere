@@ -1385,26 +1385,65 @@ h4,
 
 .thumbnail-icon {
   background: $gray-85;
+  min-height: 200px;
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 5px;
 }
 
 .thumbnail-image {
   min-height: 200px;
   min-width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 5px;
+}
+
+.thumbnail-card {
+  float: left;
+  min-width: 250px;
+  min-height: 250px;
+  max-height: 250px;
+  box-shadow: $box-shadow-sm;
+  background: $gray-100;
+  border: 1px solid $gray-200;
+  border-radius: $border-radius;
+  margin-right: 25px;
+  margin-bottom: 10px;
+}
+
+.thumbnail-card-index {
+  min-width: 215px;
+  width: 215px;
+  height: 215px;
+  box-shadow: $box-shadow-sm;
+  background: $gray-100;
+  border: 1px solid $gray-200;
+  border-radius: $border-radius;
+  margin-left: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.resource-page-thumbnail {
+  margin-left: 17px;
+  min-width: 200px;
+  display: inline-block;
+}
+
+.bordered-thumbnail-image {
+  min-height: 200px;
+  min-width: 200px;
+  border: 1px solid $gray-200;
+  background-color: $white;
 }
 
 form.edit-work-visibility .label {
   display: none;
-}
-
-.auto-generate-thumbnail {
-
-  .form-check-input {
-    min-height: 25px;
-    min-width: 25px;
-  }
-
-  .form-check-label {
-    margin-top: 6px;
-    margin-left: 20px;
-  }
 }

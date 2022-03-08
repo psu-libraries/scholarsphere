@@ -293,10 +293,6 @@ class WorkVersion < ApplicationRecord
     super
   end
 
-  def thumbnail_url
-    auto_generate_thumbnail? ? file_resources&.map { |fr| fr&.thumbnail_url }&.last : nil
-  end
-
   delegate :deposited_at,
            :depositor,
            :embargoed?,
@@ -304,7 +300,9 @@ class WorkVersion < ApplicationRecord
            :proxy_depositor,
            :visibility,
            :work_type,
-           :auto_generate_thumbnail?, to: :work
+           :default_thumbnail?,
+           :auto_generated_thumbnail?,
+           :thumbnail_url, to: :work
 
   private
 

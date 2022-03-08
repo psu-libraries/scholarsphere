@@ -89,7 +89,8 @@ module Dashboard
         params
           .fetch(:thumbnail_form, {})
           .permit(
-            :auto_generate_thumbnail
+            :thumbnail_upload,
+            :thumbnail_selection
           )
       end
   end

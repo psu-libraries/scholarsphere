@@ -5,6 +5,9 @@ import './styles'
 // View statistics
 import './scripts/view_statistics_chart'
 
+// Thumbnail selection settings
+import './scripts/thumbnail_selection_init'
+
 // Load dependencies
 require('jquery/dist/jquery')
 require('bootstrap/dist/js/bootstrap')

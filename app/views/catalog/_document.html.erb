@@ -1,8 +1,10 @@
 <div id="document-<%= document.id %>"
-     class="card card--horizontal mb-3"
+     class="card card--horizontal mb-3 align-items-center"
      data-document-counter="<%= document_counter %>"
      itemscope itemtype="<%= document.itemtype %>">
-  <%= render ThumbnailComponent.new(resource: document) %>
+  <div class="thumbnail-card-index">
+    <%= render ThumbnailComponent.new(resource: document) %>
+  </div>
   <div class="card-body">
     <div class="row no-gutters">
       <div class="col-md-8">

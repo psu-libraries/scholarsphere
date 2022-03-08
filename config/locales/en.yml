@@ -193,7 +193,9 @@ en:
     # Note, for hints (and only hints) you can use Markdown
     hint:
       thumbnail_form:
-        auto_generate_thumbnail: "Auto-generated thumbnail:"
+        thumbnail_upload: "Upload a New File:"
+        thumbnail_upload_details: "Notice: The uploaded thumbnail should be a jpeg or png file, 200x200 pixels."
+        no_auto_generated_thumbnail: "Notice: A thumbnail could not be generated from your uploaded files."
       editors_form:
         edit_users: Requires the user's Penn State Access ID (e.g., xyz500)
       depositor_form:
@@ -255,8 +257,6 @@ en:
       edit:
         heading: "Settings for %{title}"
         back: Back to Collection
-        thumbnail:
-          heading: Thumbnail
         doi:
           heading: DOI
           explanation: A Digital Object Identifier (DOI) is a persistent identifier that can be used in print or on the web.
@@ -292,8 +292,8 @@ en:
       monthly_user_report: "Monthly Report for %{user}"
     shared:
       thumbnail_form:
-        explanation: Use auto-generated thumbnail
-        submit_button: Update Thumbnail Settings
+        submit_button: Save Thumbnail Settings
+        no_image: 'No Image'
       editors_form:
         heading: Editors
         explanation: "Gives the ability for other users from Penn State to edit your %{type}. This can be done on a per-user basis, or a group basis."
@@ -319,8 +319,6 @@ en:
       edit:
         heading: "Settings for %{work_title}"
         back: Back to Work
-        thumbnail:
-          heading: Thumbnail
         visibility:
           heading: Access
           explanation: Access settings affect who can download files associated with the work.
@@ -608,6 +606,7 @@ en:
       submit: 'search'
       subheading: Or
       browse: 'Browse & Filter All Works'
+    thumbnail_heading: 'Thumbnail'
   visibility_badge_component:
     label:
       open: Open Access
