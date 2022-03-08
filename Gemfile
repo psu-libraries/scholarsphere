@@ -8,7 +8,7 @@ ruby '2.7.5'
 gem 'aasm'
 gem 'after_commit_everywhere', '~> 0.1', '>= 0.1.5'
 gem 'blacklight', '~> 7.13'
-gem 'blacklight_oai_provider', github: 'projectblacklight/blacklight_oai_provider'
+gem 'blacklight_oai_provider', github: 'projectblacklight/blacklight_oai_provider', ref: '428da77'
 gem 'bootsnap', '>= 1.4.2', require: false
 gem 'browser'
 gem 'cocoon'

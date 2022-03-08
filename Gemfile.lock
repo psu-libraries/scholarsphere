@@ -1,6 +1,7 @@
 GIT
   remote: https://github.com/projectblacklight/blacklight_oai_provider.git
   revision: 428da773d76c11cc647a218ca0a183b185bd46ae
+  ref: 428da77
   specs:
     blacklight_oai_provider (7.0.1)
       blacklight (~> 7.0)
