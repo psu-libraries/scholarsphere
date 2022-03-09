@@ -217,6 +217,7 @@ class CatalogController < ApplicationController
         admin_email: Rails.configuration.contact_email
       },
       document: {
+        limit: 100,
         set_model: ScholarsphereListSet,
         set_fields: [
           { label: 'visibility', solr_field: 'visibility_ssi' }
