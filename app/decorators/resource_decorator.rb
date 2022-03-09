@@ -79,7 +79,7 @@ class ResourceDecorator < SimpleDelegator
     def combined_description
       [try(:description), try(:publisher_statement)]
         .compact
-        .join("\r\n")
+        .join("\r\r")
     end
 
     def render_markdown(str)
