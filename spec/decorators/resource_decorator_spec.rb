@@ -246,7 +246,7 @@ RSpec.describe ResourceDecorator do
       end
 
       let(:combined_description) do
-        [resource.description, resource.publisher_statement].join("\r\n")
+        [resource.description, resource.publisher_statement].join("\r\r")
       end
 
       it 'traps the error and returns the original string' do
