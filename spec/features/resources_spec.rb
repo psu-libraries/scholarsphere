@@ -46,6 +46,11 @@ RSpec.describe 'Public Resources', type: :feature do
           expect(page).not_to have_content(I18n.t!('resources.settings_button.text', type: 'Work'))
         end
 
+        # Does not have a menu toggle button
+        within('nav.main-nav') do
+          expect(page).not_to have_selector('button')
+        end
+
         ## Ensure we cannot navigate to the draft version
         within('.version-navigation .list-group') do
           expect(page).not_to have_content 'V3'
@@ -117,6 +122,11 @@ RSpec.describe 'Public Resources', type: :feature do
 
             expect(page).to have_content(I18n.t!('resources.edit_button.text', type: 'Work'))
               .and have_content(I18n.t!('resources.settings_button.text', type: 'Work'))
+          end
+
+          # Has a menu toggle button
+          within('nav.main-nav') do
+            expect(page).to have_selector('button.navbar-toggler')
           end
         end
       end
