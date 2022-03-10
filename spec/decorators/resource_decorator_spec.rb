@@ -183,75 +183,94 @@ RSpec.describe ResourceDecorator do
     let(:parsed) { Nokogiri::HTML(description_html) }
     let(:resource) { instance_spy('WorkVersion') }
 
-    before do
-      allow(resource).to receive(:description).and_return(<<-MARKDOWN.strip_heredoc)
-        This is my first paragraph, which is *emphasized*.
-
-        This is my second paragraph with has a [link](https://scholarsphere.psu.edu)
-
-        And this is my third paragraph which has an autolink to https://google.com
-
-        This paragraph has <h1>sneaky html</h1>
-      MARKDOWN
-
-      allow(resource).to receive(:publisher_statement).and_return(<<-MARKDOWN.strip_heredoc)
-        ## Publisher's Statement
-
-        Here's some important stuff that you need to know.
-      MARKDOWN
-    end
-
-    it 'renders the description into markdown' do
-      expect(description_html).to be_html_safe
-
-      expect(parsed.css('p').length).to eq 5
-
-      parsed.css('p').first.tap do |first_paragraph|
-        expect(first_paragraph.css('em').text).to eq 'emphasized'
-      end
-    end
-
-    it 'supports explicit links' do
-      parsed.css('p')[1].tap do |second_paragraph|
-        expect(second_paragraph.css('a').text).to eq 'link'
-        expect(second_paragraph.css('a')[0]['href']).to eq 'https://scholarsphere.psu.edu'
-      end
-    end
-
-    it 'supports autolinks' do
-      parsed.css('p')[2].tap do |third_paragraph|
-        expect(third_paragraph.css('a').text).to eq 'https://google.com'
-        expect(third_paragraph.css('a')[0]['href']).to eq 'https://google.com'
-      end
-    end
-
-    it 'does not allow html' do
-      parsed.css('p')[3].tap do |fourth_paragraph|
-        expect(fourth_paragraph.css('h1').text).to be_empty
-      end
-    end
-
-    context 'when given nil' do
+    context 'when description_html contains markdown' do
       before do
-        allow(resource).to receive(:description).and_return(nil)
-        allow(resource).to receive(:publisher_statement).and_return(nil)
+        allow(resource).to receive(:description).and_return(<<-MARKDOWN.strip_heredoc)
+          This is my first paragraph, which is *emphasized*.
+
+          This is my second paragraph with has a [link](https://scholarsphere.psu.edu)
+
+          And this is my third paragraph which has an autolink to https://google.com
+
+          This paragraph has <h1>sneaky html</h1>
+        MARKDOWN
+
+        allow(resource).to receive(:publisher_statement).and_return(<<-MARKDOWN.strip_heredoc)
+          ## Publisher's Statement
+
+          Here's some important stuff that you need to know.
+        MARKDOWN
       end
 
-      it { is_expected.to eq '' }
+      it 'renders the description into markdown' do
+        expect(description_html).to be_html_safe
+
+        expect(parsed.css('p').length).to eq 5
+
+        parsed.css('p').first.tap do |first_paragraph|
+          expect(first_paragraph.css('em').text).to eq 'emphasized'
+        end
+      end
+
+      it 'supports explicit links' do
+        parsed.css('p')[1].tap do |second_paragraph|
+          expect(second_paragraph.css('a').text).to eq 'link'
+          expect(second_paragraph.css('a')[0]['href']).to eq 'https://scholarsphere.psu.edu'
+        end
+      end
+
+      it 'supports autolinks' do
+        parsed.css('p')[2].tap do |third_paragraph|
+          expect(third_paragraph.css('a').text).to eq 'https://google.com'
+          expect(third_paragraph.css('a')[0]['href']).to eq 'https://google.com'
+        end
+      end
+
+      it 'does not allow html' do
+        parsed.css('p')[3].tap do |fourth_paragraph|
+          expect(fourth_paragraph.css('h1').text).to be_empty
+        end
+      end
+
+      context 'when given nil' do
+        before do
+          allow(resource).to receive(:description).and_return(nil)
+          allow(resource).to receive(:publisher_statement).and_return(nil)
+        end
+
+        it { is_expected.to eq '' }
+      end
+
+      context 'when given something that explodes' do
+        before do
+          allow(Redcarpet::Markdown).to receive(:new).and_raise
+        end
+
+        let(:combined_description) do
+          [resource.description, resource.publisher_statement].join("\n\r")
+        end
+
+        it 'traps the error and returns the original string' do
+          expect(description_html).to eq(combined_description)
+          expect(description_html).not_to be_html_safe
+        end
+      end
     end
 
-    context 'when given something that explodes' do
+    context 'when description_html does not contain markdown' do
       before do
-        allow(Redcarpet::Markdown).to receive(:new).and_raise
+        allow(resource).to receive(:description).and_return('Description.')
+        allow(resource).to receive(:publisher_statement).and_return('Publisher Statement')
       end
 
-      let(:combined_description) do
-        [resource.description, resource.publisher_statement].join("\r\n")
-      end
+      it 'renders the description into html' do
+        expect(description_html).to be_html_safe
 
-      it 'traps the error and returns the original string' do
-        expect(description_html).to eq(combined_description)
-        expect(description_html).not_to be_html_safe
+        expect(parsed.css('p').length).to eq 2
+
+        parsed.css('p').last.tap do |last_paragraph|
+          expect(last_paragraph.text).to eq 'Publisher Statement'
+        end
       end
     end
   end
