@@ -288,6 +288,8 @@ h4,
 }
 
 .main-nav {
+  min-height: 53px;
+
   @include media-breakpoint-down(md) {
     &:not(.main-nav--no-pad) {
       padding: ($spacer * .5) 0;

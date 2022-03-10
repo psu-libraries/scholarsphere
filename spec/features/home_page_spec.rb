@@ -19,6 +19,7 @@ RSpec.describe 'Home page', type: :feature do
 
       within('nav.main-nav') do
         expect(page).to have_content('Welcome to ScholarSphere')
+        expect(page).not_to have_selector('button')
       end
 
       expect(page).to have_selector('h2', text: 'ScholarSphere Updates')
