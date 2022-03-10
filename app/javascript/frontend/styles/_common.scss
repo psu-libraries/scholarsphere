@@ -525,6 +525,8 @@ h4,
 }
 
 .ft-work {
+  min-height: 100%;
+
   h3 {
     @extend .text-primary;
     @extend .mb-2;
