@@ -16,4 +16,15 @@ class CollectionWorkMembership < ApplicationRecord
             uniqueness: {
               scope: :work_id
             }
+
+  after_create :set_thumbnail_selection
+
+  private
+
+    def set_thumbnail_selection
+      # collection.works.blank? lets us know if the collection has just been created
+      if collection.works.blank? && work.auto_generated_thumbnail_url.present?
+        collection.update thumbnail_selection: ThumbnailSelections::AUTO_GENERATED
+      end
+    end
 end
