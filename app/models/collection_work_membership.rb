@@ -22,7 +22,8 @@ class CollectionWorkMembership < ApplicationRecord
   private
 
     def set_thumbnail_selection
-      # collection.works.blank? lets us know if the collection has just been created
+      # The MembersController accepts_nested_attributes_for all WorKCollectionMembers before the Collection is saved
+      # Therefore collection.works.blank? lets us know if the collection has just been created
       if collection.works.blank? && work.auto_generated_thumbnail_url.present?
         collection.update thumbnail_selection: ThumbnailSelections::AUTO_GENERATED
       end
