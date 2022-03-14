@@ -45,11 +45,11 @@ RSpec.describe CollectionWorkMembership, type: :model do
           allow_any_instance_of(Work).to receive(:auto_generated_thumbnail_url).and_return 'url.com/path/file'
           expect(collection.thumbnail_selection).to eq ThumbnailSelections::DEFAULT_ICON
           collection.attributes = {
-              "collection_work_memberships_attributes"=>{
-                  "0"=>{"work_id"=>"#{work.id}",
-                        "_destroy"=>"false",
-                        "position"=>"1"}
-              }
+            'collection_work_memberships_attributes' => {
+              '0' => { 'work_id' => work.id.to_s,
+                       '_destroy' => 'false',
+                       'position' => '1' }
+            }
           }
           collection.save
           expect(collection.reload.thumbnail_selection).to eq ThumbnailSelections::AUTO_GENERATED
@@ -60,15 +60,39 @@ RSpec.describe CollectionWorkMembership, type: :model do
         it "the associated collection's thumbnail_selection remains as '#{ThumbnailSelections::DEFAULT_ICON}" do
           expect(collection.thumbnail_selection).to eq ThumbnailSelections::DEFAULT_ICON
           collection.attributes = {
-              "collection_work_memberships_attributes"=>{
-                  "0"=>{"work_id"=>"#{work.id}",
-                        "_destroy"=>"false",
-                        "position"=>"1"}
-              }
+            'collection_work_memberships_attributes' => {
+              '0' => { 'work_id' => work.id.to_s,
+                       '_destroy' => 'false',
+                       'position' => '1' }
+            }
           }
           collection.save
           expect(collection.reload.thumbnail_selection).to eq ThumbnailSelections::DEFAULT_ICON
         end
+      end
+    end
+
+    context 'when the associated collection already has associated works' do
+      let(:collection) { create :collection }
+      let(:work) { create :work }
+
+      before do
+        collection.works << (create :work)
+        collection.save
+      end
+
+      it "the associated collection's thumbnail_selection remains as '#{ThumbnailSelections::DEFAULT_ICON}" do
+        allow_any_instance_of(Work).to receive(:auto_generated_thumbnail_url).and_return 'url.com/path/file'
+        expect(collection.thumbnail_selection).to eq ThumbnailSelections::DEFAULT_ICON
+        collection.attributes = {
+          'collection_work_memberships_attributes' => {
+            '0' => { 'work_id' => work.id.to_s,
+                     '_destroy' => 'false',
+                     'position' => '1' }
+          }
+        }
+        collection.save
+        expect(collection.reload.thumbnail_selection).to eq ThumbnailSelections::DEFAULT_ICON
       end
     end
   end
