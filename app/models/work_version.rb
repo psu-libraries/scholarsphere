@@ -302,6 +302,12 @@ class WorkVersion < ApplicationRecord
       (draft? || temporarily_published_draft?)
   end
 
+  def mint_doi_on_completion
+    return unless initial_draft? && mint_doi && !doi_present_or_minting?
+
+    MintDoiAsync.call(self)
+  end
+
   delegate :deposited_at,
            :depositor,
            :embargoed?,
@@ -311,7 +317,8 @@ class WorkVersion < ApplicationRecord
            :work_type,
            :default_thumbnail?,
            :auto_generated_thumbnail?,
-           :thumbnail_url, to: :work
+           :thumbnail_url,
+           :mint_doi, to: :work
 
   private
 
@@ -338,5 +345,9 @@ class WorkVersion < ApplicationRecord
 
     def temporarily_published_draft?
       aasm.from_state == :draft && aasm.to_state == :published
+    end
+
+    def doi_present_or_minting?
+      work.doi.present? || DoiMintingStatus.new(work).present?
     end
 end

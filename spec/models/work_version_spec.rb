@@ -246,6 +246,7 @@ RSpec.describe WorkVersion, type: :model do
   it { is_expected.to delegate_method(:proxy_depositor).to(:work) }
   it { is_expected.to delegate_method(:work_type).to(:work) }
   it { is_expected.to delegate_method(:thumbnail_url).to(:work) }
+  it { is_expected.to delegate_method(:mint_doi).to(:work) }
 
   describe 'after save' do
     let(:work_version) { build :work_version, :published }
@@ -677,6 +678,77 @@ RSpec.describe WorkVersion, type: :model do
         let(:work) { create(:work, has_draft: true, versions_count: 2) }
 
         it { is_expected.not_to be_initial_draft }
+      end
+    end
+  end
+
+  describe '#mint_doi_on_completion' do
+    let(:work_version) { work.versions.last }
+
+    before do
+      allow(MintDoiAsync).to receive(:call)
+      work_version.work.mint_doi = false
+    end
+
+    context 'when Work Version is an initial draft' do
+      let(:work) { create(:work, has_draft: true, versions_count: 1) }
+
+      context 'when mint_doi is NOT true' do
+        it 'does not call the MintDoiAsync service' do
+          work_version.mint_doi_on_completion
+          expect(MintDoiAsync).not_to have_received(:call)
+        end
+      end
+
+      context 'when mint_doi is true' do
+        before do
+          work_version.work.mint_doi = true
+        end
+
+        context 'when Work does NOT have a DOI present' do
+          it 'calls the MintDoiAsync service' do
+            work_version.work.doi = nil
+            work_version.mint_doi_on_completion
+            expect(MintDoiAsync).to have_received(:call)
+          end
+        end
+
+        context 'when Work has a DOI present' do
+          it 'does not call the MintDoiAsync service' do
+            work_version.work.doi = FactoryBotHelpers.datacite_doi
+            work_version.mint_doi_on_completion
+            expect(MintDoiAsync).not_to have_received(:call)
+          end
+        end
+
+        context 'when Work is actively minting a DOI right now' do
+          let(:mock_minting_status) { instance_double 'DoiMintingStatus', present?: true }
+
+          before do
+            allow(DoiMintingStatus).to receive(:new).with(work)
+              .and_return(mock_minting_status)
+          end
+
+          it 'does not call the MintDoiAsync service' do
+            work_version.work.doi = nil
+            work_version.mint_doi_on_completion
+            expect(MintDoiAsync).not_to have_received(:call)
+          end
+        end
+      end
+    end
+
+    context 'when work version is NOT an initial draft' do
+      let(:work) { create(:work, has_draft: false, versions_count: 2) }
+
+      before do
+        work_version.work.mint_doi = true
+        work_version.work.doi = nil
+      end
+
+      it 'does not call the MintDoiAsync service' do
+        work_version.mint_doi_on_completion
+        expect(MintDoiAsync).not_to have_received(:call)
       end
     end
   end

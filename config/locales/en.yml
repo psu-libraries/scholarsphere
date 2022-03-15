@@ -205,6 +205,8 @@ en:
           authenticated: >
             By choosing Penn State Only, files can only be accessed by users with a Penn State Access ID. The Penn State
             Only option DOES NOT satisfy Penn State's Open Access to Scholarly Articles Policy (AC02) requirements.
+      work:
+        doi: Do not create a DOI if another publisher or repository has already assigned one. [Read more](https://docs.scholarsphere.psu.edu/guides/deposit-overview/#assigning-a-doi)
       work_version:
         title: The title as would appear in a bibliographic reference to the work (not a filename).
         description: Include the work abstract if available.
@@ -435,6 +437,7 @@ en:
           contributors: Contributors
           files: Files
           publishing_details: Publishing Details
+        mint_doi_on_completion: Create DOI on Completion
       members:
         heading: Works
         badge: Work 

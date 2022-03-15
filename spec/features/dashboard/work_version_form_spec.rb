@@ -9,6 +9,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
   before do
     allow(SolrIndexingJob).to receive(:perform_later)
+    allow(MintDoiAsync).to receive(:call)
   end
 
   describe 'The Work Details tab for a new work' do
@@ -489,18 +490,24 @@ RSpec.describe 'Publishing a work', with_user: :user do
       end
     end
 
-    context 'with a non v1 draft version' do
+    context 'with a non initial draft version' do
       let(:user) { work_version.work.depositor.user }
       let(:work_version) { create :work_version }
 
-      it 'does not display visibility fields' do
+      it 'does NOT display visibility fields' do
         visit dashboard_form_publish_path(work_version)
 
         expect(page).not_to have_content(WorkVersion.human_attribute_name(:visibility))
       end
+
+      it 'does NOT display Create DOI on Completion checkbox' do
+        visit dashboard_form_publish_path(work_version)
+
+        expect(page).not_to have_content(I18n.t('dashboard.form.publish.mint_doi_on_completion'))
+      end
     end
 
-    context 'with a v1 draft version' do
+    context 'with an initial draft version' do
       let(:work) { create :work, versions_count: 1, has_draft: true }
       let(:work_version) { work.versions.first }
       let(:user) { work.depositor.user }
@@ -509,6 +516,12 @@ RSpec.describe 'Publishing a work', with_user: :user do
         visit dashboard_form_publish_path(work_version)
 
         expect(page).to have_content(WorkVersion.human_attribute_name(:visibility))
+      end
+
+      it 'displays Create DOI on Completion checkbox' do
+        visit dashboard_form_publish_path(work_version)
+
+        expect(page).to have_content(I18n.t('dashboard.form.publish.mint_doi_on_completion'))
       end
     end
   end
@@ -562,6 +575,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       expect(version).to be_published
       expect(version.published_at).to be_present.and be_within(2.seconds).of(Time.zone.now)
       expect(work.visibility).to eq(Permissions::Visibility::OPEN)
+      expect(work.mint_doi).to eq true
       expect(version.version_number).to eq 1
       expect(version.title).to eq different_metadata[:title]
       expect(version.description).to eq different_metadata[:description]
@@ -576,6 +590,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
       expect(version.creators.length).to eq 1
       expect(version.creators.first.display_name).to eq user.actor.display_name
+
+      expect(MintDoiAsync).to have_received(:call)
     end
   end
 
@@ -639,6 +655,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
       expect(version).to be_published
       expect(work.visibility).to eq(Permissions::Visibility::AUTHORIZED)
+      expect(work.mint_doi).to eq true
       expect(version.version_number).to eq 1
       expect(version.title).to eq different_metadata[:title]
       expect(version.description).to eq different_metadata[:description]
@@ -653,6 +670,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
       expect(version.creators.length).to eq 1
       expect(version.creators.first.display_name).to eq user.actor.display_name
+
+      expect(MintDoiAsync).to have_received(:call).twice
     end
   end
 
@@ -691,17 +710,22 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
       # Fill out form properly
       FeatureHelpers::DashboardForm.fill_in_work_details(different_metadata)
-      # Note that visibility fields are not editable for published work
+      # Note that visibility fields and Create DOI on Completion checkbox are not editable for published work
+      expect(page).not_to have_content(WorkVersion.human_attribute_name(:visibility))
+      expect(page).not_to have_content(I18n.t('dashboard.form.publish.mint_doi_on_completion'))
+
       # Pick a license
       FeatureHelpers::DashboardForm.fill_in_publishing_details_published(
         different_metadata.merge(rights: incorrect_rights)
       )
       FeatureHelpers::DashboardForm.finish
       expect(SolrIndexingJob).to have_received(:perform_later).once
+      expect(MintDoiAsync).not_to have_received(:call)
 
       work_version.reload
       expect(work_version.rights).to eq(incorrect_rights)
       expect(work_version.visibility).to eq(Permissions::Visibility::OPEN)
+      expect(work_version.mint_doi).to eq false
     end
   end
 

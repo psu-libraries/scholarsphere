@@ -1,0 +1,21 @@
+<%- hint = FieldHintComponent.new(form: form, attribute: :doi) %>
+
+<div class="form-group">
+  <div class="keyline keyline--left">
+    <h2 id="<%= t('dashboard.works.edit.doi.heading').parameterize %>" class="h4">
+      <%= t('dashboard.works.edit.doi.heading') %>
+    </h2>
+  </div>
+
+  <div class="form-check mb-2">
+    <%= form.check_box :mint_doi,
+                       required: false,
+                       class: 'form-check-input' %>
+
+    <%= form.label :mint_doi, class: 'form-check-label' do %>
+        <%= t('dashboard.form.publish.mint_doi_on_completion') %>
+    <% end %>
+
+    <%= render hint %>
+  </div>
+</div>

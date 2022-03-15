@@ -25,6 +25,7 @@ module Dashboard
         # save again--this time using the published validations. That way the
         # appropriate error messages will appear on the form when it's re-rendered
         if publish?
+          @resource.mint_doi_on_completion
           @resource.indexing_source = Proc.new { nil }
           @resource.save
           @resource.publish
@@ -111,7 +112,8 @@ module Dashboard
               work_attributes: [
                 :id,
                 :work_type,
-                :visibility
+                :visibility,
+                :mint_doi
               ]
             )
         end

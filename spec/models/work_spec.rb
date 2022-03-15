@@ -35,6 +35,7 @@ RSpec.describe Work, type: :model do
     it { is_expected.to have_db_column(:deposit_agreement_version) }
     it { is_expected.to have_db_column(:thumbnail_selection).of_type(:string).with_options(default: ThumbnailSelections::DEFAULT_ICON) }
     it { is_expected.to have_db_column(:notify_editors).of_type(:boolean) }
+    it { is_expected.to have_db_column(:mint_doi).of_type(:boolean) }
 
     it { is_expected.to have_db_index(:depositor_id) }
     it { is_expected.to have_db_index(:proxy_id) }
@@ -358,6 +359,7 @@ RSpec.describe Work, type: :model do
           thumbnail_url_ssi
           thumbnail_selection_tesim
           notify_editors_tesim
+          mint_doi_tesim
         )
       end
 
@@ -425,6 +427,7 @@ RSpec.describe Work, type: :model do
           published_at_dtsi
           removed_at_dtsi
           withdrawn_at_dtsi
+          mint_doi_tesim
         )
       end
 
