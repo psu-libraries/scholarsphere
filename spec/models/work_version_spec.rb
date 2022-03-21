@@ -671,4 +671,53 @@ RSpec.describe WorkVersion, type: :model do
       end
     end
   end
+
+  describe '#initial_draft?' do
+    subject { work.versions.last }
+
+    context 'when work version has one version that is a draft' do
+      let(:work) { create(:work, has_draft: true, versions_count: 1) }
+
+      it { is_expected.to be_initial_draft }
+    end
+
+    context 'when work version is has one version that is not a draft' do
+      let(:work) { create(:work, has_draft: false, versions_count: 1) }
+
+      it { is_expected.not_to be_initial_draft }
+    end
+
+    context 'when work version has more than one version including a draft' do
+      let(:work) { create(:work, has_draft: true, versions_count: 2) }
+
+      it { is_expected.not_to be_initial_draft }
+    end
+
+    context 'when work version has more than one version with no draft' do
+      let(:work) { create(:work, has_draft: false, versions_count: 2) }
+
+      it { is_expected.not_to be_initial_draft }
+    end
+
+    context 'when work version is temporarily published draft' do
+      let(:work_version) { subject }
+
+      before do
+        work_version.aasm.from_state == :draft
+        work_version.aasm.to_state == :published
+      end
+
+      context 'when work has one version' do
+        let(:work) { create(:work, has_draft: true, versions_count: 1) }
+
+        it { is_expected.to be_initial_draft }
+      end
+
+      context 'when work has more than one versions' do
+        let(:work) { create(:work, has_draft: true, versions_count: 2) }
+
+        it { is_expected.not_to be_initial_draft }
+      end
+    end
+  end
 end

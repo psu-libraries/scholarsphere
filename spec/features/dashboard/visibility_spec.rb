@@ -6,7 +6,7 @@ RSpec.describe 'Setting visibility in the dashboard', with_user: :user do
   let(:user) { work_version.work.depositor.user }
 
   context 'when changing from public to Penn State' do
-    let(:work_version) { create :work_version, :able_to_be_published }
+    let(:work_version) { create :work_version, :able_to_be_published, :initial_draft }
 
     it 'sets the visibility to Penn State' do
       visit dashboard_form_publish_path(work_version)
@@ -23,7 +23,8 @@ RSpec.describe 'Setting visibility in the dashboard', with_user: :user do
   end
 
   context 'when changing from Penn State to public' do
-    let(:work_version) { create :work_version, :able_to_be_published, work: create(:work, :with_authorized_access) }
+    let(:work) { create(:work, :with_authorized_access) }
+    let(:work_version) { create :work_version, :able_to_be_published, :initial_draft, work: work }
 
     it 'sets the visibility to public' do
       visit dashboard_form_publish_path(work_version)
@@ -40,7 +41,8 @@ RSpec.describe 'Setting visibility in the dashboard', with_user: :user do
   end
 
   context 'when changing from restricted to Penn State' do
-    let(:work_version) { create :work_version, :able_to_be_published, work: create(:work, :with_no_access) }
+    let(:work) { create(:work, :with_no_access) }
+    let(:work_version) { create :work_version, :able_to_be_published, :initial_draft, work: work }
 
     it 'sets the visibility to public' do
       visit dashboard_form_publish_path(work_version)
@@ -58,7 +60,8 @@ RSpec.describe 'Setting visibility in the dashboard', with_user: :user do
   end
 
   context 'when changing from restricted to public' do
-    let(:work_version) { create :work_version, :able_to_be_published, work: create(:work, :with_no_access) }
+    let(:work) { create(:work, :with_no_access) }
+    let(:work_version) { create :work_version, :able_to_be_published, :initial_draft, work: work }
 
     it 'sets the visibility to public' do
       visit dashboard_form_publish_path(work_version)
@@ -76,7 +79,8 @@ RSpec.describe 'Setting visibility in the dashboard', with_user: :user do
   end
 
   context 'when NOT changing from restricted' do
-    let(:work_version) { create :work_version, :able_to_be_published, work: create(:work, :with_no_access) }
+    let(:work) { create(:work, :with_no_access) }
+    let(:work_version) { create :work_version, :able_to_be_published, :initial_draft, work: work }
 
     it 'sets the visibility to public' do
       visit dashboard_form_publish_path(work_version)

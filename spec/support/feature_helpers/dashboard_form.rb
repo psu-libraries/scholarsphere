@@ -83,6 +83,11 @@ module FeatureHelpers
       select WorkVersion::Licenses.label(metadata[:rights]), from: 'work_version_rights'
     end
 
+    def self.fill_in_publishing_details_published(metadata)
+      check 'work_version_depositor_agreement'
+      select WorkVersion::Licenses.label(metadata[:rights]), from: 'work_version_rights'
+    end
+
     def self.save_as_draft_and_exit
       fix_sticky_footer
       click_on I18n.t!('dashboard.form.actions.save_and_exit.work_version')
