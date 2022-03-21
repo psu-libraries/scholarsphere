@@ -190,30 +190,62 @@ RSpec.describe 'Public Resources', type: :feature do
     end
 
     context 'when work has a thumbnail' do
-      before do
-        allow_any_instance_of(Work).to receive(:default_thumbnail?).and_return false
-        allow_any_instance_of(ThumbnailComponent).to receive(:display_thumbnail?).and_return true
-        allow_any_instance_of(ThumbnailComponent).to receive(:thumbnail_url).and_return 'url.com/path/file'
-        visit resource_path(work.uuid)
+      let(:collection) { create :collection }
+
+      context 'when work#default_thumbnail? is true' do
+        before do
+          allow_any_instance_of(Work).to receive(:default_thumbnail?).and_return true
+          allow_any_instance_of(ThumbnailComponent).to receive(:thumbnail_url).and_return 'url.com/path/file'
+          visit resource_path(work.uuid)
+        end
+
+        it 'does not display thumbnail' do
+          expect(page).not_to have_css("img[src='url.com/path/file']")
+          expect(page).not_to have_css('.thumbnail-card')
+        end
       end
 
-      it 'displays the thumbnail' do
-        expect(page).to have_css("img[src='url.com/path/file']")
-        expect(page).to have_css('.thumbnail-card')
+      context 'when work#default_thumbnail? is false' do
+        before do
+          allow_any_instance_of(Work).to receive(:default_thumbnail?).and_return false
+          allow_any_instance_of(ThumbnailComponent).to receive(:thumbnail_url).and_return 'url.com/path/file'
+          visit resource_path(work.uuid)
+        end
+
+        it 'displays the thumbnail' do
+          expect(page).to have_css("img[src='url.com/path/file']")
+          expect(page).to have_css('.thumbnail-card')
+        end
       end
     end
 
     context 'when work does not have a thumbnail' do
+      let(:work) { create :work }
+
       before do
-        allow_any_instance_of(Work).to receive(:default_thumbnail?).and_return true
-        allow_any_instance_of(ThumbnailComponent).to receive(:display_thumbnail?).and_return true
-        allow_any_instance_of(ThumbnailComponent).to receive(:thumbnail_url).and_return 'url.com/path/file'
-        visit resource_path(work.uuid)
+        allow_any_instance_of(ThumbnailComponent).to receive(:thumbnail_url).and_return nil
       end
 
-      it 'does not display thumbnail' do
-        expect(page).not_to have_css("img[src='url.com/path/file']")
-        expect(page).not_to have_css('.thumbnail-card')
+      context 'when work#default_thumbnail? is true' do
+        before do
+          allow_any_instance_of(Work).to receive(:default_thumbnail?).and_return true
+          visit resource_path(work.uuid)
+        end
+
+        it 'does not display thumbnail' do
+          expect(page).not_to have_css('.thumbnail-image')
+        end
+      end
+
+      context 'when work#default_thumbnail? is false' do
+        before do
+          allow_any_instance_of(Work).to receive(:default_thumbnail?).and_return false
+          visit resource_path(work.uuid)
+        end
+
+        it 'does not display thumbnail' do
+          expect(page).not_to have_css('.thumbnail-image')
+        end
       end
     end
   end
@@ -286,16 +318,30 @@ RSpec.describe 'Public Resources', type: :feature do
     context 'when collection has a thumbnail' do
       let(:collection) { create :collection }
 
-      before do
-        allow_any_instance_of(Collection).to receive(:default_thumbnail?).and_return false
-        allow_any_instance_of(ThumbnailComponent).to receive(:display_thumbnail?).and_return true
-        allow_any_instance_of(ThumbnailComponent).to receive(:thumbnail_url).and_return 'url.com/path/file'
-        visit resource_path(collection.uuid)
+      context 'when collection#default_thumbnail? is true' do
+        before do
+          allow_any_instance_of(Collection).to receive(:default_thumbnail?).and_return true
+          allow_any_instance_of(ThumbnailComponent).to receive(:thumbnail_url).and_return 'url.com/path/file'
+          visit resource_path(collection.uuid)
+        end
+
+        it 'does not display thumbnail' do
+          expect(page).not_to have_css("img[src='url.com/path/file']")
+          expect(page).not_to have_css('.thumbnail-card')
+        end
       end
 
-      it 'displays the thumbnail' do
-        expect(page).to have_css("img[src='url.com/path/file']")
-        expect(page).to have_css('.thumbnail-card')
+      context 'when collection#default_thumbnail? is false' do
+        before do
+          allow_any_instance_of(Collection).to receive(:default_thumbnail?).and_return false
+          allow_any_instance_of(ThumbnailComponent).to receive(:thumbnail_url).and_return 'url.com/path/file'
+          visit resource_path(collection.uuid)
+        end
+
+        it 'displays the thumbnail' do
+          expect(page).to have_css("img[src='url.com/path/file']")
+          expect(page).to have_css('.thumbnail-card')
+        end
       end
     end
 
@@ -303,15 +349,29 @@ RSpec.describe 'Public Resources', type: :feature do
       let(:collection) { create :collection }
 
       before do
-        allow_any_instance_of(Collection).to receive(:default_thumbnail?).and_return true
-        allow_any_instance_of(ThumbnailComponent).to receive(:display_thumbnail?).and_return true
-        allow_any_instance_of(ThumbnailComponent).to receive(:thumbnail_url).and_return 'url.com/path/file'
-        visit resource_path(collection.uuid)
+        allow_any_instance_of(ThumbnailComponent).to receive(:thumbnail_url).and_return nil
       end
 
-      it 'does not display thumbnail' do
-        expect(page).not_to have_css("img[src='url.com/path/file']")
-        expect(page).not_to have_css('.thumbnail-card')
+      context 'when collection#default_thumbnail? is true' do
+        before do
+          allow_any_instance_of(Collection).to receive(:default_thumbnail?).and_return true
+          visit resource_path(collection.uuid)
+        end
+
+        it 'does not display thumbnail' do
+          expect(page).not_to have_css('.thumbnail-image')
+        end
+      end
+
+      context 'when collection#default_thumbnail? is false' do
+        before do
+          allow_any_instance_of(Collection).to receive(:default_thumbnail?).and_return false
+          visit resource_path(collection.uuid)
+        end
+
+        it 'does not display thumbnail' do
+          expect(page).not_to have_css('.thumbnail-image')
+        end
       end
     end
   end

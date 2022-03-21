@@ -1,9 +1,10 @@
+<% thumbnail_component = ThumbnailComponent.new(resource: resource) %>
 <div class="row mb-3 no-gutters d-flex flex-row flex-nowrap">
   <div class="col">
-    <% unless resource.default_thumbnail? %>
+    <% if thumbnail_component.display_thumbnail? %>
       <div class="thumbnail-card d-none d-md-flex align-items-center mb-1">
         <div class="resource-page-thumbnail">
-          <div><%= render ThumbnailComponent.new(resource: resource) %></div>
+          <div><%= render thumbnail_component %></div>
         </div>
       </div>
     <% end %>
