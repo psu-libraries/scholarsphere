@@ -632,46 +632,6 @@ RSpec.describe WorkVersion, type: :model do
     end
   end
 
-  describe '#set_thumbnail_selection' do
-    context 'when associated work does not have any published versions' do
-      let(:work) { create :work, has_draft: true }
-
-      before do
-        work.versions.last.file_resources << (create :file_resource)
-        work.versions.last.save
-      end
-
-      context 'when the work_version has a file_resource with a thumbnail_url' do
-        it "updates the work's thumbnail_selection to #{ThumbnailSelections::AUTO_GENERATED}" do
-          allow_any_instance_of(FileResource).to receive(:thumbnail_url).and_return 'url.com/path/file'
-          expect { work.versions.last.set_thumbnail_selection }
-            .to change { work.reload.thumbnail_selection }.to ThumbnailSelections::AUTO_GENERATED
-        end
-      end
-
-      context 'when the work_version has a file_resource without a thumbnail_url' do
-        it "doesn't update the work's thumbnail_selection" do
-          allow_any_instance_of(FileResource).to receive(:thumbnail_url).and_return nil
-          expect { work.versions.last.set_thumbnail_selection }.not_to(change { work.reload.thumbnail_selection })
-        end
-      end
-    end
-
-    context 'when associated work does have a published version' do
-      let(:work) { create :work, versions_count: 1, has_draft: false }
-
-      before do
-        work.versions.last.file_resources << (create :file_resource)
-        work.versions.last.save
-      end
-
-      it "doesn't update the work's thumbnail_selection" do
-        allow_any_instance_of(FileResource).to receive(:thumbnail_url).and_return 'url.com/path/file'
-        expect { work.versions.last.set_thumbnail_selection }.not_to(change { work.reload.thumbnail_selection })
-      end
-    end
-  end
-
   describe '#initial_draft?' do
     subject { work.versions.last }
 

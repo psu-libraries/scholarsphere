@@ -546,7 +546,6 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
       # On the review page, change all the details metadata to ensure the params
       # are submitted correctly
-      expect_any_instance_of(WorkVersion).to receive(:set_thumbnail_selection).once
       FeatureHelpers::DashboardForm.fill_in_work_details(different_metadata)
       FeatureHelpers::DashboardForm.fill_in_publishing_details(metadata)
       FeatureHelpers::DashboardForm.publish

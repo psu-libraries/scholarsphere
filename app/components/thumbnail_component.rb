@@ -11,7 +11,7 @@ class ThumbnailComponent < ApplicationComponent
   end
 
   def display_thumbnail?
-    !resource.default_thumbnail? && thumbnail_url.present?
+    !resource.default_thumbnail?
   end
 
   def thumbnail_url

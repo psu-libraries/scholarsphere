@@ -25,8 +25,6 @@ module Dashboard
         # save again--this time using the published validations. That way the
         # appropriate error messages will appear on the form when it's re-rendered
         if publish?
-          # WorkVersion#set_thumbnail_selection may be unreliable if the Shrine::ThumbnailJob is delayed
-          @resource.set_thumbnail_selection
           @resource.indexing_source = Proc.new { nil }
           @resource.save
           @resource.publish
