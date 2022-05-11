@@ -36,7 +36,7 @@ module Scholarsphere
     end
 
     def query_url
-      "http://#{solr_username}:#{solr_password}@#{solr_host}:#{solr_port}/solr/#{collection_name}"
+      "http://#{solr_username}:#{CGI.escape(solr_password)}@#{solr_host}:#{solr_port}/solr/#{collection_name}"
     end
 
     def dir
