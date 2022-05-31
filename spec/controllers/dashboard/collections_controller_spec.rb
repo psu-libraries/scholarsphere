@@ -3,10 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe Dashboard::CollectionsController, type: :controller do
+  # TODO this appears to call identity API, we should mock this out
+  # This was Adams access account. he left. tests started failing.
   let(:valid_attributes) {
     {
       'editors_form' => {
-        'edit_users' => ['agw13']
+        'edit_users' => ['djb44']
       }
 
     }
