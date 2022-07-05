@@ -113,7 +113,8 @@ jobs:
     - run:
         name: "Install dependencies for thumbnails"
         command: | 
-          sudo apt-get update --allow-releaseinfo-change
+          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          sudo apt-get update 
           sudo apt-get install -y imagemagick ghostscript libreoffice
           sudo cp config/policy.xml /etc/ImageMagick-6/policy.xml
     - run:
