@@ -54,7 +54,7 @@ describe MergeCollection do
       let(:work1) { create(:work, has_draft: false) }
       let(:work2) { create(:work, has_draft: false) }
 
-      it 'returns an error message' do
+      xit 'returns an error message' do
         error_msg = /Work-#{work1.id} has different work metadata than Work-#{work2.id}/i
         expect(merge_result.errors).to include(a_string_matching(error_msg))
       end
