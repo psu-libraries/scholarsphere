@@ -34,6 +34,8 @@ module Scholarsphere
       ENV['READ_ONLY'] == 'true'
     end
 
+    config.active_record.yaml_column_permitted_classes = [HashWithIndifferentAccess]
+
     config.generators { |generator| generator.test_framework :rspec }
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.0

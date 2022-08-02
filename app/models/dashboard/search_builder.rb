@@ -9,6 +9,16 @@ module Dashboard
     include Blacklight::Solr::SearchBuilderBehavior
     include CatalogSearchBehavior
 
+    # Overrides where method to allow passing in a string, as well as a Hash
+    # https://github.com/projectblacklight/blacklight/blob/main/lib/blacklight/search_builder.rb
+    def where(conditions)
+      params_will_change!
+      @search_state = @search_state.reset(@search_state.params.merge(q: conditions))
+      @blacklight_params = @search_state.params.dup
+      @additional_filters = conditions if conditions.is_a?(Hash)
+      self
+    end
+
     self.default_processor_chain += %i(
       search_related_files
       restrict_search_to_works_and_collections

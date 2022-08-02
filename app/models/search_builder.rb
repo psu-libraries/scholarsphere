@@ -24,6 +24,16 @@ class SearchBuilder < Blacklight::SearchBuilder
     solr_parameters[:fq] << gated_discovery_filters.compact.join(' OR ')
   end
 
+  # Overrides where method to allow passing in a string, as well as a Hash
+  # https://github.com/projectblacklight/blacklight/blob/main/lib/blacklight/search_builder.rb
+  def where(conditions)
+    params_will_change!
+    @search_state = @search_state.reset(@search_state.params.merge(q: conditions))
+    @blacklight_params = @search_state.params.dup
+    @additional_filters = conditions if conditions.is_a?(Hash)
+    self
+  end
+
   private
 
     def gated_discovery_filters
