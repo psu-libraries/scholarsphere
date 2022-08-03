@@ -634,6 +634,7 @@ DEPENDENCIES
   rails-controller-testing
   recaptcha
   redcarpet (~> 3.5)
+  rexml
   rsolr (>= 1.0, < 3)
   rspec
   rspec-its
