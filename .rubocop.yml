@@ -4,6 +4,9 @@ inherit_gem:
 inherit_from:
   - .rubocop_todo.yml
 
+Rails/SkipsModelValidations:
+  Enabled: false
+
 Naming/VariableNumber:
   Enabled: false
 
