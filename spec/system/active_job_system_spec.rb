@@ -30,7 +30,7 @@ RSpec.describe 'Can change the queue adapter', :inline_jobs do
 
       TestJob.perform_later
 
-      expect(TestJob.job_ran).to eq(true)
+      expect(TestJob.job_ran).to be(true)
     end
   end
 end

@@ -483,13 +483,13 @@ RSpec.describe Work, type: :model do
     end
 
     context 'with an embargoed public work' do
-      subject { build(:work, has_draft: false, embargoed_until: (Time.zone.now + 6.days)) }
+      subject { build(:work, has_draft: false, embargoed_until: 6.days.from_now) }
 
       it { is_expected.to be_embargoed }
     end
 
     context 'with an previously embargoed public work' do
-      subject { build(:work, has_draft: false, embargoed_until: (Time.zone.now - 6.months)) }
+      subject { build(:work, has_draft: false, embargoed_until: 6.months.ago) }
 
       it { is_expected.not_to be_embargoed }
     end

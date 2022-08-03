@@ -29,7 +29,7 @@ class FileHelpers
       client = Aws::S3::Client.new(options)
 
       source.open do |body|
-        client.put_object(bucket: ENV['AWS_BUCKET'], key: key, body: body)
+        client.put_object(bucket: ENV.fetch('AWS_BUCKET', nil), key: key, body: body)
       end
 
       {

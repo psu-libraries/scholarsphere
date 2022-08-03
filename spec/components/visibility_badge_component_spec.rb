@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe VisibilityBadgeComponent, type: :component do
   let(:node) { render_inline(described_class.new(work: work)) }
   let(:badge) { node.css('div').first }
-  let(:embargo_date) { Time.zone.now + 6.days }
+  let(:embargo_date) { 6.days.from_now }
 
   context 'when a work is open access' do
     let(:work) { build(:work) }

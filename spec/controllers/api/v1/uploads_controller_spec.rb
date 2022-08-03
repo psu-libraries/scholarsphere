@@ -21,10 +21,10 @@ RSpec.describe Api::V1::UploadsController, type: :controller do
 
       it 'creates a presigned url' do
         expect(response).to be_ok
-        expect(presigned_url).to include(ENV['S3_ENDPOINT'])
+        expect(presigned_url).to include(ENV.fetch('S3_ENDPOINT', nil))
         expect(presigned_url).to include('content-md5')
         expect(URI.parse(presigned_url).path).to match(
-          "/#{ENV['AWS_BUCKET']}/#{Scholarsphere::ShrineConfig::CACHE_PREFIX}.*#{extension}"
+          "/#{ENV.fetch('AWS_BUCKET', nil)}/#{Scholarsphere::ShrineConfig::CACHE_PREFIX}.*#{extension}"
         )
         expect(id).to end_with(extension)
         expect(prefix).to eq(Scholarsphere::ShrineConfig::CACHE_PREFIX)

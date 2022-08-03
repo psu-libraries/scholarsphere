@@ -52,12 +52,12 @@ RSpec.describe EmbargoForm, type: :model do
 
   describe '#remove?' do
     it 'casts the `remove` param to a boolean' do
-      expect(described_class.new(work: work, params: { 'remove' => 't' }).remove?).to eq true
-      expect(described_class.new(work: work, params: { 'remove' => '1' }).remove?).to eq true
-      expect(described_class.new(work: work, params: { 'remove' => 'f' }).remove?).to eq false
-      expect(described_class.new(work: work, params: { 'remove' => '0' }).remove?).to eq false
-      expect(described_class.new(work: work, params: { 'remove' => '' }).remove?).to eq  false
-      expect(described_class.new(work: work, params: { 'remove' => nil }).remove?).to eq false
+      expect(described_class.new(work: work, params: { 'remove' => 't' }).remove?).to be true
+      expect(described_class.new(work: work, params: { 'remove' => '1' }).remove?).to be true
+      expect(described_class.new(work: work, params: { 'remove' => 'f' }).remove?).to be false
+      expect(described_class.new(work: work, params: { 'remove' => '0' }).remove?).to be false
+      expect(described_class.new(work: work, params: { 'remove' => '' }).remove?).to be  false
+      expect(described_class.new(work: work, params: { 'remove' => nil }).remove?).to be false
     end
   end
 

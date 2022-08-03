@@ -26,7 +26,7 @@ RSpec.describe WithdrawVersionsForm, type: :model do
       let(:params) { {} }
 
       it 'returns false' do
-        expect(form.save).to eq(false)
+        expect(form.save).to be(false)
       end
     end
 

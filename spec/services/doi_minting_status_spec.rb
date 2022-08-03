@@ -28,13 +28,13 @@ describe DoiMintingStatus do
     context 'when the current status is not "waiting"' do
       before { status.delete! }
 
-      it { is_expected.to eq false }
+      it { is_expected.to be false }
     end
 
     context 'when the current status is "waiting"' do
       before { status.waiting! }
 
-      it { is_expected.to eq true }
+      it { is_expected.to be true }
     end
   end
 
@@ -64,13 +64,13 @@ describe DoiMintingStatus do
     context 'when the key is present in redis' do
       before { status.waiting! }
 
-      it { is_expected.to eq true }
+      it { is_expected.to be true }
     end
 
     context 'when the key is not present in redis' do
       before { status.delete! }
 
-      it { is_expected.to eq false }
+      it { is_expected.to be false }
     end
   end
 end

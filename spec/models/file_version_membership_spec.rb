@@ -84,7 +84,7 @@ RSpec.describe FileVersionMembership, type: :model do
 
         paper_trail_version = file_version_membership.versions.first
 
-        expect(paper_trail_version.changed_by_system).to eq(true)
+        expect(paper_trail_version.changed_by_system).to be(true)
       end
     end
 
@@ -96,7 +96,7 @@ RSpec.describe FileVersionMembership, type: :model do
 
         expect(paper_trail_version.resource_id).to eq(file_version_membership.work_version_id)
         expect(paper_trail_version.resource_type).to eq('WorkVersion')
-        expect(paper_trail_version.changed_by_system).to eq(false)
+        expect(paper_trail_version.changed_by_system).to be(false)
       end
     end
   end

@@ -2,6 +2,6 @@
 
 RSpec.configure do |configure|
   configure.before(:suite) do
-    FileUtils.rm_rf Rails.root.join('public', 'uploads-test')
+    FileUtils.rm_rf Rails.public_path.join('uploads-test')
   end
 end

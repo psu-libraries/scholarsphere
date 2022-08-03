@@ -26,7 +26,7 @@ RSpec.describe Users::OmniauthCallbacksController, type: :controller do
         end
 
         it 'signs in the user' do
-          expect(warden.authenticated?(:user)).to eq true
+          expect(warden.authenticated?(:user)).to be true
         end
 
         it 'sets current_user' do
@@ -43,7 +43,7 @@ RSpec.describe Users::OmniauthCallbacksController, type: :controller do
         end
 
         it 'signs in the user' do
-          expect(warden.authenticated?(:user)).to eq true
+          expect(warden.authenticated?(:user)).to be true
         end
 
         it 'sets current_user' do

@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe FilesVisibilityDetailComponent, type: :component do
   let(:content) { render_inline(described_class.new(work_version: work_version)).to_s }
-  let(:embargo_date) { Time.zone.now + 6.days }
+  let(:embargo_date) { 6.days.from_now }
   let(:work) { build(:work, embargoed_until: embargo_date) }
   let(:user) { build(:user) }
   let(:controller_name) { 'application' }

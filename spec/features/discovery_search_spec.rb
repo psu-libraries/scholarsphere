@@ -5,8 +5,8 @@ require 'rails_helper'
 RSpec.describe 'Searching discoverable resources', :inline_jobs do
   let!(:public_work) { create(:work, has_draft: false) }
   let!(:authorized_work) { create(:work, visibility: Permissions::Visibility::AUTHORIZED, has_draft: false) }
-  let!(:current_embargoed_work) { create(:work, has_draft: false, embargoed_until: (Time.zone.now + 6.days)) }
-  let!(:previous_embargoed_work) { create(:work, has_draft: false, embargoed_until: (Time.zone.now - 6.days)) }
+  let!(:current_embargoed_work) { create(:work, has_draft: false, embargoed_until: 6.days.from_now) }
+  let!(:previous_embargoed_work) { create(:work, has_draft: false, embargoed_until: 6.days.ago) }
 
   let!(:public_collection) { create(:collection, visibility: Permissions::Visibility::OPEN) }
   let!(:authorized_collection) { create(:collection, visibility: Permissions::Visibility::AUTHORIZED) }

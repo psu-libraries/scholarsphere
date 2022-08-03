@@ -44,7 +44,7 @@ RSpec.describe MintableDoiComponent, type: :component do
     before { allow(mock_policy).to receive(:edit?).and_return(false) }
 
     it 'does not render' do
-      expect(component.render?).to eq false
+      expect(component.render?).to be false
     end
   end
 end

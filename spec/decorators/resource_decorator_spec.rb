@@ -185,7 +185,7 @@ RSpec.describe ResourceDecorator do
 
     context 'when description_html contains markdown' do
       before do
-        allow(resource).to receive(:description).and_return(<<-MARKDOWN.strip_heredoc)
+        allow(resource).to receive(:description).and_return(<<~MARKDOWN)
           This is my first paragraph, which is *emphasized*.
 
           This is my second paragraph with has a [link](https://scholarsphere.psu.edu)
@@ -195,7 +195,7 @@ RSpec.describe ResourceDecorator do
           This paragraph has <h1>sneaky html</h1>
         MARKDOWN
 
-        allow(resource).to receive(:publisher_statement).and_return(<<-MARKDOWN.strip_heredoc)
+        allow(resource).to receive(:publisher_statement).and_return(<<~MARKDOWN)
           ## Publisher's Statement
 
           Here's some important stuff that you need to know.

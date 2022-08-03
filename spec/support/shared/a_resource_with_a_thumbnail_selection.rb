@@ -20,7 +20,7 @@ RSpec.shared_examples 'a resource with a thumbnail selection' do
       end
 
       it 'returns true' do
-        expect(resource.auto_generated_thumbnail?).to eq true
+        expect(resource.auto_generated_thumbnail?).to be true
       end
     end
 
@@ -30,7 +30,7 @@ RSpec.shared_examples 'a resource with a thumbnail selection' do
       end
 
       it 'returns false' do
-        expect(resource.auto_generated_thumbnail?).to eq false
+        expect(resource.auto_generated_thumbnail?).to be false
       end
     end
   end
@@ -42,7 +42,7 @@ RSpec.shared_examples 'a resource with a thumbnail selection' do
       end
 
       it 'returns true' do
-        expect(resource.default_thumbnail?).to eq true
+        expect(resource.default_thumbnail?).to be true
       end
     end
 
@@ -52,7 +52,7 @@ RSpec.shared_examples 'a resource with a thumbnail selection' do
       end
 
       it 'returns false' do
-        expect(resource.default_thumbnail?).to eq false
+        expect(resource.default_thumbnail?).to be false
       end
     end
   end

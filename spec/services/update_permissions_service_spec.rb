@@ -21,7 +21,7 @@ RSpec.describe UpdatePermissionsService do
       it 'uses the existing group' do
         described_class.call(resource: resource, permissions: { edit_groups: [group.name] }, create_agents: true)
         expect(resource.edit_groups.map(&:name)).to contain_exactly(group.name)
-        expect { resource.save }.to change(Group, :count).by(0)
+        expect { resource.save }.not_to change(Group, :count)
       end
     end
   end
@@ -32,7 +32,7 @@ RSpec.describe UpdatePermissionsService do
         group_name = Faker::Currency.code.downcase
         described_class.call(resource: resource, permissions: { edit_groups: [group_name] }, create_agents: false)
         expect(resource.edit_groups.map(&:name)).to be_empty
-        expect { resource.save }.to change(Group, :count).by(0)
+        expect { resource.save }.not_to change(Group, :count)
       end
     end
 
@@ -42,7 +42,7 @@ RSpec.describe UpdatePermissionsService do
       it 'uses the existing group' do
         described_class.call(resource: resource, permissions: { edit_groups: [group.name] }, create_agents: false)
         expect(resource.edit_groups.map(&:name)).to contain_exactly(group.name)
-        expect { resource.save }.to change(Group, :count).by(0)
+        expect { resource.save }.not_to change(Group, :count)
       end
     end
   end

@@ -32,7 +32,7 @@ RSpec.describe HealthChecks::QueueLatencyCheck, :sidekiq do
       it 'returns no failure' do
         hc = described_class.new
         hc.check
-        expect(hc.failure_occurred).to be nil
+        expect(hc.failure_occurred).to be_nil
       end
 
       it 'writes a message' do

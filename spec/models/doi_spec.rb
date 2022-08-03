@@ -29,7 +29,7 @@ RSpec.describe Doi do
   end
 
   context 'with a configured prefix' do
-    let(:doi) { "doi:#{ENV['DATACITE_PREFIX']}/fvr2-yw38" }
+    let(:doi) { "doi:#{ENV.fetch('DATACITE_PREFIX', nil)}/fvr2-yw38" }
 
     before { ENV['DATACITE_PREFIX'] = "10.#{Faker::Number.number(digits: 5)}" }
 

@@ -94,7 +94,7 @@ RSpec.describe Authorship, type: :model do
 
         paper_trail_version = authorship.versions.first
 
-        expect(paper_trail_version.changed_by_system).to eq(true)
+        expect(paper_trail_version.changed_by_system).to be(true)
       end
     end
 
@@ -106,7 +106,7 @@ RSpec.describe Authorship, type: :model do
 
         expect(paper_trail_version.resource_id).to eq(authorship.resource_id)
         expect(paper_trail_version.resource_type).to eq(authorship.resource_type)
-        expect(paper_trail_version.changed_by_system).to eq(false)
+        expect(paper_trail_version.changed_by_system).to be(false)
       end
     end
   end

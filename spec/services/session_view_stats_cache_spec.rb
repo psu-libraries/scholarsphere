@@ -9,13 +9,13 @@ RSpec.describe SessionViewStatsCache do
   let(:collection) { build_stubbed :collection, id: 1 }
 
   it 'retuns false if the given session/resource combo is in the cache already' do
-    expect(described_class.call(session: session, resource: work)).to eq true
-    expect(described_class.call(session: session, resource: work)).to eq false
+    expect(described_class.call(session: session, resource: work)).to be true
+    expect(described_class.call(session: session, resource: work)).to be false
 
-    expect(described_class.call(session: session, resource: collection)).to eq true
-    expect(described_class.call(session: session, resource: collection)).to eq false
+    expect(described_class.call(session: session, resource: collection)).to be true
+    expect(described_class.call(session: session, resource: collection)).to be false
 
-    expect(described_class.call(session: another_session, resource: work)).to eq true
-    expect(described_class.call(session: another_session, resource: collection)).to eq true
+    expect(described_class.call(session: another_session, resource: work)).to be true
+    expect(described_class.call(session: another_session, resource: collection)).to be true
   end
 end

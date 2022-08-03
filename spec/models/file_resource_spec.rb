@@ -162,10 +162,10 @@ RSpec.describe FileResource, type: :model do
     context 'when the file exists' do
       let(:client) do
         Aws::S3::Client.new(
-          access_key_id: ENV['AWS_ACCESS_KEY_ID'],
-          secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
-          region: ENV['AWS_REGION'],
-          endpoint: ENV['S3_ENDPOINT'],
+          access_key_id: ENV.fetch('AWS_ACCESS_KEY_ID', nil),
+          secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY', nil),
+          region: ENV.fetch('AWS_REGION', nil),
+          endpoint: ENV.fetch('S3_ENDPOINT', nil),
           force_path_style: true
         )
       end
@@ -238,7 +238,7 @@ RSpec.describe FileResource, type: :model do
         let(:mime_type) { 'image/png' }
 
         it 'returns true' do
-          expect(file_resource.thumbnailable?).to eq true
+          expect(file_resource.thumbnailable?).to be true
         end
       end
 
@@ -246,7 +246,7 @@ RSpec.describe FileResource, type: :model do
         let(:mime_type) { 'application/pdf' }
 
         it 'returns true' do
-          expect(file_resource.thumbnailable?).to eq true
+          expect(file_resource.thumbnailable?).to be true
         end
       end
 
@@ -254,7 +254,7 @@ RSpec.describe FileResource, type: :model do
         let(:mime_type) { 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' }
 
         it 'returns true' do
-          expect(file_resource.thumbnailable?).to eq true
+          expect(file_resource.thumbnailable?).to be true
         end
       end
     end
@@ -264,7 +264,7 @@ RSpec.describe FileResource, type: :model do
         let(:mime_type) { 'application/zip-compressed' }
 
         it 'returns false' do
-          expect(file_resource.thumbnailable?).to eq false
+          expect(file_resource.thumbnailable?).to be false
         end
       end
     end

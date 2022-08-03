@@ -12,24 +12,24 @@ RSpec.describe JSONLogFormatter do
     end
 
     it 'returns an object when passed a json string' do
-      msg = { "foo": 'bar' }.to_json
+      msg = { foo: 'bar' }.to_json
       expect(described_class.new.parse_message(msg)).to have_key('foo')
     end
 
     it 'returns an object if passed an object' do
-      msg = { "foo": 'bar' }
+      msg = { foo: 'bar' }
       expect(described_class.new.parse_message(msg)).to eq(msg)
     end
   end
 
   describe '#call' do
     it 'returns a json string when passed hash' do
-      msg = { "foo": 'bar' }
+      msg = { foo: 'bar' }
       expect(described_class.new.call('INFO', Time.zone.now, 'foo', msg)).to be_a(String)
     end
 
     it 'returns a nested json object when passed a json-encodable string' do
-      msg = { "foo": 'bar' }.to_json
+      msg = { foo: 'bar' }.to_json
       parsed_message = JSON.parse(described_class.new.call('INFO', Time.zone.now, 'foo', msg))
       expect(parsed_message).to have_key('type')
       expect(parsed_message).to have_key('time')

@@ -18,7 +18,7 @@ RSpec.describe Scholarsphere::ShrineConfig do
   describe '::s3_options' do
     context 'when an endpoint is configured' do
       it 'adds additional options to S3' do
-        cached_endpoint = ENV['S3_ENDPOINT']
+        cached_endpoint = ENV.fetch('S3_ENDPOINT', nil)
         ENV['S3_ENDPOINT'] = 'http://some-endpoint'
         expect(described_class.s3_options).to include(endpoint: 'http://some-endpoint', force_path_style: true)
         ENV['S3_ENDPOINT'] = cached_endpoint

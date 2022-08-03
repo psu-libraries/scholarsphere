@@ -24,7 +24,7 @@ RSpec.describe LdapGroupCleaner do
       after { described_class.logger_source = @old_logger }
 
       it 'traps the error and returns nil' do
-        expect(call).to eq nil
+        expect(call).to be_nil
       end
 
       it 'logs the error' do

@@ -20,7 +20,7 @@ Capybara.register_driver :selenium_remote do |app|
   )
   Capybara.server_port = '3002'
   Capybara.server_host = '0.0.0.0'
-  Capybara.app_host = "http://#{ENV['APP_HOST']}:#{Capybara.server_port}"
+  Capybara.app_host = "http://#{ENV.fetch('APP_HOST', nil)}:#{Capybara.server_port}"
   Capybara::Selenium::Driver.new(app,
                                  browser: :remote,
                                  desired_capabilities: capabilities,

@@ -16,7 +16,7 @@ RSpec.describe FieldHintComponent, type: :component do
       allow(I18n).to receive(:t).with('helpers.hint.work.doi').and_return(translation)
     end
 
-    its(:render?) { is_expected.to eq true }
+    its(:render?) { is_expected.to be true }
     its(:dom_id) { is_expected.to eq 'work_form_doi-hint' }
 
     it 'renders' do
@@ -57,7 +57,7 @@ RSpec.describe FieldHintComponent, type: :component do
       allow(I18n).to receive(:exists?).with('helpers.hint.work.doi').and_return(false)
     end
 
-    its(:dom_id) { is_expected.to eq nil }
-    its(:render?) { is_expected.to eq false }
+    its(:dom_id) { is_expected.to be_nil }
+    its(:render?) { is_expected.to be false }
   end
 end

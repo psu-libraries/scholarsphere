@@ -16,7 +16,7 @@ RSpec.shared_examples 'a resource with a deposited at timestamp' do
     context 'with a specific value' do
       subject(:resource) { described_class.new(deposited_at: deposit_time) }
 
-      let(:deposit_time) { Time.zone.now - 10.days }
+      let(:deposit_time) { 10.days.ago }
 
       its(:deposited_at) { is_expected.to eq(deposit_time) }
     end
@@ -24,7 +24,7 @@ RSpec.shared_examples 'a resource with a deposited at timestamp' do
     context 'with a string in a valid date format' do
       subject(:resource) { described_class.new(deposited_at: deposit_time.iso8601) }
 
-      let(:deposit_time) { Time.zone.now - 8.days }
+      let(:deposit_time) { 8.days.ago }
 
       # @note Converting an iso8601 string to a Time object looses milisecond precision, so we just compare the days to
       # be sure.

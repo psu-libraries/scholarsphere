@@ -45,7 +45,7 @@ RSpec.shared_examples 'a resource with thumbnail settings' do
       expect(page).to have_selector('input[id=thumbnail_form_thumbnail_selection_uploaded_image][disabled=disabled]')
       attach_file(Rails.root.join('spec', 'fixtures', 'image.png'))
       sleep 0.1
-      expect(find('#thumbnail_form_thumbnail_selection_uploaded_image').selected?).to eq true
+      expect(find('#thumbnail_form_thumbnail_selection_uploaded_image').selected?).to be true
       expect(page)
         .not_to have_selector('input[id=thumbnail_form_thumbnail_selection_uploaded_image][disabled=disabled]')
       click_button I18n.t!('dashboard.shared.thumbnail_form.submit_button')

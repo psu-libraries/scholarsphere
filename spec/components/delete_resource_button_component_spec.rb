@@ -58,7 +58,7 @@ RSpec.describe DeleteResourceButtonComponent, type: :component do
       let(:hide_if_published) { true }
 
       it 'is not rendered' do
-        expect(instance.render?).to eq false
+        expect(instance.render?).to be false
       end
     end
 

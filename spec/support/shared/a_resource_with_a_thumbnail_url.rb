@@ -41,7 +41,7 @@ RSpec.shared_examples 'a resource with a thumbnail url' do
           allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
           allow(resource.thumbnail_upload.file_resource).to receive(:file_attacher)
             .and_return(mock_attacher_thumbnail_upload)
-          expect(resource.thumbnail_url).to eq nil
+          expect(resource.thumbnail_url).to be_nil
         end
       end
     end
@@ -76,7 +76,7 @@ RSpec.shared_examples 'a resource with a thumbnail url' do
           allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
           allow(resource.thumbnail_upload.file_resource).to receive(:file_attacher)
             .and_return(mock_attacher_thumbnail_upload)
-          expect(resource.thumbnail_url).to eq nil
+          expect(resource.thumbnail_url).to be_nil
         end
       end
     end
@@ -101,7 +101,7 @@ RSpec.shared_examples 'a resource with a thumbnail url' do
 
       it 'returns nil' do
         allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
-        expect(resource.auto_generated_thumbnail_url).to eq nil
+        expect(resource.auto_generated_thumbnail_url).to be_nil
       end
     end
   end
@@ -117,7 +117,7 @@ RSpec.shared_examples 'a resource with a thumbnail url' do
         allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
         allow(resource.thumbnail_upload.file_resource).to receive(:file_attacher)
           .and_return(mock_attacher_thumbnail_upload)
-        expect(resource.thumbnail_present?).to eq true
+        expect(resource.thumbnail_present?).to be true
       end
     end
 
@@ -131,7 +131,7 @@ RSpec.shared_examples 'a resource with a thumbnail url' do
         allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
         allow(resource.thumbnail_upload.file_resource).to receive(:file_attacher)
           .and_return(mock_attacher_thumbnail_upload)
-        expect(resource.thumbnail_present?).to eq true
+        expect(resource.thumbnail_present?).to be true
       end
     end
 
@@ -145,7 +145,7 @@ RSpec.shared_examples 'a resource with a thumbnail url' do
         allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
         allow(resource.thumbnail_upload.file_resource).to receive(:file_attacher)
           .and_return(mock_attacher_thumbnail_upload)
-        expect(resource.thumbnail_present?).to eq true
+        expect(resource.thumbnail_present?).to be true
       end
     end
 
@@ -159,7 +159,7 @@ RSpec.shared_examples 'a resource with a thumbnail url' do
         allow_any_instance_of(FileResource).to receive(:file_attacher).and_return(mock_attacher)
         allow(resource.thumbnail_upload.file_resource).to receive(:file_attacher)
           .and_return(mock_attacher_thumbnail_upload)
-        expect(resource.thumbnail_present?).to eq false
+        expect(resource.thumbnail_present?).to be false
       end
     end
   end

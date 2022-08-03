@@ -59,13 +59,13 @@ RSpec.describe WorkHistories::PaperTrailChangeBaseComponent, type: :component do
     context 'when the PaperTrail::Version has changed_by_system = true' do
       before { allow(paper_trail_version).to receive(:changed_by_system).and_return(true) }
 
-      it { is_expected.to eq false }
+      it { is_expected.to be false }
     end
 
     context 'when the PaperTrail::Version has changed_by_system = false' do
       before { allow(paper_trail_version).to receive(:changed_by_system).and_return(false) }
 
-      it { is_expected.to eq true }
+      it { is_expected.to be true }
     end
   end
 

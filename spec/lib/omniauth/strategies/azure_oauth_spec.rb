@@ -15,11 +15,11 @@ RSpec.describe OmniAuth::Strategies::AzureOauth do
 
   let(:client) do
     OAuth2::Client.new(
-      ENV['OAUTH_APP_ID'],
-      ENV['OAUTH_APP_SECRET'],
-      authorize_url: ENV['OAUTH_AUTHORIZE_URL'],
-      token_url: ENV['OAUTH_TOKEN_URL'],
-      site: ENV['OAUTH_APP_URL']
+      ENV.fetch('OAUTH_APP_ID', nil),
+      ENV.fetch('OAUTH_APP_SECRET', nil),
+      authorize_url: ENV.fetch('OAUTH_AUTHORIZE_URL', nil),
+      token_url: ENV.fetch('OAUTH_TOKEN_URL', nil),
+      site: ENV.fetch('OAUTH_APP_URL', nil)
     )
   end
 

@@ -120,25 +120,25 @@ RSpec.describe 'Work Settings Page', with_user: :user do
       end
 
       it 'notify editors if send notification email is checked' do
-        expect(work.notify_editors).to eq false
+        expect(work.notify_editors).to be false
         check 'editors_form_notify_editors'
         fill_in('Edit users', with: 'agw13')
 
         click_button('Update Editors')
 
         work.reload
-        expect(work.notify_editors).to eq true
+        expect(work.notify_editors).to be true
         expect(mailer_spy).to have_received(:deliver_later)
       end
 
       it 'does not notify editors if send notification email is not checked' do
-        expect(work.notify_editors).to eq false
+        expect(work.notify_editors).to be false
         fill_in('Edit users', with: 'agw13')
 
         click_button('Update Editors')
 
         work.reload
-        expect(work.notify_editors).to eq false
+        expect(work.notify_editors).to be false
         expect(mailer_spy).not_to have_received(:deliver_later)
       end
     end

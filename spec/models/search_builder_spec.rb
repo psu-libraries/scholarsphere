@@ -51,7 +51,7 @@ RSpec.describe SearchBuilder do
       it 'restricts searches to public and registered works, as well as user-discoverable works' do
         expect(parameters['fq']).to include(
           "({!terms f=discover_groups_ssim}#{Group::PUBLIC_AGENT_NAME},#{Group::AUTHORIZED_AGENT_NAME}) " \
-            "OR discover_users_ssim:#{user.access_id}",
+          "OR discover_users_ssim:#{user.access_id}",
           '{!terms f=model_ssi}Work,Collection'
         )
       end

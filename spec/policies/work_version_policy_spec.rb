@@ -305,7 +305,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
       let(:work) do
         create :work,
                has_draft: false,
-               embargoed_until: (Time.zone.now + 6.days),
+               embargoed_until: 6.days.from_now,
                edit_users: [edit_user],
                proxy_depositor: proxy.actor
       end

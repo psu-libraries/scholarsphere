@@ -311,7 +311,7 @@ RSpec.describe Api::V1::WorkPublisher do
                                                       psu_id: depositor.user_id
                                                     }
                                                   ],
-                                                  embargoed_until: (Time.zone.now + 2.months)
+                                                  embargoed_until: 2.months.from_now
                                                 )),
         depositor_access_id: depositor.user_id,
         content: [

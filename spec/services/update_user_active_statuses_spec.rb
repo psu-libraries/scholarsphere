@@ -20,7 +20,7 @@ describe UpdateUserActiveStatuses do
     it 'updates user active status to true' do
       described_class.call
       user.reload
-      expect(user.active).to eq true
+      expect(user.active).to be true
     end
   end
 
@@ -37,7 +37,7 @@ describe UpdateUserActiveStatuses do
     it 'updates user active status to false' do
       described_class.call
       user.reload
-      expect(user.active).to eq false
+      expect(user.active).to be false
     end
   end
 
@@ -51,7 +51,7 @@ describe UpdateUserActiveStatuses do
     it 'updates user active status to false' do
       described_class.call
       user.reload
-      expect(user.active).to eq false
+      expect(user.active).to be false
     end
   end
 
