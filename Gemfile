@@ -58,13 +58,13 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'factory_bot_rails'
   gem 'faker'
-  gem 'niftany'
+  gem 'niftany', '~> 0.10'
   gem 'pry-byebug'
   gem 'pry-rails'
-  gem 'rubocop', '= 0.83.0'
-  gem 'rubocop-performance', '= 1.5.2'
-  gem 'rubocop-rails', '= 2.5.2'
-  gem 'rubocop-rspec', '= 1.39.0'
+  gem 'rubocop'
+  gem 'rubocop-performance'
+  gem 'rubocop-rails'
+  gem 'rubocop-rspec'
   gem 'timecop'
 end
 
