@@ -4,6 +4,15 @@ inherit_gem:
 inherit_from:
   - .rubocop_todo.yml
 
+Naming/VariableNumber:
+  Enabled: false
+
+Style/OpenStructUse:
+  Enabled: false
+
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+
 AllCops:
   TargetRubyVersion: 2.6.6
   Exclude:
