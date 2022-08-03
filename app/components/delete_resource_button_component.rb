@@ -55,6 +55,6 @@ class DeleteResourceButtonComponent < ApplicationComponent
     end
 
     def t(key, options = {})
-      I18n.t!("dashboard.form.actions.destroy.#{key}", options)
+      I18n.t!("dashboard.form.actions.destroy.#{key}", **options)
     end
 end
