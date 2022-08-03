@@ -15,7 +15,7 @@ module Scholarsphere
     end
 
     def password
-      ENV['REDIS_PASSWORD']
+      ENV.fetch('REDIS_PASSWORD', nil)
     end
 
     def ttl

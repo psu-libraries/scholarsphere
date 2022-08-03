@@ -20,12 +20,9 @@ class AccessControl < ApplicationRecord
   belongs_to :resource,
              polymorphic: true
 
-  # rubocop:disable Rails/UniqueValidationWithoutIndex
   validates :access_level,
             uniqueness: { scope: [:agent, :resource] },
             inclusion: { in: AccessControl::Level.all }
-  # rubocop:enable Rails/UniqueValidationWithoutIndex
-
   def public?
     agent.is_a?(Group) && agent.public? && access_level == AccessControl::Level::READ
   end

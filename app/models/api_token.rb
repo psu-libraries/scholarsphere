@@ -3,7 +3,6 @@
 class ApiToken < ApplicationRecord
   belongs_to :application,
              class_name: 'ExternalApp',
-             foreign_key: 'application_id',
              inverse_of: 'api_tokens'
 
   before_create :set_token

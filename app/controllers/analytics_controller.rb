@@ -10,7 +10,7 @@ class AnalyticsController < ApplicationController
       format.json { render json: view_statistics }
     end
   rescue ActiveRecord::RecordNotFound
-    head 404, content_type: 'text/plain'
+    head :not_found, content_type: 'text/plain'
   end
 
   private

@@ -30,10 +30,10 @@ class WorkHistories::PaperTrailChangeBaseComponent < ApplicationComponent
     # For example, if your component was representing changes to a
     # FileVersionMembership object, set this method to "FileVersionMembership"
     def expected_item_type
-      raise NotImplementedError, '''
+      raise NotImplementedError, '
         Implement #expected_item_type in your subclass. For details on what it
         does and how to set it, see the note in PaperTrailChangeBaseComponent
-      '''.squish
+      '.squish
     end
 
     attr_reader :paper_trail_version,

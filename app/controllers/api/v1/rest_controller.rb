@@ -36,7 +36,7 @@ module Api
           if api_token && !Rails.application.read_only?
             api_token.record_usage
           else
-            render json: { message: I18n.t('api.errors.not_authorized'), code: 401 }, status: 401
+            render json: { message: I18n.t('api.errors.not_authorized'), code: 401 }, status: :unauthorized
           end
         end
 

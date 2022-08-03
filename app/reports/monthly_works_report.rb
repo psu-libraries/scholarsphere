@@ -94,7 +94,7 @@ class MonthlyWorksReport
           INNER JOIN
             file_version_memberships ON file_version_memberships.work_version_id = work_versions.id
           ) unique_works ON unique_works.file_resource_id = view_statistics.resource_id
-        WHERE 
+        WHERE#{' '}
           view_statistics.resource_type = :resource_type
         AND
           work_id IN(:work_ids)
@@ -104,9 +104,9 @@ class MonthlyWorksReport
       SQL
 
       query = ActiveRecord::Base.sanitize_sql([raw_query,
-                                               resource_type: 'FileResource',
-                                               work_ids: work_batch_ids,
-                                               start_date: start_date, end_date: end_date])
+                                               { resource_type: 'FileResource',
+                                                 work_ids: work_batch_ids,
+                                                 start_date: start_date, end_date: end_date }])
       results = ActiveRecord::Base.connection.exec_query(query)
       results.map { |row| [row['work_id'], row['sum_count']] }.to_h
     end

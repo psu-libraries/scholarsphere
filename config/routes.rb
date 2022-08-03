@@ -112,8 +112,8 @@ Rails.application.routes.draw do
 
     namespace :form do
       scope 'work_versions' do
-        get   'new', to: 'work_version_details#new', as: 'work_versions'
-        match 'new', to: 'work_version_details#create', via: :post, as: nil
+        get 'new', to: 'work_version_details#new', as: 'work_versions'
+        post 'new', to: 'work_version_details#create', as: nil
 
         get   ':id/details', to: 'work_version_details#edit', as: 'work_version_details'
         match ':id/details', to: 'work_version_details#update', via: %i[patch put], as: nil
@@ -127,11 +127,11 @@ Rails.application.routes.draw do
 
       scope 'collections' do
         get   'new', to: 'collection_details#new', as: 'collections'
-        match 'new', to: 'collection_details#create', via: :post, as: nil
+        post 'new', to: 'collection_details#create', as: nil
 
         get   ':id/details', to: 'collection_details#edit', as: 'collection_details'
         match ':id/details', to: 'collection_details#update', via: %i[patch put], as: nil
-        match ':id/details', to: 'collection_details#destroy', via: :delete, as: nil
+        delete ':id/details', to: 'collection_details#destroy', as: nil
 
         get   ':id/members', to: 'members#edit', as: 'members'
         match ':id/members', to: 'members#update', via: %i[patch put], as: nil

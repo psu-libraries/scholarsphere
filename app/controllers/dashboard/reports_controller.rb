@@ -47,7 +47,7 @@ class Dashboard::ReportsController < Dashboard::BaseController
     end
 
     def deny_request
-      render json: { message: I18n.t('errors.not_authorized.heading'), code: 401 }, status: 401
+      render json: { message: I18n.t('errors.not_authorized.heading'), code: 401 }, status: :unauthorized
     end
 
     def generate_csv(report)

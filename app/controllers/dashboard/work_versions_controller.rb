@@ -153,13 +153,13 @@ module Dashboard
               :actor_id,
               :_destroy,
               :display_name,
-              actor_attributes: [
+              { actor_attributes: [
                 :id,
                 :email,
                 :given_name,
                 :surname,
                 :psu_id
-              ]
+              ] }
             ]
           )
       end

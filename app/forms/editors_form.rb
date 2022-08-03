@@ -59,7 +59,7 @@ class EditorsForm
     def build_users
       edit_users.map do |access_id|
         service_wrapper(access_id) ||
-          errors.add(:edit_users, :not_found, access_id: access_id) && access_id
+          (errors.add(:edit_users, :not_found, access_id: access_id) && access_id)
       end
     end
 

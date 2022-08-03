@@ -26,7 +26,7 @@ module DataCite
       process_response post(data: data)
     end
 
-    def publish(doi: nil, metadata:)
+    def publish(metadata:, doi: nil)
       data = {
         type: 'dois',
         attributes: metadata.merge(
@@ -99,10 +99,10 @@ module DataCite
 
       def process_body(response)
         parsed_body = begin
-                        JSON.parse(response.body)
-                      rescue JSON::ParserError
-                        {}
-                      end
+          JSON.parse(response.body)
+        rescue JSON::ParserError
+          {}
+        end
 
         return parsed_body if response.success?
 
@@ -131,7 +131,7 @@ module DataCite
       end
 
       def password
-        @password ||= ENV['DATACITE_PASSWORD']
+        @password ||= ENV.fetch('DATACITE_PASSWORD', nil)
       end
   end
 end

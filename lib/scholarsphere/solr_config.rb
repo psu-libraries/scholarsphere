@@ -71,7 +71,7 @@ module Scholarsphere
       def solr_md5
         digest = []
         Dir.glob("#{dir}/**/*").each do |f|
-          digest.push(Digest::MD5.hexdigest(File.open(f).read)) if File.file?(f)
+          digest.push(Digest::MD5.hexdigest(File.read(f))) if File.file?(f)
         end
         Digest::MD5.hexdigest(digest.join(''))
       end

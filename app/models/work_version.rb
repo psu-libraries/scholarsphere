@@ -18,20 +18,20 @@ class WorkVersion < ApplicationRecord
                  title: :string,
                  subtitle: :string,
                  version_name: :string,
-                 keyword: [:string, array: true, default: []],
+                 keyword: [:string, { array: true, default: [] }],
                  rights: :string,
                  description: :string,
                  publisher_statement: :string,
-                 resource_type: [:string, array: true, default: []],
-                 contributor: [:string, array: true, default: []],
-                 publisher: [:string, array: true, default: []],
+                 resource_type: [:string, { array: true, default: [] }],
+                 contributor: [:string, { array: true, default: [] }],
+                 publisher: [:string, { array: true, default: [] }],
                  published_date: :string,
-                 subject: [:string, array: true, default: []],
-                 language: [:string, array: true, default: []],
-                 identifier: [:string, array: true, default: []],
-                 based_near: [:string, array: true, default: []],
-                 related_url: [:string, array: true, default: []],
-                 source: [:string, array: true, default: []]
+                 subject: [:string, { array: true, default: [] }],
+                 language: [:string, { array: true, default: [] }],
+                 identifier: [:string, { array: true, default: [] }],
+                 based_near: [:string, { array: true, default: [] }],
+                 related_url: [:string, { array: true, default: [] }],
+                 source: [:string, { array: true, default: [] }]
 
   belongs_to :work,
              inverse_of: :versions
@@ -70,7 +70,7 @@ class WorkVersion < ApplicationRecord
       end
 
       def ids
-        all.map { |license| license[:id] }
+        all.pluck(:id)
       end
 
       def ids_for_authorized_visibility
@@ -93,7 +93,7 @@ class WorkVersion < ApplicationRecord
       def label(id)
         all
           .select { |license| license[:id] == id }
-          .map { |license| license[:label] }
+          .pluck(:label)
           .first
       end
     end

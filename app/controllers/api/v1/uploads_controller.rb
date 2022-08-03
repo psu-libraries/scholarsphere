@@ -7,7 +7,8 @@ module Api::V1
     # files they are sending.
     def create
       render json: {
-        url: signer.presigned_url(:put_object, bucket: ENV['AWS_BUCKET'], key: key, content_md5: content_md5),
+        url: signer.presigned_url(:put_object, bucket: ENV.fetch('AWS_BUCKET', nil), key: key,
+                                               content_md5: content_md5),
         id: id,
         prefix: prefix
       }
@@ -31,9 +32,9 @@ module Api::V1
 
       def base_options
         {
-          access_key_id: ENV['AWS_ACCESS_KEY_ID'],
-          secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
-          region: ENV['AWS_REGION']
+          access_key_id: ENV.fetch('AWS_ACCESS_KEY_ID', nil),
+          secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY', nil),
+          region: ENV.fetch('AWS_REGION', nil)
         }
       end
 

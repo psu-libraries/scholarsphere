@@ -17,10 +17,10 @@ class Doi
   # @param [String] doi
   def initialize(doi)
     @doi = begin
-             URI(doi.to_s.gsub(/\s/, ''))
-           rescue URI::InvalidURIError
-             URI('')
-           end
+      URI(doi.to_s.gsub(/\s/, ''))
+    rescue URI::InvalidURIError
+      URI('')
+    end
 
     parse_doi
   end

@@ -72,9 +72,8 @@ class Actor < ApplicationRecord
             presence: true,
             unless: -> { psu_id.present? }
 
-  after_save :reindex_if_display_name_changed
-
   after_destroy :update_index_async
+  after_save :reindex_if_display_name_changed
 
   def display_name
     super.presence || "#{given_name} #{surname}"

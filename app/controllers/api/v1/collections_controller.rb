@@ -65,12 +65,12 @@ module Api::V1
             creators_attributes: [
               :display_name,
               :position,
-              actor_attributes: [
+              { actor_attributes: [
                 :email,
                 :given_name,
                 :surname,
                 :psu_id
-              ]
+              ] }
             ]
           )
       end

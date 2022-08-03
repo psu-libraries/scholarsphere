@@ -29,7 +29,7 @@ module DataCite
       end
 
       def validate!
-        raise ValidationError.new("title can't be blank") if attributes[:titles].map { |t| t[:title] }.all?(&:blank?)
+        raise ValidationError.new("title can't be blank") if attributes[:titles].pluck(:title).all?(&:blank?)
 
         raise ValidationError.new("publicationYear can't be blank") if attributes[:publicationYear].blank?
       end

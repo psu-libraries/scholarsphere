@@ -32,14 +32,14 @@ module Dashboard
                 :given_name,
                 :surname,
                 :email,
-                actor_attributes: [
+                { actor_attributes: [
                   :id,
                   :email,
                   :given_name,
                   :surname,
                   :psu_id,
                   :orcid
-                ]
+                ] }
               ]
             )
         end

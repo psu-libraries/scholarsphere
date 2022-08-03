@@ -16,21 +16,20 @@ class Collection < ApplicationRecord
   jsonb_accessor :metadata,
                  title: :string,
                  subtitle: :string,
-                 keyword: [:string, array: true, default: []],
+                 keyword: [:string, { array: true, default: [] }],
                  description: :string,
-                 contributor: [:string, array: true, default: []],
-                 publisher: [:string, array: true, default: []],
+                 contributor: [:string, { array: true, default: [] }],
+                 publisher: [:string, { array: true, default: [] }],
                  published_date: :string,
-                 subject: [:string, array: true, default: []],
-                 language: [:string, array: true, default: []],
-                 identifier: [:string, array: true, default: []],
-                 based_near: [:string, array: true, default: []],
-                 related_url: [:string, array: true, default: []],
-                 source: [:string, array: true, default: []]
+                 subject: [:string, { array: true, default: [] }],
+                 language: [:string, { array: true, default: [] }],
+                 identifier: [:string, { array: true, default: [] }],
+                 based_near: [:string, { array: true, default: [] }],
+                 related_url: [:string, { array: true, default: [] }],
+                 source: [:string, { array: true, default: [] }]
 
   belongs_to :depositor,
              class_name: 'Actor',
-             foreign_key: 'depositor_id',
              inverse_of: 'deposited_works'
 
   has_many :legacy_identifiers,

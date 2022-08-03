@@ -27,7 +27,7 @@ module Dashboard
         if publish?
           # WorkVersion#set_thumbnail_selection may be unreliable if the Shrine::ThumbnailJob is delayed
           @resource.set_thumbnail_selection
-          @resource.indexing_source = Proc.new { nil }
+          @resource.indexing_source = Proc.new {}
           @resource.save
           @resource.publish
         end
@@ -102,13 +102,13 @@ module Dashboard
                 :actor_id,
                 :_destroy,
                 :display_name,
-                actor_attributes: [
+                { actor_attributes: [
                   :id,
                   :email,
                   :given_name,
                   :surname,
                   :psu_id
-                ]
+                ] }
               ],
               work_attributes: [
                 :id,

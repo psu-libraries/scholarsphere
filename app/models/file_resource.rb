@@ -40,7 +40,7 @@ class FileResource < ApplicationRecord
   # @note Using `head_object` will retrieve the metadata without retrieving the entire object.
   def etag
     @etag ||= client
-      .head_object(bucket: ENV['AWS_BUCKET'], key: "#{file_data['storage']}/#{file_data['id']}")
+      .head_object(bucket: ENV.fetch('AWS_BUCKET', nil), key: "#{file_data['storage']}/#{file_data['id']}")
       .etag
       .gsub('"', '')
   rescue Aws::S3::Errors::Forbidden

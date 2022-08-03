@@ -13,7 +13,7 @@ module OmniAuth
              domain_hint: ENV.fetch('AZURE_DOMAIN_HINT', 'psu.edu')
 
       option :client_options,
-             site: ENV['OAUTH_APP_URL'],
+             site: ENV.fetch('OAUTH_APP_URL', nil),
              token_url: ENV.fetch('OAUTH_TOKEN_URL', '/oauth/token'),
              authorize_url: ENV.fetch('OAUTH_AUTHORIZE_URL', 'oauth/authorize')
 

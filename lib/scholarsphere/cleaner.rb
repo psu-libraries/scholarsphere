@@ -12,8 +12,8 @@ module Scholarsphere
       def clean_minio
         return unless ENV.key?('S3_ENDPOINT') && verify_aws
 
-        system("aws --endpoint-url #{ENV['S3_ENDPOINT']} s3 rb s3://#{ENV['AWS_BUCKET']} --force")
-        system("aws --endpoint-url #{ENV['S3_ENDPOINT']} s3 mb s3://#{ENV['AWS_BUCKET']}")
+        system("aws --endpoint-url #{ENV.fetch('S3_ENDPOINT', nil)} s3 rb s3://#{ENV.fetch('AWS_BUCKET', nil)} --force")
+        system("aws --endpoint-url #{ENV.fetch('S3_ENDPOINT', nil)} s3 mb s3://#{ENV.fetch('AWS_BUCKET', nil)}")
       end
 
       def clean_solr

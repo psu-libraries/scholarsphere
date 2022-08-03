@@ -273,7 +273,7 @@ Devise.setup do |config|
   # ==> OmniAuth
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
-  config.omniauth :azure_oauth, ENV['OAUTH_APP_ID'], ENV['OAUTH_APP_SECRET'], scope: 'openid profile email offline_access user.read'
+  config.omniauth :azure_oauth, ENV.fetch('OAUTH_APP_ID', nil), ENV.fetch('OAUTH_APP_SECRET', nil), scope: 'openid profile email offline_access user.read'
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or

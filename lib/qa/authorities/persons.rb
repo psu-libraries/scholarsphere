@@ -60,14 +60,14 @@ module Qa
         # Because none of the other searches rely on orcid id, there is no concern for duplicate results.
         def orcid
           @orcid ||= begin
-                       orcid = OrcidId.new(term)
+            orcid = OrcidId.new(term)
 
-                       return [] unless orcid.valid?
+            return [] unless orcid.valid?
 
-                       Array.wrap(Actor.find_by(orcid: orcid.to_s) || Orcid::Public::Person.new(orcid.to_human))
-                     rescue Orcid::NotFound
-                       []
-                     end
+            Array.wrap(Actor.find_by(orcid: orcid.to_s) || Orcid::Public::Person.new(orcid.to_human))
+          rescue Orcid::NotFound
+            []
+          end
         end
 
         def formatted_response(result)
