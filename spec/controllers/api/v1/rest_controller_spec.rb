@@ -82,7 +82,7 @@ RSpec.describe Api::V1::RestController, type: :controller do
     let!(:api_key) { create :api_token }
 
     before do
-      allow(controller).to receive(:index).and_raise(NoMethodError.new(msg='well, this is unexpected!'))
+      allow(controller).to receive(:index).and_raise(NoMethodError))
       request.headers[:'X-API-Key'] = api_key.token
       get :index
     end
