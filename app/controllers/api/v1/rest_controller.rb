@@ -15,7 +15,7 @@ module Api
         elsif exception.is_a?(ActiveRecord::RecordNotFound)
           render json: { message: 'Record not found' }, status: :not_found
         else
-          render json: { message: "We're sorry, but something went wrong", errors: [exception.class.to_s, exception] },
+          render json: { message: "We're sorry, but something went wrong", errors: [exception.class.to_s] },
                  status: :internal_server_error
         end
       end
