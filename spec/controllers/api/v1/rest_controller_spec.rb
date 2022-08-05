@@ -82,7 +82,7 @@ RSpec.describe Api::V1::RestController, type: :controller do
     let!(:api_key) { create :api_token }
 
     before do
-      allow(controller).to receive(:index).and_raise(NoMethodError, 'well, this is unexpected!')
+      allow(controller).to receive(:index).and_raise(NoMethodError.new(msg="well, this is unexpected!"))
       request.headers[:'X-API-Key'] = api_key.token
       get :index
     end
@@ -92,7 +92,7 @@ RSpec.describe Api::V1::RestController, type: :controller do
       expect(response.body).to eq(
         '{' \
         "\"message\":\"We're sorry, but something went wrong\"," \
-        '"errors":["NoMethodError","well, this is unexpected!"]' \
+        '"errors":["NoMethodError"]' \
         '}'
       )
     end
