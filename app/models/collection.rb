@@ -30,6 +30,7 @@ class Collection < ApplicationRecord
 
   belongs_to :depositor,
              class_name: 'Actor',
+             foreign_key: 'depositor_id',
              inverse_of: 'deposited_works'
 
   has_many :legacy_identifiers,
