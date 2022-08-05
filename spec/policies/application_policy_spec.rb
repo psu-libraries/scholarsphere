@@ -53,7 +53,7 @@ RSpec.describe ApplicationPolicy, type: :policy do
     it 'raises an error if #limit is not defined' do
       expect {
         described_class.new('user', 'model')
-      }.to raise_error(NoMethodError, 'ApplicationPolicy::Scope#limit must be defined instead of #resolve')
+      }.to raise_error(NoMethodError, /ApplicationPolicy::Scope#limit must be defined instead of #resolve/)
     end
   end
 end
