@@ -11,6 +11,7 @@ class Work < ApplicationRecord
 
   belongs_to :depositor,
              class_name: 'Actor',
+             foreign_key: 'depositor_id',
              inverse_of: 'deposited_works'
 
   belongs_to :proxy_depositor,
