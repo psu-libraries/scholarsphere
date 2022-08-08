@@ -8,7 +8,7 @@
 
       <ul id="work_version_changes_<%= work_version.id %>" class="version-timeline__list mt-3">
         <% changes.each do |change_component_attributes| %>
-          <%= render change_component_attributes[:component].new(change_component_attributes[:locals]) %>
+          <%= render change_component_attributes[:component].new(**change_component_attributes[:locals]) %>
         <% end %>
       </ul>
     </div>

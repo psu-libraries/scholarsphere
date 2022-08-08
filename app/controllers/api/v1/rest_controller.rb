@@ -15,7 +15,7 @@ module Api
         elsif exception.is_a?(ActiveRecord::RecordNotFound)
           render json: { message: 'Record not found' }, status: :not_found
         else
-          render json: { message: "We're sorry, but something went wrong", errors: [exception.class.to_s, exception] },
+          render json: { message: "We're sorry, but something went wrong", errors: [exception.class.to_s] },
                  status: :internal_server_error
         end
       end
@@ -36,7 +36,7 @@ module Api
           if api_token && !Rails.application.read_only?
             api_token.record_usage
           else
-            render json: { message: I18n.t('api.errors.not_authorized'), code: 401 }, status: 401
+            render json: { message: I18n.t('api.errors.not_authorized'), code: 401 }, status: :unauthorized
           end
         end
 

@@ -86,6 +86,6 @@ class WorkHistories::PaperTrailChangeBaseComponent < ApplicationComponent
     end
 
     def translate(key, options = {})
-      I18n.t("dashboard.work_history.#{i18n_key}.#{key}", options)
+      I18n.t("dashboard.work_history.#{i18n_key}.#{key}", **options)
     end
 end
