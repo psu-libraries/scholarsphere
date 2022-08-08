@@ -4,8 +4,8 @@ module Api
   module V1
     class WorkPublisher
       # @return [WorkPublisher]
-      def self.call(*args)
-        publisher = new(*args)
+      def self.call(**args)
+        publisher = new(**args)
         publisher.call
         publisher
       end
