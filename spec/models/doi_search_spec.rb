@@ -19,7 +19,8 @@ RSpec.describe DoiSearch do
     it 'returns all unique DOIs in the index' do
       expect(described_class.all).to match(
         {
-          'doi:10.26207/rb4s-33xs' => [work_version_1.uuid],
+          'doi:10.26207/rb4s-33xs' => [work_version_1.work.uuid],
+          'doi:10.26207/jjd7-0is4' => [work_1.uuid],
           'doi:10.26207/upw2-pkx3' => [collection_1.uuid],
           'doi:10.18113/dmnf-6dzs' => a_collection_containing_exactly(work_1.uuid, collection_1.uuid),
           'doi:10.18113/qi03-b693' => [collection_2.uuid]
@@ -34,13 +35,13 @@ RSpec.describe DoiSearch do
       expect(described_class.new(doi: collection_2.doi).results)
         .to contain_exactly(collection_2.uuid)
 
-      # Find work version 1 because it is the latest published version and its work has no doi
+      # Find work version 1's work because it is the latest published version
       expect(described_class.new(doi: work_version_1.doi).results)
-        .to contain_exactly(work_version_1.uuid)
+        .to contain_exactly(work_version_1.work.uuid)
 
-      # Cannot find work version 2 because work 1 has a doi
+      # Find work 1 with work version 2's doi
       expect(described_class.new(doi: work_version_2.doi).results)
-        .to eq []
+        .to eq [work_1.uuid]
 
       # Find a collection, with non-canonical formatting
       expect(described_class.new(doi: 'https://doi.org/10.18113/qi03-b693').results)

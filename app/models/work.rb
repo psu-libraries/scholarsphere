@@ -7,7 +7,7 @@ class Work < ApplicationRecord
   include GeneratedUuids
   include ThumbnailSelections
 
-  fields_with_dois :doi
+  fields_with_dois :doi, :latest_published_version_dois
 
   belongs_to :depositor,
              class_name: 'Actor',
@@ -206,6 +206,10 @@ class Work < ApplicationRecord
 
   def thumbnail_present?
     uploaded_thumbnail_url.present? || auto_generated_thumbnail_urls.present?
+  end
+
+  def latest_published_version_dois
+    latest_published_version.all_dois
   end
 
   private

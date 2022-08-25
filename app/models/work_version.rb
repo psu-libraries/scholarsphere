@@ -287,12 +287,6 @@ class WorkVersion < ApplicationRecord
     super && latest_published_version?
   end
 
-  def all_dois
-    return [] if !latest_published_version? || (latest_published_version? && work.all_dois.any?)
-
-    super
-  end
-
   def set_thumbnail_selection
     # work.versions.published.blank? lets us know if the work has just been created
     if work.versions.published.blank? && file_resources.map(&:thumbnail_url).compact.present?
@@ -333,7 +327,6 @@ class WorkVersion < ApplicationRecord
         CreatorSchema,
         PublishedDateSchema,
         FacetSchema,
-        DoiSchema,
         TitleSchema,
         MemberFilesSchema
       )
