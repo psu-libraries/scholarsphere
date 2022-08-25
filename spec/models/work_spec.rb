@@ -555,6 +555,7 @@ RSpec.describe Work, type: :model do
              doi: '10.26207/utaj-jfhi',
              identifier: '10.26207/xyz-lmno'
     end
+
     before do
       work.versions << work_version
       work.save!
