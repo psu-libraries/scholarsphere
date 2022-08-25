@@ -562,7 +562,7 @@ RSpec.describe Work, type: :model do
     end
 
     it "returns an array of dois from the works's latest published version" do
-      expect(work.latest_published_version_dois).to eq([work_version.doi, work_version.identifier].flatten.collect { |n| 'doi:' + n })
+      expect(work.latest_published_version_dois).to eq([work_version.doi, work_version.identifier].flatten.map { |n| "doi:#{n}" })
     end
   end
 end
