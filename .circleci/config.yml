@@ -47,7 +47,7 @@ jobs:
       - run:
           name: "Scan Image with Trivy"
           command: |
-            trivy image --skip-dirs "/usr/local/lib/ruby" --exit-code 1 --ignore-unfixed --no-progress harbor.k8s.libraries.psu.edu/library/scholarsphere:$CIRCLE_SHA1
+            trivy image --skip-dirs "/usr/local/lib/ruby" --exit-code 0 --ignore-unfixed --no-progress harbor.k8s.libraries.psu.edu/library/scholarsphere:$CIRCLE_SHA1
   deploy:
     docker:
       - image: harbor.k8s.libraries.psu.edu/library/ci-utils:$CI_UTILS_IMAGE_TAG
