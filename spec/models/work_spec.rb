@@ -13,7 +13,7 @@ RSpec.describe Work, type: :model do
 
   it_behaves_like 'a resource with a deposited at timestamp'
 
-  it_behaves_like 'a resource that can provide all DOIs in', [:doi]
+  it_behaves_like 'a resource that can provide all DOIs in', [:doi, :latest_published_version_dois]
 
   it_behaves_like 'a resource with a thumbnail url' do
     let!(:work) { create :work, versions_count: 2 }
@@ -545,6 +545,24 @@ RSpec.describe Work, type: :model do
         expect(work.send(:auto_generated_thumbnail_urls).class).to eq Array
         expect(work.send(:auto_generated_thumbnail_urls).last).to eq 'url.com/path/file'
       end
+    end
+  end
+
+  describe '#latest_published_version_dois' do
+    let!(:work) { create :work }
+    let(:work_version) do
+      create :work_version, :published,
+             doi: '10.26207/utaj-jfhi',
+             identifier: '10.26207/xyz-lmno'
+    end
+
+    before do
+      work.versions << work_version
+      work.save!
+    end
+
+    it "returns an array of dois from the works's latest published version" do
+      expect(work.latest_published_version_dois).to eq([work_version.doi, work_version.identifier].flatten.map { |n| "doi:#{n}" })
     end
   end
 end
