@@ -29,7 +29,7 @@ RSpec.describe GoogleScholarMetadataComponent, type: :component do
 
   context 'when the file resources do not contain a pdf' do
     let(:resource) { create(:work_version, :with_creators, file_resources: [file_resource]) }
-    let(:file_resource) { create(:file_resource, :with_processed_image ) }
+    let(:file_resource) { create(:file_resource, :with_processed_image) }
     let(:file) { resource.file_resources.first }
 
     it 'renders all the meta tags' do
