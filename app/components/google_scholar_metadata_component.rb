@@ -36,7 +36,7 @@ class GoogleScholarMetadataComponent < ApplicationComponent
       .includes(:file_resource)
       .select { |f| f.mime_type == 'application/pdf' }
       .first
-      &.id
+      &.file_resource_id
   end
 
   private
