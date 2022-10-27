@@ -31,12 +31,12 @@ class GoogleScholarMetadataComponent < ApplicationComponent
     Date.edtf(published_date).try(:year) || deposited_at.year
   end
 
-  def citation_pdf
+  def citation_pdf_id
     file_version_memberships
       .includes(:file_resource)
-      .collect{ |f| f if f.mime_type == 'application/pdf' }
-      .compact
+      .select { |f| f.mime_type == 'application/pdf' }
       .first
+      &.id
   end
 
   private
