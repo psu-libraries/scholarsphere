@@ -35,8 +35,7 @@ class GoogleScholarMetadataComponent < ApplicationComponent
     file_version_memberships
       .includes(:file_resource)
       .select { |f| f.mime_type == 'application/pdf' }
-      .sort
-      .first
+      .min
       &.file_resource_id
   end
 
