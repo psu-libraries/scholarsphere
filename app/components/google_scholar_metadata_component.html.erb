@@ -4,6 +4,6 @@
   <meta name="citation_author" content="<%= author %>">
 <%- end %>
 <meta name="citation_publication_date" content="<%= citation_publication_date %>">
-<%- file_version_memberships.includes(:file_resource).each do |file| %>
-  <meta name="citation_pdf_url" content="<%= resource_download_url(file.id, resource_id: resource.uuid) %>">
+<%- if citation_pdf_id %>
+  <meta name="citation_pdf_url" content="<%= resource_download_url(citation_pdf_id, resource_id: resource.uuid) %>">
 <%- end %>

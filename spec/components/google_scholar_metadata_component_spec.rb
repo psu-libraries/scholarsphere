@@ -11,8 +11,10 @@ RSpec.describe GoogleScholarMetadataComponent, type: :component do
   let(:mock_policy) { instance_double('WorkVersionPolicy', download?: true) }
   let(:html) { render_inline(component) }
 
-  context 'with a downloadable work version' do
-    let(:resource) { create(:work_version, :with_files, :with_creators) }
+  context 'with multiple downloadable work version pdfs' do
+    let(:resource) { create(:work_version, :with_creators, file_resources: [file_resource1, file_resource2]) }
+    let(:file_resource1) { create(:file_resource, :pdf) }
+    let(:file_resource2) { create(:file_resource, :pdf) }
     let(:file) { resource.file_resources.first }
 
     it 'renders all the meta tags' do
@@ -22,6 +24,19 @@ RSpec.describe GoogleScholarMetadataComponent, type: :component do
       expect(html.search('meta[@name="citation_pdf_url"]').first['content']).to eq(
         resource_download_url(file.id, resource_id: resource.uuid, host: 'test.host')
       )
+    end
+  end
+
+  context 'when the file resources do not contain a pdf' do
+    let(:resource) { create(:work_version, :with_creators, file_resources: [file_resource]) }
+    let(:file_resource) { create(:file_resource, :with_processed_image) }
+    let(:file) { resource.file_resources.first }
+
+    it 'renders all the meta tags' do
+      expect(html.search('meta[@name="citation_title"]').first['content']).to eq(resource.title)
+      expect(html.search('meta[@name="citation_author"]').first['content']).to eq(resource.creators.first.display_name)
+      expect(html.search('meta[@name="citation_publication_date"]').first['content']).to eq(Time.zone.now.year.to_s)
+      expect(html.search('meta[@name="citation_pdf_url"]')).to be_empty
     end
   end
 

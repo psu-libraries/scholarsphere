@@ -31,9 +31,19 @@ class GoogleScholarMetadataComponent < ApplicationComponent
     Date.edtf(published_date).try(:year) || deposited_at.year
   end
 
-  def file_version_memberships
-    return FileVersionMembership.none unless policy.download?
-
-    resource.file_version_memberships
+  def citation_pdf_id
+    file_version_memberships
+      .includes(:file_resource)
+      .select { |f| f.mime_type == 'application/pdf' }
+      .min
+      &.file_resource_id
   end
+
+  private
+
+    def file_version_memberships
+      return FileVersionMembership.none unless policy.download?
+
+      resource.file_version_memberships
+    end
 end
