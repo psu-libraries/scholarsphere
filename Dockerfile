@@ -31,8 +31,6 @@ RUN yarn --frozen-lockfile && \
 
 COPY --chown=app . /app
 
-ENTRYPOINT [ "/app/bin/entrypoint" ]
-
 CMD ["/app/bin/startup"]
 
 FROM base as dev
