@@ -52,6 +52,7 @@ RUN apt-get update && apt-get install -y x11vnc \
     google-chrome-stable
 
 USER app
+RUN bundle config set path 'vendor/bundle'
 
 # Final Target
 FROM base as production
@@ -73,8 +74,5 @@ RUN RAILS_ENV=production \
   rm -rf /app/.cache/ && \
   rm -rf /app/node_modules/.cache/ && \
   rm -rf /app/tmp/
-
-
-ENTRYPOINT [ "/app/bin/entrypoint" ]
 
 CMD ["/app/bin/startup"]
