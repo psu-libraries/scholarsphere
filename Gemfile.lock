@@ -379,7 +379,7 @@ GEM
       rails (>= 5.0, < 6.2)
       rdf
     racc (1.6.1)
-    rack (2.2.4)
+    rack (2.2.6.2)
     rack-mini-profiler (2.3.2)
       rack (>= 1.2.0)
     rack-protection (2.1.0)
