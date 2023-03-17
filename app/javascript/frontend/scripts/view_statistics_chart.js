@@ -103,7 +103,7 @@ function drawChart (selection, data) {
   const bisectDate = d3.bisector(row => row[0])
 
   svg.on('mousemove click touchmove', function () {
-    const mouseCoords = d3.mouse(this)
+    const mouseCoords = d3.pointer(this)
     const mouseDate = x.invert(mouseCoords[0])
     const [nearestDate,, nearestValue] = findNearestDataPoint(bisectDate, data, mouseDate)
 
