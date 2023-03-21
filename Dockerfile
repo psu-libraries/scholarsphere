@@ -6,7 +6,7 @@ USER root
 RUN apt-get update && \
    apt-get install --no-install-recommends -y \
    shared-mime-info \
-   imagemagick==8:6.9.10.23+dfsg-2.1+deb10u4 \
+   imagemagick=8:6.9.10.23+dfsg-2.1+deb10u4 \
    ghostscript\
    libreoffice && \
    rm -rf /var/lib/apt/lists*
