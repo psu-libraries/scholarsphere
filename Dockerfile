@@ -4,7 +4,11 @@ ARG UID=2000
 COPY bin/vaultshell /usr/local/bin/
 USER root
 RUN apt-get update && \
-   apt-get install --no-install-recommends -y shared-mime-info imagemagick ghostscript libreoffice && \
+   apt-get install --no-install-recommends -y \
+   shared-mime-info \
+   imagemagick=8:6.9.10.23+dfsg-2.1+deb10u4 \
+   ghostscript\
+   libreoffice && \
    rm -rf /var/lib/apt/lists*
 
 COPY config/policy.xml /etc/ImageMagick-6/policy.xml
@@ -44,6 +48,7 @@ RUN apt-get update && apt-get install -y x11vnc \
     fluxbox \
     wget \
     sqlite3 \
+    rsync \
     libsqlite3-dev \
     libnss3 \
     wmctrl \
