@@ -102,7 +102,7 @@ function drawChart (selection, data) {
   // Binary search function to look up closet data point to a given date
   const bisectDate = d3.bisector(row => row[0])
 
-  svg.on('mousemove click touchmove', (event) {
+  svg.on('mousemove click touchmove', (event) => {
     const mouseCoords = d3.pointer(event)
     const mouseDate = x.invert(mouseCoords[0])
     const [nearestDate,, nearestValue] = findNearestDataPoint(bisectDate, data, mouseDate)
