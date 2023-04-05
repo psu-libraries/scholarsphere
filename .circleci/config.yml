@@ -74,7 +74,7 @@ jobs:
         environment:
           MINIO_ACCESS_KEY: scholarsphere
           MINIO_SECRET_KEY: scholarsphere
-      - image: postgres:11.8
+      - image: postgres:15.2
         environment:
           POSTGRES_PASSWORD: scholarsphere
           POSTGRES_USER: scholarsphere
