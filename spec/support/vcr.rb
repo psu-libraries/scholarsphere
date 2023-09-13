@@ -8,10 +8,7 @@ require 'vcr'
 WebMock.allow_net_connect!(net_http_connect_on_start: true)
 
 # Allow connections to Docker images and webriver update urls
-driver_hosts = Webdrivers::Common.subclasses
-  .map(&:base_url)
-  .map { |url| URI.parse(url).host }
-allowed_hosts = %w(selenium minio solr) + driver_hosts
+allowed_hosts = %w(selenium minio solr)
 
 VCR.configure do |c|
   c.cassette_library_dir = 'spec/fixtures/vcr_cassettes'
