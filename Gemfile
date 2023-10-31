@@ -54,7 +54,7 @@ gem 'sidekiq', '~> 6.5'
 gem 'stackprof'
 gem 'uppy-s3_multipart', '~> 0.3'
 gem 'view_component'
-gem 'webpacker', '~> 4.0'
+gem 'shakapacker', '~> 7.1'
 
 group :development, :test do
   gem 'byebug', platform: :mri
