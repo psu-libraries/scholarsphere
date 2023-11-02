@@ -9,7 +9,7 @@ import './scripts/view_statistics_chart'
 import './scripts/thumbnail_selection_init'
 
 // Load dependencies
-require('jquery/dist/jquery')
+require('jquery/src/jquery')
 require('bootstrap/dist/js/bootstrap')
 require('select2/dist/js/select2')
 

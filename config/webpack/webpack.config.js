@@ -1,10 +1,15 @@
 // See the shakacode/shakapacker README and docs directory for advice on customizing your webpackConfig.
-const { generateWebpackConfig } = require('shakapacker')
+const { generateWebpackConfig, merge } = require('shakapacker')
 
-const customConfig = {
+const webpackConfig = generateWebpackConfig()
+
+const options = {
   resolve: {
-    extensions: ['.css', '.scss']
+    extensions: ['.css', '.scss'],
+    alias: {
+      jquery: 'jquery/src/jquery',
+    }
   }
 }
 
-module.exports = generateWebpackConfig(customConfig)
+module.exports = merge(options, webpackConfig)
