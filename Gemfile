@@ -49,12 +49,12 @@ gem 'rexml'
 gem 'rsolr', '>= 1.0', '< 3'
 gem 'rubyzip', '~> 2.3.0'
 gem 'seedbank'
+gem 'shakapacker', '~> 7.1'
 gem 'shrine', '~> 3.3'
 gem 'sidekiq', '~> 6.5'
 gem 'stackprof'
 gem 'uppy-s3_multipart', '~> 0.3'
 gem 'view_component'
-gem 'shakapacker', '~> 7.1'
 
 group :development, :test do
   gem 'byebug', platform: :mri

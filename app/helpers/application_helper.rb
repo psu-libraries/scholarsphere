@@ -24,7 +24,7 @@ module ApplicationHelper
     if Rails.application.read_only?
       link_to link, path, options.merge(class: 'nav-link disabled')
     else
-      button_to link, path, options.merge(class:'btn nav-link', style:"font-weight:600;", type:'submit')
+      button_to link, path, options.merge(class: 'btn nav-link', style: 'font-weight:600;', type: 'submit')
     end
   end
 end

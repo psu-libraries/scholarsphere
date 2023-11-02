@@ -4,8 +4,7 @@ const webpack = require('webpack')
 environment.plugins.prepend(
   'Provide',
   new webpack.ProvidePlugin({
-    Popper: ['popper.js', 'default'],
-    Rails: 'rails-ujs'
+    Popper: ['popper.js', 'default']
   })
 )
 
