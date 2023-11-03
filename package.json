@@ -17,6 +17,7 @@
     "autocomplete.js": "^0.38.0",
     "axios": "^0.21.2",
     "babel-loader": "^9.1.3",
+    "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "blacklight-frontend": "^7.7.0",
     "bootstrap": "^4.5.2",
     "caniuse-lite": "^1.0.30001115",
