@@ -67,6 +67,7 @@ RUN bundle install --without development test && \
   rm -rf /app/vendor/bundle/ruby/*/cache
 
 RUN RAILS_ENV=production \
+  NODE_ENV=production \
   DEFAULT_URL_HOST=localhost \
   SECRET_KEY_BASE=rails_bogus_key \
   AWS_BUCKET=bucket \
