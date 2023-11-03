@@ -1,6 +1,5 @@
 // See the shakacode/shakapacker README and docs directory for advice on customizing your webpackConfig.
 const { generateWebpackConfig, inliningCss, merge } = require('shakapacker');
-const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const webpackConfig = generateWebpackConfig()
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -15,6 +14,8 @@ const options = {
 };
 
 if (isDevelopment && inliningCss) {
+  const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+
   webpackConfig.plugins.push(
     new ReactRefreshWebpackPlugin({
       overlay: {
