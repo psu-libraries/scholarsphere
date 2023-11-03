@@ -1,7 +1,8 @@
 // See the shakacode/shakapacker README and docs directory for advice on customizing your webpackConfig.
-const { generateWebpackConfig, merge } = require('shakapacker')
-
+const { generateWebpackConfig, inliningCss, merge } = require('shakapacker');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const webpackConfig = generateWebpackConfig()
+const isDevelopment = process.env.NODE_ENV !== 'production';
 
 const options = {
   resolve: {
@@ -9,7 +10,18 @@ const options = {
     alias: {
       jquery: 'jquery/src/jquery',
     }
-  }
+  },
+  mode: isDevelopment ? 'development' : 'production'
+};
+
+if (isDevelopment && inliningCss) {
+  webpackConfig.plugins.push(
+    new ReactRefreshWebpackPlugin({
+      overlay: {
+        sockPort: webpackConfig.devServer.port,
+      },
+    })
+  );
 }
 
 module.exports = merge(options, webpackConfig)

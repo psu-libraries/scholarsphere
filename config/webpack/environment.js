@@ -1,4 +1,4 @@
-const { environment } = require('@rails/webpacker')
+const { environment } = require('shakapacker')
 const webpack = require('webpack')
 
 environment.plugins.prepend(
@@ -7,6 +7,5 @@ environment.plugins.prepend(
     Popper: ['popper.js', 'default']
   })
 )
-
 
 module.exports = environment
