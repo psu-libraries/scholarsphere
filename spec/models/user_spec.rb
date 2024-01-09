@@ -188,7 +188,12 @@ RSpec.describe User, type: :model do
     end
 
     context 'when a validation error occurs' do
-      before { auth_params.uid = nil }
+      before do
+        auth_params.uid = nil
+        allow(PsuIdentity::DirectoryService::Client)
+          .to receive_message_chain(:new, :userid, :orc_id)
+          .and_return nil
+      end
 
       it do
         expect { described_class.from_omniauth(auth_params) }
