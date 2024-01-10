@@ -190,9 +190,11 @@ RSpec.describe User, type: :model do
     context 'when a validation error occurs' do
       before do
         auth_params.uid = nil
+        to_struct = Struct.new(:orc_id)
+        user_meta = to_struct.new(orc_id: nil)
         allow(PsuIdentity::DirectoryService::Client)
-          .to receive_message_chain(:new, :userid, :orc_id)
-          .and_return nil
+          .to receive(:new)
+          .and_return user_meta
       end
 
       it do
