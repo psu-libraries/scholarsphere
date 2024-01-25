@@ -76,7 +76,7 @@ class Collection < ApplicationRecord
                                 allow_destroy: true
   after_initialize :set_defaults
 
-  after_save :perform_update_index
+  after_commit :perform_update_index, on: [:create, :update]
 
   after_destroy { SolrDeleteJob.perform_now(uuid) }
 

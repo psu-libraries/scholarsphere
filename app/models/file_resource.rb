@@ -19,7 +19,7 @@ class FileResource < ApplicationRecord
           required: false,
           dependent: :destroy
 
-  after_save :perform_update_index
+  after_commit :perform_update_index, on: [:create, :update]
 
   def self.reindex_all(relation: all, async: false)
     relation.find_each do |file|

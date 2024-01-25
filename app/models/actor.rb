@@ -72,7 +72,7 @@ class Actor < ApplicationRecord
             presence: true,
             unless: -> { psu_id.present? }
 
-  after_save :reindex_if_display_name_changed
+  after_commit :reindex_if_display_name_changed, on: [:create, :update]
 
   after_destroy :update_index_async
 
