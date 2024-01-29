@@ -47,6 +47,7 @@ RSpec.describe Work, type: :model do
   describe 'associations' do
     it { is_expected.to belong_to(:depositor).class_name('Actor').with_foreign_key(:depositor_id).inverse_of(:deposited_works) }
     it { is_expected.to belong_to(:proxy_depositor).class_name('Actor').with_foreign_key(:proxy_id).inverse_of(:proxy_deposited_works).optional }
+    it { is_expected.to have_many(:curators).through(:curatorships) }
     it { is_expected.to have_many(:access_controls) }
     it { is_expected.to have_many(:versions).class_name('WorkVersion').inverse_of('work') }
     it { is_expected.to have_many(:legacy_identifiers) }

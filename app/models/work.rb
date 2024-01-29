@@ -20,6 +20,10 @@ class Work < ApplicationRecord
              inverse_of: 'proxy_deposited_works',
              optional: true
 
+  has_many :curatorships
+
+  has_many :curators, through: :curatorships, source: :user
+
   has_many :versions,
            -> { order(version_number: :asc) },
            class_name: 'WorkVersion',

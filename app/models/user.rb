@@ -33,6 +33,9 @@ class User < ApplicationRecord
   has_many :groups,
            through: :user_group_memberships
 
+  has_many :curatorships
+  has_many :curated_works, through: :curatorships, source: :work
+  
   validates :access_id,
             presence: true,
             uniqueness: { case_sensitive: false }
