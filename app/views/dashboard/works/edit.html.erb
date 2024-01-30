@@ -125,6 +125,28 @@
 
       <% if current_user.admin? && policy(@work.latest_version).destroy? %>
         <div class="keyline keyline--left">
+          <h2 id="<%= t('dashboard.shared.curator_form.heading').parameterize %>" class="h4"><%= t('dashboard.shared.curator_form.heading') %></h2>
+        </div>
+
+        <div class="actions mb-3">
+          <%= render 'dashboard/shared/curator_form', curator_form: @curator_form, url: dashboard_work_path(@work) %>
+        </div>
+
+        <% if @work.curators.present? %>
+          <div>
+            <p>
+              Previous Curators:
+              <% curators = @work.curatorships.order('created_at DESC') %>
+              <% curators&.each do |curator| %>
+                <li>
+                  <%= curator.access_id %> - <%= curator.created_at.strftime("%m/%d/%Y %H:%M") %>
+                </li>
+              <% end %>
+            </p>
+          </div>
+        <% end %>
+
+        <div class="keyline keyline--left">
           <h2 id="<%= t('dashboard.shared.depositor_form.heading').parameterize %>" class="h4"><%= t('dashboard.shared.depositor_form.heading') %></h2>
         </div>
 

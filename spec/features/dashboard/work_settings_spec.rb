@@ -229,11 +229,37 @@ RSpec.describe 'Work Settings Page', with_user: :user do
 
       it 'allows the change' do
         visit edit_dashboard_work_path(work)
-        fill_in('Access Account', with: actor.psu_id)
+        find('[name="depositor_form[psu_id]"]', visible: true).set(actor.psu_id)
         click_on(I18n.t!('dashboard.shared.depositor_form.submit_button'))
         expect(page).to have_content(I18n.t!('dashboard.works.update.success'))
         work.reload
         expect(work.depositor).to eq(actor)
+      end
+    end
+  end
+
+  describe 'Changing the curator' do
+    context 'with a standard user' do
+      it 'does not allow the change' do
+        visit edit_dashboard_work_path(work)
+        expect(page).not_to have_content(I18n.t!('dashboard.shared.curator_form.heading'))
+        expect(page).not_to have_link(I18n.t!('dashboard.shared.curator_form.submit_button'))
+      end
+    end
+
+    context 'with an admin user' do
+      let(:user) { create :user, :admin }
+
+      it 'allows the change and lists previous curators' do
+        visit edit_dashboard_work_path(work)
+        expect(page).not_to have_content('Previous Curators')
+        find('[name="curator_form[access_id]"]', visible: true).set(user.access_id)
+        click_on(I18n.t!('dashboard.shared.curator_form.submit_button'))
+        expect(page).to have_content(I18n.t!('dashboard.works.update.success'))
+        work.reload
+        expect(work.curators.first).to eq(user)
+        expect(page).to have_content('Previous Curators')
+        expect(page).to have_content("#{user.access_id} - ")
       end
     end
   end
