@@ -20,7 +20,8 @@ class Work < ApplicationRecord
              inverse_of: 'proxy_deposited_works',
              optional: true
 
-  has_many :curatorships
+  has_many :curatorships,
+           dependent: :destroy
 
   has_many :curators, through: :curatorships, source: :user
 

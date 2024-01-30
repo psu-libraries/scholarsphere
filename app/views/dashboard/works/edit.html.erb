@@ -135,11 +135,11 @@
         <% if @work.curators.present? %>
           <div>
             <p>
-              Previous Curators:
+              <%= t('dashboard.shared.curator_form.audit_heading') %>
               <% curators = @work.curatorships.order('created_at DESC') %>
               <% curators&.each do |curator| %>
                 <li>
-                  <%= curator.access_id %> - <%= curator.created_at.strftime("%m/%d/%Y %H:%M") %>
+                  <%= curator.access_id %> - <%= curator.created_at.strftime('%m/%d/%Y %H:%M') %>
                 </li>
               <% end %>
             </p>

@@ -314,6 +314,7 @@ en:
         submit_button: Update Depositor
       curator_form:
         heading: Curator
+        audit_heading: "Previous Curators:"
         explanation: "Changes the curator of the work. Currently, only existing Penn State users are allowed."
         submit_button: Update Curator
     works:

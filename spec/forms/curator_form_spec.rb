@@ -17,12 +17,12 @@ RSpec.describe CuratorForm, type: :model do
 
     context 'with a current curator but without a value in the params' do
       let(:params) { {} }
-      let(:resource) { build(:work)}
+      let(:resource) { build(:work) }
       let(:user) { create(:user) }
       let(:curatorship) { create(:curatorship, work: resource, user: user) }
 
       before { resource.curatorships << curatorship }
-  
+
       its(:access_id) { is_expected.to eq(user.access_id) }
     end
 
