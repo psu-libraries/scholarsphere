@@ -45,30 +45,44 @@ class Work < ApplicationRecord
 
   module Types
     def self.all
+      general.union(scholarly_works).union(data_and_code).freeze
+    end
+
+    def self.general
       %w[
-        article
         audio
-        book
-        capstone_project
-        conference_proceeding
-        dataset
-        dissertation
         image
         journal
         map_or_cartographic_material
-        masters_culminating_experience
-        masters_thesis
         other
-        part_of_book
         poster
         presentation
         project
-        report
-        research_paper
-        software_or_program_code
-        thesis
         unspecified
         video
+      ].freeze
+    end
+
+    def self.scholarly_works
+      %w[
+        article
+        book
+        capstone_project
+        conference_proceeding
+        dissertation
+        masters_culminating_experience
+        masters_thesis
+        part_of_book
+        report
+        research_paper
+        thesis
+      ].freeze
+    end
+
+    def self.data_and_code
+      %w[
+        dataset
+        software_or_program_code
       ].freeze
     end
 
@@ -210,6 +224,16 @@ class Work < ApplicationRecord
 
   def latest_published_version_dois
     latest_published_version.all_dois
+  end
+
+  def deposit_pathway
+    if Types.scholarly_works.include?(work_type)
+      :scholarly_works
+    elsif Types.data_and_code.include?(work_type)
+      :data_and_code
+    elsif Types.general.include?(work_type)
+      :general
+    end
   end
 
   private
