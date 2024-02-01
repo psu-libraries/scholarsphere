@@ -217,6 +217,10 @@ class Work < ApplicationRecord
     latest_published_version.all_dois
   end
 
+  def current_curator_access_id
+    curatorships.order(created_at: :desc)&.first&.access_id
+  end
+
   private
 
     def uploaded_thumbnail_url

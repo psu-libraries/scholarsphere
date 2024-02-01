@@ -11,7 +11,7 @@ class CuratorForm
   end
 
   def access_id
-    @access_id ||= current_curator_access_id
+    @access_id ||= resource.current_curator_access_id
   end
 
   def access_id=(access_id)
@@ -33,9 +33,5 @@ class CuratorForm
       if user.blank?
         errors.add(:access_id, :not_found, access_id: @access_id)
       end
-    end
-
-    def current_curator_access_id
-      resource.curatorships.order(created_at: :desc)&.first&.access_id
     end
 end

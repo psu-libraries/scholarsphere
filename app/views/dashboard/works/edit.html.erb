@@ -27,15 +27,22 @@
             <%= link_to t('dashboard.shared.editors_form.heading'), "##{t('dashboard.shared.editors_form.heading').parameterize}", class: 'nav-link' %>
           </li>
 
-          <% if current_user.admin? && policy(@work.latest_version).destroy? %>
+          <% if current_user.admin? %>
+            <li class="nav-item">
+              <%= link_to t('dashboard.shared.curator_form.heading'),
+                          "##{t('dashboard.shared.curator_form.heading').parameterize}",
+                          class: 'nav-link' %>
+            </li>
             <li class="nav-item">
               <%= link_to t('dashboard.shared.depositor_form.heading'),
                           "##{t('dashboard.shared.depositor_form.heading').parameterize}",
                           class: 'nav-link' %>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#<%= t('.danger.heading').parameterize %>"><%= t('.danger.heading') %></a>
-            </li>
+            <% if policy(@work.latest_version).destroy? %>
+              <li class="nav-item">
+                <a class="nav-link" href="#<%= t('.danger.heading').parameterize %>"><%= t('.danger.heading') %></a>
+              </li>
+            <% end %>
           <% end %>
 
         </ul>
@@ -123,7 +130,7 @@
         <%= render 'dashboard/shared/editors_form', editors_form: @editors_form, url: dashboard_work_path(@work) %>
       </div>
 
-      <% if current_user.admin? && policy(@work.latest_version).destroy? %>
+      <% if current_user.admin? %>
         <div class="keyline keyline--left">
           <h2 id="<%= t('dashboard.shared.curator_form.heading').parameterize %>" class="h4"><%= t('dashboard.shared.curator_form.heading') %></h2>
         </div>
@@ -153,40 +160,41 @@
         <div class="actions mb-3">
           <%= render 'dashboard/shared/depositor_form', depositor_form: @depositor_form, url: dashboard_work_path(@work) %>
         </div>
-
-        <div class="keyline keyline--left">
-          <h2 id="<%= t('.danger.heading').parameterize %>" class="h4"><%= t('.danger.heading') %></h2>
-        </div>
-
-        <div class="border border-danger rounded p-2">
+        <% if policy(@work.latest_version).destroy? %>
           <div class="keyline keyline--left">
-            <h2 id="<%= t('dashboard.works.edit.danger.delete_draft.heading').parameterize %>" class="h4"><%= t('dashboard.works.edit.danger.delete_draft.heading') %></h2>
+            <h2 id="<%= t('.danger.heading').parameterize %>" class="h4"><%= t('.danger.heading') %></h2>
           </div>
 
-          <div class="actions">
-            <div class="d-flex">
-              <div class="mr-auto">
-                <p><%= t('.danger.delete_draft.explanation') %></p>
-              </div>
-              <div>
-                <%= render DeleteResourceButtonComponent.new(
-                      resource: @work.latest_version,
-                      html_class: 'btn btn-outline-danger text-nowrap ml-lg-2',
-                      hide_if_published: false
-                    ) %>
+          <div class="border border-danger rounded p-2">
+            <div class="keyline keyline--left">
+              <h2 id="<%= t('dashboard.works.edit.danger.delete_draft.heading').parameterize %>" class="h4"><%= t('dashboard.works.edit.danger.delete_draft.heading') %></h2>
+            </div>
+
+            <div class="actions">
+              <div class="d-flex">
+                <div class="mr-auto">
+                  <p><%= t('.danger.delete_draft.explanation') %></p>
+                </div>
+                <div>
+                  <%= render DeleteResourceButtonComponent.new(
+                        resource: @work.latest_version,
+                        html_class: 'btn btn-outline-danger text-nowrap ml-lg-2',
+                        hide_if_published: false
+                      ) %>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div class="keyline keyline--left">
-            <h2 id="<%= t('.danger.withdraw_versions.heading').parameterize %>" class="h4"><%= t('.danger.withdraw_versions.heading') %></h2>
-          </div>
+            <div class="keyline keyline--left">
+              <h2 id="<%= t('.danger.withdraw_versions.heading').parameterize %>" class="h4"><%= t('.danger.withdraw_versions.heading') %></h2>
+            </div>
 
-          <div class="actions mb-3">
-            <%= render 'dashboard/works/withdraw_versions_form', versions_form: @withdraw_versions_form, url: dashboard_work_path(@work) %>
+            <div class="actions mb-3">
+              <%= render 'dashboard/works/withdraw_versions_form', versions_form: @withdraw_versions_form, url: dashboard_work_path(@work) %>
+            </div>
           </div>
+        <% end %>
       <% end %>
-        </div>
     </div>
   </article>
 </div>
