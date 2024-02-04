@@ -15,6 +15,8 @@ Rails.application.routes.draw do
 
         get   'settings', to: 'application_settings#edit', as: :application_settings
         match 'settings', to: 'application_settings#update', via: %i[patch put]
+        get ':resource_klass/:id/contact_depositor', to: 'contact_depositor#form', as: 'contact_depositors'
+        post ':resource_klass/:id/contact_depositor', to: 'contact_depositor#submit', as: 'submit_contact_depositors'
       end
     end
   end

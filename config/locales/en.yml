@@ -547,6 +547,7 @@ en:
     heading:
       about: 'About'
       contact: 'Contact'
+      contact_depositor: 'Contact Depositor'
       policies_2_0: 'Policies'
       policies_1_0: 'Policies'
       terms: "Terms of Use for ScholarSphere"
