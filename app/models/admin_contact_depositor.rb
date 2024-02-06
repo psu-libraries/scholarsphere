@@ -2,10 +2,10 @@
 
 class AdminContactDepositor < MailForm::Base
   # Even though this won't ultimately send an email, still using
-  # MailForm:Base to validate and create form
+  # MailForm:Base to validate and handle contact_depositor form
   attributes :send_to_name, validate: true
   attributes :send_to_email, validate: /\A[^@\s]+@[^@\s]+\z/i
   attributes :subject, validate: true
-  attributes :cc_email_to, validate: true
+  attributes :cc_email_to, array: { match: /\A[^@\s]+@[^@\s]+\z/i }
   attributes :message, validate: true
 end
