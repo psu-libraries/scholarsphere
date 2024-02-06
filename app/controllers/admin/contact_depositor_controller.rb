@@ -12,12 +12,12 @@ module Admin
     def submit
       @contact_depositor_form = AdminContactDepositor.new(contact_depositor_params.to_h)
       if @contact_depositor_form.valid?
-        response = LibanswersApiService.new(contact_depositor_params.to_h).create_ticket
+        response = LibanswersApiService.new(@contact_depositor_form.mail_form_attributes.symbolize_keys).create_ticket
         redirect_to response
       else
         render :form
       end
-    rescue LibanswersApiService::LibanswersAPIError => e
+    rescue LibanswersApiService::LibanswersApiError => e
       flash[:error] = e.message
       render :form
     end
