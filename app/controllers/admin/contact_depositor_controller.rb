@@ -15,7 +15,7 @@ module Admin
         response = LibanswersApiService.new(@contact_depositor_form.instance_values.symbolize_keys).create_ticket
         redirect_to response
       else
-        flash[:error] = @contact_depositor_form.errors.full_messages.join(' ,')
+        flash[:error] = @contact_depositor_form.errors.full_messages.join(', ')
         render :form
       end
     rescue LibanswersApiService::LibanswersApiError => e
