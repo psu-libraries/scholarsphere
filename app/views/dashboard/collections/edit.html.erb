@@ -38,7 +38,14 @@
       </aside>
     </div>
     <div class="col-lg-9">
-      <p class="float-right"><%= link_to 'Contact Depositor via LibAnswers', admin_contact_depositors_url(resource_klass: :work, id: @work.id) %></p>
+      <% if current_user.admin? %>
+        <p class="float-right">
+          <%= link_to 'Contact Depositor via LibAnswers', 
+                      admin_contact_depositors_url(resource_klass: :collection, id: @collection.id), 
+                      target: :_blank %>
+        </p>
+      <% end %>
+
       <h1 class="h2 mb-3"><%= t('.heading', title: @collection.title) %></h1>
 
       <div class="keyline keyline--left">

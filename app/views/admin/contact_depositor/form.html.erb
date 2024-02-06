@@ -6,14 +6,13 @@
   <div class="row">
     <div class="col">
 
-    <%= form_for @contact_depositor_form  do |form| %>
-
+    <%= form_for @contact_depositor_form do |form| %>
       <div class="form-wrapper">
         <%= render 'form_fields/text', form: form, attribute: :send_to_name, required: true %>
         <%= render 'form_fields/text', form: form, attribute: :send_to_email, required: true %>
         <%= render 'form_fields/multi_text', form: form, attribute: :cc_email_to, required: true %>
-        <%= render 'form_fields/text', form: form, attribute: :subject %>
-        <%= render 'form_fields/text_area', form: form, attribute: :message %>
+        <%= render 'form_fields/text', form: form, attribute: :subject, required: true %>
+        <%= render 'form_fields/text_area', form: form, attribute: :message, required: true %>
 
         <%= form.submit value: 'Send', class: 'btn btn-primary btn--rounded' %>
       </div>
