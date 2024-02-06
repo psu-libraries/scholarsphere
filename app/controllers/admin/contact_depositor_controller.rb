@@ -35,16 +35,5 @@ module Admin
           cc_email_to: []
         )
     end
-
-    def resource_klass
-      case params[:resource_klass]
-      when 'work'
-        Work
-      when 'collection'
-        Collection
-      else
-        @resource.class
-      end
-    end
   end
 end
