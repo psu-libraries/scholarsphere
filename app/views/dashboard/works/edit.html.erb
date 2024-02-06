@@ -45,7 +45,7 @@
       <% if current_user.admin? %>
         <p class="float-right">
           <%= link_to 'Contact Depositor via LibAnswers', 
-                      admin_contact_depositors_url(resource_klass: :work, id: @work.id), 
+                      admin_contact_depositors_url(id: @work.id), 
                       target: :_blank %>
         </p>
       <% end %>

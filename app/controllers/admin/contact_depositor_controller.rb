@@ -3,10 +3,10 @@
 module Admin
   class ContactDepositorController < ApplicationController
     def form
-      resource = resource_klass.find(params[:id])
-      @contact_depositor_form = AdminContactDepositor.new(send_to_name: resource.depositor.display_name, 
-                                                          send_to_email: resource.depositor.email, 
-                                                          cc_email_to: resource.edit_users.collect(&:email) << resource.depositor.email)
+      work = Work.find(params[:id])
+      @contact_depositor_form = AdminContactDepositor.new(send_to_name: work.depositor.display_name, 
+                                                          send_to_email: work.depositor.email, 
+                                                          cc_email_to: work.edit_users.collect(&:email) << work.depositor.email)
     end
 
     def submit
