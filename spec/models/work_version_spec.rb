@@ -246,6 +246,7 @@ RSpec.describe WorkVersion, type: :model do
   it { is_expected.to delegate_method(:proxy_depositor).to(:work) }
   it { is_expected.to delegate_method(:work_type).to(:work) }
   it { is_expected.to delegate_method(:thumbnail_url).to(:work) }
+  it { is_expected.to delegate_method(:deposit_pathway).to(:work) }
 
   describe 'after save' do
     let(:work_version) { build :work_version, :published }
@@ -717,6 +718,14 @@ RSpec.describe WorkVersion, type: :model do
 
         it { is_expected.not_to be_initial_draft }
       end
+    end
+  end
+
+  describe '#form_partial' do
+    let(:wv) { described_class.new }
+
+    it 'returns work_version' do
+      expect(wv.form_partial).to eq 'work_version'
     end
   end
 end

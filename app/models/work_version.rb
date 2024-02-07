@@ -299,6 +299,10 @@ class WorkVersion < ApplicationRecord
       (draft? || temporarily_published_draft?)
   end
 
+  def form_partial
+    self.class.model_name.param_key
+  end
+
   delegate :deposited_at,
            :depositor,
            :embargoed?,
@@ -309,6 +313,8 @@ class WorkVersion < ApplicationRecord
            :default_thumbnail?,
            :auto_generated_thumbnail?,
            :thumbnail_url, to: :work
+
+  delegate :deposit_pathway, to: :work, prefix: false
 
   private
 

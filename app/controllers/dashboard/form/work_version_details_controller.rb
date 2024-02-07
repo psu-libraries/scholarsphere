@@ -8,13 +8,15 @@ module Dashboard
       end
 
       def edit
-        @resource = WorkVersion.includes(:work).find(params[:id])
-        authorize(@resource)
+        wv = WorkVersion.includes(:work).find(params[:id])
+        authorize(wv)
+        @resource = WorkDepositPathways.details_form_for(wv)
       end
 
       def update
-        @resource = WorkVersion.includes(:work).find(params[:id])
-        authorize(@resource)
+        wv = WorkVersion.includes(:work).find(params[:id])
+        authorize(wv)
+        @resource = WorkDepositPathways.details_form_for(wv)
         @resource.attributes = work_version_params
         process_response(on_error: :edit)
       end
