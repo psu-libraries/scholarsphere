@@ -1,0 +1,34 @@
+# frozen_string_literal: true
+
+require 'rails_helper'
+
+RSpec.describe LibanswersApiService, vcr: true do
+  describe '#create_ticket' do
+    let(:args) do
+      {
+        send_to_name: 'Test Tester',
+        send_to_email: 'test1@psu.edu',
+        cc_email_to: ['test2@psu.edu', 'test3@psu.edu'],
+        subject: 'Test Subject',
+        message: 'Test message.'
+      }
+    end
+
+    context 'when successful response is returned from libanswers /ticket/create endpoint' do
+      it 'returns the url of the ticket created' do
+        expect(described_class.new(args).create_ticket).to eq 'https://psu.libanswers.com/admin/ticket?qid=123456789'
+      end
+    end
+
+    context 'when unsuccessful response is returned from libanswers /ticket/create endpoint' do
+      before do
+        args[:subject] = nil
+      end
+
+      it 'raises a LibanswersApiError' do
+        expect { described_class.new(args).create_ticket }.to
+        raise_error LibanswersApiService::LibanswersApiError, 'Question text empty or missing from request.'
+      end
+    end
+  end
+end

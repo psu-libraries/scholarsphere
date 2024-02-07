@@ -4,10 +4,10 @@ module Admin
   class ContactDepositorController < ApplicationController
     def form
       work = Work.find(params[:id])
-      @contact_depositor_form = AdminContactDepositor.new(send_to_name: work.depositor.display_name, 
-                                                          send_to_email: work.depositor.email, 
-                                                          cc_email_to: [work.edit_users.collect(&:email) + 
-                                                                        work.versions.last.creators.collect(&:email)].flatten.uniq)
+      @contact_depositor_form = AdminContactDepositor.new(send_to_name: work.depositor.display_name,
+                                                          send_to_email: work.depositor.email,
+                                                          cc_email_to: [work.edit_users.map(&:email) +
+                                                                        work.versions.last.creators.map(&:email)].flatten.uniq)
     end
 
     def submit
@@ -26,16 +26,16 @@ module Admin
 
     private
 
-    def contact_depositor_params
-      params
-        .require(:admin_contact_depositor)
-        .permit(
-          :send_to_name,
-          :send_to_email,
-          :subject,
-          :message,
-          cc_email_to: []
-        )
-    end
+      def contact_depositor_params
+        params
+          .require(:admin_contact_depositor)
+          .permit(
+            :send_to_name,
+            :send_to_email,
+            :subject,
+            :message,
+            cc_email_to: []
+          )
+      end
   end
 end

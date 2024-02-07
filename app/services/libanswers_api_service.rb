@@ -14,29 +14,29 @@ class LibanswersApiService
 
   def create_ticket
     conn = Faraday.new(url: host) do |f|
-      f.headers["Authorization"] = "Bearer #{oauth_token}"
+      f.headers['Authorization'] = "Bearer #{oauth_token}"
     end
-    response = conn.post(create_ticket_path, "quid=#{scholarsphere_queue_id}&" + 
-                                             "pquestion=#{subject}&" + 
-                                             "pname=#{send_to_name}&" + 
+    response = conn.post(create_ticket_path, "quid=#{scholarsphere_queue_id}&" +
+                                             "pquestion=#{subject}&" +
+                                             "pname=#{send_to_name}&" +
                                              "pemail=#{send_to_email}&" +
                                              "pdetails=#{message}")
     if response.env.status == 200
-      host + JSON.parse(response.env.response_body)["ticketUrl"]
+      host + JSON.parse(response.env.response_body)['ticketUrl']
     else
-      raise LibanswersApiError, JSON.parse(response.env.response_body)["error"]
+      raise LibanswersApiError, JSON.parse(response.env.response_body)['error']
     end
   end
 
   private
 
     def oauth_token
-      JSON.parse(oauth_token_response)["access_token"]
+      JSON.parse(oauth_token_response)['access_token']
     end
 
     def oauth_token_response
-      Faraday.new(url: host).post(oauth_token_path, { client_id: ENV.fetch('LIBANSWERS_CLIENT_ID'), 
-                                                      client_secret: ENV.fetch('LIBANSWERS_CLIENT_SECRET'), 
+      Faraday.new(url: host).post(oauth_token_path, { client_id: ENV.fetch('LIBANSWERS_CLIENT_ID'),
+                                                      client_secret: ENV.fetch('LIBANSWERS_CLIENT_SECRET'),
                                                       grant_type: 'client_credentials' }).env.response_body
     end
 

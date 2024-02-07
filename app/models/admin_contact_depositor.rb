@@ -11,7 +11,7 @@ class AdminContactDepositor
   validates :message, presence: true
 
   def validate_cc_email_to
-    if !cc_email_to.is_a?(Array) || cc_email_to.any?{ |e| !e.match(/\A[^@\s]+@[^@\s]+\z/i) }
+    if !cc_email_to.is_a?(Array) || cc_email_to.any? { |e| !e.match(/\A[^@\s]+@[^@\s]+\z/i) }
       errors.add(:cc_email_to, :invalid)
     end
   end
