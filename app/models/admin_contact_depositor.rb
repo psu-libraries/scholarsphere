@@ -2,7 +2,7 @@
 
 class AdminContactDepositor
   include ActiveModel::Model
-  attr_accessor :send_to_name, :send_to_email, :subject, :cc_email_to, :message
+  attr_accessor :send_to_name, :send_to_email, :subject, :message
 
   validates :send_to_name, presence: true
   validates :send_to_email, format: /\A[^@\s]+@[^@\s]+\z/i

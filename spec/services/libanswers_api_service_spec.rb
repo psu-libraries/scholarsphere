@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require 'support/vcr'
 
-RSpec.describe LibanswersApiService, vcr: true do
+RSpec.describe LibanswersApiService, :vcr do
   describe '#create_ticket' do
     let(:args) do
       {
         send_to_name: 'Test Tester',
         send_to_email: 'test1@psu.edu',
-        cc_email_to: ['test2@psu.edu', 'test3@psu.edu'],
         subject: 'Test Subject',
         message: 'Test message.'
       }

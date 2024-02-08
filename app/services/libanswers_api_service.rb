@@ -2,7 +2,7 @@
 
 class LibanswersApiService
   class LibanswersApiError < StandardError; end
-  attr_reader :send_to_name, :send_to_email, :cc_email_to, :subject, :message
+  attr_reader :send_to_name, :send_to_email, :subject, :message
 
   def initialize(admin_contact_depositor_params = {})
     @send_to_name = admin_contact_depositor_params.fetch(:send_to_name)
