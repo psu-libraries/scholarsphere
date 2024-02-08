@@ -3,7 +3,7 @@
 require 'rails_helper'
 require_relative '../_shared_examples_for_details_form'
 
-RSpec.describe WorkDepositPathways::General::DetailsForm, type: :model do
+RSpec.describe WorkDepositPathway::General::DetailsForm, type: :model do
   subject(:form) { described_class.new(wv) }
 
   let(:wv) {

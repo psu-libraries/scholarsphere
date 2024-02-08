@@ -226,16 +226,6 @@ class Work < ApplicationRecord
     latest_published_version.all_dois
   end
 
-  def deposit_pathway
-    if Types.scholarly_works.include?(work_type)
-      :scholarly_works
-    elsif Types.data_and_code.include?(work_type)
-      :data_and_code
-    elsif Types.general.include?(work_type)
-      :general
-    end
-  end
-
   private
 
     def uploaded_thumbnail_url

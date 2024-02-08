@@ -53,8 +53,8 @@ class DeleteResourceButtonComponent < ApplicationComponent
     def work_version?
       [
         'WorkVersion',
-        'WorkDepositPathways::ScholarlyWorks::DetailsForm',
-        'WorkDepositPathways::General::DetailsForm'
+        'WorkDepositPathway::ScholarlyWorks::DetailsForm',
+        'WorkDepositPathway::General::DetailsForm'
       ].include?(type)
     end
 
