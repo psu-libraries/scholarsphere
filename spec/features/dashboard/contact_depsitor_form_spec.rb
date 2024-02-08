@@ -12,22 +12,22 @@ RSpec.describe 'Submitting the Contact Depositor form', :vcr, type: :feature, wi
   describe 'navigating to form, filling out required fields, and submitting the form' do
     before do
       visit edit_dashboard_work_path(work)
-      click_on "Contact Depositor via LibAnswers"
+      click_on 'Contact Depositor via LibAnswers'
     end
 
     context 'when no error is raised' do
       it 'prepopulates fields in form and redirects to the libanswers ticket after submission' do
-        expect(find("#admin_contact_depositor_send_to_name").value).to eq work.depositor.display_name
-        expect(find("#admin_contact_depositor_send_to_email").value).to eq work.depositor.email
-        expect(find("#admin_contact_depositor_subject").value).to be_blank
-        expect(find("#admin_contact_depositor_message").value).to be_blank
+        expect(find('#admin_contact_depositor_send_to_name').value).to eq work.depositor.display_name
+        expect(find('#admin_contact_depositor_send_to_email').value).to eq work.depositor.email
+        expect(find('#admin_contact_depositor_subject').value).to be_blank
+        expect(find('#admin_contact_depositor_message').value).to be_blank
         fill_in('admin_contact_depositor_subject', with: 'Test Subject')
         fill_in('admin_contact_depositor_message', with: message)
         click_on 'Send'
       rescue ActionController::RoutingError
         # This is a bit unconventional.  Since clicking the "Send" button will redirect to an external site,
         # a routing error will be raised in the test env.  Rescue it and check the correct redirect location
-        expect(page.driver.browser.last_response['Location']).to eq "https://psu.libanswers.com/admin/ticket?qid=13162084"
+        expect(page.driver.browser.last_response['Location']).to eq 'https://psu.libanswers.com/admin/ticket?qid=13162084'
       end
     end
 
@@ -37,12 +37,12 @@ RSpec.describe 'Submitting the Contact Depositor form', :vcr, type: :feature, wi
         fill_in('admin_contact_depositor_subject', with: 'Test Subject')
         fill_in('admin_contact_depositor_message', with: message)
         click_on 'Send'
-        expect(page).to have_content "Send to email is invalid"
-        expect(current_path).to eq admin_contact_depositors_path(id: work.id)
-        expect(find("#admin_contact_depositor_send_to_name").value).to eq work.depositor.display_name
-        expect(find("#admin_contact_depositor_send_to_email").value).to eq 'notavalidemail'
-        expect(find("#admin_contact_depositor_subject").value).to eq 'Test Subject'
-        expect(find("#admin_contact_depositor_message").value).to eq message
+        expect(page).to have_content 'Send to email is invalid'
+        expect(page).to have_current_path admin_contact_depositors_path(id: work.id), ignore_query: true
+        expect(find('#admin_contact_depositor_send_to_name').value).to eq work.depositor.display_name
+        expect(find('#admin_contact_depositor_send_to_email').value).to eq 'notavalidemail'
+        expect(find('#admin_contact_depositor_subject').value).to eq 'Test Subject'
+        expect(find('#admin_contact_depositor_message').value).to eq message
       end
     end
 
@@ -55,12 +55,12 @@ RSpec.describe 'Submitting the Contact Depositor form', :vcr, type: :feature, wi
         fill_in('admin_contact_depositor_subject', with: 'Test Subject')
         fill_in('admin_contact_depositor_message', with: message)
         click_on 'Send'
-        expect(page).to have_content "Error Message"
-        expect(current_path).to eq admin_contact_depositors_path(id: work.id)
-        expect(find("#admin_contact_depositor_send_to_name").value).to eq work.depositor.display_name
-        expect(find("#admin_contact_depositor_send_to_email").value).to eq work.depositor.email
-        expect(find("#admin_contact_depositor_subject").value).to eq 'Test Subject'
-        expect(find("#admin_contact_depositor_message").value).to eq message
+        expect(page).to have_content 'Error Message'
+        expect(page).to have_current_path admin_contact_depositors_path(id: work.id), ignore_query: true
+        expect(find('#admin_contact_depositor_send_to_name').value).to eq work.depositor.display_name
+        expect(find('#admin_contact_depositor_send_to_email').value).to eq work.depositor.email
+        expect(find('#admin_contact_depositor_subject').value).to eq 'Test Subject'
+        expect(find('#admin_contact_depositor_message').value).to eq message
       end
     end
   end
