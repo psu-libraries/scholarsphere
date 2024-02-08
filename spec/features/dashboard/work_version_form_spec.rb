@@ -709,7 +709,6 @@ RSpec.describe 'Publishing a work', with_user: :user do
       # On the review page, change all the details metadata to ensure the params
       # are submitted correctly
       expect_any_instance_of(WorkVersion).to receive(:set_thumbnail_selection).once
-      # FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_draft(different_metadata)
       fill_in 'work_version_title', with: different_metadata[:title]
       FeatureHelpers::DashboardForm.fill_in_work_details(different_metadata)
       FeatureHelpers::DashboardForm.fill_in_publishing_details(metadata)
@@ -770,7 +769,6 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
       # On the review page, change all the details metadata to ensure the params
       # are submitted correctly
-      # FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_draft(different_metadata)
       fill_in 'work_version_title', with: different_metadata[:title]
       FeatureHelpers::DashboardForm.fill_in_work_details(different_metadata)
 
