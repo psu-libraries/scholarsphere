@@ -5,9 +5,7 @@ module Admin
     def form
       work = Work.find(params[:id])
       @contact_depositor_form = AdminContactDepositor.new(send_to_name: work.depositor.display_name,
-                                                          send_to_email: work.depositor.email,
-                                                          cc_email_to: [work.edit_users.map(&:email) +
-                                                                        work.versions.last.creators.map(&:email)].flatten.uniq)
+                                                          send_to_email: work.depositor.email)
     end
 
     def submit

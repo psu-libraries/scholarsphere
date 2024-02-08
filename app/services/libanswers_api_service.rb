@@ -7,7 +7,6 @@ class LibanswersApiService
   def initialize(admin_contact_depositor_params = {})
     @send_to_name = admin_contact_depositor_params.fetch(:send_to_name)
     @send_to_email = admin_contact_depositor_params.fetch(:send_to_email)
-    @cc_email_to = admin_contact_depositor_params.fetch(:cc_email_to)
     @subject = admin_contact_depositor_params.fetch(:subject)
     @message = admin_contact_depositor_params.fetch(:message)
   end
