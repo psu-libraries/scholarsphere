@@ -10,6 +10,7 @@ RSpec.describe 'Submitting the Contact Depositor form', :vcr, type: :feature, wi
 
   context 'when admin user' do
     let(:user) { create :user, :admin }
+
     before do
       visit admin_contact_depositors_path(id: work.id)
     end

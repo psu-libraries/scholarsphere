@@ -266,14 +266,15 @@ RSpec.describe 'Work Settings Page', with_user: :user do
 
     context 'when regular user' do
       it 'does not have link' do
-        expect(page).not_to have_content "Contact Depositor via LibAnswers"
+        expect(page).not_to have_content 'Contact Depositor via LibAnswers'
       end
     end
 
     context 'when admin user' do
       let(:user) { create :user, :admin }
+
       it 'has link' do
-        expect(page).to have_content "Contact Depositor via LibAnswers"
+        expect(page).to have_content 'Contact Depositor via LibAnswers'
       end
     end
   end
