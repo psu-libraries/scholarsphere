@@ -258,4 +258,23 @@ RSpec.describe 'Work Settings Page', with_user: :user do
       end
     end
   end
+
+  describe 'Contact depositor link' do
+    before do
+      visit edit_dashboard_work_path(work)
+    end
+
+    context 'when regular user' do
+      it 'does not have link' do
+        expect(page).not_to have_content "Contact Depositor via LibAnswers"
+      end
+    end
+
+    context 'when admin user' do
+      let(:user) { create :user, :admin }
+      it 'has link' do
+        expect(page).to have_content "Contact Depositor via LibAnswers"
+      end
+    end
+  end
 end
