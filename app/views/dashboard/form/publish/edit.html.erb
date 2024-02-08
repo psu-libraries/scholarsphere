@@ -23,7 +23,7 @@
                   heading: t('.error_message', error: pluralize(form.object.errors.count, 'issue'))
                 ) %>
 
-            <%= render 'dashboard/form/type/work_version_fields', form: form %>
+            <%= render 'dashboard/form/type/work_version_fields', form: form, work_type_disabled: true %>
             <%= render 'dashboard/form/details/work_version_fields', form: form %>
 
             <%= render 'dashboard/form/contributors/creators', form: form, resource_klass: 'work_version' %>

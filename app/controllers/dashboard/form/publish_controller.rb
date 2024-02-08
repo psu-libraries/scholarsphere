@@ -112,7 +112,6 @@ module Dashboard
               ],
               work_attributes: [
                 :id,
-                :work_type,
                 :visibility
               ]
             )
