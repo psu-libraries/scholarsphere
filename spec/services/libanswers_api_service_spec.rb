@@ -26,8 +26,19 @@ RSpec.describe LibanswersApiService, vcr: true do
       end
 
       it 'raises a LibanswersApiError' do
-        expect { described_class.new(args).create_ticket }.to
-        raise_error LibanswersApiService::LibanswersApiError, 'Question text empty or missing from request.'
+        expect { described_class.new(args).create_ticket }
+          .to raise_error LibanswersApiService::LibanswersApiError, 'Question text empty or missing from request.'
+      end
+    end
+
+    context 'when there is a connection error' do
+      before do
+        allow(Faraday).to receive(:new).and_raise Faraday::ConnectionFailed, 'Error Message'
+      end
+
+      it 'raises a LibanswersApiError' do
+        expect { described_class.new(args).create_ticket }
+          .to raise_error LibanswersApiService::LibanswersApiError, 'Error Message'
       end
     end
   end

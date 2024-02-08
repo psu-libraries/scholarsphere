@@ -26,6 +26,8 @@ class LibanswersApiService
     else
       raise LibanswersApiError, JSON.parse(response.env.response_body)['error']
     end
+  rescue Faraday::ConnectionFailed => e
+    raise LibanswersApiError, e.message
   end
 
   private
