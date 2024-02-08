@@ -31,8 +31,7 @@ module Admin
             :send_to_name,
             :send_to_email,
             :subject,
-            :message,
-            cc_email_to: []
+            :message
           )
       end
   end
