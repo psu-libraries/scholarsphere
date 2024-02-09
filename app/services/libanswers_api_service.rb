@@ -36,8 +36,8 @@ class LibanswersApiService
     end
 
     def oauth_token_response
-      Faraday.new(url: host).post(oauth_token_path, { client_id: ENV.fetch('LIBANSWERS_CLIENT_ID'),
-                                                      client_secret: ENV.fetch('LIBANSWERS_CLIENT_SECRET'),
+      Faraday.new(url: host).post(oauth_token_path, { client_id: ENV.fetch('LIBANSWERS_CLIENT_ID', 'asdf'),
+                                                      client_secret: ENV.fetch('LIBANSWERS_CLIENT_SECRET', 'asdfasdf'),
                                                       grant_type: 'client_credentials' }).env.response_body
     end
 
