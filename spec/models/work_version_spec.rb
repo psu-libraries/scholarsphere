@@ -732,7 +732,7 @@ RSpec.describe WorkVersion, type: :model do
   describe '#depositor_access_id' do
     let(:work_version) { create(:work_version) }
     let(:depositor) { build(:actor, psu_id: 'abc1234') }
-    let(:work) { build(:work, versions: [work_version])}
+    let(:work) { build(:work, versions: [work_version]) }
 
     it 'returns depositor access id' do
       depositor.deposited_works << [work]
@@ -743,7 +743,7 @@ RSpec.describe WorkVersion, type: :model do
   describe '#depositor_name' do
     let(:work_version) { create(:work_version) }
     let(:depositor) { build(:actor, display_name: 'Test Depositor') }
-    let(:work) { build(:work, versions: [work_version])}
+    let(:work) { build(:work, versions: [work_version]) }
 
     it 'returns depositor display name' do
       depositor.deposited_works << [work]

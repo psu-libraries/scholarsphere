@@ -15,7 +15,8 @@ module Dashboard
             @resource.class
           end
         end
-#where drafts are being saved
+
+        # where drafts are being saved
         def process_response(on_error:, validation_context: nil)
           respond_to do |format|
             if save_resource(validation_context: validation_context)
@@ -84,10 +85,10 @@ module Dashboard
 
         helper_method :allow_publish?
         def allow_publish?
-          unless @resource.is_a?(Collection)
-            !@resource.draft_curation_requested
-          else
+          if @resource.is_a?(Collection)
             true
+          else
+            !@resource.draft_curation_requested
           end
         end
 
@@ -99,12 +100,12 @@ module Dashboard
         def in_publish_edit_action?
           current_controller = params[:controller]
           current_action = params[:action]
-      
-          current_controller == "dashboard/form/publish" && current_action == "edit"
+
+          current_controller == 'dashboard/form/publish' && current_action == 'edit'
         end
 
-        def data? 
-          @resource.work.work_type == "dataset" || @resource.work.work_type == "software_or_program_code"
+        def data?
+          @resource.work.work_type == 'dataset' || @resource.work.work_type == 'software_or_program_code'
         end
 
         def curation_eligible?

@@ -4,7 +4,7 @@
 <footer class="footer footer--actions footer--fixed d-flex justify-content-center">
   <div>
     <% if allow_curation? %>
-      <%= form.submit t("dashboard.form.actions.request_curation"), name: 'request_curation', class: 'btn btn-primary btn--rounded' %>
+      <%= form.submit t('dashboard.form.actions.request_curation'), name: 'request_curation', class: 'btn btn-primary btn--rounded' %>
     <% end %>
 
     <% if allow_publish? %>

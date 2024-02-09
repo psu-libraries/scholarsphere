@@ -35,7 +35,7 @@ module Dashboard
             AirtableExporter.call(@resource.id)
             @resource.draft_curation_requested = true
           rescue Airrecord::Error
-            flash[:error] = "There was an error with your curation request. Please try again later or contact us if the problem persists."
+            flash[:error] = t('dashboard.work_versions.publish.curation.error')
           end
         end
 

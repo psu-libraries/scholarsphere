@@ -773,10 +773,9 @@ RSpec.describe 'Publishing a work', with_user: :user do
       let(:work_version) { work.versions.first }
 
       it 'does not render a button for requesting curation but does render publish and does not show helper text about requesting curation' do
-
         visit dashboard_form_publish_path(work_version)
 
-        expect(page).not_to have_button('Request Curation & Save')  
+        expect(page).not_to have_button('Request Curation & Save')
         expect(page).to have_button('Publish')
         expect(page).not_to have_content(request_description)
       end
@@ -790,7 +789,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         work_version.work.work_type = 'dataset'
         visit dashboard_form_publish_path(work_version)
 
-        expect(page).not_to have_button('Request Curation & Save')  
+        expect(page).not_to have_button('Request Curation & Save')
         expect(page).not_to have_button('Publish')
         expect(page).to have_content(curation_requested)
       end
@@ -799,15 +798,15 @@ RSpec.describe 'Publishing a work', with_user: :user do
     context 'when an error occurs requesting curation' do
       let(:work_version) { create :work_version, :able_to_be_published, draft_curation_requested: nil }
 
-      before { allow(AirtableExporter).to receive(:call).with(work_version.id).and_raise(Airrecord::Error)}
-      
+      before { allow(AirtableExporter).to receive(:call).with(work_version.id).and_raise(Airrecord::Error) }
+
       it 'saves changes and displays an error flash message' do
         work_version.work.work_type = 'dataset'
 
         visit dashboard_form_publish_path(work_version)
 
         fill_in 'work_version_title', with: ''
-        fill_in 'work_version_title', with: "Changed Title"
+        fill_in 'work_version_title', with: 'Changed Title'
         check 'I have read and agree to the deposit agreement.'
 
         click_on 'Request Curation & Save'
