@@ -13,6 +13,7 @@
 ActiveRecord::Schema.define(version: 2024_01_26_170854) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
 
@@ -220,8 +221,7 @@ ActiveRecord::Schema.define(version: 2024_01_26_170854) do
   end
 
   create_table "versions", force: :cascade do |t|
-    t.string "item_type"
-    t.string "{:null=>false}"
+    t.string "item_type", null: false
     t.bigint "item_id", null: false
     t.string "event", null: false
     t.string "whodunnit"
