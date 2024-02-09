@@ -719,4 +719,35 @@ RSpec.describe WorkVersion, type: :model do
       end
     end
   end
+
+  describe '#submission_link' do
+    let(:work_version) { create(:work_version, uuid: '8d7eb165-25e0-4b60-8c94-8dc63ae6989f') }
+    let(:expected_link) { 'https://scholarsphere.psu.edu/resources/8d7eb165-25e0-4b60-8c94-8dc63ae6989f' }
+
+    it 'returns a link to the work' do
+      expect(work_version.submission_link).to eq expected_link
+    end
+  end
+
+  describe '#depositor_access_id' do
+    let(:work_version) { create(:work_version) }
+    let(:depositor) { build(:actor, psu_id: 'abc1234') }
+    let(:work) { build(:work, versions: [work_version])}
+
+    it 'returns depositor access id' do
+      depositor.deposited_works << [work]
+      expect(work_version.depositor_access_id).to eq('abc1234')
+    end
+  end
+
+  describe '#depositor_name' do
+    let(:work_version) { create(:work_version) }
+    let(:depositor) { build(:actor, display_name: 'Test Depositor') }
+    let(:work) { build(:work, versions: [work_version])}
+
+    it 'returns depositor display name' do
+      depositor.deposited_works << [work]
+      expect(work_version.depositor_name).to eq('Test Depositor')
+    end
+  end
 end

@@ -24,12 +24,19 @@ module Dashboard
         # against the draft validations, then mark the record as published and
         # save again--this time using the published validations. That way the
         # appropriate error messages will appear on the form when it's re-rendered
-        if publish?
+        if publish? && !@resource.draft_curation_requested
           # WorkVersion#set_thumbnail_selection may be unreliable if the Shrine::ThumbnailJob is delayed
           @resource.set_thumbnail_selection
           @resource.indexing_source = Proc.new { nil }
           @resource.save
           @resource.publish
+        elsif request_curation?
+          begin
+            AirtableExporter.call(@resource.id)
+            @resource.draft_curation_requested = true
+          rescue Airrecord::Error
+            flash[:error] = "There was an error with your curation request. Please try again later or contact us if the problem persists."
+          end
         end
 
         validation_context = current_user.admin? ? nil : :user_publish
@@ -88,6 +95,7 @@ module Dashboard
               :version_name,
               :published_date,
               :depositor_agreement,
+              :draft_curation_requested,
               keyword: [],
               contributor: [],
               publisher: [],

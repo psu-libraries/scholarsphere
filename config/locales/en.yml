@@ -383,6 +383,7 @@ en:
           collection: Save and Exit
           work_version: Save as Draft & Exit
           admin_save: Save and Exit
+        request_curation: Request Curation & Save
         destroy:
           button: Delete
           collection: Collection
@@ -436,6 +437,10 @@ en:
           contributors: Contributors
           files: Files
           publishing_details: Publishing Details
+        curation:
+          header: Request Curation (Optional)
+          request_description: Please select 'Request Curation & Save' below if you would like metadata curation on your work before it is published.
+          curation_requested: Curation has been requested. We will notify you when curation is complete and your work is ready to be published.
       members:
         heading: Works
         badge: Work 

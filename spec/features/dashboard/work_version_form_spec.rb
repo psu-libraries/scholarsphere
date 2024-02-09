@@ -106,6 +106,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         expect(page).to have_current_path(resource_path(work_version.uuid))
         expect(Work.count).to eq(initial_work_count)
+        expect(page).not_to have_button('Request Curation & Save')
 
         work_version.reload
         expect(work_version.title).to eq metadata[:title]
@@ -185,6 +186,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
           expect(page).to have_field('Email')
           expect(page).to have_content("Access Account: #{actor.psu_id}".upcase)
         end
+
+        expect(page).not_to have_button('Request Curation & Save')
 
         fill_in 'work_version_contributor', with: metadata[:contributor]
 
@@ -462,6 +465,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
           sleep 0.1
         end
       end
+
+      expect(page).not_to have_button('Request Curation & Save')
     end
   end
 
@@ -740,6 +745,79 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect {
           FeatureHelpers::DashboardForm.delete
         }.to raise_error(Capybara::ElementNotFound)
+      end
+    end
+  end
+
+  describe 'Requesting curation', js: true do
+    let(:user) { work_version.work.depositor.user }
+    let(:request_description) { "Please select 'Request Curation & Save' below if you would like metadata curation on your work before it is published." }
+
+    context 'with a draft eligible for curation request' do
+      let(:work_version) { create :work_version, :draft, draft_curation_requested: nil }
+
+      it 'renders buttons for requesting curation and publish and shows helper text explaing requesting curation' do
+        work_version.work.work_type = 'dataset'
+
+        visit dashboard_form_publish_path(work_version)
+
+        expect(page).to have_button('Request Curation & Save')
+        expect(page).to have_button('Publish')
+
+        expect(page).to have_content(request_description)
+      end
+    end
+
+    context 'with a draft not eligible for curation request' do
+      let(:work) { create :work, versions_count: 1, has_draft: true, work_type: 'article' }
+      let(:work_version) { work.versions.first }
+
+      it 'does not render a button for requesting curation but does render publish and does not show helper text about requesting curation' do
+
+        visit dashboard_form_publish_path(work_version)
+
+        expect(page).not_to have_button('Request Curation & Save')  
+        expect(page).to have_button('Publish')
+        expect(page).not_to have_content(request_description)
+      end
+    end
+
+    context 'with a draft that has curation requested' do
+      let(:work_version) { create :work_version, :draft, draft_curation_requested: true }
+      let(:curation_requested) { 'Curation has been requested. We will notify you when curation is complete and your work is ready to be published.' }
+
+      it 'does not render buttons for requesting curation or publish & shows text that curation has been requested' do
+        work_version.work.work_type = 'dataset'
+        visit dashboard_form_publish_path(work_version)
+
+        expect(page).not_to have_button('Request Curation & Save')  
+        expect(page).not_to have_button('Publish')
+        expect(page).to have_content(curation_requested)
+      end
+    end
+
+    context 'when an error occurs requesting curation' do
+      let(:work_version) { create :work_version, :able_to_be_published, draft_curation_requested: nil }
+
+      before { allow(AirtableExporter).to receive(:call).with(work_version.id).and_raise(Airrecord::Error)}
+      
+      it 'saves changes and displays an error flash message' do
+        work_version.work.work_type = 'dataset'
+
+        visit dashboard_form_publish_path(work_version)
+
+        fill_in 'work_version_title', with: ''
+        fill_in 'work_version_title', with: "Changed Title"
+        check 'I have read and agree to the deposit agreement.'
+
+        click_on 'Request Curation & Save'
+
+        within('.alert-danger') do
+          expect(page).to have_content('There was an error with your curation request')
+        end
+
+        work_version.reload
+        expect(work_version.title).to eq('Changed Title')
       end
     end
   end

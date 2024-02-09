@@ -299,6 +299,18 @@ class WorkVersion < ApplicationRecord
       (draft? || temporarily_published_draft?)
   end
 
+  def submission_link
+    "https://scholarsphere.psu.edu/resources/#{uuid}"
+  end
+
+  def depositor_access_id
+    depositor.psu_id
+  end
+
+  def depositor_name
+    depositor.display_name
+  end
+
   delegate :deposited_at,
            :depositor,
            :embargoed?,

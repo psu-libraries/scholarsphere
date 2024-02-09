@@ -14,6 +14,10 @@
       <%= render 'visibility_field', form: work_form %>
     <% end %>
 
+    <% if allow_curation? || @resource.draft_curation_requested %>
+      <%= render 'curation', form: form %>
+    <% end %>
+
     <div class="form-group mt-5">
       <div class="keyline keyline--left">
         <h2 id="<%= WorkVersion.human_attribute_name(:depositor_agreement).parameterize %>" class="h4">
