@@ -15,6 +15,14 @@ class WorkDepositPathway
     end
   end
 
+  def publish_form
+    if scholarly_works?
+      ScholarlyWorks::PublishForm.new(resource)
+    else
+      resource
+    end
+  end
+
   private
 
     attr_reader :resource
@@ -120,6 +128,20 @@ class WorkDepositPathway
         end
 
         form_fields.each { |attr_name| attribute attr_name }
+
+        def form_partial
+          'scholarly_works_work_version'
+        end
+      end
+
+      class PublishForm < SimpleDelegator
+        def self.method_missing(method_name, *args)
+          WorkVersion.public_send(method_name, *args)
+        end
+
+        def self.respond_to_missing?(method_name, *)
+          WorkVersion.respond_to?(method_name)
+        end
 
         def form_partial
           'scholarly_works_work_version'

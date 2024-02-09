@@ -671,6 +671,34 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).to have_content(WorkVersion.human_attribute_name(:visibility))
       end
     end
+
+    context 'with a work that uses the general deposit pathway' do
+      let(:work) { create :work, versions_count: 1, work_type: 'audio' }
+      let(:work_version) { work.versions.first }
+      let(:user) { work.depositor.user }
+
+      it 'shows all of the work details fields' do
+        visit dashboard_form_publish_path(work_version)
+
+        expect(page).to have_field('work_version_based_near')
+        expect(page).to have_field('work_version_source')
+        expect(page).to have_field('work_version_version_name')
+      end
+    end
+
+    context 'with a work that uses the scholarly works deposit pathway' do
+      let(:work) { create :work, versions_count: 1, work_type: 'article' }
+      let(:work_version) { work.versions.first }
+      let(:user) { work.depositor.user }
+
+      it 'shows only the fields for a scholarly work' do
+        visit dashboard_form_publish_path(work_version)
+
+        expect(page).not_to have_field('work_version_based_near')
+        expect(page).not_to have_field('work_version_source')
+        expect(page).not_to have_field('work_version_version_name')
+      end
+    end
   end
 
   describe 'Publishing a new work from end-to-end', js: true do

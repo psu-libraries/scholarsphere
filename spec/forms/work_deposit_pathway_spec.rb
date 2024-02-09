@@ -81,4 +81,70 @@ RSpec.describe WorkDepositPathway do
       end
     end
   end
+
+  describe '#publish_form when the given work version has a scholarly works type' do
+    %w[
+      article
+      book
+      capstone_project
+      conference_proceeding
+      dissertation
+      masters_culminating_experience
+      masters_thesis
+      part_of_book
+      report
+      research_paper
+      thesis
+    ].each do |t|
+      let(:type) { t }
+
+      context "when the given work version has a work type of #{t}" do
+        it 'returns a WorkDepositPathway::ScholarlyWorks::DetailsForm initialized with the work type' do
+          form = pathway.publish_form
+          expect(form).to be_a WorkDepositPathway::ScholarlyWorks::PublishForm
+          expect(form.id).to eq 123
+        end
+      end
+    end
+  end
+
+  describe '#publish_form when the given work version has a general type' do
+    %w[
+      audio
+      image
+      journal
+      map_or_cartographic_material
+      other
+      poster
+      presentation
+      project
+      unspecified
+      video
+    ].each do |t|
+      let(:type) { t }
+
+      context "when the given work version has a work type of #{t}" do
+        it 'returns the given WorkVersion' do
+          form = pathway.publish_form
+          expect(form).to eq wv
+        end
+      end
+    end
+  end
+
+  describe '#publish_form when the given work version has a data and code type' do
+    %w[
+      dataset
+      software_or_program_code
+    ].each do |t|
+      let(:type) { t }
+
+      context "when the given work version has a work type of #{t}" do
+        it 'returns the given WorkVersion' do
+          form = pathway.publish_form
+          expect(form).to eq wv
+        end
+      end
+    end
+  end
 end
