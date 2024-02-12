@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
 RSpec.configure do |_config|
-  Capybara.javascript_driver = :selenium_chrome_headless 
+  Capybara.javascript_driver = :selenium_chrome_headless
 end
-
 
 Capybara.register_driver :selenium_chrome_headless do |app|
   options = ::Selenium::WebDriver::Chrome::Options.new
