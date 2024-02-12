@@ -4,8 +4,12 @@ RSpec.configure do |_config|
   Capybara.javascript_driver = if ENV['SELENIUM']
                                  :selenium_remote
                                else
-                                 :selenium_chrome_headless
+                                 :selenium_headless
                                end
+end
+
+Capybara.register_driver :selenium_headless do |app|
+  Capybara::Selenium::Driver.new(app, :browser => :chrome, args: ['headless=new'])
 end
 
 Capybara.register_driver :selenium_remote do |app|
