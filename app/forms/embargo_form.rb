@@ -50,6 +50,10 @@ class EmbargoForm
 
       begin
         Date.parse(embargoed_until.to_s)
+        unless embargoed_until < (DateTime.now + 4.years)
+          errors.add(:embargoed_until, :max)
+          nil
+        end
       rescue ArgumentError, TypeError
         errors.add(:embargoed_until, :not_a_date)
       end

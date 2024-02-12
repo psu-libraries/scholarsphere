@@ -33,6 +33,9 @@ RSpec.describe EmbargoForm, type: :model do
 
       # correct format, but not actually a date
       it { is_expected.not_to allow_value('2020-02-31').for(:embargoed_until) }
+
+      # correct format, but exceeds the four year limit
+      it { is_expected.not_to allow_value(DateTime.now.advance(years: 4, days: 1).to_s).for(:embargoed_until) }
     end
 
     context 'when `remove` is present' do
@@ -47,6 +50,9 @@ RSpec.describe EmbargoForm, type: :model do
 
       # correct format, but not actually a date
       it { is_expected.to allow_value('2020-02-31').for(:embargoed_until) }
+
+      # correct format, but exceeds the four year limit
+      it { is_expected.to allow_value(DateTime.now.advance(years: 4, days: 1).to_s).for(:embargoed_until) }
     end
   end
 

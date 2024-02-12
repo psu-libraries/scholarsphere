@@ -55,13 +55,14 @@ RSpec.describe 'Work Settings Page', with_user: :user do
     end
 
     it 'works from the Settings page' do
-      fill_in 'embargo_form_embargoed_until', with: '2030-11-11'
+      fill_in 'embargo_form_embargoed_until', with: DateTime.now.next_year(3).strftime('%Y-%m-%d').to_s
       click_button I18n.t!('dashboard.works.edit.embargo.submit_button')
 
       expect(page).to have_content(I18n.t!('dashboard.works.edit.heading', work_title: work.latest_version.title))
 
       work.reload
-      expect(work.embargoed_until).to be_within(1.minute).of(Time.zone.local(2030, 11, 11, 0))
+      expected_time = (DateTime.now + 3.years).change(hour: 0, min: 0, sec: 0)
+      expect(work.embargoed_until).to be_within(1.minute).of(expected_time)
 
       click_button I18n.t!('dashboard.works.edit.embargo.remove_button')
 
