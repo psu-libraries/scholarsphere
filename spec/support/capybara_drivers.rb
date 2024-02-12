@@ -22,7 +22,6 @@ Capybara.register_driver :headless_chrome_no_sandbox do |app|
   )
 end
 
-
 Capybara.register_driver :selenium_remote do |app|
   capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
     chromeOptions: { args: [
