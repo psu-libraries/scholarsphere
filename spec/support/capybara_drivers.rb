@@ -4,13 +4,24 @@ RSpec.configure do |_config|
   Capybara.javascript_driver = if ENV['SELENIUM']
                                  :selenium_remote
                                else
-                                 :selenium_headless
+                                 :headless_chrome_no_sandbox
                                end
 end
 
-Capybara.register_driver :selenium_headless do |app|
-  Capybara::Selenium::Driver.new(app, :browser => :chrome, args: ['headless=new'])
+Capybara.register_driver :headless_chrome_no_sandbox do |app|
+  Capybara::Selenium::Driver.new(
+    app,
+    browser: :chrome,
+    capabilities: Selenium::WebDriver::Chrome::Options.new(
+      args: %w[
+        no-sandbox
+        headless=new
+        disable-gpu
+      ]
+    )
+  )
 end
+
 
 Capybara.register_driver :selenium_remote do |app|
   capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
