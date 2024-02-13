@@ -380,6 +380,7 @@ en:
           new: "Create New Collection"
           edit: "Edit Collection"
       tabs:
+        work_version_type: Work Type
         work_version_details: Work Details
         collection_details: Collection Details
         contributors: Contributors

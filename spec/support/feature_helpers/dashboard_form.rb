@@ -10,8 +10,6 @@ module FeatureHelpers
     end
 
     def self.fill_in_work_details(work_version_metadata)
-      fill_in_minimal_work_details_for_draft(work_version_metadata)
-
       fill_in 'work_version_description', with: work_version_metadata[:description]
       fill_in 'work_version_publisher_statement', with: work_version_metadata[:publisher_statement]
       fill_in 'work_version_published_date', with: work_version_metadata[:published_date]

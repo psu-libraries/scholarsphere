@@ -1,0 +1,13 @@
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h4 class="text-center mb-4"><%= t("dashboard.form.heading.#{param_key}.new") %></h4>
+      <%= render FormTabsComponent.new(resource: @resource, current_controller: controller_name) %>
+
+      <div class="tab-content">
+        <div class="tab-pane active show">
+          <%= render 'form', url: send("dashboard_form_#{@resource.model_name.plural}_path") %>
+        </div>
+      </div>
+    </div>
+</div>
