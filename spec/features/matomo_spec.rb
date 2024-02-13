@@ -3,9 +3,15 @@
 require 'rails_helper'
 
 RSpec.describe 'Matomo Traking Code' do
-  before { Capybara.ignore_hidden_elements = false }
+  before do
+    ENV['MATOMO_TEST'] = 'true'
+    Capybara.ignore_hidden_elements = false
+  end
 
-  after { Capybara.ignore_hidden_elements = true }
+  after do
+    Capybara.ignore_hidden_elements = true
+    ENV.reject! { |k, _v| k == 'MATOMO_TEST' }
+  end
 
   it 'has the default configuration' do
     visit(blacklight_path)
