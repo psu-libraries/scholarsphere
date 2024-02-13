@@ -9,7 +9,7 @@ RSpec.describe 'Matomo Traking Code' do
   end
 
   after do
-    ENV.delete("MATOMO_TEST")
+    ENV.delete('MATOMO_TEST')
     Capybara.ignore_hidden_elements = true
   end
 
