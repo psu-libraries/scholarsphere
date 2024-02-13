@@ -35,7 +35,7 @@ module Dashboard
             AirtableExporter.call(@resource.id)
             @resource.draft_curation_requested = true
           rescue Airrecord::Error
-            flash[:error] = t('dashboard.work_versions.publish.curation.error')
+            flash[:error] = t('dashboard.form.publish.curation.error')
           end
         end
 
