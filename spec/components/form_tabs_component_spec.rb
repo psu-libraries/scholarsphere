@@ -12,7 +12,7 @@ RSpec.describe FormTabsComponent, type: :component do
 
     it 'does NOT render the tabs as links' do
       expect(tabs.css('a')).to be_empty
-      expect(tabs.css('.nav-item.disabled').length).to eq 4
+      expect(tabs.css('.nav-item.disabled').length).to eq 5
     end
 
     it "renders the current controller's tab as active" do
@@ -25,7 +25,7 @@ RSpec.describe FormTabsComponent, type: :component do
     let(:resource) { build_stubbed :work_version }
 
     it 'renders the inactive tabs as links' do
-      expect(tabs.css('a.nav-item').length).to eq 3
+      expect(tabs.css('a.nav-item').length).to eq 4
       expect(tabs.css('a.nav-item').map(&:text)).not_to include(I18n.t!('dashboard.form.tabs.work_version_details'))
     end
 

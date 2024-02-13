@@ -114,8 +114,11 @@ Rails.application.routes.draw do
 
     namespace :form do
       scope 'work_versions' do
-        get   'new', to: 'work_version_details#new', as: 'work_versions'
-        match 'new', to: 'work_version_details#create', via: :post, as: nil
+        get   'new', to: 'work_version_type#new', as: 'work_versions'
+        match 'new', to: 'work_version_type#create', via: :post, as: nil
+
+        get   ':id/type', to: 'work_version_type#edit', as: 'work_version_type'
+        match ':id/type', to: 'work_version_type#update', via: %i[patch put], as: nil
 
         get   ':id/details', to: 'work_version_details#edit', as: 'work_version_details'
         match ':id/details', to: 'work_version_details#update', via: %i[patch put], as: nil

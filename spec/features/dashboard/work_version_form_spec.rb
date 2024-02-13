@@ -43,6 +43,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         visit dashboard_form_work_versions_path
 
+        FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_draft(metadata)
+        FeatureHelpers::DashboardForm.save_and_continue
         FeatureHelpers::DashboardForm.fill_in_work_details(metadata)
         FeatureHelpers::DashboardForm.save_and_continue
 
@@ -77,6 +79,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
       it 'returns to the resource page' do
         visit dashboard_form_work_versions_path
 
+        FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_draft(metadata)
+        FeatureHelpers::DashboardForm.save_and_continue
         FeatureHelpers::DashboardForm.fill_in_work_details(metadata)
         FeatureHelpers::DashboardForm.save_and_continue
 
@@ -95,7 +99,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       it 'creates a new work with all fields provided' do
         initial_work_count = Work.count
 
-        visit dashboard_form_work_version_details_path(work_version)
+        visit dashboard_form_work_version_type_path(work_version)
 
         FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_draft(metadata)
         FeatureHelpers::DashboardForm.save_as_draft_and_exit
@@ -111,8 +115,10 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
     context 'when saving and_continuing' do
       it 'creates a new work with all fields provided' do
-        visit dashboard_form_work_version_details_path(work_version)
+        visit dashboard_form_work_version_type_path(work_version)
 
+        FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_draft(metadata)
+        FeatureHelpers::DashboardForm.save_and_continue
         FeatureHelpers::DashboardForm.fill_in_work_details(metadata)
         FeatureHelpers::DashboardForm.save_and_continue
 
@@ -134,13 +140,13 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(work_version.source).to eq [metadata[:source]]
 
         expect(page).to have_current_path(dashboard_form_contributors_path('work_version', work_version))
-        expect(SolrIndexingJob).to have_received(:perform_later).once
+        expect(SolrIndexingJob).to have_received(:perform_later).twice
       end
     end
 
     context 'when navigating away from unsaved changes', js: true do
       it 'warns the user' do
-        visit dashboard_form_work_version_details_path(work_version)
+        visit dashboard_form_work_version_type_path(work_version)
 
         fill_in 'work_version_title', with: "Changed #{metadata[:title]}"
 
@@ -148,7 +154,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
           click_on I18n.t!('dashboard.form.tabs.contributors')
         end
 
-        expect(page).to have_current_path(dashboard_form_work_version_details_path(work_version))
+        expect(page).to have_current_path(dashboard_form_work_version_type_path(work_version))
 
         accept_confirm(I18n.t!('dashboard.form.unsaved_changes_prompt')) do
           click_on I18n.t!('dashboard.form.tabs.contributors')
@@ -519,6 +525,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
     it 'routes the user through the workflow' do
       visit dashboard_form_work_versions_path
 
+      FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_draft(metadata)
+      FeatureHelpers::DashboardForm.save_and_continue
       FeatureHelpers::DashboardForm.fill_in_work_details(metadata)
       FeatureHelpers::DashboardForm.save_and_continue
 
@@ -547,6 +555,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       # On the review page, change all the details metadata to ensure the params
       # are submitted correctly
       expect_any_instance_of(WorkVersion).to receive(:set_thumbnail_selection).once
+      FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_draft(different_metadata)
       FeatureHelpers::DashboardForm.fill_in_work_details(different_metadata)
       FeatureHelpers::DashboardForm.fill_in_publishing_details(metadata)
       FeatureHelpers::DashboardForm.publish
@@ -588,6 +597,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
     it 'routes the user through the workflow' do
       visit dashboard_form_work_versions_path
 
+      FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_draft(metadata)
+      FeatureHelpers::DashboardForm.save_and_continue
       FeatureHelpers::DashboardForm.fill_in_work_details(metadata)
       FeatureHelpers::DashboardForm.save_and_continue
 
@@ -604,6 +615,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
       # On the review page, change all the details metadata to ensure the params
       # are submitted correctly
+      FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_draft(different_metadata)
       FeatureHelpers::DashboardForm.fill_in_work_details(different_metadata)
 
       # Pick the wrong license
