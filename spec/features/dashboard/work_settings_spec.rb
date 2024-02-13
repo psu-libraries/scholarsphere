@@ -49,20 +49,21 @@ RSpec.describe 'Work Settings Page', with_user: :user do
   end
 
   describe 'Updating Embargo' do
+    let(:future_date) { Date.today + 3.years }
+
     before do
       work.update(embargoed_until: nil)
       visit edit_dashboard_work_path(work)
     end
 
     it 'works from the Settings page' do
-      fill_in 'embargo_form_embargoed_until', with: DateTime.now.next_year(3).strftime('%Y-%m-%d').to_s
+      fill_in 'embargo_form_embargoed_until', with: future_date.strftime('%Y-%m-%d')
       click_button I18n.t!('dashboard.works.edit.embargo.submit_button')
 
       expect(page).to have_content(I18n.t!('dashboard.works.edit.heading', work_title: work.latest_version.title))
 
       work.reload
-      expected_time = (DateTime.now + 3.years).change(hour: 0, min: 0, sec: 0)
-      expect(work.embargoed_until).to be_within(1.minute).of(expected_time)
+      expect(work.embargoed_until).to be_within(1.minute).of(Time.zone.local(future_date.year, future_date.month, future_date.day, 0))
 
       click_button I18n.t!('dashboard.works.edit.embargo.remove_button')
 
