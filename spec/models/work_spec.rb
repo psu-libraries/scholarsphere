@@ -566,4 +566,22 @@ RSpec.describe Work, type: :model do
       expect(work.latest_published_version_dois).to eq([work_version.doi, work_version.identifier].flatten.map { |n| "doi:#{n}" })
     end
   end
+
+  describe '#current_curator_access_id' do
+    let(:work) { create(:work) }
+    let(:curatorship1) { create(:curatorship, work: work, created_at: '2024-02-10') }
+    let(:curatorship2) { create(:curatorship, work: work, created_at: '2024-02-13') }
+
+    let(:user1)  { create(:user, access_id: 'abc1234') }
+    let(:user2)  { create(:user, access_id: 'xyz9876') }
+
+    before do
+      curatorship1.update(user: user1)
+      curatorship2.update(user: user2)
+    end
+
+    it 'returns the access id of the most recent curator' do
+      expect(work.current_curator_access_id).to eq 'xyz9876'
+    end
+  end
 end
