@@ -2,9 +2,18 @@
 
 module Dashboard
   module Form
-    class WorkVersionDetailsController < BaseController
+    class WorkVersionTypeController < BaseController
       def self._prefixes
-        ['application', 'dashboard/form', 'dashboard/form/details']
+        ['application', 'dashboard/form', 'dashboard/form/type']
+      end
+
+      def new
+        @resource = WorkVersion.build_with_empty_work(depositor: current_user.actor)
+      end
+
+      def create
+        @resource = WorkVersion.build_with_empty_work(work_version_params, depositor: current_user.actor)
+        process_response(on_error: :new)
       end
 
       def edit
@@ -25,26 +34,16 @@ module Dashboard
           params
             .require(:work_version)
             .permit(
-              :description,
-              :publisher_statement,
-              :subtitle,
-              :rights,
-              :version_name,
-              :published_date,
-              keyword: [],
-              contributor: [],
-              publisher: [],
-              subject: [],
-              language: [],
-              identifier: [],
-              based_near: [],
-              related_url: [],
-              source: []
+              :title,
+              work_attributes: [
+                :id,
+                :work_type
+              ]
             )
         end
 
         def next_page_path
-          dashboard_form_contributors_path('work_version', @resource.id)
+          dashboard_form_work_version_details_path(@resource.id)
         end
     end
   end

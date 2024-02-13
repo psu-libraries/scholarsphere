@@ -15,22 +15,24 @@
     <%= csrf_meta_tags %>
     <%= content_for(:head) %>
 
-    <!-- Matomo -->
-    <script type="text/javascript">
-      var _paq = window._paq || [];
-      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-      _paq.push(['trackPageView']);
-      _paq.push(['setSecureCookie', true]);
-      _paq.push(['enableLinkTracking']);
-      (function() {
-        var u = "<%= ENV.fetch('MATOMO_URL', 'https://analytics.libraries.psu.edu/matomo/') %>";
-        _paq.push(['setTrackerUrl', u+'matomo.php']);
-        _paq.push(['setSiteId', '<%= ENV.fetch('MATOMO_SITE_ID', '18') %>']);
-        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-        g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
-      })();
-    </script>
-    <!-- End Matomo Code -->
+    <% if Rails.env.production? || (Rails.env.test? && ENV['MATOMO_TEST']) %>
+      <!-- Matomo -->
+      <script type="text/javascript">
+        var _paq = window._paq || [];
+        /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+        _paq.push(['trackPageView']);
+        _paq.push(['setSecureCookie', true]);
+        _paq.push(['enableLinkTracking']);
+        (function() {
+          var u = "<%= ENV.fetch('MATOMO_URL', 'https://analytics.libraries.psu.edu/matomo/') %>";
+          _paq.push(['setTrackerUrl', u+'matomo.php']);
+          _paq.push(['setSiteId', '<%= ENV.fetch('MATOMO_SITE_ID', '18') %>']);
+          var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+          g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+        })();
+      </script>
+      <!-- End Matomo Code -->
+    <% end %>
   </head>
 
   <body <%= yield :body_attributes %>>
@@ -38,7 +40,7 @@
       <nav class="navbar navbar-light navbar-expand-lg topbar">
         <%= link_to 'ScholarSphere', root_path, class: 'navbar-brand slab-font' %>
         <%= link_to image_pack_tag(
-              'media/frontend/img/logo-penn_state_university_libraries.png',
+              'static/frontend/img/logo-penn_state_university_libraries.png',
               alt: 'Penn State – University Libraries'
             ),
                     'https://libraries.psu.edu/' %>

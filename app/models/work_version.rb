@@ -167,7 +167,7 @@ class WorkVersion < ApplicationRecord
   validates_with ChangedWorkVersionValidator,
                  if: :published?
 
-  after_save :perform_update_index
+  after_commit :perform_update_index, on: [:create, :update]
 
   attr_accessor :force_destroy
 

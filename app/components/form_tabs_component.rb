@@ -30,6 +30,13 @@ class FormTabsComponent < ApplicationComponent
     def work_version_tabs
       [
         OpenStruct.new(
+          label: I18n.t('dashboard.form.tabs.work_version_type'),
+          url: links_enabled && dashboard_form_work_version_type_path(resource),
+          controller: 'work_version_type',
+          active: false,
+          classes: []
+        ),
+        OpenStruct.new(
           label: I18n.t('dashboard.form.tabs.work_version_details'),
           url: links_enabled && dashboard_form_work_version_details_path(resource),
           controller: 'work_version_details',

@@ -6,7 +6,7 @@ module UpdatingDois
   included do
     attr_writer :update_doi
 
-    after_save :perform_update_doi
+    after_commit :perform_update_doi, on: [:create, :update]
   end
 
   def update_doi?

@@ -49,7 +49,7 @@ RSpec.describe Actor, type: :model do
     end
   end
 
-  describe 'after_save' do
+  describe 'after_commit' do
     let(:actor) { create :actor }
 
     before { allow(actor).to receive(:update_index_async) }
