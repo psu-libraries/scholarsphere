@@ -9,8 +9,8 @@ RSpec.describe 'Matomo Traking Code' do
   end
 
   after do
+    ENV.delete("MATOMO_TEST")
     Capybara.ignore_hidden_elements = true
-    ENV.reject! { |k, _v| k == 'MATOMO_TEST' }
   end
 
   it 'has the default configuration' do
