@@ -44,7 +44,7 @@
     <div class="col-lg-9">
       <% if current_user.admin? %>
         <p class="float-right">
-          <%= link_to 'Contact Depositor via LibAnswers',
+          <%= link_to 'Contact Depositor via LibAnswers >>',
                       admin_contact_depositors_url(id: @work.id),
                       rel: 'noopener',
                       target: :_blank %>
