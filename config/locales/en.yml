@@ -105,6 +105,8 @@ en:
     attributes:
       depositor_form:
         psu_id: Access Account
+      curator_form:
+        access_id: Access Account
     errors:
       models:
         editors_form:
@@ -116,6 +118,10 @@ en:
           attributes:
             psu_id:
               not_found: "User %{psu_id} could not be found"
+        curator_form:
+          attributes:
+            access_id:
+              not_found: "User %{access_id} could not be found"
         embargo_form:
           attributes:
             embargoed_until:
@@ -200,6 +206,8 @@ en:
         edit_users: Requires the user's Penn State Access ID (e.g., xyz500)
       depositor_form:
         psu_id: Enter the user's Penn State Access ID (e.g., xyz500)
+      curator_form:
+        access_id: Enter the user's Penn State Access ID (e.g., xyz500)
       permissions:
         visibility:
           authenticated: >
@@ -304,6 +312,11 @@ en:
         heading: Depositor
         explanation: "Changes the depositor of the work. Currently, only existing Penn State users are allowed."
         submit_button: Update Depositor
+      curator_form:
+        heading: Curator
+        audit_heading: "Previous Curators:"
+        explanation: "Changes the curator of the work. Currently, only existing Penn State users are allowed."
+        submit_button: Update Curator
     works:
       index:
         heading: "Your ScholarSphere Deposits"

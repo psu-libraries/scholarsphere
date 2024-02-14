@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_01_182323) do
+ActiveRecord::Schema.define(version: 2024_01_26_170854) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -111,6 +111,15 @@ ActiveRecord::Schema.define(version: 2022_03_01_182323) do
     t.boolean "notify_editors", default: false
     t.string "thumbnail_selection", default: "default_icon"
     t.index ["depositor_id"], name: "index_collections_on_depositor_id"
+  end
+
+  create_table "curatorships", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "work_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_curatorships_on_user_id"
+    t.index ["work_id"], name: "index_curatorships_on_work_id"
   end
 
   create_table "external_apps", force: :cascade do |t|
@@ -280,6 +289,8 @@ ActiveRecord::Schema.define(version: 2022_03_01_182323) do
   add_foreign_key "collection_work_memberships", "collections"
   add_foreign_key "collection_work_memberships", "works"
   add_foreign_key "collections", "actors", column: "depositor_id"
+  add_foreign_key "curatorships", "users"
+  add_foreign_key "curatorships", "works"
   add_foreign_key "file_version_memberships", "file_resources"
   add_foreign_key "file_version_memberships", "work_versions"
   add_foreign_key "thumbnail_uploads", "file_resources"
