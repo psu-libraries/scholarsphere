@@ -127,6 +127,7 @@ en:
             embargoed_until:
               format: must be in yyyy-mm-dd format
               not_a_date: must be a valid date
+              max: maximum is four years
   admin:
     application_setting:
       heading: Application Settings
