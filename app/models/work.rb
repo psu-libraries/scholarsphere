@@ -20,6 +20,11 @@ class Work < ApplicationRecord
              inverse_of: 'proxy_deposited_works',
              optional: true
 
+  has_many :curatorships,
+           dependent: :destroy
+
+  has_many :curators, through: :curatorships, source: :user
+
   has_many :versions,
            -> { order(version_number: :asc) },
            class_name: 'WorkVersion',
@@ -210,6 +215,10 @@ class Work < ApplicationRecord
 
   def latest_published_version_dois
     latest_published_version.all_dois
+  end
+
+  def current_curator_access_id
+    curatorships.order(created_at: :desc)&.first&.access_id
   end
 
   private
