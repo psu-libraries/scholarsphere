@@ -314,8 +314,6 @@ class WorkVersion < ApplicationRecord
            :auto_generated_thumbnail?,
            :thumbnail_url, to: :work
 
-  delegate :deposit_pathway, to: :work, prefix: false
-
   private
 
     def perform_update_index
