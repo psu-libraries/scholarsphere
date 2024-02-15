@@ -23,7 +23,8 @@ class WorkVersionMetadataComponent < BaseMetadataComponent
     :based_near,
     :related_url,
     :source,
-    :deposited_at
+    :deposited_at,
+    :citation_display
   ].freeze
 
   MINI_ATTRIBUTES = [
