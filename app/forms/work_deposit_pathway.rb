@@ -72,9 +72,19 @@ class WorkDepositPathway
       end
 
       def save(context:)
-        if valid?
-          work_version.attributes = attributes
-          work_version.save(context: context)
+        work_version.attributes = attributes
+
+        if work_version.valid?
+          if valid?
+            work_version.attributes = attributes
+            work_version.save(context: context)
+          end
+        else
+          validate
+          work_version.errors.each do |attr, message|
+            errors.add(attr, message)
+          end
+          false
         end
       end
 
@@ -108,18 +118,6 @@ class WorkDepositPathway
         end
 
         form_fields.each { |attr_name| attribute attr_name }
-
-        def save(context:)
-          work_version.attributes = attributes
-          if work_version.valid?
-            super(context: context)
-          else
-            work_version.errors.each do |attr, message|
-              errors.add(attr, message)
-            end
-            false
-          end
-        end
 
         delegate :form_partial, to: :work_version
       end

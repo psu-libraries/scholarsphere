@@ -22,9 +22,14 @@ RSpec.describe WorkDepositPathway::ScholarlyWorks::DetailsForm, type: :model do
         'language' => 'test language'
       },
       'indexing_source=': nil,
-      'update_doi=': nil
+      'update_doi=': nil,
+      valid?: valid,
+      errors: errors
     )
   }
+
+  let(:valid) { true }
+  let(:errors) { {} }
 
   it_behaves_like 'a work deposit pathway details form'
 
@@ -69,51 +74,6 @@ RSpec.describe WorkDepositPathway::ScholarlyWorks::DetailsForm, type: :model do
           language: 'test language'
         }
       )
-    end
-  end
-
-  describe '#save' do
-    let(:context) { double }
-
-    before do
-      allow(wv).to receive(:save).with(context: context).and_return true
-      allow(wv).to receive(:attributes=)
-    end
-
-    context 'when the form is valid' do
-      it "assigns the form's attributes to the form's work version" do
-        form.save(context: context)
-        expect(wv).to have_received(:attributes=).with(form.attributes)
-      end
-
-      it "saves the form's work version" do
-        form.save(context: context)
-        expect(wv).to have_received(:save).with(context: context)
-      end
-
-      context 'when the work version saves successfully' do
-        it 'returns true' do
-          expect(form.save(context: context)).to eq true
-        end
-      end
-    end
-
-    context 'when the form is not valid' do
-      before { form.description = nil }
-
-      it 'returns nil' do
-        expect(form.save(context: context)).to be_nil
-      end
-
-      it 'does not persist the form data' do
-        form.save(context: context)
-        expect(wv).not_to have_received(:save)
-      end
-
-      it 'sets errors on the form' do
-        form.save(context: context)
-        expect(form.errors[:description]).not_to be_empty
-      end
     end
   end
 end
