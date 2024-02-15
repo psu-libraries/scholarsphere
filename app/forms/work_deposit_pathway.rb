@@ -109,13 +109,17 @@ class WorkDepositPathway
 
         form_fields.each { |attr_name| attribute attr_name }
 
-        validates :version_name,
-                  allow_blank: true,
-                  format: {
-                    with: /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/, # rubocop:disable Layout/LineLength
-                    message: I18n.t('activerecord.errors.work_version.attributes.version_name.format'),
-                    multiline: true
-                  }
+        def save(context:)
+          work_version.attributes = attributes
+          if work_version.valid?
+            super(context: context)
+          else
+            work_version.errors.each do |attr, message|
+              errors.add(attr, message)
+            end
+            false
+          end
+        end
 
         delegate :form_partial, to: :work_version
       end

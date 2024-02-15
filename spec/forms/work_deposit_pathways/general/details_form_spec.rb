@@ -25,9 +25,14 @@ RSpec.describe WorkDepositPathway::General::DetailsForm, type: :model do
         'version_name' => '1.0.0'
       },
       'indexing_source=': nil,
-      'update_doi=': nil
+      'update_doi=': nil,
+      valid?: valid,
+      errors: errors
     )
   }
+
+  let(:valid) { true }
+  let(:errors) { {} }
 
   it_behaves_like 'a work deposit pathway details form'
 
@@ -37,9 +42,6 @@ RSpec.describe WorkDepositPathway::General::DetailsForm, type: :model do
   it { is_expected.to allow_value('').for(:version_name) }
   it { is_expected.to allow_value('1.0.1').for(:version_name) }
   it { is_expected.to allow_value('1.2.3-beta').for(:version_name) }
-  it { is_expected.not_to allow_value('1').for(:version_name) }
-  it { is_expected.not_to allow_value('1.0').for(:version_name) }
-  it { is_expected.not_to allow_value('v1').for(:version_name) }
 
   describe '.form_fields' do
     it "returns a frozen array of the names of the form's fields" do
@@ -93,39 +95,60 @@ RSpec.describe WorkDepositPathway::General::DetailsForm, type: :model do
       allow(wv).to receive(:attributes=)
     end
 
-    context 'when the form is valid' do
-      it "assigns the form's attributes to the form's work version" do
-        form.save(context: context)
-        expect(wv).to have_received(:attributes=).with(form.attributes)
+    context "when the form's work version is valid" do
+      context 'when the form is valid' do
+        it "assigns the form's attributes to the form's work version" do
+          form.save(context: context)
+          expect(wv).to have_received(:attributes=).with(form.attributes).at_least(:once)
+        end
+
+        it "saves the form's work version" do
+          form.save(context: context)
+          expect(wv).to have_received(:save).with(context: context)
+        end
+
+        context 'when the work version saves successfully' do
+          it 'returns true' do
+            expect(form.save(context: context)).to eq true
+          end
+        end
       end
 
-      it "saves the form's work version" do
-        form.save(context: context)
-        expect(wv).to have_received(:save).with(context: context)
-      end
+      context 'when the form is not valid' do
+        before { form.description = nil }
 
-      context 'when the work version saves successfully' do
-        it 'returns true' do
-          expect(form.save(context: context)).to eq true
+        it 'returns nil' do
+          expect(form.save(context: context)).to be_nil
+        end
+
+        it 'does not persist the form data' do
+          form.save(context: context)
+          expect(wv).not_to have_received(:save)
+        end
+
+        it 'sets errors on the form' do
+          form.save(context: context)
+          expect(form.errors[:description]).not_to be_empty
         end
       end
     end
 
-    context 'when the form is not valid' do
-      before { form.description = nil }
+    context "when the form's work version is invalid" do
+      let(:valid) { false }
+      let(:errors) { { version_name: 'not a valid version name' } }
 
-      it 'returns nil' do
-        expect(form.save(context: context)).to be_nil
+      it "assigns the form's attributes to the form's work version" do
+        form.save(context: context)
+        expect(wv).to have_received(:attributes=).with(form.attributes).at_least(:once)
       end
 
-      it 'does not persist the form data' do
+      it "transfers the work version's errors on the form" do
         form.save(context: context)
-        expect(wv).not_to have_received(:save)
+        expect(form.errors[:version_name]).to include 'not a valid version name'
       end
 
-      it 'sets errors on the form' do
-        form.save(context: context)
-        expect(form.errors[:description]).not_to be_empty
+      it 'returns false' do
+        expect(form.save(context: context)).to eq false
       end
     end
   end
