@@ -2,15 +2,13 @@
 
 class LibanswersApiService
   class LibanswersApiError < StandardError; end
-  attr_reader :send_to_name, :send_to_email, :subject, :message
+  attr_reader :work
 
-  def initialize(admin_contact_depositor_params = {})
-    @send_to_name = admin_contact_depositor_params.fetch(:send_to_name)
-    @send_to_email = admin_contact_depositor_params.fetch(:send_to_email)
-    @subject = admin_contact_depositor_params.fetch(:subject)
+  def initialize(work_id)
+    @work = Work.find(work_id)
   end
 
-  def create_ticket
+  def admin_create_curation_ticket
     conn = Faraday.new(url: host) do |f|
       f.headers['Authorization'] = "Bearer #{oauth_token}"
     end
@@ -28,6 +26,18 @@ class LibanswersApiService
   end
 
   private
+
+    def send_to_name
+      work.depositor.display_name
+    end
+
+    def send_to_email
+      work.depositor.email
+    end
+
+    def subject
+      "ScholarSphere Deposit Curation: #{work.versions.last.title}"
+    end
 
     def oauth_token
       JSON.parse(oauth_token_response)['access_token']

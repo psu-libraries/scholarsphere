@@ -15,8 +15,7 @@ Rails.application.routes.draw do
 
         get   'settings', to: 'application_settings#edit', as: :application_settings
         match 'settings', to: 'application_settings#update', via: %i[patch put]
-        get 'works/:id/contact_depositor', to: 'contact_depositor#form', as: 'contact_depositors'
-        post 'works/:id/contact_depositor', to: 'contact_depositor#submit', as: 'submit_contact_depositors'
+        post 'works/:id/create_curation_ticket', to: 'create_curation_ticket#submit', as: 'create_curation_ticket'
       end
     end
   end
