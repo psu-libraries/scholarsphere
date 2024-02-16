@@ -9,14 +9,13 @@ RSpec.describe LibanswersApiService, :vcr do
       {
         send_to_name: 'Test Tester',
         send_to_email: 'test1@psu.edu',
-        subject: 'Test Subject',
-        message: 'Test message.'
+        subject: 'Test Subject'
       }
     end
 
     context 'when successful response is returned from libanswers /ticket/create endpoint' do
       it 'returns the url of the ticket created' do
-        expect(described_class.new(args).create_ticket).to eq 'https://psu.libanswers.com/admin/ticket?qid=123456789'
+        expect(described_class.new(args).admin_create_curation_ticket).to eq 'https://psu.libanswers.com/admin/ticket?qid=123456789'
       end
     end
 
@@ -26,7 +25,7 @@ RSpec.describe LibanswersApiService, :vcr do
       end
 
       it 'raises a LibanswersApiError' do
-        expect { described_class.new(args).create_ticket }
+        expect { described_class.new(args).admin_create_curation_ticket }
           .to raise_error LibanswersApiService::LibanswersApiError, 'Question text empty or missing from request.'
       end
     end
@@ -37,7 +36,7 @@ RSpec.describe LibanswersApiService, :vcr do
       end
 
       it 'raises a LibanswersApiError' do
-        expect { described_class.new(args).create_ticket }
+        expect { described_class.new(args).admin_create_curation_ticket }
           .to raise_error LibanswersApiService::LibanswersApiError, 'Error Message'
       end
     end

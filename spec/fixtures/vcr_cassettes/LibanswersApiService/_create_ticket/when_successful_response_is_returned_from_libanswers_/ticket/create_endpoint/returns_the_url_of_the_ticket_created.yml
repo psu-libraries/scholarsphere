@@ -56,7 +56,7 @@ http_interactions:
     uri: https://psu.libanswers.com/api/1.1/ticket/create
     body:
       encoding: UTF-8
-      string: quid=5477&pquestion=Test Subject&pname=Test Tester&pemail=test1@psu.edu&pdetails=Test
+      string: quid=5477&pquestion=Test Subject&pname=Test Tester&pemail=test1@psu.edu
         message.
     headers:
       Authorization:
