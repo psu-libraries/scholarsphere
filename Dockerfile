@@ -51,6 +51,9 @@ RUN apt-get update && apt-get install -y x11vnc \
     rsync \
     libsqlite3-dev \
     libnss3 \
+    libdrm2 \
+    libice6 \
+    libsm6 \
     wmctrl \
     google-chrome-stable
 
