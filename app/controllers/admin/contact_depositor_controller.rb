@@ -30,8 +30,7 @@ module Admin
           .permit(
             :send_to_name,
             :send_to_email,
-            :subject,
-            :message
+            :subject
           )
       end
   end

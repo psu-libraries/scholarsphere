@@ -8,7 +8,6 @@ class LibanswersApiService
     @send_to_name = admin_contact_depositor_params.fetch(:send_to_name)
     @send_to_email = admin_contact_depositor_params.fetch(:send_to_email)
     @subject = admin_contact_depositor_params.fetch(:subject)
-    @message = admin_contact_depositor_params.fetch(:message)
   end
 
   def create_ticket
@@ -18,8 +17,7 @@ class LibanswersApiService
     response = conn.post(create_ticket_path, "quid=#{scholarsphere_queue_id}&" +
                                              "pquestion=#{subject}&" +
                                              "pname=#{send_to_name}&" +
-                                             "pemail=#{send_to_email}&" +
-                                             "pdetails=#{message}")
+                                             "pemail=#{send_to_email}")
     if response.env.status == 200
       host + JSON.parse(response.env.response_body)['ticketUrl']
     else
