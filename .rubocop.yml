@@ -113,6 +113,7 @@ RSpec/MessageSpies:
     - 'spec/jobs/doi_minting_job_spec.rb'
     - 'spec/lib/scholarsphere/solr_admin_spec.rb'
     - 'spec/services/airtable_exporter_spec.rb'
+    - 'spec/services/curation_task_exporter_spec.rb'
 
 RSpec/MultipleSubjects:
   Exclude:

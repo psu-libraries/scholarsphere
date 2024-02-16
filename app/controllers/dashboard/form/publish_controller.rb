@@ -32,9 +32,9 @@ module Dashboard
           @resource.publish
         elsif request_curation?
           begin
-            AirtableExporter.call(@resource.id)
+            CurationTaskExporter.call(@resource.id)
             @resource.draft_curation_requested = true
-          rescue Airrecord::Error
+          rescue CurationTaskExporter::CurationError
             flash[:error] = t('dashboard.form.publish.curation.error')
           end
         end

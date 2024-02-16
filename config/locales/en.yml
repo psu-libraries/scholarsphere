@@ -454,7 +454,7 @@ en:
         curation:
           header: Request Curation (Optional)
           request_description: Please select 'Request Curation & Save' below if you would like metadata curation on your work before it is published.
-          curation_requested: Curation has been requested. We will notify you when curation is complete and your work is ready to be published.\
+          curation_requested: Curation has been requested. We will notify you when curation is complete and your work is ready to be published.
           error: There was an error with your curation request. Please try again later or contact us if the problem persists.
       members:
         heading: Works

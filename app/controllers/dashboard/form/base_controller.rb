@@ -16,7 +16,6 @@ module Dashboard
           end
         end
 
-        # where drafts are being saved
         def process_response(on_error:, validation_context: nil)
           respond_to do |format|
             if save_resource(validation_context: validation_context)

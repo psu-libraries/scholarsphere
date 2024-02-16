@@ -781,7 +781,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       end
     end
 
-    context 'with a draft that has curation requested' do
+    context 'with a draft that already has curation requested' do
       let(:work_version) { create :work_version, :draft, draft_curation_requested: true }
       let(:curation_requested) { 'Curation has been requested. We will notify you when curation is complete and your work is ready to be published.' }
 
@@ -795,10 +795,44 @@ RSpec.describe 'Publishing a work', with_user: :user do
       end
     end
 
+    context 'when curation is successfully requested' do
+      let(:work_version) { create :work_version, :able_to_be_published, draft_curation_requested: nil }
+      let(:expected_record) { {
+        ID: work_version.uuid,
+        'Submission Title': work_version.title,
+        'Submission Link': work_version.submission_link,
+        Depositor: work_version.depositor_access_id,
+        'Depositor Name': work_version.depositor_name,
+        'Deposit Date': work_version.deposited_at,
+        Labels: ['Curation Requested']
+      }}
+
+      before do
+        allow(Submission).to receive(:create)
+      end
+
+      it 'saves changes and creates a Submission' do
+        work_version.work.work_type = 'dataset'
+
+        visit dashboard_form_publish_path(work_version)
+
+        fill_in 'work_version_title', with: ''
+        fill_in 'work_version_title', with: 'Changed Title'
+        check 'I have read and agree to the deposit agreement.'
+
+        click_on 'Request Curation & Save'
+
+        expect(Submission).to have_received(:create).with(expected_record)
+
+        work_version.reload
+        expect(work_version.title).to eq('Changed Title')
+      end
+    end
+
     context 'when an error occurs requesting curation' do
       let(:work_version) { create :work_version, :able_to_be_published, draft_curation_requested: nil }
 
-      before { allow(AirtableExporter).to receive(:call).with(work_version.id).and_raise(Airrecord::Error) }
+      before { allow(CurationTaskExporter).to receive(:call).with(work_version.id).and_raise(CurationTaskExporter::CurationError) }
 
       it 'saves changes and displays an error flash message' do
         work_version.work.work_type = 'dataset'

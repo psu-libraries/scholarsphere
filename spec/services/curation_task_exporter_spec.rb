@@ -4,7 +4,7 @@
 
 require 'rails_helper'
 
-RSpec.describe AirtableExporter do
+RSpec.describe CurationTaskExporter do
   describe '.call' do
     let(:work_version) { build :work_version,
                                id: 1,
