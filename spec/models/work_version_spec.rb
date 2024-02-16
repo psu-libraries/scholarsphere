@@ -719,4 +719,56 @@ RSpec.describe WorkVersion, type: :model do
       end
     end
   end
+
+  describe '#citation_display' do
+    let(:work_version) { create :work_version, :published,
+                                title: 'Citation Title',
+                                published_date: '2024-02-16',
+                                doi: '10.26207/123' }
+    let(:authorship1) { create :authorship, given_name: 'Alan', surname: 'Grant' }
+
+    before { work_version.creators = [authorship1] }
+
+    context 'when the work is not a dataset' do
+      before { work_version.work.work_type = 'article' }
+
+      it 'does not return a citation' do
+        expect(work_version.citation_display).to be_nil
+      end
+    end
+
+    context 'when the work is a dataset' do
+      before { work_version.work.work_type = 'dataset' }
+
+      context 'when there is not a DOI' do
+        let(:expected_citation) { 'Grant, Alan (2024). Citation Title [Data set]. Scholarsphere.' }
+
+        before { work_version.doi = nil }
+
+        it 'returns the correct citation' do
+          expect(work_version.citation_display).to eq expected_citation
+        end
+      end
+
+      context 'when there is one contributor' do
+        let(:expected_citation) { 'Grant, Alan (2024). Citation Title [Data set]. Scholarsphere. https://doi.org/10.26207/123' }
+
+        it 'returns the correct citation' do
+          expect(work_version.citation_display).to eq expected_citation
+        end
+      end
+
+      context 'when there are multiple contributors' do
+        let(:expected_citation) { 'Grant, Alan; Sattler, Ellie; Malcolm, Ian (2024). Citation Title [Data set]. Scholarsphere. https://doi.org/10.26207/123' }
+        let(:authorship2) { create :authorship, given_name: 'Ellie', surname: 'Sattler' }
+        let(:authorship3) { create :authorship, given_name: 'Ian', surname: 'Malcolm' }
+
+        before { work_version.creators << [authorship2, authorship3] }
+
+        it 'returns the correct citation' do
+          expect(work_version.citation_display).to eq expected_citation
+        end
+      end
+    end
+  end
 end

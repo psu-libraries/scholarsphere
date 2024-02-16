@@ -311,23 +311,28 @@ class WorkVersion < ApplicationRecord
            :thumbnail_url, to: :work
 
   def citation_display
-    return unless work_type == "dataset" || work_type == "code"
-    "#{creators_citation_display}(#{published_date}). #{title} [Data set]. Scholarsphere. #{doi_url}"
+    return unless work_type == 'dataset' || work_type == 'code'
+
+    "#{creators_citation_display}(#{year_published}). #{title} [Data set]. Scholarsphere.#{doi_url}"
   end
 
   private
+
     def creators_citation_display
       formatted_creators = ''
       creators.each_with_index do |creator, index|
         formatted_creators += "#{creator.surname}, #{creator.given_name}"
-        formatted_creators += index == creators.length - 1 ? " " : "; "
+        formatted_creators += index == creators.length - 1 ? ' ' : '; '
       end
       formatted_creators
     end
 
     def doi_url
-      return unless doi.present?
-      "https://doi.org/#{doi}"
+      doi.blank? ? '' : " https://doi.org/#{doi}"
+    end
+
+    def year_published
+      Date.edtf(published_date).try(:year)
     end
 
     def perform_update_index
