@@ -1,0 +1,12 @@
+<span data-controller="clipboard">
+  <span class="meta__signature" data-target="clipboard.source" data-source="<%= citation %>">
+    Copy Citation
+  </span>
+  <button class="btn btn-sm btn-link px-0"
+          data-toggle="tooltip"
+          data-placement="top"
+          title="<%= citation %>"
+          data-action="clipboard#copy">
+    <span class="material-icons material-icons--copy"><%= t('resources.signature.copy_icon') %></span>
+  </button>
+</span>

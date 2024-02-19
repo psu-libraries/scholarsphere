@@ -79,7 +79,6 @@ en:
         visibility: Access
         visibility_badge: Access
         deposited_at: Deposited
-        citation_display: Citation
       user:
         admin_enabled: Administrative privileges enabled
         opt_in_stats_email: Receive monthly report on downloads and views
@@ -576,6 +575,7 @@ en:
       reports: 'Reports'
   resources:
     analytics: Analytics
+    citation: Citation
     collections: Collections
     download: "Download %{name}"
     files: Files
