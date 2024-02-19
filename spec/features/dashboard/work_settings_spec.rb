@@ -278,7 +278,7 @@ RSpec.describe 'Work Settings Page', with_user: :user do
           it 'creates a ticket in libanswers and directs to that ticket', :vcr do
             click_button 'Contact Depositor via LibAnswers >>'
           rescue ActionController::RoutingError
-            # This is a bit unconventional.  Since clicking the "Send" button will redirect to an external site,
+            # This is a bit unconventional.  Since clicking the button will redirect to an external site,
             # a routing error will be raised in the test env.  Rescue it and check the correct redirect location
             expect(page.driver.browser.last_response['Location']).to eq 'https://psu.libanswers.com/admin/ticket?qid=13224664'
           end
