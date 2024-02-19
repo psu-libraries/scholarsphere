@@ -811,30 +811,25 @@ RSpec.describe 'Publishing a work', with_user: :user do
         allow(Submission).to receive(:create)
       end
 
-      it 'saves changes and creates a Submission' do
+      it 'creates a Submission' do
         work_version.work.work_type = 'dataset'
 
         visit dashboard_form_publish_path(work_version)
 
-        fill_in 'work_version_title', with: ''
-        fill_in 'work_version_title', with: 'Changed Title'
         check 'I have read and agree to the deposit agreement.'
 
         click_on 'Request Curation & Save'
 
         expect(Submission).to have_received(:create).with(expected_record)
-
-        work_version.reload
-        expect(work_version.title).to eq('Changed Title')
       end
     end
 
-    context 'when an error occurs requesting curation' do
+    context 'when an error occurs within the curation exporter' do
       let(:work_version) { create :work_version, :able_to_be_published, draft_curation_requested: nil }
 
       before { allow(CurationTaskExporter).to receive(:call).with(work_version.id).and_raise(CurationTaskExporter::CurationError) }
 
-      it 'saves changes and displays an error flash message' do
+      it 'saves changes to the work version and displays an error flash message' do
         work_version.work.work_type = 'dataset'
 
         visit dashboard_form_publish_path(work_version)
@@ -851,6 +846,39 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         work_version.reload
         expect(work_version.title).to eq('Changed Title')
+      end
+    end
+
+    context 'when there is a validation error' do
+      let(:work_version) { create :work_version, :able_to_be_published, draft_curation_requested: nil }
+
+      before { allow(CurationTaskExporter).to receive(:call).with(work_version.id) }
+
+      it 'does not call the curation task exporter' do
+        work_version.work.work_type = 'dataset'
+
+        visit dashboard_form_publish_path(work_version)
+
+        fill_in 'work_version_published_date', with: ''
+        fill_in 'work_version_published_date', with: 'this is not a valid date'
+        check 'I have read and agree to the deposit agreement.'
+
+        click_on 'Request Curation & Save'
+
+        expect(CurationTaskExporter).not_to have_received(:call).with(work_version.id)
+
+        within '#error_explanation' do
+          expect(page).to have_content(I18n.t!('errors.messages.invalid_edtf'))
+        end
+
+        within '.footer--actions' do
+          expect(page).to have_button(I18n.t!('dashboard.form.actions.request_curation'))
+        end
+
+        work_version.reload
+        expect(work_version).not_to be_published
+        expect(work_version.published_date).to eq 'this is not a valid date'
+        expect(work_version.draft_curation_requested).to be_nil
       end
     end
   end

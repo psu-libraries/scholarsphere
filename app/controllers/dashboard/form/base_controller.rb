@@ -100,7 +100,7 @@ module Dashboard
           current_controller = params[:controller]
           current_action = params[:action]
 
-          current_controller == 'dashboard/form/publish' && current_action == 'edit'
+          current_controller == 'dashboard/form/publish' && ['edit', 'update'].include?(current_action)
         end
 
         def data?
