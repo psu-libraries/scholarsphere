@@ -7,7 +7,7 @@
       <%= form.submit t('dashboard.form.actions.request_curation'), name: 'request_curation', class: 'btn btn-primary btn--rounded' %>
     <% end %>
 
-    <% if allow_publish? %>
+    <% if allow_publish? || primary_action == :save_and_continue %>
     <%= form.submit t("dashboard.form.actions.#{primary_action}"), name: primary_action, class: 'btn btn-primary btn--rounded' %>
     <% end %>
 
