@@ -15,7 +15,6 @@ RSpec.describe LibanswersApiService, :vcr do
     end
 
     context 'when unsuccessful response is returned from libanswers /ticket/create endpoint' do
-
       it 'raises a LibanswersApiError' do
         expect { described_class.new(work.id).admin_create_curation_ticket }
           .to raise_error LibanswersApiService::LibanswersApiError, 'Error saving ticket.'
