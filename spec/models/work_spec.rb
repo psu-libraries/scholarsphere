@@ -96,6 +96,72 @@ RSpec.describe Work, type: :model do
           'video'
         )
       end
+
+      specify do
+        expect(all).to be_frozen
+      end
+    end
+
+    describe '.general' do
+      subject(:general) { types.general }
+
+      specify do
+        expect(general).to contain_exactly(
+          'audio',
+          'image',
+          'journal',
+          'map_or_cartographic_material',
+          'other',
+          'poster',
+          'presentation',
+          'project',
+          'unspecified',
+          'video'
+        )
+      end
+
+      specify do
+        expect(general).to be_frozen
+      end
+    end
+
+    describe '.scholarly_works' do
+      subject(:scholarly_works) { types.scholarly_works }
+
+      specify do
+        expect(scholarly_works).to contain_exactly(
+          'article',
+          'book',
+          'capstone_project',
+          'conference_proceeding',
+          'dissertation',
+          'masters_culminating_experience',
+          'masters_thesis',
+          'part_of_book',
+          'report',
+          'research_paper',
+          'thesis'
+        )
+      end
+
+      specify do
+        expect(scholarly_works).to be_frozen
+      end
+    end
+
+    describe '.data_and_code' do
+      subject(:data_and_code) { types.data_and_code }
+
+      specify do
+        expect(data_and_code).to contain_exactly(
+          'dataset',
+          'software_or_program_code'
+        )
+      end
+
+      specify do
+        expect(data_and_code).to be_frozen
+      end
     end
 
     describe '.default' do
