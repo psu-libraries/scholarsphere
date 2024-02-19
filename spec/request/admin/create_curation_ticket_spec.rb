@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Application Settings', type: :request do
+RSpec.describe 'Create Curation Ticket', type: :request do
   before { sign_in user }
 
   describe 'GET /admin/works/:id/create_curation_ticket' do
