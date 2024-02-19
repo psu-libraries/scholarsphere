@@ -57,7 +57,6 @@ http_interactions:
     body:
       encoding: UTF-8
       string: quid=5477&pquestion=&pname=Test Tester&pemail=test1@psu.edu
-        message.
     headers:
       Authorization:
       - Bearer abcdefg1234567
