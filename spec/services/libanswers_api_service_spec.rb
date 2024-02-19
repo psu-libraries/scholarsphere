@@ -4,29 +4,21 @@ require 'rails_helper'
 require 'support/vcr'
 
 RSpec.describe LibanswersApiService, :vcr do
-  describe '#create_ticket' do
-    let(:args) do
-      {
-        send_to_name: 'Test Tester',
-        send_to_email: 'test1@psu.edu',
-        subject: 'Test Subject'
-      }
-    end
+  describe '#admin_create_curation_ticket' do
+    let!(:user) { create :user, access_id: 'test', email: 'test@psu.edu' }
+    let!(:work) { create :work, depositor: user.actor }
 
     context 'when successful response is returned from libanswers /ticket/create endpoint' do
       it 'returns the url of the ticket created' do
-        expect(described_class.new(args).admin_create_curation_ticket).to eq 'https://psu.libanswers.com/admin/ticket?qid=123456789'
+        expect(described_class.new(work.id).admin_create_curation_ticket).to eq 'https://psu.libanswers.com/admin/ticket?qid=13226122'
       end
     end
 
     context 'when unsuccessful response is returned from libanswers /ticket/create endpoint' do
-      before do
-        args[:subject] = nil
-      end
 
       it 'raises a LibanswersApiError' do
-        expect { described_class.new(args).admin_create_curation_ticket }
-          .to raise_error LibanswersApiService::LibanswersApiError, 'Question text empty or missing from request.'
+        expect { described_class.new(work.id).admin_create_curation_ticket }
+          .to raise_error LibanswersApiService::LibanswersApiError, 'Error saving ticket.'
       end
     end
 
@@ -36,7 +28,7 @@ RSpec.describe LibanswersApiService, :vcr do
       end
 
       it 'raises a LibanswersApiError' do
-        expect { described_class.new(args).admin_create_curation_ticket }
+        expect { described_class.new(work.id).admin_create_curation_ticket }
           .to raise_error LibanswersApiService::LibanswersApiError, 'Error Message'
       end
     end
