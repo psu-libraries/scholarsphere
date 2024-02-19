@@ -8,7 +8,8 @@
                     class: 'form-control custom-select',
                     required: local_assigns[:required].presence,
                     multiple: local_assigns.fetch(:multiple, false),
-                    aria: { describedby: hint.dom_id }
+                    aria: { describedby: hint.dom_id },
+                    disabled: local_assigns[:disabled].presence
                   } %>
   <%= form.label attribute %>
 

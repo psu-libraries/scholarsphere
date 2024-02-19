@@ -8,13 +8,13 @@ module Dashboard
       end
 
       def edit
-        @resource = WorkVersion.includes(:work).find(params[:id])
-        authorize(@resource)
+        authorize(work_version)
+        @resource = deposit_pathway.details_form
       end
 
       def update
-        @resource = WorkVersion.includes(:work).find(params[:id])
-        authorize(@resource)
+        authorize(work_version)
+        @resource = deposit_pathway.details_form
         @resource.attributes = work_version_params
         process_response(on_error: :edit)
       end
@@ -45,6 +45,14 @@ module Dashboard
 
         def next_page_path
           dashboard_form_contributors_path('work_version', @resource.id)
+        end
+
+        def work_version
+          @work_version ||= WorkVersion.includes(:work).find(params[:id])
+        end
+
+        def deposit_pathway
+          @deposit_pathway ||= WorkDepositPathway.new(work_version)
         end
     end
   end

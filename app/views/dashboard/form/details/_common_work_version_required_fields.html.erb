@@ -1,0 +1,16 @@
+<div class="form-wrapper form-wrapper--wide">
+  <div class="keyline keyline--left mb-3">
+    <h4><%= t 'dashboard.form.details.required_to_publish_metadata' %></h4>
+  </div>
+</div>
+
+<div class="form-wrapper">
+  <%= render 'form_fields/text_area', form: form, attribute: :description %>
+  <%= render 'form_fields/text', form: form, attribute: :published_date %>
+</div>
+
+<div class="form-wrapper form-wrapper--wide">
+  <div class="keyline keyline--left mb-3">
+    <h4><%= t 'dashboard.form.details.additional_metadata' %></h4>
+  </div>
+</div>

@@ -2,7 +2,7 @@
 
   <%= render FormErrorMessageComponent.new(form: form) %>
 
-  <%= render "#{param_key}_fields", form: form %>
+  <%= render "#{@resource.form_partial}_fields", form: form %>
 
   <%= render 'dashboard/form/shared/action_footer', form: form %>
 <% end %>

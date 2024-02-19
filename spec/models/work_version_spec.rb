@@ -719,4 +719,12 @@ RSpec.describe WorkVersion, type: :model do
       end
     end
   end
+
+  describe '#form_partial' do
+    let(:wv) { described_class.new }
+
+    it 'returns work_version' do
+      expect(wv.form_partial).to eq 'work_version'
+    end
+  end
 end
