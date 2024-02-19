@@ -3,7 +3,7 @@
 require 'airrecord'
 
 class CurationTaskExporter
-  class CurationError < StandardError; end
+  class CurationError < RuntimeError; end
 
   def self.call(work_version_id)
     Airrecord.api_key = ENV['AIRTABLE_API_TOKEN']
@@ -23,8 +23,8 @@ class CurationTaskExporter
 
     begin
       Submission.create(record)
-    rescue Airrecord::Error
-      raise CurationError
+    rescue Airrecord::Error => e
+      raise CurationError.new(e)
     end
   end
 end
