@@ -43,7 +43,7 @@
     </div>
     <div class="col-lg-9">
       <% if current_user.admin? %>
-        <%= button_to 'Contact Depositor via LibAnswers >>',
+        <%= button_to I18n.t('resources.contact_depositor_button.text'),
                       admin_create_curation_ticket_url(id: @work.id),
                       class: 'btn btn-primary float-right',
                       form: { target: '_blank' } %>

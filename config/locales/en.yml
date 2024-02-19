@@ -548,7 +548,6 @@ en:
     heading:
       about: 'About'
       contact: 'Contact'
-      contact_depositor: 'Contact Depositor'
       policies_2_0: 'Policies'
       policies_1_0: 'Policies'
       terms: "Terms of Use for ScholarSphere"
@@ -576,6 +575,8 @@ en:
     versions: Versions
     work_history: Work History
     works: Works
+    contact_depositor_button:
+      text: 'Contact Depositor via LibAnswers >>'
     doi:
       doi: 'doi:'
       valid: 'This is a valid DOI and can be used to reference this page'

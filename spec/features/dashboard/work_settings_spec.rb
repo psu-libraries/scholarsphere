@@ -273,8 +273,28 @@ RSpec.describe 'Work Settings Page', with_user: :user do
     context 'when admin user' do
       let(:user) { create :user, :admin }
 
-      it 'has button' do
-        expect(page).to have_button 'Contact Depositor via LibAnswers >>'
+      describe 'clicking the contact depositor button' do
+        context 'when no error is raised' do
+          it 'creates a ticket in libanswers and directs to that ticket', :vcr do
+            click_button 'Contact Depositor via LibAnswers >>'
+          rescue ActionController::RoutingError
+            # This is a bit unconventional.  Since clicking the "Send" button will redirect to an external site,
+            # a routing error will be raised in the test env.  Rescue it and check the correct redirect location
+            expect(page.driver.browser.last_response['Location']).to eq 'https://psu.libanswers.com/admin/ticket?qid=13224664'
+          end
+        end
+  
+        context 'when the libanswers api service raises an error' do
+          before do
+            allow(LibanswersApiService).to receive(:new).and_raise LibanswersApiService::LibanswersApiError, 'Error Message'
+          end
+  
+          it 'redirects to the work settings page and presents a flash message with the error message' do
+            click_on 'Contact Depositor via LibAnswers >>'
+            expect(page).to have_content 'Error Message'
+            expect(page).to have_current_path edit_dashboard_work_path(work)
+          end
+        end
       end
     end
   end
