@@ -103,12 +103,10 @@ module Dashboard
           current_controller == 'dashboard/form/publish' && ['edit', 'update'].include?(current_action)
         end
 
-        def data?
-          @resource.work.work_type == 'dataset' || @resource.work.work_type == 'software_or_program_code'
-        end
-
         def curation_eligible?
-          !@resource.is_a?(Collection) && !@resource.draft_curation_requested && data?
+          !@resource.is_a?(Collection) &&
+          !@resource.draft_curation_requested &&
+          Work::Types.data_and_code.include?(@resource.work.work_type)
         end
 
         def save_resource(validation_context: nil)
