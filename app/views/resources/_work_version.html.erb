@@ -36,12 +36,7 @@
     <div class="col-lg-7">
       <%= render partial: 'resources/heading_display', locals: { resource: work_version } %>
 
-    <% if work_version.citation_display.present? %>
-      <div class="keyline keyline--left mb-1">
-              <h2 class="h4"><%= t('resources.citation') %></h2>
-            </div>
-      <%= render 'citation', resource: work_version %>
-    <% end %>
+      <%= render(CitationComponent.new(work_version.citation_display)) %>
 
       <div class="keyline keyline--left mb-3">
         <h2 class="h4"><%= t('resources.files') %></h2>

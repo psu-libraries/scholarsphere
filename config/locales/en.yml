@@ -575,7 +575,9 @@ en:
       reports: 'Reports'
   resources:
     analytics: Analytics
-    citation: Citation
+    citation:
+      header: Citation
+      copy: Copy Citation
     collections: Collections
     download: "Download %{name}"
     files: Files

@@ -132,6 +132,8 @@ Lint/TripleQuotes:
 # Configuration parameters: CountComments, CountAsOne.
 Metrics/ClassLength:
   Max: 240
+  Exclude:
+    - 'app/models/work_version.rb'
 
 # Offense count: 4
 # Configuration parameters: IgnoredMethods.
