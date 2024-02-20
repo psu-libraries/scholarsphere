@@ -105,8 +105,8 @@ module Dashboard
 
         def curation_eligible?
           !@resource.is_a?(Collection) &&
-          !@resource.draft_curation_requested &&
-          Work::Types.data_and_code.include?(@resource.work.work_type)
+            !@resource.draft_curation_requested &&
+            Work::Types.data_and_code.include?(@resource.work.work_type)
         end
 
         def save_resource(validation_context: nil)
