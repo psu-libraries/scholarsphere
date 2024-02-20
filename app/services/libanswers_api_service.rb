@@ -28,15 +28,15 @@ class LibanswersApiService
   private
 
     def send_to_name
-      work.depositor.display_name
+      work.display_name
     end
 
     def send_to_email
-      work.depositor.email
+      work.email
     end
 
     def subject
-      "ScholarSphere Deposit Curation: #{work.versions.last.title}"
+      "ScholarSphere Deposit Curation: #{work.latest_version.title}"
     end
 
     def oauth_token

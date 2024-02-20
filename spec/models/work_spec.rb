@@ -3,6 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe Work, type: :model do
+  it { is_expected.to delegate_method(:email).to(:depositor) }
+  it { is_expected.to delegate_method(:display_name).to(:depositor) }
+
   it_behaves_like 'a resource with permissions' do
     let(:factory_name) { :work }
   end

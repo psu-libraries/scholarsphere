@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Admin
-  class CreateCurationTicketController < ApplicationController
-    def submit
+  class CurationTicketController < ApplicationController
+    def create
       response = LibanswersApiService.new(params[:id]).admin_create_curation_ticket
       redirect_to response
     rescue LibanswersApiService::LibanswersApiError => e
