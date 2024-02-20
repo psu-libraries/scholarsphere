@@ -964,16 +964,34 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
 
     context 'with a draft that already has curation requested' do
-      let(:work_version) { create :work_version, :draft, draft_curation_requested: true }
+      let(:work_version) { create :work_version, :able_to_be_published, draft_curation_requested: true }
       let(:curation_requested) { 'Curation has been requested. We will notify you when curation is complete and your work is ready to be published.' }
 
-      it 'does not render buttons for requesting curation or publish & shows text that curation has been requested' do
-        work_version.work.work_type = 'dataset'
-        visit dashboard_form_publish_path(work_version)
+      context 'when user is an admin' do
+        let(:user) { create(:user, :admin) }
 
-        expect(page).not_to have_button('Request Curation & Save')
-        expect(page).not_to have_button('Publish')
-        expect(page).to have_content(curation_requested)
+        it 'allows admin to publish' do
+          work_version.work.work_type = 'dataset'
+          visit dashboard_form_publish_path(work_version)
+
+          expect(page).to have_button('Publish')
+
+          check 'I have read and agree to the deposit agreement.'
+          click_on 'Publish'
+
+          expect(work_version.reload.aasm_state).to eq 'published'
+        end
+      end
+
+      context 'when user is not an admin' do
+        it 'does not render buttons for requesting curation or publish & shows text that curation has been requested' do
+          work_version.work.work_type = 'dataset'
+          visit dashboard_form_publish_path(work_version)
+
+          expect(page).not_to have_button('Request Curation & Save')
+          expect(page).not_to have_button('Publish')
+          expect(page).to have_content(curation_requested)
+        end
       end
     end
 

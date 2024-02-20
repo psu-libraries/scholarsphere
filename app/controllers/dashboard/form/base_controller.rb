@@ -85,7 +85,7 @@ module Dashboard
         helper_method :allow_publish?
         def allow_publish?
           if @resource.is_a?(WorkVersion)
-            !@resource.draft_curation_requested
+            !@resource.draft_curation_requested || current_user.admin?
           else
             true
           end

@@ -26,7 +26,7 @@ module Dashboard
         # against the draft validations, then mark the record as published and
         # save again--this time using the published validations. That way the
         # appropriate error messages will appear on the form when it's re-rendered
-        if publish? && !@resource.draft_curation_requested
+        if publish? && allow_publish?
           # WorkVersion#set_thumbnail_selection may be unreliable if the Shrine::ThumbnailJob is delayed
           @resource.set_thumbnail_selection
           @resource.indexing_source = Proc.new { nil }
