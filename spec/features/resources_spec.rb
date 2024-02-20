@@ -92,6 +92,27 @@ RSpec.describe 'Public Resources', type: :feature do
           expect(page).to have_content 'Version 3'
         end
       end
+
+      context 'when the resource is in the data and code pathway' do
+        let(:work) { create :work, has_draft: true, versions_count: 3, work_type: 'dataset' }
+
+        it 'displays a citation' do
+          visit resource_path(work.uuid)
+
+          expect(page).to have_content 'Copy Citation'
+          expect(page).to have_content v2.citation_display
+        end
+      end
+
+      context 'when the resource is not in the dataset pathway' do
+        let(:work) { create :work, has_draft: true, versions_count: 3, work_type: 'article' }
+
+        it 'does not display a citation' do
+          visit resource_path(work.uuid)
+
+          expect(page).not_to have_content 'Citation'
+        end
+      end
     end
 
     context 'when logged in as the resource owner', with_user: :user do
