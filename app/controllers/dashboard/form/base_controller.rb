@@ -84,10 +84,10 @@ module Dashboard
 
         helper_method :allow_publish?
         def allow_publish?
-          if @resource.is_a?(Collection)
-            true
-          else
+          if @resource.is_a?(WorkVersion)
             !@resource.draft_curation_requested
+          else
+            true
           end
         end
 
@@ -104,7 +104,7 @@ module Dashboard
         end
 
         def curation_eligible?
-          !@resource.is_a?(Collection) &&
+          @resource.is_a?(WorkVersion) &&
             !@resource.draft_curation_requested &&
             Work::Types.data_and_code.include?(@resource.work.work_type)
         end
