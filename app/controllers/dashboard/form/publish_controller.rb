@@ -4,10 +4,12 @@ module Dashboard
   module Form
     class PublishController < BaseController
       def edit
-        @resource = WorkVersion
+        wv = WorkVersion
           .includes(file_version_memberships: [:file_resource])
           .find(params[:id])
-        authorize(@resource)
+        authorize(wv)
+        pathway = WorkDepositPathway.new(wv)
+        @resource = pathway.publish_form
         prevalidate
       end
 
@@ -112,7 +114,6 @@ module Dashboard
               ],
               work_attributes: [
                 :id,
-                :work_type,
                 :visibility
               ]
             )

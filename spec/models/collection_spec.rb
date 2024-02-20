@@ -412,4 +412,12 @@ RSpec.describe Collection, type: :model do
       end
     end
   end
+
+  describe '#form_partial' do
+    let(:c) { described_class.new }
+
+    it 'returns collection' do
+      expect(c.form_partial).to eq 'collection'
+    end
+  end
 end

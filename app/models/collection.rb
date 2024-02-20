@@ -171,6 +171,10 @@ class Collection < ApplicationRecord
       .empty?
   end
 
+  def form_partial
+    'collection'
+  end
+
   private
 
     def uploaded_thumbnail_url
