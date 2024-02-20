@@ -315,7 +315,7 @@ class WorkVersion < ApplicationRecord
            :thumbnail_url, to: :work
 
   def citation_display
-    return unless work_type == 'dataset' || work_type == 'code'
+    return unless Work::Types.data_and_code.include?(work_type)
 
     "#{creators_citation_display}(#{year_published}). #{title} [Data set]. Scholarsphere.#{doi_url}"
   end
