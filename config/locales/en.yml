@@ -455,9 +455,11 @@ en:
           publishing_details: Publishing Details
         curation:
           header: Request Curation (Optional)
-          request_description: Please select 'Request Curation & Save' below if you would like metadata curation on your work before it is published.
-          curation_requested: Curation has been requested. We will notify you when curation is complete and your work is ready to be published.
+          request_description: Select 'Request Curation & Save' below if you would like ScholarSphere curators to review your work assessing its findability, accessibility, interoperability, and reusability prior to publication (recommended).
+          publish_description: Select 'Publish' if you would like to self-submit your deposit to Scholarsphere and make it immediately public. ScholarSphere curators will review your work after publication. Note, because curatorial review occurs after publication, any changes or updates may result in a versioned work.
+          curation_requested: Curation has been requested. We will notify you when curation is complete and your work is ready to be published. If you have any questions in the meantime, please contact ScholarSphere curators via our 
           error: There was an error with your curation request. Please try again later or contact us if the problem persists.
+          contact: contact form
       members:
         heading: Works
         badge: Work 

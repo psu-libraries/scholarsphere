@@ -7,8 +7,12 @@
       <div>
         <%= t '.request_description' %>
       </div>
+      <br>
+      <div>
+        <%= t '.publish_description' %>
+      </div>
     <% else %>
-      <strong><%= t '.curation_requested' %></strong>
+      <strong><%= t '.curation_requested' %> <a href="/incidents/new"><%= t '.contact' %></a></strong>
     <% end %>
   </div>
 </div>

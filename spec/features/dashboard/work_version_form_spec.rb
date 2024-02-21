@@ -933,7 +933,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
   describe 'Requesting curation', js: true do
     let(:user) { work_version.work.depositor.user }
-    let(:request_description) { "Please select 'Request Curation & Save' below if you would like metadata curation on your work before it is published." }
+    let(:request_description) { "Select 'Request Curation & Save' below if you would like ScholarSphere curators to review your work assessing its findability, accessibility, interoperability, and reusability prior to publication (recommended)." }
+    let(:publish_description) { "Select 'Publish' if you would like to self-submit your deposit to Scholarsphere and make it immediately public. ScholarSphere curators will review your work after publication. Note, because curatorial review occurs after publication, any changes or updates may result in a versioned work." }
 
     context 'with a draft eligible for curation request' do
       let(:work_version) { create :work_version, :draft, draft_curation_requested: nil }
@@ -947,6 +948,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).to have_button('Publish')
 
         expect(page).to have_content(request_description)
+        expect(page).to have_content(publish_description)
       end
     end
 
@@ -965,7 +967,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
     context 'with a draft that already has curation requested' do
       let(:work_version) { create :work_version, :able_to_be_published, draft_curation_requested: true }
-      let(:curation_requested) { 'Curation has been requested. We will notify you when curation is complete and your work is ready to be published.' }
+      let(:curation_requested) { 'Curation has been requested. We will notify you when curation is complete and your work is ready to be published. If you have any questions in the meantime, please contact ScholarSphere curators via our ' }
 
       context 'when user is an admin' do
         let(:user) { create(:user, :admin) }
@@ -991,6 +993,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
           expect(page).not_to have_button('Request Curation & Save')
           expect(page).not_to have_button('Publish')
           expect(page).to have_content(curation_requested)
+          expect(page).to have_link('contact form')
         end
       end
     end
@@ -1008,7 +1011,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       }}
 
       before do
-        allow(Submission).to receive(:create)
+        allow(Submission).to receive(:create).with(expected_record)
       end
 
       it 'creates a Submission' do

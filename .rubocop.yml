@@ -145,3 +145,7 @@ Style/EmptyCaseCondition:
     - 'app/services/doi_service.rb'
     - 'app/controllers/dashboard/form/base_controller.rb'
 
+Layout/LineLength:
+  Exclude:
+    - 'spec/features/dashboard/work_version_form_spec.rb'
+
