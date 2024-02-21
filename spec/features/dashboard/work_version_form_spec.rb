@@ -1000,18 +1000,9 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
     context 'when curation is successfully requested' do
       let(:work_version) { create :work_version, :able_to_be_published, draft_curation_requested: nil }
-      let(:expected_record) { {
-        ID: work_version.uuid,
-        'Submission Title': work_version.title,
-        'Submission Link': work_version.submission_link,
-        Depositor: work_version.depositor_access_id,
-        'Depositor Name': work_version.depositor_name,
-        'Deposit Date': work_version.deposited_at,
-        Labels: ['Curation Requested']
-      }}
 
       before do
-        allow(Submission).to receive(:create).with(expected_record)
+        allow(CurationTaskExporter).to receive(:call).with(work_version.id)
       end
 
       it 'creates a Submission' do
@@ -1023,7 +1014,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         click_on 'Request Curation & Save'
 
-        expect(Submission).to have_received(:create).with(expected_record)
+        expect(CurationTaskExporter).to have_received(:call).with(work_version.id)
       end
     end
 
