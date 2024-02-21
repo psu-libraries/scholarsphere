@@ -591,6 +591,9 @@ en:
     versions: Versions
     work_history: Work History
     works: Works
+    contact_depositor_button:
+      text: 'Contact Depositor via LibAnswers >>'
+      confirm_message: 'This will create a ticket in LibAnswers and direct you to it.  An email will not be sent to the depositor until the form is completed in LibAnswers.'
     doi:
       doi: 'doi:'
       valid: 'This is a valid DOI and can be used to reference this page'

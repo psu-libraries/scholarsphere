@@ -51,6 +51,18 @@
       </aside>
     </div>
     <div class="col-lg-9">
+      <% if current_user.admin? %>
+        <%= button_to I18n.t('resources.contact_depositor_button.text'),
+                      admin_create_curation_ticket_url(id: @work.id),
+                      class: 'btn btn-primary float-right',
+                      form: {
+                        target: '_blank',
+                        data: {
+                          confirm: I18n.t('resources.contact_depositor_button.confirm_message')
+                        }
+                      } %>
+      <% end %>
+
       <h1 class="h2 mb-3"><%= t('.heading',
                                 work_title: @work.latest_version.title) %></h1>
 

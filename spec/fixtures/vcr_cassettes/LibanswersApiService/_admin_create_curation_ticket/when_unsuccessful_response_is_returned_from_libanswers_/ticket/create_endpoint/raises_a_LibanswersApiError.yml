@@ -1,0 +1,96 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://psu.libanswers.com/api/1.1/oauth/token
+    body:
+      encoding: UTF-8
+      string: client_id=ABCDEFG&client_secret=abcdefg123456&grant_type=client_credentials
+    headers:
+      User-Agent:
+      - Faraday v1.10.3
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Wed, 07 Feb 2024 21:16:00 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Vary:
+      - Accept-Encoding
+      X-Frame-Options:
+      - deny
+      Cache-Control:
+      - no-store
+      Pragma:
+      - no-cache
+      X-Backend-Server:
+      - libanswers-us-1.springyaws.com
+      X-Content-Type-Options:
+      - nosniff
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Content-Security-Policy:
+      - upgrade-insecure-requests
+    body:
+      encoding: ASCII-8BIT
+      string: '{"access_token":"abcdefg1234567","expires_in":86400,"token_type":"Bearer","scope":"app_view
+        app_create app_update"}'
+  recorded_at: Wed, 07 Feb 2024 21:16:00 GMT
+- request:
+    method: post
+    uri: https://psu.libanswers.com/api/1.1/ticket/create
+    body:
+      encoding: UTF-8
+      string: quid=5477&pquestion=&pname=Test Tester&pemail=test1@psu.edu
+    headers:
+      Authorization:
+      - Bearer abcdefg1234567
+      User-Agent:
+      - Faraday v1.10.3
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 500
+      message: Internal Server Error
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Wed, 07 Feb 2024 21:16:00 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      X-Backend-Server:
+      - libanswers-us-3.springyaws.com
+      X-Content-Type-Options:
+      - nosniff
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Content-Security-Policy:
+      - upgrade-insecure-requests
+    body:
+      encoding: UTF-8
+      string: '{"error": "Error saving ticket."}'
+  recorded_at: Wed, 07 Feb 2024 21:16:00 GMT
+recorded_with: VCR 6.1.0

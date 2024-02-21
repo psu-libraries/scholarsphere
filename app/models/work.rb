@@ -9,6 +9,8 @@ class Work < ApplicationRecord
 
   fields_with_dois :doi, :latest_published_version_dois
 
+  delegate :email, :display_name, to: :depositor
+
   belongs_to :depositor,
              class_name: 'Actor',
              foreign_key: 'depositor_id',

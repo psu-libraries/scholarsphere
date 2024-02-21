@@ -1,0 +1,100 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://psu.libanswers.com/api/1.1/oauth/token
+    body:
+      encoding: UTF-8
+      string: client_id=abcdefg12345&client_secret=abcdef12345&grant_type=client_credentials
+    headers:
+      User-Agent:
+      - Faraday v1.10.3
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Mon, 19 Feb 2024 18:19:53 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Vary:
+      - Accept-Encoding
+      X-Frame-Options:
+      - deny
+      Cache-Control:
+      - no-store
+      Pragma:
+      - no-cache
+      X-Backend-Server:
+      - libanswers-us-1.springyaws.com
+      X-Content-Type-Options:
+      - nosniff
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Content-Security-Policy:
+      - upgrade-insecure-requests
+    body:
+      encoding: ASCII-8BIT
+      string: '{"access_token":"abcdef12345","expires_in":86400,"token_type":"Bearer","scope":"app_view
+        app_create app_update"}'
+  recorded_at: Mon, 19 Feb 2024 18:19:53 GMT
+- request:
+    method: post
+    uri: https://psu.libanswers.com/api/1.1/ticket/create
+    body:
+      encoding: UTF-8
+      string: 'quid=5477&pquestion=ScholarSphere Deposit Curation: Ad nihil veritatis
+        quia laudantium: "error, est, nulla; 1st facere''s placeat''s et"&pname=Dick
+        Williamson&pemail=test@psu.edu'
+    headers:
+      Authorization:
+      - Bearer abcdefg12345
+      User-Agent:
+      - Faraday v1.10.3
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Mon, 19 Feb 2024 18:19:54 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Vary:
+      - Accept-Encoding
+      X-Backend-Server:
+      - libanswers-us-5.springyaws.com
+      X-Content-Type-Options:
+      - nosniff
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Content-Security-Policy:
+      - upgrade-insecure-requests
+    body:
+      encoding: ASCII-8BIT
+      string: '{"isShared":false,"ticketUrl":"\/admin\/ticket?qid=13226122","claimed":0}'
+  recorded_at: Mon, 19 Feb 2024 18:19:54 GMT
+recorded_with: VCR 6.1.0
