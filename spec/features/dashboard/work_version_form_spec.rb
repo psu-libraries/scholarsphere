@@ -260,7 +260,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         expect(page).to have_current_path(resource_path(work_version.uuid))
         expect(Work.count).to eq(initial_work_count)
-        expect(page).not_to have_button('Request Curation & Save')
+        expect(page).not_to have_button('Request Curation & Save as Draft')
 
         work_version.reload
         expect(work_version.title).to eq metadata[:title]
@@ -341,7 +341,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
           expect(page).to have_content("Access Account: #{actor.psu_id}".upcase)
         end
 
-        expect(page).not_to have_button('Request Curation & Save')
+        expect(page).not_to have_button('Request Curation & Save as Draft')
 
         fill_in 'work_version_contributor', with: metadata[:contributor]
 
@@ -620,7 +620,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         end
       end
 
-      expect(page).not_to have_button('Request Curation & Save')
+      expect(page).not_to have_button('Request Curation & Save as Draft')
     end
   end
 
@@ -933,7 +933,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
   describe 'Requesting curation', js: true do
     let(:user) { work_version.work.depositor.user }
-    let(:request_description) { "Select 'Request Curation & Save' below if you would like ScholarSphere curators to review your work assessing its findability, accessibility, interoperability, and reusability prior to publication (recommended)." }
+    let(:request_description) { "Select 'Request Curation & Save as Draft' below if you would like ScholarSphere curators to review your work assessing its findability, accessibility, interoperability, and reusability prior to publication (recommended)." }
     let(:publish_description) { "Select 'Publish' if you would like to self-submit your deposit to Scholarsphere and make it immediately public. ScholarSphere curators will review your work after publication. Note, because curatorial review occurs after publication, any changes or updates may result in a versioned work." }
 
     context 'with a draft eligible for curation request' do
@@ -944,7 +944,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         visit dashboard_form_publish_path(work_version)
 
-        expect(page).to have_button('Request Curation & Save')
+        expect(page).to have_button('Request Curation & Save as Draft')
         expect(page).to have_button('Publish')
 
         expect(page).to have_content(request_description)
@@ -959,7 +959,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       it 'does not render a button for requesting curation but does render publish and does not show helper text about requesting curation' do
         visit dashboard_form_publish_path(work_version)
 
-        expect(page).not_to have_button('Request Curation & Save')
+        expect(page).not_to have_button('Request Curation & Save as Draft')
         expect(page).to have_button('Publish')
         expect(page).not_to have_content(request_description)
       end
@@ -990,7 +990,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
           work_version.work.work_type = 'dataset'
           visit dashboard_form_publish_path(work_version)
 
-          expect(page).not_to have_button('Request Curation & Save')
+          expect(page).not_to have_button('Request Curation & Save as Draft')
           expect(page).not_to have_button('Publish')
           expect(page).to have_content(curation_requested)
           expect(page).to have_link('contact form')
@@ -1012,7 +1012,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         check 'I have read and agree to the deposit agreement.'
 
-        click_on 'Request Curation & Save'
+        click_on 'Request Curation & Save as Draft'
 
         expect(CurationTaskExporter).to have_received(:call).with(work_version.id)
       end
@@ -1032,7 +1032,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         fill_in 'work_version_title', with: 'Changed Title'
         check 'I have read and agree to the deposit agreement.'
 
-        click_on 'Request Curation & Save'
+        click_on 'Request Curation & Save as Draft'
 
         within('.alert-danger') do
           expect(page).to have_content('There was an error with your curation request')
@@ -1057,7 +1057,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         fill_in 'work_version_published_date', with: 'this is not a valid date'
         check 'I have read and agree to the deposit agreement.'
 
-        click_on 'Request Curation & Save'
+        click_on 'Request Curation & Save as Draft'
 
         expect(CurationTaskExporter).not_to have_received(:call).with(work_version.id)
 
