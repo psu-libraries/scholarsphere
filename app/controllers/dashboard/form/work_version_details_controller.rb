@@ -10,6 +10,7 @@ module Dashboard
       def edit
         authorize(work_version)
         @resource = deposit_pathway.details_form
+        @autocomplete_work_form = AutocompleteWorkForm.new
       end
 
       def update
@@ -19,7 +20,19 @@ module Dashboard
         process_response(on_error: :edit)
       end
 
+      def autocomplete_work_forms
+      end
+
       private
+
+        def autocomplete_work_form_params
+          params
+            .require(:autocomplete_work_form)
+            .permit(
+              :doi,
+              :work_id
+            )
+        end
 
         def work_version_params
           params

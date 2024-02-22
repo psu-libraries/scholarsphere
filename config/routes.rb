@@ -72,6 +72,7 @@ Rails.application.routes.draw do
     get 'sign_out', to: 'devise/sessions#destroy', as: :destroy_user_session
   end
 
+
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
   namespace :dashboard do
@@ -112,6 +113,7 @@ Rails.application.routes.draw do
     end
 
     namespace :form do
+      post 'autocomplete_work_forms', to: 'work_version_details#autocomplete_work_forms'
       scope 'work_versions' do
         get   'new', to: 'work_version_type#new', as: 'work_versions'
         match 'new', to: 'work_version_type#create', via: :post, as: nil
