@@ -32,7 +32,8 @@ module Dashboard
           @resource.indexing_source = Proc.new { nil }
           @resource.save
           @resource.publish
-        elsif request_curation?
+        elsif request_curation? && !@resource.draft_curation_requested
+          @resource.update_column(:draft_curation_requested, true)
           # We want validation errors to block curation requests and keep users on the edit page
           # so WorkVersion needs to temporarily act like it's being published. It's returned to it's
           # initial state before being saved.
@@ -44,13 +45,16 @@ module Dashboard
               CurationTaskExporter.call(@resource.id)
               @resource.draft_curation_requested = true
             else
+              @resource.update_column(:draft_curation_requested, false)
               render :edit
               return
             end
           rescue CurationTaskExporter::CurationError => e
+            @resource.update_column(:draft_curation_requested, false)
             logger.error(e)
             flash[:error] = t('dashboard.form.publish.curation.error')
           ensure
+            @resource.update_column(:draft_curation_requested, false)
             @resource.aasm_state = initial_state
           end
         end

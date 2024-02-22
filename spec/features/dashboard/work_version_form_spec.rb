@@ -1072,7 +1072,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         work_version.reload
         expect(work_version).not_to be_published
         expect(work_version.published_date).to eq 'this is not a valid date'
-        expect(work_version.draft_curation_requested).to be_nil
+        expect(work_version.draft_curation_requested).to eq false
       end
     end
   end
