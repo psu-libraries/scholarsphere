@@ -8,13 +8,14 @@ module Dashboard
           .includes(file_version_memberships: [:file_resource])
           .find(params[:id])
         authorize(wv)
-        pathway = WorkDepositPathway.new(wv)
-        @resource = pathway.publish_form
+        @pathway = WorkDepositPathway.new(wv)
+        @resource = @pathway.publish_form
         prevalidate
       end
 
       def update
         @resource = WorkVersion.find(params[:id])
+        @pathway = WorkDepositPathway.new(@resource)
         authorize(@resource)
 
         @resource.attributes = work_version_params

@@ -804,6 +804,9 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).to have_field('work_version_based_near')
         expect(page).to have_field('work_version_source')
         expect(page).to have_field('work_version_version_name')
+        expect(page).to have_field('work_version_publisher_statement')
+        expect(page).to have_field('work_version_work_attributes_visibility_open')
+        expect(page).to have_field('work_version_work_attributes_visibility_authenticated')
       end
     end
 
@@ -818,6 +821,26 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).not_to have_field('work_version_based_near')
         expect(page).not_to have_field('work_version_source')
         expect(page).not_to have_field('work_version_version_name')
+        expect(page).to have_field('work_version_publisher_statement')
+        expect(page).to have_field('work_version_work_attributes_visibility_open')
+        expect(page).to have_field('work_version_work_attributes_visibility_authenticated')
+      end
+    end
+
+    context 'with a work that uses the data & code deposit pathway' do
+      let(:work) { create :work, versions_count: 1, work_type: 'dataset' }
+      let(:work_version) { work.versions.first }
+      let(:user) { work.depositor.user }
+
+      it 'shows only the fields for a data & code work' do
+        visit dashboard_form_publish_path(work_version)
+
+        expect(page).to have_field('work_version_based_near')
+        expect(page).to have_field('work_version_source')
+        expect(page).to have_field('work_version_version_name')
+        expect(page).not_to have_field('work_version_publisher_statement')
+        expect(page).not_to have_field('work_version_work_attributes_visibility_open')
+        expect(page).not_to have_field('work_version_work_attributes_visibility_authenticated')
       end
     end
   end
@@ -973,7 +996,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
   end
 
   describe 'Editing a published work' do
-    let(:work_version) { create :work_version, :published }
+    let(:work) { create :work, work_type: 'audio' }
+    let(:work_version) { create :work_version, :published, work: work }
     let(:invalid_metadata) { attributes_for(:work_version, :with_complete_metadata, description: '') }
     let(:different_metadata) { attributes_for(:work_version, :with_complete_metadata) }
     let(:incorrect_rights) { (WorkVersion::Licenses.ids - WorkVersion::Licenses::ids_for_authorized_visibility).first }
