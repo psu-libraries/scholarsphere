@@ -99,8 +99,8 @@ RSpec.describe 'Public Resources', type: :feature do
         it 'displays a citation' do
           visit resource_path(work.uuid)
 
-          expect(page).to have_content 'Copy Citation'
-          expect(page).to have_content v2.citation_display
+          expect(page).to have_content 'Citation'
+          expect(page).to have_button('Copy Citation to Clipboard')
         end
       end
 
@@ -111,6 +111,7 @@ RSpec.describe 'Public Resources', type: :feature do
           visit resource_path(work.uuid)
 
           expect(page).not_to have_content 'Citation'
+          expect(page).not_to have_button('Copy Citation to Clipboard')
         end
       end
     end

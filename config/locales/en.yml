@@ -579,7 +579,7 @@ en:
     analytics: Analytics
     citation:
       header: Citation
-      copy: Copy Citation
+      copy: Copy Citation to Clipboard
     collections: Collections
     download: "Download %{name}"
     files: Files
