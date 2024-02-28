@@ -314,30 +314,7 @@ class WorkVersion < ApplicationRecord
            :auto_generated_thumbnail?,
            :thumbnail_url, to: :work
 
-  def citation_display
-    return unless Work::Types.data_and_code.include?(work_type)
-
-    "#{creators_citation_display}(#{year_published}). #{title} [Data set]. Scholarsphere.#{doi_url}"
-  end
-
   private
-
-    def creators_citation_display
-      formatted_creators = ''
-      creators.each_with_index do |creator, index|
-        formatted_creators += "#{creator.surname}, #{creator.given_name}"
-        formatted_creators += index == creators.length - 1 ? ' ' : '; '
-      end
-      formatted_creators
-    end
-
-    def doi_url
-      doi.blank? ? '' : " https://doi.org/#{doi}"
-    end
-
-    def year_published
-      Date.edtf(published_date).try(:year)
-    end
 
     def perform_update_index
       indexing_source.call(self)
