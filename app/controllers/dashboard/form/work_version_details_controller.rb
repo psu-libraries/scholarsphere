@@ -21,6 +21,10 @@ module Dashboard
       end
 
       def autocomplete_work_forms
+        authorize(work_version, :edit?)
+        @resource = work_version
+        @resource.attributes = RmdPublication.new(autocomplete_work_form_params[:doi]).to_params
+        process_response(on_error: :edit)
       end
 
       private
@@ -29,8 +33,7 @@ module Dashboard
           params
             .require(:autocomplete_work_form)
             .permit(
-              :doi,
-              :work_id
+              :doi
             )
         end
 
