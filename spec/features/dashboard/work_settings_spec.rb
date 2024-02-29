@@ -59,8 +59,8 @@ RSpec.describe 'Work Settings Page', with_user: :user do
 
         # regular user is NOT allowed to update visibility from open to authorized
         expect(page).to have_content(ActionController::Base.helpers.strip_tags(
-                                      I18n.t!('dashboard.works.edit.visibility.not_allowed_html')
-                                    ))
+                                       I18n.t!('dashboard.works.edit.visibility.not_allowed_html')
+                                     ))
       end
     end
   end
