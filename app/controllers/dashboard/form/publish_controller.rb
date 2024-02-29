@@ -114,7 +114,8 @@ module Dashboard
               ],
               work_attributes: [
                 :id,
-                :visibility
+                :visibility,
+                :embargoed_until
               ]
             )
         end

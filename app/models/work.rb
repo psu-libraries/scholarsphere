@@ -50,6 +50,8 @@ class Work < ApplicationRecord
 
   accepts_nested_attributes_for :versions
 
+  validate :embargoed_until_is_valid_date
+
   module Types
     def self.all
       general.union(scholarly_works).union(data_and_code).freeze
@@ -256,5 +258,15 @@ class Work < ApplicationRecord
         WorkTypeSchema,
         DoiSchema
       )
+    end
+
+    def embargoed_until_is_valid_date
+      return if embargoed_until.blank?
+
+        Date.parse(embargoed_until.to_s)
+        unless embargoed_until < (DateTime.now + 4.years)
+          errors.add(:embargoed_until, :max)
+          nil
+        end
     end
 end
