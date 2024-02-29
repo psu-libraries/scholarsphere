@@ -26,12 +26,37 @@ module Dashboard
         # against the draft validations, then mark the record as published and
         # save again--this time using the published validations. That way the
         # appropriate error messages will appear on the form when it's re-rendered
-        if publish?
+        if publish? && allow_publish?
           # WorkVersion#set_thumbnail_selection may be unreliable if the Shrine::ThumbnailJob is delayed
           @resource.set_thumbnail_selection
           @resource.indexing_source = Proc.new { nil }
           @resource.save
           @resource.publish
+        elsif request_curation? && !@resource.draft_curation_requested
+          @resource.update_column(:draft_curation_requested, true)
+          # We want validation errors to block curation requests and keep users on the edit page
+          # so WorkVersion needs to temporarily act like it's being published. It's returned to it's
+          # initial state before being saved.
+          begin
+            @resource.save
+            initial_state = @resource.aasm_state
+            @resource.publish
+            if @resource.valid?
+              CurationTaskExporter.call(@resource.id)
+              @resource.draft_curation_requested = true
+            else
+              @resource.update_column(:draft_curation_requested, false)
+              render :edit
+              return
+            end
+          rescue CurationTaskExporter::CurationError => e
+            @resource.update_column(:draft_curation_requested, false)
+            logger.error(e)
+            flash[:error] = t('dashboard.form.publish.curation.error')
+          ensure
+            @resource.update_column(:draft_curation_requested, false)
+            @resource.aasm_state = initial_state
+          end
         end
 
         validation_context = current_user.admin? ? nil : :user_publish
@@ -90,6 +115,7 @@ module Dashboard
               :version_name,
               :published_date,
               :depositor_agreement,
+              :draft_curation_requested,
               keyword: [],
               contributor: [],
               publisher: [],

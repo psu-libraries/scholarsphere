@@ -36,6 +36,10 @@ module Dashboard
           params.key?(:save_and_exit)
         end
 
+        def request_curation?
+          params.key?(:request_curation)
+        end
+
         def create?
           @resource.new_record?
         end
@@ -49,7 +53,7 @@ module Dashboard
         end
 
         def redirect_upon_success
-          if save_and_exit? || finish?
+          if save_and_exit? || finish? || request_curation?
             redirect_to resource_path(@resource.uuid),
                         notice: I18n.t('dashboard.form.notices.success', resource: @resource.model_name.human)
           elsif publish?
@@ -73,9 +77,36 @@ module Dashboard
           end
         end
 
+        helper_method :allow_curation?
+        def allow_curation?
+          curation_eligible? && in_publish_edit_action?
+        end
+
+        helper_method :allow_publish?
+        def allow_publish?
+          if @resource.is_a?(WorkVersion)
+            !@resource.draft_curation_requested || current_user.admin?
+          else
+            true
+          end
+        end
+
         helper_method :param_key
         def param_key
           resource_klass.model_name.param_key
+        end
+
+        def in_publish_edit_action?
+          current_controller = params[:controller]
+          current_action = params[:action]
+
+          current_controller == 'dashboard/form/publish' && ['edit', 'update'].include?(current_action)
+        end
+
+        def curation_eligible?
+          @resource.is_a?(WorkVersion) &&
+            !@resource.draft_curation_requested &&
+            Work::Types.data_and_code.include?(@resource.work.work_type)
         end
 
         def save_resource(validation_context: nil)

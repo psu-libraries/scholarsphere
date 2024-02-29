@@ -260,6 +260,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         expect(page).to have_current_path(resource_path(work_version.uuid))
         expect(Work.count).to eq(initial_work_count)
+        expect(page).not_to have_button('Request Curation & Save as Draft')
 
         work_version.reload
         expect(work_version.title).to eq metadata[:title]
@@ -339,6 +340,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
           expect(page).to have_field('Email')
           expect(page).to have_content("Access Account: #{actor.psu_id}".upcase)
         end
+
+        expect(page).not_to have_button('Request Curation & Save as Draft')
 
         fill_in 'work_version_contributor', with: metadata[:contributor]
 
@@ -616,6 +619,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
           sleep 0.1
         end
       end
+
+      expect(page).not_to have_button('Request Curation & Save as Draft')
     end
   end
 
@@ -922,6 +927,152 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect {
           FeatureHelpers::DashboardForm.delete
         }.to raise_error(Capybara::ElementNotFound)
+      end
+    end
+  end
+
+  describe 'Requesting curation', js: true do
+    let(:user) { work_version.work.depositor.user }
+    let(:request_description) { "Select 'Request Curation & Save as Draft' below if you would like ScholarSphere curators to review your work assessing its findability, accessibility, interoperability, and reusability prior to publication (recommended)." }
+    let(:publish_description) { "Select 'Publish' if you would like to self-submit your deposit to Scholarsphere and make it immediately public. ScholarSphere curators will review your work after publication. Note, because curatorial review occurs after publication, any changes or updates may result in a versioned work." }
+
+    context 'with a draft eligible for curation request' do
+      let(:work_version) { create :work_version, :draft, draft_curation_requested: nil }
+
+      it 'renders buttons for requesting curation and publish and shows helper text explaing requesting curation' do
+        work_version.work.work_type = 'dataset'
+
+        visit dashboard_form_publish_path(work_version)
+
+        expect(page).to have_button('Request Curation & Save as Draft')
+        expect(page).to have_button('Publish')
+
+        expect(page).to have_content(request_description)
+        expect(page).to have_content(publish_description)
+      end
+    end
+
+    context 'with a draft not eligible for curation request' do
+      let(:work) { create :work, versions_count: 1, has_draft: true, work_type: 'article' }
+      let(:work_version) { work.versions.first }
+
+      it 'does not render a button for requesting curation but does render publish and does not show helper text about requesting curation' do
+        visit dashboard_form_publish_path(work_version)
+
+        expect(page).not_to have_button('Request Curation & Save as Draft')
+        expect(page).to have_button('Publish')
+        expect(page).not_to have_content(request_description)
+      end
+    end
+
+    context 'with a draft that already has curation requested' do
+      let(:work_version) { create :work_version, :able_to_be_published, draft_curation_requested: true }
+      let(:curation_requested) { 'Curation has been requested. We will notify you when curation is complete and your work is ready to be published. If you have any questions in the meantime, please contact ScholarSphere curators via our ' }
+
+      context 'when user is an admin' do
+        let(:user) { create(:user, :admin) }
+
+        it 'allows admin to publish' do
+          work_version.work.work_type = 'dataset'
+          visit dashboard_form_publish_path(work_version)
+
+          expect(page).to have_button('Publish')
+
+          check 'I have read and agree to the deposit agreement.'
+          click_on 'Publish'
+
+          expect(work_version.reload.aasm_state).to eq 'published'
+        end
+      end
+
+      context 'when user is not an admin' do
+        it 'does not render buttons for requesting curation or publish & shows text that curation has been requested' do
+          work_version.work.work_type = 'dataset'
+          visit dashboard_form_publish_path(work_version)
+
+          expect(page).not_to have_button('Request Curation & Save as Draft')
+          expect(page).not_to have_button('Publish')
+          expect(page).to have_content(curation_requested)
+          expect(page).to have_link('contact form')
+        end
+      end
+    end
+
+    context 'when curation is successfully requested' do
+      let(:work_version) { create :work_version, :able_to_be_published, draft_curation_requested: nil }
+
+      before do
+        allow(CurationTaskExporter).to receive(:call).with(work_version.id)
+      end
+
+      it 'creates a Submission' do
+        work_version.work.work_type = 'dataset'
+
+        visit dashboard_form_publish_path(work_version)
+
+        check 'I have read and agree to the deposit agreement.'
+
+        click_on 'Request Curation & Save as Draft'
+
+        expect(CurationTaskExporter).to have_received(:call).with(work_version.id)
+      end
+    end
+
+    context 'when an error occurs within the curation exporter' do
+      let(:work_version) { create :work_version, :able_to_be_published, draft_curation_requested: nil }
+
+      before { allow(CurationTaskExporter).to receive(:call).with(work_version.id).and_raise(CurationTaskExporter::CurationError) }
+
+      it 'saves changes to the work version and displays an error flash message' do
+        work_version.work.work_type = 'dataset'
+
+        visit dashboard_form_publish_path(work_version)
+
+        fill_in 'work_version_title', with: ''
+        fill_in 'work_version_title', with: 'Changed Title'
+        check 'I have read and agree to the deposit agreement.'
+
+        click_on 'Request Curation & Save as Draft'
+
+        within('.alert-danger') do
+          expect(page).to have_content('There was an error with your curation request')
+        end
+
+        work_version.reload
+        expect(work_version.title).to eq('Changed Title')
+      end
+    end
+
+    context 'when there is a validation error' do
+      let(:work_version) { create :work_version, :able_to_be_published, draft_curation_requested: nil }
+
+      before { allow(CurationTaskExporter).to receive(:call).with(work_version.id) }
+
+      it 'does not call the curation task exporter' do
+        work_version.work.work_type = 'dataset'
+
+        visit dashboard_form_publish_path(work_version)
+
+        fill_in 'work_version_published_date', with: ''
+        fill_in 'work_version_published_date', with: 'this is not a valid date'
+        check 'I have read and agree to the deposit agreement.'
+
+        click_on 'Request Curation & Save as Draft'
+
+        expect(CurationTaskExporter).not_to have_received(:call).with(work_version.id)
+
+        within '#error_explanation' do
+          expect(page).to have_content(I18n.t!('errors.messages.invalid_edtf'))
+        end
+
+        within '.footer--actions' do
+          expect(page).to have_button(I18n.t!('dashboard.form.actions.request_curation'))
+        end
+
+        work_version.reload
+        expect(work_version).not_to be_published
+        expect(work_version.published_date).to eq 'this is not a valid date'
+        expect(work_version.draft_curation_requested).to eq false
       end
     end
   end
