@@ -18,10 +18,12 @@
   <% end %>
 </div>
 
-<div class="keyline keyline--left">
-  <h2 id="<%= t('dashboard.works.edit.embargo.heading').parameterize %>" class="h4"><%= t('dashboard.works.edit.embargo.heading') %></h2>
+<div class="form-group mt-5">
+  <div class="keyline keyline--left">
+    <h2 id="<%= t('dashboard.works.edit.embargo.heading').parameterize %>" class="h4"><%= t('dashboard.works.edit.embargo.heading') %></h2>
+  </div>
+
+  <p><%= t('dashboard.works.edit.embargo.explanation') %></p>
+
+  <%= render 'form_fields/date', form: form, attribute: :embargoed_until %>
 </div>
-
-<p><%= t('dashboard.works.edit.embargo.explanation') %></p>
-
-<%= render 'form_fields/date', form: form, attribute: :embargoed_until %>

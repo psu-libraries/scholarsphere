@@ -169,6 +169,8 @@ class WorkVersion < ApplicationRecord
 
   after_commit :perform_update_index, on: [:create, :update]
 
+  after_validation :remove_duplicate_errors
+
   attr_accessor :force_destroy
 
   # Do not allow pubilshed works to be destroyed, unless specially flagged by
@@ -338,5 +340,16 @@ class WorkVersion < ApplicationRecord
 
     def temporarily_published_draft?
       aasm.from_state == :draft && aasm.to_state == :published
+    end
+
+    def remove_duplicate_errors
+      over_limit_errors = []
+      errors.errors.each_with_index do |error, index|
+        over_limit_errors << index if error.type == :max
+      end
+
+      if over_limit_errors.length > 1
+        errors.errors.delete_at(over_limit_errors[1])
+      end
     end
 end
