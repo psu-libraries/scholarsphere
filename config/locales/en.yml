@@ -585,6 +585,9 @@ en:
       reports: 'Reports'
   resources:
     analytics: Analytics
+    citation:
+      header: Citation
+      copy: Copy Citation to Clipboard
     collections: Collections
     download: "Download %{name}"
     files: Files
