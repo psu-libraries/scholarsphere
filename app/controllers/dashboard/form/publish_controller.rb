@@ -4,18 +4,16 @@ module Dashboard
   module Form
     class PublishController < BaseController
       def edit
-        wv = WorkVersion
+        @work_version = WorkVersion
           .includes(file_version_memberships: [:file_resource])
           .find(params[:id])
-        authorize(wv)
-        @pathway = WorkDepositPathway.new(wv)
-        @resource = @pathway.publish_form
+        authorize(@work_version)
+        @resource = deposit_pathway.publish_form
         prevalidate
       end
 
       def update
         @resource = WorkVersion.find(params[:id])
-        @pathway = WorkDepositPathway.new(@resource)
         authorize(@resource)
 
         @resource.attributes = work_version_params
@@ -102,6 +100,11 @@ module Dashboard
           )
 
           not_published || marked_as_published_but_not_persisted
+        end
+
+        helper_method :deposit_pathway
+        def deposit_pathway
+          @deposit_pathway ||= WorkDepositPathway.new(@work_version || @resource)
         end
 
         def work_version_params

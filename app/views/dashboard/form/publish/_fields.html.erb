@@ -10,7 +10,7 @@
 <%= form.fields_for :work do |work_form| %>
   <div class="form-wrapper">
 
-    <% if policy(@resource).edit_initial_draft? && @pathway.allows_visibility_change? %>
+    <% if policy(@resource).edit_initial_draft? && deposit_pathway.allows_visibility_change? %>
       <%= render 'visibility_field', form: work_form %>
     <% end %>
 
