@@ -14,10 +14,7 @@ class EmbargoForm
   end
 
   def embargoed_until
-    work_embargoed_until = if work.embargoed_until.respond_to?(:strftime)
-                             work.embargoed_until.strftime('%Y-%m-%d')
-                           end
-    @embargoed_until || work_embargoed_until
+    @embargoed_until || work.embargoed_until
   end
 
   def remove?
