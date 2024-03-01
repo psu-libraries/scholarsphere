@@ -29,20 +29,26 @@ class WorkDepositPathway
     !data_and_code?
   end
 
+  def allows_curation_request?
+    data_and_code? && !@resource.draft_curation_requested
+  end
+
+  def work?
+    Work::Types.all.include?(work_type)
+  end
+
+  def data_and_code?
+    Work::Types.data_and_code.include?(work_type)
+  end
+
   private
 
     attr_reader :resource
 
     delegate :work_type, to: :resource
 
-    # It will probably make sense to promote these predicate methods to the
-    # public interface at some point.
     def scholarly_works?
       Work::Types.scholarly_works.include?(work_type)
-    end
-
-    def data_and_code?
-      Work::Types.data_and_code.include?(work_type)
     end
 
     class DetailsFormBase
@@ -103,6 +109,8 @@ class WorkDepositPathway
                :work,
                :indexing_source=,
                :update_doi=,
+               :work_type,
+               :draft_curation_requested,
                to: :work_version, prefix: false
 
       private

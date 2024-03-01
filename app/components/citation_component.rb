@@ -3,8 +3,9 @@
 class CitationComponent < ApplicationComponent
   attr_reader :work_version, :creators
 
-  def initialize(work_version)
+  def initialize(work_version, deposit_pathway)
     @work_version = work_version
+    @deposit_pathway = deposit_pathway
   end
 
   def render?
@@ -12,12 +13,14 @@ class CitationComponent < ApplicationComponent
   end
 
   def citation_display
-    return unless Work::Types.data_and_code.include?(work_version.work_type)
+    return unless deposit_pathway.data_and_code?
 
     "#{creators_citation_display}(#{year_published}). #{work_version.title} [Data set]. Scholarsphere.#{doi_url}"
   end
 
   private
+
+    attr_reader :deposit_pathway
 
     def creators_citation_display
       formatted_creators = ''

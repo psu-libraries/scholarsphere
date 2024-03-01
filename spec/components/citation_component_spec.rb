@@ -3,25 +3,34 @@
 require 'rails_helper'
 
 RSpec.describe CitationComponent, type: :component do
+  let(:component) { described_class.new(work_version, pathway) }
+  let(:pathway) { instance_double(WorkDepositPathway, data_and_code?: data_and_code) }
+  let(:data_and_code) { true }
+
   describe 'rendering' do
-    context 'when the work is an article' do
-      let(:work_version) { create :work_version, :published, work: create(:work, work_type: 'article') }
-      let(:citation_component) { render_inline(described_class.new(work_version)) }
+    context 'when not given a data and code pathway' do
+      let(:data_and_code) { false }
+      let(:work_version) { build :work_version, :published, work: build(:work, work_type: 'article') }
+      let(:citation_component) { render_inline(component) }
 
       it 'does not render anything' do
         expect(citation_component.css('div.keyline')).to be_empty
       end
     end
 
-    context 'when the work is a dataset' do
-      let(:work_version) { create :work_version,
-                                  :published,
-                                  work: create(:work, work_type: 'dataset', doi: '10.26207/123'),
-                                  title: 'Citation Title',
-                                  published_date: '2024-02-16',
-                                  doi: '10.26207/123' }
-      let(:authorship1) { create :authorship, given_name: 'Alan', surname: 'Grant' }
-      let(:citation_component) { render_inline(described_class.new(work_version)) }
+    context 'when given a data and code pathway' do
+      let(:work_version) {
+        build(
+          :work_version,
+          :published,
+          work: build(:work, work_type: 'dataset',  doi: '10.26207/123'),
+          title: 'Citation Title',
+          published_date: '2024-02-16',
+          doi: '10.26207/123'
+        )
+      }
+      let(:authorship1) { build :authorship, given_name: 'Alan', surname: 'Grant' }
+      let(:citation_component) { render_inline(component) }
 
       before { work_version.creators = [authorship1] }
 
@@ -36,8 +45,8 @@ RSpec.describe CitationComponent, type: :component do
 
       context 'when there are multiple creators' do
         let(:expected_citation) { 'Grant, Alan; Sattler, Ellie; Malcolm, Ian (2024). Citation Title [Data set]. Scholarsphere. https://doi.org/10.26207/123' }
-        let(:authorship2) { create :authorship, given_name: 'Ellie', surname: 'Sattler' }
-        let(:authorship3) { create :authorship, given_name: 'Ian', surname: 'Malcolm' }
+        let(:authorship2) { build :authorship, given_name: 'Ellie', surname: 'Sattler' }
+        let(:authorship3) { build :authorship, given_name: 'Ian', surname: 'Malcolm' }
 
         before { work_version.creators << [authorship2, authorship3] }
 

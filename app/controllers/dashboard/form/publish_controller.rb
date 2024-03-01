@@ -102,11 +102,6 @@ module Dashboard
           not_published || marked_as_published_but_not_persisted
         end
 
-        helper_method :deposit_pathway
-        def deposit_pathway
-          @deposit_pathway ||= WorkDepositPathway.new(@work_version || @resource)
-        end
-
         def work_version_params
           params
             .require(:work_version)
