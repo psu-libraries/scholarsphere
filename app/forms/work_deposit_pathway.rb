@@ -96,6 +96,7 @@ class WorkDepositPathway
                :published?,
                :draft?,
                :work,
+               :imported_metadata_from_rmd,
                :indexing_source=,
                :update_doi=,
                to: :work_version, prefix: false

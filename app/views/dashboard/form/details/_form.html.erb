@@ -1,4 +1,4 @@
-<% if @resource.form_partial == "scholarly_works_work_version" %>
+<% if @resource.form_partial == "scholarly_works_work_version" && @resource.imported_metadata_from_rmd.nil? %>
   <div class="form-wrapper form-wrapper--wide">
     <div class="keyline keyline--left mb-3">
       <h4><%= "Autocomplete for Open Access Works" %></h4>

@@ -17,6 +17,7 @@ module Dashboard
         authorize(work_version)
         @resource = deposit_pathway.details_form
         @resource.attributes = work_version_params
+        @resource.update imported_metadata_from_rmd: false if @resource.imported_metadata_from_rmd.nil?
         process_response(on_error: :edit)
       end
 
@@ -24,6 +25,7 @@ module Dashboard
         authorize(work_version, :edit?)
         @resource = work_version
         @resource.attributes = RmdPublication.new(autocomplete_work_form_params[:doi]).to_params
+        @resource.update imported_metadata_from_rmd: true
         process_response(on_error: :edit)
       end
 
