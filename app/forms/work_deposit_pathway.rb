@@ -135,6 +135,10 @@ class WorkDepositPathway
         def form_partial
           'scholarly_works_work_version'
         end
+
+        def show_autocomplete_form?
+          imported_metadata_from_rmd != true
+        end
       end
 
       class PublishForm < SimpleDelegator
@@ -148,6 +152,10 @@ class WorkDepositPathway
 
         def form_partial
           'scholarly_works_work_version'
+        end
+
+        def show_autocomplete_form?
+          false
         end
       end
     end

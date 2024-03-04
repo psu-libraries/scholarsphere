@@ -1,15 +1,5 @@
-<% if @resource.form_partial == "scholarly_works_work_version" && @resource.imported_metadata_from_rmd.nil? %>
-  <div class="form-wrapper form-wrapper--wide">
-    <div class="keyline keyline--left mb-3">
-      <h4><%= "Autocomplete for Open Access Works" %></h4>
-    </div>
-  </div>
-  <div class="form-wrapper">
-    <%= form_for @autocomplete_work_form, url: dashboard_form_autocomplete_work_url(@resource.id) do |doi_form| %>
-      <%= render 'form_fields/text', form: doi_form, attribute: :doi, required: true %>
-      <%= doi_form.submit 'Submit', class: 'btn btn-primary' %>
-    <% end %>
-  </div>
+<% if @resource.show_autocomplete_form? %>
+  <%= render 'autocomplete_form' %>
 <% end %>
 
 <%= form_with(model: @resource, url: url, local: true, data: { target: 'unsaved-changes.form' }) do |form| %>
