@@ -245,7 +245,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
 
     context 'when selecting a work type that uses the data and code deposit pathway' do
-      it 'shows only the fields for scholarly works' do
+      it 'shows only the fields for data and code works' do
         visit dashboard_form_work_versions_path
 
         FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_data_and_code_draft(metadata)
