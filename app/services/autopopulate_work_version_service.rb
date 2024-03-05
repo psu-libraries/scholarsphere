@@ -33,10 +33,10 @@ class AutopopulateWorkVersionService
         position: contributor.position,
         given_name: contributor.first_name,
         surname: contributor.last_name,
-        display_name: contributor.first_name + 
-                      (contributor.middle_name.present? ? ' ' + contributor.middle_name + ' ' : ' ') + 
+        display_name: contributor.first_name +
+                      (contributor.middle_name.present? ? " #{contributor.middle_name} " : ' ') +
                       contributor.last_name,
-        email: contributor.psu_user_id.present? ? contributor.psu_user_id + '@psu.edu' : nil,
+        email: contributor.psu_user_id.present? ? "#{contributor.psu_user_id}@psu.edu" : nil,
         actor: actor(contributor)
       )
     end
@@ -46,19 +46,15 @@ class AutopopulateWorkVersionService
 
       actor = Actor.find_by(psu_id: contributor.psu_user_id)
 
-      if actor.present?
-        actor
-      else
-        Actor.new(
-          given_name: contributor.first_name,
-          surname: contributor.last_name,
-          display_name: contributor.first_name + 
-                        (contributor.middle_name.present? ? ' ' + contributor.middle_name + ' ' : ' ') +
-                        contributor.last_name,
-          psu_id: contributor.psu_user_id,
-          email: contributor.psu_user_id.present? ? contributor.psu_user_id + '@psu.edu' : nil
-        )
-      end
+      actor.presence || Actor.new(
+        given_name: contributor.first_name,
+        surname: contributor.last_name,
+        display_name: contributor.first_name +
+                      (contributor.middle_name.present? ? " #{contributor.middle_name} " : ' ') +
+                      contributor.last_name,
+        psu_id: contributor.psu_user_id,
+        email: contributor.psu_user_id.present? ? "#{contributor.psu_user_id}@psu.edu" : nil
+      )
     end
 
     def rmd_pub

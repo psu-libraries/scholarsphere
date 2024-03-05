@@ -45,22 +45,22 @@ class RmdPublication
   end
 
   def tags
-    attributes['tags'].map{|t| t["name"]}
+    attributes['tags'].map { |t| t['name'] }
   end
 
   private
 
     def attributes
-      publication["attributes"]
+      publication['attributes']
     end
 
     def publication
-      parsed_response["data"].first
+      parsed_response['data'].first
     end
 
     def parsed_response
       response = Faraday.new(url: rmd_host).get(publications_endpoint, doi: doi) do |request|
-        request.headers["X-API-Key"] = api_key
+        request.headers['X-API-Key'] = api_key
       end
       JSON.parse(response.env.response_body)
     end
