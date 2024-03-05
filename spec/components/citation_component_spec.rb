@@ -14,8 +14,12 @@ RSpec.describe CitationComponent, type: :component do
     end
 
     context 'when the work is a dataset' do
-      let(:work_version) {
- create :work_version, :published, work: create(:work, work_type: 'dataset'), title: 'Citation Title', published_date: '2024-02-16', doi: '10.26207/123' }
+      let(:work_version) { create :work_version,
+                                  :published,
+                                  work: create(:work, work_type: 'dataset', doi: '10.26207/123'),
+                                  title: 'Citation Title',
+                                  published_date: '2024-02-16',
+                                  doi: '10.26207/123' }
       let(:authorship1) { create :authorship, given_name: 'Alan', surname: 'Grant' }
       let(:citation_component) { render_inline(described_class.new(work_version)) }
 

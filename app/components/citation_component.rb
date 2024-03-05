@@ -29,7 +29,7 @@ class CitationComponent < ApplicationComponent
     end
 
     def doi_url
-      work_version.doi.blank? ? '' : " https://doi.org/#{work_version.doi}"
+      work_version.work.doi.blank? ? '' : " https://doi.org/#{work_version.work.doi}"
     end
 
     def year_published
