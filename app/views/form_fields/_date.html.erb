@@ -1,17 +1,12 @@
-<%- hint = FieldHintComponent.new(form: form, attribute: attribute) %>
-
 <div class="form-group has-float-label mb-3">
   <%= form.date_field attribute,
                       class: 'form-control',
                       required: local_assigns[:required].presence,
                       data: local_assigns[:data],
-                      readonly: local_assigns[:readonly].presence,
-                      aria: { describedby: hint.dom_id } %>
+                      readonly: local_assigns[:readonly].presence %>
   <%= form.label attribute %>
 
   <% if form.object.errors.include?(attribute) %>
     <small class="form-text feedback-invalid"><%= form.object.errors[attribute].join('; ') %></small>
   <% end %>
-
-  <%= render hint %>
 </div>
