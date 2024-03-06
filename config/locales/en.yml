@@ -106,8 +106,6 @@ en:
         work:
           attributes:
             embargoed_until:
-              format: must be in yyyy-mm-dd format
-              not_a_date: must be a valid date
               max: maximum is four years
   activemodel:
     attributes:
@@ -239,10 +237,6 @@ en:
       work_version:
         version_name: x.y.z
         published_date: yyyy-mm-dd
-      work:
-        embargoed_until: yyyy-mm-dd
-      embargo_form:
-        embargoed_until: yyyy-mm-dd
   incidents:
     new:
       error_message: 'Cannot send message'
