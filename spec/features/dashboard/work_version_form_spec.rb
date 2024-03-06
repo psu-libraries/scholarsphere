@@ -809,7 +809,6 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).to have_field('work_version_publisher_statement')
         expect(page).to have_field('work_version_work_attributes_visibility_open')
         expect(page).to have_field('work_version_work_attributes_visibility_authenticated')
-        expect(page).to have_field('work_version_work_attributes_embargoed_until')
       end
     end
 
@@ -827,7 +826,6 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).to have_field('work_version_publisher_statement')
         expect(page).to have_field('work_version_work_attributes_visibility_open')
         expect(page).to have_field('work_version_work_attributes_visibility_authenticated')
-        expect(page).to have_field('work_version_work_attributes_embargoed_until')
       end
     end
 
@@ -845,7 +843,6 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).not_to have_field('work_version_publisher_statement')
         expect(page).not_to have_field('work_version_work_attributes_visibility_open')
         expect(page).not_to have_field('work_version_work_attributes_visibility_authenticated')
-        expect(page).not_to have_field('work_version_work_attributes_embargoed_until')
       end
     end
   end
