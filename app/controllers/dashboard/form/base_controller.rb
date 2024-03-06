@@ -79,12 +79,12 @@ module Dashboard
 
         helper_method :allow_curation?
         def allow_curation?
-          curation_eligible? && in_publish_edit_action?
+          deposit_pathway.allows_curation_request? && in_publish_edit_action?
         end
 
         helper_method :allow_publish?
         def allow_publish?
-          if @resource.is_a?(WorkVersion)
+          if deposit_pathway.work?
             !@resource.draft_curation_requested || current_user.admin?
           else
             true
@@ -103,10 +103,9 @@ module Dashboard
           current_controller == 'dashboard/form/publish' && ['edit', 'update'].include?(current_action)
         end
 
-        def curation_eligible?
-          @resource.is_a?(WorkVersion) &&
-            !@resource.draft_curation_requested &&
-            Work::Types.data_and_code.include?(@resource.work.work_type)
+        helper_method :deposit_pathway
+        def deposit_pathway
+          @deposit_pathway ||= WorkDepositPathway.new(@work_version || @resource)
         end
 
         def save_resource(validation_context: nil)

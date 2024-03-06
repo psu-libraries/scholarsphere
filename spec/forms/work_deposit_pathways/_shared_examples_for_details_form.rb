@@ -9,6 +9,8 @@ shared_examples_for 'a work deposit pathway details form' do
   it { is_expected.to delegate_method(:published?).to(:work_version) }
   it { is_expected.to delegate_method(:draft?).to(:work_version) }
   it { is_expected.to delegate_method(:work).to(:work_version) }
+  it { is_expected.to delegate_method(:work_type).to(:work_version) }
+  it { is_expected.to delegate_method(:draft_curation_requested).to(:work_version) }
 
   it { is_expected.to validate_presence_of(:description) }
   it { is_expected.to validate_presence_of(:published_date) }
