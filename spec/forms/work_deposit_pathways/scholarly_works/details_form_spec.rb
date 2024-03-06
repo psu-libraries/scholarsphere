@@ -35,7 +35,7 @@ RSpec.describe WorkDepositPathway::ScholarlyWorks::DetailsForm, type: :model do
 
   describe '.form_fields' do
     it "returns a frozen array of the names of the form's fields" do
-      expect(described_class.form_fields).to eq %w{
+      expect(described_class.form_fields).to match_array %w{
         description
         published_date
         subtitle

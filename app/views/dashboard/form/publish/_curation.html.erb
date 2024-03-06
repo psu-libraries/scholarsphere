@@ -1,0 +1,18 @@
+<div class="form-group mt-5">
+  <div class="keyline keyline--left">
+    <h4><%= t '.header' %></h4>
+  </div>
+  <div>
+    <% unless @resource.draft_curation_requested %>
+      <div>
+        <%= t '.request_description' %>
+      </div>
+      <br>
+      <div>
+        <%= t '.publish_description' %>
+      </div>
+    <% else %>
+      <strong><%= t '.curation_requested' %> <a href="/incidents/new"><%= t '.contact' %></a></strong>
+    <% end %>
+  </div>
+</div>

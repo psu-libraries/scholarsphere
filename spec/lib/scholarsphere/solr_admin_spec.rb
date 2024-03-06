@@ -10,6 +10,7 @@ RSpec.describe Scholarsphere::SolrAdmin, skip: ci_build? do
   before(:all) do
     VCR.configure do |c|
       c.ignore_localhost = false
+      c.unignore_host Scholarsphere::SolrConfig.new.solr_host
     end
   end
 

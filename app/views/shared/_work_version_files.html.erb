@@ -9,6 +9,7 @@
           <h3>
             <%= link_to resource_download_path(file.id, resource_id: work_version.uuid),
                         title: t('resources.download', name: file.title),
+                        class: 'matomo_download',
                         rel: 'nofollow' do %>
               <%= file.title %>
             <% end %>

@@ -14,15 +14,13 @@ module FeatureHelpers
       select Work::Types.display('article'), from: 'work_version_work_attributes_work_type'
     end
 
-    def self.fill_in_work_details(work_version_metadata)
-      fill_in_scholarly_works_work_details(work_version_metadata)
-      fill_in 'work_version_based_near', with: work_version_metadata[:based_near]
-      fill_in 'work_version_source', with: work_version_metadata[:source]
+    def self.fill_in_minimal_work_details_for_data_and_code_draft(work_version_metadata)
+      fill_in 'work_version_title', with: work_version_metadata[:title]
+      select Work::Types.display('dataset'), from: 'work_version_work_attributes_work_type'
     end
 
-    def self.fill_in_scholarly_works_work_details(work_version_metadata)
+    def self.fill_in_common_work_details(work_version_metadata)
       fill_in 'work_version_description', with: work_version_metadata[:description]
-      fill_in 'work_version_publisher_statement', with: work_version_metadata[:publisher_statement]
       fill_in 'work_version_published_date', with: work_version_metadata[:published_date]
       fill_in 'work_version_keyword', with: work_version_metadata[:keyword]
 
@@ -32,6 +30,24 @@ module FeatureHelpers
       fill_in 'work_version_language', with: work_version_metadata[:language]
       fill_in 'work_version_related_url', with: work_version_metadata[:related_url]
       fill_in 'work_version_identifier', with: work_version_metadata[:identifier]
+    end
+
+    def self.fill_in_work_details(work_version_metadata)
+      fill_in_common_work_details(work_version_metadata)
+      fill_in 'work_version_publisher_statement', with: work_version_metadata[:publisher_statement]
+      fill_in 'work_version_based_near', with: work_version_metadata[:based_near]
+      fill_in 'work_version_source', with: work_version_metadata[:source]
+    end
+
+    def self.fill_in_data_and_code_work_details(work_version_metadata)
+      fill_in_common_work_details(work_version_metadata)
+      fill_in 'work_version_based_near', with: work_version_metadata[:based_near]
+      fill_in 'work_version_source', with: work_version_metadata[:source]
+    end
+
+    def self.fill_in_scholarly_works_work_details(work_version_metadata)
+      fill_in_common_work_details(work_version_metadata)
+      fill_in 'work_version_publisher_statement', with: work_version_metadata[:publisher_statement]
     end
 
     def self.fill_in_minimal_collection_details(collection_metadata)

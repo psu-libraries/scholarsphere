@@ -26,6 +26,8 @@ module Dashboard
       end
     end
 
+    helper_method :deposit_pathway
+
     private
 
       # @note Work indexing is largely handled via the WorkVersion and not the actual work. Placing a callback on the
@@ -36,7 +38,7 @@ module Dashboard
 
       def initialize_forms
         @work = WorkDecorator.new(@undecorated_work)
-        @work.attributes = work_params
+        @work.attributes = work_params if deposit_pathway.allows_visibility_change?
 
         @embargo_form = EmbargoForm.new(work: @undecorated_work, params: embargo_params)
         @editors_form = EditorsForm.new(resource: @undecorated_work, user: current_user, params: editors_params)
@@ -62,6 +64,10 @@ module Dashboard
         else
           @work
         end
+      end
+
+      def deposit_pathway
+        @deposit_pathway ||= WorkDepositPathway.new(@undecorated_work)
       end
 
       # Never trust parameters from the scary internet, only allow the white list through.
