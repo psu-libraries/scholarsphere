@@ -25,10 +25,10 @@ class EmbargoForm
 
   def save
     work.embargoed_until = if remove?
-                            nil
-                          elsif embargoed_until.present?
-                            parsed_embargo_date
-                          end
+                             nil
+                           elsif embargoed_until.present?
+                             parsed_embargo_date
+                           end
 
     unless work.valid?
       work.errors.each do |attr, message|
@@ -41,7 +41,8 @@ class EmbargoForm
   end
 
   private
-  def parsed_embargo_date
-    Time.zone.parse(@embargoed_until).beginning_of_day
-  end
+
+    def parsed_embargo_date
+      Time.zone.parse(@embargoed_until).beginning_of_day
+    end
 end

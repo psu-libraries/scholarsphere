@@ -62,10 +62,10 @@ RSpec.describe Work, type: :model do
   end
 
   describe 'validations' do
+    let(:work) { build(:work) }
+
     it { is_expected.to validate_presence_of(:work_type) }
     it { is_expected.to validate_presence_of(:versions) }
-
-    let(:work) { build(:work) }
 
     context 'when embargoed_until is blank' do
       it 'is valid' do

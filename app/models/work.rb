@@ -263,9 +263,9 @@ class Work < ApplicationRecord
     def embargoed_until_is_valid_date
       return if embargoed_until.blank?
 
-        unless embargoed_until < (DateTime.now + 4.years)
-          errors.add(:embargoed_until, :max)
-          nil
-        end
+      unless embargoed_until < (DateTime.now + 4.years)
+        errors.add(:embargoed_until, :max)
+        nil
+      end
     end
 end
