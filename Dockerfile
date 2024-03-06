@@ -1,4 +1,4 @@
-FROM harbor.k8s.libraries.psu.edu/library/ruby-3.1.2-node-16:20240115 as base
+FROM harbor.k8s.libraries.psu.edu/library/ruby-3.1.2-node-16:20240304 as base
 ARG UID=2000
 
 COPY bin/vaultshell /usr/local/bin/
@@ -6,7 +6,7 @@ USER root
 RUN apt-get update && \
    apt-get install --no-install-recommends -y \
    shared-mime-info \
-   imagemagick=8:6.9.10.23+dfsg-2.1+deb10u5 \
+   imagemagick \
    ghostscript\
    libreoffice && \
    rm -rf /var/lib/apt/lists*
@@ -51,6 +51,9 @@ RUN apt-get update && apt-get install -y x11vnc \
     rsync \
     libsqlite3-dev \
     libnss3 \
+    libdrm2 \
+    libice6 \
+    libsm6 \
     wmctrl \
     google-chrome-stable
 

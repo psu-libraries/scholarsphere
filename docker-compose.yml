@@ -1,7 +1,6 @@
 version: '3.5'
 x-web_env: &web_env
   environment:
-      SELENIUM: "true"
       REDIS_HOST: redis
       SOLR_USERNAME: scholarsphere
       SOLR_PASSWORD: scholarsphere
@@ -28,8 +27,6 @@ x-web_env: &web_env
       SOLR_COLLECTION: scholarsphere
       POSTGRES_HOST: db
 services:
-  selenium:
-    image: selenium/standalone-chrome:3.141.59-xenon
   redis:
     image: redis:6.2.6
     command: redis-server --requirepass redispassword
@@ -43,7 +40,7 @@ services:
     <<: *web_env
     build: 
       context: . 
-      target: base
+      target: dev
     volumes:
     - bundle-data:/app/vendor/bundle
     - node-data:/app/node_modules
@@ -92,6 +89,12 @@ services:
     - "5432:5432"
     volumes:
     - db-data:/var/lib/postgresql/data
+
+networks:                                
+  default:                               
+    driver: bridge                       
+    driver_opts:                         
+      com.docker.network.driver.mtu: 1400
 
 volumes:
   redis-data:

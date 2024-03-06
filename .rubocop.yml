@@ -42,6 +42,9 @@ Metrics/CyclomaticComplexity:
     - 'app/services/doi_service.rb'
     - 'app/services/authorship_migration/work_version_creation_migration.rb'
 
+Metrics/ClassLength:
+  Exclude:
+    - 'app/models/work_version.rb'
 
 Rails/DynamicFindBy:
   Exclude:
@@ -56,6 +59,7 @@ Rails/ApplicationController:
 
 Rails/SkipsModelValidations:
   Exclude:
+    - 'app/controllers/dashboard/form/publish_controller.rb'
     - 'app/models/api_token.rb'
     - 'app/services/migrate_collection_ids.rb'
     - 'app/services/doi_service.rb'
@@ -109,6 +113,8 @@ RSpec/MessageSpies:
   Exclude:
     - 'spec/jobs/doi_minting_job_spec.rb'
     - 'spec/lib/scholarsphere/solr_admin_spec.rb'
+    - 'spec/services/airtable_exporter_spec.rb'
+    - 'spec/services/curation_task_exporter_spec.rb'
 
 RSpec/MultipleSubjects:
   Exclude:
@@ -139,4 +145,8 @@ Style/EmptyCaseCondition:
   Exclude:
     - 'app/services/doi_service.rb'
     - 'app/controllers/dashboard/form/base_controller.rb'
+
+Layout/LineLength:
+  Exclude:
+    - 'spec/features/dashboard/work_version_form_spec.rb'
 

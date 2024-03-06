@@ -77,4 +77,8 @@ FactoryBot.define do
   trait(:with_private_access) do
     visibility { Permissions::Visibility::PRIVATE }
   end
+
+  trait(:article) do
+    work_type { 'article' }
+  end
 end

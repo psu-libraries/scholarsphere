@@ -199,9 +199,9 @@ RSpec.describe 'Publishing a work', with_user: :user do
           it 'does not save the data and rerenders the form with errors' do
             visit dashboard_form_work_versions_path
 
-            FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_draft(metadata)
+            FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_scholarly_works_draft(metadata)
             FeatureHelpers::DashboardForm.save_and_continue
-            FeatureHelpers::DashboardForm.fill_in_work_details(metadata)
+            FeatureHelpers::DashboardForm.fill_in_scholarly_works_work_details(metadata)
             fill_in 'work_version_description', with: ''
             FeatureHelpers::DashboardForm.save_and_continue
 
@@ -243,6 +243,122 @@ RSpec.describe 'Publishing a work', with_user: :user do
         end
       end
     end
+
+    context 'when selecting a work type that uses the data and code deposit pathway' do
+      it 'shows only the fields for data and code works' do
+        visit dashboard_form_work_versions_path
+
+        FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_data_and_code_draft(metadata)
+        FeatureHelpers::DashboardForm.save_and_continue
+
+        expect(page).not_to have_field('publisher_statement')
+      end
+
+      context 'when saving as draft and exiting' do
+        it 'creates a new work with all fields provided' do
+          initial_work_count = Work.count
+
+          visit dashboard_form_work_versions_path
+
+          FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_data_and_code_draft(metadata)
+          FeatureHelpers::DashboardForm.save_as_draft_and_exit
+
+          expect(Work.count).to eq(initial_work_count + 1)
+
+          new_work = Work.last
+          expect(new_work.work_type).to eq 'dataset'
+          expect(new_work.versions.length).to eq 1
+
+          new_work_version = new_work.versions.last
+          expect(page).to have_content(metadata[:title])
+          expect(new_work_version.title).to eq metadata[:title]
+          expect(new_work_version.version_number).to eq 1
+
+          expect(page).to have_current_path(resource_path(new_work_version.uuid))
+          expect(SolrIndexingJob).to have_received(:perform_later).at_least(:once)
+        end
+      end
+
+      context 'when saving and_continuing' do
+        it 'creates a new work with all fields provided' do
+          initial_work_count = Work.count
+
+          visit dashboard_form_work_versions_path
+
+          FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_data_and_code_draft(metadata)
+          FeatureHelpers::DashboardForm.save_and_continue
+          FeatureHelpers::DashboardForm.fill_in_data_and_code_work_details(metadata)
+          FeatureHelpers::DashboardForm.save_and_continue
+
+          expect(Work.count).to eq(initial_work_count + 1)
+          new_work = Work.last
+          expect(new_work.work_type).to eq 'dataset'
+          expect(new_work.versions.length).to eq 1
+
+          new_work_version = new_work.versions.last
+          expect(new_work_version.version_number).to eq 1
+          expect(new_work_version.title).to eq metadata[:title]
+          expect(new_work_version.description).to eq metadata[:description]
+          expect(new_work_version.published_date).to eq metadata[:published_date]
+          expect(new_work_version.keyword).to eq [metadata[:keyword]]
+          expect(new_work_version.subtitle).to eq metadata[:subtitle]
+          expect(new_work_version.publisher).to eq [metadata[:publisher]]
+          expect(new_work_version.subject).to eq [metadata[:subject]]
+          expect(new_work_version.language).to eq [metadata[:language]]
+          expect(new_work_version.related_url).to eq [metadata[:related_url]]
+          expect(new_work_version.identifier).to eq [metadata[:identifier]]
+
+          expect(page).to have_current_path(dashboard_form_contributors_path('work_version', new_work_version))
+          expect(SolrIndexingJob).to have_received(:perform_later).at_least(:twice)
+        end
+
+        context 'with invalid data' do
+          it 'does not save the data and rerenders the form with errors' do
+            visit dashboard_form_work_versions_path
+
+            FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_data_and_code_draft(metadata)
+            FeatureHelpers::DashboardForm.save_and_continue
+            FeatureHelpers::DashboardForm.fill_in_data_and_code_work_details(metadata)
+            fill_in 'work_version_description', with: ''
+            FeatureHelpers::DashboardForm.save_and_continue
+
+            new_work_version = Work.last.versions.last
+
+            expect(page).to have_current_path(dashboard_form_work_version_details_path(new_work_version))
+            expect(page).to have_content "Description can't be blank"
+            expect(SolrIndexingJob).to have_received(:perform_later).once
+
+            expect(new_work_version.description).to be_nil
+            expect(new_work_version.published_date).to be_nil
+            expect(new_work_version.keyword).to be_empty
+            expect(new_work_version.subtitle).to be_nil
+            expect(new_work_version.version_name).to be_nil
+            expect(new_work_version.publisher).to be_empty
+            expect(new_work_version.subject).to be_empty
+            expect(new_work_version.language).to be_empty
+            expect(new_work_version.related_url).to be_empty
+            expect(new_work_version.identifier).to be_empty
+            expect(new_work_version.based_near).to be_empty
+            expect(new_work_version.source).to be_empty
+          end
+        end
+      end
+
+      context 'when saving-and-continuing, then hitting cancel' do
+        it 'returns to the resource page' do
+          visit dashboard_form_work_versions_path
+
+          FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_data_and_code_draft(metadata)
+          FeatureHelpers::DashboardForm.save_and_continue
+          FeatureHelpers::DashboardForm.fill_in_data_and_code_work_details(metadata)
+          FeatureHelpers::DashboardForm.save_and_continue
+
+          FeatureHelpers::DashboardForm.cancel
+
+          expect(page).to have_content metadata[:title]
+        end
+      end
+    end
   end
 
   describe 'The Work Details tab for an existing draft work' do
@@ -260,6 +376,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         expect(page).to have_current_path(resource_path(work_version.uuid))
         expect(Work.count).to eq(initial_work_count)
+        expect(page).not_to have_button('Request Curation & Save as Draft')
 
         work_version.reload
         expect(work_version.title).to eq metadata[:title]
@@ -339,6 +456,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
           expect(page).to have_field('Email')
           expect(page).to have_content("Access Account: #{actor.psu_id}".upcase)
         end
+
+        expect(page).not_to have_button('Request Curation & Save as Draft')
 
         fill_in 'work_version_contributor', with: metadata[:contributor]
 
@@ -616,6 +735,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
           sleep 0.1
         end
       end
+
+      expect(page).not_to have_button('Request Curation & Save as Draft')
     end
   end
 
@@ -683,6 +804,9 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).to have_field('work_version_based_near')
         expect(page).to have_field('work_version_source')
         expect(page).to have_field('work_version_version_name')
+        expect(page).to have_field('work_version_publisher_statement')
+        expect(page).to have_field('work_version_work_attributes_visibility_open')
+        expect(page).to have_field('work_version_work_attributes_visibility_authenticated')
       end
     end
 
@@ -697,6 +821,26 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).not_to have_field('work_version_based_near')
         expect(page).not_to have_field('work_version_source')
         expect(page).not_to have_field('work_version_version_name')
+        expect(page).to have_field('work_version_publisher_statement')
+        expect(page).to have_field('work_version_work_attributes_visibility_open')
+        expect(page).to have_field('work_version_work_attributes_visibility_authenticated')
+      end
+    end
+
+    context 'with a work that uses the data & code deposit pathway' do
+      let(:work) { create :work, versions_count: 1, work_type: 'dataset' }
+      let(:work_version) { work.versions.first }
+      let(:user) { work.depositor.user }
+
+      it 'shows only the fields for a data & code work' do
+        visit dashboard_form_publish_path(work_version)
+
+        expect(page).to have_field('work_version_based_near')
+        expect(page).to have_field('work_version_source')
+        expect(page).to have_field('work_version_version_name')
+        expect(page).not_to have_field('work_version_publisher_statement')
+        expect(page).not_to have_field('work_version_work_attributes_visibility_open')
+        expect(page).not_to have_field('work_version_work_attributes_visibility_authenticated')
       end
     end
   end
@@ -852,7 +996,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
   end
 
   describe 'Editing a published work' do
-    let(:work_version) { create :work_version, :published }
+    let(:work) { create :work, work_type: 'audio' }
+    let(:work_version) { create :work_version, :published, work: work }
     let(:invalid_metadata) { attributes_for(:work_version, :with_complete_metadata, description: '') }
     let(:different_metadata) { attributes_for(:work_version, :with_complete_metadata) }
     let(:incorrect_rights) { (WorkVersion::Licenses.ids - WorkVersion::Licenses::ids_for_authorized_visibility).first }
@@ -922,6 +1067,152 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect {
           FeatureHelpers::DashboardForm.delete
         }.to raise_error(Capybara::ElementNotFound)
+      end
+    end
+  end
+
+  describe 'Requesting curation', js: true do
+    let(:user) { work_version.work.depositor.user }
+    let(:request_description) { "Select 'Request Curation & Save as Draft' below if you would like ScholarSphere curators to review your work assessing its findability, accessibility, interoperability, and reusability prior to publication (recommended)." }
+    let(:publish_description) { "Select 'Publish' if you would like to self-submit your deposit to Scholarsphere and make it immediately public. ScholarSphere curators will review your work after publication. Note, because curatorial review occurs after publication, any changes or updates may result in a versioned work." }
+
+    context 'with a draft eligible for curation request' do
+      let(:work_version) { create :work_version, :draft, draft_curation_requested: nil }
+
+      it 'renders buttons for requesting curation and publish and shows helper text explaing requesting curation' do
+        work_version.work.work_type = 'dataset'
+
+        visit dashboard_form_publish_path(work_version)
+
+        expect(page).to have_button('Request Curation & Save as Draft')
+        expect(page).to have_button('Publish')
+
+        expect(page).to have_content(request_description)
+        expect(page).to have_content(publish_description)
+      end
+    end
+
+    context 'with a draft not eligible for curation request' do
+      let(:work) { create :work, versions_count: 1, has_draft: true, work_type: 'article' }
+      let(:work_version) { work.versions.first }
+
+      it 'does not render a button for requesting curation but does render publish and does not show helper text about requesting curation' do
+        visit dashboard_form_publish_path(work_version)
+
+        expect(page).not_to have_button('Request Curation & Save as Draft')
+        expect(page).to have_button('Publish')
+        expect(page).not_to have_content(request_description)
+      end
+    end
+
+    context 'with a draft that already has curation requested' do
+      let(:work_version) { create :work_version, :able_to_be_published, draft_curation_requested: true }
+      let(:curation_requested) { 'Curation has been requested. We will notify you when curation is complete and your work is ready to be published. If you have any questions in the meantime, please contact ScholarSphere curators via our ' }
+
+      context 'when user is an admin' do
+        let(:user) { create(:user, :admin) }
+
+        it 'allows admin to publish' do
+          work_version.work.work_type = 'dataset'
+          visit dashboard_form_publish_path(work_version)
+
+          expect(page).to have_button('Publish')
+
+          check 'I have read and agree to the deposit agreement.'
+          click_on 'Publish'
+
+          expect(work_version.reload.aasm_state).to eq 'published'
+        end
+      end
+
+      context 'when user is not an admin' do
+        it 'does not render buttons for requesting curation or publish & shows text that curation has been requested' do
+          work_version.work.work_type = 'dataset'
+          visit dashboard_form_publish_path(work_version)
+
+          expect(page).not_to have_button('Request Curation & Save as Draft')
+          expect(page).not_to have_button('Publish')
+          expect(page).to have_content(curation_requested)
+          expect(page).to have_link('contact form')
+        end
+      end
+    end
+
+    context 'when curation is successfully requested' do
+      let(:work_version) { create :work_version, :able_to_be_published, draft_curation_requested: nil }
+
+      before do
+        allow(CurationTaskExporter).to receive(:call).with(work_version.id)
+      end
+
+      it 'creates a Submission' do
+        work_version.work.work_type = 'dataset'
+
+        visit dashboard_form_publish_path(work_version)
+
+        check 'I have read and agree to the deposit agreement.'
+
+        click_on 'Request Curation & Save as Draft'
+
+        expect(CurationTaskExporter).to have_received(:call).with(work_version.id)
+      end
+    end
+
+    context 'when an error occurs within the curation exporter' do
+      let(:work_version) { create :work_version, :able_to_be_published, draft_curation_requested: nil }
+
+      before { allow(CurationTaskExporter).to receive(:call).with(work_version.id).and_raise(CurationTaskExporter::CurationError) }
+
+      it 'saves changes to the work version and displays an error flash message' do
+        work_version.work.work_type = 'dataset'
+
+        visit dashboard_form_publish_path(work_version)
+
+        fill_in 'work_version_title', with: ''
+        fill_in 'work_version_title', with: 'Changed Title'
+        check 'I have read and agree to the deposit agreement.'
+
+        click_on 'Request Curation & Save as Draft'
+
+        within('.alert-danger') do
+          expect(page).to have_content('There was an error with your curation request')
+        end
+
+        work_version.reload
+        expect(work_version.title).to eq('Changed Title')
+      end
+    end
+
+    context 'when there is a validation error' do
+      let(:work_version) { create :work_version, :able_to_be_published, draft_curation_requested: nil }
+
+      before { allow(CurationTaskExporter).to receive(:call).with(work_version.id) }
+
+      it 'does not call the curation task exporter' do
+        work_version.work.work_type = 'dataset'
+
+        visit dashboard_form_publish_path(work_version)
+
+        fill_in 'work_version_published_date', with: ''
+        fill_in 'work_version_published_date', with: 'this is not a valid date'
+        check 'I have read and agree to the deposit agreement.'
+
+        click_on 'Request Curation & Save as Draft'
+
+        expect(CurationTaskExporter).not_to have_received(:call).with(work_version.id)
+
+        within '#error_explanation' do
+          expect(page).to have_content(I18n.t!('errors.messages.invalid_edtf'))
+        end
+
+        within '.footer--actions' do
+          expect(page).to have_button(I18n.t!('dashboard.form.actions.request_curation'))
+        end
+
+        work_version.reload
+        expect(work_version).not_to be_published
+        expect(work_version.published_date).to eq 'this is not a valid date'
+        expect(work_version.draft_curation_requested).to eq false
       end
     end
   end

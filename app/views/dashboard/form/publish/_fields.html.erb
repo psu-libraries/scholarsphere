@@ -10,8 +10,12 @@
 <%= form.fields_for :work do |work_form| %>
   <div class="form-wrapper">
 
-    <% if policy(@resource).edit_initial_draft? %>
+    <% if policy(@resource).edit_initial_draft? && deposit_pathway.allows_visibility_change? %>
       <%= render 'visibility_field', form: work_form %>
+    <% end %>
+
+    <% if allow_curation? || @resource.draft_curation_requested %>
+      <%= render 'curation', form: form %>
     <% end %>
 
     <div class="form-group mt-5">

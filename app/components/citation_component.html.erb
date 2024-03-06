@@ -1,0 +1,15 @@
+<div class="keyline keyline--left mb-1">
+  <h2 class="h4"><%= t('resources.citation.header') %></h2>
+</div>
+<span data-controller="clipboard">
+  <%= citation_display %>
+  <span class="meta__signature" data-target="clipboard.source" data-source="<%= citation_display %>">
+  </span>
+  <button class="btn btn-sm btn-link px-0"
+          data-toggle="tooltip"
+          data-placement="top"
+          title="<%= t('resources.citation.copy') %>"
+          data-action="clipboard#copy">
+    <span class="material-icons material-icons--copy"><%= t('resources.signature.copy_icon') %></span>
+  </button>
+</span>

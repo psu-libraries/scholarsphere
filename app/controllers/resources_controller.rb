@@ -18,4 +18,9 @@ class ResourcesController < ApplicationController
 
       SessionViewStatsCache.call(session: session, resource: @resource)
     end
+
+    helper_method :deposit_pathway
+    def deposit_pathway
+      @deposit_pathway ||= WorkDepositPathway.new(@resource)
+    end
 end

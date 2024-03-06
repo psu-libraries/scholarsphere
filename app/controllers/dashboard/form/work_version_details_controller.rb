@@ -67,10 +67,6 @@ module Dashboard
         def work_version
           @work_version ||= WorkVersion.includes(:work).find(params[:id])
         end
-
-        def deposit_pathway
-          @deposit_pathway ||= WorkDepositPathway.new(work_version)
-        end
     end
   end
 end
