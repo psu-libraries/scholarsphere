@@ -23,7 +23,7 @@ RSpec.describe CitationComponent, type: :component do
         build(
           :work_version,
           :published,
-          work: build(:work, work_type: 'dataset',  doi: '10.26207/123'),
+          work: build(:work, work_type: 'dataset', doi: '10.26207/123'),
           title: 'Citation Title',
           published_date: '2024-02-16',
           doi: '10.26207/123'
