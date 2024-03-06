@@ -777,19 +777,21 @@ RSpec.describe 'Publishing a work', with_user: :user do
       it 'does not display visibility fields' do
         visit dashboard_form_publish_path(work_version)
 
-        expect(page).not_to have_content(WorkVersion.human_attribute_name(:visibility))
+        expect(page).not_to have_content('Penn State Only')
+        expect(page).not_to have_content('Embargo')
       end
     end
 
     context 'with a v1 draft version' do
-      let(:work) { create :work, versions_count: 1, has_draft: true }
+      let(:work) { create :work, versions_count: 1, has_draft: true, work_type: 'article' }
       let(:work_version) { work.versions.first }
       let(:user) { work.depositor.user }
 
       it 'displays visibility fields' do
         visit dashboard_form_publish_path(work_version)
 
-        expect(page).to have_content(WorkVersion.human_attribute_name(:visibility))
+        expect(page).to have_content('Penn State Only')
+        expect(page).to have_content('Embargo')
       end
     end
 
@@ -807,6 +809,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).to have_field('work_version_publisher_statement')
         expect(page).to have_field('work_version_work_attributes_visibility_open')
         expect(page).to have_field('work_version_work_attributes_visibility_authenticated')
+        expect(page).to have_field('work_version_work_attributes_embargoed_until')
       end
     end
 
@@ -824,6 +827,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).to have_field('work_version_publisher_statement')
         expect(page).to have_field('work_version_work_attributes_visibility_open')
         expect(page).to have_field('work_version_work_attributes_visibility_authenticated')
+        expect(page).to have_field('work_version_work_attributes_embargoed_until')
       end
     end
 
@@ -841,6 +845,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).not_to have_field('work_version_publisher_statement')
         expect(page).not_to have_field('work_version_work_attributes_visibility_open')
         expect(page).not_to have_field('work_version_work_attributes_visibility_authenticated')
+        expect(page).not_to have_field('work_version_work_attributes_embargoed_until')
       end
     end
   end
