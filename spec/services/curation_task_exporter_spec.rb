@@ -5,7 +5,7 @@
 require 'rails_helper'
 
 RSpec.describe CurationTaskExporter do
-  describe '.call' do
+  describe '.send_curation' do
     let(:work_version) { build :work_version,
                                id: 1,
                                uuid: uuid,
@@ -33,7 +33,7 @@ RSpec.describe CurationTaskExporter do
         Labels: ['Curation Requested']
       )
 
-      described_class.call(work_version.id)
+      described_class.send_curation(work_version.id, requested: true)
     end
   end
 end

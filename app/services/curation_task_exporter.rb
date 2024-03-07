@@ -5,10 +5,11 @@ require 'airrecord'
 class CurationTaskExporter
   class CurationError < RuntimeError; end
 
-  def self.call(work_version_id)
+  def self.send_curation(work_version_id, requested: false)
     Airrecord.api_key = ENV['AIRTABLE_API_TOKEN']
 
     submission = WorkVersion.find(work_version_id)
+    labels = requested ? ['Curation Requested'] : []
 
     record =
       {
@@ -18,7 +19,7 @@ class CurationTaskExporter
         Depositor: submission.depositor_access_id,
         'Depositor Name': submission.depositor_name,
         'Deposit Date': submission.deposited_at,
-        Labels: ['Curation Requested']
+        Labels: labels
       }
 
     begin

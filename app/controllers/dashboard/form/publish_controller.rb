@@ -41,7 +41,7 @@ module Dashboard
             initial_state = @resource.aasm_state
             @resource.publish
             if @resource.valid?
-              CurationTaskExporter.call(@resource.id)
+              CurationTaskExporter.send_curation(@resource.id, requested: true)
               @resource.draft_curation_requested = true
             else
               @resource.update_column(:draft_curation_requested, false)
