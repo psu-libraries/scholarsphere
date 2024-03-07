@@ -2,7 +2,7 @@
 
 require 'airrecord'
 
-class CurationTaskExporter
+class CurationTaskClient
   class CurationError < RuntimeError; end
 
   def self.send_curation(work_version_id, requested: false)
@@ -24,6 +24,27 @@ class CurationTaskExporter
 
     begin
       Submission.create(record)
+    rescue Airrecord::Error => e
+      raise CurationError.new(e)
+    end
+  end
+
+  def self.find(uuid)
+    Airrecord.api_key = ENV['AIRTABLE_API_TOKEN']
+
+    begin
+      Submission.all(filter: "{ID} = '#{uuid}'")
+    rescue Airrecord::Error => e
+      raise CurationError.new(e)
+    end
+  end
+
+  def self.remove(airtable_id)
+    Airrecord.api_key = ENV['AIRTABLE_API_TOKEN']
+
+    begin
+      record = Submission.find(airtable_id)
+      record.destroy
     rescue Airrecord::Error => e
       raise CurationError.new(e)
     end

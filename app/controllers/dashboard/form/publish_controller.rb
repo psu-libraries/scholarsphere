@@ -41,14 +41,14 @@ module Dashboard
             initial_state = @resource.aasm_state
             @resource.publish
             if @resource.valid?
-              CurationTaskExporter.send_curation(@resource.id, requested: true)
+              CurationTaskClient.send_curation(@resource.id, requested: true)
               @resource.draft_curation_requested = true
             else
               @resource.update_column(:draft_curation_requested, false)
               render :edit
               return
             end
-          rescue CurationTaskExporter::CurationError => e
+          rescue CurationTaskClient::CurationError => e
             @resource.update_column(:draft_curation_requested, false)
             logger.error(e)
             flash[:error] = t('dashboard.form.publish.curation.error')

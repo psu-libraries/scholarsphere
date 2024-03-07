@@ -4,7 +4,7 @@
 
 require 'rails_helper'
 
-RSpec.describe CurationTaskExporter do
+RSpec.describe CurationTaskClient do
   describe '.send_curation' do
     let(:work_version) { build :work_version,
                                id: 1,
@@ -34,6 +34,14 @@ RSpec.describe CurationTaskExporter do
       )
 
       described_class.send_curation(work_version.id, requested: true)
+    end
+  end
+
+  describe '.find' do
+    it 'finds a record if it is in Airtable' do
+      expect(Submission).to receive(:all).with(filter: "{ID} = 'testID'")
+
+      described_class.find('testID')
     end
   end
 end

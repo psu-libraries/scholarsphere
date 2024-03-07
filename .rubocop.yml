@@ -115,6 +115,7 @@ RSpec/MessageSpies:
     - 'spec/lib/scholarsphere/solr_admin_spec.rb'
     - 'spec/services/airtable_exporter_spec.rb'
     - 'spec/services/curation_task_exporter_spec.rb'
+    - 'spec/services/curation_task_client_spec.rb'
 
 RSpec/MultipleSubjects:
   Exclude:
