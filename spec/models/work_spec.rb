@@ -66,6 +66,27 @@ RSpec.describe Work, type: :model do
     it { is_expected.to validate_presence_of(:versions) }
   end
 
+  describe '.recently_published' do
+    let(:wv1_2) { build :work_version, :published, work: nil, published_at: 20.days.ago, version_number: 2 }
+    let(:wv1_1) { build :work_version, :published, work: nil, published_at: 80.days.ago, version_number: 1 }
+    let(:work1) { create :work, versions: [wv1_1, wv1_2] }
+
+    let(:wv2) { build :work_version, :published, work: nil, published_at: 70.days.ago}
+    let(:work2) { create :work, versions: [wv2] }
+
+    let(:wv3) { build :work_version, :published, work: nil, published_at: 10.days.ago}
+    let(:work3) { create :work, versions: [wv3] }
+
+    let(:wv4) { build :work_version, work: nil, published_at: nil}
+    let(:work4) { create :work, versions: [wv4] }
+
+    let(:work5) { create :work }
+
+    it 'returns works with a published WorkVersion in the last 60 days' do
+      expect(Work.recently_published).to match_array([work1, work3])
+    end
+  end
+
   describe '::Types' do
     subject(:types) { described_class::Types }
 

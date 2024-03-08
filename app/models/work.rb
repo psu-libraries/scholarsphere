@@ -50,6 +50,12 @@ class Work < ApplicationRecord
 
   accepts_nested_attributes_for :versions
 
+  scope :recently_published, -> {
+    joins(:versions)
+      .where("work_versions.published_at >= ?", 60.days.ago)
+      .distinct
+  }
+
   module Types
     def self.all
       general.union(scholarly_works).union(data_and_code).freeze
