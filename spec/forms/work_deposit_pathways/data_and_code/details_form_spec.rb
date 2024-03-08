@@ -1,16 +1,17 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require_relative '../_shared_examples_for_work_deposit_pathway_form'
 require_relative '../_shared_examples_for_details_form'
 
 RSpec.describe WorkDepositPathway::DataAndCode::DetailsForm, type: :model do
   subject(:form) { described_class.new(wv) }
 
   let(:wv) {
-    instance_double(
-      WorkVersion,
+    build(
+      :work_version,
       attributes: {
-        'description' => 'test description',
+        'description' => description,
         'published_date' => '2024',
         'subtitle' => 'test subtitle',
         'keyword' => 'test keyword',
@@ -22,17 +23,13 @@ RSpec.describe WorkDepositPathway::DataAndCode::DetailsForm, type: :model do
         'based_near' => 'test location',
         'source' => 'test source',
         'version_name' => '1.0.0'
-      },
-      'indexing_source=': nil,
-      'update_doi=': nil,
-      valid?: valid,
-      errors: errors
+      }
     )
   }
 
-  let(:valid) { true }
-  let(:errors) { {} }
+  let(:description) { 'test description' }
 
+  it_behaves_like 'a work deposit pathway form'
   it_behaves_like 'a work deposit pathway details form'
 
   describe '.form_fields' do
@@ -69,14 +66,14 @@ RSpec.describe WorkDepositPathway::DataAndCode::DetailsForm, type: :model do
           description: 'test description',
           published_date: '2024',
           subtitle: 'test subtitle',
-          keyword: 'test keyword',
-          publisher: 'test publisher',
-          identifier: 'test identifier',
-          related_url: 'test related_url',
-          subject: 'test subject',
-          language: 'test language',
-          based_near: 'test location',
-          source: 'test source',
+          keyword: ['test keyword'],
+          publisher: ['test publisher'],
+          identifier: ['test identifier'],
+          related_url: ['test related_url'],
+          subject: ['test subject'],
+          language: ['test language'],
+          based_near: ['test location'],
+          source: ['test source'],
           version_name: '1.0.0'
         }
       )

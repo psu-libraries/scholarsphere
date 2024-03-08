@@ -51,7 +51,7 @@ class WorkDepositPathway
       Work::Types.scholarly_works.include?(work_type)
     end
 
-    class DetailsFormBase
+    class WorkVersionFormBase
       include ActiveModel::Model
       include ActiveModel::Attributes
 
@@ -72,28 +72,25 @@ class WorkDepositPathway
         super(work_version.attributes.slice(*self.class.form_fields))
       end
 
-      validates :description, presence: true
-
-      validates :published_date,
-                presence: true,
-                edtf_date: true
-
       def self.model_name
         WorkVersion.model_name
       end
 
-      def save(context:)
+      def save(context: nil)
         work_version.attributes = attributes
 
         if work_version.valid?
           if valid?
-            work_version.attributes = attributes
             work_version.save(context: context)
+          else
+            false
           end
         else
           validate
-          work_version.errors.each do |attr, message|
-            errors.add(attr, message)
+          work_version.errors.each do |error|
+            unless errors.find { |e| e.attribute == error.attribute && e.message == error.message }
+              errors.add(error.attribute, error.message)
+            end
           end
           false
         end
@@ -118,10 +115,18 @@ class WorkDepositPathway
         attr_reader :work_version
     end
 
+    class DetailsFormBase < WorkVersionFormBase
+      validates :description, presence: true
+
+      validates :published_date,
+                presence: true,
+                edtf_date: true
+    end
+
     module General
       class DetailsForm < DetailsFormBase
         def self.form_fields
-          DetailsFormBase::COMMON_FIELDS.union(
+          WorkVersionFormBase::COMMON_FIELDS.union(
             %w{
               publisher_statement
               based_near
@@ -140,7 +145,7 @@ class WorkDepositPathway
     module ScholarlyWorks
       class DetailsForm < DetailsFormBase
         def self.form_fields
-          DetailsFormBase::COMMON_FIELDS.union(
+          WorkVersionFormBase::COMMON_FIELDS.union(
             %w{
               publisher_statement
             }
@@ -172,7 +177,7 @@ class WorkDepositPathway
     module DataAndCode
       class DetailsForm < DetailsFormBase
         def self.form_fields
-          DetailsFormBase::COMMON_FIELDS.union(
+          WorkVersionFormBase::COMMON_FIELDS.union(
             %w{
               based_near
               source
@@ -188,18 +193,83 @@ class WorkDepositPathway
         end
       end
 
-      class PublishForm < SimpleDelegator
-        def self.method_missing(method_name, *args)
-          WorkVersion.public_send(method_name, *args)
+      class PublishForm < WorkVersionFormBase
+        def self.form_fields
+          WorkVersionFormBase::COMMON_FIELDS.union(
+            %w{
+              title
+              based_near
+              source
+              version_name
+              rights
+              depositor_agreement
+              contributor
+            }
+          ).freeze
         end
 
-        def self.respond_to_missing?(method_name, *)
-          WorkVersion.respond_to?(method_name)
-        end
+        form_fields.each { |attr_name| attribute attr_name }
+
+        validate :includes_readme_file,
+                 if: :published?
 
         def form_partial
           'data_and_code_work_version'
         end
+
+        def valid?
+          validate
+          errors.none?
+        end
+
+        def validate
+          super
+          unless work_version.valid?
+            work_version.errors.each do |error|
+              errors.add(error.attribute, error.message)
+            end
+            false
+          end
+        end
+
+        def save(context: nil)
+          work_version.attributes = attributes
+          if valid?
+            work_version.save(context: context)
+          else
+            false
+          end
+        end
+
+        delegate :aasm_state=,
+                 :aasm_state,
+                 :publish,
+                 :file_resources,
+                 :work_attributes=,
+                 :creators_attributes=,
+                 :creators,
+                 :contributor,
+                 :file_version_memberships,
+                 :initial_draft?,
+                 :aasm,
+                 :update_column,
+                 :draft_curation_requested=,
+                 :set_thumbnail_selection,
+                 to: :work_version,
+                 prefix: false
+
+        private
+
+          def includes_readme_file
+            unless file_resources.find do |fr|
+              fr.file_data['metadata']['size'].positive? &&
+                  fr.file_data['metadata']['filename'] =~ /readme/i
+            end && file_resources.find do |fr|
+              fr.file_data['metadata']['filename'] !~ /readme/i
+            end
+              errors.add(:file_resources, :readme)
+            end
+          end
       end
     end
 end

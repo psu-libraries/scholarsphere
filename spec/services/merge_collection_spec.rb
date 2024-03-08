@@ -43,7 +43,7 @@ describe MergeCollection do
     context 'when a work has too many files' do
       let (:work1) { create(:work, versions: [v1], depositor: actor) }
       let (:work2) { create(:work, has_draft: false, depositor: actor) }
-      let (:v1) { create(:work_version, :with_files, :published, file_count: 2) }
+      let (:v1) { create(:work_version, :published, file_count: 2) }
 
       it 'returns an error message' do
         expect(merge_result.errors).to include("Work-#{work1.id} has 2 files, but must only have 1")

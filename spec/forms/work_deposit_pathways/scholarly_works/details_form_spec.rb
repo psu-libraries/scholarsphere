@@ -1,16 +1,17 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require_relative '../_shared_examples_for_work_deposit_pathway_form'
 require_relative '../_shared_examples_for_details_form'
 
 RSpec.describe WorkDepositPathway::ScholarlyWorks::DetailsForm, type: :model do
   subject(:form) { described_class.new(wv) }
 
   let(:wv) {
-    instance_double(
-      WorkVersion,
+    build(
+      :work_version,
       attributes: {
-        'description' => 'test description',
+        'description' => description,
         'published_date' => '2024',
         'subtitle' => 'test subtitle',
         'publisher_statement' => 'test publisher_statement',
@@ -20,17 +21,13 @@ RSpec.describe WorkDepositPathway::ScholarlyWorks::DetailsForm, type: :model do
         'related_url' => 'test related_url',
         'subject' => 'test subject',
         'language' => 'test language'
-      },
-      'indexing_source=': nil,
-      'update_doi=': nil,
-      valid?: valid,
-      errors: errors
+      }
     )
   }
 
-  let(:valid) { true }
-  let(:errors) { {} }
+  let(:description) { 'test description' }
 
+  it_behaves_like 'a work deposit pathway form'
   it_behaves_like 'a work deposit pathway details form'
 
   describe '.form_fields' do
@@ -66,12 +63,12 @@ RSpec.describe WorkDepositPathway::ScholarlyWorks::DetailsForm, type: :model do
           published_date: '2024',
           subtitle: 'test subtitle',
           publisher_statement: 'test publisher_statement',
-          keyword: 'test keyword',
-          publisher: 'test publisher',
-          identifier: 'test identifier',
-          related_url: 'test related_url',
-          subject: 'test subject',
-          language: 'test language'
+          keyword: ['test keyword'],
+          publisher: ['test publisher'],
+          identifier: ['test identifier'],
+          related_url: ['test related_url'],
+          subject: ['test subject'],
+          language: ['test language']
         }
       )
     end

@@ -145,7 +145,8 @@ RSpec.describe WorkDepositPathway do
       context "when the given work version has a work type of #{t}" do
         it 'returns the given WorkVersion' do
           form = pathway.publish_form
-          expect(form).to eq wv
+          expect(form).to be_a WorkDepositPathway::DataAndCode::PublishForm
+          expect(form.id).to eq 123
         end
       end
     end

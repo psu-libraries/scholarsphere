@@ -1,45 +1,10 @@
 # frozen_string_literal: true
 
 shared_examples_for 'a work deposit pathway details form' do
-  it { is_expected.to delegate_method(:id).to(:work_version) }
-  it { is_expected.to delegate_method(:to_param).to(:work_version) }
-  it { is_expected.to delegate_method(:persisted?).to(:work_version) }
-  it { is_expected.to delegate_method(:uuid).to(:work_version) }
-  it { is_expected.to delegate_method(:new_record?).to(:work_version) }
-  it { is_expected.to delegate_method(:published?).to(:work_version) }
-  it { is_expected.to delegate_method(:draft?).to(:work_version) }
-  it { is_expected.to delegate_method(:work).to(:work_version) }
-  it { is_expected.to delegate_method(:work_type).to(:work_version) }
-  it { is_expected.to delegate_method(:draft_curation_requested).to(:work_version) }
-
   it { is_expected.to validate_presence_of(:description) }
   it { is_expected.to validate_presence_of(:published_date) }
   it { is_expected.to allow_value('1999-uu-uu').for(:published_date) }
   it { is_expected.not_to allow_value('not an EDTF formatted date').for(:published_date) }
-
-  describe '#indexing_source=' do
-    let(:arg) { double }
-
-    it 'delegates to the given work version' do
-      form.indexing_source = arg
-      expect(wv).to have_received(:indexing_source=).with(arg)
-    end
-  end
-
-  describe '#update_doi=' do
-    let(:arg) { double }
-
-    it 'delegates to the given work version' do
-      form.update_doi = arg
-      expect(wv).to have_received(:update_doi=).with(arg)
-    end
-  end
-
-  describe '.model_name' do
-    it 'returns a WorkVersion model name object' do
-      expect(described_class.model_name).to eq WorkVersion.model_name
-    end
-  end
 
   describe '#save' do
     let(:context) { double }
@@ -71,8 +36,8 @@ shared_examples_for 'a work deposit pathway details form' do
       context 'when the form is not valid' do
         before { form.description = nil }
 
-        it 'returns nil' do
-          expect(form.save(context: context)).to be_nil
+        it 'returns false' do
+          expect(form.save(context: context)).to eq false
         end
 
         it 'does not persist the form data' do
@@ -88,8 +53,10 @@ shared_examples_for 'a work deposit pathway details form' do
     end
 
     context "when the form's work version is invalid" do
-      let(:valid) { false }
-      let(:errors) { { version_name: 'not a valid version name' } }
+      before do
+        wv.errors.add(:description, 'bad data!')
+        allow(wv).to receive(:valid?).and_return false
+      end
 
       context 'when the form is valid' do
         it "assigns the form's attributes to the form's work version" do
@@ -97,9 +64,9 @@ shared_examples_for 'a work deposit pathway details form' do
           expect(wv).to have_received(:attributes=).with(form.attributes)
         end
 
-        it "transfers the work version's errors on the form" do
+        it "transfers the work version's errors to the form" do
           form.save(context: context)
-          expect(form.errors[:version_name]).to include 'not a valid version name'
+          expect(form.errors[:description]).to include 'bad data!'
         end
 
         it 'does not persist the form data' do
@@ -125,9 +92,25 @@ shared_examples_for 'a work deposit pathway details form' do
           expect(form.errors[:description]).not_to be_empty
         end
 
-        it "transfers the work version's errors on the form" do
+        it "transfers the work version's errors to the form" do
           form.save(context: context)
-          expect(form.errors[:version_name]).to include 'not a valid version name'
+          expect(form.errors[:description]).to include 'bad data!'
+        end
+
+        context 'when the work version and the form have the same validation error' do
+          let(:description) { nil }
+
+          before do
+            wv.errors.clear
+            allow(wv).to receive(:valid?).and_call_original
+            wv.publish
+            form.description = nil
+          end
+
+          it 'does not duplicate transferred errors' do
+            form.save(context: context)
+            expect(form.errors[:description].size).to eq 1
+          end
         end
 
         it 'does not persist the form data' do
