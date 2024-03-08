@@ -74,8 +74,9 @@ RSpec.describe Work, type: :model do
     let(:wv2) { build :work_version, :published, work: nil, published_at: 70.days.ago}
     let(:work2) { create :work, versions: [wv2] }
 
-    let(:wv3) { build :work_version, :published, work: nil, published_at: 10.days.ago}
-    let(:work3) { create :work, versions: [wv3] }
+    let(:wv3_1) { build :work_version, :published, work: nil, published_at: 10.days.ago}
+    let(:wv3_2) { build :work_version, :published, work: nil, published_at: 5.days.ago}
+    let(:work3) { create :work, versions: [wv3_1, wv3_2] }
 
     let(:wv4) { build :work_version, work: nil, published_at: nil}
     let(:work4) { create :work, versions: [wv4] }
