@@ -53,7 +53,6 @@ module Dashboard
             logger.error(e)
             flash[:error] = t('dashboard.form.publish.curation.error')
           ensure
-            @resource.update_column(:draft_curation_requested, false)
             @resource.aasm_state = initial_state
           end
         end
