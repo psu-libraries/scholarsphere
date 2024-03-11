@@ -41,10 +41,6 @@ class WorkDepositPathway
     Work::Types.data_and_code.include?(work_type)
   end
 
-  def imported_metadata_from_rmd?
-    imported_metadata_from_rmd != true
-  end
-
   private
 
     attr_reader :resource
@@ -105,6 +101,10 @@ class WorkDepositPathway
 
       def show_autocomplete_form?
         false
+      end
+
+      def imported_metadata_from_rmd?
+        imported_metadata_from_rmd == true
       end
 
       delegate :id,

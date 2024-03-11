@@ -409,6 +409,7 @@ en:
       notices:
         success: "%{resource} was successfully updated."
         publish: Successfully published work!
+        autocomplete_successful: 'Autocomplete Successful'
       details:
         about_collections: 
           label: About Collections

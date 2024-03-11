@@ -65,7 +65,7 @@ module Dashboard
                         notice: I18n.t('dashboard.form.notices.publish')
           elsif autocomplete_work_form?
             redirect_to dashboard_form_work_version_details_url(@resource.id),
-                        notice: 'Autocomplete successful'
+                        notice: I18n.t('dashboard.form.notices.autocomplete_successful')
           else
             redirect_to next_page_path
           end
