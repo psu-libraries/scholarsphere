@@ -6,7 +6,6 @@ class CurationSyncService
     tasks = CurationTaskClient.find_all(work_id)
     task_uuids = tasks.pluck('ID')
 
-      #latest version might be a draft that is from curation in progress
     current_version_for_curation =
       if work.latest_version.draft_curation_requested == true
         work.latest_version
