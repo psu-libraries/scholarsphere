@@ -74,20 +74,25 @@ class WorkDepositPathway
         WorkVersion.model_name
       end
 
-      def save(context: nil)
-        if work_version.valid?
-          if valid?
-            work_version.save(context: context)
-          else
-            false
-          end
-        else
-          validate
+      def valid?
+        super
+        unless work_version.valid?
           work_version.errors.each do |error|
             unless errors.find { |e| e.attribute == error.attribute && e.message == error.message }
               errors.add(error.attribute, error.message)
             end
           end
+          false
+        end
+        errors.none?
+      end
+
+      alias_method :validate, :valid?
+
+      def save(context: nil)
+        if valid?
+          work_version.save(context: context)
+        else
           false
         end
       end
@@ -223,27 +228,6 @@ class WorkDepositPathway
 
         def form_partial
           'data_and_code_work_version'
-        end
-
-        def valid?
-          super
-          unless work_version.valid?
-            work_version.errors.each do |error|
-              errors.add(error.attribute, error.message)
-            end
-            false
-          end
-          errors.none?
-        end
-
-        alias_method :validate, :valid?
-
-        def save(context: nil)
-          if valid?
-            work_version.save(context: context)
-          else
-            false
-          end
         end
 
         delegate :aasm_state=,
