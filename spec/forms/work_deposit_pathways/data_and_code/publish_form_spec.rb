@@ -563,10 +563,6 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
 
     context "when the form's work version is valid" do
       context 'when the form is valid' do
-        it "assigns the form's attributes to the form's work version" do
-          form.save(context: context)
-          expect(wv).to have_received(:attributes=).with(form.attributes).at_least(:once)
-        end
 
         it "saves the form's work version" do
           form.save(context: context)
@@ -606,11 +602,6 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
       end
 
       context 'when the form is valid' do
-        it "assigns the form's attributes to the form's work version" do
-          form.save(context: context)
-          expect(wv).to have_received(:attributes=).with(form.attributes)
-        end
-
         it "transfers the work version's errors to the form" do
           form.save(context: context)
           expect(form.errors[:description]).to include 'bad data!'
@@ -628,11 +619,6 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
 
       context 'when the form is not valid' do
         before { wv.publish }
-
-        it "assigns the form's attributes to the form's work version" do
-          form.save(context: context)
-          expect(wv).to have_received(:attributes=).with(form.attributes).at_least(:once)
-        end
 
         it 'sets errors on the form' do
           form.save(context: context)

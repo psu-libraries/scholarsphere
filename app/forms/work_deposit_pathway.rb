@@ -53,7 +53,6 @@ class WorkDepositPathway
 
     class WorkVersionFormBase
       include ActiveModel::Model
-      include ActiveModel::Attributes
 
       COMMON_FIELDS = %w{
         description
@@ -69,7 +68,6 @@ class WorkDepositPathway
 
       def initialize(work_version)
         @work_version = work_version
-        super(work_version.attributes.slice(*self.class.form_fields))
       end
 
       def self.model_name
@@ -77,8 +75,6 @@ class WorkDepositPathway
       end
 
       def save(context: nil)
-        work_version.attributes = attributes
-
         if work_version.valid?
           if valid?
             work_version.save(context: context)
@@ -136,7 +132,10 @@ class WorkDepositPathway
           ).freeze
         end
 
-        form_fields.each { |attr_name| attribute attr_name }
+        form_fields.each do |attr_name|
+          delegate attr_name, to: :work_version, prefix: false
+          delegate "#{attr_name}=", to: :work_version, prefix: false
+        end
 
         delegate :form_partial, to: :work_version
       end
@@ -152,7 +151,10 @@ class WorkDepositPathway
           ).freeze
         end
 
-        form_fields.each { |attr_name| attribute attr_name }
+        form_fields.each do |attr_name|
+          delegate attr_name, to: :work_version, prefix: false
+          delegate "#{attr_name}=", to: :work_version, prefix: false
+        end
 
         def form_partial
           'scholarly_works_work_version'
@@ -186,7 +188,10 @@ class WorkDepositPathway
           ).freeze
         end
 
-        form_fields.each { |attr_name| attribute attr_name }
+        form_fields.each do |attr_name|
+          delegate attr_name, to: :work_version, prefix: false
+          delegate "#{attr_name}=", to: :work_version, prefix: false
+        end
 
         def form_partial
           'data_and_code_work_version'
@@ -208,7 +213,10 @@ class WorkDepositPathway
           ).freeze
         end
 
-        form_fields.each { |attr_name| attribute attr_name }
+        form_fields.each do |attr_name|
+          delegate attr_name, to: :work_version, prefix: false
+          delegate "#{attr_name}=", to: :work_version, prefix: false
+        end
 
         validate :includes_readme_file,
                  if: :published?
@@ -233,7 +241,6 @@ class WorkDepositPathway
         end
 
         def save(context: nil)
-          work_version.attributes = attributes
           if valid?
             work_version.save(context: context)
           else
