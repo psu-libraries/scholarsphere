@@ -3,6 +3,8 @@
 module Dashboard
   module Form
     class WorkVersionDetailsController < BaseController
+      before_action :set_autocomplete_form
+
       def self._prefixes
         ['application', 'dashboard/form', 'dashboard/form/details']
       end
@@ -10,7 +12,6 @@ module Dashboard
       def edit
         authorize(work_version)
         @resource = deposit_pathway.details_form
-        @autocomplete_work_form = AutocompleteWorkForm.new
       end
 
       def update
@@ -22,13 +23,22 @@ module Dashboard
 
       def autocomplete_work_forms
         authorize(work_version, :edit?)
-        @resource = work_version
-        AutopopulateWorkVersionService.new(@resource, autocomplete_work_form_params[:doi]).call
-        @resource.update imported_metadata_from_rmd: true
-        process_response(on_error: :edit)
+        @resource = deposit_pathway.details_form
+        AutopopulateWorkVersionService.new(work_version, autocomplete_work_form_params[:doi]).call
+        work_version.update imported_metadata_from_rmd: true
+        redirect_to dashboard_form_work_version_details_url(@resource.id),
+                        notice: I18n.t('dashboard.form.notices.autocomplete_successful')
+      rescue RmdPublication::PublicationNotFound
+        work_version.update imported_metadata_from_rmd: false
+        flash[:error] = 'We were not able to find metadata for your submission'
+        render :edit
       end
 
       private
+
+        def set_autocomplete_form
+          @autocomplete_work_form = AutocompleteWorkForm.new
+        end
 
         def autocomplete_work_form_params
           params

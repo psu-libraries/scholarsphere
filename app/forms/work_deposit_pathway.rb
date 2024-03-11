@@ -163,7 +163,7 @@ class WorkDepositPathway
         end
 
         def show_autocomplete_form?
-          imported_metadata_from_rmd != true
+          imported_metadata_from_rmd == nil
         end
       end
 

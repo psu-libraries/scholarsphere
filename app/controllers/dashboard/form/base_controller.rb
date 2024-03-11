@@ -52,10 +52,6 @@ module Dashboard
           params.key?(:finish)
         end
 
-        def autocomplete_work_form?
-          params.key?(:autocomplete_work_form)
-        end
-
         def redirect_upon_success
           if save_and_exit? || finish? || request_curation?
             redirect_to resource_path(@resource.uuid),
@@ -63,9 +59,6 @@ module Dashboard
           elsif publish?
             redirect_to resource_path(@resource.work.uuid),
                         notice: I18n.t('dashboard.form.notices.publish')
-          elsif autocomplete_work_form?
-            redirect_to dashboard_form_work_version_details_url(@resource.id),
-                        notice: I18n.t('dashboard.form.notices.autocomplete_successful')
           else
             redirect_to next_page_path
           end

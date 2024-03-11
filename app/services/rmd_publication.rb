@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 class RmdPublication
-  attr_reader :doi
+  class PublicationNotFound < StandardError; end
+  attr_reader :doi, :attributes
 
   def initialize(doi)
     @doi = doi
+    @attributes = publication.present? ? publication['attributes'] : (raise PublicationNotFound)
   end
 
   def title
@@ -49,10 +51,6 @@ class RmdPublication
   end
 
   private
-
-    def attributes
-      publication['attributes']
-    end
 
     def publication
       parsed_response['data'].first

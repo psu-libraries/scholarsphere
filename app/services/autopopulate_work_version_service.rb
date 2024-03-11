@@ -10,6 +10,7 @@ class AutopopulateWorkVersionService
 
   def call
     work_version.attributes = rmd_pub_to_attributes
+    work_version.save
   end
 
   private
