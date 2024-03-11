@@ -6,21 +6,21 @@ RSpec.describe CurationSyncService do
   describe '.sync' do
     context 'when the latest work version for curation is found in tasks table' do
       let(:work_version1) { build :work_version,
-        work: nil,
-        aasm_state: "published",
-        draft_curation_requested: nil,
-        published_at: Time.new(2024, 3, 10, 10, 30, 0)
+                                  work: nil,
+                                  aasm_state: 'published',
+                                  draft_curation_requested: nil,
+                                  published_at: Time.new(2024, 3, 10, 10, 30, 0)
       }
       let(:work_version2) { build :work_version,
-        work: nil,
-        aasm_state: "draft",
-        draft_curation_requested: true,
-        published_at: nil
+                                  work: nil,
+                                  aasm_state: 'draft',
+                                  draft_curation_requested: true,
+                                  published_at: nil
       }
       let(:work) { create(:work, versions: [work_version1, work_version2]) }
-      let(:task) {double 'Submission',
-                    fields: { "ID"=>"#{work_version2.uuid}" },
-                    id: "table_id_1"}
+      let(:task) { instance_double 'Submission',
+                                   fields: { 'ID' => work_version2.uuid },
+                                   id: 'table_id_1'}
 
       before do
         allow(CurationTaskClient).to receive(:send_curation).with(work.id)
@@ -39,27 +39,27 @@ RSpec.describe CurationSyncService do
 
     context 'when the latest work version for curation is not found in tasks table' do
       let(:work_version1) { build :work_version,
-        work: nil,
-        aasm_state: "published",
-        draft_curation_requested: nil,
-        published_at: Time.new(2024, 2, 10, 10, 30, 0)
+                                  work: nil,
+                                  aasm_state: 'published',
+                                  draft_curation_requested: nil,
+                                  published_at: Time.new(2024, 2, 10, 10, 30, 0)
       }
       let(:work_version2) { build :work_version,
-        work: nil,
-        aasm_state: "published",
-        draft_curation_requested: true,
-        published_at: Time.new(2024, 3, 10, 10, 30, 0)
+                                  work: nil,
+                                  aasm_state: 'published',
+                                  draft_curation_requested: true,
+                                  published_at: Time.new(2024, 3, 10, 10, 30, 0)
       }
       let(:work_version3) { build :work_version,
-        work: nil,
-        aasm_state: "draft",
-        draft_curation_requested: nil,
-        published_at: nil
+                                  work: nil,
+                                  aasm_state: 'draft',
+                                  draft_curation_requested: nil,
+                                  published_at: nil
       }
       let(:work) { create(:work, versions: [work_version1, work_version2, work_version3]) }
-      let(:task1) {double 'Submission',
-                    fields: { "ID"=>"#{work_version1.uuid}" },
-                    id: "table_id_1"}
+      let(:task1) { instance_double 'Submission',
+                                    fields: { 'ID' => work_version1.uuid },
+                                    id: 'table_id_1'}
 
       before do
         allow(CurationTaskClient).to receive(:send_curation).with(work.id)

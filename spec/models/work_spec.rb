@@ -67,24 +67,24 @@ RSpec.describe Work, type: :model do
   end
 
   describe '.recently_published' do
-    let(:wv1_2) { build :work_version, :published, work: nil, published_at: 1.days.ago, version_number: 2 }
+    let(:wv1_2) { build :work_version, :published, work: nil, published_at: 1.day.ago, version_number: 2 }
     let(:wv1_1) { build :work_version, :published, work: nil, published_at: 10.days.ago, version_number: 1 }
     let(:work1) { create :work, versions: [wv1_1, wv1_2] }
 
-    let(:wv2) { build :work_version, :published, work: nil, published_at: 5.days.ago}
+    let(:wv2) { build :work_version, :published, work: nil, published_at: 5.days.ago }
     let(:work2) { create :work, versions: [wv2] }
 
-    let(:wv3_1) { build :work_version, :published, work: nil, published_at: 1.days.ago}
-    let(:wv3_2) { build :work_version, :published, work: nil, published_at: 2.days.ago}
+    let(:wv3_1) { build :work_version, :published, work: nil, published_at: 1.day.ago }
+    let(:wv3_2) { build :work_version, :published, work: nil, published_at: 36.hours.ago }
     let(:work3) { create :work, versions: [wv3_1, wv3_2] }
 
-    let(:wv4) { build :work_version, work: nil, published_at: nil}
+    let(:wv4) { build :work_version, work: nil, published_at: nil }
     let(:work4) { create :work, versions: [wv4] }
 
     let(:work5) { create :work }
 
     it 'returns works with a published WorkVersion in the last 60 days' do
-      expect(Work.recently_published).to match_array([work1, work3])
+      expect(described_class.recently_published).to match_array([work1, work3])
     end
   end
 

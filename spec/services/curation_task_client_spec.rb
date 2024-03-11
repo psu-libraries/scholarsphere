@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# spec/airtable_exporter_spec.rb
-
 require 'rails_helper'
 
 RSpec.describe CurationTaskClient do

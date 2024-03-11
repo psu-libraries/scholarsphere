@@ -13,13 +13,12 @@ class CurationSyncService
         work.latest_published_version
       end
 
-    if !task_uuids.include?(current_version_for_curation.uuid)
-      CurationTaskClient.send_curation(current_version_for_curation.id) #if work.latest_published_version.curation_status == 'not started yet'
+    if task_uuids.exclude?(current_version_for_curation.uuid)
+      CurationTaskClient.send_curation(current_version_for_curation.id) # if work.latest_published_version.curation_status == 'not started yet'
     end
 
     tasks.each do |task|
-      CurationTaskClient.remove(task.id) unless task.fields["ID"] == current_version_for_curation.uuid
+      CurationTaskClient.remove(task.id) unless task.fields['ID'] == current_version_for_curation.uuid
     end
   end
-
 end
