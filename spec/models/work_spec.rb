@@ -67,15 +67,15 @@ RSpec.describe Work, type: :model do
   end
 
   describe '.recently_published' do
-    let(:wv1_2) { build :work_version, :published, work: nil, published_at: 20.days.ago, version_number: 2 }
-    let(:wv1_1) { build :work_version, :published, work: nil, published_at: 80.days.ago, version_number: 1 }
+    let(:wv1_2) { build :work_version, :published, work: nil, published_at: 1.days.ago, version_number: 2 }
+    let(:wv1_1) { build :work_version, :published, work: nil, published_at: 10.days.ago, version_number: 1 }
     let(:work1) { create :work, versions: [wv1_1, wv1_2] }
 
-    let(:wv2) { build :work_version, :published, work: nil, published_at: 70.days.ago}
+    let(:wv2) { build :work_version, :published, work: nil, published_at: 5.days.ago}
     let(:work2) { create :work, versions: [wv2] }
 
-    let(:wv3_1) { build :work_version, :published, work: nil, published_at: 10.days.ago}
-    let(:wv3_2) { build :work_version, :published, work: nil, published_at: 5.days.ago}
+    let(:wv3_1) { build :work_version, :published, work: nil, published_at: 1.days.ago}
+    let(:wv3_2) { build :work_version, :published, work: nil, published_at: 2.days.ago}
     let(:work3) { create :work, versions: [wv3_1, wv3_2] }
 
     let(:wv4) { build :work_version, work: nil, published_at: nil}
