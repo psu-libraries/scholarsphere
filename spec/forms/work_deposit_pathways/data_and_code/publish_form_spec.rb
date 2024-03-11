@@ -640,8 +640,4 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
       end
     end
   end
-
-  describe '#validate' do
-    xit
-  end
 end

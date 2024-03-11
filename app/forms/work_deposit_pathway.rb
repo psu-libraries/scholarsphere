@@ -226,11 +226,6 @@ class WorkDepositPathway
         end
 
         def valid?
-          validate
-          errors.none?
-        end
-
-        def validate
           super
           unless work_version.valid?
             work_version.errors.each do |error|
@@ -238,7 +233,10 @@ class WorkDepositPathway
             end
             false
           end
+          errors.none?
         end
+
+        alias_method :validate, :valid?
 
         def save(context: nil)
           if valid?
