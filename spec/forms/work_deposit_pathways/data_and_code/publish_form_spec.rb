@@ -563,7 +563,6 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
 
     context "when the form's work version is valid" do
       context 'when the form is valid' do
-
         it "saves the form's work version" do
           form.save(context: context)
           expect(wv).to have_received(:save).with(context: context)
