@@ -26,6 +26,10 @@ FactoryBot.define do
       end
     end
 
+    trait :article do
+      association :work, :article
+    end
+
     trait :initial_draft do
       after(:build, :stub) do |work_version, evaluator|
         evaluator.work.versions.destroy_all
@@ -39,7 +43,13 @@ FactoryBot.define do
       end
 
       after(:build, :stub) do |work_version, evaluator|
-        work_version.file_resources = build_list(:file_resource, evaluator.file_count)
+        work_version.file_resources += build_list(:file_resource, evaluator.file_count)
+      end
+    end
+
+    trait :with_readme_file do
+      after(:build, :stub) do |work_version|
+        work_version.file_resources << build(:file_resource, :readme_md)
       end
     end
 
@@ -48,10 +58,21 @@ FactoryBot.define do
       aasm_state { WorkVersion::STATE_DRAFT }
     end
 
-    # A draft that has everything needed to pass validations and be published
+    # A draft article that has everything needed to pass validations and be published
     trait :able_to_be_published do
+      article
       draft
       with_files
+      with_creators
+      description { Faker::Lorem.paragraph }
+      published_date { Faker::Date.between(from: 2.years.ago, to: Date.today).iso8601 }
+    end
+
+    # A draft dataset that has everything needed to pass validations and be published
+    trait :dataset_able_to_be_published do
+      draft
+      with_files
+      with_readme_file
       with_creators
       description { Faker::Lorem.paragraph }
       published_date { Faker::Date.between(from: 2.years.ago, to: Date.today).iso8601 }

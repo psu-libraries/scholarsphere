@@ -85,6 +85,66 @@ class FileHelpers
       uploaded_file
     end
 
+    def markdown_data(file_name)
+      attacher = Shrine::Attacher.new
+      attacher.set(uploaded_markdown(file_name))
+    end
+
+    def uploaded_markdown(file_name)
+      path = Rails.root.join('spec', 'fixtures', 'ipsum.md')
+      file = File.open(path, binmode: true)
+      file_size = file.size
+
+      uploaded_file = Shrine.upload(file, :store, metadata: false)
+      uploaded_file.metadata.merge!(
+        'size' => file_size,
+        'mime_type' => 'text/markdown',
+        'filename' => file_name
+      )
+
+      uploaded_file
+    end
+
+    def text_data(file_name)
+      attacher = Shrine::Attacher.new
+      attacher.set(uploaded_text(file_name))
+    end
+
+    def uploaded_text(file_name)
+      path = Rails.root.join('spec', 'fixtures', 'ipsum.txt')
+      file = File.open(path, binmode: true)
+      file_size = file.size
+
+      uploaded_file = Shrine.upload(file, :store, metadata: false)
+      uploaded_file.metadata.merge!(
+        'size' => file_size,
+        'mime_type' => 'text/plain',
+        'filename' => file_name
+      )
+
+      uploaded_file
+    end
+
+    def no_data(file_name)
+      attacher = Shrine::Attacher.new
+      attacher.set(uploaded_empty(file_name))
+    end
+
+    def uploaded_empty(file_name)
+      path = Rails.root.join('spec', 'fixtures', 'empty.txt')
+      file = File.open(path, binmode: true)
+      file_size = file.size
+
+      uploaded_file = Shrine.upload(file, :store, metadata: false)
+      uploaded_file.metadata.merge!(
+        'size' => file_size,
+        'mime_type' => 'text/plain',
+        'filename' => file_name
+      )
+
+      uploaded_file
+    end
+
     # @note See https://github.com/shrinerb/shrine/blob/master/doc/testing.md#test-data
     def image_data(file_name)
       attacher = Shrine::Attacher.new
