@@ -353,10 +353,18 @@ class WorkVersion < ApplicationRecord
       aasm.from_state == :draft && aasm.to_state == :published
     end
 
+    # when embargoed_until is invalid, it causes a nested error on work.embargoed_until (expected) but when the work version is
+    # validated more than once, it causes an identical nested error on work.versions.work.embargoed_until. The suspicion is that
+    # this is is a weird edge case in ActiveRecord where we're using two-way nested attributes plus validating multiple times.
+    # This method removes the duplicate error before it hits the user. It's not ideal by any means, but it seems to be all we
+    # can do until this bug is addressed in Rails.
     def remove_duplicate_errors
       over_limit_errors = []
       errors.errors.each_with_index do |error, index|
-        over_limit_errors << index if error.type == :max
+        if error.type == :max &&
+            (error.attribute == :'work.embargoed_until' || error.attribute == :'work.versions.work.embargoed_until')
+          over_limit_errors << index
+        end
       end
 
       if over_limit_errors.length > 1

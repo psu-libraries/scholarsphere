@@ -142,6 +142,14 @@ RSpec.describe WorkVersion, type: :model do
         expect(work_version).not_to allow_value('not an EDTF formatted date').for(:published_date)
       end
 
+      it 'validates that there are not duplicate embargo errors' do
+        work_version.work.embargoed_until = 5.years.from_now
+        work_version.save
+        work_version.save
+        expect(work_version.errors[:'work.embargoed_until']).to eq(['maximum is four years'])
+        expect(work_version.errors[:'work.versions.work.embargoed_until']).to be_empty
+      end
+
       context 'when visibility is set to AUTHORIZED' do
         before do
           work_version.work.access_controls.destroy_all

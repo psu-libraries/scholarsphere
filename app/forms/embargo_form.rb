@@ -31,8 +31,8 @@ class EmbargoForm
                            end
 
     unless work.valid?
-      work.errors.each do |attr, message|
-        errors.add(attr, message)
+      work.errors.each do |error|
+        errors.add(error.attribute, error.message)
       end
       return false
     end

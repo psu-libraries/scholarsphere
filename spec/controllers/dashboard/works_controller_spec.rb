@@ -14,7 +14,7 @@ RSpec.describe Dashboard::WorksController, type: :controller do
   let(:invalid_attributes) {
     {
       'embargo_form' => {
-        'embargoed_until' => '2030-02-12'
+        'embargoed_until' => 5.years.from_now
       }
     }
   }
