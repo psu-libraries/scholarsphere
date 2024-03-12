@@ -409,7 +409,8 @@ en:
       notices:
         success: "%{resource} was successfully updated."
         publish: Successfully published work!
-        autocomplete_successful: 'Autocomplete Successful'
+        autocomplete_successful: 'We were able to find your work and autocomplete some metadata for you.  Please double-check the imported data and complete or add anything that was missed.'
+        autocomplete_unsuccessful: 'We were not able to find and autocomplete the metadata for your work.  Please manually enter your metadata in the following forms to complete your submission.'
       details:
         about_collections: 
           label: About Collections

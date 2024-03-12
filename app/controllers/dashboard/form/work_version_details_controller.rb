@@ -27,10 +27,10 @@ module Dashboard
         AutopopulateWorkVersionService.new(work_version, autocomplete_work_form_params[:doi]).call
         work_version.update imported_metadata_from_rmd: true
         redirect_to dashboard_form_work_version_details_url(@resource.id),
-                        notice: I18n.t('dashboard.form.notices.autocomplete_successful')
+                    notice: I18n.t('dashboard.form.notices.autocomplete_successful')
       rescue RmdPublication::PublicationNotFound
         work_version.update imported_metadata_from_rmd: false
-        flash[:error] = 'We were not able to find metadata for your submission'
+        flash[:error] = I18n.t('dashboard.form.notices.autocomplete_unsuccessful')
         render :edit
       end
 
