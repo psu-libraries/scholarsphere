@@ -6,7 +6,7 @@ RSpec.describe 'Setting visibility in the dashboard', with_user: :user do
   let(:user) { work_version.work.depositor.user }
 
   context 'when the work uses the Data & Code pathway' do
-    let(:work_version) { create :work_version, :able_to_be_published, :initial_draft }
+    let(:work_version) { create :work_version, :dataset_able_to_be_published, :initial_draft }
 
     it 'does not allow the visibility to be changed' do
       visit dashboard_form_publish_path(work_version)

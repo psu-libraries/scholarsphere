@@ -13,8 +13,9 @@ module Dashboard
       end
 
       def update
-        @resource = WorkVersion.find(params[:id])
-        authorize(@resource)
+        @work_version = WorkVersion.find(params[:id])
+        @resource = deposit_pathway.publish_form
+        authorize(@work_version)
 
         @resource.attributes = work_version_params
         # If the user clicks the "Publish" button, *and* there are validation
