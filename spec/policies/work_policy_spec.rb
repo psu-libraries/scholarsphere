@@ -164,14 +164,31 @@ RSpec.describe WorkPolicy, type: :policy do
                       edit_users: [edit_user]
       end
 
-      it { is_expected.to permit(depositor, work) }
-      it { is_expected.to permit(proxy, work) }
-      it { is_expected.to permit(edit_user, work) }
-      it { is_expected.not_to permit(discover_user, work) }
-      it { is_expected.not_to permit(other_user, work) }
-      it { is_expected.not_to permit(public, work) }
-      it { is_expected.to permit(admin, work) }
-      it { is_expected.to permit(application, work) }
+      context 'when the work has a publisher DOI' do
+        before { allow(work).to receive(:has_publisher_doi?).and_return true }
+
+        it { is_expected.not_to permit(depositor, work) }
+        it { is_expected.not_to permit(proxy, work) }
+        it { is_expected.not_to permit(edit_user, work) }
+        it { is_expected.not_to permit(discover_user, work) }
+        it { is_expected.not_to permit(other_user, work) }
+        it { is_expected.not_to permit(public, work) }
+        it { is_expected.not_to permit(admin, work) }
+        it { is_expected.not_to permit(application, work) }
+      end
+
+      context 'when the work does not have a publisher DOI' do
+        before { allow(work).to receive(:has_publisher_doi?).and_return false }
+
+        it { is_expected.to permit(depositor, work) }
+        it { is_expected.to permit(proxy, work) }
+        it { is_expected.to permit(edit_user, work) }
+        it { is_expected.not_to permit(discover_user, work) }
+        it { is_expected.not_to permit(other_user, work) }
+        it { is_expected.not_to permit(public, work) }
+        it { is_expected.to permit(admin, work) }
+        it { is_expected.to permit(application, work) }
+      end
     end
 
     context 'when no published version exists' do
@@ -184,14 +201,31 @@ RSpec.describe WorkPolicy, type: :policy do
                       edit_users: [edit_user]
       end
 
-      it { is_expected.not_to permit(depositor, work) }
-      it { is_expected.not_to permit(proxy, work) }
-      it { is_expected.not_to permit(edit_user, work) }
-      it { is_expected.not_to permit(discover_user, work) }
-      it { is_expected.not_to permit(other_user, work) }
-      it { is_expected.not_to permit(public, work) }
-      it { is_expected.not_to permit(admin, work) }
-      it { is_expected.not_to permit(application, work) }
+      context 'when the work has a publisher DOI' do
+        before { allow(work).to receive(:has_publisher_doi?).and_return true }
+
+        it { is_expected.not_to permit(depositor, work) }
+        it { is_expected.not_to permit(proxy, work) }
+        it { is_expected.not_to permit(edit_user, work) }
+        it { is_expected.not_to permit(discover_user, work) }
+        it { is_expected.not_to permit(other_user, work) }
+        it { is_expected.not_to permit(public, work) }
+        it { is_expected.not_to permit(admin, work) }
+        it { is_expected.not_to permit(application, work) }
+      end
+
+      context 'when the work does not have a publisher DOI' do
+        before { allow(work).to receive(:has_publisher_doi?).and_return false }
+
+        it { is_expected.not_to permit(depositor, work) }
+        it { is_expected.not_to permit(proxy, work) }
+        it { is_expected.not_to permit(edit_user, work) }
+        it { is_expected.not_to permit(discover_user, work) }
+        it { is_expected.not_to permit(other_user, work) }
+        it { is_expected.not_to permit(public, work) }
+        it { is_expected.not_to permit(admin, work) }
+        it { is_expected.not_to permit(application, work) }
+      end
     end
   end
 

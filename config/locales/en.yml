@@ -356,7 +356,7 @@ en:
           heading: DOI
           explanation: A Digital Object Identifier (DOI) is a persistent identifier that can be used in print or on the web.
           not_allowed: >
-            A DOI may only be created on published works. Since this work is a draft, you'll need to wait until it's
+            A DOI may only be created on published works that do not already have a publisher DOI. If this work does not have a DOI from the publisher and is still a draft, you'll need to wait until it's
             published to create a DOI for it.
         danger:
           heading: Danger

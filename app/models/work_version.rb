@@ -316,6 +316,10 @@ class WorkVersion < ApplicationRecord
     self.class.model_name.param_key
   end
 
+  def has_publisher_doi?
+    !!identifier.find { |id| Doi.new(id).valid? }
+  end
+
   delegate :deposited_at,
            :depositor,
            :embargoed?,
