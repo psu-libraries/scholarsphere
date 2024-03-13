@@ -18,7 +18,6 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
         'publisher_statement' => 'test publisher_statement',
         'keyword' => 'test keyword',
         'publisher' => 'test publisher',
-        'identifier' => 'test identifier',
         'related_url' => 'test related_url',
         'subject' => 'test subject',
         'language' => 'test language',
@@ -99,7 +98,6 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
         subtitle
         keyword
         publisher
-        identifier
         related_url
         subject
         language
@@ -125,7 +123,6 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
           subtitle: 'test subtitle',
           keyword: ['test keyword'],
           publisher: ['test publisher'],
-          identifier: ['test identifier'],
           related_url: ['test related_url'],
           subject: ['test subject'],
           language: ['test language'],

@@ -60,7 +60,6 @@ class WorkDepositPathway
         subtitle
         keyword
         publisher
-        identifier
         related_url
         subject
         language
@@ -130,6 +129,7 @@ class WorkDepositPathway
           WorkVersionFormBase::COMMON_FIELDS.union(
             %w{
               publisher_statement
+              identifier
               based_near
               source
               version_name
@@ -152,6 +152,7 @@ class WorkDepositPathway
           WorkVersionFormBase::COMMON_FIELDS.union(
             %w{
               publisher_statement
+              identifier
             }
           ).freeze
         end
