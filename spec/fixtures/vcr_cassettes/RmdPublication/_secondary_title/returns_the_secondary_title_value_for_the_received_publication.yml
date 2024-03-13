@@ -1,0 +1,243 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://metadata.libraries.psu.edu/v1/publications?doi=https://doi.org/10.1038/abcdefg1234567
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v1.10.3
+      X-Api-Key:
+      - asdfgh123456
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Wed, 13 Mar 2024 20:57:14 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Vary:
+      - Accept
+      Etag:
+      - W/"2174c2c28afe598b6a79ee4c1945d76b"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 05c6b15b7d91e08905ad67690b723119
+      X-Runtime:
+      - '1.050348'
+      Strict-Transport-Security:
+      - max-age=30
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, PUT, POST, DELETE, PATCH, OPTIONS
+      Access-Control-Allow-Headers:
+      - DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization
+      Access-Control-Max-Age:
+      - '1728000'
+    body:
+      encoding: UTF-8
+      string: '{
+          "data": [
+            {
+              "id": "123",
+              "type": "publication",
+              "attributes": {
+                "title": "A Scholarly Research Article",
+                "secondary_title": "A Comparative Analysis",
+                "journal_title": "An Academic Journal",
+                "publication_type": "Academic Journal Article",
+                "publisher": "A Publishing Company",
+                "status": "Published",
+                "volume": "30",
+                "issue": "12",
+                "edition": "6",
+                "page_range": "110-123",
+                "authors_et_al": true,
+                "abstract": "A summary of the research",
+                "doi": "https://doi.org/example",
+                "preferred_open_access_url": "https://example.org/articles/article-123.pdf",
+                "published_on": "2010-12-05",
+                "citation_count": 50,
+                "supplementary_url": "https://blog.com/post",
+                "contributors": [
+                  {
+                    "first_name": "Anne",
+                    "middle_name": "Example",
+                    "last_name": "Contributor",
+                    "psu_user_id": "abc1234"
+                  }
+                ],
+                "tags": [
+                  {
+                    "name": "A Topic",
+                    "rank": 1.25
+                  }
+                ],
+                "pure_ids": [
+                  "abc-def-123-456"
+                ],
+                "activity_insight_ids": [
+                  "1234567890"
+                ],
+                "profile_preferences": [
+                  {
+                    "user_id": 123,
+                    "webaccess_id": "abc123",
+                    "visible_in_profile": true,
+                    "position_in_profile": 8
+                  }
+                ]
+              }
+            }
+          ]
+        }'
+  recorded_at: Wed, 13 Mar 2024 20:57:14 GMT
+- request:
+    method: get
+    uri: https://metadata.libraries.psu.edu/v1/publications?doi=https://doi.org/10.1038/abcdefg1234567
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v1.10.3
+      X-Api-Key:
+      - asdfg123456
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Wed, 13 Mar 2024 20:57:15 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Vary:
+      - Accept
+      Etag:
+      - W/"2174c2c28afe598b6a79ee4c1945d76b"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 7c99eaa888f2bf05aea768947a46b2bc
+      X-Runtime:
+      - '1.106727'
+      Strict-Transport-Security:
+      - max-age=30
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, PUT, POST, DELETE, PATCH, OPTIONS
+      Access-Control-Allow-Headers:
+      - DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization
+      Access-Control-Max-Age:
+      - '1728000'
+    body:
+      encoding: UTF-8
+      string: '{
+          "data": [
+            {
+              "id": "123",
+              "type": "publication",
+              "attributes": {
+                "title": "A Scholarly Research Article",
+                "secondary_title": "A Comparative Analysis",
+                "journal_title": "An Academic Journal",
+                "publication_type": "Academic Journal Article",
+                "publisher": "A Publishing Company",
+                "status": "Published",
+                "volume": "30",
+                "issue": "12",
+                "edition": "6",
+                "page_range": "110-123",
+                "authors_et_al": true,
+                "abstract": "A summary of the research",
+                "doi": "https://doi.org/example",
+                "preferred_open_access_url": "https://example.org/articles/article-123.pdf",
+                "published_on": "2010-12-05",
+                "citation_count": 50,
+                "supplementary_url": "https://blog.com/post",
+                "contributors": [
+                  {
+                    "first_name": "Anne",
+                    "middle_name": "Example",
+                    "last_name": "Contributor",
+                    "psu_user_id": "abc1234"
+                  }
+                ],
+                "tags": [
+                  {
+                    "name": "A Topic",
+                    "rank": 1.25
+                  }
+                ],
+                "pure_ids": [
+                  "abc-def-123-456"
+                ],
+                "activity_insight_ids": [
+                  "1234567890"
+                ],
+                "profile_preferences": [
+                  {
+                    "user_id": 123,
+                    "webaccess_id": "abc123",
+                    "visible_in_profile": true,
+                    "position_in_profile": 8
+                  }
+                ]
+              }
+            }
+          ]
+        }'
+  recorded_at: Wed, 13 Mar 2024 20:57:15 GMT
+recorded_with: VCR 6.1.0

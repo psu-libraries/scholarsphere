@@ -9,7 +9,7 @@
                                          placeholder: true,
                                          value: term,
                                          class: 'form-control',
-                                         readonly: local_assigns[:readonly] %>
+                                         readonly: local_assigns[:readonly].presence %>
           <span><%= form.object.class.human_attribute_name(attribute) %></span>
         </label>
       </div>
