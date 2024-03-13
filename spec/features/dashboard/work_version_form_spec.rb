@@ -252,6 +252,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         FeatureHelpers::DashboardForm.save_and_continue
 
         expect(page).not_to have_field('publisher_statement')
+        expect(page).not_to have_field('work_version_identifier')
       end
 
       context 'when saving as draft and exiting' do
@@ -306,7 +307,6 @@ RSpec.describe 'Publishing a work', with_user: :user do
           expect(new_work_version.subject).to eq [metadata[:subject]]
           expect(new_work_version.language).to eq [metadata[:language]]
           expect(new_work_version.related_url).to eq [metadata[:related_url]]
-          expect(new_work_version.identifier).to eq [metadata[:identifier]]
 
           expect(page).to have_current_path(dashboard_form_contributors_path('work_version', new_work_version))
           expect(SolrIndexingJob).to have_received(:perform_later).at_least(:twice)
@@ -841,6 +841,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).to have_field('work_version_source')
         expect(page).to have_field('work_version_version_name')
         expect(page).not_to have_field('work_version_publisher_statement')
+        expect(page).not_to have_field('work_version_identifier')
         expect(page).not_to have_field('work_version_work_attributes_visibility_open')
         expect(page).not_to have_field('work_version_work_attributes_visibility_authenticated')
       end

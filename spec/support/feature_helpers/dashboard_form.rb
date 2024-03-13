@@ -29,11 +29,11 @@ module FeatureHelpers
       fill_in 'work_version_subject', with: work_version_metadata[:subject]
       fill_in 'work_version_language', with: work_version_metadata[:language]
       fill_in 'work_version_related_url', with: work_version_metadata[:related_url]
-      fill_in 'work_version_identifier', with: work_version_metadata[:identifier]
     end
 
     def self.fill_in_work_details(work_version_metadata)
       fill_in_common_work_details(work_version_metadata)
+      fill_in 'work_version_identifier', with: work_version_metadata[:identifier]
       fill_in 'work_version_publisher_statement', with: work_version_metadata[:publisher_statement]
       fill_in 'work_version_based_near', with: work_version_metadata[:based_near]
       fill_in 'work_version_source', with: work_version_metadata[:source]
@@ -47,6 +47,7 @@ module FeatureHelpers
 
     def self.fill_in_scholarly_works_work_details(work_version_metadata)
       fill_in_common_work_details(work_version_metadata)
+      fill_in 'work_version_identifier', with: work_version_metadata[:identifier]
       fill_in 'work_version_publisher_statement', with: work_version_metadata[:publisher_statement]
     end
 
