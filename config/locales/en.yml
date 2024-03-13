@@ -103,6 +103,10 @@ en:
               incompatible_license_for_authorized_visibility: The access and license settings conflict with each other. Please set access to "Public" (preferred), or set the license to "In Copyright (Rights Reserved)."
             version_name:
               format: Version names must be in semantic version format, ex. 1.0.0
+        work:
+          attributes:
+            embargoed_until:
+              max: maximum is four years
   activemodel:
     attributes:
       depositor_form:
@@ -124,12 +128,6 @@ en:
           attributes:
             access_id:
               not_found: "User %{access_id} could not be found"
-        embargo_form:
-          attributes:
-            embargoed_until:
-              format: must be in yyyy-mm-dd format
-              not_a_date: must be a valid date
-              max: maximum is four years
         work_version:
           attributes:
             description:
@@ -247,8 +245,6 @@ en:
       work_version:
         version_name: x.y.z
         published_date: yyyy-mm-dd
-      embargo_form:
-        embargoed_until: yyyy-mm-dd
   incidents:
     new:
       error_message: 'Cannot send message'

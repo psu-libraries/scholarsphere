@@ -1,0 +1,12 @@
+<div class="form-group has-float-label mb-3">
+  <%= form.date_field attribute,
+                      class: 'form-control',
+                      required: local_assigns[:required].presence,
+                      data: local_assigns[:data],
+                      readonly: local_assigns[:readonly].presence %>
+  <%= form.label attribute %>
+
+  <% if form.object.errors.include?(attribute) %>
+    <small class="form-text feedback-invalid"><%= form.object.errors[attribute].join('; ') %></small>
+  <% end %>
+</div>

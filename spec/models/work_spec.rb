@@ -62,8 +62,31 @@ RSpec.describe Work, type: :model do
   end
 
   describe 'validations' do
+    let(:work) { build(:work) }
+
     it { is_expected.to validate_presence_of(:work_type) }
     it { is_expected.to validate_presence_of(:versions) }
+
+    context 'when embargoed_until is blank' do
+      it 'is valid' do
+        work.embargoed_until = nil
+        expect(work.valid?).to eq true
+      end
+    end
+
+    context 'when embargoed_until is within 4 years from now' do
+      it 'is valid' do
+        work.embargoed_until = DateTime.now + 1.year
+        expect(work.valid?).to eq true
+      end
+    end
+
+    context 'when embargoed_until is more than 4 years from now' do
+      it 'is not valid' do
+        work.embargoed_until = DateTime.now + 5.years
+        expect(work.valid?).to eq false
+      end
+    end
   end
 
   describe '::Types' do

@@ -8,19 +8,15 @@ class EmbargoForm
   attr_writer :embargoed_until
   attr_accessor :remove
 
-  validate :embargoed_until_is_valid_date,
-           unless: :remove?
-
   def initialize(work:, params:)
     @work = work
     super(params)
   end
 
   def embargoed_until
-    work_embargoed_until = if work.embargoed_until.respond_to?(:strftime)
-                             work.embargoed_until.strftime('%Y-%m-%d')
-                           end
-    @embargoed_until || work_embargoed_until
+    return work.embargoed_until if @embargoed_until.blank?
+
+    parsed_embargo_date
   end
 
   def remove?
@@ -28,34 +24,25 @@ class EmbargoForm
   end
 
   def save
-    return false unless valid?
-
     work.embargoed_until = if remove?
                              nil
                            elsif embargoed_until.present?
-                             Time.zone.parse(embargoed_until).beginning_of_day
+                             parsed_embargo_date
                            end
+
+    unless work.valid?
+      work.errors.each do |error|
+        errors.add(error.attribute, error.message)
+      end
+      return false
+    end
+
     work.save
   end
 
   private
 
-    def embargoed_until_is_valid_date
-      return if embargoed_until.blank?
-
-      unless /^\d{4}-\d{2}-\d{2}$/.match?(embargoed_until.to_s)
-        errors.add(:embargoed_until, :format)
-        return
-      end
-
-      begin
-        Date.parse(embargoed_until.to_s)
-        unless embargoed_until < (DateTime.now + 4.years)
-          errors.add(:embargoed_until, :max)
-          nil
-        end
-      rescue ArgumentError, TypeError
-        errors.add(:embargoed_until, :not_a_date)
-      end
+    def parsed_embargo_date
+      Time.zone.parse(@embargoed_until).beginning_of_day
     end
 end
