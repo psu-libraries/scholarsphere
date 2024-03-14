@@ -51,7 +51,7 @@ en:
         email: Email
         psu_id: Access Account
         orcid: ORCiD
-      work_version:
+      work_version: &work_version_attributes
         title: Work Title
         version_name: Semantic Version
         subtitle: Subtitle
@@ -95,20 +95,25 @@ en:
         work_version:
           attributes:
             description:
-              blank: is required to publish the work
+              blank: &required_to_publish is required to publish the work
             published_date:
-              blank: is required to publish the work
+              blank: *required_to_publish
             rights:
-              blank: is required to publish the work
+              blank: *required_to_publish
               incompatible_license_for_authorized_visibility: The access and license settings conflict with each other. Please set access to "Public" (preferred), or set the license to "In Copyright (Rights Reserved)."
             version_name:
               format: Version names must be in semantic version format, ex. 1.0.0
+        work:
+          attributes:
+            embargoed_until:
+              max: maximum is four years
   activemodel:
     attributes:
       depositor_form:
         psu_id: Access Account
       curator_form:
         access_id: Access Account
+      work_version: *work_version_attributes
     errors:
       models:
         editors_form:
@@ -124,12 +129,14 @@ en:
           attributes:
             access_id:
               not_found: "User %{access_id} could not be found"
-        embargo_form:
+        work_version:
           attributes:
-            embargoed_until:
-              format: must be in yyyy-mm-dd format
-              not_a_date: must be a valid date
-              max: maximum is four years
+            description:
+              blank: *required_to_publish
+            published_date:
+              blank: *required_to_publish
+            file_resources:
+              readme: must include a README file in addition to other files
   admin:
     application_setting:
       heading: Application Settings
@@ -239,8 +246,6 @@ en:
       work_version:
         version_name: x.y.z
         published_date: yyyy-mm-dd
-      embargo_form:
-        embargoed_until: yyyy-mm-dd
   incidents:
     new:
       error_message: 'Cannot send message'

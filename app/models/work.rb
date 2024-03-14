@@ -55,6 +55,7 @@ class Work < ApplicationRecord
       .where('work_versions.published_at >= ?', 2.days.ago)
       .distinct
   }
+  validate :embargoed_until_is_valid_date
 
   module Types
     def self.all
@@ -262,5 +263,14 @@ class Work < ApplicationRecord
         WorkTypeSchema,
         DoiSchema
       )
+    end
+
+    def embargoed_until_is_valid_date
+      return if embargoed_until.blank?
+
+      unless embargoed_until < (DateTime.now + 4.years)
+        errors.add(:embargoed_until, :max)
+        nil
+      end
     end
 end

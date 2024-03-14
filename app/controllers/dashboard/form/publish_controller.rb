@@ -13,8 +13,9 @@ module Dashboard
       end
 
       def update
-        @resource = WorkVersion.find(params[:id])
-        authorize(@resource)
+        @work_version = WorkVersion.find(params[:id])
+        @resource = deposit_pathway.publish_form
+        authorize(@work_version)
 
         @resource.attributes = work_version_params
         # If the user clicks the "Publish" button, *and* there are validation
@@ -53,7 +54,6 @@ module Dashboard
             logger.error(e)
             flash[:error] = t('dashboard.form.publish.curation.error')
           ensure
-            @resource.update_column(:draft_curation_requested, false)
             @resource.aasm_state = initial_state
           end
         end
@@ -139,7 +139,8 @@ module Dashboard
               ],
               work_attributes: [
                 :id,
-                :visibility
+                :visibility,
+                :embargoed_until
               ]
             )
         end
