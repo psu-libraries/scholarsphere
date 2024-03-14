@@ -101,7 +101,7 @@ RSpec.describe Work, type: :model do
     let(:wv3_2) { build :work_version, :published, work: nil, published_at: 36.hours.ago }
     let(:work3) { create :work, versions: [wv3_1, wv3_2] }
 
-    let(:wv4) { build :work_version, work: nil, published_at: nil }
+    let(:wv4) { build :work_version, work: nil, aasm_state: 'draft' }
     let(:work4) { create :work, versions: [wv4] }
 
     let(:work5) { create :work }
