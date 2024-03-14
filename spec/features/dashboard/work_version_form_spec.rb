@@ -1151,7 +1151,10 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         click_on 'Request Curation & Save as Draft'
 
+        work_version.reload
+
         expect(CurationTaskExporter).to have_received(:call).with(work_version.id)
+        expect(work_version.draft_curation_requested).to be true
       end
     end
 
@@ -1175,6 +1178,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         work_version.reload
         expect(work_version.title).to eq('Changed Title')
+        expect(work_version.draft_curation_requested).not_to be true
       end
     end
 
