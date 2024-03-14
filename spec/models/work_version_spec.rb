@@ -766,4 +766,47 @@ RSpec.describe WorkVersion, type: :model do
       expect(wv.form_partial).to eq 'work_version'
     end
   end
+
+  describe '#has_publisher_doi?' do
+    let(:wv) { described_class.new(identifier: identifier) }
+    let(:invalid_doi) { instance_double Doi, valid?: false }
+    let(:valid_doi) { instance_double Doi, valid?: true }
+
+    before do
+      allow(Doi).to receive(:new).with('invalid DOI').and_return invalid_doi
+      allow(Doi).to receive(:new).with('valid DOI').and_return valid_doi
+    end
+
+    context 'when the work version has no identifiers' do
+      let(:identifier) { [] }
+
+      it 'returns false' do
+        expect(wv.has_publisher_doi?).to eq false
+      end
+    end
+
+    context 'when the work version has an identifier value that is a valid DOI' do
+      let(:identifier) { ['valid DOI'] }
+
+      it 'returns true' do
+        expect(wv.has_publisher_doi?).to eq true
+      end
+    end
+
+    context 'when the work version has an identifier value that is not a valid DOI' do
+      let(:identifier) { ['invalid DOI'] }
+
+      it 'returns false' do
+        expect(wv.has_publisher_doi?).to eq false
+      end
+    end
+
+    context 'when the work version has identifier values that include both valid and invalid DOIs' do
+      let(:identifier) { ['invalid DOI', 'valid DOI'] }
+
+      it 'returns true' do
+        expect(wv.has_publisher_doi?).to eq true
+      end
+    end
+  end
 end
