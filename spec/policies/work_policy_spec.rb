@@ -230,79 +230,166 @@ RSpec.describe WorkPolicy, type: :policy do
   end
 
   permissions :edit_visibility? do
-    context 'when the work is draft' do
-      let(:work) do
-        create :work,
-               has_draft: true,
-               versions_count: 1,
-               depositor: depositor_actor,
-               proxy_depositor: proxy_actor,
-               discover_users: [discover_user],
-               edit_users: [edit_user]
+    let(:pathway) { instance_double WorkDepositPathway, allows_visibility_change?: change_allowed }
+    before { allow(WorkDepositPathway).to receive(:new).with(work).and_return pathway }
+
+    context 'when the deposit pathway for the work allows visibility to be changed' do
+      let(:change_allowed) { true }
+
+      context 'when the work is draft' do
+        let(:work) do
+          create :work,
+                 has_draft: true,
+                 versions_count: 1,
+                 depositor: depositor_actor,
+                 proxy_depositor: proxy_actor,
+                 discover_users: [discover_user],
+                 edit_users: [edit_user]
+        end
+
+        context 'when the work is Open access' do
+          before { work.grant_open_access }
+
+          it { is_expected.to permit(depositor, work) }
+          it { is_expected.to permit(proxy, work) }
+          it { is_expected.to permit(edit_user, work) }
+          it { is_expected.not_to permit(discover_user, work) }
+          it { is_expected.not_to permit(other_user, work) }
+          it { is_expected.not_to permit(public, work) }
+          it { is_expected.to permit(admin, work) }
+          it { is_expected.to permit(application, work) }
+        end
+
+        context 'when the work is Penn State Only' do
+          before { work.grant_authorized_access }
+
+          it { is_expected.to permit(depositor, work) }
+          it { is_expected.to permit(proxy, work) }
+          it { is_expected.to permit(edit_user, work) }
+          it { is_expected.not_to permit(discover_user, work) }
+          it { is_expected.not_to permit(other_user, work) }
+          it { is_expected.not_to permit(public, work) }
+          it { is_expected.to permit(admin, work) }
+          it { is_expected.to permit(application, work) }
+        end
       end
 
-      context 'when the work is Open access' do
-        before { work.grant_open_access }
+      context 'when the work is published' do
+        let(:work) do
+          create :work,
+                 has_draft: false,
+                 versions_count: 1,
+                 depositor: depositor_actor,
+                 proxy_depositor: proxy_actor,
+                 discover_users: [discover_user],
+                 edit_users: [edit_user]
+        end
 
-        it { is_expected.to permit(depositor, work) }
-        it { is_expected.to permit(proxy, work) }
-        it { is_expected.to permit(edit_user, work) }
-        it { is_expected.not_to permit(discover_user, work) }
-        it { is_expected.not_to permit(other_user, work) }
-        it { is_expected.not_to permit(public, work) }
-        it { is_expected.to permit(admin, work) }
-        it { is_expected.to permit(application, work) }
-      end
+        context 'when the work is Open access' do
+          before { work.grant_open_access }
 
-      context 'when the work is Penn State Only' do
-        before { work.grant_authorized_access }
+          it { is_expected.not_to permit(depositor, work) }
+          it { is_expected.not_to permit(proxy, work) }
+          it { is_expected.not_to permit(edit_user, work) }
+          it { is_expected.not_to permit(discover_user, work) }
+          it { is_expected.not_to permit(other_user, work) }
+          it { is_expected.not_to permit(public, work) }
+          it { is_expected.to permit(admin, work) }
+          it { is_expected.to permit(application, work) }
+        end
 
-        it { is_expected.to permit(depositor, work) }
-        it { is_expected.to permit(proxy, work) }
-        it { is_expected.to permit(edit_user, work) }
-        it { is_expected.not_to permit(discover_user, work) }
-        it { is_expected.not_to permit(other_user, work) }
-        it { is_expected.not_to permit(public, work) }
-        it { is_expected.to permit(admin, work) }
-        it { is_expected.to permit(application, work) }
+        context 'when the work is Penn State Only' do
+          before { work.grant_authorized_access }
+
+          it { is_expected.to permit(depositor, work) }
+          it { is_expected.to permit(proxy, work) }
+          it { is_expected.to permit(edit_user, work) }
+          it { is_expected.not_to permit(discover_user, work) }
+          it { is_expected.not_to permit(other_user, work) }
+          it { is_expected.not_to permit(public, work) }
+          it { is_expected.to permit(admin, work) }
+          it { is_expected.to permit(application, work) }
+        end
       end
     end
 
-    context 'when the work is published' do
-      let(:work) do
-        create :work,
-               has_draft: false,
-               versions_count: 1,
-               depositor: depositor_actor,
-               proxy_depositor: proxy_actor,
-               discover_users: [discover_user],
-               edit_users: [edit_user]
+    context 'when the deposit pathway for the work does not allow visibility to be changed' do
+      let(:change_allowed) { false }
+
+      context 'when the work is draft' do
+        let(:work) do
+          create :work,
+                 has_draft: true,
+                 versions_count: 1,
+                 depositor: depositor_actor,
+                 proxy_depositor: proxy_actor,
+                 discover_users: [discover_user],
+                 edit_users: [edit_user]
+        end
+
+        context 'when the work is Open access' do
+          before { work.grant_open_access }
+
+          it { is_expected.not_to permit(depositor, work) }
+          it { is_expected.not_to permit(proxy, work) }
+          it { is_expected.not_to permit(edit_user, work) }
+          it { is_expected.not_to permit(discover_user, work) }
+          it { is_expected.not_to permit(other_user, work) }
+          it { is_expected.not_to permit(public, work) }
+          it { is_expected.to permit(admin, work) }
+          it { is_expected.to permit(application, work) }
+        end
+
+        context 'when the work is Penn State Only' do
+          before { work.grant_authorized_access }
+
+          it { is_expected.not_to permit(depositor, work) }
+          it { is_expected.not_to permit(proxy, work) }
+          it { is_expected.not_to permit(edit_user, work) }
+          it { is_expected.not_to permit(discover_user, work) }
+          it { is_expected.not_to permit(other_user, work) }
+          it { is_expected.not_to permit(public, work) }
+          it { is_expected.to permit(admin, work) }
+          it { is_expected.to permit(application, work) }
+        end
       end
 
-      context 'when the work is Open access' do
-        before { work.grant_open_access }
+      context 'when the work is published' do
+        let(:work) do
+          create :work,
+                 has_draft: false,
+                 versions_count: 1,
+                 depositor: depositor_actor,
+                 proxy_depositor: proxy_actor,
+                 discover_users: [discover_user],
+                 edit_users: [edit_user]
+        end
 
-        it { is_expected.not_to permit(depositor, work) }
-        it { is_expected.not_to permit(proxy, work) }
-        it { is_expected.not_to permit(edit_user, work) }
-        it { is_expected.not_to permit(discover_user, work) }
-        it { is_expected.not_to permit(other_user, work) }
-        it { is_expected.not_to permit(public, work) }
-        it { is_expected.to permit(admin, work) }
-        it { is_expected.to permit(application, work) }
-      end
+        context 'when the work is Open access' do
+          before { work.grant_open_access }
 
-      context 'when the work is Penn State Only' do
-        before { work.grant_authorized_access }
+          it { is_expected.not_to permit(depositor, work) }
+          it { is_expected.not_to permit(proxy, work) }
+          it { is_expected.not_to permit(edit_user, work) }
+          it { is_expected.not_to permit(discover_user, work) }
+          it { is_expected.not_to permit(other_user, work) }
+          it { is_expected.not_to permit(public, work) }
+          it { is_expected.to permit(admin, work) }
+          it { is_expected.to permit(application, work) }
+        end
 
-        it { is_expected.to permit(depositor, work) }
-        it { is_expected.to permit(proxy, work) }
-        it { is_expected.to permit(edit_user, work) }
-        it { is_expected.not_to permit(discover_user, work) }
-        it { is_expected.not_to permit(other_user, work) }
-        it { is_expected.not_to permit(public, work) }
-        it { is_expected.to permit(admin, work) }
-        it { is_expected.to permit(application, work) }
+        context 'when the work is Penn State Only' do
+          before { work.grant_authorized_access }
+
+          it { is_expected.not_to permit(depositor, work) }
+          it { is_expected.not_to permit(proxy, work) }
+          it { is_expected.not_to permit(edit_user, work) }
+          it { is_expected.not_to permit(discover_user, work) }
+          it { is_expected.not_to permit(other_user, work) }
+          it { is_expected.not_to permit(public, work) }
+          it { is_expected.to permit(admin, work) }
+          it { is_expected.to permit(application, work) }
+        end
       end
     end
   end

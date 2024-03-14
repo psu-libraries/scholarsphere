@@ -29,7 +29,7 @@ class WorkPolicy < ApplicationPolicy
   def edit_visibility?
     return true if user.admin?
 
-    (editable? && !published?) || (editable? && !open_access?)
+    ((editable? && !published?) || (editable? && !open_access?)) && deposit_pathway.allows_visibility_change?
   end
 
   private
@@ -54,5 +54,9 @@ class WorkPolicy < ApplicationPolicy
 
     def open_access?
       record.open_access?
+    end
+
+    def deposit_pathway
+      @deposit_pathway ||= WorkDepositPathway.new(record)
     end
 end
