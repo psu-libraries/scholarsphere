@@ -59,6 +59,6 @@ class WorkPolicy < ApplicationPolicy
     end
 
     def deposit_pathway
-      @pathway ||= WorkDepositPathway.new(record)
+      @deposit_pathway ||= WorkDepositPathway.new(record)
     end
 end
