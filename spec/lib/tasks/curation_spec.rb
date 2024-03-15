@@ -10,17 +10,23 @@ describe 'curation', type: :task do
     let!(:work2) { create :work, versions: [wv2] }
     let(:wv3) { build :work_version, :published, work: nil, published_at: 36.hours.ago }
     let!(:work3) { create :work, versions: [wv3] }
-    let(:wv4) { build :work_version, work: nil, published_at: nil }
+    let(:wv4) { build :work_version, work: nil, aasm_state: 'draft' }
     let!(:work4) { create :work, versions: [wv4] }
     let!(:work5) { create :work }
+    let(:service1) { double CurationSyncService }
+    let(:service2) { double CurationSyncService }
 
     before do
-      allow(CurationSyncService).to receive(:sync)
+      allow(CurationSyncService).to receive(:new).with(work1).and_return(service1)
+      allow(service1).to receive(:sync)
+      allow(CurationSyncService).to receive(:new).with(work3).and_return(service2)
+      allow(service2).to receive(:sync)
     end
 
     it 'calls the CurationSyncService' do
       Rake::Task['curation:sync'].invoke
-      expect(CurationSyncService).to have_received(:sync).exactly(2).times
+      expect(service1).to have_received(:sync).once
+      expect(service2).to have_received(:sync).once
     end
   end
 end

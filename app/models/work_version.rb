@@ -52,8 +52,6 @@ class WorkVersion < ApplicationRecord
            dependent: :destroy,
            inverse_of: :resource
 
-  enum curation_status: { not_started: 'Not Started', in_progress: 'In Progress', completed: 'Completed' }
-  
   accepts_nested_attributes_for :work
 
   accepts_nested_attributes_for :file_resources

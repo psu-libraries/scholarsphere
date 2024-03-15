@@ -24,16 +24,14 @@ RSpec.describe CurationSyncService do
 
       before do
         allow(CurationTaskClient).to receive(:send_curation).with(work.id)
-        allow(CurationTaskClient).to receive(:remove).with('table_id_1')
         allow(CurationTaskClient).to receive(:find_all).with(work.id).and_return([task])
         allow(task).to receive(:[]).and_return(work_version2.uuid)
       end
 
-      it 'does not send another curation or remove existing curation' do
+      it 'does not send another curation' do
         expect(CurationTaskClient).not_to receive(:send_curation).with(work_version2.id)
-        expect(CurationTaskClient).not_to receive(:remove).with('table_id_1')
 
-        described_class.sync(work.id)
+        described_class.new(work).sync
       end
     end
 
@@ -62,20 +60,17 @@ RSpec.describe CurationSyncService do
                                     id: 'table_id_1'}
 
       before do
-        allow(CurationTaskClient).to receive(:send_curation).with(work.id)
-        allow(CurationTaskClient).to receive(:remove).with('table_id_1')
-        allow(CurationTaskClient).to receive(:remove).with('table_id_2')
+        allow(CurationTaskClient).to receive(:send_curation).with(work.id, updated_version: true)
         allow(CurationTaskClient).to receive(:find_all).with(work.id).and_return([task1])
         allow(task1).to receive(:[]).and_return(work_version1.uuid)
       end
 
-      it 'sends current version for curation and removes stale versions' do
-        expect(CurationTaskClient).to receive(:send_curation).with(work_version2.id)
+      it 'sends current version for curation with Updated Version label' do
+        expect(CurationTaskClient).to receive(:send_curation).with(work_version2.id, updated_version: true)
         expect(CurationTaskClient).not_to receive(:send_curation).with(work_version1.id)
         expect(CurationTaskClient).not_to receive(:send_curation).with(work_version3.id)
-        expect(CurationTaskClient).to receive(:remove).with('table_id_1')
 
-        described_class.sync(work.id)
+        described_class.new(work).sync
       end
     end
   end

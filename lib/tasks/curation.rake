@@ -5,7 +5,7 @@ namespace :curation do
   task sync: :environment do
     works = Work.recently_published
     works.each do |work|
-      CurationSyncService.sync(work.id)
+      CurationSyncService.new(work).sync
       sleep(0.5)
     end
   end

@@ -5,11 +5,14 @@ require 'airrecord'
 class CurationTaskClient
   class CurationError < RuntimeError; end
 
-  def self.send_curation(work_version_id, requested: false)
+  def self.send_curation(work_version_id, requested: false, updated_version: false)
     Airrecord.api_key = ENV['AIRTABLE_API_TOKEN']
 
     submission = WorkVersion.find(work_version_id)
-    labels = requested ? ['Curation Requested'] : []
+    labels = []
+    labels << 'Curation Requested' if requested
+    labels << 'Embargoed' if submission.embargoed?
+    labels << 'Updated Version' if updated_version
 
     record =
       {
@@ -50,17 +53,6 @@ class CurationTaskClient
         submissions.concat(Submission.all(filter: "{ID} = '#{uuid}'"))
       end
       submissions
-    rescue Airrecord::Error => e
-      raise CurationError.new(e)
-    end
-  end
-
-  def self.remove(airtable_id)
-    Airrecord.api_key = ENV['AIRTABLE_API_TOKEN']
-
-    begin
-      record = Submission.find(airtable_id)
-      record.destroy
     rescue Airrecord::Error => e
       raise CurationError.new(e)
     end
