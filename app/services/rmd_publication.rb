@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-class RmdPublication
+class RmdPublication < RmdClient
   class PublicationNotFound < StandardError; end
   attr_reader :doi, :attributes
 
   def initialize(doi)
     @doi = doi
-    @attributes = publication.present? ? publication['attributes'] : (raise PublicationNotFound)
+    @response = parsed_response.first.present? ? parsed_response.first['attributes'] : (raise PublicationNotFound)
   end
 
   def title
@@ -52,26 +52,11 @@ class RmdPublication
 
   private
 
-    def publication
-      parsed_response['data'].first
+    def faraday_options
+      { doi: doi }
     end
 
-    def parsed_response
-      response = Faraday.new(url: rmd_host).get(publications_endpoint, doi: doi) do |request|
-        request.headers['X-API-Key'] = api_key
-      end
-      JSON.parse(response.env.response_body)
-    end
-
-    def publications_endpoint
+    def endpoint
       '/v1/publications'
-    end
-
-    def rmd_host
-      'https://metadata.libraries.psu.edu'
-    end
-
-    def api_key
-      ENV.fetch('RMD_API_KEY', 'asdf')
     end
 end

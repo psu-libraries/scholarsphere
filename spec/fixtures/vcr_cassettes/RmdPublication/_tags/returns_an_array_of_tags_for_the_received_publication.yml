@@ -219,6 +219,10 @@ http_interactions:
                   {
                     "name": "A Topic",
                     "rank": 1.25
+                  },
+                  {
+                    "name": "Another Topic",
+                    "rank": 1.50
                   }
                 ],
                 "pure_ids": [

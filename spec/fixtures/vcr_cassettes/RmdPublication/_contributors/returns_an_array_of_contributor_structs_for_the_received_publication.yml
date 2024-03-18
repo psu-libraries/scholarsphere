@@ -213,6 +213,12 @@ http_interactions:
                     "middle_name": "Example",
                     "last_name": "Contributor",
                     "psu_user_id": "abc1234"
+                  },
+                  {
+                    "first_name": "Joe",
+                    "middle_name": "Fakeman",
+                    "last_name": "Person",
+                    "psu_user_id": "def1234"
                   }
                 ],
                 "tags": [
