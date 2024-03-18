@@ -496,6 +496,7 @@ en:
         creator: Creator
         add_creator: 'Add another Creator'
         remove_creator: 'Remove'
+        embargo: Embargo (Optional)
       publish:
         heading: Publishing Work Version
         agreement_preamble: I have read and agree to
