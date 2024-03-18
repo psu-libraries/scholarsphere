@@ -3,7 +3,7 @@
 class RmdClient
   class RmdClientError < StandardError; end
 
-  def parsed_response
+  def api_response
     response = Faraday.new(url: rmd_host).get(endpoint, **faraday_options) do |request|
       request.headers['X-API-Key'] = api_key
     end

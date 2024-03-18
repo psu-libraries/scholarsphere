@@ -6,7 +6,7 @@ class RmdPublication < RmdClient
 
   def initialize(doi)
     @doi = doi
-    @response = parsed_response.first.present? ? parsed_response.first['attributes'] : (raise PublicationNotFound)
+    @attributes = api_response.first.present? ? api_response.first['attributes'] : (raise PublicationNotFound)
   end
 
   def title
