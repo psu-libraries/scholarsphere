@@ -16,19 +16,19 @@ class CurationSyncService
 
   private
 
-  def current_version_for_curation
-    if @work.latest_version.draft_curation_requested == true
-      @work.latest_version
-    else
-      @work.latest_published_version
+    def current_version_for_curation
+      if @work.latest_version.draft_curation_requested == true
+        @work.latest_version
+      else
+        @work.latest_published_version
+      end
     end
-  end
 
-  def updated_version
-    stale_version = false
-    @tasks.each do |task|
-      stale_version = true unless task.fields['ID'] == current_version_for_curation.uuid
+    def updated_version
+      stale_version = false
+      @tasks.each do |task|
+        stale_version = true unless task.fields['ID'] == current_version_for_curation.uuid
+      end
+      stale_version
     end
-    stale_version
-  end
 end

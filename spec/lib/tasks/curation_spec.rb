@@ -13,8 +13,8 @@ describe 'curation', type: :task do
     let(:wv4) { build :work_version, work: nil, aasm_state: 'draft' }
     let!(:work4) { create :work, versions: [wv4] }
     let!(:work5) { create :work }
-    let(:service1) { double CurationSyncService }
-    let(:service2) { double CurationSyncService }
+    let(:service1) { instance_double CurationSyncService }
+    let(:service2) { instance_double CurationSyncService }
 
     before do
       allow(CurationSyncService).to receive(:new).with(work1).and_return(service1)

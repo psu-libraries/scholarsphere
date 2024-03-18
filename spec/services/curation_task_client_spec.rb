@@ -14,13 +14,13 @@ RSpec.describe CurationTaskClient do
     let(:deposited_time) { Time.new(2024, 2, 8, 10, 30, 0) }
     let(:uuid) { '8d7eb165-25e0-4b60-8c94-8dc63ae6989f' }
     let(:expected_record) {
-      {ID: uuid,
-      'Submission Title': 'Test Submission',
-      'Submission Link': "https://scholarsphere.psu.edu/resources/#{uuid}",
-      Depositor: 'abc1234',
-      'Depositor Name': 'Test Depositor',
-      'Deposit Date': deposited_time,
-      Labels: labels}
+      { ID: uuid,
+        'Submission Title': 'Test Submission',
+        'Submission Link': "https://scholarsphere.psu.edu/resources/#{uuid}",
+        Depositor: 'abc1234',
+        'Depositor Name': 'Test Depositor',
+        'Deposit Date': deposited_time,
+        Labels: labels }
     }
 
     before do
@@ -31,7 +31,7 @@ RSpec.describe CurationTaskClient do
 
     context 'when the work is not embargoed' do
       let(:embargo) { nil }
-      let(:labels) { ['Curation Requested']}
+      let(:labels) { ['Curation Requested'] }
 
       it 'creates a submission record in Airtable' do
         expect(Submission).to receive(:create).with(expected_record)
@@ -42,7 +42,7 @@ RSpec.describe CurationTaskClient do
 
     context 'when the work is embargoed' do
       let(:embargo) { 3.years.from_now }
-      let(:labels) { ['Curation Requested', 'Embargoed']}
+      let(:labels) { ['Curation Requested', 'Embargoed'] }
 
       it 'creates a submission record in Airtable' do
         expect(Submission).to receive(:create).with(expected_record)
@@ -53,7 +53,7 @@ RSpec.describe CurationTaskClient do
 
     context 'when curation was not requested' do
       let(:embargo) { nil }
-      let(:labels) { []}
+      let(:labels) { [] }
 
       it 'creates a submission record in Airtable' do
         expect(Submission).to receive(:create).with(expected_record)
@@ -85,11 +85,11 @@ RSpec.describe CurationTaskClient do
   describe '.find_all' do
     let!(:work) { create(:work, versions_count: 2) }
     let(:task1) { instance_double 'Submission',
-      fields: { 'ID' => work.versions.first.uuid },
-      id: 'table_id_1'}
+                                  fields: { 'ID' => work.versions.first.uuid },
+                                  id: 'table_id_1'}
     let(:task2) { instance_double 'Submission',
-        fields: { 'ID' => work.versions.second.uuid },
-        id: 'table_id_1'}
+                                  fields: { 'ID' => work.versions.second.uuid },
+                                  id: 'table_id_1'}
 
     before do
       allow(Submission).to receive(:all).with(filter: "{ID} = '#{work.versions.first.uuid}'").and_return([task1])
