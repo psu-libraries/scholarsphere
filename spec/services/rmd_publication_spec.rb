@@ -70,4 +70,10 @@ RSpec.describe RmdPublication, :vcr do
       expect { rmd_publication }.to raise_error RmdPublication::PublicationNotFound
     end
   end
+
+  context 'when an error is returned from the api' do
+    it 'raises a RmdClientError' do
+      expect { rmd_publication }.to raise_error RmdClient::RmdClientError, 'Unauthorized'
+    end
+  end
 end
