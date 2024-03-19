@@ -1,11 +1,15 @@
 <div class="form-wrapper form-wrapper--wide">
-  <div class="keyline keyline--left mb-3">
+  <div class="keyline keyline--left mb-2">
     <h4><%= 'Autocomplete for Open Access Works' %></h4>
   </div>
-</div>
-<div class="form-wrapper mb-3">
-  <%= form_for @autocomplete_work_form, url: dashboard_form_autocomplete_work_url(@resource.id) do |doi_form| %>
-    <%= render 'form_fields/text', form: doi_form, attribute: :doi, required: true %>
-    <%= doi_form.submit 'Submit', class: 'btn btn-primary' %>
-  <% end %>
+  <div class="form-wrapper mb-3">
+    <div>
+      <%= t '.autocomplete_help_text' %>
+    </div>
+    <br>
+    <%= form_for @autocomplete_work_form, url: dashboard_form_autocomplete_work_url(@resource.id) do |doi_form| %>
+      <%= render 'form_fields/text', form: doi_form, attribute: :doi, required: true %>
+      <%= doi_form.submit 'Submit', class: 'btn btn-primary' %>
+    <% end %>
+  </div>
 </div>

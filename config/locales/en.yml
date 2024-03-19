@@ -412,6 +412,8 @@ en:
         autocomplete_successful: 'We were able to find your work and autocomplete some metadata for you.  Please double-check the imported data and complete or add anything that was missed.'
         autocomplete_unsuccessful: 'We were not able to find and autocomplete the metadata for your work.  Please manually enter your metadata in the following forms to complete your submission.'
       details:
+        autocomplete_form:
+          autocomplete_help_text: You have chosen an open access work type.  We may already know some details about your work.  If you know the DOI of your work, please enter it below and we can try to autocomplete some information for you.  Note that autocompletion will overwrite anything you have already saved for this work.
         about_collections: 
           label: About Collections
           message: >

@@ -7,6 +7,6 @@ class AutocompleteWorkForm
   validate :doi, :valid_doi?
 
   def valid_doi?
-    Doi.new(doi).valid?
+    errors.add(:autocomplete, 'failed: not a valid DOI') unless Doi.new(doi).valid?
   end
 end
