@@ -74,14 +74,6 @@ RSpec.describe CurationTaskClient do
     end
   end
 
-  describe '.find' do
-    it 'finds a record if it is in Airtable' do
-      expect(Submission).to receive(:all).with(filter: "{ID} = 'testID'")
-
-      described_class.find('testID')
-    end
-  end
-
   describe '.find_all' do
     let!(:work) { create(:work, versions_count: 2) }
     let(:task1) { instance_double 'Submission',

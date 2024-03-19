@@ -35,6 +35,42 @@ RSpec.describe CurationSyncService do
       end
     end
 
+    context 'when there is an error' do
+      let(:work_version1) { build :work_version,
+                                  work: nil,
+                                  aasm_state: 'draft',
+                                  draft_curation_requested: true,
+                                  published_at: Time.new(2024, 3, 10, 10, 30, 0)
+      }
+      let(:work) { create(:work, versions: [work_version1]) }
+
+      before do
+        allow(CurationTaskClient).to receive(:find_all).with(work.id).and_raise(CurationTaskClient::CurationError, message)
+      end
+
+      context 'when it is not a 5XX error' do
+        let(:message) { 'HTTP 422: UNKNOWN_FIELD_NAME: Unknown field name: \"Label\"' }
+
+        it 'does not retry and logs the error' do
+          expect(CurationTaskClient).to receive(:find_all).once
+          expect(Rails.logger).to receive(:error).once
+
+          described_class.new(work).sync
+        end
+      end
+
+      context 'when it is a 5XX error' do
+        let(:message) { 'HTTP 503: Service Unavailable' }
+
+        it 'does not retry and logs the error' do
+          expect(CurationTaskClient).to receive(:find_all).exactly(3).times
+          expect(Rails.logger).to receive(:error).once
+
+          described_class.new(work).sync
+        end
+      end
+    end
+
     context 'when the latest work version for curation is not found in tasks table' do
       let(:work_version1) { build :work_version,
                                   work: nil,

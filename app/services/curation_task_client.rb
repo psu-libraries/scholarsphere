@@ -6,8 +6,6 @@ class CurationTaskClient
   class CurationError < RuntimeError; end
 
   def self.send_curation(work_version_id, requested: false, updated_version: false)
-    Airrecord.api_key = ENV['AIRTABLE_API_TOKEN']
-
     submission = WorkVersion.find(work_version_id)
     labels = []
     labels << 'Curation Requested' if requested
@@ -32,19 +30,7 @@ class CurationTaskClient
     end
   end
 
-  def self.find(uuid)
-    Airrecord.api_key = ENV['AIRTABLE_API_TOKEN']
-
-    begin
-      Submission.all(filter: "{ID} = '#{uuid}'")
-    rescue Airrecord::Error => e
-      raise CurationError.new(e)
-    end
-  end
-
   def self.find_all(work_id)
-    Airrecord.api_key = ENV['AIRTABLE_API_TOKEN']
-
     uuids = Work.find(work_id).versions.pluck('uuid')
     submissions = []
 
