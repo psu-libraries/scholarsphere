@@ -22,11 +22,8 @@ RSpec.describe 'Home page', type: :feature do
         expect(page).not_to have_selector('button')
       end
 
-      expect(page).to have_selector('h2', text: 'ScholarSphere Updates')
       expect(page).to have_selector('h2', text: 'Browse and search for works')
       expect(page).to have_selector('h2', text: 'Featured Works')
-
-      expect(page).to have_link('Read more about ScholarSphere')
 
       within('div.search') do
         expect(page).to have_selector('form')
@@ -52,7 +49,6 @@ RSpec.describe 'Home page', type: :feature do
     it 'displays the landing page without any featured resources' do
       visit(root_path)
 
-      expect(page).to have_selector('h2', text: 'ScholarSphere Updates')
       expect(page).to have_selector('h2', text: 'Browse and search for works')
       expect(page).not_to have_selector('h2', text: 'Featured Works')
     end
