@@ -24,7 +24,7 @@ class AutopopulateWorkVersionService
         keyword: rmd_pub.tags,
         creators: rmd_pub.contributors.map { |c| authorship(c) },
         publisher: [rmd_pub.publisher],
-        identifier: [rmd_pub.doi],
+        identifier: [doi],
         related_url: [rmd_pub.preferred_open_access_url || rmd_pub.supplementary_url]
       }
     end
