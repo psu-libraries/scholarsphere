@@ -62,7 +62,7 @@ RSpec.describe CurationSyncService do
       context 'when it is a 5XX error' do
         let(:message) { 'HTTP 503: Service Unavailable' }
 
-        it 'does not retry and logs the error' do
+        it 'retries and logs error if it persists' do
           expect(CurationTaskClient).to receive(:find_all).exactly(3).times
           expect(Rails.logger).to receive(:error).once
 
