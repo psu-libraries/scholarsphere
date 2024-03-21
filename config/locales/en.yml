@@ -136,7 +136,7 @@ en:
             published_date:
               blank: *required_to_publish
             file_resources:
-              readme: must include a README file in addition to other files
+              readme: must include a separate README file in addition to other files
   admin:
     application_setting:
       heading: Application Settings
@@ -423,6 +423,7 @@ en:
         required_metadata: Required Metadata
         required_to_publish_metadata: Needed to Publish
         additional_metadata: Optional Metadata
+        readme: Placeholder for README helper text
       contributors:
         edit:
           badge: Creator

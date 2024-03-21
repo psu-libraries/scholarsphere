@@ -738,6 +738,30 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
       expect(page).not_to have_button('Request Curation & Save as Draft')
     end
+
+    context 'when a work is in the data & code pathway' do
+      let(:work) { create :work, versions_count: 1 }
+      let(:work_version) { work.versions.first }
+      let(:user) { work.depositor.user }
+
+      it 'displays helper text' do
+        visit dashboard_form_files_path(work_version)
+
+        expect(page).to have_content(I18n.t!('dashboard.form.details.readme'))
+      end
+    end
+
+    context 'when a work is not in the data & code pathway' do
+      let(:work) { create :work, :article, versions_count: 1 }
+      let(:work_version) { work.versions.first }
+      let(:user) { work.depositor.user }
+
+      it 'does not display helper text' do
+        visit dashboard_form_files_path(work_version)
+
+        expect(page).not_to have_content(I18n.t!('dashboard.form.details.readme'))
+      end
+    end
   end
 
   describe 'The Publish tab' do
