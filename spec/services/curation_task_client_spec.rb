@@ -4,10 +4,9 @@ require 'rails_helper'
 
 RSpec.describe CurationTaskClient do
   describe '.send_curation' do
-    let(:work_version) { build :work_version,
-                               id: 1,
-                               uuid: uuid,
-                               title: 'Test Submission'
+    let(:work_version) { create :work_version,
+                                uuid: uuid,
+                                title: 'Test Submission'
     }
     let(:depositor) { build(:actor, psu_id: 'abc1234', display_name: 'Test Depositor') }
     let(:work) { build(:work, uuid: uuid, deposited_at: deposited_time, embargoed_until: embargo) }
@@ -37,6 +36,10 @@ RSpec.describe CurationTaskClient do
         expect(Submission).to receive(:create).with(expected_record)
 
         described_class.send_curation(work_version.id, requested: true)
+
+        work_version.reload
+
+        expect(work_version.sent_for_curation).to be_within(1.minute).of(Time.zone.now)
       end
     end
 
@@ -46,8 +49,10 @@ RSpec.describe CurationTaskClient do
 
       it 'creates a submission record in Airtable' do
         expect(Submission).to receive(:create).with(expected_record)
-
         described_class.send_curation(work_version.id, requested: true)
+        work_version.reload
+
+        expect(work_version.sent_for_curation).to be_within(1.minute).of(Time.zone.now)
       end
     end
 
@@ -59,6 +64,9 @@ RSpec.describe CurationTaskClient do
         expect(Submission).to receive(:create).with(expected_record)
 
         described_class.send_curation(work_version.id)
+        work_version.reload
+
+        expect(work_version.sent_for_curation).to be_within(1.minute).of(Time.zone.now)
       end
     end
 
@@ -70,6 +78,27 @@ RSpec.describe CurationTaskClient do
         expect(Submission).to receive(:create).with(expected_record)
 
         described_class.send_curation(work_version.id, updated_version: true)
+        work_version.reload
+
+        expect(work_version.sent_for_curation).to be_within(1.minute).of(Time.zone.now)
+      end
+    end
+
+    context 'when there is an Airrecord error' do
+      before do
+        allow(Submission).to receive(:create).with(expected_record).and_raise(Airrecord::Error)
+      end
+
+      let(:embargo) { nil }
+      let(:labels) { [] }
+
+      it 'creates a submission record in Airtable' do
+        expect {
+          described_class.send_curation(work_version.id)
+        }.to raise_error(CurationTaskClient::CurationError)
+        work_version.reload
+
+        expect(work_version.sent_for_curation).to be_nil
       end
     end
   end

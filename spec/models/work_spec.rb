@@ -90,24 +90,19 @@ RSpec.describe Work, type: :model do
   end
 
   describe '.recently_published' do
-    let(:wv1_2) { build :work_version, :published, work: nil, published_at: 1.day.ago, version_number: 2 }
-    let(:wv1_1) { build :work_version, :published, work: nil, published_at: 10.days.ago, version_number: 1 }
-    let(:work1) { create :work, versions: [wv1_1, wv1_2] }
+    let(:wv1) { build :work_version, :published, work: nil, sent_for_curation: nil }
+    let(:work1) { create :work, versions: [wv1] }
 
-    let(:wv2) { build :work_version, :published, work: nil, published_at: 5.days.ago }
+    let(:wv2) { build :work_version, :published, work: nil, sent_for_curation: Time.now }
     let(:work2) { create :work, versions: [wv2] }
 
-    let(:wv3_1) { build :work_version, :published, work: nil, published_at: 1.day.ago }
-    let(:wv3_2) { build :work_version, :published, work: nil, published_at: 36.hours.ago }
-    let(:work3) { create :work, versions: [wv3_1, wv3_2] }
-
     let(:wv4) { build :work_version, work: nil, aasm_state: 'draft' }
-    let(:work4) { create :work, versions: [wv4] }
+    let(:work3) { create :work, versions: [wv4] }
 
-    let(:work5) { create :work }
+    let(:work4) { create :work }
 
-    it 'returns works with a published WorkVersion in the last 60 days' do
-      expect(described_class.recently_published).to match_array([work1, work3])
+    it 'returns works with a published WorkVersion that has not been sent for curation' do
+      expect(described_class.recently_published).to match_array([work1])
     end
   end
 
@@ -521,6 +516,7 @@ RSpec.describe Work, type: :model do
           read_users_ssim
           related_url_tesim
           rights_tesim
+          sent_for_curation_dtsi
           source_tesim
           subject_sim
           subject_tesim
