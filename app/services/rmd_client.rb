@@ -4,13 +4,13 @@ class RmdClient
   class RmdClientError < StandardError; end
 
   def api_response
-    response = Faraday.new(url: rmd_host).get(endpoint, **faraday_options) do |request|
+    @response ||= Faraday.new(url: rmd_host).get(endpoint, **faraday_options) do |request|
       request.headers['X-API-Key'] = api_key
     end
-    if response.status == 200
-      JSON.parse(response.env.response_body)['data']
+    if @response.status == 200
+      JSON.parse(@response.env.response_body)['data']
     else
-      message = JSON.parse(response.env.response_body)['message']
+      message = JSON.parse(@response.env.response_body)['message']
       raise RmdClientError, message
     end
   end
