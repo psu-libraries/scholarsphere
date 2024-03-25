@@ -18,16 +18,16 @@ Penn State's [open access policy](https://openaccess.psu.edu/)  (AC02: Open Acce
 
 #### Development
 
-Dann Bohn, Dan Coughlin, Eric Durante, Seth Erickson, Briana Ezray, Binky Lush, Ryan Schenk, Adam Wead
+Dann Bohn, Dan Coughlin, Eric Durante, Alex Kiessling, Binky Lush, Ryan Schenk, Allie Shoffner, Sarah Smulligan, Briana Wham
 
 #### Curation
 
-Allis Choi, Seth Erickson, Briana Ezray, Hannah Hadley, Xuying Xin
+Allie Schoffner, Briana Wham
 
 #### Policy Task Force
 
-Ana Enriquez, Seth Erickson, Briana Ezray, Kathleen Phillips, Xuying Xin
+Ana Enriquez, Seth Erickson, Kathleen Phillips, Briana Wham, Xuying Xin
 
 #### Emeritus
 
-Joni Barnoff, Jim Campbell, Kevin Clair, Carolyn Cole, Hector Correa, Justin Coyne, Paul Crum, Kieren Etienne, Mike Giarlo, Beth Hayes, Patricia Hswe, Jamie Little, Brian Maddy, Valerie Maher, Calvin Morooney, Jeff Minelli, Justin Patterson, Elizabeth Saddler, Chet Swalina, Michael Tribone, Matt Zumwalt
+Joni Barnoff, Jim Campbell, Kevin Clair, Carolyn Cole, Hector Correa, Justin Coyne, Paul Crum, Seth Erickson, Kieren Etienne, Mike Giarlo, Hannah Hadley, Beth Hayes, Patricia Hswe, Paulina Krys, Banu Kutlu, Jamie Little, Brian Maddy, Valerie Maher, Calvin Morooney, Jeff Minelli, Justin Patterson, Elizabeth Saddler, Chet Swalina, Nick Tiberi, Michael Tribone, Adam Wead, Xuying Xin, Matt Zumwalt
