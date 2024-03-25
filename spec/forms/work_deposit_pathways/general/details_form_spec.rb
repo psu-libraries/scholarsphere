@@ -27,12 +27,14 @@ RSpec.describe WorkDepositPathway::General::DetailsForm, type: :model do
       'indexing_source=': nil,
       'update_doi=': nil,
       valid?: valid,
-      errors: errors
+      errors: errors,
+      imported_metadata_from_rmd: imported_metadata_from_rmd_value
     )
   }
 
   let(:valid) { true }
   let(:errors) { {} }
+  let(:imported_metadata_from_rmd_value) { true }
 
   it_behaves_like 'a work deposit pathway details form'
 
@@ -84,6 +86,28 @@ RSpec.describe WorkDepositPathway::General::DetailsForm, type: :model do
           version_name: '1.0.0'
         }
       )
+    end
+  end
+
+  describe "#show_autocomplete_form?" do
+    it 'returns false' do
+      expect(form.show_autocomplete_form?).to eq false
+    end
+  end
+
+  describe "#imported_metadata_from_rmd?" do
+    context "when the resource's imported_metadata_from_rmd attribute is true" do
+      it 'returns true' do
+        expect(form.imported_metadata_from_rmd?).to eq true
+      end
+    end
+
+    context "when the resource's imported_metadata_from_rmd attribute is false" do
+      let(:imported_metadata_from_rmd_value) { false }
+
+      it 'returns false' do
+        expect(form.imported_metadata_from_rmd?).to eq false
+      end
     end
   end
 end

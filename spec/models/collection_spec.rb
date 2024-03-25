@@ -420,4 +420,12 @@ RSpec.describe Collection, type: :model do
       expect(c.form_partial).to eq 'collection'
     end
   end
+
+  describe '#show_autocomplete_form?' do
+    let(:c) { described_class.new }
+
+    it 'returns false' do
+      expect(c.show_autocomplete_form?).to eq false
+    end
+  end
 end
