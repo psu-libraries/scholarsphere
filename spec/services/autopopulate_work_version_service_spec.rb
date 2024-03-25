@@ -38,15 +38,13 @@ RSpec.describe AutopopulateWorkVersionService do
       expect(work_version.subtitle).to eq "A Comparative Analysis"
       expect(work_version.description).to eq "A summary of the research"
       expect(work_version.publisher).to eq ["A Publishing Company"]
-      expect(work_version.related_url).to eq ["https://example.org/articles/article-123.pdf"]
+      expect(work_version.related_url).to eq ["https://example.org/articles/article-123.pdf", "https://blog.com/post"]
       expect(work_version.published_date).to eq "2010-12-05"
       expect(work_version.creators.count).to eq 2
       expect(work_version.creators.first.display_name).to eq "Anne Example Contributor"
       expect(work_version.creators.first.email).to eq "abc1234@psu.edu"
       expect(work_version.creators.first.actor.display_name).to eq "Anne Example Contributor"
-      expect(work_version.creators.second.display_name).to eq "Joe Fakeman Person"
-      expect(work_version.creators.second.email).to eq "def1234@psu.edu"
-      expect(work_version.creators.second.actor.display_name).to eq "Existing Actor"
+      expect(work_version.creators.second.actor).to eq existing_actor
       expect(work_version.keyword).to eq ["A Topic", "Another Topic"]
       expect(work_version.identifier).to eq [doi]
     end

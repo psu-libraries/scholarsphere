@@ -25,7 +25,7 @@ class AutopopulateWorkVersionService
         creators: rmd_pub.contributors.map { |c| authorship(c) },
         publisher: [rmd_pub.publisher],
         identifier: [doi],
-        related_url: [rmd_pub.preferred_open_access_url || rmd_pub.supplementary_url]
+        related_url: [rmd_pub.preferred_open_access_url, rmd_pub.supplementary_url].compact
       }
     end
 
