@@ -10,7 +10,7 @@ http_interactions:
       User-Agent:
       - Faraday v1.10.3
       X-Api-Key:
-      - ec6ef62c5be99469cfa6ae7da28230e1702d51909feb38f0a6731ee96a71ce3444918205af3a385ff502e3011e90331c
+      - abcdefg12345
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
