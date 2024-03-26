@@ -54,7 +54,7 @@ RSpec.describe RmdPublication, :vcr do
         contributor = Struct.new(:first_name, :middle_name, :last_name, :psu_user_id, :position)
         contributors = [contributor.new('Anne', 'Example', 'Contributor', 'abc1234', 1),
                         contributor.new('Joe', 'Fakeman', 'Person', 'def1234', 2),
-                        contributor.new('Joe', 'Fakeman', 'Person', '', 3)]
+                        contributor.new('Another', 'Fake', 'Contributor', '', 3)]
         expect(rmd_publication.contributors.map(&:to_h)).to eq contributors.map(&:to_h)
       end
     end

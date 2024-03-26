@@ -99,6 +99,12 @@ http_interactions:
                     "middle_name": "Fakeman",
                     "last_name": "Person",
                     "psu_user_id": "def1234"
+                  },
+                  {
+                    "first_name": "Another",
+                    "middle_name": "Fake",
+                    "last_name": "Contributor",
+                    "psu_user_id": ""
                   }
                 ],
                 "tags": [
