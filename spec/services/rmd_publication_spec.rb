@@ -52,28 +52,28 @@ RSpec.describe RmdPublication, :vcr do
     describe '#contributors' do
       it 'returns an array of contributor structs for the received publication' do
         contributor = Struct.new(:first_name, :middle_name, :last_name, :psu_user_id, :position)
-        contributors = [contributor.new("Anne", "Example", "Contributor", "abc1234", 1), 
-                        contributor.new("Joe", "Fakeman", "Person", "def1234", 2)]
+        contributors = [contributor.new('Anne', 'Example', 'Contributor', 'abc1234', 1),
+                        contributor.new('Joe', 'Fakeman', 'Person', 'def1234', 2)]
         expect(rmd_publication.contributors.map(&:to_h)).to eq contributors.map(&:to_h)
       end
     end
 
     describe '#tags' do
       it 'returns an array of tags for the received publication' do
-        expect(rmd_publication.tags).to eq ["A Topic", "Another Topic"]
+        expect(rmd_publication.tags).to eq ['A Topic', 'Another Topic']
       end
     end
   end
 
-  context "when publication is not found" do
+  context 'when publication is not found' do
     it 'raises a PublicationNotFound error' do
-      expect { rmd_publication }.to raise_error RmdPublication::PublicationNotFound
+      expect { rmd_publication.title }.to raise_error RmdPublication::PublicationNotFound
     end
   end
 
   context 'when an error is returned from the api' do
     it 'raises a RmdClientError' do
-      expect { rmd_publication }.to raise_error RmdClient::RmdClientError, 'Unauthorized'
+      expect { rmd_publication.title }.to raise_error RmdClient::RmdClientError, 'Unauthorized'
     end
   end
 end

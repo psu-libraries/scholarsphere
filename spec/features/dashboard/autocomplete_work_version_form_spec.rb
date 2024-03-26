@@ -28,7 +28,7 @@ RSpec.describe 'Autocompleting WorkVersion metadata with data from RMD', with_us
 
             FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_scholarly_works_draft(metadata)
             FeatureHelpers::DashboardForm.save_and_continue
-            
+
             fill_in 'autocomplete_work_form_doi', with: 'https://doi.org/10.1038/abcdefg1234567'
             click_on 'Submit'
 
@@ -42,7 +42,7 @@ RSpec.describe 'Autocompleting WorkVersion metadata with data from RMD', with_us
 
             FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_scholarly_works_draft(metadata)
             FeatureHelpers::DashboardForm.save_and_continue
-            
+
             fill_in 'autocomplete_work_form_doi', with: 'https://doi.org/10.1038/abcdefg1234567'
             click_on 'Submit'
 
@@ -57,7 +57,7 @@ RSpec.describe 'Autocompleting WorkVersion metadata with data from RMD', with_us
 
           FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_scholarly_works_draft(metadata)
           FeatureHelpers::DashboardForm.save_and_continue
-          
+
           fill_in 'autocomplete_work_form_doi', with: 'abcdefghi123456'
           click_on 'Submit'
 

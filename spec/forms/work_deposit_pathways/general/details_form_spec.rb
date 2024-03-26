@@ -85,13 +85,13 @@ RSpec.describe WorkDepositPathway::General::DetailsForm, type: :model do
     end
   end
 
-  describe "#show_autocomplete_form?" do
+  describe '#show_autocomplete_form?' do
     it 'returns false' do
       expect(form.show_autocomplete_form?).to eq false
     end
   end
 
-  describe "#imported_metadata_from_rmd?" do
+  describe '#imported_metadata_from_rmd?' do
     context "when the resource's imported_metadata_from_rmd attribute is true" do
       it 'returns true' do
         expect(form.imported_metadata_from_rmd?).to eq true

@@ -2,11 +2,10 @@
 
 class RmdPublication < RmdClient
   class PublicationNotFound < StandardError; end
-  attr_reader :doi, :attributes
+  attr_reader :doi
 
   def initialize(doi)
     @doi = doi
-    @attributes = api_response.first.present? ? api_response.first['attributes'] : (raise PublicationNotFound)
   end
 
   def title
@@ -51,6 +50,10 @@ class RmdPublication < RmdClient
   end
 
   private
+
+    def attributes
+      @attributes ||= api_response.first.present? ? api_response.first['attributes'] : (raise PublicationNotFound)
+    end
 
     def faraday_options
       { doi: doi }

@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 
 class AutopopulateWorkVersionService
-  attr_accessor :work_version, :doi, :rmd_pub
+  attr_accessor :work_version, :doi
 
   def initialize(work_version, doi)
     @work_version = work_version
     @doi = doi
-    @rmd_pub = RmdPublication.new(doi)
   end
 
   def call
@@ -26,7 +25,7 @@ class AutopopulateWorkVersionService
         creators: rmd_pub.contributors.map { |c| authorship(c) },
         publisher: [rmd_pub.publisher],
         identifier: [doi],
-        related_url: [rmd_pub.preferred_open_access_url || rmd_pub.supplementary_url]
+        related_url: [rmd_pub.preferred_open_access_url, rmd_pub.supplementary_url].compact
       }
     end
 
@@ -57,5 +56,9 @@ class AutopopulateWorkVersionService
         psu_id: contributor.psu_user_id,
         email: contributor.psu_user_id.present? ? "#{contributor.psu_user_id}@psu.edu" : nil
       )
+    end
+
+    def rmd_pub
+      @rmd_pub ||= RmdPublication.new(doi)
     end
 end
