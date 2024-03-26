@@ -22,16 +22,14 @@ class WorkPolicy < ApplicationPolicy
     editable? && record.draft_version.blank?
   end
 
-  # @note we are temporarily disabling DOIs on draft works for launch. This
-  # method should probably go away when we re-enable them
   def mint_doi?
-    published? && editable?
+    published? && editable? && !record.has_publisher_doi?
   end
 
   def edit_visibility?
     return true if user.admin?
 
-    (editable? && !published?) || (editable? && !open_access?)
+    ((editable? && !published?) || (editable? && !open_access?)) && deposit_pathway.allows_visibility_change?
   end
 
   private
@@ -56,5 +54,9 @@ class WorkPolicy < ApplicationPolicy
 
     def open_access?
       record.open_access?
+    end
+
+    def deposit_pathway
+      @deposit_pathway ||= WorkDepositPathway.new(record)
     end
 end

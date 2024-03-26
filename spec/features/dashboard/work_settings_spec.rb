@@ -93,17 +93,34 @@ RSpec.describe 'Work Settings Page', with_user: :user do
   describe 'Minting a DOI' do
     before do
       work.update(doi: nil)
-      visit edit_dashboard_work_path(work)
     end
 
     context 'when the work has been published' do
-      let(:work) { create :work, versions_count: 1, has_draft: false, depositor: user.actor }
+      let(:work) { create :work, depositor: user.actor }
 
-      it 'works from the Settings page' do
-        click_button I18n.t!('resources.doi.create')
+      before { create :work_version, :published, work: work, identifier: identifier }
 
-        expect(page).to have_current_path(edit_dashboard_work_path(work))
-        expect(page).not_to have_button I18n.t!('resources.doi.create')
+      context 'when the work has a publisher DOI' do
+        let(:identifier) { ['http://doi.org/10.47366/sabia.v5n1a3'] }
+
+        it 'is not allowed' do
+          visit edit_dashboard_work_path(work)
+
+          expect(page).not_to have_content I18n.t!('resources.doi.create')
+          expect(page).to have_content I18n.t!('dashboard.works.edit.doi.not_allowed')
+        end
+      end
+
+      context 'when the work does not have a publisher DOI' do
+        let(:identifier) { [] }
+
+        it 'works from the Settings page' do
+          visit edit_dashboard_work_path(work)
+          click_button I18n.t!('resources.doi.create')
+
+          expect(page).to have_current_path(edit_dashboard_work_path(work))
+          expect(page).not_to have_button I18n.t!('resources.doi.create')
+        end
       end
     end
 
@@ -111,6 +128,8 @@ RSpec.describe 'Work Settings Page', with_user: :user do
       let(:work) { create :work, versions_count: 1, has_draft: true, depositor: user.actor }
 
       it 'is not allowed' do
+        visit edit_dashboard_work_path(work)
+
         expect(page).not_to have_content I18n.t!('resources.doi.create')
         expect(page).to have_content I18n.t!('dashboard.works.edit.doi.not_allowed')
       end

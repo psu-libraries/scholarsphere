@@ -10,8 +10,20 @@
 <%= form.fields_for :work do |work_form| %>
   <div class="form-wrapper">
 
-    <% if policy(@resource).edit_initial_draft? && deposit_pathway.allows_visibility_change? %>
-      <%= render 'visibility_field', form: work_form %>
+    <% if policy(@resource).edit_initial_draft? %>
+      <% if deposit_pathway.allows_visibility_change? %>
+        <%= render 'visibility_field', form: work_form %>
+      <% end %>
+
+      <div class="form-group mt-5">
+        <div class="keyline keyline--left">
+          <h2 id="<%= t('dashboard.work_versions.edit.embargo').parameterize %>" class="h4"><%= t('dashboard.work_versions.edit.embargo') %></h2>
+        </div>
+
+        <p><%= t('dashboard.works.edit.embargo.explanation') %></p>
+
+        <%= render 'form_fields/date', form: work_form, attribute: :embargoed_until %>
+      </div>
     <% end %>
 
     <% if allow_curation? || @resource.draft_curation_requested %>

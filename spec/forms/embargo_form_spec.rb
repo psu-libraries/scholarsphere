@@ -15,44 +15,8 @@ RSpec.describe EmbargoForm, type: :model do
       it 'initializes with params' do
         allow(work).to receive(:embargoed?).and_return false
         form = described_class.new(work: work, params: params)
-        expect(form.embargoed_until).to eq '2020-11-04'
+        expect(form.embargoed_until).to eq Time.zone.parse('2020-11-04').beginning_of_day
       end
-    end
-  end
-
-  describe 'validations' do
-    context 'when `remove` is falsey' do
-      let(:params) { {} }
-
-      it { is_expected.to allow_value(nil).for(:embargoed_until) }
-
-      it { is_expected.to allow_value('2020-11-04').for(:embargoed_until) }
-
-      # wrong format
-      it { is_expected.not_to allow_value('not a date').for(:embargoed_until) }
-
-      # correct format, but not actually a date
-      it { is_expected.not_to allow_value('2020-02-31').for(:embargoed_until) }
-
-      # correct format, but exceeds the four year limit
-      it { is_expected.not_to allow_value(DateTime.now.advance(years: 4, days: 1).to_s).for(:embargoed_until) }
-    end
-
-    context 'when `remove` is present' do
-      let(:params) { { 'remove' => 't' } }
-
-      it { is_expected.to allow_value(nil).for(:embargoed_until) }
-
-      it { is_expected.to allow_value('2020-11-04').for(:embargoed_until) }
-
-      # wrong format
-      it { is_expected.to allow_value('not a date').for(:embargoed_until) }
-
-      # correct format, but not actually a date
-      it { is_expected.to allow_value('2020-02-31').for(:embargoed_until) }
-
-      # correct format, but exceeds the four year limit
-      it { is_expected.to allow_value(DateTime.now.advance(years: 4, days: 1).to_s).for(:embargoed_until) }
     end
   end
 
@@ -70,10 +34,10 @@ RSpec.describe EmbargoForm, type: :model do
   describe '#embargoed_until' do
     context 'when not set by params' do
       context 'when the work has an embargoed_until value' do
-        before { allow(work).to receive(:embargoed_until).and_return Time.zone.parse('2020-11-03 14:50:00') }
+        before { allow(work).to receive(:embargoed_until).and_return Time.zone.parse('2020-11-03 00:00:00') }
 
         it "formats the work's embargoed_until as a datestamp" do
-          expect(form.embargoed_until).to eq '2020-11-03'
+          expect(form.embargoed_until).to eq Time.zone.parse('2020-11-03').beginning_of_day
         end
       end
 
@@ -82,18 +46,12 @@ RSpec.describe EmbargoForm, type: :model do
 
         specify { expect(form.embargoed_until).to be_blank }
       end
-
-      context "when the work's value for embargoed_until is not a date" do
-        before { allow(work).to receive(:embargoed_until).and_return 123 }
-
-        specify { expect(form.embargoed_until).to be_blank }
-      end
     end
 
     context 'when set by params' do
-      let(:params) { { 'embargoed_until' => 'the value from params' } }
+      let(:params) { { 'embargoed_until' => '2020-11-03' } }
 
-      specify { expect(form.embargoed_until).to eq 'the value from params' }
+      specify { expect(form.embargoed_until).to eq Time.zone.parse('2020-11-03').beginning_of_day }
     end
   end
 

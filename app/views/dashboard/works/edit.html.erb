@@ -70,7 +70,7 @@
         <h2 id="<%= t('.visibility.heading').parameterize %>" class="h4"><%= t('.visibility.heading') %></h2>
       </div>
 
-      <% if policy(@work).edit_visibility? && deposit_pathway.allows_visibility_change? %>
+      <% if policy(@work).edit_visibility? %>
         <p><%= t('.visibility.explanation') %></p>
 
         <%- visibility_form_id = "edit_visibility_#{dom_id @work}" %>
@@ -101,7 +101,7 @@
         <%= hidden_field_tag 'form_id', embargo_form_id %>
         <%= render FormErrorMessageComponent.new(form: form) %>
 
-        <%= render 'form_fields/text', form: form, attribute: :embargoed_until %>
+        <%= render 'form_fields/date', form: form, attribute: :embargoed_until %>
 
         <div class="actions mt-1 mb-3">
           <%= form.submit t('.embargo.submit_button'), class: 'btn btn-primary' %>

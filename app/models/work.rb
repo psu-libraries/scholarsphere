@@ -10,6 +10,7 @@ class Work < ApplicationRecord
   fields_with_dois :doi, :latest_published_version_dois
 
   delegate :email, :display_name, to: :depositor
+  delegate :has_publisher_doi?, to: :latest_version
 
   belongs_to :depositor,
              class_name: 'Actor',
@@ -49,6 +50,8 @@ class Work < ApplicationRecord
           as: :resource
 
   accepts_nested_attributes_for :versions
+
+  validate :embargoed_until_is_valid_date
 
   module Types
     def self.all
@@ -256,5 +259,14 @@ class Work < ApplicationRecord
         WorkTypeSchema,
         DoiSchema
       )
+    end
+
+    def embargoed_until_is_valid_date
+      return if embargoed_until.blank?
+
+      unless embargoed_until < (DateTime.now + 4.years)
+        errors.add(:embargoed_until, :max)
+        nil
+      end
     end
 end

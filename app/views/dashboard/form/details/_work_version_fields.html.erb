@@ -2,7 +2,9 @@
 
 <div class="form-wrapper">
   <%= render 'form_fields/text', form: form, attribute: :subtitle %>
+  <%= render 'form_fields/multi_text', form: form, attribute: :publisher %>
   <%= render 'form_fields/text_area', form: form, attribute: :publisher_statement %>
+  <%= render 'form_fields/multi_text', form: form, attribute: :identifier %>
   <%= render 'dashboard/form/details/common_work_version_optional_fields', form: form %>
   <%= render 'form_fields/multi_text', form: form, attribute: :based_near %>
   <%= render 'form_fields/multi_text', form: form, attribute: :source %>
