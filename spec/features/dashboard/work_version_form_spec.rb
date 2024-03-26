@@ -747,7 +747,10 @@ RSpec.describe 'Publishing a work', with_user: :user do
       it 'displays helper text' do
         visit dashboard_form_files_path(work_version)
 
-        expect(page).to have_content(I18n.t!('dashboard.form.details.readme'))
+        expect(page).to have_content(I18n.t!('dashboard.form.details.readme.header'))
+        expect(page).to have_content(I18n.t!('dashboard.form.details.readme.format'))
+        expect(page).to have_content(I18n.t!('dashboard.form.details.readme.zip'))
+        expect(page).to have_link('ScholarSphere README template', href: 'https://docs.scholarsphere.psu.edu/guides/writing-readme/')
       end
     end
 
@@ -759,7 +762,10 @@ RSpec.describe 'Publishing a work', with_user: :user do
       it 'does not display helper text' do
         visit dashboard_form_files_path(work_version)
 
-        expect(page).not_to have_content(I18n.t!('dashboard.form.details.readme'))
+        expect(page).not_to have_content(I18n.t!('dashboard.form.details.readme.header'))
+        expect(page).not_to have_content(I18n.t!('dashboard.form.details.readme.format'))
+        expect(page).not_to have_content(I18n.t!('dashboard.form.details.readme.zip'))
+        expect(page).not_to have_link(I18n.t!('dashboard.form.details.readme.documentation'), href: 'https://docs.scholarsphere.psu.edu/guides/writing-readme/')
       end
     end
   end

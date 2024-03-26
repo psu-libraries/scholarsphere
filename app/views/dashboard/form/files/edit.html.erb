@@ -17,7 +17,6 @@
                   target: 'unsaved-changes.form'
                 }
               ) do |form| %>
-            <p><%= t('dashboard.form.details.readme') if deposit_pathway.data_and_code? %></p>
             <%= render 'fields', form: form %>
 
             <%= render 'dashboard/form/shared/action_footer', form: form %>
