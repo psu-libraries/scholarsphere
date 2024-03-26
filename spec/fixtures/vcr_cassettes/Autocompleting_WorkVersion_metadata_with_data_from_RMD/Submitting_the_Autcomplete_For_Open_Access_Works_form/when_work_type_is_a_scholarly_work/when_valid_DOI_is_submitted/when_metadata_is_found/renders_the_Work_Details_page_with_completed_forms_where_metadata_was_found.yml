@@ -92,13 +92,23 @@ http_interactions:
                     "first_name": "Anne",
                     "middle_name": "Example",
                     "last_name": "Contributor",
-                    "psu_user_id": "abc1234"
+                    "psu_user_id": ""
+                  },
+                  {
+                    "first_name": "Joe",
+                    "middle_name": "Fakeman",
+                    "last_name": "Person",
+                    "psu_user_id": "def1234"
                   }
                 ],
                 "tags": [
                   {
                     "name": "A Topic",
                     "rank": 1.25
+                  },
+                  {
+                    "name": "Another Topic",
+                    "rank": 1.50
                   }
                 ],
                 "pure_ids": [

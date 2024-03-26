@@ -33,6 +33,21 @@ RSpec.describe 'Autocompleting WorkVersion metadata with data from RMD', with_us
             click_on 'Submit'
 
             expect(page).to have_content 'We were able to find your work and autocomplete some metadata for you'
+            expect(find('#work_version_description').text).to eq 'A summary of the research'
+            expect(find('#work_version_published_date').value).to eq '2010-12-05'
+            expect(find('#work_version_subtitle').value).to eq 'A Comparative Analysis'
+            expect(find('#work_version_publisher').value).to eq 'A Publishing Company'
+            expect(find('#work_version_identifier').value).to eq 'https://doi.org/10.1038/abcdefg1234567'
+            keywords = find_all('#work_version_keyword')
+            expect(keywords[0].value).to eq 'A Topic'
+            expect(keywords[1].value).to eq 'Another Topic'
+            related_urls = find_all('#work_version_related_url')
+            expect(related_urls[0].value).to eq 'https://example.org/articles/article-123.pdf'
+            expect(related_urls[1].value).to eq 'https://blog.com/post'
+
+            click_on 'Contributors'
+
+            save_and_open_page
           end
         end
 
