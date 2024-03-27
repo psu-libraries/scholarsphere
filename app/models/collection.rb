@@ -175,6 +175,10 @@ class Collection < ApplicationRecord
     'collection'
   end
 
+  def show_autocomplete_form?
+    false
+  end
+
   private
 
     def uploaded_thumbnail_url

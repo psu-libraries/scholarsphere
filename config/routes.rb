@@ -127,6 +127,8 @@ Rails.application.routes.draw do
 
         get   ':id/publish', to: 'publish#edit', as: 'publish'
         match ':id/publish', to: 'publish#update', via: %i[patch put], as: nil
+
+        post ':id/autocomplete_work_forms', to: 'work_version_details#autocomplete_work_forms', as: 'autocomplete_work'
       end
 
       scope 'collections' do

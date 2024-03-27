@@ -96,6 +96,14 @@ class WorkDepositPathway
         end
       end
 
+      def show_autocomplete_form?
+        false
+      end
+
+      def imported_metadata_from_rmd?
+        imported_metadata_from_rmd == true
+      end
+
       delegate :id,
                :to_param,
                :persisted?,
@@ -104,6 +112,7 @@ class WorkDepositPathway
                :published?,
                :draft?,
                :work,
+               :imported_metadata_from_rmd,
                :indexing_source=,
                :update_doi=,
                :work_type,
@@ -164,6 +173,10 @@ class WorkDepositPathway
 
         def form_partial
           'scholarly_works_work_version'
+        end
+
+        def show_autocomplete_form?
+          imported_metadata_from_rmd == nil
         end
       end
 

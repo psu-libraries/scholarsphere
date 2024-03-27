@@ -2,7 +2,7 @@
 
   <%= render FormErrorMessageComponent.new(form: form) %>
 
-  <%= render "#{param_key}_fields", form: form %>
+  <%= render "#{param_key}_fields", form: form, work_type_disabled: @resource.imported_metadata_from_rmd? %>
 
   <%= render 'dashboard/form/shared/action_footer', form: form %>
 <% end %>
