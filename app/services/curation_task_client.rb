@@ -25,7 +25,7 @@ class CurationTaskClient
 
     begin
       Submission.create(record)
-      submission.sent_for_curation = Time.zone.now
+      submission.sent_for_curation_at = Time.zone.now
       submission.save!
     rescue Airrecord::Error => e
       raise CurationError.new(e)

@@ -39,7 +39,7 @@ RSpec.describe CurationTaskClient do
 
         work_version.reload
 
-        expect(work_version.sent_for_curation).to be_within(1.minute).of(Time.zone.now)
+        expect(work_version.sent_for_curation_at).to be_within(1.minute).of(Time.zone.now)
       end
     end
 
@@ -52,7 +52,7 @@ RSpec.describe CurationTaskClient do
         described_class.send_curation(work_version.id, requested: true)
         work_version.reload
 
-        expect(work_version.sent_for_curation).to be_within(1.minute).of(Time.zone.now)
+        expect(work_version.sent_for_curation_at).to be_within(1.minute).of(Time.zone.now)
       end
     end
 
@@ -66,7 +66,7 @@ RSpec.describe CurationTaskClient do
         described_class.send_curation(work_version.id)
         work_version.reload
 
-        expect(work_version.sent_for_curation).to be_within(1.minute).of(Time.zone.now)
+        expect(work_version.sent_for_curation_at).to be_within(1.minute).of(Time.zone.now)
       end
     end
 
@@ -80,7 +80,7 @@ RSpec.describe CurationTaskClient do
         described_class.send_curation(work_version.id, updated_version: true)
         work_version.reload
 
-        expect(work_version.sent_for_curation).to be_within(1.minute).of(Time.zone.now)
+        expect(work_version.sent_for_curation_at).to be_within(1.minute).of(Time.zone.now)
       end
     end
 
@@ -98,7 +98,7 @@ RSpec.describe CurationTaskClient do
         }.to raise_error(CurationTaskClient::CurationError)
         work_version.reload
 
-        expect(work_version.sent_for_curation).to be_nil
+        expect(work_version.sent_for_curation_at).to be_nil
       end
     end
   end

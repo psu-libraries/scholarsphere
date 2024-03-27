@@ -262,7 +262,7 @@ enable_extension "pg_stat_statements"
     t.datetime "withdrawn_at"
     t.datetime "removed_at"
     t.boolean "draft_curation_requested"
-    t.datetime "sent_for_curation"
+    t.datetime "sent_for_curation_at"
     t.index ["external_app_id"], name: "index_work_versions_on_external_app_id"
     t.index ["work_id", "version_number"], name: "index_work_versions_on_work_id_and_version_number", unique: true
     t.index ["work_id"], name: "index_work_versions_on_work_id"

@@ -53,7 +53,7 @@ class Work < ApplicationRecord
   scope :recently_published, -> {
     joins(:versions)
       .where(work_versions: { aasm_state: 'published' })
-      .where(work_versions: { sent_for_curation: nil })
+      .where(work_versions: { sent_for_curation_at: nil })
       .distinct
   }
   validate :embargoed_until_is_valid_date
