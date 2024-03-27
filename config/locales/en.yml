@@ -418,7 +418,7 @@ en:
         autocomplete_unsuccessful: 'We were not able to find and autocomplete the metadata for your work.  Please manually enter your metadata in the following forms to complete your submission.'
       details:
         autocomplete_form:
-          autocomplete_help_text: You have chosen an open access work type.  We may already know some details about your work.  If you know the DOI of your work, please enter it below and we can try to autocomplete some information for you.  Note that autocompletion will overwrite anything you have already saved for this work.
+          autocomplete_help_text_html: By adding your publisher identifier (e.g., DOI) to this field, we can search the Penn State Researcher Metadata Database and potentially enrich the following metadata fields for your deposit. If the Researcher Metadata Database contains pertinent information about your scholarly work, it will automatically be imported into the fields below. You can choose to retain or modify this imported information.<br/><br/>Please note that if you are working to make your work open per <a href="https://policy.psu.edu/policies/ac02">AC02</a>, we recommend using the process available directly within the <a href="https://openaccess.psu.edu/deposit/rmd/">Researcher Metadata Database</a> for deposit when possible.
         about_collections: 
           label: About Collections
           message: >
