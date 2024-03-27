@@ -5,6 +5,15 @@
   data-uppy-blacklist="<%= form.object.file_version_memberships.map(&:title).to_json %>"
   data-uppy-parent-form="file-uploader">
 </div>
+<% if deposit_pathway.data_and_code? %>
+  <p>
+    <strong><%= t('dashboard.form.details.readme.header') %></strong>
+    <ul>
+      <li><%= t('dashboard.form.details.readme.format') %><%= link_to t('dashboard.form.details.readme.documentation'), 'https://docs.scholarsphere.psu.edu/guides/writing-readme/' %>.</li>
+      <li><%= t('dashboard.form.details.readme.zip') %></li>
+    </ul>
+  </p>
+<% end %>
 
 <% if form.object.file_version_memberships.any? %>
   <%= render 'uploaded_file_list', file_version_memberships: form.object.file_version_memberships %>

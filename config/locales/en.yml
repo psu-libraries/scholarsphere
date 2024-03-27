@@ -136,7 +136,7 @@ en:
             published_date:
               blank: *required_to_publish
             file_resources:
-              readme: must include a README file in addition to other files
+              readme: must include a separate README file labeled as “README” in addition to other files
   admin:
     application_setting:
       heading: Application Settings
@@ -423,6 +423,12 @@ en:
         required_metadata: Required Metadata
         required_to_publish_metadata: Needed to Publish
         additional_metadata: Optional Metadata
+        readme:
+          header: 'Please note:'
+          format: Every work must include a README file labeled as “README” (e.g., README.txt, readme.md, etc.). This README file should contain essential information about your uploaded files, such as a brief description, instructions, or any other pertinent details. If you need assistance or guidance, please refer to the
+          zip: If you are uploading a compressed file (e.g., .zip, .tar), ensure that the README file is a separate file outside the zipped files.
+          documentation: ' ScholarSphere README template'
+
       contributors:
         edit:
           badge: Creator
