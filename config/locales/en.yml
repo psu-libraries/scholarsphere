@@ -230,6 +230,8 @@ en:
         published_date: The publication date can be specific to the year (2020), month (2020-11), or day (2020-11-22).
         version_name: For datasets or software using semantic versioning (e.g., x.y.z)
         rights: The license you select determines how your work can be used by others. [Read More](https://docs.scholarsphere.psu.edu/guides/licenses/)
+      autocomplete_work_form:
+        doi: Please enter a valid DOI (e.g. https://doi.org/10.xxxx/xxxxxx or 10.xxxx/xxxxxx)
       actor:
         orcid: "[Click here to link your ORCiD](https://guides.libraries.psu.edu/orcid)"
         display_name: >
