@@ -738,6 +738,36 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
       expect(page).not_to have_button('Request Curation & Save as Draft')
     end
+
+    context 'when a work is in the data & code pathway' do
+      let(:work) { create :work, versions_count: 1 }
+      let(:work_version) { work.versions.first }
+      let(:user) { work.depositor.user }
+
+      it 'displays helper text' do
+        visit dashboard_form_files_path(work_version)
+
+        expect(page).to have_content(I18n.t!('dashboard.form.details.readme.header'))
+        expect(page).to have_content(I18n.t!('dashboard.form.details.readme.format'))
+        expect(page).to have_content(I18n.t!('dashboard.form.details.readme.zip'))
+        expect(page).to have_link('ScholarSphere README template', href: 'https://docs.scholarsphere.psu.edu/guides/writing-readme/')
+      end
+    end
+
+    context 'when a work is not in the data & code pathway' do
+      let(:work) { create :work, :article, versions_count: 1 }
+      let(:work_version) { work.versions.first }
+      let(:user) { work.depositor.user }
+
+      it 'does not display helper text' do
+        visit dashboard_form_files_path(work_version)
+
+        expect(page).not_to have_content(I18n.t!('dashboard.form.details.readme.header'))
+        expect(page).not_to have_content(I18n.t!('dashboard.form.details.readme.format'))
+        expect(page).not_to have_content(I18n.t!('dashboard.form.details.readme.zip'))
+        expect(page).not_to have_link(I18n.t!('dashboard.form.details.readme.documentation'), href: 'https://docs.scholarsphere.psu.edu/guides/writing-readme/')
+      end
+    end
   end
 
   describe 'The Publish tab' do
@@ -1141,7 +1171,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       let(:work_version) { create :work_version, :dataset_able_to_be_published, draft_curation_requested: nil }
 
       before do
-        allow(CurationTaskExporter).to receive(:call).with(work_version.id)
+        allow(CurationTaskClient).to receive(:send_curation).with(work_version.id, requested: true)
       end
 
       it 'creates a Submission' do
@@ -1153,7 +1183,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         work_version.reload
 
-        expect(CurationTaskExporter).to have_received(:call).with(work_version.id)
+        expect(CurationTaskClient).to have_received(:send_curation).with(work_version.id, requested: true)
         expect(work_version.draft_curation_requested).to be true
       end
     end
@@ -1161,7 +1191,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
     context 'when an error occurs within the curation exporter' do
       let(:work_version) { create :work_version, :dataset_able_to_be_published, draft_curation_requested: nil }
 
-      before { allow(CurationTaskExporter).to receive(:call).with(work_version.id).and_raise(CurationTaskExporter::CurationError) }
+      before { allow(CurationTaskClient).to receive(:send_curation).with(work_version.id, requested: true).and_raise(CurationTaskClient::CurationError) }
 
       it 'saves changes to the work version and displays an error flash message' do
         visit dashboard_form_publish_path(work_version)
@@ -1185,7 +1215,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
     context 'when there is a validation error' do
       let(:work_version) { create :work_version, :dataset_able_to_be_published, draft_curation_requested: nil }
 
-      before { allow(CurationTaskExporter).to receive(:call).with(work_version.id) }
+      before { allow(CurationTaskClient).to receive(:send_curation).with(work_version.id, requested: true) }
 
       it 'does not call the curation task exporter' do
         visit dashboard_form_publish_path(work_version)
@@ -1195,7 +1225,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         click_on 'Request Curation & Save as Draft'
 
-        expect(CurationTaskExporter).not_to have_received(:call).with(work_version.id)
+        expect(CurationTaskClient).not_to have_received(:send_curation).with(work_version.id, requested: true)
 
         within '#error_explanation' do
           expect(page).to have_content(I18n.t!('errors.messages.invalid_edtf'))

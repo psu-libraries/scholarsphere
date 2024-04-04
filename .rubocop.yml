@@ -98,6 +98,11 @@ RSpec/LeakyConstantDeclaration:
     - 'spec/models/concerns/all_dois_spec.rb'
     - 'spec/models/concerns/null_object_pattern_spec.rb'
 
+RSpec/LetSetup:
+  Exclude:
+    - 'spec/lib/tasks/curation_spec.rb'
+    - 'spec/models/collection_spec.rb'
+
 RSpec/ExpectActual:
   Exclude:
     - 'spec/integration/qa/routing_spec.rb'
@@ -115,6 +120,8 @@ RSpec/MessageSpies:
     - 'spec/lib/scholarsphere/solr_admin_spec.rb'
     - 'spec/services/airtable_exporter_spec.rb'
     - 'spec/services/curation_task_exporter_spec.rb'
+    - 'spec/services/curation_task_client_spec.rb'
+    - 'spec/services/curation_sync_service_spec.rb'
 
 RSpec/MultipleSubjects:
   Exclude:

@@ -90,6 +90,23 @@ RSpec.describe Work, type: :model do
     end
   end
 
+  describe '.recently_published' do
+    let(:wv1) { build :work_version, :published, work: nil, sent_for_curation_at: nil }
+    let(:work1) { create :work, versions: [wv1] }
+
+    let(:wv2) { build :work_version, :published, work: nil, sent_for_curation_at: Time.now }
+    let(:work2) { create :work, versions: [wv2] }
+
+    let(:wv4) { build :work_version, work: nil, aasm_state: 'draft' }
+    let(:work3) { create :work, versions: [wv4] }
+
+    let(:work4) { create :work }
+
+    it 'returns works with a published WorkVersion that has not been sent for curation' do
+      expect(described_class.recently_published).to match_array([work1])
+    end
+  end
+
   describe '::Types' do
     subject(:types) { described_class::Types }
 
@@ -500,6 +517,7 @@ RSpec.describe Work, type: :model do
           read_users_ssim
           related_url_tesim
           rights_tesim
+          sent_for_curation_at_dtsi
           source_tesim
           subject_sim
           subject_tesim
