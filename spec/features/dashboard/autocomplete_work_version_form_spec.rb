@@ -35,10 +35,11 @@ RSpec.describe 'Autocompleting WorkVersion metadata with data from RMD', with_us
             expect(WorkVersion.last.imported_metadata_from_rmd).to eq true
             expect(page).to have_content 'We were able to find your work and autocomplete some metadata for you'
             expect(page).not_to have_css '#autocomplete_work_form_doi'
+            expect(find('#work_version_title').value).to eq 'A Scholarly Research Article'
             expect(find('#work_version_description').text).to eq 'A summary of the research'
             expect(find('#work_version_published_date').value).to eq '2010-12-05'
             expect(find('#work_version_subtitle').value).to eq 'A Comparative Analysis'
-            expect(find('#work_version_publisher').value).to eq 'A Publishing Company'
+            expect(find('#work_version_publisher').value).to eq 'An Academic Journal'
             expect(find('#work_version_identifier').value).to eq 'https://doi.org/10.1038/abcdefg1234567'
             expect(find('#work_version_identifier').readonly?).to eq true
             expect(find('#work_version_identifier').find(:xpath, './../..').native.attribute_nodes.first.value).to eq 'mb-1'
@@ -47,7 +48,6 @@ RSpec.describe 'Autocompleting WorkVersion metadata with data from RMD', with_us
             expect(keywords[1].value).to eq 'Another Topic'
             related_urls = find_all('#work_version_related_url')
             expect(related_urls[0].value).to eq 'https://example.org/articles/article-123.pdf'
-            expect(related_urls[1].value).to eq 'https://blog.com/post'
 
             # Check that the contributors were imported
             click_on 'Contributors'

@@ -421,7 +421,6 @@ en:
         publish: Successfully published work!
         autocomplete_successful: 'We were able to find your work and autocomplete some metadata for you.  Please double-check the imported data and complete or add anything that was missed.'
         autocomplete_unsuccessful: 'We were not able to find and autocomplete the metadata for your work.  Please manually enter your metadata in the following forms to complete your submission.'
-        autocomplete_title_change: 'The title we imported is different from the one you entered manually.  Please review the title change from the "Review & Publish" step at the end of this workflow.'
       details:
         autocomplete_form:
           autocomplete_help_text_html: By adding the Digital Object Identifier (DOI) for the article, issued by the Publisher, to this field, we can search the Penn State Researcher Metadata 
