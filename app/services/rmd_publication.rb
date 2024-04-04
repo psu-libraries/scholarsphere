@@ -25,15 +25,11 @@ class RmdPublication < RmdClient
   end
 
   def publisher
-    attributes['publisher']
+    attributes['journal_title']
   end
 
   def published_on
     attributes['published_on']
-  end
-
-  def supplementary_url
-    attributes['supplementary_url']
   end
 
   def contributors

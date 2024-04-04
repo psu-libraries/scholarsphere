@@ -248,6 +248,9 @@ en:
       work_version:
         version_name: x.y.z
         published_date: yyyy-mm-dd
+    label:
+      autocomplete_work_form:
+        doi: DOI
   incidents:
     new:
       error_message: 'Cannot send message'
@@ -418,9 +421,15 @@ en:
         publish: Successfully published work!
         autocomplete_successful: 'We were able to find your work and autocomplete some metadata for you.  Please double-check the imported data and complete or add anything that was missed.'
         autocomplete_unsuccessful: 'We were not able to find and autocomplete the metadata for your work.  Please manually enter your metadata in the following forms to complete your submission.'
+        autocomplete_title_change: 'The title we imported is different from the one you entered manually.  Please review the title change from the "Review & Publish" step at the end of this workflow.'
       details:
         autocomplete_form:
-          autocomplete_help_text_html: By adding your publisher identifier (e.g., DOI) to this field, we can search the Penn State Researcher Metadata Database and potentially enrich the following metadata fields for your deposit. If the Researcher Metadata Database contains pertinent information about your scholarly work, it will automatically be imported into the fields below. You can choose to retain or modify this imported information.<br/><br/>Please note that if you are working to make your work open per <a href="https://policy.psu.edu/policies/ac02">AC02</a>, we recommend using the process available directly within the <a href="https://openaccess.psu.edu/deposit/rmd/">Researcher Metadata Database</a> for deposit when possible.
+          autocomplete_help_text_html: By adding the Digital Object Identifier (DOI) for the article, issued by the Publisher, to this field, we can search the Penn State Researcher Metadata 
+                                       Database and potentially enrich the following metadata fields for your deposit. If the Researcher Metadata Database contains pertinent information about 
+                                       your scholarly work, it will automatically be imported into the fields below. You can choose to retain or modify this imported information. 
+                                       You cannot modify the DOI once you have completed a search. If you discover that the DOI is incorrect, please delete the draft and start a new search.
+                                       <br/><br/>Please note that if you are working to make your work open per <a href="https://policy.psu.edu/policies/ac02">AC02</a>, we recommend using 
+                                       the process available directly within the <a href="https://openaccess.psu.edu/deposit/rmd/">Researcher Metadata Database</a> for deposit when possible.
         about_collections: 
           label: About Collections
           message: >

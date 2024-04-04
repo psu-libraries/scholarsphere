@@ -160,6 +160,7 @@ class WorkDepositPathway
         def self.form_fields
           WorkVersionFormBase::COMMON_FIELDS.union(
             %w{
+              title
               publisher_statement
               identifier
             }

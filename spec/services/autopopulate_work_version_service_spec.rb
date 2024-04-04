@@ -21,7 +21,6 @@ RSpec.describe AutopopulateWorkVersionService do
       publisher: 'A Publishing Company',
       preferred_open_access_url: 'https://example.org/articles/article-123.pdf',
       published_on: '2010-12-05',
-      supplementary_url: 'https://blog.com/post',
       contributors: contributors,
       tags: ['A Topic', 'Another Topic']
     )
@@ -39,7 +38,7 @@ RSpec.describe AutopopulateWorkVersionService do
       expect(work_version.subtitle).to eq 'A Comparative Analysis'
       expect(work_version.description).to eq 'A summary of the research'
       expect(work_version.publisher).to eq ['A Publishing Company']
-      expect(work_version.related_url).to eq ['https://example.org/articles/article-123.pdf', 'https://blog.com/post']
+      expect(work_version.related_url).to eq ['https://example.org/articles/article-123.pdf']
       expect(work_version.published_date).to eq '2010-12-05'
       expect(work_version.creators.count).to eq 3
       expect(work_version.creators.first.position).to eq 1

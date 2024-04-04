@@ -5,6 +5,9 @@
 </div>
 
 <div class="form-wrapper">
+  <% if @resource.imported_metadata_from_rmd %>
+    <%= render 'form_fields/text', form: form, attribute: :title %>
+  <% end %>
   <%= render 'form_fields/text_area', form: form, attribute: :description %>
   <%= render 'form_fields/text', form: form, attribute: :published_date %>
 </div>

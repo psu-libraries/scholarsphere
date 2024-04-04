@@ -33,19 +33,13 @@ RSpec.describe RmdPublication, :vcr do
 
     describe '#publisher' do
       it 'returns the publisher value for the received publication' do
-        expect(rmd_publication.publisher).to eq 'A Publishing Company'
+        expect(rmd_publication.publisher).to eq 'An Academic Journal'
       end
     end
 
     describe '#published_on' do
       it 'returns the published_on value for the received publication' do
         expect(rmd_publication.published_on).to eq '2010-12-05'
-      end
-    end
-
-    describe '#supplementary_url' do
-      it 'returns the supplementary_url value for the received publication' do
-        expect(rmd_publication.supplementary_url).to eq 'https://blog.com/post'
       end
     end
 
