@@ -89,6 +89,7 @@ RSpec.describe 'Autocompleting WorkVersion metadata with data from RMD', with_us
             expect(WorkVersion.last.imported_metadata_from_rmd).to eq false
             expect(page).to have_content 'We were not able to find and autocomplete the metadata for your work'
             expect(page).not_to have_css '#autocomplete_work_form_doi'
+            expect(page).not_to have_css '#work_version_title'
           end
         end
       end
