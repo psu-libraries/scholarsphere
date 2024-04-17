@@ -11,6 +11,7 @@ RSpec.describe WorkDepositPathway::ScholarlyWorks::DetailsForm, type: :model do
     build(
       :work_version,
       attributes: {
+        'title' => 'test title',
         'description' => description,
         'published_date' => '2024',
         'subtitle' => 'test subtitle',
@@ -33,6 +34,7 @@ RSpec.describe WorkDepositPathway::ScholarlyWorks::DetailsForm, type: :model do
   describe '.form_fields' do
     it "returns a frozen array of the names of the form's fields" do
       expect(described_class.form_fields).to match_array %w{
+        title
         description
         published_date
         subtitle
@@ -59,6 +61,7 @@ RSpec.describe WorkDepositPathway::ScholarlyWorks::DetailsForm, type: :model do
     it "sets the form attributes correctly from the given object's attributes" do
       expect(form).to have_attributes(
         {
+          title: 'test title',
           description: 'test description',
           published_date: '2024',
           subtitle: 'test subtitle',

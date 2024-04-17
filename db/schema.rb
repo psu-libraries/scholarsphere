@@ -11,9 +11,8 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 2024_03_21_203236) do
-
   # These are extensions that must be enabled in order to support this database
-enable_extension "pg_stat_statements"
+  enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
 
@@ -261,6 +260,7 @@ enable_extension "pg_stat_statements"
     t.datetime "published_at"
     t.datetime "withdrawn_at"
     t.datetime "removed_at"
+    t.boolean "imported_metadata_from_rmd"
     t.boolean "draft_curation_requested"
     t.datetime "sent_for_curation_at"
     t.index ["external_app_id"], name: "index_work_versions_on_external_app_id"

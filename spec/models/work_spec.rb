@@ -538,6 +538,7 @@ RSpec.describe Work, type: :model do
           published_at_dtsi
           removed_at_dtsi
           withdrawn_at_dtsi
+          imported_metadata_from_rmd_tesim
         )
       end
 

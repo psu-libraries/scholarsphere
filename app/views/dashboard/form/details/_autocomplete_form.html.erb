@@ -1,0 +1,15 @@
+<div class="form-wrapper form-wrapper--wide">
+  <div class="keyline keyline--left mb-2">
+    <h4><%= 'Autocomplete for Scholarly Works' %></h4>
+  </div>
+  <div class="form-wrapper mb-3">
+    <div>
+      <%= t '.autocomplete_help_text_html' %>
+    </div>
+    <br>
+    <%= form_for @autocomplete_work_form, url: dashboard_form_autocomplete_work_url(@resource.id) do |doi_form| %>
+      <%= render 'form_fields/text', form: doi_form, attribute: :doi, required: true %>
+      <%= doi_form.submit 'Submit', class: 'btn btn-primary' %>
+    <% end %>
+  </div>
+</div>
