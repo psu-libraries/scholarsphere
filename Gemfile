@@ -12,6 +12,7 @@ gem 'blacklight', '~> 7.14'
 gem 'blacklight_oai_provider', github: 'projectblacklight/blacklight_oai_provider', ref: '428da77'
 gem 'bootsnap', '>= 1.4.2', require: false
 gem 'browser'
+gem 'bugsnag', '~> 6.26'
 gem 'cocoon'
 gem 'devise'
 gem 'diffy'
@@ -59,10 +60,10 @@ gem 'view_component'
 
 group :development, :test do
   gem 'byebug', platform: :mri
-  gem 'html_tokenizer', '~> 0.0.8'
   gem 'database_cleaner'
   gem 'factory_bot_rails'
   gem 'faker'
+  gem 'html_tokenizer', '~> 0.0.8'
   gem 'niftany', '~> 0.10'
   gem 'pry-byebug'
   gem 'pry-rails'
