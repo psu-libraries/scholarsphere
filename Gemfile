@@ -59,6 +59,7 @@ gem 'view_component'
 
 group :development, :test do
   gem 'byebug', platform: :mri
+  gem 'html_tokenizer', '~> 0.0.8'
   gem 'database_cleaner'
   gem 'factory_bot_rails'
   gem 'faker'
@@ -100,7 +101,6 @@ group :test do
 end
 
 group :production do
-  gem 'ddtrace', '~> 0.34'
   gem 'lograge', '~> 0.11'
   gem 'lograge-sql', '~> 1.1'
 end

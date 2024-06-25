@@ -149,8 +149,6 @@ GEM
     crass (1.0.6)
     database_cleaner (1.8.5)
     date (3.3.4)
-    ddtrace (0.38.0)
-      msgpack
     debug_inspector (1.1.0)
     deprecation (1.1.0)
       activesupport
@@ -228,7 +226,7 @@ GEM
       concurrent-ruby (~> 1.0)
     hashdiff (1.0.1)
     hashie (5.0.0)
-    html_tokenizer (0.0.7)
+    html_tokenizer (0.0.8)
     i18n (1.14.5)
       concurrent-ruby (~> 1.0)
     image_processing (1.12.2)
@@ -605,7 +603,6 @@ DEPENDENCIES
   capybara
   cocoon
   database_cleaner
-  ddtrace (~> 0.34)
   devise
   diffy
   edtf
@@ -617,6 +614,7 @@ DEPENDENCIES
   flamegraph
   flog
   graphql (~> 1.12)
+  html_tokenizer (~> 0.0.8)
   image_processing
   jbuilder (~> 2.7)
   jquery-rails
