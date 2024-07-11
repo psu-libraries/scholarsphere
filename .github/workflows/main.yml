@@ -1,10 +1,10 @@
 name: Actions Runner Controller Demo
 on:
-  workflow_dispatch:
+  push:
 
 jobs:
   Explore-GitHub-Actions:
-    # You need to use the INSTALLATION_NAME from the previous step
     runs-on: arc-runner-set
     steps:
+    - uses: actions/checkout@v4
     - run: docker build -t foo .
