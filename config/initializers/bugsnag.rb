@@ -3,4 +3,6 @@
 Bugsnag.configure do |config|
   config.app_version = ENV.fetch('APP_VERSION', nil)
   config.release_stage = ENV.fetch('BUGSNAG_RELEASE_STAGE', 'development')
+
+  config.discard_classes << 'ActionController::UnknownFormat'
 end
