@@ -173,6 +173,7 @@ workflows:
       - publish:
           context: 
             - org-global
+
       - deploy:
           context: 
             - org-global
