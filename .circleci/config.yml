@@ -7,7 +7,7 @@ orbs:
 jobs:
   release:
     docker:
-      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:$CI_UTILS_IMAGE_TAG
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v4.0.3
     environment:
       REGISTRY_HOST: harbor.k8s.libraries.psu.edu
       REGISTRY_REPO: library/scholarsphere
@@ -26,7 +26,7 @@ jobs:
 
   publish:
     docker:
-      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:$CI_UTILS_IMAGE_TAG
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v4.0.3
         user: root
     steps:
       - setup_remote_docker:
@@ -46,7 +46,7 @@ jobs:
           registry: harbor.k8s.libraries.psu.edu
   deploy:
     docker:
-      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:$CI_UTILS_IMAGE_TAG
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v4.0.3
     environment:
       CONFIG_REPO: git@github.com:psu-libraries/scholarsphere-config.git
     steps:
@@ -57,7 +57,7 @@ jobs:
             ssh-keyscan github.com > ~/.ssh/known_hosts
             git clone $CONFIG_REPO
             cd scholarsphere-config
-            ./generate_circle_application.sh
+            ./generate_app
   test:
     docker:
       - image: cimg/ruby:3.1.2-browsers
@@ -173,6 +173,7 @@ workflows:
       - publish:
           context: 
             - org-global
+
       - deploy:
           context: 
             - org-global
