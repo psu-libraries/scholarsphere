@@ -7,7 +7,7 @@ orbs:
 jobs:
   release:
     docker:
-      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v4.0.3
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v4.0.4
     environment:
       REGISTRY_HOST: harbor.k8s.libraries.psu.edu
       REGISTRY_REPO: library/scholarsphere
@@ -26,7 +26,7 @@ jobs:
 
   publish:
     docker:
-      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v4.0.3
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v4.0.4
         user: root
     steps:
       - setup_remote_docker:
@@ -46,7 +46,7 @@ jobs:
           registry: harbor.k8s.libraries.psu.edu
   deploy:
     docker:
-      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v4.0.3
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v4.0.4
     environment:
       CONFIG_REPO: git@github.com:psu-libraries/scholarsphere-config.git
     steps:
