@@ -88,7 +88,7 @@ export default class extends Controller {
     node.setAttribute('data-action', 'multiple-fields#add')
     node.classList.add(this.buttonClass, this.addButtonClass, 'add')
 
-    const description = this.descriptionText('add another')
+    const description = this.descriptionText('add another ' + this.baseLabelText)
     node.appendChild(description)
 
     const icon = this.materialIcon('add_circle_outline')

@@ -454,7 +454,7 @@ en:
           last_option: Not finding what you're looking for? Choose this option to create your own...
           new: Create New Contributor
           no_results: No results
-          placeholder: "Search..."
+          placeholder: "Search for creator to add"
           reader_hint: >
             When autocomplete results are available use up and down arrows to review and enter to select.
             Touch device users, explore by touch or with swipe gestures.
