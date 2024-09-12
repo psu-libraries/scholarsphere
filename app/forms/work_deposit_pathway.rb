@@ -10,6 +10,8 @@ class WorkDepositPathway
       ScholarlyWorks::DetailsForm.new(resource)
     elsif data_and_code?
       DataAndCode::DetailsForm.new(resource)
+    elsif grad_culminating_experiences?
+      GradCulminatingExperiences::DetailsForm.new(resource) 
     else
       General::DetailsForm.new(resource)
     end
@@ -20,6 +22,8 @@ class WorkDepositPathway
       ScholarlyWorks::PublishForm.new(resource)
     elsif data_and_code?
       DataAndCode::PublishForm.new(resource)
+    elsif grad_culminating_experiences?
+      GradCulminatingExperiences::PublishForm.new(resource)
     else
       resource
     end
@@ -41,6 +45,10 @@ class WorkDepositPathway
     Work::Types.data_and_code.include?(work_type)
   end
 
+  def grad_culminating_experiences?
+    Work::Types.grad_culminating_experiences.include?(work_type)
+  end
+
   private
 
     attr_reader :resource
@@ -57,11 +65,8 @@ class WorkDepositPathway
       COMMON_FIELDS = %w{
         description
         published_date
-        subtitle
         keyword
-        publisher
         related_url
-        subject
         language
       }.freeze
 
@@ -117,6 +122,7 @@ class WorkDepositPathway
                :update_doi=,
                :work_type,
                :draft_curation_requested,
+               :sub_work_type_dropdown,
                to: :work_version, prefix: false
 
       private
@@ -142,6 +148,9 @@ class WorkDepositPathway
               based_near
               source
               version_name
+              subject
+              publisher
+              subtitle
             }
           ).freeze
         end
@@ -163,6 +172,9 @@ class WorkDepositPathway
               title
               publisher_statement
               identifier
+              subject
+              publisher
+              subtitle
             }
           ).freeze
         end
@@ -182,6 +194,16 @@ class WorkDepositPathway
       end
 
       class PublishForm < SimpleDelegator
+        def self.form_fields
+          WorkVersionFormBase::COMMON_FIELDS.union(
+            %w{
+              subject
+              publisher
+              subtitle
+            }
+          ).freeze
+        end
+
         def self.method_missing(method_name, *args)
           WorkVersion.public_send(method_name, *args)
         end
@@ -204,6 +226,9 @@ class WorkDepositPathway
               based_near
               source
               version_name
+              subject
+              publisher
+              subtitle
             }
           ).freeze
         end
@@ -229,6 +254,9 @@ class WorkDepositPathway
               rights
               depositor_agreement
               contributor
+              subject
+              publisher
+              subtitle
             }
           ).freeze
         end
@@ -274,6 +302,70 @@ class WorkDepositPathway
               errors.add(:file_resources, :readme)
             end
           end
+      end
+    end
+
+    module GradCulminatingExperiences
+      REQUIRE_FIELDS = %w{
+              sub_work_type
+              program
+              degree
+            }
+
+      class DetailsForm < DetailsFormBase
+        REQUIRE_FIELDS.each { |f| validates f.to_sym, presence: true}
+
+        def self.form_fields
+          WorkVersionFormBase::COMMON_FIELDS.union(
+            REQUIRE_FIELDS 
+          ).freeze
+        end
+
+        form_fields.each do |attr_name|
+          delegate attr_name, to: :work_version, prefix: false
+          delegate "#{attr_name}=", to: :work_version, prefix: false
+        end
+
+        def form_partial
+          'grad_culminating_experiences_work_version'
+        end
+      end
+
+      class PublishForm < WorkVersionFormBase
+        REQUIRE_FIELDS.each { |f| validates f.to_sym, presence: true}
+
+        def self.form_fields
+          WorkVersionFormBase::COMMON_FIELDS.union(
+            REQUIRE_FIELDS
+          ).freeze
+        end
+
+        form_fields.each do |attr_name|
+          delegate attr_name, to: :work_version, prefix: false
+          delegate "#{attr_name}=", to: :work_version, prefix: false
+        end
+
+        def form_partial
+          'grad_culminating_experiences_work_version'
+        end
+
+        delegate :aasm_state=,
+                 :aasm_state,
+                 :publish,
+                 :file_resources,
+                 :work_attributes=,
+                 :creators_attributes=,
+                 :creators,
+                 :contributor,
+                 :file_version_memberships,
+                 :initial_draft?,
+                 :aasm,
+                 :update_column,
+                 :draft_curation_requested=,
+                 :set_thumbnail_selection,
+                 :sub_work_type_dropdown,
+                 to: :work_version,
+                 prefix: false
       end
     end
 end

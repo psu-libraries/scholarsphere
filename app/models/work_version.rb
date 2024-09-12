@@ -31,7 +31,10 @@ class WorkVersion < ApplicationRecord
                  identifier: [:string, array: true, default: []],
                  based_near: [:string, array: true, default: []],
                  related_url: [:string, array: true, default: []],
-                 source: [:string, array: true, default: []]
+                 source: [:string, array: true, default: []],
+                 sub_work_type: :string,
+                 program: :string,
+                 degree: :string
 
   belongs_to :work,
              inverse_of: :versions
@@ -318,6 +321,25 @@ class WorkVersion < ApplicationRecord
 
   def has_publisher_doi?
     !!identifier.find { |id| Doi.new(id).valid? }
+  end
+
+  def sub_work_type_dropdown
+    if work_type == Work::Types.grad_culminating_experiences.first
+      [
+        "Integrative Doctoral Research Project",
+        "Praxis Project",
+        "Culminating Research Project",
+        "Doctor of Nursing Practice Project",
+        "Public Performance",
+        "Capstone Project"
+      ].freeze
+    elsif work_type == Work::Types.grad_culminating_experiences.second
+      [
+        "Scholarly Paper/Essay (MA/MS)",
+        "Capstone Project",
+        "Capstone Course Work Product"
+      ].freeze
+    end
   end
 
   delegate :deposited_at,

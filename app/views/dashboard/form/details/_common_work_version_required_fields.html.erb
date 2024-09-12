@@ -10,6 +10,9 @@
   <% end %>
   <%= render 'form_fields/text_area', form: form, attribute: :description %>
   <%= render 'form_fields/text', form: form, attribute: :published_date %>
+  <% if deposit_pathway.grad_culminating_experiences? %>
+    <%= render 'dashboard/form/details/grad_culminating_experiences_work_version_required_fields', form: form %>
+  <% end %>
 </div>
 
 <div class="form-wrapper form-wrapper--wide">

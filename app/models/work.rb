@@ -61,7 +61,9 @@ class Work < ApplicationRecord
 
   module Types
     def self.all
-      general.union(scholarly_works).union(data_and_code).freeze
+      general.union(scholarly_works)
+             .union(data_and_code)
+             .union(grad_culminating_experiences).freeze
     end
 
     def self.general
@@ -83,11 +85,7 @@ class Work < ApplicationRecord
       %w[
         article
         book
-        capstone_project
         conference_proceeding
-        dissertation
-        masters_culminating_experience
-        masters_thesis
         part_of_book
         report
         research_paper
@@ -99,6 +97,13 @@ class Work < ApplicationRecord
       %w[
         dataset
         software_or_program_code
+      ].freeze
+    end
+
+    def self.grad_culminating_experiences
+      %w[
+        professional_doctoral_culminating_experience
+        masters_culminating_experience
       ].freeze
     end
 

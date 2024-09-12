@@ -118,15 +118,13 @@ RSpec.describe Work, type: :model do
           'article',
           'audio',
           'book',
-          'capstone_project',
           'conference_proceeding',
           'dataset',
-          'dissertation',
           'image',
           'journal',
           'map_or_cartographic_material',
           'masters_culminating_experience',
-          'masters_thesis',
+          'professional_doctoral_culminating_experience',
           'other',
           'part_of_book',
           'poster',
@@ -176,11 +174,7 @@ RSpec.describe Work, type: :model do
         expect(scholarly_works).to contain_exactly(
           'article',
           'book',
-          'capstone_project',
           'conference_proceeding',
-          'dissertation',
-          'masters_culminating_experience',
-          'masters_thesis',
           'part_of_book',
           'report',
           'research_paper',
@@ -275,15 +269,13 @@ RSpec.describe Work, type: :model do
           article: 'article',
           audio: 'audio',
           book: 'book',
-          capstone_project: 'capstone_project',
           conference_proceeding: 'conference_proceeding',
           dataset: 'dataset',
-          dissertation: 'dissertation',
           image: 'image',
           journal: 'journal',
           map_or_cartographic_material: 'map_or_cartographic_material',
           masters_culminating_experience: 'masters_culminating_experience',
-          masters_thesis: 'masters_thesis',
+          professional_doctoral_culminating_experience: 'professional_doctoral_culminating_experience',
           other: 'other',
           part_of_book: 'part_of_book',
           poster: 'poster',
@@ -539,6 +531,9 @@ RSpec.describe Work, type: :model do
           removed_at_dtsi
           withdrawn_at_dtsi
           imported_metadata_from_rmd_tesim
+          degree_tesim
+          program_tesim
+          sub_work_type_tesim
         )
       end
 
