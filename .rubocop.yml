@@ -57,6 +57,10 @@ Rails/ApplicationController:
   Exclude:
     - 'app/controllers/api/v1/rest_controller.rb'
 
+Rails/Blank:
+  Exclude:
+    - 'app/forms/work_deposit_pathway.rb' 
+
 Rails/SkipsModelValidations:
   Exclude:
     - 'app/controllers/dashboard/form/publish_controller.rb'

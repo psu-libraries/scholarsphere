@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_03_21_203236) do
+ActiveRecord::Schema.define(version: 2024_09_10_195820) do
+
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
 
@@ -220,7 +220,8 @@ ActiveRecord::Schema.define(version: 2024_03_21_203236) do
   end
 
   create_table "versions", force: :cascade do |t|
-    t.string "item_type", null: false
+    t.string "item_type"
+    t.string "{:null=>false}"
     t.bigint "item_id", null: false
     t.string "event", null: false
     t.string "whodunnit"
@@ -260,9 +261,10 @@ ActiveRecord::Schema.define(version: 2024_03_21_203236) do
     t.datetime "published_at"
     t.datetime "withdrawn_at"
     t.datetime "removed_at"
-    t.boolean "imported_metadata_from_rmd"
     t.boolean "draft_curation_requested"
     t.datetime "sent_for_curation_at"
+    t.boolean "imported_metadata_from_rmd"
+    t.boolean "mint_doi_requested"
     t.index ["external_app_id"], name: "index_work_versions_on_external_app_id"
     t.index ["work_id", "version_number"], name: "index_work_versions_on_work_id_and_version_number", unique: true
     t.index ["work_id"], name: "index_work_versions_on_work_id"

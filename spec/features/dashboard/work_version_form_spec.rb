@@ -1242,4 +1242,70 @@ RSpec.describe 'Publishing a work', with_user: :user do
       end
     end
   end
+
+  describe 'minting a doi', js: true do
+    let(:user) { work_version.work.depositor.user }
+
+    context 'with a draft eligible for doi minting' do
+      let(:work) { create :work, work_type: 'dataset', versions_count: 1, has_draft: true, doi: nil }
+      let(:work_version) { work.versions.first }
+
+      it 'renders a checkbox requesting a doi be minted upon publish' do
+        visit dashboard_form_publish_path(work_version)
+
+        expect(page).to have_content(I18n.t('dashboard.form.publish.doi.label'))
+      end
+    end
+
+    context 'with a draft not eligible for doi minting' do
+      let(:work) { create :work, work_type: 'dataset', versions_count: 1, has_draft: true, doi: '10.26207/x8qe-xp35' }
+      let(:work_version) { work.versions.first }
+
+      it 'does not render a checkbox requesting a doi be minted upon publish' do
+        visit dashboard_form_publish_path(work_version)
+
+        expect(page).not_to have_content(I18n.t('dashboard.form.publish.doi.label'))
+      end
+    end
+
+    context 'when minting doi is successfully requested' do
+      let(:work_version) { create :work_version, :dataset_able_to_be_published }
+      let(:work) { create :work, work_type: 'dataset', versions_count: 1, has_draft: true, doi: nil, versions: [work_version] }
+
+      before do
+        allow(MintDoiAsync).to receive(:call).with(work_version.work)
+      end
+
+      it 'calls the MintDoi job' do
+        visit dashboard_form_publish_path(work_version)
+
+        check I18n.t('dashboard.form.publish.doi.label')
+        check 'I have read and agree to the deposit agreement.'
+
+        click_on 'Publish'
+
+        expect(MintDoiAsync).to have_received(:call).with(work_version.work)
+      end
+    end
+
+    context 'when an error occurs and the work version does not publish' do
+      let(:work_version) { create :work_version, :dataset_able_to_be_published }
+      let(:work) { create :work, work_type: 'dataset', versions_count: 1, has_draft: true, doi: nil, versions: [work_version] }
+
+      before do
+        work_version.work.doi = nil
+        allow(MintDoiAsync).to receive(:call).with(work_version.work)
+      end
+
+      it 'does not mint a doi' do
+        visit dashboard_form_publish_path(work_version)
+
+        check I18n.t('dashboard.form.publish.doi.label')
+
+        click_on 'Publish'
+
+        expect(MintDoiAsync).not_to have_received(:call).with(work_version.work)
+      end
+    end
+  end
 end

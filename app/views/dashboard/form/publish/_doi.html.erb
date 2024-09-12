@@ -1,0 +1,20 @@
+<div class="form-group mt-5">
+  <div class="keyline keyline--left">
+    <h4><%= t '.header' %></h4>
+  </div>
+  <div>
+      <div>
+        <%= t '.request_description' %>
+      </div>
+      <br>
+      <div class="form-check">
+        <%= form.check_box :mint_doi_requested,
+                           required: false,
+                           class: 'form-check-input' %>
+
+        <%= form.label :mint_doi_requested, class: 'form-check-label' do %>
+          <%= t '.label' %>
+        <% end %>
+      </div>
+  </div>
+</div>

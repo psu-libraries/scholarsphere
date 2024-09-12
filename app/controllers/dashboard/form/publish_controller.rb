@@ -3,6 +3,8 @@
 module Dashboard
   module Form
     class PublishController < BaseController
+      class DoiIsMintingError < RuntimeError; end
+
       def edit
         @work_version = WorkVersion
           .includes(file_version_memberships: [:file_resource])
@@ -32,6 +34,9 @@ module Dashboard
           @resource.indexing_source = Proc.new { nil }
           @resource.save
           @resource.publish
+          if @resource.mint_doi_requested
+            allow_mint_doi? ? MintDoiAsync.call(@resource.work) : flash[:error] = t('dashboard.form.publish.doi.error')
+          end
         elsif request_curation? && !@resource.draft_curation_requested
           @resource.update_column(:draft_curation_requested, true)
           # We want validation errors to block curation requests and keep users on the edit page
@@ -115,6 +120,7 @@ module Dashboard
               :published_date,
               :depositor_agreement,
               :draft_curation_requested,
+              :mint_doi_requested,
               keyword: [],
               contributor: [],
               publisher: [],

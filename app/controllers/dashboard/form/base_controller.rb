@@ -82,6 +82,11 @@ module Dashboard
           deposit_pathway.allows_curation_request? && in_publish_edit_action?
         end
 
+        helper_method :allow_mint_doi?
+        def allow_mint_doi?
+          deposit_pathway.allows_mint_doi_request?
+        end
+
         helper_method :allow_publish?
         def allow_publish?
           if deposit_pathway.work?

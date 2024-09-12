@@ -485,6 +485,11 @@ en:
           curation_requested: Curation has been requested. We will notify you when curation is complete and your work is ready to be published. If you have any questions in the meantime, please contact ScholarSphere curators via our 
           error: There was an error with your curation request. Please try again later or contact us if the problem persists.
           contact: contact form
+        doi:
+          header: Mint DOI (Optional)
+          request_description: Placeholder for mint doi description
+          label: I would like to mint a DOI upon publish.
+          error: There was an error minting your doi. Please try again later from Work Settings or contact us if the problem persists.
       members:
         heading: Works
         badge: Work 
