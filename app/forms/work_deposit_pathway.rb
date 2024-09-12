@@ -11,7 +11,7 @@ class WorkDepositPathway
     elsif data_and_code?
       DataAndCode::DetailsForm.new(resource)
     elsif grad_culminating_experiences?
-      GradCulminatingExperiences::DetailsForm.new(resource) 
+      GradCulminatingExperiences::DetailsForm.new(resource)
     else
       General::DetailsForm.new(resource)
     end
@@ -307,17 +307,17 @@ class WorkDepositPathway
 
     module GradCulminatingExperiences
       REQUIRE_FIELDS = %w{
-              sub_work_type
-              program
-              degree
-            }
+        sub_work_type
+        program
+        degree
+      }.freeze
 
       class DetailsForm < DetailsFormBase
-        REQUIRE_FIELDS.each { |f| validates f.to_sym, presence: true}
+        REQUIRE_FIELDS.each { |f| validates f.to_sym, presence: true }
 
         def self.form_fields
           WorkVersionFormBase::COMMON_FIELDS.union(
-            REQUIRE_FIELDS 
+            REQUIRE_FIELDS
           ).freeze
         end
 
@@ -332,7 +332,7 @@ class WorkDepositPathway
       end
 
       class PublishForm < WorkVersionFormBase
-        REQUIRE_FIELDS.each { |f| validates f.to_sym, presence: true}
+        REQUIRE_FIELDS.each { |f| validates f.to_sym, presence: true }
 
         def self.form_fields
           WorkVersionFormBase::COMMON_FIELDS.union(

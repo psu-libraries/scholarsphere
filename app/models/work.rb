@@ -62,8 +62,8 @@ class Work < ApplicationRecord
   module Types
     def self.all
       general.union(scholarly_works)
-             .union(data_and_code)
-             .union(grad_culminating_experiences).freeze
+        .union(data_and_code)
+        .union(grad_culminating_experiences).freeze
     end
 
     def self.general

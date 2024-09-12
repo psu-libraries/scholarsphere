@@ -326,18 +326,18 @@ class WorkVersion < ApplicationRecord
   def sub_work_type_dropdown
     if work_type == Work::Types.grad_culminating_experiences.first
       [
-        "Integrative Doctoral Research Project",
-        "Praxis Project",
-        "Culminating Research Project",
-        "Doctor of Nursing Practice Project",
-        "Public Performance",
-        "Capstone Project"
+        'Integrative Doctoral Research Project',
+        'Praxis Project',
+        'Culminating Research Project',
+        'Doctor of Nursing Practice Project',
+        'Public Performance',
+        'Capstone Project'
       ].freeze
     elsif work_type == Work::Types.grad_culminating_experiences.second
       [
-        "Scholarly Paper/Essay (MA/MS)",
-        "Capstone Project",
-        "Capstone Course Work Product"
+        'Scholarly Paper/Essay (MA/MS)',
+        'Capstone Project',
+        'Capstone Course Work Product'
       ].freeze
     end
   end
