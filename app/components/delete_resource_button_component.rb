@@ -40,10 +40,6 @@ class DeleteResourceButtonComponent < ApplicationComponent
     t('work_version')
   end
 
-  def onclick
-    "location.href = '#{path}'"
-  end
-
   private
 
     def type

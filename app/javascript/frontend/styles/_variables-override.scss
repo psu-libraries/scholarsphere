@@ -8,11 +8,13 @@ $mid-blue: #095498;
 $dark-blue: #1e407c;
 $light-green: #dfd;
 $dark-green: #025d04;
-$red: #D73B2D;
+$red: #d73b2d;
 $light-red: #fee;
 $dark-red: #aa1a1c;
-$orange: #B65E16;
+$orange: #b65e16;
 $secondary: $orange;
+$alert-info-text: #2a6e79;
+$alert-warning-text: #614d14;
 
 $font-size-lg: 18px;
 $link-color: $mid-blue;
@@ -105,10 +107,6 @@ $axis-text-color: $gray-800;
 $point-marker-color: $red;
 
 $hr-margin-y: $spacer * 2;
-
-$alert-warning: (
-  "color": $light-green
-);
 
 
 $badge-colors: (

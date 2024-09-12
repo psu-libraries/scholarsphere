@@ -1,7 +1,6 @@
-<%= button_tag path,
-            type: :button,
-            onclick: onclick,
+<%= link_to path,
+            method: :delete,
             class: html_class,
-            data: { turbo_method: :delete, turbo_confirm: confirm } do %>
+            data: { confirm: confirm } do %>
             <%= button_text %><span class="subtitle responsive-hide"> <%= button_subtitle %></span>
 <% end %>
