@@ -11,7 +11,7 @@
     <%= form.submit t("dashboard.form.actions.#{primary_action}"), name: primary_action, class: 'btn btn-primary btn--rounded' %>
     <% end %>
 
-    <%= button_tag t('dashboard.form.actions.cancel'), type: 'button', class: 'btn btn-outline-dark btn--rounded ml-2', onclick: "location.href = '#{cancel_path}'" %>
+    <%= link_to t('dashboard.form.actions.cancel'), cancel_path, class: 'btn btn-outline-dark btn--rounded ml-2' %>
   </div>
 
   <%= form.button t("dashboard.form.actions.save_and_exit.#{secondary_action}"), name: 'save_and_exit', class: 'btn btn-outline-primary btn--rounded pull-left' %>
