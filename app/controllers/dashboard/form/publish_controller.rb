@@ -34,9 +34,6 @@ module Dashboard
           @resource.indexing_source = Proc.new { nil }
           @resource.save
           @resource.publish
-          if @resource.mint_doi_requested
-            allow_mint_doi? ? MintDoiAsync.call(@resource.work) : flash[:error] = t('dashboard.form.publish.doi.error')
-          end
         elsif request_curation? && !@resource.draft_curation_requested
           @resource.update_column(:draft_curation_requested, true)
           # We want validation errors to block curation requests and keep users on the edit page
@@ -64,7 +61,11 @@ module Dashboard
         end
 
         validation_context = current_user.admin? ? nil : :user_publish
-        process_response(on_error: :edit, validation_context: validation_context)
+        process_response(on_error: :edit, validation_context: validation_context) do
+          if @resource.mint_doi_requested
+            allow_mint_doi? ? MintDoiAsync.call(@resource.work) : flash[:error] = t('dashboard.form.publish.doi.error')
+          end
+        end
       end
 
       private
