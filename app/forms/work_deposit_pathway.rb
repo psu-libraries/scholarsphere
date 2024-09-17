@@ -34,7 +34,7 @@ class WorkDepositPathway
   end
 
   def allows_mint_doi_request?
-    data_and_code? && @resource.work.doi.blank? && !DoiMintingStatus.new(@resource.work).present?
+    data_and_code? && @resource.doi_blank? && DoiMintingStatus.new(@resource.work).blank?
   end
 
   def work?

@@ -25,6 +25,10 @@ class DoiMintingStatus
     resource.present? && current_status.present?
   end
 
+  def blank?
+    !present?
+  end
+
   def delete!
     redis.del(key)
   end
