@@ -78,6 +78,7 @@ export default class extends Controller {
         $(wrapperElement).find(`.${this.positionClass}`).val((index + 1) * 10)
         $(wrapperElement).find('.js-move-up').toggleClass('disabled', index === 0)
         $(wrapperElement).find('.js-move-down').toggleClass('disabled', index === children.length - 1)
+        $(wrapperElement).find('input[type=text],textarea,select').filter(':visible:first').trigger('focus')
       })
   }
 
