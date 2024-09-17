@@ -4,7 +4,6 @@ class DoiMintingJob < ApplicationJob
   queue_as :doi
 
   def perform(resource)
-    sleep(2)
     status = DoiMintingStatus.new(resource)
 
     status.minting!

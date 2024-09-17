@@ -16,9 +16,10 @@ module Dashboard
           end
         end
 
-        def process_response(on_error:, validation_context: nil)
+        def process_response(on_error:, validation_context: nil, &block)
           respond_to do |format|
             if save_resource(validation_context: validation_context)
+              yield if block
               format.html do
                 redirect_upon_success
               end
