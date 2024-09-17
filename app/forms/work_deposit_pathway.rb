@@ -337,6 +337,8 @@ class WorkDepositPathway
         def self.form_fields
           WorkVersionFormBase::COMMON_FIELDS.union(
             REQUIRE_FIELDS
+          ).union(
+            ['title']
           ).freeze
         end
 
