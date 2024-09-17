@@ -27,7 +27,7 @@ module Dashboard
     end
 
     def destroy
-      authorize(@work_version)
+      authorize(@file_version)
       @file_version.destroy
       respond_to do |format|
         format.html do
