@@ -8,13 +8,13 @@
     <% end %>
 
     <% if allow_publish? || primary_action == :save_and_continue %>
-    <%= form.submit t("dashboard.form.actions.#{primary_action}"), name: primary_action, class: 'btn btn-primary btn--rounded' %>
+    <%= form.submit t("dashboard.form.actions.#{primary_action}.button"), name: primary_action, data: { confirm: primary_action == :publish ? 'Your confirm message' : nil, toggle: 'tooltip', placement: 'top', title: t("dashboard.form.actions.#{primary_action}.tooltip") }, class: 'btn btn-primary btn--rounded' %>
     <% end %>
 
-    <%= link_to t('dashboard.form.actions.cancel'), cancel_path, class: 'btn btn-outline-dark btn--rounded ml-2' %>
+    <%= link_to t('dashboard.form.actions.cancel.button'), cancel_path, data: { toggle: 'tooltip', placement: 'top', title: t('dashboard.form.actions.cancel.tooltip') }, class: 'btn btn-outline-dark btn--rounded ml-2' %>
   </div>
 
-  <%= form.button t("dashboard.form.actions.save_and_exit.#{secondary_action}"), name: 'save_and_exit', class: 'btn btn-outline-primary btn--rounded pull-left' %>
+  <%= form.button t("dashboard.form.actions.save_and_exit.#{secondary_action}"), name: 'save_and_exit', data: { toggle: 'tooltip', placement: 'top', title: t('dashboard.form.actions.save_and_exit.tooltip') }, class: 'btn btn-outline-primary btn--rounded pull-left' %>
 
   <% if form.object.persisted? && policy(form.object).destroy? %>
     <%= render DeleteResourceButtonComponent.new(
