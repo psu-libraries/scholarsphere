@@ -32,7 +32,7 @@ module Dashboard
       respond_to do |format|
         format.html do
           redirect_to dashboard_form_files_path(@work_version),
-                      notice: 'Work version was successfully destroyed.'
+                      notice: 'File was successfully destroyed.'
         end
         format.json { head :no_content }
       end
