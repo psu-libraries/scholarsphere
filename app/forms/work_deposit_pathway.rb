@@ -10,6 +10,8 @@ class WorkDepositPathway
       ScholarlyWorks::DetailsForm.new(resource)
     elsif data_and_code?
       DataAndCode::DetailsForm.new(resource)
+    elsif instrument?
+      Instrument::DetailsForm.new(resource)
     else
       General::DetailsForm.new(resource)
     end
@@ -20,6 +22,8 @@ class WorkDepositPathway
       ScholarlyWorks::PublishForm.new(resource)
     elsif data_and_code?
       DataAndCode::PublishForm.new(resource)
+    elsif instrument?
+      Instrument::PublishForm.new(resource)
     else
       resource
     end
@@ -39,6 +43,10 @@ class WorkDepositPathway
 
   def data_and_code?
     Work::Types.data_and_code.include?(work_type)
+  end
+
+  def instrument?
+    Work::Types.instrument.include?(work_type)
   end
 
   private
@@ -274,6 +282,53 @@ class WorkDepositPathway
               errors.add(:file_resources, :readme)
             end
           end
+      end
+    end
+
+    module Instrument
+      class DetailsForm < DetailsFormBase
+        def self.form_fields
+          WorkVersionFormBase::COMMON_FIELDS.union(
+            %w{
+              title
+              owner
+              identifier
+              manufacturer
+              model
+              instrument_type
+              measured_variable
+              available_date
+              decommission_date
+              related_identifier
+              alternative_identifier
+              instrument_resource_type
+              funding_reference
+            }
+          ).freeze
+        end
+
+        form_fields.each do |attr_name|
+          delegate attr_name, to: :work_version, prefix: false
+          delegate "#{attr_name}=", to: :work_version, prefix: false
+        end
+
+        def form_partial
+          'instrument_work_version'
+        end
+      end
+
+      class PublishForm < SimpleDelegator
+        def self.method_missing(method_name, *args)
+          WorkVersion.public_send(method_name, *args)
+        end
+
+        def self.respond_to_missing?(method_name, *)
+          WorkVersion.respond_to?(method_name)
+        end
+
+        def form_partial
+          'instrument_work_version'
+        end
       end
     end
 end

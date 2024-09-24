@@ -61,7 +61,7 @@ class Work < ApplicationRecord
 
   module Types
     def self.all
-      general.union(scholarly_works).union(data_and_code).freeze
+      general.union(scholarly_works).union(data_and_code).union(instrument).freeze
     end
 
     def self.general
@@ -99,6 +99,12 @@ class Work < ApplicationRecord
       %w[
         dataset
         software_or_program_code
+      ].freeze
+    end
+
+    def self.instrument
+      %w[
+        instrument
       ].freeze
     end
 
