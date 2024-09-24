@@ -107,6 +107,8 @@ FactoryBot.define do
       based_near { FactoryBotHelpers.fancy_geo_location }
       related_url { Faker::Internet.url }
       source { Faker::SlackEmoji.emoji }
+      owner { Faker::Book.author }
+      model { Faker::Number.leading_zero_number(digits: 5) }
     end
   end
 end

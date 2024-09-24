@@ -334,6 +334,40 @@ components:
           type: "array"
           items:
             type: "string"
+
+        owner:
+          type: "string"
+          example: "Classifying Independent Hybridity"
+        manufacturer:
+          type: "string"
+          example: "Classifying Independent Hybridity"
+        model:
+          type: "string"
+          example: "Classifying Independent Hybridity"
+        instrument_type:
+          type: "string"
+          example: "Classifying Independent Hybridity"
+        measured_variable:
+          type: "string"
+          example: "Classifying Independent Hybridity"
+        available_date:
+          type: "string"
+          example: "Classifying Independent Hybridity"
+        decommission_date:
+          type: "string"
+          example: "Classifying Independent Hybridity"
+        related_identifier:
+          type: "string"
+          example: "Classifying Independent Hybridity"
+        alternative_identifier:
+          type: "string"
+          example: "Classifying Independent Hybridity"
+        instrument_resource_type:
+          type: "string"
+          example: "Classifying Independent Hybridity"
+        funding_reference:
+          type: "string"
+          example: "Classifying Independent Hybridity"
         related_url:
           type: "array"
           items:

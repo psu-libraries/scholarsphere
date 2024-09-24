@@ -123,6 +123,7 @@ RSpec.describe Work, type: :model do
           'dataset',
           'dissertation',
           'image',
+          'instrument',
           'journal',
           'map_or_cartographic_material',
           'masters_culminating_experience',
@@ -280,6 +281,7 @@ RSpec.describe Work, type: :model do
           dataset: 'dataset',
           dissertation: 'dissertation',
           image: 'image',
+          instrument: 'instrument',
           journal: 'journal',
           map_or_cartographic_material: 'map_or_cartographic_material',
           masters_culminating_experience: 'masters_culminating_experience',
@@ -539,6 +541,17 @@ RSpec.describe Work, type: :model do
           removed_at_dtsi
           withdrawn_at_dtsi
           imported_metadata_from_rmd_tesim
+          alternative_identifier_tesim
+          instrument_type_tesim
+          available_date_tesim
+          decommission_date_tesim
+          funding_reference_tesim
+          instrument_resource_type_tesim
+          manufacturer_tesim
+          measured_variable_tesim
+          model_tesim
+          owner_tesim
+          related_identifier_tesim
         )
       end
 
