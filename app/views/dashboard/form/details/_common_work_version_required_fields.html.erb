@@ -11,7 +11,7 @@
   <%= render 'form_fields/text_area', form: form, attribute: :description %>
   <%= render 'form_fields/text', form: form, attribute: :published_date %>
   <% if deposit_pathway.grad_culminating_experiences? %>
-    <%= render 'dashboard/form/details/grad_culminating_experiences_work_version_required_fields', form: form %>
+    <%= render GradCulminatingExperiencesDropdownsComponent.new(form: form, resource: @resource) %>
   <% end %>
 </div>
 
