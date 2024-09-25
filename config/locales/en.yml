@@ -487,7 +487,8 @@ en:
           contact: contact form
         doi:
           header: Mint DOI (Optional)
-          request_description: Placeholder for mint doi description
+          request_description: A Digital Object Identifier (DOI) is a unique identifier that ensures your work can be easily cited and reliably located. We recommend minting a DOI unless your work already has one from another publisher or repository.
+          request_note: "Note: It may take a few moments for the DOI to be minted after publication. Please refresh the page if it does not appear right away and do not request an additional one."
           label: I would like to mint a DOI upon publish.
           error: There was an error minting your doi. Please try again later from Work Settings or contact us if the problem persists.
       members:
