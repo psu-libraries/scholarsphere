@@ -406,21 +406,21 @@ en:
       actions:
         save_and_continue: 
           button: Save and Continue
-          tooltip: Save and continue yo
+          tooltip: Save your draft and proceed to the next section of the deposit form.
         cancel: 
           button: Cancel
-          tooltip: Return to home yoo
+          tooltip: Discard changes and return to the work's display page.
         publish: 
           button: Publish
-          tooltip: Publish this shiz yoo
+          tooltip: Publish your work to make it publicly visible. Changes cannot be made to the published version, but you can create a new version if updates are needed.
         finish: 
           button: Finish
-          tooltip: Finish this shizz yoo
+          tooltip: Finish this yoo
         save_and_exit:
           collection: Save and Exit
           work_version: Save as Draft & Exit
           admin_save: Save and Exit
-          tooltip: Save and exit yoo
+          tooltip: Save your draft. It will be accessible via your dashboard and visible only to you and those with edit access.
         request_curation: 
           button: Request Curation & Save as Draft
           tooltip: yoo doggie
@@ -429,7 +429,7 @@ en:
           collection: Collection
           draft: Draft
           work_version: Version
-          tooltip: "Delete this %{type} yoo"
+          tooltip: Permanently delete the draft.
           confirm: "Are you sure you want to delete this %{type}? This cannot be undone."
       notices:
         success: "%{resource} was successfully updated."

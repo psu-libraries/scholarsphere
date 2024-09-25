@@ -1,0 +1,28 @@
+<dialog id="hidden-publish-dialog" data-target="publishing-check.dialogBox">
+  <div class="form-check">
+  <h4>Are you sure you want to publish?</h4>
+  <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    <div class="form-group mt-2">
+      <div class="keyline keyline--left">
+        <h2 id="<%= WorkVersion.human_attribute_name(:depositor_agreement).parameterize %>" class="h4">
+          <%= WorkVersion.human_attribute_name(:depositor_agreement) %>
+        </h2>
+      </div>
+      <%= f.check_box :depositor_agreement,
+                        required: true,
+                        data: { target: 'publishing-check.agreementCheckbox' },
+                        class: 'form-check-input' %>
+
+                        
+      <%= f.label :depositor_agreement, class: 'form-check-label' do %>
+        <%= t('dashboard.work_versions.publish.agreement_preamble') %>
+        <%= link_to t('dashboard.work_versions.publish.agreement_link'), agreement_path, target: :_blank, rel: 'noopener' %>.
+      <% end %>
+    </div>
+
+  </div>
+  <div class="d-flex justify-content-around">
+    <%= f.submit t('dashboard.form.actions.publish.button'), name: 'publish', data: { toggle: 'tooltip', placement: 'top', title: t('dashboard.form.actions.publish.tooltip') }, class: 'btn btn-primary btn--rounded' %>
+    <button type="button" class='btn btn-outline-dark btn--rounded ml-2' data-action="publishing-check#closeDialog">Cancel</button>
+  </div>
+</dialog>

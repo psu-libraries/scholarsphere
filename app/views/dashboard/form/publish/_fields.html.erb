@@ -2,7 +2,6 @@
   <%= render 'form_fields/select',
              form: form,
              attribute: :rights,
-             required: true,
              options_for_select: WorkVersion::Licenses.options_for_select_box,
              include_blank: true %>
 </div>

@@ -8,7 +8,15 @@
     <% end %>
 
     <% if allow_publish? || primary_action == :save_and_continue %>
-    <%= form.submit t("dashboard.form.actions.#{primary_action}.button"), name: primary_action, data: { confirm: primary_action == :publish ? 'Your confirm message' : nil, toggle: 'tooltip', placement: 'top', title: t("dashboard.form.actions.#{primary_action}.tooltip") }, class: 'btn btn-primary btn--rounded' %>
+      <% if primary_action == :publish %>
+        <!-- show submit button -->
+        <span data-controller="publishing-check">
+          <%= button_tag t("dashboard.form.actions.publish.button"), type: "button", data: { action:"publishing-check#openDialog", toggle: 'tooltip', placement: 'top', title: t("dashboard.form.actions.#{primary_action}.tooltip") }, class: 'btn btn-primary btn--rounded' %>
+          <%= render 'publish_dialog', f: form %>
+        </span>
+      <% else %>
+      <%= form.submit t("dashboard.form.actions.#{primary_action}.button"), name: primary_action, data: { toggle: 'tooltip', placement: 'top', title: t("dashboard.form.actions.#{primary_action}.tooltip") }, class: 'btn btn-primary btn--rounded' %>
+      <% end %>
     <% end %>
 
     <%= link_to t('dashboard.form.actions.cancel.button'), cancel_path, data: { toggle: 'tooltip', placement: 'top', title: t('dashboard.form.actions.cancel.tooltip') }, class: 'btn btn-outline-dark btn--rounded ml-2' %>
