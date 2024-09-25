@@ -317,18 +317,72 @@ class WorkDepositPathway
         end
       end
 
-      class PublishForm < SimpleDelegator
-        def self.method_missing(method_name, *args)
-          WorkVersion.public_send(method_name, *args)
+      class PublishForm < WorkVersionFormBase
+        def self.form_fields
+          WorkVersionFormBase::COMMON_FIELDS.union(
+            %w{
+              title
+              owner
+              identifier
+              manufacturer
+              model
+              instrument_type
+              measured_variable
+              available_date
+              decommission_date
+              related_identifier
+              alternative_identifier
+              instrument_resource_type
+              funding_reference
+              rights
+              depositor_agreement
+              contributor
+            }
+          ).freeze
         end
 
-        def self.respond_to_missing?(method_name, *)
-          WorkVersion.respond_to?(method_name)
+        form_fields.each do |attr_name|
+          delegate attr_name, to: :work_version, prefix: false
+          delegate "#{attr_name}=", to: :work_version, prefix: false
         end
+
+        validate :includes_readme_file_and_image,
+                 if: :published?
 
         def form_partial
           'instrument_work_version'
         end
+
+        delegate :aasm_state=,
+                 :aasm_state,
+                 :publish,
+                 :file_resources,
+                 :work_attributes=,
+                 :creators_attributes=,
+                 :creators,
+                 :contributor,
+                 :file_version_memberships,
+                 :initial_draft?,
+                 :aasm,
+                 :update_column,
+                 :draft_curation_requested=,
+                 :set_thumbnail_selection,
+                 to: :work_version,
+                 prefix: false
+
+        private
+
+          def includes_readme_file_and_image
+            unless file_resources.find do |fr|
+              fr.file_data['metadata']['size'].positive? &&
+                  fr.file_data['metadata']['filename'] =~ /readme/i
+            end && file_resources.find do |fr|
+              (fr.file_data['metadata']['filename'] !~ /readme/i &&
+              fr.file_data['metadata']['filename'] =~ /png|jpeg|tiff/i)
+            end
+              errors.add(:file_resources, :readme_and_image)
+            end
+          end
       end
     end
 end

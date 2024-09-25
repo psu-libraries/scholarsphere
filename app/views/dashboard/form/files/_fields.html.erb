@@ -13,6 +13,15 @@
       <li><%= t('dashboard.form.details.readme.zip') %></li>
     </ul>
   </p>
+<% elsif deposit_pathway.instrument? %>
+  <p>
+    <strong><%= t('dashboard.form.details.readme.header') %></strong>
+    <ul>
+      <li><%= t('dashboard.form.details.readme.format') %><%= link_to t('dashboard.form.details.readme.documentation'), 'https://docs.scholarsphere.psu.edu/guides/writing-readme/' %>.</li>
+      <li><%= t('dashboard.form.details.image.format') %></li>
+      <li><%= t('dashboard.form.details.image.zip') %></li>
+    </ul>
+  </p>
 <% end %>
 
 <% if form.object.file_version_memberships.any? %>
