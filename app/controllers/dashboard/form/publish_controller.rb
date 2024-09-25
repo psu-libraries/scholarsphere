@@ -30,6 +30,7 @@ module Dashboard
           # WorkVersion#set_thumbnail_selection may be unreliable if the Shrine::ThumbnailJob is delayed
           @resource.set_thumbnail_selection
           @resource.indexing_source = Proc.new { nil }
+          @resource.set_publisher_as_scholarsphere if deposit_pathway.instrument?
           @resource.save
           @resource.publish
         elsif request_curation? && !@resource.draft_curation_requested

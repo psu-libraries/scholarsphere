@@ -367,6 +367,7 @@ class WorkDepositPathway
                  :update_column,
                  :draft_curation_requested=,
                  :set_thumbnail_selection,
+                 :set_publisher_as_scholarsphere,
                  to: :work_version,
                  prefix: false
 

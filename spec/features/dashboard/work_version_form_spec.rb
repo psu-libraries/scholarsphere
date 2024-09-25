@@ -1003,6 +1003,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).not_to have_field('work_version_source')
         expect(page).not_to have_field('work_version_version_name')
         expect(page).not_to have_field('work_version_publisher_statement')
+        expect(page).to have_field('work_version_keyword')
         expect(page).to have_field('work_version_owner')
         expect(page).to have_field('work_version_identifier')
         expect(page).to have_field('work_version_manufacturer')
@@ -1379,6 +1380,34 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(work_version).not_to be_published
         expect(work_version.published_date).to eq 'this is not a valid date'
         expect(work_version.draft_curation_requested).to eq false
+      end
+    end
+  end
+
+  describe 'automatically setting publisher as Scholarsphere', js: true do
+    context 'with a work that uses the instrument works deposit pathway' do
+      let(:user) { work_version.work.depositor.user }
+      let(:work_version) { create :work_version, :instrument_able_to_be_published }
+
+      it 'sets the publisher to Scholarsphere automatically' do
+        visit dashboard_form_publish_path(work_version)
+        check 'I have read and agree to the deposit agreement.'
+        click_on 'Publish'
+
+        expect(work_version.reload.publisher).to eq ['Scholarsphere']
+      end
+    end
+
+    context 'with a work that does not use the instrument works deposit pathway' do
+      let(:user) { work_version.work.depositor.user }
+      let(:work_version) { create :work_version, :able_to_be_published }
+
+      it 'does not edit the publisher field' do
+        visit dashboard_form_publish_path(work_version)
+        check 'I have read and agree to the deposit agreement.'
+        click_on 'Publish'
+
+        expect(work_version.reload.publisher).to eq []
       end
     end
   end

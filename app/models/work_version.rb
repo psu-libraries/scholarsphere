@@ -317,6 +317,10 @@ class WorkVersion < ApplicationRecord
     end
   end
 
+  def set_publisher_as_scholarsphere
+    metadata['publisher'] = ['Scholarsphere']
+  end
+
   def initial_draft?
     version_number == 1 &&
       (draft? || temporarily_published_draft?)

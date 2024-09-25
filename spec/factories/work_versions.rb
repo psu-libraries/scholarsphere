@@ -30,6 +30,10 @@ FactoryBot.define do
       association :work, :article
     end
 
+    trait :instrument do
+      association :work, :instrument
+    end
+
     trait :initial_draft do
       after(:build, :stub) do |work_version, evaluator|
         evaluator.work.versions.destroy_all
@@ -70,6 +74,17 @@ FactoryBot.define do
 
     # A draft dataset that has everything needed to pass validations and be published
     trait :dataset_able_to_be_published do
+      draft
+      with_files
+      with_readme_file
+      with_creators
+      description { Faker::Lorem.paragraph }
+      published_date { Faker::Date.between(from: 2.years.ago, to: Date.today).iso8601 }
+    end
+
+    # A draft instrument that has everything needed to pass validations and be published
+    trait :instrument_able_to_be_published do
+      instrument
       draft
       with_files
       with_readme_file
