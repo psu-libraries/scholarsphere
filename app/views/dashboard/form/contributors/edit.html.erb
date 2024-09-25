@@ -12,7 +12,8 @@
                 url: dashboard_form_contributors_path(param_key, @resource),
                 local: true,
                 data: {
-                  target: 'unsaved-changes.form'
+                  target: 'unsaved-changes.form',
+                  turbo: 'true'
                 }
               ) do |form| %>
 

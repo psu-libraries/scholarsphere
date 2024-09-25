@@ -404,20 +404,32 @@ en:
         publish: Review & Publish
         members: Works
       actions:
-        save_and_continue: Save and Continue
-        cancel: Cancel
-        publish: Publish
-        finish: Finish
+        save_and_continue: 
+          button: Save and Continue
+          tooltip: Save and continue yo
+        cancel: 
+          button: Cancel
+          tooltip: Return to home yoo
+        publish: 
+          button: Publish
+          tooltip: Publish this shiz yoo
+        finish: 
+          button: Finish
+          tooltip: Finish this shizz yoo
         save_and_exit:
           collection: Save and Exit
           work_version: Save as Draft & Exit
           admin_save: Save and Exit
-        request_curation: Request Curation & Save as Draft
+          tooltip: Save and exit yoo
+        request_curation: 
+          button: Request Curation & Save as Draft
+          tooltip: yoo doggie
         destroy:
           button: Delete
           collection: Collection
           draft: Draft
           work_version: Version
+          tooltip: "Delete this %{type} yoo"
           confirm: "Are you sure you want to delete this %{type}? This cannot be undone."
       notices:
         success: "%{resource} was successfully updated."
