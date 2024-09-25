@@ -230,6 +230,9 @@ class WorkVersion < ApplicationRecord
     rights
     subtitle
     version_name
+    sub_work_type
+    program
+    degree
   ].each do |field|
     define_method "#{field}=" do |val|
       super(val.presence)
