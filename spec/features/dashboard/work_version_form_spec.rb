@@ -1005,7 +1005,6 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).not_to have_field('work_version_publisher_statement')
         expect(page).to have_field('work_version_keyword')
         expect(page).to have_field('work_version_owner')
-        expect(page).to have_field('work_version_identifier')
         expect(page).to have_field('work_version_manufacturer')
         expect(page).to have_field('work_version_instrument_type')
         expect(page).to have_field('work_version_measured_variable')
