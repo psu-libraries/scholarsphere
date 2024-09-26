@@ -38,7 +38,7 @@ class WorkDepositPathway
   end
 
   def allows_mint_doi_request?
-    data_and_code? && @resource.doi_blank? && DoiMintingStatus.new(@resource.work).blank?
+    (data_and_code? || instrument?) && @resource.doi_blank? && DoiMintingStatus.new(@resource.work).blank?
   end
 
   def work?
@@ -372,6 +372,7 @@ class WorkDepositPathway
                  :aasm,
                  :update_column,
                  :draft_curation_requested=,
+                 :mint_doi_requested=,
                  :set_thumbnail_selection,
                  :set_publisher_as_scholarsphere,
                  to: :work_version,
