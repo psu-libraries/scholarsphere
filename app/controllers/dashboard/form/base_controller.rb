@@ -16,9 +16,10 @@ module Dashboard
           end
         end
 
-        def process_response(on_error:, validation_context: nil)
+        def process_response(on_error:, validation_context: nil, &block)
           respond_to do |format|
             if save_resource(validation_context: validation_context)
+              yield if block
               format.html do
                 redirect_upon_success
               end
@@ -80,6 +81,11 @@ module Dashboard
         helper_method :allow_curation?
         def allow_curation?
           deposit_pathway.allows_curation_request? && in_publish_edit_action?
+        end
+
+        helper_method :allow_mint_doi?
+        def allow_mint_doi?
+          deposit_pathway.allows_mint_doi_request?
         end
 
         helper_method :allow_publish?

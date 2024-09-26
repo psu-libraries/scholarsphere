@@ -499,6 +499,7 @@ RSpec.describe Work, type: :model do
           keyword_sim
           keyword_tesim
           language_tesim
+          mint_doi_requested_tesim
           model_ssi
           proxy_id_isi
           published_date_dtrsi

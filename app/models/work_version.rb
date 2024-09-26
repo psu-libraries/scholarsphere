@@ -294,6 +294,10 @@ class WorkVersion < ApplicationRecord
     super && latest_published_version?
   end
 
+  def doi_blank?
+    work.doi.blank?
+  end
+
   def set_thumbnail_selection
     # work.versions.published.blank? lets us know if the work has just been created
     if work.versions.published.blank? && file_resources.map(&:thumbnail_url).compact.present?
