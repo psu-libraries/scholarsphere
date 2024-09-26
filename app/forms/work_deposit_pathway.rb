@@ -38,7 +38,7 @@ class WorkDepositPathway
   end
 
   def allows_mint_doi_request?
-    data_and_code? && @resource.doi_blank? && DoiMintingStatus.new(@resource.work).blank?
+    (data_and_code? || grad_culminating_experiences?) && @resource.doi_blank? && DoiMintingStatus.new(@resource.work).blank?
   end
 
   def work?
@@ -349,6 +349,7 @@ class WorkDepositPathway
               rights
               depositor_agreement
               contributor
+              mint_doi_requested
             }
           ).freeze
         end
