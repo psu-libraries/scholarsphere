@@ -3,6 +3,8 @@
 module Dashboard
   module Form
     class PublishController < BaseController
+      class DoiIsMintingError < RuntimeError; end
+
       def edit
         @work_version = WorkVersion
           .includes(file_version_memberships: [:file_resource])
@@ -60,7 +62,11 @@ module Dashboard
         end
 
         validation_context = current_user.admin? ? nil : :user_publish
-        process_response(on_error: :edit, validation_context: validation_context)
+        process_response(on_error: :edit, validation_context: validation_context) do
+          if @resource.mint_doi_requested
+            allow_mint_doi? ? MintDoiAsync.call(@resource.work) : flash[:error] = t('dashboard.form.publish.doi.error')
+          end
+        end
       end
 
       private
@@ -127,6 +133,7 @@ module Dashboard
               :alternative_identifier,
               :instrument_resource_type,
               :funding_reference,
+              :mint_doi_requested,
               keyword: [],
               contributor: [],
               publisher: [],

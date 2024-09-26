@@ -30,6 +30,10 @@
       <%= render 'curation', form: form %>
     <% end %>
 
+    <% if allow_mint_doi? %>
+      <%= render 'doi', form: form %>
+    <% end %>
+
     <div class="form-group mt-5">
       <div class="keyline keyline--left">
         <h2 id="<%= WorkVersion.human_attribute_name(:depositor_agreement).parameterize %>" class="h4">

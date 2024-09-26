@@ -459,7 +459,7 @@ en:
           last_option: Not finding what you're looking for? Choose this option to create your own...
           new: Create New Contributor
           no_results: No results
-          placeholder: "Search..."
+          placeholder: "Search for creator to add"
           reader_hint: >
             When autocomplete results are available use up and down arrows to review and enter to select.
             Touch device users, explore by touch or with swipe gestures.
@@ -490,6 +490,12 @@ en:
           curation_requested: Curation has been requested. We will notify you when curation is complete and your work is ready to be published. If you have any questions in the meantime, please contact ScholarSphere curators via our 
           error: There was an error with your curation request. Please try again later or contact us if the problem persists.
           contact: contact form
+        doi:
+          header: Mint DOI (Optional)
+          request_description: A Digital Object Identifier (DOI) is a unique identifier that ensures your work can be easily cited and reliably located. We recommend minting a DOI unless your work already has one from another publisher or repository.
+          request_note: "Note: It may take a few moments for the DOI to be minted after publication. Please refresh the page if it does not appear right away and do not request an additional one."
+          label: I would like to mint a DOI upon publish.
+          error: There was an error minting your doi. Please try again later from Work Settings or contact us if the problem persists.
       members:
         heading: Works
         badge: Work 

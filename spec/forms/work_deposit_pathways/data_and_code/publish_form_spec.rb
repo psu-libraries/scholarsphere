@@ -89,6 +89,17 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
     end
   end
 
+  describe '#mint_doi_requested=' do
+    before { allow(wv).to receive(:mint_doi_requested=) }
+
+    let(:arg) { double }
+
+    it 'delegates to the given work version' do
+      form.mint_doi_requested = arg
+      expect(wv).to have_received(:mint_doi_requested=).with(arg)
+    end
+  end
+
   describe '.form_fields' do
     it "returns a frozen array of the names of the form's fields" do
       expect(described_class.form_fields).to match_array %w{

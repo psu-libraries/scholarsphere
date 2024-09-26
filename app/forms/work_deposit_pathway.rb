@@ -37,6 +37,10 @@ class WorkDepositPathway
     data_and_code? && !@resource.draft_curation_requested
   end
 
+  def allows_mint_doi_request?
+    data_and_code? && @resource.doi_blank? && DoiMintingStatus.new(@resource.work).blank?
+  end
+
   def work?
     Work::Types.all.include?(work_type)
   end
@@ -125,6 +129,7 @@ class WorkDepositPathway
                :update_doi=,
                :work_type,
                :draft_curation_requested,
+               :mint_doi_requested,
                to: :work_version, prefix: false
 
       private
@@ -266,6 +271,7 @@ class WorkDepositPathway
                  :aasm,
                  :update_column,
                  :draft_curation_requested=,
+                 :mint_doi_requested=,
                  :set_thumbnail_selection,
                  to: :work_version,
                  prefix: false
