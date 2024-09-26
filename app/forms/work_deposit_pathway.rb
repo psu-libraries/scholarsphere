@@ -338,7 +338,12 @@ class WorkDepositPathway
           WorkVersionFormBase::COMMON_FIELDS.union(
             REQUIRE_FIELDS
           ).union(
-            ['title']
+            %w{
+              title
+              rights
+              depositor_agreement
+              contributor
+            }
           ).freeze
         end
 
