@@ -199,6 +199,7 @@ class WorkVersion < ApplicationRecord
                   to: :published,
                   after: Proc.new {
                     work.try(:update_deposit_agreement)
+                    set_publisher_as_scholarsphere if work_type == 'instrument'
                     self.reload_on_index = true
                   }
     end

@@ -85,6 +85,10 @@ RSpec.describe WorkVersion, type: :model do
   end
 
   describe 'states' do
+    subject(:work_version) { build(:work_version, work: work) }
+
+    let(:work) { build(:work) }
+
     it { is_expected.to have_state(:draft) }
     it { is_expected.to transition_from(:draft).to(:published).on_event(:publish) }
     it { is_expected.to transition_from(:published).to(:withdrawn).on_event(:withdraw) }
