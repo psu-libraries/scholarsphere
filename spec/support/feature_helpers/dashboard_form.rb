@@ -137,17 +137,17 @@ module FeatureHelpers
 
     def self.save_and_continue
       fix_sticky_footer
-      click_on I18n.t!('dashboard.form.actions.save_and_continue')
+      click_on I18n.t!('dashboard.form.actions.save_and_continue.button')
     end
 
     def self.publish
       fix_sticky_footer
-      click_on I18n.t!('dashboard.form.actions.publish')
+      click_on I18n.t!('dashboard.form.actions.publish.button')
     end
 
     def self.finish
       fix_sticky_footer
-      click_on I18n.t!('dashboard.form.actions.finish')
+      click_on I18n.t!('dashboard.form.actions.finish.button')
     end
 
     def self.delete
@@ -157,7 +157,7 @@ module FeatureHelpers
 
     def self.cancel
       fix_sticky_footer
-      click_on I18n.t!('dashboard.form.actions.cancel')
+      click_on I18n.t!('dashboard.form.actions.cancel.button')
     end
 
     def self.fix_sticky_footer
