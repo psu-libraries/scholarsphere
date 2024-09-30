@@ -66,9 +66,9 @@ class AllWorkVersionsReport
           wv.identifier,
           wv.based_near,
           wv.related_url,
-          wv.sub_work_type
-          wv.program
-          wv.degree
+          wv.sub_work_type,
+          wv.program,
+          wv.degree,
           wv.source,
           views
         ]
