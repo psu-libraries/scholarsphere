@@ -996,7 +996,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       let(:work_version) { work.versions.first }
       let(:user) { work.depositor.user }
 
-      it 'shows only the fields for a scholarly work' do
+      it 'shows only the fields for an instrument work' do
         visit dashboard_form_publish_path(work_version)
 
         expect(page).not_to have_field('work_version_based_near')
