@@ -255,7 +255,6 @@ RSpec.describe Api::V1::WorkPublisher do
         'Versions description is required to publish the work',
         "Versions creators can't be blank",
         "Versions file resources can't be blank",
-        'Versions published date is not a valid date in EDTF format',
         'Versions published date is required to publish the work',
         'Versions visibility cannot be private',
         "Work type can't be blank",

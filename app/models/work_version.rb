@@ -171,6 +171,14 @@ class WorkVersion < ApplicationRecord
             edtf_date: true,
             if: :published?
 
+  validates :decommission_date,
+            edtf_date: true,
+            if: :published?
+
+  validates :available_date,
+            edtf_date: true,
+            if: :published?
+
   validates :description,
             presence: true,
             if: :published?

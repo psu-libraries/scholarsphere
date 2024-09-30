@@ -355,6 +355,12 @@ class WorkDepositPathway
         validate :includes_readme_file_and_image,
                  if: :published?
 
+        validates :decommission_date,
+                  edtf_date: true
+
+        validates :available_date,
+                  edtf_date: true
+
         def form_partial
           'instrument_work_version'
         end
