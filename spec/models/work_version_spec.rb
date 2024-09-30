@@ -502,6 +502,30 @@ RSpec.describe WorkVersion, type: :model do
       expect(work_version).to be_published
       expect(work_version.reload.published_at).to be_present.and be_within(1.second).of(Time.zone.now)
     end
+
+    context 'with a work that uses the instrument works deposit pathway' do
+      let(:work_version) { create :work_version, :instrument_able_to_be_published, work: build(:work, work_type: 'instrument') }
+
+      it 'sets the publisher to Scholarsphere automatically' do
+        work_version.save
+        expect(work_version.publisher).to eq []
+        work_version.publish!
+        expect(work_version).to be_published
+        expect(work_version.reload.publisher).to eq ['Scholarsphere']
+      end
+    end
+
+    context 'with a work that does not use the instrument works deposit pathway' do
+      let(:work_version) { create :work_version, :able_to_be_published, work: build(:work, work_type: 'article') }
+
+      it 'does not edit the publisher field' do
+        work_version.save
+        expect(work_version.publisher).to eq []
+        work_version.publish!
+        expect(work_version).to be_published
+        expect(work_version.reload.publisher).to eq []
+      end
+    end
   end
 
   describe '#force_destroy' do
