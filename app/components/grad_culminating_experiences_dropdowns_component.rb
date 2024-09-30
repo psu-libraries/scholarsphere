@@ -10,7 +10,7 @@ class GradCulminatingExperiencesDropdownsComponent < ApplicationComponent
   end
 
   def sub_work_type_dropdown
-    if resource.work_type == Work::Types.grad_culminating_experiences.first
+    if resource.work_type == Work::Types.professional_doctoral_culminating_experience
       [
         'Capstone Project',
         'Culminating Research Project',
@@ -19,7 +19,7 @@ class GradCulminatingExperiencesDropdownsComponent < ApplicationComponent
         'Praxis Project',
         'Public Performance'
       ].freeze
-    elsif resource.work_type == Work::Types.grad_culminating_experiences.second
+    elsif resource.work_type == Work::Types.masters_culminating_experience
       [
         'Capstone Course Work Product',
         'Capstone Project',
@@ -29,15 +29,22 @@ class GradCulminatingExperiencesDropdownsComponent < ApplicationComponent
   end
 
   def programs_dropdown
-    Qa::Authorities::Local::FileBasedAuthority.new(:graduate_programs)
-      .all
-      .map { |p| p['label'] }
+    qa_labels(:graduate_programs)
   end
 
   def degrees_dropdown
-    string_matcher = resource.work_type == Work::Types.grad_culminating_experiences.first ? 'Doctor' : 'Master'
-    Qa::Authorities::Local::FileBasedAuthority.new(:graduate_degrees)
-      .all
-      .filter_map { |p| p['label'] if p['label'].include? string_matcher }
+    if resource.work_type == Work::Types.professional_doctoral_culminating_experience
+      qa_labels(:doctoral_degrees)
+    elsif resource.work_type == Work::Types.masters_culminating_experience
+      qa_labels(:masters_degrees)
+    end
   end
+
+  private
+
+    def qa_labels(basename)
+      Qa::Authorities::Local::FileBasedAuthority.new(basename)
+        .all
+        .filter_map { |p| p['label'] }
+    end
 end

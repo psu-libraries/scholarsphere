@@ -263,16 +263,14 @@ components:
             - article
             - audio
             - book
-            - capstone_project
             - collection
             - conference_proceeding
             - dataset
-            - dissertation
             - image
             - journal
             - map_or_cartographic_material
             - masters_culminating_experience
-            - masters_thesis
+            - professional_doctoral_culminating_experience
             - other
             - part_of_book
             - poster
@@ -338,6 +336,32 @@ components:
           type: "array"
           items:
             type: "string"
+        sub_work_type:
+          type: "string"
+          enum:
+            - Capstone Project
+            - Culminating Research Project
+            - Doctor of Nursing Practice Project
+            - Integrative Doctoral Research Project
+            - Praxis Project
+            - Public Performance
+            - Capstone Course Work Product
+            - Scholarly Paper/Essay (MA/MS)
+          example: "Capstone project"
+        program:
+          type: "string"
+          example: "Acoustics"
+        degree:
+          type: "string"
+          enum:
+            - Master of Arts
+            - Master of Science
+            - Doctor of Education
+            - Doctor of Musical Arts
+            - Doctor of Nursing Practice
+            - Doctor of Public Health
+            - Doctor of Philosophy
+          example: "Master of Science"
         source:
           type: "array"
           items:
