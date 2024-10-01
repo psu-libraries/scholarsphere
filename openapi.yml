@@ -269,6 +269,7 @@ components:
             - dataset
             - dissertation
             - image
+            - instrument
             - journal
             - map_or_cartographic_material
             - masters_culminating_experience

@@ -79,6 +79,17 @@ en:
         visibility: Access
         visibility_badge: Access
         deposited_at: Deposited
+        owner: Owner
+        manufacturer: Manufacturer
+        model: Model
+        instrument_type: Instrument Type
+        measured_variable: Measured Variable
+        available_date: Available Date
+        decommission_date: Decommission Date
+        related_identifier: Related Identifier
+        alternative_identifier: Alternative Identifier
+        instrument_resource_type: Instrument Resource Type
+        funding_reference: Funding Reference
       user:
         admin_enabled: Administrative privileges enabled
         opt_in_stats_email: Receive monthly report on downloads and views
