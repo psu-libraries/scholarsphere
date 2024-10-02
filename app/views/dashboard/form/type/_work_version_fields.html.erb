@@ -4,10 +4,20 @@
   </div>
 </div>
 
-<div class="form-wrapper">
+<div class="form-wrapper" data-controller="work-type">
   <%= render 'form_fields/text', form: form, attribute: :title, required: true %>
 
   <%= form.fields_for :work do |work_form| %>
-    <%= render 'form_fields/select', form: work_form, attribute: :work_type, options_for_select: Work::Types.options_for_select_box, disabled: local_assigns[:work_type_disabled] %>
+    <%= work_form.select :work_type,
+                         Work::Types.options_for_select_box,
+                         {},
+                         { class: 'form-control custom-select',
+                           id: 'work_version_work_attributes_work_type',
+                           data: { target: 'work-type.workTypeSelect' },
+                           disabled: local_assigns[:work_type_disabled] } %>
   <% end %>
+
+  <div id="work-title-help-text" data-target="work-type.helpText" style="display: none;">
+    <p><%= t 'dashboard.form.details.instrument_title' %></p>
+  </div>
 </div>

@@ -19,6 +19,11 @@ module FeatureHelpers
       select Work::Types.display('dataset'), from: 'work_version_work_attributes_work_type'
     end
 
+    def self.fill_in_minimal_work_details_for_instrument_draft(work_version_metadata)
+      fill_in 'work_version_title', with: work_version_metadata[:title]
+      select Work::Types.display('instrument'), from: 'work_version_work_attributes_work_type'
+    end
+
     def self.fill_in_common_work_details(work_version_metadata)
       fill_in 'work_version_description', with: work_version_metadata[:description]
       fill_in 'work_version_published_date', with: work_version_metadata[:published_date]
@@ -43,6 +48,13 @@ module FeatureHelpers
       fill_in_common_work_details(work_version_metadata)
       fill_in 'work_version_based_near', with: work_version_metadata[:based_near]
       fill_in 'work_version_source', with: work_version_metadata[:source]
+    end
+
+    def self.fill_in_instrument_work_details(work_version_metadata)
+      fill_in 'work_version_description', with: work_version_metadata[:description]
+      fill_in 'work_version_published_date', with: work_version_metadata[:published_date]
+      fill_in 'work_version_owner', with: work_version_metadata[:owner]
+      fill_in 'work_version_model', with: work_version_metadata[:model]
     end
 
     def self.fill_in_scholarly_works_work_details(work_version_metadata)

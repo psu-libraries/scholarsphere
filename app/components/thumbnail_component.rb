@@ -60,6 +60,7 @@ class ThumbnailComponent < ApplicationComponent
                                       dataset: 'analytics',
                                       dissertation: 'subject',
                                       image: 'image',
+                                      instrument: '',
                                       journal: 'subject',
                                       map_or_cartographic_material: 'map',
                                       masters_culminating_experience: 'landscape',

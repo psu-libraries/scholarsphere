@@ -10,6 +10,8 @@ class WorkDepositPathway
       ScholarlyWorks::DetailsForm.new(resource)
     elsif data_and_code?
       DataAndCode::DetailsForm.new(resource)
+    elsif instrument?
+      Instrument::DetailsForm.new(resource)
     else
       General::DetailsForm.new(resource)
     end
@@ -20,6 +22,8 @@ class WorkDepositPathway
       ScholarlyWorks::PublishForm.new(resource)
     elsif data_and_code?
       DataAndCode::PublishForm.new(resource)
+    elsif instrument?
+      Instrument::PublishForm.new(resource)
     else
       resource
     end
@@ -34,7 +38,7 @@ class WorkDepositPathway
   end
 
   def allows_mint_doi_request?
-    data_and_code? && @resource.doi_blank? && DoiMintingStatus.new(@resource.work).blank?
+    (data_and_code? || instrument?) && @resource.doi_blank? && DoiMintingStatus.new(@resource.work).blank?
   end
 
   def work?
@@ -43,6 +47,10 @@ class WorkDepositPathway
 
   def data_and_code?
     Work::Types.data_and_code.include?(work_type)
+  end
+
+  def instrument?
+    Work::Types.instrument.include?(work_type)
   end
 
   private
@@ -278,6 +286,109 @@ class WorkDepositPathway
               fr.file_data['metadata']['filename'] !~ /readme/i
             end
               errors.add(:file_resources, :readme)
+            end
+          end
+      end
+    end
+
+    module Instrument
+      class DetailsForm < DetailsFormBase
+        def self.form_fields
+          WorkVersionFormBase::COMMON_FIELDS.union(
+            %w{
+              title
+              owner
+              identifier
+              manufacturer
+              model
+              instrument_type
+              measured_variable
+              available_date
+              decommission_date
+              related_identifier
+              alternative_identifier
+              instrument_resource_type
+              funding_reference
+            }
+          ).freeze
+        end
+
+        form_fields.each do |attr_name|
+          delegate attr_name, to: :work_version, prefix: false
+          delegate "#{attr_name}=", to: :work_version, prefix: false
+        end
+
+        def form_partial
+          'instrument_work_version'
+        end
+      end
+
+      class PublishForm < WorkVersionFormBase
+        def self.form_fields
+          WorkVersionFormBase::COMMON_FIELDS.union(
+            %w{
+              title
+              owner
+              identifier
+              manufacturer
+              model
+              instrument_type
+              measured_variable
+              available_date
+              decommission_date
+              related_identifier
+              alternative_identifier
+              instrument_resource_type
+              funding_reference
+              rights
+              depositor_agreement
+              contributor
+            }
+          ).freeze
+        end
+
+        form_fields.each do |attr_name|
+          delegate attr_name, to: :work_version, prefix: false
+          delegate "#{attr_name}=", to: :work_version, prefix: false
+        end
+
+        validate :includes_readme_file_and_image,
+                 if: :published?
+
+        def form_partial
+          'instrument_work_version'
+        end
+
+        delegate :aasm_state=,
+                 :aasm_state,
+                 :publish,
+                 :file_resources,
+                 :work_attributes=,
+                 :creators_attributes=,
+                 :creators,
+                 :contributor,
+                 :file_version_memberships,
+                 :initial_draft?,
+                 :aasm,
+                 :update_column,
+                 :draft_curation_requested=,
+                 :mint_doi_requested=,
+                 :set_thumbnail_selection,
+                 :set_publisher_as_scholarsphere,
+                 to: :work_version,
+                 prefix: false
+
+        private
+
+          def includes_readme_file_and_image
+            unless file_resources.find do |fr|
+              fr.file_data['metadata']['size'].positive? &&
+                  fr.file_data['metadata']['filename'] =~ /readme/i
+            end && file_resources.find do |fr|
+              (fr.file_data['metadata']['filename'] !~ /readme/i &&
+              fr.file_data['metadata']['filename'] =~ /png|jpeg|tiff/i)
+            end
+              errors.add(:file_resources, :readme_and_image)
             end
           end
       end

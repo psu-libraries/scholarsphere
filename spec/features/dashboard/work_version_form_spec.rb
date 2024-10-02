@@ -359,6 +359,120 @@ RSpec.describe 'Publishing a work', with_user: :user do
         end
       end
     end
+
+    context 'when selecting a work type that uses the instrument deposit pathway' do
+      it 'shows only the fields for instrument works' do
+        visit dashboard_form_work_versions_path
+
+        FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_instrument_draft(metadata)
+        FeatureHelpers::DashboardForm.save_and_continue
+
+        expect(page).not_to have_field('publisher_statement')
+        expect(page).not_to have_field('work_version_based_near')
+        expect(page).not_to have_field('work_version_source')
+        expect(page).not_to have_field('work_version_version_name')
+        expect(page).to have_field('work_version_owner')
+        expect(page).to have_field('work_version_model')
+      end
+
+      context 'when saving as draft and exiting' do
+        it 'creates a new work with all fields provided' do
+          initial_work_count = Work.count
+
+          visit dashboard_form_work_versions_path
+
+          FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_instrument_draft(metadata)
+          FeatureHelpers::DashboardForm.save_as_draft_and_exit
+
+          expect(Work.count).to eq(initial_work_count + 1)
+
+          new_work = Work.last
+          expect(new_work.work_type).to eq 'instrument'
+          expect(new_work.versions.length).to eq 1
+
+          new_work_version = new_work.versions.last
+          expect(page).to have_content(metadata[:title])
+          expect(new_work_version.title).to eq metadata[:title]
+          expect(new_work_version.version_number).to eq 1
+
+          expect(page).to have_current_path(resource_path(new_work_version.uuid))
+          expect(SolrIndexingJob).to have_received(:perform_later).at_least(:once)
+        end
+      end
+
+      context 'when saving and_continuing' do
+        it 'creates a new work with all fields provided' do
+          initial_work_count = Work.count
+
+          visit dashboard_form_work_versions_path
+
+          FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_instrument_draft(metadata)
+          FeatureHelpers::DashboardForm.save_and_continue
+          FeatureHelpers::DashboardForm.fill_in_instrument_work_details(metadata)
+          FeatureHelpers::DashboardForm.save_and_continue
+
+          expect(Work.count).to eq(initial_work_count + 1)
+          new_work = Work.last
+          expect(new_work.work_type).to eq 'instrument'
+          expect(new_work.versions.length).to eq 1
+
+          new_work_version = new_work.versions.last
+
+          expect(new_work_version.version_number).to eq 1
+          expect(new_work_version.title).to eq metadata[:title]
+          expect(new_work_version.owner).to eq metadata[:owner]
+          expect(new_work_version.model).to eq metadata[:model]
+
+          expect(page).to have_current_path(dashboard_form_contributors_path('work_version', new_work_version))
+          expect(SolrIndexingJob).to have_received(:perform_later).at_least(:twice)
+        end
+
+        context 'with invalid data' do
+          it 'does not save the data and rerenders the form with errors' do
+            visit dashboard_form_work_versions_path
+
+            FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_instrument_draft(metadata)
+            FeatureHelpers::DashboardForm.save_and_continue
+            FeatureHelpers::DashboardForm.fill_in_instrument_work_details(metadata)
+            fill_in 'work_version_description', with: ''
+            FeatureHelpers::DashboardForm.save_and_continue
+
+            new_work_version = Work.last.versions.last
+
+            expect(page).to have_current_path(dashboard_form_work_version_details_path(new_work_version))
+            expect(page).to have_content 'Description is required to publish the work'
+            expect(SolrIndexingJob).to have_received(:perform_later).once
+
+            expect(new_work_version.description).to be_nil
+            expect(new_work_version.published_date).to be_nil
+            expect(new_work_version.subtitle).to be_nil
+            expect(new_work_version.version_name).to be_nil
+            expect(new_work_version.publisher).to be_empty
+            expect(new_work_version.subject).to be_empty
+            expect(new_work_version.language).to be_empty
+            expect(new_work_version.related_url).to be_empty
+            expect(new_work_version.identifier).to be_empty
+            expect(new_work_version.based_near).to be_empty
+            expect(new_work_version.source).to be_empty
+          end
+        end
+      end
+
+      context 'when saving-and-continuing, then hitting cancel' do
+        it 'returns to the resource page' do
+          visit dashboard_form_work_versions_path
+
+          FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_instrument_draft(metadata)
+          FeatureHelpers::DashboardForm.save_and_continue
+          FeatureHelpers::DashboardForm.fill_in_instrument_work_details(metadata)
+          FeatureHelpers::DashboardForm.save_and_continue
+
+          FeatureHelpers::DashboardForm.cancel
+
+          expect(page).to have_content metadata[:title]
+        end
+      end
+    end
   end
 
   describe 'The Work Details tab for an existing draft work' do
@@ -876,6 +990,33 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).not_to have_field('work_version_work_attributes_visibility_authenticated')
       end
     end
+
+    context 'with a work that uses the instrument works deposit pathway' do
+      let(:work) { create :work, :instrument, versions_count: 1 }
+      let(:work_version) { work.versions.first }
+      let(:user) { work.depositor.user }
+
+      it 'shows only the fields for a scholarly work' do
+        visit dashboard_form_publish_path(work_version)
+
+        expect(page).not_to have_field('work_version_based_near')
+        expect(page).not_to have_field('work_version_source')
+        expect(page).not_to have_field('work_version_version_name')
+        expect(page).not_to have_field('work_version_publisher_statement')
+        expect(page).to have_field('work_version_keyword')
+        expect(page).to have_field('work_version_owner')
+        expect(page).to have_field('work_version_identifier')
+        expect(page).to have_field('work_version_manufacturer')
+        expect(page).to have_field('work_version_instrument_type')
+        expect(page).to have_field('work_version_measured_variable')
+        expect(page).to have_field('work_version_available_date')
+        expect(page).to have_field('work_version_decommission_date')
+        expect(page).to have_field('work_version_related_identifier')
+        expect(page).to have_field('work_version_alternative_identifier')
+        expect(page).to have_field('work_version_instrument_resource_type')
+        expect(page).to have_field('work_version_funding_reference')
+      end
+    end
   end
 
   describe 'Publishing a new work from end-to-end', js: true do
@@ -1243,10 +1384,49 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
   end
 
+  describe 'automatically setting publisher as Scholarsphere', js: true do
+    context 'with a work that uses the instrument works deposit pathway' do
+      let(:user) { work_version.work.depositor.user }
+      let(:work_version) { create :work_version, :instrument_able_to_be_published }
+
+      it 'sets the publisher to Scholarsphere automatically' do
+        visit dashboard_form_publish_path(work_version)
+        check 'I have read and agree to the deposit agreement.'
+        click_on 'Publish'
+
+        expect(work_version.reload.publisher).to eq ['Scholarsphere']
+      end
+    end
+
+    context 'with a work that does not use the instrument works deposit pathway' do
+      let(:user) { work_version.work.depositor.user }
+      let(:work_version) { create :work_version, :able_to_be_published }
+
+      it 'does not edit the publisher field' do
+        visit dashboard_form_publish_path(work_version)
+        check 'I have read and agree to the deposit agreement.'
+        click_on 'Publish'
+
+        expect(work_version.reload.publisher).to eq []
+      end
+    end
+  end
+
   describe 'minting a doi', js: true do
     let(:user) { work_version.work.depositor.user }
 
-    context 'with a draft eligible for doi minting' do
+    context 'with an instrument draft eligible for doi minting' do
+      let(:work) { create :work, work_type: 'instrument', versions_count: 1, has_draft: true, doi: nil }
+      let(:work_version) { work.versions.first }
+
+      it 'renders a checkbox requesting a doi be minted upon publish' do
+        visit dashboard_form_publish_path(work_version)
+
+        expect(page).to have_content(I18n.t('dashboard.form.publish.doi.label'))
+      end
+    end
+
+    context 'with a data and code draft eligible for doi minting' do
       let(:work) { create :work, work_type: 'dataset', versions_count: 1, has_draft: true, doi: nil }
       let(:work_version) { work.versions.first }
 
