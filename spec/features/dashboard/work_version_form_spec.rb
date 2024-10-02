@@ -906,7 +906,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         end
 
         within '.footer--actions' do
-          expect(page).to have_button(I18n.t!('dashboard.form.actions.publish'))
+          expect(page).to have_button(I18n.t!('dashboard.form.actions.publish.button'))
         end
 
         work_version.reload
@@ -1194,7 +1194,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       end
 
       within '.footer--actions' do
-        expect(page).to have_button(I18n.t!('dashboard.form.actions.finish'))
+        expect(page).to have_button(I18n.t!('dashboard.form.actions.finish.button'))
       end
 
       # Fill out form properly
@@ -1249,7 +1249,6 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
       it 'renders buttons for requesting curation and publish and shows helper text explaing requesting curation' do
         visit dashboard_form_publish_path(work_version)
-
         expect(page).to have_button('Request Curation & Save as Draft')
         expect(page).to have_button('Publish')
 
@@ -1283,8 +1282,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
           expect(page).to have_button('Publish')
 
-          check 'I have read and agree to the deposit agreement.'
-          click_on 'Publish'
+          FeatureHelpers::DashboardForm.publish
 
           expect(work_version.reload.aasm_state).to eq 'published'
         end
@@ -1311,13 +1309,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
       it 'creates a Submission' do
         visit dashboard_form_publish_path(work_version)
-
-        check 'I have read and agree to the deposit agreement.'
-
         click_on 'Request Curation & Save as Draft'
-
         work_version.reload
-
         expect(CurationTaskClient).to have_received(:send_curation).with(work_version.id, requested: true)
         expect(work_version.draft_curation_requested).to be true
       end
@@ -1333,7 +1326,6 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         fill_in 'work_version_title', with: ''
         fill_in 'work_version_title', with: 'Changed Title'
-        check 'I have read and agree to the deposit agreement.'
 
         click_on 'Request Curation & Save as Draft'
 
@@ -1356,7 +1348,6 @@ RSpec.describe 'Publishing a work', with_user: :user do
         visit dashboard_form_publish_path(work_version)
 
         fill_in 'work_version_published_date', with: 'this is not a valid date'
-        check 'I have read and agree to the deposit agreement.'
 
         click_on 'Request Curation & Save as Draft'
 
@@ -1367,7 +1358,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         end
 
         within '.footer--actions' do
-          expect(page).to have_button(I18n.t!('dashboard.form.actions.request_curation'))
+          expect(page).to have_button(I18n.t!('dashboard.form.actions.request_curation.button'))
         end
 
         work_version.reload
@@ -1428,9 +1419,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         visit dashboard_form_publish_path(work_version)
 
         check I18n.t('dashboard.form.publish.doi.label')
-        check 'I have read and agree to the deposit agreement.'
-
-        click_on 'Publish'
+        FeatureHelpers::DashboardForm.publish
 
         expect(MintDoiAsync).to have_received(:call).with(work_version.work)
       end
@@ -1451,6 +1440,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         check I18n.t('dashboard.form.publish.doi.label')
 
         click_on 'Publish'
+        click_on 'Confirm'
 
         expect(MintDoiAsync).not_to have_received(:call).with(work_version.work)
       end

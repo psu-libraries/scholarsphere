@@ -413,6 +413,9 @@ en:
         publish: 
           button: Publish
           tooltip: Publish your work to make it publicly visible. Changes cannot be made to the published version, but you can create a new version if updates are needed.
+        confirm:
+          publish: Confirm
+          cancel: Cancel
         finish: 
           button: Finish
           tooltip: Finish this yoo

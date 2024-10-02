@@ -18,8 +18,8 @@ module Dashboard
         @work_version = WorkVersion.find(params[:id])
         @resource = deposit_pathway.publish_form
         authorize(@work_version)
-
         @resource.attributes = work_version_params
+
         # If the user clicks the "Publish" button, *and* there are validation
         # errors, we still want to persist any changes to the draft version's
         # db record, while at the same time showing the publish validation errors
@@ -43,11 +43,14 @@ module Dashboard
             @resource.save
             initial_state = @resource.aasm_state
             @resource.publish
+            @resource.curation_request_attempt = true
             if @resource.valid?
               CurationTaskClient.send_curation(@resource.id, requested: true)
               @resource.draft_curation_requested = true
+              @resource.curation_request_attempt = false
             else
               @resource.update_column(:draft_curation_requested, false)
+              @resource.curation_request_attempt = false
               render :edit
               return
             end

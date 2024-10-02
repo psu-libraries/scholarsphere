@@ -116,12 +116,10 @@ module FeatureHelpers
 
     def self.fill_in_publishing_details(metadata, visibility: Permissions::Visibility::OPEN)
       choose "work_version_work_attributes_visibility_#{visibility}"
-      check 'work_version_depositor_agreement'
       select WorkVersion::Licenses.label(metadata[:rights]), from: 'work_version_rights'
     end
 
     def self.fill_in_publishing_details_published(metadata)
-      check 'work_version_depositor_agreement'
       select WorkVersion::Licenses.label(metadata[:rights]), from: 'work_version_rights'
     end
 
@@ -143,6 +141,8 @@ module FeatureHelpers
     def self.publish
       fix_sticky_footer
       click_on I18n.t!('dashboard.form.actions.publish.button')
+      check 'work_version_depositor_agreement'
+      click_on I18n.t!('dashboard.form.actions.confirm.publish')
     end
 
     def self.finish

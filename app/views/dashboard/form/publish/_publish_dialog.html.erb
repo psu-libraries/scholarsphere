@@ -22,7 +22,7 @@
 
   </div>
   <div class="d-flex justify-content-around">
-    <%= f.submit t('dashboard.form.actions.publish.button'), name: 'publish', data: { toggle: 'tooltip', placement: 'top', title: t('dashboard.form.actions.publish.tooltip') }, class: 'btn btn-primary btn--rounded' %>
-    <button type="button" class='btn btn-outline-dark btn--rounded ml-2' data-action="publishing-check#closeDialog">Cancel</button>
+    <%= f.submit t('dashboard.form.actions.confirm.publish'), name: 'publish', data: { toggle: 'tooltip', placement: 'top', title: t('dashboard.form.actions.publish.tooltip') }, class: 'btn btn-primary btn--rounded' %>
+    <button type="button" class='btn btn-outline-dark btn--rounded ml-2' data-action="publishing-check#closeDialog"><%= t('dashboard.form.actions.confirm.cancel') %></button>
   </div>
 </dialog>
