@@ -213,21 +213,42 @@ RSpec.describe 'Work Settings Page', with_user: :user do
       end
     end
 
-    context 'when selecting a group' do
-      let(:user) { create(:user, groups: User.default_groups + [group]) }
-      let(:group) { create(:group) }
-      let(:work) { create :work, depositor: user.actor }
+    context 'when selecting a group', js: true do
+      context 'when a regular user' do
+        let(:user) { create(:user, groups: User.default_groups + [group]) }
+        let(:group) { create(:group) }
+        let(:work) { create :work, depositor: user.actor }
 
-      it 'adds the group as an editor' do
-        visit edit_dashboard_work_path(work)
+        it 'adds the group as an editor' do
+          visit edit_dashboard_work_path(work)
 
-        expect(work.edit_groups).to be_empty
-        select(group.name, from: 'Edit groups')
-        click_button('Update Editors')
+          expect(work.edit_groups).to be_empty
+          select(group.name, from: 'Edit groups')
+          click_button('Update Editors')
 
-        work.reload
-        expect(work.edit_groups).to contain_exactly(group)
-        expect(WorkIndexer).to have_received(:call)
+          work.reload
+          expect(work.edit_groups).to contain_exactly(group)
+          expect(WorkIndexer).to have_received(:call)
+        end
+      end
+
+      context 'when an admin' do
+        let(:user) { create(:user, :admin) }
+        let(:group1) { create(:group) }
+        let(:group2) { create(:group) }
+        let(:work) { create :work, edit_groups: [group1, group2] }
+
+        it 'allows admins to remove a group as an editor' do
+          visit edit_dashboard_work_path(work)
+
+          expect(work.edit_groups).to eq [group1, group2]
+          find('a[data-action="multiple-fields#remove"]').click
+          click_button('Update Editors')
+
+          work.reload
+          expect(work.edit_groups).to contain_exactly(group2)
+          expect(WorkIndexer).to have_received(:call)
+        end
       end
     end
   end
