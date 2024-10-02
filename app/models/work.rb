@@ -85,7 +85,10 @@ class Work < ApplicationRecord
       %w[
         article
         book
+        capstone_project
         conference_proceeding
+        dissertation
+        masters_thesis
         part_of_book
         report
         research_paper
@@ -102,8 +105,8 @@ class Work < ApplicationRecord
 
     def self.grad_culminating_experiences
       %w[
-        professional_doctoral_culminating_experience
         masters_culminating_experience
+        professional_doctoral_culminating_experience
       ].freeze
     end
 
@@ -125,12 +128,22 @@ class Work < ApplicationRecord
       'unspecified'
     end
 
+    # TODO: Once these have been totally cleaned from the db,
+    # we'll no longer need to define them here.
+    def self.retired
+      %w{
+        capstone_project
+        dissertation
+        masters_thesis
+      }
+    end
+
     def self.display(type)
       type.humanize.titleize
     end
 
     def self.options_for_select_box
-      (all - [unspecified, thesis])
+      (all - [unspecified, thesis, retired].flatten)
         .sort
         .map { |type| [display(type), type] }
     end

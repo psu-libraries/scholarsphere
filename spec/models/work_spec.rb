@@ -118,12 +118,15 @@ RSpec.describe Work, type: :model do
           'article',
           'audio',
           'book',
+          'capstone_project',
           'conference_proceeding',
           'dataset',
+          'dissertation',
           'image',
           'journal',
           'map_or_cartographic_material',
           'masters_culminating_experience',
+          'masters_thesis',
           'professional_doctoral_culminating_experience',
           'other',
           'part_of_book',
@@ -174,7 +177,10 @@ RSpec.describe Work, type: :model do
         expect(scholarly_works).to contain_exactly(
           'article',
           'book',
+          'capstone_project',
           'conference_proceeding',
+          'dissertation',
+          'masters_thesis',
           'part_of_book',
           'report',
           'research_paper',
@@ -202,6 +208,33 @@ RSpec.describe Work, type: :model do
       end
     end
 
+    describe '.grad_culminating_experiences' do
+      subject(:grad_culminating_experiences) { types.grad_culminating_experiences }
+
+      specify do
+        expect(grad_culminating_experiences).to contain_exactly(
+          'masters_culminating_experience',
+          'professional_doctoral_culminating_experience'
+        )
+      end
+
+      specify do
+        expect(grad_culminating_experiences).to be_frozen
+      end
+    end
+
+    describe '.masters_culminating_experience' do
+      subject { types.masters_culminating_experience }
+
+      it { is_expected.to eq('masters_culminating_experience') }
+    end
+
+    describe '.professional_doctoral_culminating_experience' do
+      subject { types.professional_doctoral_culminating_experience }
+
+      it { is_expected.to eq('professional_doctoral_culminating_experience') }
+    end
+
     describe '.default' do
       subject { types.default }
 
@@ -223,8 +256,11 @@ RSpec.describe Work, type: :model do
     describe '.options_for_select_box' do
       subject(:options) { types.options_for_select_box }
 
-      it { is_expected.to include(['Dataset', 'dataset'], ['Part Of Book', 'part_of_book']) }
-      it { is_expected.not_to include(['Unspecified', 'unspecified']) }
+      it { expect(options).to include(['Dataset', 'dataset'],
+                                      ['Part Of Book', 'part_of_book'],
+                                      ['Masters Culminating Experience', 'masters_culminating_experience']) }
+
+      it { is_expected.not_to include(['Unspecified', 'unspecified'], ['Masters Thesis', 'masters_thesis']) }
     end
 
     describe '.display' do
@@ -269,17 +305,20 @@ RSpec.describe Work, type: :model do
           article: 'article',
           audio: 'audio',
           book: 'book',
+          capstone_project: 'capstone_project',
           conference_proceeding: 'conference_proceeding',
           dataset: 'dataset',
+          dissertation: 'dissertation',
           image: 'image',
           journal: 'journal',
           map_or_cartographic_material: 'map_or_cartographic_material',
           masters_culminating_experience: 'masters_culminating_experience',
-          professional_doctoral_culminating_experience: 'professional_doctoral_culminating_experience',
+          masters_thesis: 'masters_thesis',
           other: 'other',
           part_of_book: 'part_of_book',
           poster: 'poster',
           presentation: 'presentation',
+          professional_doctoral_culminating_experience: 'professional_doctoral_culminating_experience',
           project: 'project',
           report: 'report',
           research_paper: 'research_paper',

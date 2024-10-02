@@ -41,6 +41,9 @@ RSpec.describe WorkVersion, type: :model do
     it { is_expected.to have_jsonb_accessor(:based_near).of_type(:string).is_array.with_default([]) }
     it { is_expected.to have_jsonb_accessor(:related_url).of_type(:string).is_array.with_default([]) }
     it { is_expected.to have_jsonb_accessor(:source).of_type(:string).is_array.with_default([]) }
+    it { is_expected.to have_jsonb_accessor(:sub_work_type).of_type(:string) }
+    it { is_expected.to have_jsonb_accessor(:program).of_type(:string) }
+    it { is_expected.to have_jsonb_accessor(:degree).of_type(:string) }
   end
 
   describe 'factory' do
