@@ -31,7 +31,18 @@ class WorkVersion < ApplicationRecord
                  identifier: [:string, array: true, default: []],
                  based_near: [:string, array: true, default: []],
                  related_url: [:string, array: true, default: []],
-                 source: [:string, array: true, default: []]
+                 source: [:string, array: true, default: []],
+                 owner: :string,
+                 manufacturer: :string,
+                 model: :string,
+                 instrument_type: :string,
+                 measured_variable: :string,
+                 available_date: :string,
+                 decommission_date: :string,
+                 related_identifier: :string,
+                 alternative_identifier: :string,
+                 instrument_resource_type: :string,
+                 funding_reference: :string
 
   belongs_to :work,
              inverse_of: :versions
@@ -160,6 +171,14 @@ class WorkVersion < ApplicationRecord
             edtf_date: true,
             if: :published?
 
+  validates :decommission_date,
+            edtf_date: true,
+            if: :published?
+
+  validates :available_date,
+            edtf_date: true,
+            if: :published?
+
   validates :description,
             presence: true,
             if: :published?
@@ -188,6 +207,7 @@ class WorkVersion < ApplicationRecord
                   to: :published,
                   after: Proc.new {
                     work.try(:update_deposit_agreement)
+                    set_publisher_as_scholarsphere if work_type == 'instrument'
                     self.reload_on_index = true
                   }
     end
@@ -227,6 +247,17 @@ class WorkVersion < ApplicationRecord
     rights
     subtitle
     version_name
+    owner
+    manufacturer
+    model
+    instrument_type
+    measured_variable
+    available_date
+    decommission_date
+    related_identifier
+    alternative_identifier
+    instrument_resource_type
+    funding_reference
   ].each do |field|
     define_method "#{field}=" do |val|
       super(val.presence)
@@ -297,6 +328,10 @@ class WorkVersion < ApplicationRecord
     if work.versions.published.blank? && file_resources.map(&:thumbnail_url).compact.present?
       work.update thumbnail_selection: ThumbnailSelections::AUTO_GENERATED
     end
+  end
+
+  def set_publisher_as_scholarsphere
+    metadata['publisher'] = ['Scholarsphere']
   end
 
   def initial_draft?

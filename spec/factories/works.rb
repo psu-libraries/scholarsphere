@@ -82,6 +82,10 @@ FactoryBot.define do
     work_type { 'article' }
   end
 
+  trait(:instrument) do
+    work_type { 'instrument' }
+  end
+
   trait(:general) do
     work_type { 'audio' }
   end

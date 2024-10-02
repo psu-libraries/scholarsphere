@@ -30,6 +30,10 @@ FactoryBot.define do
       association :work, :article
     end
 
+    trait :instrument do
+      association :work, :instrument
+    end
+
     trait :initial_draft do
       after(:build, :stub) do |work_version, evaluator|
         evaluator.work.versions.destroy_all
@@ -78,6 +82,17 @@ FactoryBot.define do
       published_date { Faker::Date.between(from: 2.years.ago, to: Date.today).iso8601 }
     end
 
+    # A draft instrument that has everything needed to pass validations and be published
+    trait :instrument_able_to_be_published do
+      instrument
+      draft
+      with_files
+      with_readme_file
+      with_creators
+      description { Faker::Lorem.paragraph }
+      published_date { Faker::Date.between(from: 2.years.ago, to: Date.today).iso8601 }
+    end
+
     # A valid published work-version
     trait :published do
       able_to_be_published
@@ -107,6 +122,8 @@ FactoryBot.define do
       based_near { FactoryBotHelpers.fancy_geo_location }
       related_url { Faker::Internet.url }
       source { Faker::SlackEmoji.emoji }
+      owner { Faker::Book.author }
+      model { Faker::Number.leading_zero_number(digits: 5) }
     end
   end
 end
