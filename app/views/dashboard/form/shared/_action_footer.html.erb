@@ -3,21 +3,21 @@
 
 <footer class="footer footer--actions footer--fixed d-flex justify-content-center">
   <div>
+    <span data-controller="publishing-check">
     <% if allow_curation? %>
-      <%= form.submit t('dashboard.form.actions.request_curation'), name: 'request_curation', class: 'btn btn-primary btn--rounded' %>
+      <%= button_tag t("dashboard.form.actions.request_curation.button"), type: "button", data: { action:"publishing-check#openDialog", dialog: "curation", toggle: 'tooltip', placement: 'top', title: t("dashboard.form.actions.request_curation.tooltip") }, class: 'btn btn-primary btn--rounded' %>
     <% end %>
 
     <% if allow_publish? || primary_action == :save_and_continue %>
       <% if primary_action == :publish %>
         <!-- show submit button -->
-        <span data-controller="publishing-check">
-          <%= button_tag t("dashboard.form.actions.publish.button"), type: "button", data: { action:"publishing-check#openDialog", toggle: 'tooltip', placement: 'top', title: t("dashboard.form.actions.#{primary_action}.tooltip") }, class: 'btn btn-primary btn--rounded' %>
+          <%= button_tag t("dashboard.form.actions.publish.button"), type: "button", data: { action:"publishing-check#openDialog", dialog: "publish", toggle: 'tooltip', placement: 'top', title: t("dashboard.form.actions.#{primary_action}.tooltip") }, class: 'btn btn-primary btn--rounded' %>
           <%= render 'publish_dialog', f: form %>
-        </span>
-      <% else %>
-      <%= form.submit t("dashboard.form.actions.#{primary_action}.button"), name: primary_action, data: { toggle: 'tooltip', placement: 'top', title: t("dashboard.form.actions.#{primary_action}.tooltip") }, class: 'btn btn-primary btn--rounded' %>
-      <% end %>
-    <% end %>
+          <% else %>
+          <%= form.submit t("dashboard.form.actions.#{primary_action}.button"), name: primary_action, data: { toggle: 'tooltip', placement: 'top', title: t("dashboard.form.actions.#{primary_action}.tooltip") }, class: 'btn btn-primary btn--rounded' %>
+          <% end %>
+          <% end %>
+    </span>
 
     <%= link_to t('dashboard.form.actions.cancel.button'), cancel_path, data: { toggle: 'tooltip', placement: 'top', title: t('dashboard.form.actions.cancel.tooltip') }, class: 'btn btn-outline-dark btn--rounded ml-2' %>
   </div>
