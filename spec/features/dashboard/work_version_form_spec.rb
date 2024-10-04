@@ -1171,7 +1171,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       let(:work_version) { create :work_version, :dataset_able_to_be_published, draft_curation_requested: nil }
 
       before do
-        allow(CurationTaskClient).to receive(:send_curation).with(work_version.id, requested: true)
+        allow(CurationTaskClient).to receive(:send_curation).with(work_version.id, requested: true, remediation_requested: false)
       end
 
       it 'creates a Submission' do
@@ -1183,7 +1183,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         work_version.reload
 
-        expect(CurationTaskClient).to have_received(:send_curation).with(work_version.id, requested: true)
+        expect(CurationTaskClient).to have_received(:send_curation).with(work_version.id, requested: true, remediation_requested: false)
         expect(work_version.draft_curation_requested).to be true
       end
     end
@@ -1191,7 +1191,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
     context 'when an error occurs within the curation exporter' do
       let(:work_version) { create :work_version, :dataset_able_to_be_published, draft_curation_requested: nil }
 
-      before { allow(CurationTaskClient).to receive(:send_curation).with(work_version.id, requested: true).and_raise(CurationTaskClient::CurationError) }
+      before { allow(CurationTaskClient).to receive(:send_curation).with(work_version.id, requested: true, remediation_requested: false).and_raise(CurationTaskClient::CurationError) }
 
       it 'saves changes to the work version and displays an error flash message' do
         visit dashboard_form_publish_path(work_version)
@@ -1214,7 +1214,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
     context 'when there is a validation error' do
       let(:work_version) { create :work_version, :dataset_able_to_be_published, draft_curation_requested: nil }
 
-      before { allow(CurationTaskClient).to receive(:send_curation).with(work_version.id, requested: true) }
+      before { allow(CurationTaskClient).to receive(:send_curation).with(work_version.id, requested: true, remediation_requested: false) }
 
       it 'does not call the curation task exporter' do
         visit dashboard_form_publish_path(work_version)
@@ -1224,7 +1224,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         click_on 'Request Curation'
 
-        expect(CurationTaskClient).not_to have_received(:send_curation).with(work_version.id, requested: true)
+        expect(CurationTaskClient).not_to have_received(:send_curation).with(work_version.id, requested: true, remediation_requested: false)
 
         within '#error_explanation' do
           expect(page).to have_content(I18n.t!('errors.messages.invalid_edtf'))
@@ -1308,7 +1308,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       let(:work_version) { create :work_version, :dataset_able_to_be_published, accessibility_remediation_requested: nil }
 
       before do
-        allow(CurationTaskClient).to receive(:send_curation).with(work_version.id, remediation_requested: true)
+        allow(CurationTaskClient).to receive(:send_curation).with(work_version.id, remediation_requested: true, requested: false)
       end
 
       it 'creates a Submission' do
@@ -1320,7 +1320,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         work_version.reload
 
-        expect(CurationTaskClient).to have_received(:send_curation).with(work_version.id, remediation_requested: true)
+        expect(CurationTaskClient).to have_received(:send_curation).with(work_version.id, remediation_requested: true, requested: false)
         expect(work_version.accessibility_remediation_requested).to be true
       end
     end
@@ -1328,7 +1328,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
     context 'when an error occurs within the curation task exporter' do
       let(:work_version) { create :work_version, :dataset_able_to_be_published, accessibility_remediation_requested: nil }
 
-      before { allow(CurationTaskClient).to receive(:send_curation).with(work_version.id, remediation_requested: true).and_raise(CurationTaskClient::CurationError) }
+      before { allow(CurationTaskClient).to receive(:send_curation).with(work_version.id, remediation_requested: true, requested: false).and_raise(CurationTaskClient::CurationError) }
 
       it 'saves changes to the work version and displays an error flash message' do
         visit dashboard_form_publish_path(work_version)
@@ -1352,7 +1352,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
     context 'when there is a validation error' do
       let(:work_version) { create :work_version, :dataset_able_to_be_published, accessibility_remediation_requested: nil }
 
-      before { allow(CurationTaskClient).to receive(:send_curation).with(work_version.id, remediation_requested: true) }
+      before { allow(CurationTaskClient).to receive(:send_curation).with(work_version.id, remediation_requested: true, requested: false) }
 
       it 'does not call the curation task exporter' do
         visit dashboard_form_publish_path(work_version)
@@ -1362,7 +1362,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         click_on 'Request Accessibility Remediation'
 
-        expect(CurationTaskClient).not_to have_received(:send_curation).with(work_version.id, remediation_requested: true)
+        expect(CurationTaskClient).not_to have_received(:send_curation).with(work_version.id, remediation_requested: true, requested: false)
 
         within '#error_explanation' do
           expect(page).to have_content(I18n.t!('errors.messages.invalid_edtf'))

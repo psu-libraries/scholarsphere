@@ -34,8 +34,10 @@ module Dashboard
           @resource.indexing_source = Proc.new { nil }
           @resource.save
           @resource.publish
-        elsif request_curation? && !@resource.draft_curation_requested
-          @resource.update_column(:draft_curation_requested, true)
+        elsif curator_action_requested?
+          column = request_curation? ? :draft_curation_requested : :accessibility_remediation_requested
+
+          @resource.update_column(column, true)
           # We want validation errors to block curation requests and keep users on the edit page
           # so WorkVersion needs to temporarily act like it's being published. It's returned to it's
           # initial state before being saved.
@@ -44,41 +46,17 @@ module Dashboard
             initial_state = @resource.aasm_state
             @resource.publish
             if @resource.valid?
-              CurationTaskClient.send_curation(@resource.id, requested: true)
-              @resource.draft_curation_requested = true
+              CurationTaskClient.send_curation(@resource.id, requested: request_curation?, remediation_requested: request_accessibility_remediation?)
+              request_curation? ? @resource.draft_curation_requested = true : @resource.accessibility_remediation_requested = true
             else
-              @resource.update_column(:draft_curation_requested, false)
+              @resource.update_column(column, false)
               render :edit
               return
             end
           rescue CurationTaskClient::CurationError => e
-            @resource.update_column(:draft_curation_requested, false)
+            @resource.update_column(column, false)
             logger.error(e)
-            flash[:error] = t('dashboard.form.publish.curation.error')
-          ensure
-            @resource.aasm_state = initial_state
-          end
-        elsif request_accessibility_remediation? && !@resource.accessibility_remediation_requested
-          @resource.update_column(:accessibility_remediation_requested, true)
-          # We want validation errors to block curation requests and keep users on the edit page
-          # so WorkVersion needs to temporarily act like it's being published. It's returned to it's
-          # initial state before being saved.
-          begin
-            @resource.save
-            initial_state = @resource.aasm_state
-            @resource.publish
-            if @resource.valid?
-              CurationTaskClient.send_curation(@resource.id, remediation_requested: true)
-              @resource.accessibility_remediation_requested = true
-            else
-              @resource.update_column(:accessibility_remediation_requested, false)
-              render :edit
-              return
-            end
-          rescue CurationTaskClient::CurationError => e
-            @resource.update_column(:accessibility_remediation_requested, false)
-            logger.error(e)
-            flash[:error] = t('dashboard.form.publish.remediation.error')
+            flash[:error] = request_curation? ? t('dashboard.form.publish.curation.error') : t('dashboard.form.publish.remediation.error')
           ensure
             @resource.aasm_state = initial_state
           end
@@ -130,6 +108,11 @@ module Dashboard
           )
 
           not_published || marked_as_published_but_not_persisted
+        end
+
+        def curator_action_requested?
+          (request_curation? && !@resource.draft_curation_requested) ||
+            (request_accessibility_remediation? && !@resource.accessibility_remediation_requested)
         end
 
         def work_version_params
