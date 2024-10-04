@@ -507,8 +507,8 @@ RSpec.describe WorkVersion, type: :model do
     end
   end
 
-  context 'with a work that uses the instrument works deposit pathway' do
-    let(:work_version) { create :work_version, :masters_culminating_experience_able_to_be_published,
+  context 'with a masters_culminating_experience work type' do
+    let(:work_version) { create :work_version, :grad_culminating_experience_able_to_be_published,
                                 work: build(:work, work_type: 'masters_culminating_experience') }
 
     it 'sets the publisher to Scholarsphere automatically' do
@@ -520,7 +520,20 @@ RSpec.describe WorkVersion, type: :model do
     end
   end
 
-  context 'with a work that does not use the instrument works deposit pathway' do
+  context 'with a doctoral_professional_culminating_experience work type' do
+    let(:work_version) { create :work_version, :grad_culminating_experience_able_to_be_published,
+                                work: build(:work, work_type: 'doctoral_professional_culminating_experience') }
+
+    it 'sets the publisher to Scholarsphere automatically' do
+      work_version.save
+      expect(work_version.publisher).to eq []
+      work_version.publish!
+      expect(work_version).to be_published
+      expect(work_version.reload.publisher).to eq ['ScholarSphere']
+    end
+  end
+
+  context 'with a work that is not a masters_culminating_experience or a professional_doctoral_culminating_experience' do
     let(:work_version) { create :work_version, :able_to_be_published, work: build(:work, work_type: 'article') }
 
     it 'does not edit the publisher field' do
