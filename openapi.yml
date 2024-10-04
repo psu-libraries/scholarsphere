@@ -270,11 +270,11 @@ components:
             - journal
             - map_or_cartographic_material
             - masters_culminating_experience
-            - professional_doctoral_culminating_experience
             - other
             - part_of_book
             - poster
             - presentation
+            - professional_doctoral_culminating_experience
             - project
             - report
             - research_paper
@@ -339,13 +339,13 @@ components:
         sub_work_type:
           type: "string"
           enum:
+            - Capstone Course Work Product
             - Capstone Project
             - Culminating Research Project
             - Doctor of Nursing Practice Project
             - Integrative Doctoral Research Project
             - Praxis Project
             - Public Performance
-            - Capstone Course Work Product
             - Scholarly Paper/Essay (MA/MS)
           example: "Capstone Project"
         program:
