@@ -1382,13 +1382,26 @@ RSpec.describe 'Publishing a work', with_user: :user do
     let(:user) { work_version.work.depositor.user }
 
     context 'with a draft eligible for doi minting' do
-      let(:work) { create :work, work_type: 'dataset', versions_count: 1, has_draft: true, doi: nil }
-      let(:work_version) { work.versions.first }
+      context 'when data and code pathway' do
+        let(:work) { create :work, work_type: 'dataset', versions_count: 1, has_draft: true, doi: nil }
+        let(:work_version) { work.versions.first }
 
-      it 'renders a checkbox requesting a doi be minted upon publish' do
-        visit dashboard_form_publish_path(work_version)
+        it 'renders a checkbox requesting a doi be minted upon publish' do
+          visit dashboard_form_publish_path(work_version)
 
-        expect(page).to have_content(I18n.t('dashboard.form.publish.doi.label'))
+          expect(page).to have_content(I18n.t('dashboard.form.publish.doi.label'))
+        end
+      end
+
+      context 'when grad culminating experiences pathway' do
+        let(:work) { create :work, work_type: 'masters_culminating_experience', versions_count: 1, has_draft: true, doi: nil }
+        let(:work_version) { work.versions.first }
+
+        it 'renders a checkbox requesting a doi be minted upon publish' do
+          visit dashboard_form_publish_path(work_version)
+
+          expect(page).to have_content(I18n.t('dashboard.form.publish.doi.label'))
+        end
       end
     end
 
