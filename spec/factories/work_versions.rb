@@ -84,7 +84,7 @@ FactoryBot.define do
 
     # A draft masters_culminating_experience that has everything needed to pass validations and be published
     trait :grad_culminating_experience_able_to_be_published do
-      masters_culminating_experience
+      grad_culminating_experience
       draft
       with_files
       with_creators

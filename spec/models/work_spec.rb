@@ -223,18 +223,6 @@ RSpec.describe Work, type: :model do
       end
     end
 
-    describe '.masters_culminating_experience' do
-      subject { types.masters_culminating_experience }
-
-      it { is_expected.to eq('masters_culminating_experience') }
-    end
-
-    describe '.professional_doctoral_culminating_experience' do
-      subject { types.professional_doctoral_culminating_experience }
-
-      it { is_expected.to eq('professional_doctoral_culminating_experience') }
-    end
-
     describe '.default' do
       subject { types.default }
 

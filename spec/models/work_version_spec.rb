@@ -508,10 +508,9 @@ RSpec.describe WorkVersion, type: :model do
   end
 
   context 'with a masters_culminating_experience work type' do
-    let(:work_version) { create :work_version, :grad_culminating_experience_able_to_be_published,
-                                work: build(:work, work_type: 'masters_culminating_experience') }
+    let(:work_version) { create :work_version, :grad_culminating_experience_able_to_be_published }
 
-    it 'sets the publisher to Scholarsphere automatically' do
+    it 'sets the publisher to ScholarSphere automatically' do
       work_version.save
       expect(work_version.publisher).to eq []
       work_version.publish!
@@ -520,11 +519,11 @@ RSpec.describe WorkVersion, type: :model do
     end
   end
 
-  context 'with a doctoral_professional_culminating_experience work type' do
+  context 'with a professional_doctoral_culminating_experience work type' do
     let(:work_version) { create :work_version, :grad_culminating_experience_able_to_be_published,
-                                work: build(:work, work_type: 'doctoral_professional_culminating_experience') }
+                                work: build(:work, work_type: 'professional_doctoral_culminating_experience') }
 
-    it 'sets the publisher to Scholarsphere automatically' do
+    it 'sets the publisher to ScholarSphere automatically' do
       work_version.save
       expect(work_version.publisher).to eq []
       work_version.publish!
