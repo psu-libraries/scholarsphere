@@ -375,7 +375,6 @@ class WorkDepositPathway
                  :initial_draft?,
                  :aasm,
                  :update_column,
-                 :draft_curation_requested=,
                  :set_thumbnail_selection,
                  :sub_work_type_dropdown,
                  to: :work_version,

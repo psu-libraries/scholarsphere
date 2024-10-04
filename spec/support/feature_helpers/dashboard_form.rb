@@ -19,6 +19,11 @@ module FeatureHelpers
       select Work::Types.display('dataset'), from: 'work_version_work_attributes_work_type'
     end
 
+    def self.fill_in_minimal_work_details_for_grad_culminating_experiences_draft(work_version_metadata)
+      fill_in 'work_version_title', with: work_version_metadata[:title]
+      select Work::Types.display('masters_culminating_experience'), from: 'work_version_work_attributes_work_type'
+    end
+
     def self.fill_in_common_work_details(work_version_metadata)
       fill_in 'work_version_description', with: work_version_metadata[:description]
       fill_in 'work_version_published_date', with: work_version_metadata[:published_date]
@@ -49,6 +54,15 @@ module FeatureHelpers
       fill_in_common_work_details(work_version_metadata)
       fill_in 'work_version_identifier', with: work_version_metadata[:identifier]
       fill_in 'work_version_publisher_statement', with: work_version_metadata[:publisher_statement]
+    end
+
+    def self.fill_in_grad_culminating_experiences_work_details(work_version_metadata)
+      fill_in 'work_version_description', with: work_version_metadata[:description]
+      fill_in 'work_version_published_date', with: work_version_metadata[:published_date]
+      select work_version_metadata[:sub_work_type], from: 'work_version_sub_work_type'
+      select work_version_metadata[:program], from: 'work_version_program'
+      select work_version_metadata[:degree], from: 'work_version_degree'
+      fill_in 'work_version_keyword', with: work_version_metadata[:keyword]
     end
 
     def self.fill_in_minimal_collection_details(collection_metadata)

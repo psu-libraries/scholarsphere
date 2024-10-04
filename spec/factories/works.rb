@@ -82,6 +82,10 @@ FactoryBot.define do
     work_type { 'article' }
   end
 
+  trait(:masters_culminating_experience) do
+    work_type { 'masters_culminating_experience' }
+  end
+
   trait(:general) do
     work_type { 'audio' }
   end

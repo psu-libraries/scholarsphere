@@ -347,7 +347,7 @@ components:
             - Public Performance
             - Capstone Course Work Product
             - Scholarly Paper/Essay (MA/MS)
-          example: "Capstone project"
+          example: "Capstone Project"
         program:
           type: "string"
           example: "Acoustics"
