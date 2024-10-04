@@ -407,9 +407,10 @@ en:
         finish: Finish
         save_and_exit:
           collection: Save and Exit
-          work_version: Save as Draft & Exit
+          work_version: Save Draft & Exit
           admin_save: Save and Exit
-        request_curation: Request Curation & Save as Draft
+        request_curation: Request Curation
+        request_remediation: Request Accessibility Remediation
         destroy:
           button: Delete
           collection: Collection
@@ -480,10 +481,17 @@ en:
           publishing_details: Publishing Details
         curation:
           header: Request Curation (Optional)
-          request_description: Select 'Request Curation & Save as Draft' below if you would like ScholarSphere curators to review your work assessing its findability, accessibility, interoperability, and reusability prior to publication (recommended).
+          request_description: Select 'Request Curation' below if you would like ScholarSphere curators to review your work assessing its findability, accessibility, interoperability, and reusability prior to publication (recommended). Your work will be saved as a draft while being curated.
           publish_description: Select 'Publish' if you would like to self-submit your deposit to Scholarsphere and make it immediately public. ScholarSphere curators will review your work after publication. Note, because curatorial review occurs after publication, any changes or updates may result in a versioned work.
           curation_requested: Curation has been requested. We will notify you when curation is complete and your work is ready to be published. If you have any questions in the meantime, please contact ScholarSphere curators via our 
           error: There was an error with your curation request. Please try again later or contact us if the problem persists.
+          contact: contact form
+        remediation:
+          header: Request Accessibiility Remediation (Optional)
+          remediation_description: Test Description
+          publish_description: Select 'Publish' if you would like to self-submit your deposit to Scholarsphere and make it immediately public. ScholarSphere curators will review your work after publication. Note, because curatorial review occurs after publication, any changes or updates may result in a versioned work.
+          remediation_requested: Remediation has been requested. We will notify you when accessibility remediation is complete and your work is ready to be published. If you have any questions in the meantime, please contact ScholarSphere curators via our 
+          error: There was an error with your accessibility remediation request. Please try again later or contact us if the problem persists.
           contact: contact form
         doi:
           header: Mint DOI (Optional)

@@ -497,6 +497,7 @@ RSpec.describe Work, type: :model do
           display_work_type_ssi
           doi_tesim
           draft_curation_requested_tesim
+          accessibility_remediation_requested_tesim
           edit_groups_ssim
           edit_users_ssim
           embargoed_until_dtsi

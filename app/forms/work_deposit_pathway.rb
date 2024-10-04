@@ -30,7 +30,13 @@ class WorkDepositPathway
   end
 
   def allows_curation_request?
-    data_and_code? && !@resource.draft_curation_requested
+    data_and_code? && !@resource.draft_curation_requested && !@resource.accessibility_remediation_requested
+  end
+
+  def allows_accessibility_remediation_request?
+    work? && !@resource.accessibility_remediation_requested && !@resource.draft_curation_requested
+    # will need to add on to this once the autochecker is in place
+    # remediation request allowed if any of the files have failed (or did not undergo) validation
   end
 
   def allows_mint_doi_request?
@@ -121,6 +127,7 @@ class WorkDepositPathway
                :update_doi=,
                :work_type,
                :draft_curation_requested,
+               :accessibility_remediation_requested,
                :mint_doi_requested,
                to: :work_version, prefix: false
 
@@ -263,6 +270,7 @@ class WorkDepositPathway
                  :aasm,
                  :update_column,
                  :draft_curation_requested=,
+                 :accessibility_remediation_requested=,
                  :mint_doi_requested=,
                  :set_thumbnail_selection,
                  to: :work_version,
