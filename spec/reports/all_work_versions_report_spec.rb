@@ -32,6 +32,9 @@ RSpec.describe AllWorkVersionsReport do
       based_near
       related_url
       source
+      sub_work_type
+      program
+      degree
       views
     ] }
   end
@@ -98,13 +101,16 @@ RSpec.describe AllWorkVersionsReport do
         expect(row[18]).to eq version.based_near
         expect(row[19]).to eq version.related_url
         expect(row[20]).to eq version.source
+        expect(row[21]).to eq version.sub_work_type
+        expect(row[22]).to eq version.program
+        expect(row[23]).to eq version.degree
       end
 
       # Spot check view statistics
-      expect(yielded_rows[0][21]).to eq 6
-      expect(yielded_rows[1][21]).to eq 0
-      expect(yielded_rows[2][21]).to eq 1
-      expect(yielded_rows[3][21]).to eq 0
+      expect(yielded_rows[0][24]).to eq 6
+      expect(yielded_rows[1][24]).to eq 0
+      expect(yielded_rows[2][24]).to eq 1
+      expect(yielded_rows[3][24]).to eq 0
     end
   end
 end
