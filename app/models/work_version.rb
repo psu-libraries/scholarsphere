@@ -191,6 +191,9 @@ class WorkVersion < ApplicationRecord
                   to: :published,
                   after: Proc.new {
                     work.try(:update_deposit_agreement)
+                    if work.professional_doctoral_culminating_experience? || work.masters_culminating_experience?
+                      set_publisher_as_scholarsphere
+                    end
                     self.reload_on_index = true
                   }
     end
@@ -303,6 +306,10 @@ class WorkVersion < ApplicationRecord
     if work.versions.published.blank? && file_resources.map(&:thumbnail_url).compact.present?
       work.update thumbnail_selection: ThumbnailSelections::AUTO_GENERATED
     end
+  end
+
+  def set_publisher_as_scholarsphere
+    metadata['publisher'] = ['ScholarSphere']
   end
 
   def initial_draft?

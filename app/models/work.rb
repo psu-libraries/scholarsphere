@@ -110,12 +110,6 @@ class Work < ApplicationRecord
       ].freeze
     end
 
-    grad_culminating_experiences.each do |experience|
-      define_singleton_method(experience) do
-        experience
-      end
-    end
-
     def self.default
       'dataset'
     end

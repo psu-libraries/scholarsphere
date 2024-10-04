@@ -88,6 +88,10 @@ RSpec.describe WorkVersion, type: :model do
   end
 
   describe 'states' do
+    subject(:work_version) { build(:work_version, work: work) }
+
+    let(:work) { build(:work) }
+
     it { is_expected.to have_state(:draft) }
     it { is_expected.to transition_from(:draft).to(:published).on_event(:publish) }
     it { is_expected.to transition_from(:published).to(:withdrawn).on_event(:withdraw) }
@@ -500,6 +504,31 @@ RSpec.describe WorkVersion, type: :model do
       work_version.publish!
       expect(work_version).to be_published
       expect(work_version.reload.published_at).to be_present.and be_within(1.second).of(Time.zone.now)
+    end
+  end
+
+  context 'with a work that uses the instrument works deposit pathway' do
+    let(:work_version) { create :work_version, :masters_culminating_experience_able_to_be_published,
+                                work: build(:work, work_type: 'masters_culminating_experience') }
+
+    it 'sets the publisher to Scholarsphere automatically' do
+      work_version.save
+      expect(work_version.publisher).to eq []
+      work_version.publish!
+      expect(work_version).to be_published
+      expect(work_version.reload.publisher).to eq ['ScholarSphere']
+    end
+  end
+
+  context 'with a work that does not use the instrument works deposit pathway' do
+    let(:work_version) { create :work_version, :able_to_be_published, work: build(:work, work_type: 'article') }
+
+    it 'does not edit the publisher field' do
+      work_version.save
+      expect(work_version.publisher).to eq []
+      work_version.publish!
+      expect(work_version).to be_published
+      expect(work_version.reload.publisher).to eq []
     end
   end
 

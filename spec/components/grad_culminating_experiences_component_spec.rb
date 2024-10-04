@@ -3,14 +3,18 @@
 require 'rails_helper'
 
 RSpec.describe GradCulminatingExperiencesDropdownsComponent, type: :component do
-  let(:resource) { instance_double('Resource') }
+  let(:resource) { instance_double('Resource',
+                                   work: work) }
+  let(:work) { instance_double('Work',
+                               masters_culminating_experience?: false,
+                               professional_doctoral_culminating_experience?: false) }
   let(:form) { instance_double('Form') }
   let(:component) { described_class.new(form: form, resource: resource) }
 
   describe '#sub_work_type_dropdown' do
     context 'when work type is professional doctoral culminating experience' do
       before do
-        allow(resource).to receive(:work_type).and_return(Work::Types.professional_doctoral_culminating_experience)
+        allow(work).to receive(:professional_doctoral_culminating_experience?).and_return(true)
       end
 
       it 'returns the correct dropdown options' do
@@ -27,7 +31,7 @@ RSpec.describe GradCulminatingExperiencesDropdownsComponent, type: :component do
 
     context 'when work type is masters culminating experience' do
       before do
-        allow(resource).to receive(:work_type).and_return(Work::Types.masters_culminating_experience)
+        allow(work).to receive(:masters_culminating_experience?).and_return(true)
       end
 
       it 'returns the correct dropdown options' do
@@ -61,7 +65,7 @@ RSpec.describe GradCulminatingExperiencesDropdownsComponent, type: :component do
   describe '#degrees_dropdown' do
     context 'when work type is professional doctoral culminating experience' do
       before do
-        allow(resource).to receive(:work_type).and_return(Work::Types.professional_doctoral_culminating_experience)
+        allow(work).to receive(:professional_doctoral_culminating_experience?).and_return(true)
       end
 
       it 'returns degrees from the file based authority doctoral_degrees' do
@@ -73,7 +77,7 @@ RSpec.describe GradCulminatingExperiencesDropdownsComponent, type: :component do
 
     context 'when work type is masters culminating experience' do
       before do
-        allow(resource).to receive(:work_type).and_return(Work::Types.masters_culminating_experience)
+        allow(work).to receive(:masters_culminating_experience?).and_return(true)
       end
 
       it 'returns degrees from the file based authority masters_degrees' do

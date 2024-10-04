@@ -188,7 +188,7 @@ RSpec.describe WorkDepositPathway do
       book
       conference_proceeding
       masters_culminating_experience
-      professional_dcotoral_culminating_experience
+      professional_doctoral_culminating_experience
       part_of_book
       report
       research_paper
