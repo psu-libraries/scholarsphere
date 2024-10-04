@@ -126,7 +126,6 @@ class WorkDepositPathway
                :update_doi=,
                :work_type,
                :draft_curation_requested,
-               :sub_work_type_dropdown,
                :mint_doi_requested,
                to: :work_version, prefix: false
 
@@ -376,7 +375,6 @@ class WorkDepositPathway
                  :aasm,
                  :update_column,
                  :set_thumbnail_selection,
-                 :sub_work_type_dropdown,
                  to: :work_version,
                  prefix: false
       end
