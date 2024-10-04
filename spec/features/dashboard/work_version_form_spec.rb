@@ -453,7 +453,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
             expect(new_work_version.description).to be_nil
             expect(new_work_version.published_date).to be_nil
-            expect(new_work_version.sub_work_type).to be_nil 
+            expect(new_work_version.sub_work_type).to be_nil
             expect(new_work_version.program).to be_nil
             expect(new_work_version.degree).to be_nil
           end
