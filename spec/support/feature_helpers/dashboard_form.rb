@@ -145,6 +145,13 @@ module FeatureHelpers
       click_on I18n.t!('dashboard.form.actions.confirm.publish')
     end
 
+    def self.request_curation
+      fix_sticky_footer
+      click_on I18n.t!('dashboard.form.actions.request_curation.button')
+      check 'work_version_depositor_agreement'
+      click_on I18n.t!('dashboard.form.actions.confirm.request_curation')
+    end
+
     def self.finish
       fix_sticky_footer
       click_on I18n.t!('dashboard.form.actions.finish.button')
