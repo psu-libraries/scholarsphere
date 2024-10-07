@@ -25,11 +25,7 @@ RSpec.describe WorkDepositPathway do
     %w[
       article
       book
-      capstone_project
       conference_proceeding
-      dissertation
-      masters_culminating_experience
-      masters_thesis
       part_of_book
       report
       research_paper
@@ -89,15 +85,28 @@ RSpec.describe WorkDepositPathway do
     end
   end
 
+  describe '#details_form when the given work version has a grad culminating experiences type' do
+    %w[
+      masters_culminating_experience
+      professional_doctoral_culminating_experience
+    ].each do |t|
+      let(:type) { t }
+
+      context "when the given work version has a work type of #{t}" do
+        it 'returns a WorkDepositPathway::GradCulminatingExperiences::DetailsForm initialized with the work type' do
+          form = pathway.details_form
+          expect(form).to be_a WorkDepositPathway::GradCulminatingExperiences::DetailsForm
+          expect(form.id).to eq 123
+        end
+      end
+    end
+  end
+
   describe '#publish_form when the given work version has a scholarly works type' do
     %w[
       article
       book
-      capstone_project
       conference_proceeding
-      dissertation
-      masters_culminating_experience
-      masters_thesis
       part_of_book
       report
       research_paper
@@ -156,15 +165,30 @@ RSpec.describe WorkDepositPathway do
     end
   end
 
+  describe '#publish_form when the given work version has a grad culminating experiences type' do
+    %w[
+      masters_culminating_experience
+      professional_doctoral_culminating_experience
+    ].each do |t|
+      let(:type) { t }
+
+      context "when the given work version has a work type of #{t}" do
+        it 'returns a WorkDepositPathway::GradCulminatingExperiences::PublishForm initialized with the work type' do
+          form = pathway.publish_form
+          expect(form).to be_a WorkDepositPathway::GradCulminatingExperiences::PublishForm
+          expect(form.id).to eq 123
+        end
+      end
+    end
+  end
+
   describe '#allows_visibility_change? when the given work version does not have a data and code type' do
     %w[
       article
       book
-      capstone_project
       conference_proceeding
-      dissertation
       masters_culminating_experience
-      masters_thesis
+      professional_doctoral_culminating_experience
       part_of_book
       report
       research_paper
@@ -209,11 +233,9 @@ RSpec.describe WorkDepositPathway do
     %w[
       article
       book
-      capstone_project
       conference_proceeding
-      dissertation
       masters_culminating_experience
-      masters_thesis
+      professional_doctoral_culminating_experience
       part_of_book
       report
       research_paper
@@ -314,15 +336,50 @@ RSpec.describe WorkDepositPathway do
       end
     end
 
-    context 'when the given work version does not have a data and code type' do
+    context 'when the given work version has a grad culminating experiences type' do
+      %w[
+        masters_culminating_experience
+        professional_doctoral_culminating_experience
+      ].each do |t|
+        let(:type) { t }
+
+        context 'when the associated work does not have a doi' do
+          let(:doi_blank) { true }
+
+          context 'when doi minting is not already in progress' do
+            before do
+              allow_any_instance_of(DoiMintingStatus).to receive(:blank?).and_return(true)
+            end
+
+            it 'returns true' do
+              expect(pathway.allows_mint_doi_request?).to eq true
+            end
+          end
+
+          context 'when doi minting is already in progress' do
+            before do
+              allow_any_instance_of(DoiMintingStatus).to receive(:blank?).and_return(false)
+            end
+
+            it 'returns false' do
+              expect(pathway.allows_mint_doi_request?).to eq false
+            end
+          end
+        end
+
+        context 'when the associated work has a doi' do
+          it 'returns false' do
+            expect(pathway.allows_mint_doi_request?).to eq false
+          end
+        end
+      end
+    end
+
+    context 'when the given work version does not have a data and code or grad culminating experience type' do
       %w[
         article
         book
-        capstone_project
         conference_proceeding
-        dissertation
-        masters_culminating_experience
-        masters_thesis
         part_of_book
         report
         research_paper
@@ -350,11 +407,9 @@ RSpec.describe WorkDepositPathway do
     %w[
       article
       book
-      capstone_project
       conference_proceeding
-      dissertation
       masters_culminating_experience
-      masters_thesis
+      professional_doctoral_culminating_experience
       part_of_book
       report
       research_paper
@@ -394,11 +449,9 @@ RSpec.describe WorkDepositPathway do
     %w[
       article
       book
-      capstone_project
       conference_proceeding
-      dissertation
       masters_culminating_experience
-      masters_thesis
+      professional_doctoral_culminating_experience
       part_of_book
       report
       research_paper
@@ -434,6 +487,53 @@ RSpec.describe WorkDepositPathway do
       context "when the given work version has a work type of #{t}" do
         it 'returns true' do
           expect(pathway.data_and_code?).to eq true
+        end
+      end
+    end
+  end
+
+  describe '#grad_culminating_experiences? when the given work version does not have a grad culminating experiences type' do
+    %w[
+      article
+      book
+      conference_proceeding
+      dataset
+      part_of_book
+      report
+      research_paper
+      thesis
+      audio
+      image
+      journal
+      map_or_cartographic_material
+      other
+      poster
+      presentation
+      project
+      software_or_program_code
+      unspecified
+      video
+    ].each do |t|
+      let(:type) { t }
+
+      context "when the given work version has a work type of #{t}" do
+        it 'returns false' do
+          expect(pathway.grad_culminating_experiences?).to eq false
+        end
+      end
+    end
+  end
+
+  describe '#grad_culminating_experiences? when the given work version has a grad culminating experiences type' do
+    %w[
+      masters_culminating_experience
+      professional_doctoral_culminating_experience
+    ].each do |t|
+      let(:type) { t }
+
+      context "when the given work version has a work type of #{t}" do
+        it 'returns true' do
+          expect(pathway.grad_culminating_experiences?).to eq true
         end
       end
     end

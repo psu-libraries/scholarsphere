@@ -79,6 +79,9 @@ en:
         visibility: Access
         visibility_badge: Access
         deposited_at: Deposited
+        sub_work_type: Sub Work Type
+        program: Program
+        degree: Degree
       user:
         admin_enabled: Administrative privileges enabled
         opt_in_stats_email: Receive monthly report on downloads and views

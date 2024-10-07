@@ -31,7 +31,10 @@ class WorkVersion < ApplicationRecord
                  identifier: [:string, array: true, default: []],
                  based_near: [:string, array: true, default: []],
                  related_url: [:string, array: true, default: []],
-                 source: [:string, array: true, default: []]
+                 source: [:string, array: true, default: []],
+                 sub_work_type: :string,
+                 program: :string,
+                 degree: :string
 
   belongs_to :work,
              inverse_of: :versions
@@ -188,6 +191,9 @@ class WorkVersion < ApplicationRecord
                   to: :published,
                   after: Proc.new {
                     work.try(:update_deposit_agreement)
+                    if work.professional_doctoral_culminating_experience? || work.masters_culminating_experience?
+                      set_publisher_as_scholarsphere
+                    end
                     self.reload_on_index = true
                   }
     end
@@ -227,6 +233,9 @@ class WorkVersion < ApplicationRecord
     rights
     subtitle
     version_name
+    sub_work_type
+    program
+    degree
   ].each do |field|
     define_method "#{field}=" do |val|
       super(val.presence)
@@ -297,6 +306,10 @@ class WorkVersion < ApplicationRecord
     if work.versions.published.blank? && file_resources.map(&:thumbnail_url).compact.present?
       work.update thumbnail_selection: ThumbnailSelections::AUTO_GENERATED
     end
+  end
+
+  def set_publisher_as_scholarsphere
+    metadata['publisher'] = ['ScholarSphere']
   end
 
   def initial_draft?

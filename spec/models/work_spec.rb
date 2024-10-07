@@ -127,6 +127,7 @@ RSpec.describe Work, type: :model do
           'map_or_cartographic_material',
           'masters_culminating_experience',
           'masters_thesis',
+          'professional_doctoral_culminating_experience',
           'other',
           'part_of_book',
           'poster',
@@ -179,7 +180,6 @@ RSpec.describe Work, type: :model do
           'capstone_project',
           'conference_proceeding',
           'dissertation',
-          'masters_culminating_experience',
           'masters_thesis',
           'part_of_book',
           'report',
@@ -208,6 +208,21 @@ RSpec.describe Work, type: :model do
       end
     end
 
+    describe '.grad_culminating_experiences' do
+      subject(:grad_culminating_experiences) { types.grad_culminating_experiences }
+
+      specify do
+        expect(grad_culminating_experiences).to contain_exactly(
+          'masters_culminating_experience',
+          'professional_doctoral_culminating_experience'
+        )
+      end
+
+      specify do
+        expect(grad_culminating_experiences).to be_frozen
+      end
+    end
+
     describe '.default' do
       subject { types.default }
 
@@ -229,8 +244,11 @@ RSpec.describe Work, type: :model do
     describe '.options_for_select_box' do
       subject(:options) { types.options_for_select_box }
 
-      it { is_expected.to include(['Dataset', 'dataset'], ['Part Of Book', 'part_of_book']) }
-      it { is_expected.not_to include(['Unspecified', 'unspecified']) }
+      it { expect(options).to include(['Dataset', 'dataset'],
+                                      ['Part Of Book', 'part_of_book'],
+                                      ['Masters Culminating Experience', 'masters_culminating_experience']) }
+
+      it { is_expected.not_to include(['Unspecified', 'unspecified'], ['Masters Thesis', 'masters_thesis']) }
     end
 
     describe '.display' do
@@ -288,6 +306,7 @@ RSpec.describe Work, type: :model do
           part_of_book: 'part_of_book',
           poster: 'poster',
           presentation: 'presentation',
+          professional_doctoral_culminating_experience: 'professional_doctoral_culminating_experience',
           project: 'project',
           report: 'report',
           research_paper: 'research_paper',
@@ -540,6 +559,9 @@ RSpec.describe Work, type: :model do
           removed_at_dtsi
           withdrawn_at_dtsi
           imported_metadata_from_rmd_tesim
+          degree_tesim
+          program_tesim
+          sub_work_type_tesim
         )
       end
 

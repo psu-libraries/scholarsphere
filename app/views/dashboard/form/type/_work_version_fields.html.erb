@@ -8,6 +8,9 @@
   <%= render 'form_fields/text', form: form, attribute: :title, required: true %>
 
   <%= form.fields_for :work do |work_form| %>
-    <%= render 'form_fields/select', form: work_form, attribute: :work_type, options_for_select: Work::Types.options_for_select_box, disabled: local_assigns[:work_type_disabled] %>
+    <%= render 'form_fields/select', form: work_form,
+                                     attribute: :work_type,
+                                     options_for_select: Work::Types.options_for_select_box,
+                                     disabled: local_assigns[:work_type_disabled] %>
   <% end %>
 </div>

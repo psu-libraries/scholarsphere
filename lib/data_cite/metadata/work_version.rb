@@ -4,6 +4,8 @@ module DataCite
   module Metadata
     class WorkVersion < Base
       RESOURCE_TYPES = {
+        # TODO: Remove capstone_project, masters_thesis, and dissertation
+        # once they are cleared from the database
         'article' => 'Text',
         'audio' => 'Sound',
         'book' => 'Text',
@@ -20,6 +22,7 @@ module DataCite
         'part_of_book' => 'Text',
         'poster' => 'Audiovisual',
         'presentation' => 'Text',
+        'professional_doctoral_culminating_experience' => 'Text',
         'project' => 'Other',
         'report' => 'Text',
         'research_paper' => 'Text',

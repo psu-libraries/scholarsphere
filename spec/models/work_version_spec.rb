@@ -41,6 +41,9 @@ RSpec.describe WorkVersion, type: :model do
     it { is_expected.to have_jsonb_accessor(:based_near).of_type(:string).is_array.with_default([]) }
     it { is_expected.to have_jsonb_accessor(:related_url).of_type(:string).is_array.with_default([]) }
     it { is_expected.to have_jsonb_accessor(:source).of_type(:string).is_array.with_default([]) }
+    it { is_expected.to have_jsonb_accessor(:sub_work_type).of_type(:string) }
+    it { is_expected.to have_jsonb_accessor(:program).of_type(:string) }
+    it { is_expected.to have_jsonb_accessor(:degree).of_type(:string) }
   end
 
   describe 'factory' do
@@ -85,6 +88,10 @@ RSpec.describe WorkVersion, type: :model do
   end
 
   describe 'states' do
+    subject(:work_version) { build(:work_version, work: work) }
+
+    let(:work) { build(:work) }
+
     it { is_expected.to have_state(:draft) }
     it { is_expected.to transition_from(:draft).to(:published).on_event(:publish) }
     it { is_expected.to transition_from(:published).to(:withdrawn).on_event(:withdraw) }
@@ -497,6 +504,43 @@ RSpec.describe WorkVersion, type: :model do
       work_version.publish!
       expect(work_version).to be_published
       expect(work_version.reload.published_at).to be_present.and be_within(1.second).of(Time.zone.now)
+    end
+  end
+
+  context 'with a masters_culminating_experience work type' do
+    let(:work_version) { create :work_version, :grad_culminating_experience_able_to_be_published }
+
+    it 'sets the publisher to ScholarSphere automatically' do
+      work_version.save
+      expect(work_version.publisher).to eq []
+      work_version.publish!
+      expect(work_version).to be_published
+      expect(work_version.reload.publisher).to eq ['ScholarSphere']
+    end
+  end
+
+  context 'with a professional_doctoral_culminating_experience work type' do
+    let(:work_version) { create :work_version, :grad_culminating_experience_able_to_be_published,
+                                work: build(:work, work_type: 'professional_doctoral_culminating_experience') }
+
+    it 'sets the publisher to ScholarSphere automatically' do
+      work_version.save
+      expect(work_version.publisher).to eq []
+      work_version.publish!
+      expect(work_version).to be_published
+      expect(work_version.reload.publisher).to eq ['ScholarSphere']
+    end
+  end
+
+  context 'with a work that is not a masters_culminating_experience or a professional_doctoral_culminating_experience' do
+    let(:work_version) { create :work_version, :able_to_be_published, work: build(:work, work_type: 'article') }
+
+    it 'does not edit the publisher field' do
+      work_version.save
+      expect(work_version.publisher).to eq []
+      work_version.publish!
+      expect(work_version).to be_published
+      expect(work_version.reload.publisher).to eq []
     end
   end
 

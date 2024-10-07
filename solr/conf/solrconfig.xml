@@ -59,6 +59,9 @@
         subtitle_tesim
         title_tesim
         work_type_ss
+        degree_tesim
+        program_tesim
+        sub_work_type_tesim
       </str>
       <str name="pf">
         all_text_timv^10
