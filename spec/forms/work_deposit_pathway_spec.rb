@@ -348,57 +348,69 @@ RSpec.describe WorkDepositPathway do
     end
   end
 
-  describe '#allows_accessibility_remediation_request? when a work type' do
-    %w[
-      article
-      book
-      capstone_project
-      conference_proceeding
-      dissertation
-      masters_culminating_experience
-      masters_thesis
-      part_of_book
-      report
-      research_paper
-      thesis
-      audio
-      image
-      journal
-      map_or_cartographic_material
-      other
-      poster
-      presentation
-      project
-      unspecified
-      video
-      dataset
-      software_or_program_code
-    ].each do |t|
-      let(:type) { t }
+  describe '#allows_accessibility_remediation_request?' do
+    context 'when in an allowable pathway' do
+      %w[
+        article
+        book
+        capstone_project
+        conference_proceeding
+        dissertation
+        masters_culminating_experience
+        masters_thesis
+        part_of_book
+        report
+        research_paper
+        thesis
+        audio
+        image
+        journal
+        map_or_cartographic_material
+        other
+        poster
+        presentation
+        project
+        unspecified
+        video
+      ].each do |t|
+        let(:type) { t }
 
-      context "when the given work version has a work type of #{t}" do
-        context 'when remediation has been requested for the given work version' do
-          let(:accessibility_remediation_requested) { true }
-
-          it 'returns false' do
-            expect(pathway.allows_accessibility_remediation_request?).to eq false
-          end
-        end
-
-        context 'when remediation has not been requested for the given work version' do
-          context 'when curation has been requested for the given work version' do
-            let(:draft_curation_requested) { true }
+        context "when the given work version has a work type of #{t}" do
+          context 'when remediation has been requested for the given work version' do
+            let(:accessibility_remediation_requested) { true }
 
             it 'returns false' do
               expect(pathway.allows_accessibility_remediation_request?).to eq false
             end
           end
 
-          context 'when curation has not been requested for the given work version' do
-            it 'returns true' do
-              expect(pathway.allows_accessibility_remediation_request?).to eq true
+          context 'when remediation has not been requested for the given work version' do
+            context 'when curation has been requested for the given work version' do
+              let(:draft_curation_requested) { true }
+
+              it 'returns false' do
+                expect(pathway.allows_accessibility_remediation_request?).to eq false
+              end
+            end
+
+            context 'when curation has not been requested for the given work version' do
+              it 'returns true' do
+                expect(pathway.allows_accessibility_remediation_request?).to eq true
+              end
             end
           end
+        end
+      end
+    end
+
+    context 'when in data and code pathway' do
+      %w[
+        dataset
+        software_or_program_code
+      ].each do |t|
+        let(:type) { t }
+        it 'returns false' do
+          expect(pathway.allows_accessibility_remediation_request?).to eq false
         end
       end
     end
