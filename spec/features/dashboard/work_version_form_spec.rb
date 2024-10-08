@@ -1106,7 +1106,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
   describe 'Requesting curation', js: true do
     let(:user) { work_version.work.depositor.user }
-    let(:request_description) { "Select 'Request Curation' below if you would like ScholarSphere curators to review your work assessing its findability, accessibility, interoperability, and reusability prior to publication (recommended)." }
+    let(:request_description) { 'Recommended: Select ‘Request Curation’ below to have the ScholarSphere Curation Team review your work ensuring its findability, interoperability, accessibility, and reusability prior to publication. The curatorial review will focus on enhancing metadata quality, recommending improvements for deposit interoperability and reusability, and remediating files as necessary for accessibility. While under review, your work will remain saved as a draft. Once approved by the curator, the work will be published, and if applicable, a DOI will be minted.' }
     let(:publish_description) { "Select 'Publish' if you would like to self-submit your deposit to Scholarsphere and make it immediately public. ScholarSphere curators will review your work after publication. Note, because curatorial review occurs after publication, any changes or updates may result in a versioned work." }
 
     context 'with a draft eligible for curation request' do
@@ -1244,7 +1244,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
   describe 'Requesting accessibility remediation', js: true do
     let(:user) { work_version.work.depositor.user }
-    let(:request_description) { 'Test Description' }
+    let(:request_description) { 'Recommended: Select ‘Request Accessibility Remediation’ below to have the Adaptive Technologies Team review and improve the accessibility of your work before publication. While your work is being remediated it will remain saved as a draft and will be published upon completion of this work.' }
     let(:publish_description) { "Select 'Publish' if you would like to self-submit your deposit to Scholarsphere and make it immediately public. ScholarSphere curators will review your work after publication. Note, because curatorial review occurs after publication, any changes or updates may result in a versioned work." }
 
     context 'with a draft eligible for remediation request' do
