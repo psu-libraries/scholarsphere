@@ -1248,7 +1248,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
     let(:publish_description) { "Select 'Publish' if you would like to self-submit your deposit to Scholarsphere and make it immediately public. ScholarSphere curators will review your work after publication. Note, because curatorial review occurs after publication, any changes or updates may result in a versioned work." }
 
     context 'with a draft eligible for remediation request' do
-      let(:work_version) { create :work_version, :draft, accessibility_remediation_requested: nil }
+      let(:work_version) { create :work_version, :article, :draft, accessibility_remediation_requested: nil }
 
       it 'renders buttons for requesting remediation and publish and shows helper text explaing requesting curation' do
         visit dashboard_form_publish_path(work_version)
@@ -1261,7 +1261,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       end
     end
 
-    context 'with a draft not eligible for remediation request' do
+    context 'with a draft that already has remediation request' do
       let(:work_version) { create :work_version, :draft, draft_curation_requested: true }
 
       it 'does not render a button for requesting remediation does not show helper text about requesting remediation' do
@@ -1272,8 +1272,19 @@ RSpec.describe 'Publishing a work', with_user: :user do
       end
     end
 
+    context 'with a draft work type that is not eligible for remediation request' do
+      let(:work_version) { create :work_version, :dataset_able_to_be_published }
+
+      it 'does not render a button for requesting remediation does not show helper text about requesting remediation' do
+        visit dashboard_form_publish_path(work_version)
+
+        expect(page).not_to have_button('Request Accessibility Remediation')
+        expect(page).not_to have_content(request_description)
+      end
+    end
+
     context 'with a draft that already has remediation requested' do
-      let(:work_version) { create :work_version, :dataset_able_to_be_published, accessibility_remediation_requested: true }
+      let(:work_version) { create :work_version, :article, :able_to_be_published, accessibility_remediation_requested: true }
       let(:remediation_requested) { 'Remediation has been requested. We will notify you when accessibility remediation is complete and your work is ready to be published. If you have any questions in the meantime, please contact ScholarSphere curators via our ' }
 
       context 'when user is an admin' do
@@ -1305,7 +1316,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
 
     context 'when remediation is successfully requested' do
-      let(:work_version) { create :work_version, :dataset_able_to_be_published, accessibility_remediation_requested: nil }
+      let(:work_version) { create :work_version, :article, :able_to_be_published, accessibility_remediation_requested: nil }
 
       before do
         allow(CurationTaskClient).to receive(:send_curation).with(work_version.id, remediation_requested: true, requested: false)
@@ -1326,7 +1337,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
 
     context 'when an error occurs within the curation task exporter' do
-      let(:work_version) { create :work_version, :dataset_able_to_be_published, accessibility_remediation_requested: nil }
+      let(:work_version) { create :work_version, :article, :able_to_be_published, accessibility_remediation_requested: nil }
 
       before { allow(CurationTaskClient).to receive(:send_curation).with(work_version.id, remediation_requested: true, requested: false).and_raise(CurationTaskClient::CurationError) }
 
@@ -1350,7 +1361,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
 
     context 'when there is a validation error' do
-      let(:work_version) { create :work_version, :dataset_able_to_be_published, accessibility_remediation_requested: nil }
+      let(:work_version) { create :work_version, :article, :able_to_be_published, accessibility_remediation_requested: nil }
 
       before { allow(CurationTaskClient).to receive(:send_curation).with(work_version.id, remediation_requested: true, requested: false) }
 
