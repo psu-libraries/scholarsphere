@@ -4,8 +4,9 @@ class LibanswersApiService
   class LibanswersApiError < StandardError; end
   attr_reader :work
 
-  def initialize(work_id)
+  def initialize(work_id, ticket_type)
     @work = Work.find(work_id)
+    @ticket_type = ticket_type
   end
 
   def admin_create_curation_ticket
@@ -36,7 +37,8 @@ class LibanswersApiService
     end
 
     def subject
-      "ScholarSphere Deposit Curation: #{work.latest_version.title}"
+      @ticket_type == 'curation' ? "ScholarSphere Deposit Curation: #{work.latest_version.title}" :
+      "ScholarSphere Deposit Accessibility Curation: #{work.latest_version.title}"
     end
 
     def oauth_token
@@ -62,6 +64,6 @@ class LibanswersApiService
     end
 
     def scholarsphere_queue_id
-      '5477'
+      @ticket_type == 'curation' ? '5477' : 'TODO'
     end
 end
