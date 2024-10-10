@@ -853,4 +853,38 @@ RSpec.describe WorkVersion, type: :model do
       end
     end
   end
+
+  describe '#needs_accessibility_review' do
+    context 'when version is not the latest published version' do
+      let(:wv) { create(:work_version, :published, accessibility_remediation_requested: requested) }
+      let(:requested) { false }
+      let(:wv2) { create(:work_version, :published) }
+      let(:work) { create(:work) }
+
+      it 'returns false' do
+        work.versions << [wv, wv2]
+        expect(wv.needs_accessibility_review).to be false
+      end
+    end
+
+    context 'when version is the latest published version' do
+      let(:wv) { create(:work_version, :published, accessibility_remediation_requested: requested) }
+      let(:work) { create(:work, versions: [wv]) }
+      let(:requested) { false }
+
+      context 'when remediation has not been requested' do
+        it 'returns true' do
+          expect(wv.needs_accessibility_review).to be true
+        end
+      end
+
+      context 'when remediation has been requested' do
+        let(:requested) { true }
+
+        it 'returns false' do
+          expect(wv.needs_accessibility_review).to be false
+        end
+      end
+    end
+  end
 end
