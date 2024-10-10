@@ -1,12 +1,13 @@
 <dialog id="hidden-publish-dialog" data-target="publishing-check.dialogBox">
   <div class="form-check">
     <div data-target="publishing-check.publishText">
-      <h4>Are you sure you want to publish?</h4>
-      <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      <h4>Ready to Publish?</h4>
+      <p>By selecting Publish, you are making your work publicly accessible. This means it will be broadly discoverable and downloadable (unless an embargo is applied). Once a version is published, it cannot be modified. However, you can create a new version to make changes, and the new version will supersede previous ones. Older versions will remain accessible unless they are specifically withdrawn or deleted by repository managers upon reasonable depositor request.</p>
+      <p>If you are ready to proceed, please confirm the acknowledgments below:</p>
     </div>
     <div data-target="publishing-check.curationText">
-      <h4>Are you sure you want to submit for curation?</h4>
-      <p>Sloop John B</p>
+      <h4>Ready to Send for Curation?</h4>
+      <p>By selecting Request Curation & Save as Draft, your draft work will be submitted to the ScholarSphere Curation Team for review. Once approved by a curator, the work will be published, and if applicable, a DOI will be minted.</p>
     </div>
     <div class="form-group mt-2">
       <div class="keyline keyline--left">
@@ -14,16 +15,46 @@
           <%= WorkVersion.human_attribute_name(:depositor_agreement) %>
         </h2>
       </div>
+      <div>
       <%= f.check_box :depositor_agreement,
                         required: true,
                         data: { target: 'publishing-check.agreementCheckbox' },
                         class: 'form-check-input' %>
-
                         
       <%= f.label :depositor_agreement, class: 'form-check-label' do %>
           <%= t('dashboard.work_versions.publish.agreement_preamble') %>
           <%= link_to t('dashboard.work_versions.publish.agreement_link'), agreement_path, target: :_blank, rel: 'noopener' %>.
       <% end %>
+      </div>
+
+      <div>
+        <%= f.check_box :psu_community_agreement,
+        data: { target: 'publishing-check.psuCommunityCheckbox' },
+        class: 'form-check-input' %>
+        
+        <%= f.label :psu_community_agreement, class: 'form-check-label' do %>
+        <%= t('dashboard.work_versions.publish.acknowledgements.psu_community') %>
+        <% end %>
+      </div>
+
+      <div>
+        <%= f.check_box :accessibility_agreement,
+        data: { target: 'publishing-check.accessibilityCheckbox' },
+        class: 'form-check-input' %>
+
+        <%= f.label :accessibility_agreement, class: 'form-check-label' do %>
+          <%= t('dashboard.work_versions.publish.acknowledgements.accessibility').html_safe %>
+        <% end %>
+      </div>
+      <div>
+        <%= f.check_box :sensitive_info_agreement,
+        data: { target: 'publishing-check.sensitiveInfoCheckbox' },
+        class: 'form-check-input' %>
+
+        <%= f.label :sensitive_info_agreement, class: 'form-check-label' do %>
+        <%= t('dashboard.work_versions.publish.acknowledgements.sensitive_info').html_safe %>
+        <% end %>
+      </div>
     </div>
 
   </div>
@@ -33,6 +64,6 @@
       class: 'btn btn-primary btn--rounded d-none' %>
       <%= f.submit t('dashboard.form.actions.confirm.request_curation'), name: 'request_curation',
       data: {target: "publishing-check.curationButton"}, class: 'btn btn-primary btn--rounded d-none' %>
-    <button type="button" class='btn btn-outline-dark btn--rounded ml-2' data-action="publishing-check#closeDialog"><%= t('dashboard.form.actions.confirm.cancel') %></button>
+    <button class='btn btn-outline-dark btn--rounded ml-2 z' type="button" data-toggle="tooltip" data-placement="top" data-container="body" data-action="publishing-check#closeDialog"><%= t('dashboard.form.actions.confirm.cancel') %></button>
   </div>
 </dialog>

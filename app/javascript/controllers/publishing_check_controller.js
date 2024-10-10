@@ -1,10 +1,28 @@
 import { Controller } from 'stimulus'
 
 export default class extends Controller {
-  static targets = ['dialogBox', 'agreementCheckbox', 'publishButton', 'curationButton', 'publishText', 'curationText']
+  static targets = ['dialogBox',
+    'agreementCheckbox',
+    'psuCommunityCheckbox',
+    'accessibilityCheckbox',
+    'sensitiveInfoCheckbox',
+    'publishButton',
+    'curationButton',
+    'publishText',
+    'curationText']
+
+  checkBoxTargets = [this.agreementCheckboxTarget,
+    this.psuCommunityCheckboxTarget,
+    this.accessibilityCheckboxTarget,
+    this.sensitiveInfoCheckboxTarget]
 
   connect () {
-    this.agreementCheckboxTarget.removeAttribute('required');
+    // We only want to require the checkbox if the dialog is open.
+    if (this.checkBoxTargets.length > 0) {
+      for (let checkbox of this.checkBoxTargets) {
+        checkbox.removeAttribute('required');
+      }
+    }
   }
 
 
@@ -24,13 +42,19 @@ export default class extends Controller {
       this.publishTextTarget.classList.add('d-none');
     }
     this.dialogBoxTarget.showModal();
+    $('[data-toggle="tooltip"]').tooltip()
     // We only want to require the checkbox if the dialog is open.
     // If the checkbox is required when the dialog is closed, the Save and Exit button will not work.
-    this.agreementCheckboxTarget.setAttribute('required', 'required');
+    for (let checkbox of this.checkBoxTargets) {
+      checkbox.setAttribute('required', 'required');
+    }
 }
 
   closeDialog () {
+    for (let checkbox of this.checkBoxTargets) {
+      checkbox.removeAttribute('required');
+    } 
+
     this.dialogBoxTarget.close();
-    this.agreementCheckboxTarget.removeAttribute('required');
   }
 }

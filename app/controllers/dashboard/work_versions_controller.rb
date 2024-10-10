@@ -171,7 +171,10 @@ module Dashboard
         params
           .require(:work_version)
           .permit(
-            :depositor_agreement
+            :depositor_agreement,
+            :psu_community_agreement,
+            :accessibility_agreement,
+            :sensitive_info_agreement
           )
       end
   end

@@ -417,9 +417,9 @@ en:
           publish: Confirm publish
           request_curation: Confirm curation
           cancel: Cancel
+          cancel_tooltip: Return to the Review & Publish Page.
         finish: 
           button: Finish
-          tooltip: Finish this yoo
         save_and_exit:
           collection: Save and Exit
           work_version: Save as Draft & Exit
@@ -427,7 +427,7 @@ en:
           tooltip: Save your draft. It will be accessible via your dashboard and visible only to you and those with edit access.
         request_curation: 
           button: Request Curation & Save as Draft
-          tooltip: yoo doggie
+          tooltip: Save your work as a draft and submit it for curatorial review.
         destroy:
           button: Delete
           collection: Collection
@@ -461,7 +461,6 @@ en:
           format: Every work must include a README file labeled as “README” (e.g., README.txt, readme.md, etc.). This README file should contain essential information about your uploaded files, such as a brief description, instructions, or any other pertinent details. If you need assistance or guidance, please refer to the
           zip: If you are uploading a compressed file (e.g., .zip, .tar), ensure that the README file is a separate file outside the zipped files.
           documentation: ' ScholarSphere README template'
-
       contributors:
         edit:
           badge: Creator
@@ -547,6 +546,10 @@ en:
         agreement_preamble: I have read and agree to
         agreement_link: the deposit agreement
         error_message: "%{error} prohibited this work from being saved:"
+        acknowledgements:
+          psu_community: I confirm that this deposit was produced or sponsored by at least one member of the Penn State community.
+          accessibility: I confirm that this deposit meets the requirements of <a href="https://policy.psu.edu/policies/ad69" target=_blank, rel=noopener>Penn State Policy AD69 Accessibility of Electronic and Information Technology</a> or that I will actively work with curators to ensure compliance.
+          sensitive_info: I confirm that the deposit does NOT contain information with a Sensitive Information Classification of Moderate (Level 2) or higher according to <a href="https://policy.psu.edu/policies/ad95" target=_blank>Penn State Policy AD95 Information Assurance and IT Security.</a>
     file_list:
       edit:
         heading: File Listing

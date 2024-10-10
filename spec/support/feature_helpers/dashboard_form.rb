@@ -142,6 +142,9 @@ module FeatureHelpers
       fix_sticky_footer
       click_on I18n.t!('dashboard.form.actions.publish.button')
       check 'work_version_depositor_agreement'
+      check 'work_version_psu_community_agreement'
+      check 'work_version_accessibility_agreement'
+      check 'work_version_sensitive_info_agreement'
       click_on I18n.t!('dashboard.form.actions.confirm.publish')
     end
 
@@ -149,6 +152,9 @@ module FeatureHelpers
       fix_sticky_footer
       click_on I18n.t!('dashboard.form.actions.request_curation.button')
       check 'work_version_depositor_agreement'
+      check 'work_version_psu_community_agreement'
+      check 'work_version_accessibility_agreement'
+      check 'work_version_sensitive_info_agreement'
       click_on I18n.t!('dashboard.form.actions.confirm.request_curation')
     end
 
