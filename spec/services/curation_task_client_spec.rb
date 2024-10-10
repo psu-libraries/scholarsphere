@@ -56,6 +56,21 @@ RSpec.describe CurationTaskClient do
       end
     end
 
+    context 'when accessibility remediation is requested' do
+      let(:embargo) { nil }
+      let(:labels) { ['Accessibility Remediation Requested'] }
+
+      it 'creates a submission record in Airtable' do
+        expect(Submission).to receive(:create).with(expected_record)
+
+        described_class.send_curation(work_version.id, remediation_requested: true)
+
+        work_version.reload
+
+        expect(work_version.sent_for_curation_at).to be_within(1.minute).of(Time.zone.now)
+      end
+    end
+
     context 'when curation was not requested' do
       let(:embargo) { nil }
       let(:labels) { [] }

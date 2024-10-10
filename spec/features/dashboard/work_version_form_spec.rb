@@ -492,7 +492,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         expect(page).to have_current_path(resource_path(work_version.uuid))
         expect(Work.count).to eq(initial_work_count)
-        expect(page).not_to have_button('Request Curation & Save as Draft')
+        expect(page).not_to have_button('Request Curation')
 
         work_version.reload
         expect(work_version.title).to eq metadata[:title]
@@ -573,7 +573,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
           expect(page).to have_content("Access Account: #{actor.psu_id}".upcase)
         end
 
-        expect(page).not_to have_button('Request Curation & Save as Draft')
+        expect(page).not_to have_button('Request Curation')
 
         fill_in 'work_version_contributor', with: metadata[:contributor]
 
@@ -852,7 +852,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         end
       end
 
-      expect(page).not_to have_button('Request Curation & Save as Draft')
+      expect(page).not_to have_button('Request Curation')
     end
 
     context 'when a work is in the data & code pathway' do
@@ -1241,7 +1241,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
   describe 'Requesting curation', js: true do
     let(:user) { work_version.work.depositor.user }
-    let(:request_description) { "Select 'Request Curation & Save as Draft' below if you would like ScholarSphere curators to review your work assessing its findability, accessibility, interoperability, and reusability prior to publication (recommended)." }
+    let(:request_description) { 'Recommended: Select ‘Request Curation’ below to have the ScholarSphere Curation Team review your work ensuring its findability, interoperability, accessibility, and reusability prior to publication. The curatorial review will focus on enhancing metadata quality, recommending improvements for deposit interoperability and reusability, and remediating files as necessary for accessibility. While under review, your work will remain saved as a draft. Once approved by the curator, the work will be published, and if applicable, a DOI will be minted.' }
     let(:publish_description) { "Select 'Publish' if you would like to self-submit your deposit to Scholarsphere and make it immediately public. ScholarSphere curators will review your work after publication. Note, because curatorial review occurs after publication, any changes or updates may result in a versioned work." }
 
     context 'with a draft eligible for curation request' do
@@ -1250,7 +1250,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       it 'renders buttons for requesting curation and publish and shows helper text explaing requesting curation' do
         visit dashboard_form_publish_path(work_version)
 
-        expect(page).to have_button('Request Curation & Save as Draft')
+        expect(page).to have_button('Request Curation')
         expect(page).to have_button('Publish')
 
         expect(page).to have_content(request_description)
@@ -1265,7 +1265,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       it 'does not render a button for requesting curation but does render publish and does not show helper text about requesting curation' do
         visit dashboard_form_publish_path(work_version)
 
-        expect(page).not_to have_button('Request Curation & Save as Draft')
+        expect(page).not_to have_button('Request Curation')
         expect(page).to have_button('Publish')
         expect(page).not_to have_content(request_description)
       end
@@ -1294,7 +1294,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         it 'does not render buttons for requesting curation or publish & shows text that curation has been requested' do
           visit dashboard_form_publish_path(work_version)
 
-          expect(page).not_to have_button('Request Curation & Save as Draft')
+          expect(page).not_to have_button('Request Curation')
           expect(page).not_to have_button('Publish')
           expect(page).to have_content(curation_requested)
           expect(page).to have_link('contact form')
@@ -1306,7 +1306,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       let(:work_version) { create :work_version, :dataset_able_to_be_published, draft_curation_requested: nil }
 
       before do
-        allow(CurationTaskClient).to receive(:send_curation).with(work_version.id, requested: true)
+        allow(CurationTaskClient).to receive(:send_curation).with(work_version.id, requested: true, remediation_requested: false)
       end
 
       it 'creates a Submission' do
@@ -1314,11 +1314,11 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         check 'I have read and agree to the deposit agreement.'
 
-        click_on 'Request Curation & Save as Draft'
+        click_on 'Request Curation'
 
         work_version.reload
 
-        expect(CurationTaskClient).to have_received(:send_curation).with(work_version.id, requested: true)
+        expect(CurationTaskClient).to have_received(:send_curation).with(work_version.id, requested: true, remediation_requested: false)
         expect(work_version.draft_curation_requested).to be true
       end
     end
@@ -1326,7 +1326,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
     context 'when an error occurs within the curation exporter' do
       let(:work_version) { create :work_version, :dataset_able_to_be_published, draft_curation_requested: nil }
 
-      before { allow(CurationTaskClient).to receive(:send_curation).with(work_version.id, requested: true).and_raise(CurationTaskClient::CurationError) }
+      before { allow(CurationTaskClient).to receive(:send_curation).with(work_version.id, requested: true, remediation_requested: false).and_raise(CurationTaskClient::CurationError) }
 
       it 'saves changes to the work version and displays an error flash message' do
         visit dashboard_form_publish_path(work_version)
@@ -1334,8 +1334,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         fill_in 'work_version_title', with: ''
         fill_in 'work_version_title', with: 'Changed Title'
         check 'I have read and agree to the deposit agreement.'
-
-        click_on 'Request Curation & Save as Draft'
+        click_on 'Request Curation'
 
         within('.alert-danger') do
           expect(page).to have_content('There was an error with your curation request')
@@ -1350,7 +1349,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
     context 'when there is a validation error' do
       let(:work_version) { create :work_version, :dataset_able_to_be_published, draft_curation_requested: nil }
 
-      before { allow(CurationTaskClient).to receive(:send_curation).with(work_version.id, requested: true) }
+      before { allow(CurationTaskClient).to receive(:send_curation).with(work_version.id, requested: true, remediation_requested: false) }
 
       it 'does not call the curation task exporter' do
         visit dashboard_form_publish_path(work_version)
@@ -1358,9 +1357,9 @@ RSpec.describe 'Publishing a work', with_user: :user do
         fill_in 'work_version_published_date', with: 'this is not a valid date'
         check 'I have read and agree to the deposit agreement.'
 
-        click_on 'Request Curation & Save as Draft'
+        click_on 'Request Curation'
 
-        expect(CurationTaskClient).not_to have_received(:send_curation).with(work_version.id, requested: true)
+        expect(CurationTaskClient).not_to have_received(:send_curation).with(work_version.id, requested: true, remediation_requested: false)
 
         within '#error_explanation' do
           expect(page).to have_content(I18n.t!('errors.messages.invalid_edtf'))
@@ -1374,6 +1373,155 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(work_version).not_to be_published
         expect(work_version.published_date).to eq 'this is not a valid date'
         expect(work_version.draft_curation_requested).to eq false
+      end
+    end
+  end
+
+  describe 'Requesting accessibility remediation', js: true do
+    let(:user) { work_version.work.depositor.user }
+    let(:request_description) { 'Recommended: Select ‘Request Accessibility Remediation’ below to have the Adaptive Technologies Team review and improve the accessibility of your work before publication. While your work is being remediated it will remain saved as a draft and will be published upon completion of this work.' }
+    let(:publish_description) { "Select 'Publish' if you would like to self-submit your deposit to Scholarsphere and make it immediately public. ScholarSphere curators will review your work after publication. Note, because curatorial review occurs after publication, any changes or updates may result in a versioned work." }
+
+    context 'with a draft eligible for remediation request' do
+      let(:work_version) { create :work_version, :article, :draft, accessibility_remediation_requested: nil }
+
+      it 'renders buttons for requesting remediation and publish and shows helper text explaing requesting curation' do
+        visit dashboard_form_publish_path(work_version)
+
+        expect(page).to have_button('Request Accessibility Remediation')
+        expect(page).to have_button('Publish')
+
+        expect(page).to have_content(request_description)
+        expect(page).to have_content(publish_description)
+      end
+    end
+
+    context 'with a draft that already has remediation request' do
+      let(:work_version) { create :work_version, :draft, draft_curation_requested: true }
+
+      it 'does not render a button for requesting remediation does not show helper text about requesting remediation' do
+        visit dashboard_form_publish_path(work_version)
+
+        expect(page).not_to have_button('Request Accessibility Remediation')
+        expect(page).not_to have_content(request_description)
+      end
+    end
+
+    context 'with a draft work type that is not eligible for remediation request' do
+      let(:work_version) { create :work_version, :dataset_able_to_be_published }
+
+      it 'does not render a button for requesting remediation does not show helper text about requesting remediation' do
+        visit dashboard_form_publish_path(work_version)
+
+        expect(page).not_to have_button('Request Accessibility Remediation')
+        expect(page).not_to have_content(request_description)
+      end
+    end
+
+    context 'with a draft that already has remediation requested' do
+      let(:work_version) { create :work_version, :article, :able_to_be_published, accessibility_remediation_requested: true }
+      let(:remediation_requested) { 'Remediation has been requested. We will notify you when accessibility remediation is complete and your work is ready to be published. If you have any questions in the meantime, please contact ScholarSphere curators via our ' }
+
+      context 'when user is an admin' do
+        let(:user) { create(:user, :admin) }
+
+        it 'allows admin to publish' do
+          visit dashboard_form_publish_path(work_version)
+
+          expect(page).to have_button('Publish')
+
+          check 'I have read and agree to the deposit agreement.'
+          click_on 'Publish'
+
+          expect(work_version.reload.aasm_state).to eq 'published'
+        end
+      end
+
+      context 'when user is not an admin' do
+        it 'does not render buttons for requesting remediation, requesting curation, or publish & shows text that remediation has been requested' do
+          visit dashboard_form_publish_path(work_version)
+
+          expect(page).not_to have_button('Request Accessibility Remediation')
+          expect(page).not_to have_button('Request Curation')
+          expect(page).not_to have_button('Publish')
+          expect(page).to have_content(remediation_requested)
+          expect(page).to have_link('contact form')
+        end
+      end
+    end
+
+    context 'when remediation is successfully requested' do
+      let(:work_version) { create :work_version, :article, :able_to_be_published, accessibility_remediation_requested: nil }
+
+      before do
+        allow(CurationTaskClient).to receive(:send_curation).with(work_version.id, remediation_requested: true, requested: false)
+      end
+
+      it 'creates a Submission' do
+        visit dashboard_form_publish_path(work_version)
+
+        check 'I have read and agree to the deposit agreement.'
+
+        click_on 'Request Accessibility Remediation'
+
+        work_version.reload
+
+        expect(CurationTaskClient).to have_received(:send_curation).with(work_version.id, remediation_requested: true, requested: false)
+        expect(work_version.accessibility_remediation_requested).to be true
+      end
+    end
+
+    context 'when an error occurs within the curation task exporter' do
+      let(:work_version) { create :work_version, :article, :able_to_be_published, accessibility_remediation_requested: nil }
+
+      before { allow(CurationTaskClient).to receive(:send_curation).with(work_version.id, remediation_requested: true, requested: false).and_raise(CurationTaskClient::CurationError) }
+
+      it 'saves changes to the work version and displays an error flash message' do
+        visit dashboard_form_publish_path(work_version)
+
+        fill_in 'work_version_title', with: ''
+        fill_in 'work_version_title', with: 'Changed Title'
+        check 'I have read and agree to the deposit agreement.'
+
+        click_on 'Request Accessibility Remediation'
+
+        within('.alert-danger') do
+          expect(page).to have_content('There was an error with your accessibility remediation request.')
+        end
+
+        work_version.reload
+        expect(work_version.title).to eq('Changed Title')
+        expect(work_version.accessibility_remediation_requested).not_to be true
+      end
+    end
+
+    context 'when there is a validation error' do
+      let(:work_version) { create :work_version, :article, :able_to_be_published, accessibility_remediation_requested: nil }
+
+      before { allow(CurationTaskClient).to receive(:send_curation).with(work_version.id, remediation_requested: true, requested: false) }
+
+      it 'does not call the curation task exporter' do
+        visit dashboard_form_publish_path(work_version)
+
+        fill_in 'work_version_published_date', with: 'this is not a valid date'
+        check 'I have read and agree to the deposit agreement.'
+
+        click_on 'Request Accessibility Remediation'
+
+        expect(CurationTaskClient).not_to have_received(:send_curation).with(work_version.id, remediation_requested: true, requested: false)
+
+        within '#error_explanation' do
+          expect(page).to have_content(I18n.t!('errors.messages.invalid_edtf'))
+        end
+
+        within '.footer--actions' do
+          expect(page).to have_button(I18n.t!('dashboard.form.actions.request_remediation'))
+        end
+
+        work_version.reload
+        expect(work_version).not_to be_published
+        expect(work_version.published_date).to eq 'this is not a valid date'
+        expect(work_version.accessibility_remediation_requested).to eq false
       end
     end
   end
