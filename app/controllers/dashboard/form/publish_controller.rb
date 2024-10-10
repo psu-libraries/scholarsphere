@@ -43,14 +43,11 @@ module Dashboard
             @resource.save
             initial_state = @resource.aasm_state
             @resource.publish
-            @resource.curation_request_attempt = true
             if @resource.valid?
               CurationTaskClient.send_curation(@resource.id, requested: true)
               @resource.draft_curation_requested = true
-              @resource.curation_request_attempt = false
             else
               @resource.update_column(:draft_curation_requested, false)
-              @resource.curation_request_attempt = false
               render :edit
               return
             end

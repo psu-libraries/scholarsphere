@@ -118,16 +118,16 @@ class WorkVersion < ApplicationRecord
             if: :published?
 
   validates :psu_community_agreement,
-              acceptance: true,
-              if: :published?
+            acceptance: true,
+            if: :published?
 
   validates :accessibility_agreement,
-              acceptance: true,
-              if: :published?
+            acceptance: true,
+            if: :published?
 
   validates :sensitive_info_agreement,
-              acceptance: true,
-              if: :published?
+            acceptance: true,
+            if: :published?
 
   validates :version_number,
             presence: true,
@@ -186,7 +186,6 @@ class WorkVersion < ApplicationRecord
   after_commit :perform_update_index, on: [:create, :update]
 
   attr_accessor :force_destroy
-  attr_accessor :curation_request_attempt
 
   # Do not allow pubilshed works to be destroyed, unless specially flagged by
   # setting `work_version.force_destroy = true`
@@ -280,10 +279,6 @@ class WorkVersion < ApplicationRecord
 
   def resource_with_doi
     work
-  end
-
-  def is_not_a_curation_request
-    !curation_request_attempt
   end
 
   def to_solr

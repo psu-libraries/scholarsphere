@@ -125,7 +125,6 @@ class WorkDepositPathway
                :indexing_source=,
                :update_doi=,
                :work_type,
-               :curation_request_attempt=,
                :draft_curation_requested,
                :mint_doi_requested,
                to: :work_version, prefix: false

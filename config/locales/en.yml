@@ -543,10 +543,17 @@ en:
         embargo: Embargo (Optional)
       publish:
         heading: Publishing Work Version
-        agreement_preamble: I have read and agree to
-        agreement_link: the deposit agreement
         error_message: "%{error} prohibited this work from being saved:"
-        acknowledgements:
+        publish_heading: Ready to Publish?
+        publish_message: By selecting Publish, you are making your work publicly accessible. This means it will be broadly discoverable and downloadable (unless an embargo is applied). Once a version is published, it cannot be modified. However, you can create a new version to make changes, and the new version will supersede previous ones. Older versions will remain accessible unless they are specifically withdrawn or deleted by repository managers upon reasonable depositor request.
+        request_curation_heading: Ready to Send for Curation?
+        request_curation_message: By selecting Request Curation & Save as Draft, your draft work will be submitted to the ScholarSphere Curation Team for review. Once approved by a curator, the work will be published, and if applicable, a DOI will be minted.
+        request_remediation_heading: Ready to Send for Accessibility Remediation?
+        request_remediation_message: By selecting Request Accessibility Remediation, your draft work will be submitted to the Adaptive Technologies Team. Once remediation has been completed, the work will be published.
+        acknowledgment_preface: "If you are ready to proceed, please confirm the acknowledgments below:"
+        acknowledgments:
+          agreement_preamble: I have read and agree to
+          agreement_link: the deposit agreement
           psu_community: I confirm that this deposit was produced or sponsored by at least one member of the Penn State community.
           accessibility: I confirm that this deposit meets the requirements of <a href="https://policy.psu.edu/policies/ad69" target=_blank, rel=noopener>Penn State Policy AD69 Accessibility of Electronic and Information Technology</a> or that I will actively work with curators to ensure compliance.
           sensitive_info: I confirm that the deposit does NOT contain information with a Sensitive Information Classification of Moderate (Level 2) or higher according to <a href="https://policy.psu.edu/policies/ad95" target=_blank>Penn State Policy AD95 Information Assurance and IT Security.</a>

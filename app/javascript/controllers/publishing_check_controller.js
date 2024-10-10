@@ -41,8 +41,9 @@ export default class extends Controller {
       this.publishButtonTarget.classList.add('d-none');
       this.publishTextTarget.classList.add('d-none');
     }
+    // We need to bind the tooltip to the modal, other it will not be visible.
+    $('[data-toggle="modal-tooltip"]').tooltip({container: "#hidden-publish-dialog"});
     this.dialogBoxTarget.showModal();
-    $('[data-toggle="tooltip"]').tooltip()
     // We only want to require the checkbox if the dialog is open.
     // If the checkbox is required when the dialog is closed, the Save and Exit button will not work.
     for (let checkbox of this.checkBoxTargets) {
