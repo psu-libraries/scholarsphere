@@ -5,12 +5,13 @@ require 'airrecord'
 class CurationTaskClient
   class CurationError < RuntimeError; end
 
-  def self.send_curation(work_version_id, requested: false, updated_version: false)
+  def self.send_curation(work_version_id, requested: false, remediation_requested: false, updated_version: false)
     submission = WorkVersion.find(work_version_id)
     labels = []
     labels << 'Curation Requested' if requested
     labels << 'Embargoed' if submission.embargoed?
     labels << 'Updated Version' if updated_version
+    labels << 'Accessibility Remediation Requested' if remediation_requested
 
     record =
       {
