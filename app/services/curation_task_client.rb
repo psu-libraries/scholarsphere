@@ -12,6 +12,7 @@ class CurationTaskClient
     labels << 'Embargoed' if submission.embargoed?
     labels << 'Updated Version' if updated_version
     labels << 'Accessibility Remediation Requested' if remediation_requested
+    labels << 'Needs Accessibility Review' if submission.needs_accessibility_review
 
     record =
       {

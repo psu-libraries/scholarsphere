@@ -105,6 +105,9 @@ module Dashboard
             .permit(
               :title,
               :description,
+              :sub_work_type,
+              :program,
+              :degree,
               :publisher_statement,
               :subtitle,
               :rights,
@@ -126,9 +129,6 @@ module Dashboard
               based_near: [],
               related_url: [],
               source: [],
-              sub_work_type: [],
-              program: [],
-              degree: [],
               creators_attributes: [
                 :id,
                 :actor_id,

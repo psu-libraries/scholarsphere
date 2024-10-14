@@ -138,6 +138,12 @@ en:
               blank: *required_to_publish
             published_date:
               blank: *required_to_publish
+            sub_work_type:
+              blank: *required_to_publish
+            program:
+              blank: *required_to_publish
+            degree:
+              blank: *required_to_publish
             file_resources:
               readme: must include a separate README file labeled as “README” in addition to other files
   admin:

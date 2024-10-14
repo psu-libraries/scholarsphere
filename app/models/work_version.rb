@@ -349,6 +349,10 @@ class WorkVersion < ApplicationRecord
     !!identifier.find { |id| Doi.new(id).valid? }
   end
 
+  def needs_accessibility_review
+    latest_published_version? && !accessibility_remediation_requested
+  end
+
   delegate :deposited_at,
            :depositor,
            :embargoed?,
