@@ -32,15 +32,15 @@ export default class extends Controller {
   ]
 
   displayTargetMap = {
-    'publish': [
+    publish: [
       this.publishButtonTarget,
       this.publishTextTarget
     ],
-    'curation': [
+    curation: [
       this.curationButtonTarget,
       this.curationTextTarget
     ],
-    'remediation': [
+    remediation: [
       this.remediationButtonTarget,
       this.remediationTextTarget
     ]
@@ -49,38 +49,39 @@ export default class extends Controller {
   connect () {
     // We only want to require the checkbox if the dialog is open.
     if (this.checkBoxTargets.length > 0) {
-      for (let checkbox of this.checkBoxTargets) {
-        checkbox.removeAttribute('required');
+      for (const checkbox of this.checkBoxTargets) {
+        checkbox.removeAttribute('required')
       }
     }
   }
-  openDialog(event) {
-    let dialogType = event.currentTarget.dataset.dialog
-    let currentTypeTargets = this.displayTargetMap[dialogType]
+
+  openDialog (event) {
+    const dialogType = event.currentTarget.dataset.dialog
+    const currentTypeTargets = this.displayTargetMap[dialogType]
     // Hide all the targets that are not part of the current dialog.
-    for (let t of this.allDisplayTargets) {
+    for (const t of this.allDisplayTargets) {
       if (currentTypeTargets.includes(t)) {
-        t.classList.remove('d-none');
+        t.classList.remove('d-none')
       } else {
-        t.classList.add('d-none');
+        t.classList.add('d-none')
       }
     }
 
     // Bind the tooltip to the dialog object, other it will not be visible.
-    $('[data-toggle="modal-tooltip"]').tooltip({container: "#hidden-publish-dialog"});
-    this.dialogBoxTarget.showModal();
+    $('[data-toggle="modal-tooltip"]').tooltip({ container: '#hidden-publish-dialog' })
+    this.dialogBoxTarget.showModal()
 
     // We only want to require the checkbox if the dialog is open.
     // Otherwise, the Save and Exit button will not work.
-    for (let checkbox of this.checkBoxTargets) {
-      checkbox.setAttribute('required', 'required');
+    for (const checkbox of this.checkBoxTargets) {
+      checkbox.setAttribute('required', 'required')
     }
-}
+  }
 
   closeDialog () {
-    for (let checkbox of this.checkBoxTargets) {
-      checkbox.removeAttribute('required');
-    } 
-    this.dialogBoxTarget.close();
+    for (const checkbox of this.checkBoxTargets) {
+      checkbox.removeAttribute('required')
+    }
+    this.dialogBoxTarget.close()
   }
 }
