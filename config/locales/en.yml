@@ -206,7 +206,7 @@ en:
         and will work to resolve it.
   footer:
     heading: 'ScholarSphere'
-    description: 'A service of the University Libraries.'
+    description: 'An institutional repository and archive sharing and preserving Penn State’s scholarly and research outputs'
     copyright_statement: 'Copyright © 2022 The Pennsylvania State University'
   helpers:
     # Note, for hints (and only hints) you can use Markdown
@@ -622,6 +622,7 @@ en:
       agreement_1_0: 'Deposit Agreement'
       dashboard: 'Your Dashboard'
       home: 'Welcome to ScholarSphere'
+      home_subtitle: 'An institutional repository and archive sharing and preserving Penn State’s scholarly and research outputs'
       not_found: 'Page Not Found'
       server_error: 'Server Error'
       graphql: 'GraphQL'
