@@ -1,20 +1,50 @@
 import { Controller } from 'stimulus'
 
 export default class extends Controller {
-  static targets = ['dialogBox',
+  static targets = [
+    'dialogBox',
     'agreementCheckbox',
     'psuCommunityCheckbox',
     'accessibilityCheckbox',
     'sensitiveInfoCheckbox',
     'publishButton',
     'curationButton',
+    'remediationButton',
     'publishText',
-    'curationText']
+    'curationText',
+    'remediationText'
+  ]
 
-  checkBoxTargets = [this.agreementCheckboxTarget,
+  checkBoxTargets = [
+    this.agreementCheckboxTarget,
     this.psuCommunityCheckboxTarget,
     this.accessibilityCheckboxTarget,
-    this.sensitiveInfoCheckboxTarget]
+    this.sensitiveInfoCheckboxTarget
+  ]
+
+  allDisplayTargets = [
+    this.publishButtonTarget,
+    this.publishTextTarget,
+    this.curationButtonTarget,
+    this.curationTextTarget,
+    this.remediationButtonTarget,
+    this.remediationTextTarget
+  ]
+
+  displayTargetMap = {
+    'publish': [
+      this.publishButtonTarget,
+      this.publishTextTarget
+    ],
+    'curation': [
+      this.curationButtonTarget,
+      this.curationTextTarget
+    ],
+    'remediation': [
+      this.remediationButtonTarget,
+      this.remediationTextTarget
+    ]
+  }
 
   connect () {
     // We only want to require the checkbox if the dialog is open.
@@ -24,28 +54,24 @@ export default class extends Controller {
       }
     }
   }
-
-
   openDialog(event) {
     let dialogType = event.currentTarget.dataset.dialog
-    if (dialogType === 'publish') {
-      this.curationButtonTarget.classList.add('d-none');
-      this.curationTextTarget.classList.add('d-none');
-
-      this.publishButtonTarget.classList.remove('d-none');
-      this.publishTextTarget.classList.remove('d-none');
-    } else {
-      this.curationButtonTarget.classList.remove('d-none');
-      this.curationTextTarget.classList.remove('d-none');
-
-      this.publishButtonTarget.classList.add('d-none');
-      this.publishTextTarget.classList.add('d-none');
+    let currentTypeTargets = this.displayTargetMap[dialogType]
+    // Hide all the targets that are not part of the current dialog.
+    for (let t of this.allDisplayTargets) {
+      if (currentTypeTargets.includes(t)) {
+        t.classList.remove('d-none');
+      } else {
+        t.classList.add('d-none');
+      }
     }
-    // We need to bind the tooltip to the modal, other it will not be visible.
+
+    // Bind the tooltip to the dialog object, other it will not be visible.
     $('[data-toggle="modal-tooltip"]').tooltip({container: "#hidden-publish-dialog"});
     this.dialogBoxTarget.showModal();
+
     // We only want to require the checkbox if the dialog is open.
-    // If the checkbox is required when the dialog is closed, the Save and Exit button will not work.
+    // Otherwise, the Save and Exit button will not work.
     for (let checkbox of this.checkBoxTargets) {
       checkbox.setAttribute('required', 'required');
     }
@@ -55,7 +81,6 @@ export default class extends Controller {
     for (let checkbox of this.checkBoxTargets) {
       checkbox.removeAttribute('required');
     } 
-
     this.dialogBoxTarget.close();
   }
 }

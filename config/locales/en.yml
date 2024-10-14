@@ -415,7 +415,8 @@ en:
           tooltip: Publish your work to make it publicly visible. Changes cannot be made to the published version, but you can create a new version if updates are needed.
         confirm:
           publish: Confirm publish
-          request_curation: Confirm curation
+          request_curation: Confirm Request Curation
+          request_remediation: Confirm Request Accessibility Remediation
           cancel: Cancel
           cancel_tooltip: Return to the Review & Publish Page.
         finish: 
@@ -426,10 +427,11 @@ en:
           admin_save: Save and Exit
           tooltip: Save your draft. It will be accessible via your dashboard and visible only to you and those with edit access.
         request_curation: 
-          button: Request Curation & Save as Draft
+          button: Request Curation
           tooltip: Save your work as a draft and submit it for curatorial review.
-        request_curation: Request Curation
-        request_remediation: Request Accessibility Remediation
+        request_remediation: 
+          button: Request Accessibility Remediation
+          tooltip: Save your work as a draft and submit it for accessibility review and remediation.
         destroy:
           button: Delete
           collection: Collection

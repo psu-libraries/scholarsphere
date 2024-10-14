@@ -1,0 +1,46 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://sessions.bugsnag.com/
+    body:
+      encoding: UTF-8
+      string: '{"notifier":{"name":"Ruby Bugsnag Notifier","url":"https://www.bugsnag.com","version":"6.27.1"},"device":{"hostname":"L5-LST-JML8735","runtimeVersions":{"ruby":"3.1.2","rails":"6.1.7.8","rack":"2.2.9"}},"app":{"version":null,"releaseStage":"development","type":"active
+        job"},"sessionCounts":[{"startedAt":"2024-10-14T16:22:00","sessionsStarted":42}]}'
+    headers:
+      Bugsnag-Api-Key:
+      - 4a5bd13239520eda7e393cf0c8cb855a
+      Bugsnag-Payload-Version:
+      - '1.0'
+      Content-Type:
+      - application/json
+      Bugsnag-Sent-At:
+      - '2024-10-14T16:22:24.346Z'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 202
+      message: Accepted
+    headers:
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 14 Oct 2024 16:22:24 GMT
+      Content-Length:
+      - '21'
+      Via:
+      - 1.1 google
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: UTF-8
+      string: '{"status":"accepted"}'
+  recorded_at: Mon, 14 Oct 2024 16:22:24 GMT
+recorded_with: VCR 6.1.0

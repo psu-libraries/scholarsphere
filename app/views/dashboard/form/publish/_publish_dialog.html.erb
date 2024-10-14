@@ -8,6 +8,10 @@
       <h4><%= t('dashboard.work_versions.publish.request_curation_heading') %> </h4>
       <p><%= t('dashboard.work_versions.publish.request_curation_message') %>  </p>
     </div>
+    <div data-target="publishing-check.remediationText">
+      <h4><%= t('dashboard.work_versions.publish.request_remediation_heading') %> </h4>
+      <p><%= t('dashboard.work_versions.publish.request_remediation_message') %>  </p>
+    </div>
     <p><%= t('dashboard.work_versions.publish.acknowledgment_preface') %></p>
     <div class="form-group mt-2">
       <div class="keyline keyline--left">
@@ -66,6 +70,10 @@
       <%= f.submit  t('dashboard.form.actions.confirm.request_curation'),
                     name: 'request_curation',
                     data: { target: 'publishing-check.curationButton' },
+                    class: 'btn btn-primary btn--rounded d-none' %>
+      <%= f.submit  t('dashboard.form.actions.confirm.request_remediation'),
+                    name: 'request_remediation',
+                    data: { target: 'publishing-check.remediationButton' },
                     class: 'btn btn-primary btn--rounded d-none' %>
     <button class='btn btn-outline-dark btn--rounded ml-2 z'
             type='button' data-toggle='modal-tooltip'

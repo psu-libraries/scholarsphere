@@ -141,21 +141,22 @@ module FeatureHelpers
     def self.publish
       fix_sticky_footer
       click_on I18n.t!('dashboard.form.actions.publish.button')
-      check 'work_version_depositor_agreement'
-      check 'work_version_psu_community_agreement'
-      check 'work_version_accessibility_agreement'
-      check 'work_version_sensitive_info_agreement'
+      check_agreement_boxes
       click_on I18n.t!('dashboard.form.actions.confirm.publish')
     end
 
     def self.request_curation
       fix_sticky_footer
       click_on I18n.t!('dashboard.form.actions.request_curation.button')
-      check 'work_version_depositor_agreement'
-      check 'work_version_psu_community_agreement'
-      check 'work_version_accessibility_agreement'
-      check 'work_version_sensitive_info_agreement'
+      check_agreement_boxes
       click_on I18n.t!('dashboard.form.actions.confirm.request_curation')
+    end
+
+    def self.request_remediation
+      fix_sticky_footer
+      click_on I18n.t!('dashboard.form.actions.request_remediation.button')
+      check_agreement_boxes
+      click_on I18n.t!('dashboard.form.actions.confirm.request_remediation')
     end
 
     def self.finish
@@ -176,6 +177,13 @@ module FeatureHelpers
     def self.fix_sticky_footer
       Capybara.current_session.current_window.resize_to(1000, 1000)
     rescue Capybara::NotSupportedByDriverError
+    end
+
+    def self.check_agreement_boxes
+      check 'work_version_depositor_agreement'
+      check 'work_version_psu_community_agreement'
+      check 'work_version_accessibility_agreement'
+      check 'work_version_sensitive_info_agreement'
     end
 
     # @note In theory, #assert_selector should be AJAX-aware

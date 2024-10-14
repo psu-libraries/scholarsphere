@@ -1424,8 +1424,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
           expect(page).to have_button('Publish')
 
-          check 'I have read and agree to the deposit agreement.'
-          click_on 'Publish'
+          FeatureHelpers::DashboardForm.publish
 
           expect(work_version.reload.aasm_state).to eq 'published'
         end
@@ -1454,9 +1453,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       it 'creates a Submission' do
         visit dashboard_form_publish_path(work_version)
 
-        check 'I have read and agree to the deposit agreement.'
-
-        click_on 'Request Accessibility Remediation'
+        FeatureHelpers::DashboardForm.request_remediation
 
         work_version.reload
 
@@ -1475,9 +1472,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         fill_in 'work_version_title', with: ''
         fill_in 'work_version_title', with: 'Changed Title'
-        check 'I have read and agree to the deposit agreement.'
-
-        click_on 'Request Accessibility Remediation'
+        FeatureHelpers::DashboardForm.request_remediation
 
         within('.alert-danger') do
           expect(page).to have_content('There was an error with your accessibility remediation request.')
@@ -1498,9 +1493,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         visit dashboard_form_publish_path(work_version)
 
         fill_in 'work_version_published_date', with: 'this is not a valid date'
-        check 'I have read and agree to the deposit agreement.'
-
-        click_on 'Request Accessibility Remediation'
+        FeatureHelpers::DashboardForm.request_remediation
 
         expect(CurationTaskClient).not_to have_received(:send_curation).with(work_version.id, remediation_requested: true, requested: false)
 
@@ -1509,7 +1502,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         end
 
         within '.footer--actions' do
-          expect(page).to have_button(I18n.t!('dashboard.form.actions.request_remediation'))
+          expect(page).to have_button(I18n.t!('dashboard.form.actions.request_remediation.button'))
         end
 
         work_version.reload
