@@ -51,19 +51,18 @@
       </aside>
     </div>
     <div class="col-lg-9">
-      <h1 class="h2 mb-3"><%= t('.heading',
+      <h1 class="h2 mb-2"><%= t('.heading',
         work_title: @work.latest_version.title) %></h1>
       <% if current_user.admin? %>
         <%= button_to I18n.t('resources.contact_depositor_button.text'),
                       admin_create_curation_ticket_url(id: @work.id, ticket_type: 'curation'),
-                      class: 'btn btn-primary mt-2',
+                      class: 'btn btn-primary',
                       form: {
                         target: '_blank',
                         data: {
                           confirm: I18n.t('resources.contact_depositor_button.confirm_message')
                         }
                       } %>
-        <div>
         <%= button_to I18n.t('resources.contact_accessibility_team_button.text'),
                       admin_create_curation_ticket_url(id: @work.id, ticket_type: 'accessibility'),
                       class: 'btn btn-primary mt-2',
@@ -73,7 +72,6 @@
                           confirm: I18n.t('resources.contact_accessibility_team_button.confirm_message')
                         }
                       } %>
-        </div>
       <% end %>
 
       <div class="keyline keyline--left">

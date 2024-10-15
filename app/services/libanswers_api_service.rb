@@ -64,6 +64,6 @@ class LibanswersApiService
     end
 
     def scholarsphere_queue_id
-      @ticket_type == 'curation' ? '5477' : 'TODO'
+      @ticket_type == 'curation' ? '5477' : '2590'
     end
 end
