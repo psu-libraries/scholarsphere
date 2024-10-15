@@ -265,6 +265,9 @@ class WorkDepositPathway
               version_name
               rights
               depositor_agreement
+              psu_community_agreement
+              accessibility_agreement
+              sensitive_info_agreement
               contributor
               subject
               publisher
