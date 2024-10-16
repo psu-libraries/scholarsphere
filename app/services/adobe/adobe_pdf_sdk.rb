@@ -6,11 +6,13 @@ module Adobe
 
     def initialize(resource)
       @resource = resource
+      @upload_data = get_upload_uri_and_asset_id
     end
 
     def adobe_check
       upload_file
       run_pdf_accessibility_checker
+      get_accessibility_checker_status
     end
 
     private
@@ -51,7 +53,8 @@ module Adobe
         if response.success?
           parsed_response = JSON.parse(response.body)
           puts "Asset info: #{parsed_response}"
-          parsed_response
+          @upload_uri = parsed_response["uploadUri"]
+          @asset_id = parsed_response["assetID"]
         else
           error_response = JSON.parse(response.body)['error']
           raise "Failed to get presigned URL: #{error_response['message']}"
@@ -59,22 +62,21 @@ module Adobe
       end
 
       def upload_uri
-        @upload_uri ||= get_upload_uri_and_asset_id["uploadUri"]
+        @upload_uri ||= upload_data['uploadUri']
       end
 
       def asset_id
-        @asset_id ||= get_upload_uri_and_asset_id["assetID"]
+        @asset_id ||= upload_data['assetID']
       end
 
       def upload_file
         file = download_file
         response = Faraday.put(upload_uri) do |req|
           req.headers['Content-Type'] = 'application/pdf'
-          req.body = file.read
+          req.body = file.read 
         end
 
         if response.success?
-          byebug
           puts "File uploaded successfully"
         else
           raise "Failed to upload file: #{response.status} - #{response.body}"
@@ -92,18 +94,52 @@ module Adobe
           req.headers['X-API-Key'] = client_id
           req.headers['Content-Type'] = 'application/json'
           req.body = {
-            assetID: asset_id,
+            "assetID": asset_id,
           }.to_json
         end
 
         if response.success?
-          parsed_response = JSON.parse(response.body)
+          parsed_response = response.status
           puts "PDF Accessibility Checker Report: #{parsed_response}"  # Log the accessibility checker report
-          parsed_response
+          @polling_location = response.env.response_headers['location']
         else
-          error_response = JSON.parse(response.body)
+          error_response = response.status
           puts "Error response: #{error_response}"  # Log the error response
           raise "Failed to run PDF Accessibility Checker: #{error_response['message']}"
+        end
+      end
+
+      def polling_location
+        @polling_location
+      end
+
+      def get_accessibility_checker_status
+        token = access_token
+        puts "Getting status for Asset ID: #{asset_id}"  # Log the asset ID
+  
+        counter = 0
+        parsed_response = {}
+        while parsed_response["status"] != "done" || counter < 10 do
+          response = Faraday.get(polling_location) do |req|
+            req.headers['Authorization'] = "Bearer #{token}"
+            req.headers['X-API-Key'] = client_id
+            req.headers['Content-Type'] = 'application/json'
+          end
+    
+          if response.success?
+            parsed_response = JSON.parse(response.body)
+            puts "Accessibility Checker Status: #{parsed_response["status"]}"  # Log the status response
+            if parsed_response["status"] == "done"
+              puts parsed_response["report"]["downloadUri"]
+              break
+            end
+          else
+            error_response = JSON.parse(response.body)
+            puts "Error response: #{error_response}"  # Log the error response
+            raise "Failed to get accessibility checker status: #{error_response['message']}"
+          end
+          counter += 1
+          sleep 1
         end
       end
 
@@ -134,12 +170,12 @@ module Adobe
       end
 
       def download_file
-        file = Tempfile.new(resource.file_data['id'], binmode: true)
+        tempfile = Tempfile.new(resource.file_data['id'])
         s3_client.get_object(bucket: aws_bucket, 
                              key: "#{resource.file_data['storage']}/#{resource.file_data['id']}", 
-                             response_target: file.path)
-        file.rewind 
-        file
+                             response_target: tempfile.path)
+        tempfile.rewind
+        tempfile
       end
 
       def base_options
