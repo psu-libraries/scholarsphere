@@ -23,7 +23,7 @@ RSpec.describe LibanswersApiService, :vcr do
 
     context 'when there is a connection error' do
       before do
-        allow(Faraday).to receive(:new).and_return
+        allow(Faraday).to receive(:new).and_raise Faraday::ConnectionFailed, 'Error Message'
       end
 
       it 'raises a LibanswersApiError' do
@@ -32,18 +32,27 @@ RSpec.describe LibanswersApiService, :vcr do
       end
     end
 
-    context 'when a ticket type of curation is passed in' do
-      let(:mock_faraday) { instance_spy('Faraday::Connection') }
+    context 'when a ticket type is passed in' do
+      let!(:mock_faraday_connection) { instance_spy('Faraday::Connection') }
+      let!(:dummy_response) { Faraday::Response.new() }
+      let!(:accessibility_quid) {'2590'}
+      let!(:curation_quid) {'5477'}
       before do
-        allow(Faraday).to receive(:new).and_return mock_faraday
+        allow(Faraday).to receive(:new).and_return mock_faraday_connection
+        allow(mock_faraday_connection).to receive(:post).and_return dummy_response
       end
-      it 'sends the correct subject to libanswers' do
-        ticket_request = described_class.new(work.id, 'curation').admin_create_curation_ticket
-        expect(mock_faraday).to have_received(:post).with('/ticket/create', { subject: 'Curation dfa', question: 'Please review this work for curation.' })
+      after do
       end
-
-      it 'uses the correct queue id' do
-      end
+        it 'of 5477 for curation types' do
+          ticket_request = described_class.new(work.id, 'curation').admin_create_curation_ticket
+          expect(mock_faraday_connection).to have_received(:post).with('/api/1.1/ticket/create',
+          "quid=#{curation_quid}&pquestion=ScholarSphere Deposit Curation: #{work.latest_version.title}&pname=#{work.display_name}&pemail=#{work.email}")
+        end
+        it 'of 2590 for accessibility types' do
+          ticket_request = described_class.new(work.id, 'accessibility').admin_create_curation_ticket
+          expect(mock_faraday_connection).to have_received(:post).with('/api/1.1/ticket/create',
+          "quid=#{accessibility_quid}&pquestion=ScholarSphere Deposit Accessibility Curation: #{work.latest_version.title}&pname=#{work.display_name}&pemail=#{work.email}")
+        end
     end
   end
 end
