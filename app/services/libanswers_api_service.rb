@@ -37,8 +37,11 @@ class LibanswersApiService
     end
 
     def subject
-      @ticket_type == 'curation' ? "ScholarSphere Deposit Curation: #{work.latest_version.title}" :
-      "ScholarSphere Deposit Accessibility Curation: #{work.latest_version.title}"
+      if @ticket_type == 'curation'
+        "ScholarSphere Deposit Curation: #{work.latest_version.title}"
+      else
+        "ScholarSphere Deposit Accessibility Curation: #{work.latest_version.title}"
+      end
     end
 
     def oauth_token
