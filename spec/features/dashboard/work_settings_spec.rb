@@ -361,7 +361,7 @@ RSpec.describe 'Work Settings Page', with_user: :user do
       describe 'clicking the contact depositor button' do
         context 'when no error is raised' do
           it 'creates a ticket in libanswers and directs to that ticket', :vcr do
-            click_button 'Contact Depositor via LibAnswers >>'
+            click_button I18n.t('resources.contact_depositor_button.text')
           rescue ActionController::RoutingError
             # This is a bit unconventional.  Since clicking the button will redirect to an external site,
             # a routing error will be raised in the test env.  Rescue it and check the correct redirect location
@@ -375,9 +375,19 @@ RSpec.describe 'Work Settings Page', with_user: :user do
           end
 
           it 'redirects to the work settings page and presents a flash message with the error message' do
-            click_on 'Contact Depositor via LibAnswers >>'
+            click_button I18n.t('resources.contact_depositor_button.text')
             expect(page).to have_content 'Error Message'
             expect(page).to have_current_path edit_dashboard_work_path(work)
+          end
+        end
+      end
+
+      describe 'clicking the accessibility team depositor button' do
+        context 'when no error is raised' do
+          it 'creates a ticket in libanswers and directs to that ticket', :vcr do
+            click_button I18n.t('resources.contact_accessibility_team_button.text')
+          rescue ActionController::RoutingError
+            expect(page.driver.browser.last_response['Location']).to eq 'https://psu.libanswers.com/admin/ticket?qid=13224664'
           end
         end
       end
