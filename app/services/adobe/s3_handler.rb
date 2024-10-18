@@ -2,6 +2,11 @@
 
 module Adobe
   module S3Handler
+    # Downloads a file from S3 and returns a Tempfile object.
+    #
+    # @param resource [FileResource] The FileResource object containing file metadata.
+    # @return [Tempfile] The downloaded file as a Tempfile object.
+    # @raise [Aws::S3::Errors::ServiceError] if the download fails.
     def download_file(resource)
       tempfile = Tempfile.new(resource.file_data['id'])
       s3_client.get_object(bucket: aws_bucket,
