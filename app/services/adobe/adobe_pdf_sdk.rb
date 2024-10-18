@@ -6,19 +6,18 @@ module Adobe
 
     def initialize(resource)
       @resource = resource
-      @asset_upload_uri_and_asset_id = get_upload_uri_and_asset_id
+      @asset_upload_uri_and_asset_id = fetch_upload_uri_and_asset_id
     end
 
     def adobe_check
       upload_file
-      run_pdf_accessibility_checker
-      get_accessibility_checker_status
+      fetch_accessibility_checker_status
       delete_asset
     end
 
     private
 
-      def get_access_token
+      def fetch_access_token
         response = Faraday.post(host + oauth_token_path) do |req|
           req.headers['Content-Type'] = 'application/x-www-form-urlencoded'
           req.body = {
@@ -28,8 +27,8 @@ module Adobe
         end
 
         if response.success?
-          access_token = JSON.parse(response.body)["access_token"]
-          access_token
+          JSON.parse(response.body)['access_token']
+
         else
           error_response = JSON.parse(response.body)['error']
           raise "Authentication failed: #{response.env.response_body}"
@@ -37,24 +36,24 @@ module Adobe
       end
 
       def access_token
-        @access_token ||= get_access_token
+        @access_token ||= fetch_access_token
       end
 
-      def get_upload_uri_and_asset_id
+      def fetch_upload_uri_and_asset_id
         token = access_token
-        response = Faraday.post(host + '/assets') do |req|
+        response = Faraday.post("#{host}/assets") do |req|
           req.headers['Content-Type'] = 'application/json'
           req.headers['Authorization'] = "Bearer #{token}"
           req.headers['X-API-Key'] = client_id
           req.body = {
-            mediaType: "application/pdf"
-        }.to_json
+            mediaType: 'application/pdf'
+          }.to_json
         end
 
         if response.success?
           parsed_response = JSON.parse(response.body)
-          @upload_uri = parsed_response["uploadUri"]
-          @asset_id = parsed_response["assetID"]
+          @upload_uri = parsed_response['uploadUri']
+          @asset_id = parsed_response['assetID']
         else
           raise "Failed to get presigned URL: #{response.env.response_body}"
         end
@@ -71,63 +70,62 @@ module Adobe
       def upload_file
         file = download_file
         if file.size > 100000000
-          raise "File size exceeds the limit of 100Mb"
+          raise 'File size exceeds the limit of 100Mb'
         end
 
         response = Faraday.put(upload_uri) do |req|
           req.headers['Content-Type'] = 'application/pdf'
-          req.body = file.read 
+          req.body = file.read
         end
 
         if response.success?
-          Rails.logger.info "File uploaded successfully"
+          Rails.logger.info 'File uploaded successfully'
         else
           raise "Failed to upload file: #{response.status} - #{response.body}"
         end
       ensure
         file.close
-        file.unlink 
+        file.unlink
       end
 
-      def run_pdf_accessibility_checker
+      def trigger_pdf_accessibility_checker
         token = access_token
         response = Faraday.post("#{host}/operation/accessibilitychecker") do |req|
           req.headers['Authorization'] = "Bearer #{token}"
           req.headers['X-API-Key'] = client_id
           req.headers['Content-Type'] = 'application/json'
           req.body = {
-            "assetID": asset_id,
+            assetID: asset_id
           }.to_json
         end
 
         if response.success?
-          parsed_response = response.status
-          @polling_location = response.env.response_headers['location']
+          response.env.response_headers['location']
         else
           raise "Failed to run PDF Accessibility Checker: #{response.env.response_body}"
         end
       end
 
       def polling_location
-        @polling_location
+        @polling_location ||= trigger_pdf_accessibility_checker
       end
 
-      def get_accessibility_checker_status
+      def fetch_accessibility_checker_status
         token = access_token
-  
+
         counter = 0
         parsed_response = {}
-        while parsed_response["status"] != "done" || counter < 60 do
+        while parsed_response['status'] != 'done' || counter < 60
           response = Faraday.get(polling_location) do |req|
             req.headers['Authorization'] = "Bearer #{token}"
             req.headers['X-API-Key'] = client_id
             req.headers['Content-Type'] = 'application/json'
           end
-    
+
           if response.success?
             parsed_response = JSON.parse(response.body)
-            if parsed_response["status"] == "done"
-              store_json_from_presigned_url parsed_response["report"]["downloadUri"]
+            if parsed_response['status'] == 'done'
+              store_json_from_presigned_url parsed_response['report']['downloadUri']
               break
             end
           else
@@ -140,7 +138,7 @@ module Adobe
 
       def store_json_from_presigned_url(presigned_url)
         response = Faraday.get(presigned_url)
-      
+
         if response.success?
           json_response = JSON.parse(response.body)
           Rails.logger.info "Accessibility Checker report: #{json_response}"
@@ -152,14 +150,14 @@ module Adobe
 
       def delete_asset
         token = access_token
-  
+
         response = Faraday.delete("#{host}/assets/#{asset_id}") do |req|
           req.headers['Authorization'] = "Bearer #{token}"
           req.headers['X-API-Key'] = client_id
         end
-  
+
         if response.success?
-          Rails.logger.info "Asset deleted successfully"
+          Rails.logger.info 'Asset deleted successfully'
           nil
         else
           raise "Failed to delete asset: #{respnse.env.response_body}"
@@ -175,16 +173,16 @@ module Adobe
       end
 
       def host
-        "https://pdf-services.adobe.io"
+        'https://pdf-services.adobe.io'
       end
 
       def oauth_token_path
-        "/token"
+        '/token'
       end
 
       def s3_client
         @s3_client ||= Aws::S3::Client.new(
-          s3_options 
+          s3_options
         )
       end
 
@@ -194,8 +192,8 @@ module Adobe
 
       def download_file
         tempfile = Tempfile.new(resource.file_data['id'])
-        s3_client.get_object(bucket: aws_bucket, 
-                             key: "#{resource.file_data['storage']}/#{resource.file_data['id']}", 
+        s3_client.get_object(bucket: aws_bucket,
+                             key: "#{resource.file_data['storage']}/#{resource.file_data['id']}",
                              response_target: tempfile.path)
         tempfile.rewind
         tempfile
@@ -207,9 +205,9 @@ module Adobe
           secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY', nil),
           region: ENV.fetch('AWS_REGION', 'us-east-1')
         }
-        
+
         options = options.merge(endpoint: ENV['S3_ENDPOINT'], force_path_style: true) if ENV.key?('S3_ENDPOINT')
         options
       end
-    end
+  end
 end
