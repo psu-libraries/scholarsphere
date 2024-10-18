@@ -30,7 +30,6 @@ module Adobe
           JSON.parse(response.body)['access_token']
 
         else
-          error_response = JSON.parse(response.body)['error']
           raise "Authentication failed: #{response.env.response_body}"
         end
       end
