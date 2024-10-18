@@ -1,48 +1,31 @@
 # frozen_string_literal: true
 
+require_relative 's3_handler'
+
 module Adobe
-  class AdobePdfSdk
-    attr_accessor :resource
+  class AdobePdfSdk < Base
+    include S3Handler
 
     def initialize(resource)
+      super()
       @resource = resource
       @asset_upload_uri_and_asset_id = fetch_upload_uri_and_asset_id
     end
 
     def adobe_check
-      upload_file
+      upload_file_to_adobe
       fetch_accessibility_checker_status
       delete_asset
     end
 
     private
 
-      def fetch_access_token
-        response = Faraday.post(host + oauth_token_path) do |req|
-          req.headers['Content-Type'] = 'application/x-www-form-urlencoded'
-          req.body = {
-            client_id: client_id,
-            client_secret: client_secret
-          }
-        end
-
-        if response.success?
-          JSON.parse(response.body)['access_token']
-
-        else
-          raise "Authentication failed: #{response.env.response_body}"
-        end
-      end
-
-      def access_token
-        @access_token ||= fetch_access_token
-      end
+      attr_accessor :resource
 
       def fetch_upload_uri_and_asset_id
-        token = access_token
         response = Faraday.post("#{host}/assets") do |req|
           req.headers['Content-Type'] = 'application/json'
-          req.headers['Authorization'] = "Bearer #{token}"
+          req.headers['Authorization'] = "Bearer #{access_token}"
           req.headers['X-API-Key'] = client_id
           req.body = {
             mediaType: 'application/pdf'
@@ -66,8 +49,8 @@ module Adobe
         @asset_id ||= asset_upload_uri_and_asset_id['assetID']
       end
 
-      def upload_file
-        file = download_file
+      def upload_file_to_adobe
+        file = download_file(resource)
         if file.size > 100000000
           raise 'File size exceeds the limit of 100Mb'
         end
@@ -78,7 +61,7 @@ module Adobe
         end
 
         if response.success?
-          Rails.logger.info 'File uploaded successfully'
+          logger.info 'File uploaded successfully'
         else
           raise "Failed to upload file: #{response.status} - #{response.body}"
         end
@@ -88,9 +71,8 @@ module Adobe
       end
 
       def trigger_pdf_accessibility_checker
-        token = access_token
         response = Faraday.post("#{host}/operation/accessibilitychecker") do |req|
-          req.headers['Authorization'] = "Bearer #{token}"
+          req.headers['Authorization'] = "Bearer #{access_token}"
           req.headers['X-API-Key'] = client_id
           req.headers['Content-Type'] = 'application/json'
           req.body = {
@@ -110,13 +92,11 @@ module Adobe
       end
 
       def fetch_accessibility_checker_status
-        token = access_token
-
         counter = 0
         parsed_response = {}
         while parsed_response['status'] != 'done' || counter < 60
           response = Faraday.get(polling_location) do |req|
-            req.headers['Authorization'] = "Bearer #{token}"
+            req.headers['Authorization'] = "Bearer #{access_token}"
             req.headers['X-API-Key'] = client_id
             req.headers['Content-Type'] = 'application/json'
           end
@@ -140,7 +120,7 @@ module Adobe
 
         if response.success?
           json_response = JSON.parse(response.body)
-          Rails.logger.info "Accessibility Checker report: #{json_response}"
+          logger.info "Accessibility Checker report: #{json_response}"
           # Dump report into model as json-b
         else
           raise "Failed to fetch JSON from presigned URL: #{response.status} - #{response.body}"
@@ -148,65 +128,17 @@ module Adobe
       end
 
       def delete_asset
-        token = access_token
-
         response = Faraday.delete("#{host}/assets/#{asset_id}") do |req|
-          req.headers['Authorization'] = "Bearer #{token}"
+          req.headers['Authorization'] = "Bearer #{access_token}"
           req.headers['X-API-Key'] = client_id
         end
 
         if response.success?
-          Rails.logger.info 'Asset deleted successfully'
+          logger.info 'Asset deleted successfully'
           nil
         else
           raise "Failed to delete asset: #{respnse.env.response_body}"
         end
-      end
-
-      def client_id
-        ENV['ADOBE_CLIENT_ID']
-      end
-
-      def client_secret
-        ENV['ADOBE_CLIENT_SECRET']
-      end
-
-      def host
-        'https://pdf-services.adobe.io'
-      end
-
-      def oauth_token_path
-        '/token'
-      end
-
-      def s3_client
-        @s3_client ||= Aws::S3::Client.new(
-          s3_options
-        )
-      end
-
-      def aws_bucket
-        @aws_bucket ||= ENV.fetch('AWS_BUCKET', nil)
-      end
-
-      def download_file
-        tempfile = Tempfile.new(resource.file_data['id'])
-        s3_client.get_object(bucket: aws_bucket,
-                             key: "#{resource.file_data['storage']}/#{resource.file_data['id']}",
-                             response_target: tempfile.path)
-        tempfile.rewind
-        tempfile
-      end
-
-      def s3_options
-        options = {
-          access_key_id: ENV.fetch('AWS_ACCESS_KEY_ID', nil),
-          secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY', nil),
-          region: ENV.fetch('AWS_REGION', 'us-east-1')
-        }
-
-        options = options.merge(endpoint: ENV['S3_ENDPOINT'], force_path_style: true) if ENV.key?('S3_ENDPOINT')
-        options
       end
   end
 end
