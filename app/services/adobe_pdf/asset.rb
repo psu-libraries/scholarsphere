@@ -8,8 +8,6 @@ module AdobePdf
   class Asset < Base
     include S3Handler
 
-    class FileSizeExceededError < StandardError; end
-
     CONTENT_TYPE_PDF = 'application/pdf'
 
     # @param resource [FileResource] The FileResource object

@@ -14,11 +14,11 @@ module AdobePdf
       attr_accessor :logger
 
       def client_id
-        ENV['ADOBE_CLIENT_ID']
+        ENV.fetch('ADOBE_CLIENT_ID')
       end
 
       def client_secret
-        ENV['ADOBE_CLIENT_SECRET']
+        ENV.fetch('ADOBE_CLIENT_SECRET')
       end
 
       def host

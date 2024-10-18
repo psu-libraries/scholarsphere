@@ -4,6 +4,8 @@ module AdobePdf
   # Checks the accessibility of PDF files using Adobe's PDF Services API.
   # It inherits from the Asset class and fetches and stores accessibility reports.
   class AccessibilityChecker < Asset
+    class FileSizeExceededError < StandardError; end
+
     FILE_SIZE_LIMIT = 100_000_000
 
     def call
