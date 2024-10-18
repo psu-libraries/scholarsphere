@@ -6,13 +6,14 @@ module Adobe
 
     def initialize(resource)
       @resource = resource
-      @upload_data = get_upload_uri_and_asset_id
+      @asset_upload_uri_and_asset_id = get_upload_uri_and_asset_id
     end
 
     def adobe_check
       upload_file
       run_pdf_accessibility_checker
       get_accessibility_checker_status
+      delete_asset
     end
 
     private
@@ -31,7 +32,7 @@ module Adobe
           access_token
         else
           error_response = JSON.parse(response.body)['error']
-          raise "Authentication failed: #{error_response['message']}"
+          raise "Authentication failed: #{response.env.response_body}"
         end
       end
 
@@ -52,32 +53,34 @@ module Adobe
 
         if response.success?
           parsed_response = JSON.parse(response.body)
-          puts "Asset info: #{parsed_response}"
           @upload_uri = parsed_response["uploadUri"]
           @asset_id = parsed_response["assetID"]
         else
-          error_response = JSON.parse(response.body)['error']
-          raise "Failed to get presigned URL: #{error_response['message']}"
+          raise "Failed to get presigned URL: #{response.env.response_body}"
         end
       end
 
       def upload_uri
-        @upload_uri ||= upload_data['uploadUri']
+        @upload_uri ||= asset_upload_uri_and_asset_id['uploadUri']
       end
 
       def asset_id
-        @asset_id ||= upload_data['assetID']
+        @asset_id ||= asset_upload_uri_and_asset_id['assetID']
       end
 
       def upload_file
         file = download_file
+        if file.size > 100000000
+          raise "File size exceeds the limit of 100Mb"
+        end
+
         response = Faraday.put(upload_uri) do |req|
           req.headers['Content-Type'] = 'application/pdf'
           req.body = file.read 
         end
 
         if response.success?
-          puts "File uploaded successfully"
+          Rails.logger.info "File uploaded successfully"
         else
           raise "Failed to upload file: #{response.status} - #{response.body}"
         end
@@ -88,7 +91,6 @@ module Adobe
 
       def run_pdf_accessibility_checker
         token = access_token
-        puts "Running PDF Accessibility Checker for Asset ID: #{asset_id}"  # Log the asset ID
         response = Faraday.post("#{host}/operation/accessibilitychecker") do |req|
           req.headers['Authorization'] = "Bearer #{token}"
           req.headers['X-API-Key'] = client_id
@@ -100,12 +102,9 @@ module Adobe
 
         if response.success?
           parsed_response = response.status
-          puts "PDF Accessibility Checker Report: #{parsed_response}"  # Log the accessibility checker report
           @polling_location = response.env.response_headers['location']
         else
-          error_response = response.status
-          puts "Error response: #{error_response}"  # Log the error response
-          raise "Failed to run PDF Accessibility Checker: #{error_response['message']}"
+          raise "Failed to run PDF Accessibility Checker: #{response.env.response_body}"
         end
       end
 
@@ -115,11 +114,10 @@ module Adobe
 
       def get_accessibility_checker_status
         token = access_token
-        puts "Getting status for Asset ID: #{asset_id}"  # Log the asset ID
   
         counter = 0
         parsed_response = {}
-        while parsed_response["status"] != "done" || counter < 10 do
+        while parsed_response["status"] != "done" || counter < 60 do
           response = Faraday.get(polling_location) do |req|
             req.headers['Authorization'] = "Bearer #{token}"
             req.headers['X-API-Key'] = client_id
@@ -128,18 +126,43 @@ module Adobe
     
           if response.success?
             parsed_response = JSON.parse(response.body)
-            puts "Accessibility Checker Status: #{parsed_response["status"]}"  # Log the status response
             if parsed_response["status"] == "done"
-              puts parsed_response["report"]["downloadUri"]
+              store_json_from_presigned_url parsed_response["report"]["downloadUri"]
               break
             end
           else
-            error_response = JSON.parse(response.body)
-            puts "Error response: #{error_response}"  # Log the error response
-            raise "Failed to get accessibility checker status: #{error_response['message']}"
+            raise "Failed to get Accessibility Checker status: #{response.env.response_body}"
           end
           counter += 1
           sleep 1
+        end
+      end
+
+      def store_json_from_presigned_url(presigned_url)
+        response = Faraday.get(presigned_url)
+      
+        if response.success?
+          json_response = JSON.parse(response.body)
+          Rails.logger.info "Accessibility Checker report: #{json_response}"
+          # Dump report into model as json-b
+        else
+          raise "Failed to fetch JSON from presigned URL: #{response.status} - #{response.body}"
+        end
+      end
+
+      def delete_asset
+        token = access_token
+  
+        response = Faraday.delete("#{host}/assets/#{asset_id}") do |req|
+          req.headers['Authorization'] = "Bearer #{token}"
+          req.headers['X-API-Key'] = client_id
+        end
+  
+        if response.success?
+          Rails.logger.info "Asset deleted successfully"
+          nil
+        else
+          raise "Failed to delete asset: #{respnse.env.response_body}"
         end
       end
 
@@ -161,7 +184,7 @@ module Adobe
 
       def s3_client
         @s3_client ||= Aws::S3::Client.new(
-          base_options 
+          s3_options 
         )
       end
 
@@ -178,14 +201,15 @@ module Adobe
         tempfile
       end
 
-      def base_options
-        {
+      def s3_options
+        options = {
           access_key_id: ENV.fetch('AWS_ACCESS_KEY_ID', nil),
           secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY', nil),
-          region: ENV.fetch('AWS_REGION', 'us-east-1'),
-          endpoint: "http://127.0.0.1:9000",
-          force_path_style: true
-        }#.merge(endpoint: ENV['S3_ENDPOINT'], force_path_style: true)
+          region: ENV.fetch('AWS_REGION', 'us-east-1')
+        }
+        
+        options = options.merge(endpoint: ENV['S3_ENDPOINT'], force_path_style: true) if ENV.key?('S3_ENDPOINT')
+        options
       end
     end
 end
