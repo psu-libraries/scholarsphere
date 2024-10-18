@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Adobe
+module AdobePdf
   module S3Handler
     # Downloads a file from S3 and returns a Tempfile object.
     #

@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
-module Adobe
+module AdobePdf
+  # Checks the accessibility of PDF files using Adobe's PDF Services API.
+  # It inherits from the Asset class and fetches and stores accessibility reports.
   class AccessibilityChecker < Asset
     FILE_SIZE_LIMIT = 100_000_000
 
     def call
       raise FileSizeExceededError, 'File size exceeds the limit of 100Mb' unless valid?
 
-      run_operation_on_asset { fetch_accessibility_report }
+      run_operations_on_asset { fetch_accessibility_report }
     end
 
     private
@@ -19,7 +21,7 @@ module Adobe
       def fetch_accessibility_report
         counter = 0
         parsed_response = {}
-        while parsed_response['status'] != 'done' || counter < 60
+        while parsed_response['status'] != 'done' || counter < 30
           response = Faraday.get(polling_location) do |req|
             req.headers['Authorization'] = "Bearer #{access_token}"
             req.headers['X-API-Key'] = client_id
@@ -36,7 +38,7 @@ module Adobe
             raise "Failed to get Accessibility Checker status: #{response.env.response_body}"
           end
           counter += 1
-          sleep 1
+          sleep 2
         end
       end
 

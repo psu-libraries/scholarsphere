@@ -2,7 +2,9 @@
 
 require_relative 's3_handler'
 
-module Adobe
+module AdobePdf
+  # The Asset class provides methods for managing assets in Adobe's PDF Services API.
+  # It includes methods for uploading, running operations on, and deleting assets.
   class Asset < Base
     include S3Handler
 
@@ -10,6 +12,7 @@ module Adobe
 
     CONTENT_TYPE_PDF = 'application/pdf'
 
+    # @param resource [FileResource] The FileResource object
     def initialize(resource)
       super()
       @resource = resource
@@ -20,7 +23,26 @@ module Adobe
 
       attr_accessor :resource, :asset_upload_uri_and_asset_id
 
-      def run_operation_on_asset
+      # Primary method for running operations on an asset.
+      # This method uploads the asset to Adobe, yields to the provided block for additional operations,
+      # and then deletes the asset.
+      # Example:
+      #
+      #   class MyAsset < AdobePdf::Asset
+      #     def perform_operations
+      #       run_operations_on_asset do
+      #         # Additional operations on the asset
+      #         puts "Running additional operations on asset with ID: #{asset_id}"
+      #       end
+      #     end
+      #   end
+      #
+      #   resource = FileResource.new(file_data: { 'id' => '123', 'storage' => 's3' })
+      #   my_asset = MyAsset.new(resource)
+      #   my_asset.perform_operations
+      #
+      # @yield The block to run additional operations on the asset.
+      def run_operations_on_asset
         upload_asset_to_adobe
         yield
         delete_asset
@@ -34,6 +56,7 @@ module Adobe
         @asset_id ||= asset_upload_uri_and_asset_id['assetID']
       end
 
+      # @return [Hash] Containing the :uploadUri and :assetID.
       def fetch_upload_uri_and_asset_id
         response = Faraday.post("#{host}/assets") do |req|
           req.headers['Content-Type'] = 'application/json'
