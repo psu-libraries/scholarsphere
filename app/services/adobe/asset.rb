@@ -17,9 +17,10 @@ module Adobe
     end
 
     private
+
       attr_accessor :resource, :asset_upload_uri_and_asset_id
 
-      def run_operation_on_asset(&block)
+      def run_operation_on_asset
         upload_asset_to_adobe
         yield
         delete_asset
@@ -44,7 +45,7 @@ module Adobe
         end
 
         if response.success?
-          parsed_response = JSON.parse(response.body)
+          JSON.parse(response.body)
         else
           raise "Failed to get presigned URL: #{response.env.response_body}"
         end

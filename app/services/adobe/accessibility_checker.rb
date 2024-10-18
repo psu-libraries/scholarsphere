@@ -1,10 +1,8 @@
+# frozen_string_literal: true
+
 module Adobe
   class AccessibilityChecker < Asset
     FILE_SIZE_LIMIT = 100_000_000
-
-    def initialize(resource)
-      super(resource)
-    end
 
     def call
       raise FileSizeExceededError, 'File size exceeds the limit of 100Mb' unless valid?
@@ -15,9 +13,9 @@ module Adobe
     private
 
       def valid?
-        resource.file_data["metadata"]["size"] < FILE_SIZE_LIMIT
+        resource.file_data['metadata']['size'] < FILE_SIZE_LIMIT
       end
-      
+
       def fetch_accessibility_report
         counter = 0
         parsed_response = {}
@@ -42,18 +40,6 @@ module Adobe
         end
       end
 
-      def store_json_from_presigned_url(presigned_url)
-        response = Faraday.get(presigned_url)
-
-        if response.success?
-          json_response = JSON.parse(response.body)
-          logger.info "Accessibility Checker report: #{json_response}"
-          # Dump report into model as json-b
-        else
-          raise "Failed to fetch JSON from presigned URL: #{response.status} - #{response.body}"
-        end
-      end
-
       def polling_location
         @polling_location ||= initiate_accessibility_checker
       end
@@ -72,6 +58,18 @@ module Adobe
           response.env.response_headers['location']
         else
           raise "Failed to run PDF Accessibility Checker: #{response.env.response_body}"
+        end
+      end
+
+      def store_json_from_presigned_url(presigned_url)
+        response = Faraday.get(presigned_url)
+
+        if response.success?
+          json_response = JSON.parse(response.body)
+          logger.info "Accessibility Checker report: #{json_response}"
+          # Dump report into model as json-b
+        else
+          raise "Failed to fetch JSON from presigned URL: #{response.status} - #{response.body}"
         end
       end
   end
