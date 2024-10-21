@@ -16,7 +16,7 @@ module Dashboard
         @resource.attributes = work_version_params
         process_response(on_error: :edit) do
           @resource.file_resources.each do |file_resource|
-            AccessibilityCheckJob.perform_async(file_resource)
+            AccessibilityCheckJob.perform_async(file_resource.id)
           end
         end
       end
