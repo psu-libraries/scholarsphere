@@ -70,8 +70,8 @@ module AdobePdf
 
         if response.success?
           json_response = JSON.parse(response.body)
-          logger.info "Accessibility Checker report: #{json_response}"
-          # Dump report into model as json-b
+          acr = AccessibilityCheckResult.find_or_initialize_by(file_resource: resource)
+          acr.update!(:report => json_response)
         else
           raise "Failed to fetch JSON from presigned URL: #{response.status} - #{response.body}"
         end

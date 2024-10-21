@@ -19,6 +19,10 @@ class FileResource < ApplicationRecord
           required: false,
           dependent: :destroy
 
+  has_one :accessibility_check_result,
+          required: false,
+          dependent: :destroy
+
   after_commit :perform_update_index, on: [:create, :update]
 
   def self.reindex_all(relation: all, async: false)

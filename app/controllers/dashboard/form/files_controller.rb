@@ -14,7 +14,11 @@ module Dashboard
         @resource = WorkVersion.find(params[:id])
         authorize(@resource)
         @resource.attributes = work_version_params
-        process_response(on_error: :edit)
+        process_response(on_error: :edit) do
+          @resource.file_resources.each do |file_resource|
+            AccessibilityCheckJob.perform_async(file_resource)
+          end
+        end
       end
 
       private
