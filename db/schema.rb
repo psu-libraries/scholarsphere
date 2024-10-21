@@ -270,6 +270,7 @@ ActiveRecord::Schema.define(version: 2024_10_21_204531) do
     t.datetime "withdrawn_at"
     t.datetime "removed_at"
     t.boolean "imported_metadata_from_rmd"
+    t.boolean "draft_curation_requested"
     t.datetime "sent_for_curation_at"
     t.boolean "mint_doi_requested"
     t.index ["external_app_id"], name: "index_work_versions_on_external_app_id"
