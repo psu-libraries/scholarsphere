@@ -6,7 +6,6 @@ class AccessibilityCheckJob < ApplicationJob
   def perform(resource_id)
     resource = FileResource.find(resource_id)
     Adobe::AccessibilityService.call(resource)
-
   rescue StandardError => e
     acr = AccessibilityCheckResult.find_or_initialize_by(file_resource: resource)
     acr.update!(report: { error: e.message })
