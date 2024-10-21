@@ -16,7 +16,8 @@ module Dashboard
         @resource.attributes = work_version_params
         process_response(on_error: :edit) do
           @resource.file_resources.each do |file_resource|
-            AccessibilityCheckJob.perform_async(file_resource.id)
+            mime_type = file_resource.file_data["metadata"]["mime_type"]
+            AccessibilityCheckJob.perform_later(file_resource.id) if mime_type == "application/pdf"
           end
         end
       end
