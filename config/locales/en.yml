@@ -6,6 +6,12 @@ en:
     ScholarSphere. All types of scholarly materials, including publications, instructional materials, creative works,
     and research data are accepted.
   read_only: Scholarsphere is undergoing maintenance. No changes can be made during this time.
+  accessibility_report:
+    header: Accessibility Report for
+    success: Successes
+    failure: Failures
+    manual_review: Needs Manual Review
+    tips: Tips for %{rule} Remediation
   activerecord:
     attributes:
       actor:

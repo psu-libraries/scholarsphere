@@ -4,6 +4,6 @@ class AccessibilityCheckResultsController < ApplicationController
   def show
     @result = AccessibilityCheckResult.find(params[:id])
     @report = @result.readable_report
-    @title = @result.file_resource.file_data["metadata"]["filename"]
+    @title = @result.file_resource.file_data['metadata']['filename']
   end
 end

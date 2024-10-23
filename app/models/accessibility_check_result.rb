@@ -30,102 +30,70 @@ class AccessibilityCheckResult < ApplicationRecord
     end
 
     def broadcast_to_file_version_memberships
-        file_resource.file_version_memberships.each do |membership|
-          FileVersionMembershipChannel.broadcast_to(
-            membership,
-            mime_type: membership.mime_type,
-            accessibility_score_present: membership.accessibility_score_present?,
-            report_download_url: membership.accessibility_report_download_url,
-            accessibility_score: membership.accessibility_score
-          )        
-        end
+      file_resource.file_version_memberships.each do |membership|
+        FileVersionMembershipChannel.broadcast_to(
+          membership,
+          mime_type: membership.mime_type,
+          accessibility_score_present: membership.accessibility_score_present?,
+          report_download_url: membership.accessibility_report_download_url,
+          accessibility_score: membership.accessibility_score
+        )
+      end
     end
 
-  def format_report
-    raw_report = detailed_report.values.flatten
-    failures = raw_report.select { |rule| rule['Status'] == 'Failed' }
-    success = raw_report.select { |rule| rule['Status'] == 'Passed' }
-    manual_review = raw_report.select { |rule| rule['Status'] == 'Needs manual check' }
+    def format_report
+      raw_report = detailed_report.values.flatten
+      failures = raw_report.select { |rule| rule['Status'] == 'Failed' }
+      success = raw_report.select { |rule| rule['Status'] == 'Passed' }
+      manual_review = raw_report.select { |rule| rule['Status'] == 'Needs manual check' }
 
-    failures.each do |rule|
-      rule['link'] = remediation_link(rule["Rule"])
+      failures.each do |rule|
+        rule['link'] = remediation_link(rule['Rule'])
+      end
+
+      { 'Success' => success, 'Failures' => failures, 'Manual Review' => manual_review }
     end
 
-    formatted_report = { "Success" => success, "Failures" => failures, "Manual Review" => manual_review }
-  end
+    def remediation_link(rule)
+      links = {
+        'Accessibility permission flag' => 'Perms',
+        'Image-only PDF' => 'ImageOnlyPDF',
+        'Tagged PDF' => 'TaggedPDF',
+        'Logical Reading Order' => 'LogicalRO',
+        'Primary language' => 'PrimeLang',
+        'Title' => 'DocTitle',
+        'Bookmarks' => 'Bookmarks',
+        'Color contrast' => 'ColorContrast',
+        'Tagged content' => 'TaggedCont',
+        'Tagged annotations' => 'TaggedAnnots',
+        'Tab order' => 'TabOrder',
+        'Character encoding' => 'CharEnc',
+        'Tagged multimedia' => 'Multimedia',
+        'Screen flicker' => 'FlickerRate',
+        'Scripts' => 'Scripts',
+        'Timed responses' => 'TimedResponses',
+        'Navigation links' => 'NavLinks',
+        'Tagged form fields' => 'TaggedFormFields',
+        'Field descriptions' => 'FormFieldNames',
+        'Figures alternate text' => 'FigAltText',
+        'Nested alternate text' => 'NestedAltText',
+        'Associated with content' => 'AltTextNoContent',
+        'Hides annotation' => 'HiddenAnnot',
+        'Other elements alternate text' => 'OtherAltText',
+        'Rows' => 'TableRows',
+        'TH and TD' => 'THTD',
+        'Headers' => 'TableHeaders',
+        'Regularity' => 'RegularTable',
+        'Summary' => 'TableSummary',
+        'List items' => 'ListItems',
+        'Lbl and LBody' => 'LblLBody',
+        'Appropriate nesting' => 'Headings'
+      }
 
-  def remediation_link(rule)
-    case rule
-    when 'Accessibility permission flag'
-        "#{base_url}Perms"
-    when 'Image-only PDF'
-        "#{base_url}ImageOnlyPDF"
-    when 'Tagged PDF'
-        "#{base_url}TaggedPDF"
-    when 'Logical Reading Order'
-        "#{base_url}LogicalRO"
-    when 'Primary language'
-        "#{base_url}PrimeLang"
-    when 'Title'
-        "#{base_url}DocTitle"
-    when 'Bookmarks'
-        "#{base_url}Bookmarks"
-    when 'Color contrast'
-        "#{base_url}ColorContrast"
-    when 'Tagged content'
-        "#{base_url}TaggedCont"
-    when 'Tagged annotations'
-        "#{base_url}TaggedAnnots"
-    when 'Tab order'
-        "#{base_url}TabOrder"
-    when 'Character encoding'
-        "#{base_url}CharEnc"
-    when 'Tagged multimedia'
-        "#{base_url}Multimedia"
-    when 'Screen flicker'
-        "#{base_url}FlickerRate"
-    when 'Scripts'
-        "#{base_url}Scripts"
-    when 'Timed responses'
-        "#{base_url}TimedResponses"
-    when 'Navigation links'
-        "#{base_url}NavLinks"
-    when 'Tagged form fields'
-        "#{base_url}TaggedFormFields"
-    when 'Field descriptions'
-        "#{base_url}FormFieldNames"
-    when 'Figures alternate text'
-        "#{base_url}FigAltText"
-    when 'Nested alternate text'
-        "#{base_url}NestedAltText"
-    when 'Associated with content'
-        "#{base_url}AltTextNoContent"
-    when 'Hides annotation'
-        "#{base_url}HiddenAnnot"
-    when 'Other elements alternate text'
-        "#{base_url}OtherAltText"
-    when 'Rows'
-        "#{base_url}TableRows"
-    when 'TH and TD'
-        "#{base_url}THTD"
-    when 'Headers'
-        "#{base_url}TableHeaders"
-    when 'Regularity'
-        "#{base_url}RegularTable"
-    when 'Summary'
-        "#{base_url}TableSummary"
-    when 'List items'
-        "#{base_url}ListItems"
-    when 'Lbl and LBody'
-        "#{base_url}LblLBody"
-    when 'Appropriate nesting'
-        "#{base_url}Headings"
-    else
-      'https://helpx.adobe.com/acrobat/using/create-verify-pdf-accessibility.html'
+      "#{base_url}#{links[rule] || 'https://helpx.adobe.com/acrobat/using/create-verify-pdf-accessibility.html'}"
     end
-  end
 
-  def base_url
-    'http://www.adobe.com/go/acrobat11_accessibility_checker_en#'
-  end
+    def base_url
+      'http://www.adobe.com/go/acrobat11_accessibility_checker_en#'
+    end
 end
