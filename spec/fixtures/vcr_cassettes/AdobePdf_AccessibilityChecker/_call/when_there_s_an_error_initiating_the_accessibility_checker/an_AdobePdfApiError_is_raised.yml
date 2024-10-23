@@ -211,3 +211,50 @@ http_interactions:
       encoding: UTF-8
       string: '{"error": {"code": "NOT_FOUND","message": "Asset not found."}}'
   recorded_at: Wed, 23 Oct 2024 12:27:41 GMT
+- request:
+    method: delete
+    uri: https://pdf-services.adobe.io/assets/urn:aaid:AS:UE1:95530497-4e9c-4d0d-ab5c-8ec74ebc43a4
+    body:
+      encoding: US-ASCII
+      base64_string: ''
+    headers:
+      User-Agent:
+      - Faraday v1.10.3
+      Authorization:
+      - Bearer eyJhbGciOiJSUzI1NiIsIng1dSI6Imltc19uYTEta2V5LWF0LTEuY2VyIiwia2lkIjo
+      X-Api-Key:
+      - adobe_client_id
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 204
+      message: No Content
+    headers:
+      Server:
+      - openresty
+      Date:
+      - Wed, 23 Oct 2024 12:27:54 GMT
+      Connection:
+      - keep-alive
+      X-Request-Id:
+      - jbsZ25edSiIOss1K7v4lYgOlGhctRW97
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - "[...]"
+      Access-Control-Max-Age:
+      - '60'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Headers:
+      - Authorization,Content-Type,X-Api-Key,User-Agent,If-Modified-Since
+    body:
+      encoding: UTF-8
+      string: ''
+  recorded_at: Wed, 23 Oct 2024 12:27:54 GMT
+recorded_with: VCR 6.1.0

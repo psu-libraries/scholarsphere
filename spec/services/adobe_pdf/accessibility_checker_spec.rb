@@ -32,7 +32,7 @@ RSpec.describe AdobePdf::AccessibilityChecker, :vcr do
     describe 'happy path' do
       it 'fetches the accessibility report' do
         expect { checker.call }.to change(AccessibilityCheckResult, :count).by(1)
-        eq({
+        expect(AccessibilityCheckResult.last.report).to eq({
              'Detailed Report' => {
                'Alternate Text' => [
                  { 'Description' => 'Figures require alternate text', 'Rule' => 'Figures alternate text', 'Status' => 'Failed' },
@@ -96,6 +96,27 @@ RSpec.describe AdobePdf::AccessibilityChecker, :vcr do
       end
     end
 
+    # This test takes over a minute to complete
+    describe 'when polling takes too long' do
+      around do |example|
+        VCR.configure do |config|
+          original_options = config.default_cassette_options.dup
+          # Allow playback repeats to simulate polling taking too long
+          config.default_cassette_options[:allow_playback_repeats] = true
+    
+          example.run
+    
+          # Restore original configuration after the test
+          config.default_cassette_options = original_options
+        end
+      end
+
+      it 'stores an error in the AccessibilityChecker report field' do
+        expect { checker.call }.to change(AccessibilityCheckResult, :count).by(1)
+        expect(AccessibilityCheckResult.last.report).to eq({'error' => 'Accessibility check failed: Polling time limit exceeded'})
+      end
+    end
+
     describe "when there's an error fetching the access token" do
       it 'an AdobePdfApiError is raised' do
         expect { checker.call }.to raise_error(AdobePdf::Base::AdobePdfApiError,
@@ -112,41 +133,46 @@ RSpec.describe AdobePdf::AccessibilityChecker, :vcr do
 
     describe "when there's an error while uploading the pdf to adobe" do
       it 'an AdobePdfApiError is raised' do
-        expect { checker.call }.to
-        raise_error(AdobePdf::Base::AdobePdfApiError,
-                    /Failed to upload file: 403 - <\?xml version=\\"1.0\\" encoding=\\"UTF-8\\"\?>\\n<Error><Code>AccessDenied</)
+        expect { checker.call }.to raise_error(
+          AdobePdf::Base::AdobePdfApiError,
+          /Failed to upload file: 403 - <\?xml version=\\"1.0\\" encoding=\\"UTF-8\\"\?>\\n<Error><Code>AccessDenied</
+        )
       end
     end
 
     describe "when there's an error initiating the accessibility checker" do
       it 'an AdobePdfApiError is raised' do
-        expect { checker.call }.to
-        raise_error(AdobePdf::Base::AdobePdfApiError,
-                    'Failed to run PDF Accessibility Checker: 404 - {"error": {"code": "NOT_FOUND","message": "Asset not found."}}')
+        expect { checker.call }.to raise_error(
+          AdobePdf::Base::AdobePdfApiError,
+          'Failed to run PDF Accessibility Checker: 404 - {"error": {"code": "NOT_FOUND","message": "Asset not found."}}'
+        )
       end
     end
 
     describe "when there's an error polling the accessibility checker" do
       it 'an AdobePdfApiError is raised' do
-        expect { checker.call }.to
-        raise_error(AdobePdf::Base::AdobePdfApiError,
-                    'Failed to get Accessibility Checker status: 404 - {"error":{"code": "NOT_FOUND","message": "Job not found."}}')
+        expect { checker.call }.to raise_error(
+          AdobePdf::Base::AdobePdfApiError,
+          'Failed to get Accessibility Checker status: 404 - {"error":{"code": "NOT_FOUND","message": "Job not found."}}'
+        )
       end
     end
 
     describe "when there's an error fetching the accessibility report" do
       it 'an AdobePdfApiError is raised' do
-        expect { checker.call }.to
-        raise_error(AdobePdf::Base::AdobePdfApiError,
-                    /Failed to fetch JSON from presigned URL: 404 - <\?xml version=\\"1.0\\" encoding=\\"UTF-8\\"\?><Error><Code>AccessDenied/)
+        expect { checker.call }.to raise_error(
+          AdobePdf::Base::AdobePdfApiError,
+          /Failed to fetch JSON from presigned URL: 404 - <\?xml version=\\"1.0\\" encoding=\\"UTF-8\\"\?><Error><Code>AccessDenied/
+        )
       end
     end
 
     describe "when there's an error deleting the asset" do
       it 'an AdobePdfApiError is raised' do
-        expect { checker.call }.to
-        raise_error(AdobePdf::Base::AdobePdfApiError,
-                    'Failed to delete asset: 500 - {"error": {"code": "INTERNAL_SERVER_ERROR","message": "There was an error processing your request."}}')
+        expect { checker.call }.to raise_error(
+          AdobePdf::Base::AdobePdfApiError,
+          'Failed to delete asset: 500 - {"error": {"code": "INTERNAL_SERVER_ERROR","message": "There was an error processing your request."}}'
+        )
       end
     end
 

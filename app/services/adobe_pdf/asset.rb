@@ -43,6 +43,12 @@ module AdobePdf
       def run_operations_on_asset
         upload_asset_to_adobe
         yield
+      rescue StandardError => e
+        # Log error in case ensure block fails
+        Rails.logger.error e.message
+        raise e
+      ensure
+        # Ensure the asset is always deleted
         delete_asset
       end
 
