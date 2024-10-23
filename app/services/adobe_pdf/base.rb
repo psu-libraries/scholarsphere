@@ -6,7 +6,7 @@ module AdobePdf
   # retrieving API credentials and generating an access token.
   class Base
     class AdobePdfApiError < StandardError; end
-    
+
     def initialize
       @logger = Logger.new($stdout)
     end
@@ -16,18 +16,18 @@ module AdobePdf
       attr_accessor :logger
 
       def client_id
-        if !Rails.env.test?
-          ENV.fetch('ADOBE_CLIENT_ID', 'adobe_client_id')
-        else
+        if Rails.env.test?
           'adobe_client_id'
+        else
+          ENV.fetch('ADOBE_CLIENT_ID', 'adobe_client_id')
         end
       end
 
       def client_secret
-        if !Rails.env.test?
-          ENV.fetch('ADOBE_CLIENT_SECRET', 'adobe_client_secret')
-        else
+        if Rails.env.test?
           'adobe_client_secret'
+        else
+          ENV.fetch('ADOBE_CLIENT_SECRET', 'adobe_client_secret')
         end
       end
 
