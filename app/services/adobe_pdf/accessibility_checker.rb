@@ -76,7 +76,7 @@ module AdobePdf
         if response.success?
           json_response = JSON.parse(response.body)
           acr = AccessibilityCheckResult.find_or_initialize_by(file_resource: resource)
-          acr.update!(:report => json_response)
+          acr.update!(report: json_response)
         else
           raise AdobePdfApiError, "Failed to fetch JSON from presigned URL: #{response.status} - #{response.body}"
         end

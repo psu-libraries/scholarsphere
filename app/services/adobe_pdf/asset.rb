@@ -43,10 +43,6 @@ module AdobePdf
       def run_operations_on_asset
         upload_asset_to_adobe
         yield
-      rescue StandardError => e
-        # Log error in case ensure block fails
-        Rails.logger.error e.message
-        raise e
       ensure
         # Ensure the asset is always deleted
         delete_asset
@@ -108,6 +104,10 @@ module AdobePdf
         else
           raise AdobePdfApiError, "Failed to delete asset: #{response.status} - #{response.body}"
         end
+      rescue StandardError => e
+        # Just log errors here
+        # We don't want to raise an error if the asset deletion fails
+        logger.error e.message
       end
   end
 end
