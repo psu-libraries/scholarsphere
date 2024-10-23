@@ -339,6 +339,8 @@ en:
         audit_heading: "Previous Curators:"
         explanation: "Changes the curator of the work. Currently, only existing Penn State users are allowed."
         submit_button: Update Curator
+      files:
+        heading: Accessibility Review
     works:
       index:
         heading: "Your ScholarSphere Deposits"
@@ -551,6 +553,8 @@ en:
         name: Name
         size: Size
         mime_type: Type
+        accessibility_score: Accessibility Result
+        accessibility_report: Accessibility Report
         unknown_virus: unknown
         actions: ''
         rename: Rename

@@ -26,6 +26,9 @@
           <li class="nav-item">
             <%= link_to t('dashboard.shared.editors_form.heading'), "##{t('dashboard.shared.editors_form.heading').parameterize}", class: 'nav-link' %>
           </li>
+          <li class="nav-item">
+            <%= link_to t('dashboard.shared.files.heading'), "##{t('dashboard.shared.files.heading').parameterize}", class: 'nav-link' %>
+          </li>
 
           <% if current_user.admin? %>
             <li class="nav-item">
@@ -142,6 +145,16 @@
 
       <div class="actions mb-3">
         <%= render 'dashboard/shared/editors_form', editors_form: @editors_form, url: dashboard_work_path(@work) %>
+      </div>
+
+      <div class="keyline keyline--left">
+        <h2 id="<%= t('dashboard.shared.files.heading').parameterize %>" class="h4"><%= t('dashboard.shared.files.heading') %></h2>
+      </div>
+
+      <div class="actions mb-3">
+        <% if @work.latest_version.file_version_memberships.any? %>
+          <%= render 'dashboard/form/files/read_only_file_list', file_version_memberships: @work.latest_version.file_version_memberships %>
+        <% end %>
       </div>
 
       <% if current_user.admin? %>

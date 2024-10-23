@@ -1,0 +1,31 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= t('dashboard.file_list.edit.name') %></th>
+      <th><%= t('dashboard.file_list.edit.accessibility_score') %></th>
+      <th><%= t('dashboard.file_list.edit.accessibility_report') %></th>
+    </tr>
+  </thead>
+  <tbody class="work-files__file">
+    <% file_version_memberships.each do |membership| %>
+       <tr data-controller="accessibility-result" 
+            data-accessibility-result-id="<%= membership.id %>"
+            data-accessibility-result-mime-type="<%= membership.mime_type %>"
+            data-accessibility-result-score-present="<%= membership.accessibility_score_present? %>"
+            data-accessibility-result-score="<%= membership.accessibility_score %>"
+            data-accessibility-result-report-url="<%= membership.accessibility_score_present? ? membership.accessibility_report_download_url : ''%>"
+            id="<%= dom_id membership %>">
+        <td>
+          <span class="filename"><%= membership.title %></span>
+        </td>
+         <td>
+          <span data-target="accessibility-result.score"></span>
+        </td>
+        <td>
+          <span data-target="accessibility-result.link">
+          </span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
