@@ -1,0 +1,20 @@
+<h2> Accessibility Report for <%= @title %> </h2>
+<p></p>
+<h3> Successes </h3>
+  <ul>
+    <% @report["Success"].each do |rule| %>
+      <li><strong><%= "#{rule["Rule"]}: " %></strong><%= "#{rule["Description"]} - #{rule["Status"]}" %></li>
+    <% end %>
+  </ul>
+<h3> Failures </h3>
+  <ul>
+    <% @report["Failures"].each do |rule| %>
+      <li><strong><%= "#{rule["Rule"]}: " %></strong><%= "#{rule["Description"]} - #{rule["Status"]}" %>, <a href="<%=rule["link"]%>" target="_blank">Tips for <%= rule["Rule"]%> Remediation</a></li>
+    <% end %>
+  </ul>
+<h3> Needs Manual Review </h3>
+  <ul>
+    <% @report["Manual Review"].each do |rule| %>
+      <li><strong><%= "#{rule["Rule"]}: " %></strong><%= "#{rule["Description"]} - #{rule["Status"]}" %></li>
+    <% end %>
+  </ul>
