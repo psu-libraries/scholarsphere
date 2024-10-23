@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 module AdobePdf
+  # The Base class provides common configuration and authentication methods
+  # for interacting with Adobe's PDF Services API. It includes methods for
+  # retrieving API credentials and generating an access token.
   class Base
-    # The Base class provides common configuration and authentication methods
-    # for interacting with Adobe's PDF Services API. It includes methods for
-    # retrieving API credentials and generating an access token.
+    class AdobePdfApiError < StandardError; end
+    
     def initialize
       @logger = Logger.new($stdout)
     end
@@ -50,7 +52,7 @@ module AdobePdf
         if response.success?
           JSON.parse(response.body)['access_token']
         else
-          raise "Authentication failed: #{response.env.response_body}"
+          raise AdobePdfApiError, "Authentication failed: #{response.status} - #{response.body}"
         end
       end
 

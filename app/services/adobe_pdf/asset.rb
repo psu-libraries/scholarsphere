@@ -68,7 +68,7 @@ module AdobePdf
         if response.success?
           JSON.parse(response.body)
         else
-          raise "Failed to get presigned URL: #{response.env.response_body}"
+          raise AdobePdfApiError, "Failed to get presigned URL: #{response.status} - #{response.body}"
         end
       end
 
@@ -83,7 +83,7 @@ module AdobePdf
         if response.success?
           logger.info 'File uploaded successfully'
         else
-          raise "Failed to upload file: #{response.status} - #{response.body}"
+          raise AdobePdfApiError, "Failed to upload file: #{response.status} - #{response.body}"
         end
       ensure
         file.close
@@ -100,7 +100,7 @@ module AdobePdf
           logger.info 'Asset deleted successfully'
           nil
         else
-          raise "Failed to delete asset: #{respnse.env.response_body}"
+          raise AdobePdfApiError, "Failed to delete asset: #{response.status} - #{response.body}"
         end
       end
   end

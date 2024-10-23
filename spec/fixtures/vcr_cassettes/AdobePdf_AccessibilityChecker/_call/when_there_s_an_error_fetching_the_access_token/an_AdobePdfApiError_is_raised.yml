@@ -1,0 +1,51 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://pdf-services.adobe.io/token
+    body:
+      encoding: UTF-8
+      string: client_id=adobe_client_id&client_secret=adobe_client_secret
+    headers:
+      User-Agent:
+      - Faraday v1.10.3
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 400
+      message: Bad Request
+    headers:
+      Server:
+      - openresty
+      Date:
+      - Wed, 23 Oct 2024 14:26:40 GMT
+      Content-Type:
+      - application/json;charset=UTF-8
+      Content-Length:
+      - '75'
+      Connection:
+      - keep-alive
+      X-Request-Id:
+      - NsU9A7CJgvVu6nrWqLu7VH4U37sVXQCW
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - "*"
+      Access-Control-Max-Age:
+      - '60'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Headers:
+      - Authorization,Content-Type,X-Api-Key,User-Agent,If-Modified-Since,x-api-app-info
+    body:
+      encoding: UTF-8
+      string: '{"error":{"code":"invalid_client","message":"invalid client_id parameter"}}'
+  recorded_at: Wed, 23 Oct 2024 14:26:40 GMT
+recorded_with: VCR 6.1.0

@@ -26,8 +26,7 @@ module AdobePdf
 
       def fetch_accessibility_report
         counter = 0
-        parsed_response = {}
-        while parsed_response['status'] != 'done' || counter < 30
+        while counter < 30
           response = Faraday.get(polling_location) do |req|
             req.headers['Authorization'] = "Bearer #{access_token}"
             req.headers['X-API-Key'] = client_id
@@ -38,14 +37,16 @@ module AdobePdf
             parsed_response = JSON.parse(response.body)
             if parsed_response['status'] == 'done'
               store_json_from_presigned_url parsed_response['report']['downloadUri']
-              break
+              return
             end
           else
-            raise "Failed to get Accessibility Checker status: #{response.env.response_body}"
+            raise AdobePdfApiError, "Failed to get Accessibility Checker status: #{response.status} - #{response.body}"
           end
           counter += 1
           sleep 2
         end
+        acr = AccessibilityCheckResult.find_or_initialize_by(file_resource: resource)
+        acr.update!(report: { error: 'Accessibility check failed: Polling time limit exceeded' })
       end
 
       def polling_location
@@ -65,7 +66,7 @@ module AdobePdf
         if response.success?
           response.env.response_headers['location']
         else
-          raise "Failed to run PDF Accessibility Checker: #{response.env.response_body}"
+          raise AdobePdfApiError, "Failed to run PDF Accessibility Checker: #{response.status} - #{response.body}"
         end
       end
 
@@ -77,7 +78,7 @@ module AdobePdf
           acr = AccessibilityCheckResult.find_or_initialize_by(file_resource: resource)
           acr.update!(:report => json_response)
         else
-          raise "Failed to fetch JSON from presigned URL: #{response.status} - #{response.body}"
+          raise AdobePdfApiError, "Failed to fetch JSON from presigned URL: #{response.status} - #{response.body}"
         end
       end
   end
