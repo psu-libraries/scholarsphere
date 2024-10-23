@@ -8,16 +8,20 @@ module AdobePdf
 
     FILE_SIZE_LIMIT = 100_000_000
 
-    def call
-      raise FileSizeExceededError, 'File size exceeds the limit of 100Mb' unless valid?
+    def initialize(resource)
+      raise FileSizeExceededError, 'File size exceeds the limit of 100Mb' unless valid?(resource)
 
+      super(resource)
+    end
+
+    def call
       run_operations_on_asset { fetch_accessibility_report }
     end
 
     private
 
-      def valid?
-        resource.file_data['metadata']['size'] < FILE_SIZE_LIMIT
+      def valid?(file_resource)
+        file_resource.file_data['metadata']['size'] < FILE_SIZE_LIMIT
       end
 
       def fetch_accessibility_report

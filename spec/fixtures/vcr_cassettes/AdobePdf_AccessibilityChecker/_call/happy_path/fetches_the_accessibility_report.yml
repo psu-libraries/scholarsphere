@@ -1,0 +1,651 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://pdf-services.adobe.io/token
+    body:
+      encoding: UTF-8
+      string: client_id=adobe_client_id&client_secret=adobe_client_secret
+    headers:
+      User-Agent:
+      - Faraday v1.10.3
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - openresty
+      Date:
+      - Wed, 23 Oct 2024 12:27:27 GMT
+      Content-Type:
+      - application/json;charset=UTF-8
+      Content-Length:
+      - '1055'
+      Connection:
+      - keep-alive
+      X-Request-Id:
+      - xzKAibhkugKigedevnPu476fZW89qPDD
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - "*"
+      Access-Control-Max-Age:
+      - '60'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Headers:
+      - Authorization,Content-Type,X-Api-Key,User-Agent,If-Modified-Since,x-api-app-info
+    body:
+      encoding: UTF-8
+      string: '{"access_token":"eyJhbGciOiJSUzI1NiIsIng1dSI6Imltc19uYTEta2V5LWF0LTEuY2VyIiwia2lkIjo","token_type":"bearer","expires_in":86399}'
+  recorded_at: Wed, 23 Oct 2024 12:27:27 GMT
+- request:
+    method: post
+    uri: https://pdf-services.adobe.io/assets
+    body:
+      encoding: UTF-8
+      string: '{"mediaType":"application/pdf"}'
+    headers:
+      User-Agent:
+      - Faraday v1.10.3
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer eyJhbGciOiJSUzI1NiIsIng1dSI6Imltc19uYTEta2V5LWF0LTEuY2VyIiwia2lkIjo
+      X-Api-Key:
+      - adobe_client_id
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - openresty
+      Date:
+      - Wed, 23 Oct 2024 12:27:32 GMT
+      Content-Type:
+      - application/json;charset=UTF-8
+      Content-Length:
+      - '1972'
+      Connection:
+      - keep-alive
+      X-Request-Id:
+      - AhuAXTPg8iJsBfFnUix5bf9tPW2YUbtV
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - "[...]"
+      Access-Control-Max-Age:
+      - '60'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Headers:
+      - Authorization,Content-Type,X-Api-Key,User-Agent,If-Modified-Since
+    body:
+      encoding: UTF-8
+      string: '{"uploadUri":"https://dcplatformstorageservice-prod-us-east-1.s3-accelerate.amazonaws.com/adobe_client_id_FE141E7E670446A30A495E28%40techacct.adobe.com/3191e005-f40b-4163-b1a7-eed05978e97d?X-Amz-Security-Token=IQoJb3JpZ2luX2VjEFQaCXVzLWVhc3QtMSJGMEQCIDYCZzhw4yyiDs%2BXpTzYVcMewjLI2uUrKFJfX8yhsGFyAiAvxvyFRXtOv3iWKDdEZK0fKA8qQCDSMLkVulTP8Vq48iq0BQi9%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAAaDDQyMDUzMzQ0NTk4MiIMgirz9Gt8F0%2Bu0C0YKogFodN15YQf3W89us%2F5eRqCUpJGuYsaS8Z47cUdyvPqjcj9b0kj%2BUIIsjvzWVpeszo5%2F1%2FTfJo6TTtp0nzobVzkQ8jHC8644aMxXz60IYJtaHXxshDj82BrH%2BaHSW1T2ZRiAWW9RTxaw2hapfBl7CwkOTtmKfsmWg7q1isqR%2FTNUga7FrDEVbHedWtQ4Jp102zhfqHSn1gM0EBIeBfcgM0gR%2FusU0Zg9rWqcBDy73LGy76glYW75%2B87t39SdFQG15g1Rm7JTRkmIPBEAa03XM4eYlwEa8gAukDwej%2F9FiI8AlpYY7GxoEo68BfgRTdzBExk5Mi1BoEwRnLBZlGh04eQexC0BRxaU0N%2BvJCUKhyXlS23bAlA%2B7m4eTf5ncvkvzJyJGneIIJim3E3qkgPX5jlVm8OmjXvd%2BZD5jj1X%2F2uKp54zqTEqux0rX3bVK2K3nIufp1exzx8Ia8P0btmeuSlPH3c6juUA6b2H0xRGNEH0UG1%2B9aQ5YjqmzYCrHl2SCjqzUw10%2FYgzdneMp4L6hgGASg8xWsrDe0N5Epx9aQD2vgNnUehkd6eARBMPgSWcqHVoCZI%2FM%2BLT3uqW9Bib%2BsaCUvvDcDMbGviyNg8Y8f2LF2OWGgfaIQMZ4%2BQaKIPnr2FQMnwrgjr67V8vAt9Sw0E0uGUejrKM%2F7taFXq1kPQ6g6yWgMkoGCORj7ti%2FT5VkiddzX60gRk5rEhu5zKVsg29uJqGhStkukHkMic%2F4Vy1SZrclroC96jUeE%2B96Tb5sPTM10Vsy7NHhhQHQ32Zm6UanG%2Bvk049uqOW%2F7afhdehO3fmTlX8lK0tgnbGyt2xntRH0gJpOAXbgq%2BXQr9umk21%2B%2Bxe9P6WLApMMfH47gGOqoBCbQvwcSGvrAOPuCpPs%2BjVsIQwaysLVMr3B8i%2FM7vO7oa2t4sFjuTd2J%2Fyhag%2FtYzlVxsBzqnAJ0MNnhpLaYkuC5Sg%2FauFqZcHagfCYefklDAtMcq5Ig8zYUCgcxwzZME2K%2BznkLGC4Gi97A6SL2au31i4s5Pt%2BsMYle9gjoGkGJX6HVpWvlY6yqkwIPIQKdazMFOBIQzXnkdK5qLOvN%2Bme0wv4T4u7R%2BvX8%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20241023T122732Z&X-Amz-SignedHeaders=content-type%3Bhost&X-Amz-Expires=3600&X-Amz-Credential=ASIAWD2N7EVPH6R6YQJK%2F20241023%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=c43ca7f05592e54d21336d57051625cb5508f21d476e7211f344ef23297f6c8e","assetID":"urn:aaid:AS:UE1:95530497-4e9c-4d0d-ab5c-8ec74ebc43a4"}'
+  recorded_at: Wed, 23 Oct 2024 12:27:32 GMT
+- request:
+    method: put
+    uri: https://dcplatformstorageservice-prod-us-east-1.s3-accelerate.amazonaws.com/adobe_client_id_FE141E7E670446A30A495E28@techacct.adobe.com/3191e005-f40b-4163-b1a7-eed05978e97d?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIAWD2N7EVPH6R6YQJK/20241023/us-east-1/s3/aws4_request&X-Amz-Date=20241023T122732Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEFQaCXVzLWVhc3QtMSJGMEQCIDYCZzhw4yyiDs%2BXpTzYVcMewjLI2uUrKFJfX8yhsGFyAiAvxvyFRXtOv3iWKDdEZK0fKA8qQCDSMLkVulTP8Vq48iq0BQi9//////////8BEAAaDDQyMDUzMzQ0NTk4MiIMgirz9Gt8F0%2Bu0C0YKogFodN15YQf3W89us/5eRqCUpJGuYsaS8Z47cUdyvPqjcj9b0kj%2BUIIsjvzWVpeszo5/1/TfJo6TTtp0nzobVzkQ8jHC8644aMxXz60IYJtaHXxshDj82BrH%2BaHSW1T2ZRiAWW9RTxaw2hapfBl7CwkOTtmKfsmWg7q1isqR/TNUga7FrDEVbHedWtQ4Jp102zhfqHSn1gM0EBIeBfcgM0gR/usU0Zg9rWqcBDy73LGy76glYW75%2B87t39SdFQG15g1Rm7JTRkmIPBEAa03XM4eYlwEa8gAukDwej/9FiI8AlpYY7GxoEo68BfgRTdzBExk5Mi1BoEwRnLBZlGh04eQexC0BRxaU0N%2BvJCUKhyXlS23bAlA%2B7m4eTf5ncvkvzJyJGneIIJim3E3qkgPX5jlVm8OmjXvd%2BZD5jj1X/2uKp54zqTEqux0rX3bVK2K3nIufp1exzx8Ia8P0btmeuSlPH3c6juUA6b2H0xRGNEH0UG1%2B9aQ5YjqmzYCrHl2SCjqzUw10/YgzdneMp4L6hgGASg8xWsrDe0N5Epx9aQD2vgNnUehkd6eARBMPgSWcqHVoCZI/M%2BLT3uqW9Bib%2BsaCUvvDcDMbGviyNg8Y8f2LF2OWGgfaIQMZ4%2BQaKIPnr2FQMnwrgjr67V8vAt9Sw0E0uGUejrKM/7taFXq1kPQ6g6yWgMkoGCORj7ti/T5VkiddzX60gRk5rEhu5zKVsg29uJqGhStkukHkMic/4Vy1SZrclroC96jUeE%2B96Tb5sPTM10Vsy7NHhhQHQ32Zm6UanG%2Bvk049uqOW/7afhdehO3fmTlX8lK0tgnbGyt2xntRH0gJpOAXbgq%2BXQr9umk21%2B%2Bxe9P6WLApMMfH47gGOqoBCbQvwcSGvrAOPuCpPs%2BjVsIQwaysLVMr3B8i/M7vO7oa2t4sFjuTd2J/yhag/tYzlVxsBzqnAJ0MNnhpLaYkuC5Sg/auFqZcHagfCYefklDAtMcq5Ig8zYUCgcxwzZME2K%2BznkLGC4Gi97A6SL2au31i4s5Pt%2BsMYle9gjoGkGJX6HVpWvlY6yqkwIPIQKdazMFOBIQzXnkdK5qLOvN%2Bme0wv4T4u7R%2BvX8=&X-Amz-Signature=c43ca7f05592e54d21336d57051625cb5508f21d476e7211f344ef23297f6c8e&X-Amz-SignedHeaders=content-type%3Bhost
+    body:
+      encoding: UTF-8
+      base64_string: |
+        eyBtZXNzYWdlOiAnU3VjY2VzcycgfQ==
+    headers:
+      User-Agent:
+      - Faraday v1.10.3
+      Content-Type:
+      - application/pdf
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Length:
+      - '0'
+      Connection:
+      - keep-alive
+      X-Amz-Id-2:
+      - hYZL2sS/ze3dQ4PvPKlg4xxyGygHyauNGbGLR63I8iXGTByezUBnZMVj9JuJ7YY2pjSaigoN7o8=
+      X-Amz-Request-Id:
+      - 1RVFP7YQ61KECYH4
+      Date:
+      - Wed, 23 Oct 2024 12:27:36 GMT
+      X-Amz-Version-Id:
+      - D3IoCpD_9xGRO_cRcoWsApYRopeq6df2
+      X-Amz-Expiration:
+      - expiry-date="Fri, 25 Oct 2024 00:00:00 GMT", rule-id="YTNmNmJlMTktM2U4YS00NDhhLTkyNzEtNjk1NTc3NGZlMDBj"
+      X-Amz-Server-Side-Encryption:
+      - aws:kms
+      X-Amz-Server-Side-Encryption-Aws-Kms-Key-Id:
+      - arn:aws:kms:us-east-1:420533445982:key/d51f5664-5955-44c4-abef-d01808a6c45e
+      X-Amz-Server-Side-Encryption-Bucket-Key-Enabled:
+      - 'true'
+      Etag:
+      - '"ea9fca51cc0922da10b9f73491b75ae7"'
+      Server:
+      - AmazonS3
+      X-Cache:
+      - Miss from cloudfront
+      Via:
+      - 1.1 b051e9c33308597b659c33b8999b521c.cloudfront.net (CloudFront)
+      X-Amz-Cf-Pop:
+      - IAD89-C2
+      X-Amz-Cf-Id:
+      - CuCXX_2uGcA5poZo6hMK40ZantLeH-OSZH_4imJvO736Jq2JzSRaPA==
+    body:
+      encoding: UTF-8
+      string: ''
+  recorded_at: Wed, 23 Oct 2024 12:27:35 GMT
+- request:
+    method: post
+    uri: https://pdf-services.adobe.io/operation/accessibilitychecker
+    body:
+      encoding: UTF-8
+      string: '{"assetID":"urn:aaid:AS:UE1:95530497-4e9c-4d0d-ab5c-8ec74ebc43a4"}'
+    headers:
+      User-Agent:
+      - Faraday v1.10.3
+      Authorization:
+      - Bearer eyJhbGciOiJSUzI1NiIsIng1dSI6Imltc19uYTEta2V5LWF0LTEuY2VyIiwia2lkIjo
+      X-Api-Key:
+      - adobe_client_id
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Server:
+      - openresty
+      Date:
+      - Wed, 23 Oct 2024 12:27:41 GMT
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      X-Request-Id:
+      - loq9yjPHgj3tLkJl0ayGh9Q0aXmnBP9B
+      Location:
+      - https://pdf-services-ue1.adobe.io/operation/accessibilitychecker/loq9yjPHgj3tLkJl0ayGh9Q0aXmnBP9B/status
+      Retry-After:
+      - '1'
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - "*"
+      Access-Control-Max-Age:
+      - '60'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Headers:
+      - Authorization,Content-Type,X-Api-Key,User-Agent,If-Modified-Since,x-api-app-info
+    body:
+      encoding: UTF-8
+      string: ''
+  recorded_at: Wed, 23 Oct 2024 12:27:41 GMT
+- request:
+    method: get
+    uri: https://pdf-services-ue1.adobe.io/operation/accessibilitychecker/loq9yjPHgj3tLkJl0ayGh9Q0aXmnBP9B/status
+    body:
+      encoding: US-ASCII
+      base64_string: ''
+    headers:
+      User-Agent:
+      - Faraday v1.10.3
+      Authorization:
+      - Bearer eyJhbGciOiJSUzI1NiIsIng1dSI6Imltc19uYTEta2V5LWF0LTEuY2VyIiwia2lkIjo
+      X-Api-Key:
+      - adobe_client_id
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - openresty
+      Date:
+      - Wed, 23 Oct 2024 12:27:44 GMT
+      Content-Type:
+      - application/json;charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      X-Request-Id:
+      - p8nbOd5fCh8RuZ3vCtqXKnM7bHQ6F0v9
+      Vary:
+      - accept-encoding
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - "*"
+      Access-Control-Max-Age:
+      - '60'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Headers:
+      - Authorization,Content-Type,X-Api-Key,User-Agent,If-Modified-Since,x-api-app-info
+    body:
+      encoding: ASCII-8BIT
+      base64_string: |
+        eyJzdGF0dXMiOiJkb25lIiwiYXNzZXQiOnsibWV0YWRhdGEiOnsidHlwZSI6
+        ImFwcGxpY2F0aW9uL3BkZiIsInNpemUiOjIyMzA0fSwiZG93bmxvYWRVcmki
+        OiJodHRwczovL2RjcGxhdGZvcm1zdG9yYWdlc2VydmljZS1wcm9kLXVzLWVh
+        c3QtMS5zMy1hY2NlbGVyYXRlLmFtYXpvbmF3cy5jb20vYWRvYmVfY2xpZW50
+        X2lkX0ZFMTQxRTdFNjcwNDQ2QTMwQTQ5NUUyOCU0MHRlY2hhY2N0LmFkb2Jl
+        LmNvbS9lYWZhYmIwZi02YzZmLTRkYmMtYmZhZC05ZjExYjExMjljZDI/WC1B
+        bXotU2VjdXJpdHktVG9rZW49SVFvSmIzSnBaMmx1WDJWakVGTWFDWFZ6TFdW
+        aGMzUXRNU0pITUVVQ0lCYTk3RVpRT2ZJZHhYN0UxWW1xMHNxRFpCN21OJTJC
+        WGNKSnJXVzJnSk1va2pBaUVBdWtMaGtQN24ydEVDJTJCdXUwOEU0dnRla3hC
+        RTV2ZHElMkZON0ZVb0dTSlBzJTJGQXF0QVVJdlAlMkYlMkYlMkYlMkYlMkYl
+        MkYlMkYlMkYlMkYlMkZBUkFBR2d3ME1qQTFNek0wTkRVNU9ESWlETmZIZjI3
+        SklGMk5qSHRVUUNxSUJWa0F4VW5VTkdvZnozOGdkUko2c1MwdkNpR29TbG9o
+        aHlDdVpDdlg5TERBJTJCRjUlMkZnaHV1OGQ3dmlPNUthQVZUd0hJaEd1RHZ6
+        UngyY1JjNHlMWFdpSlpaaCUyRjVSY0R0TEU3YVFVT0VXdThETmVvJTJGNE45
+        SWlnZTgzWEFxa3p1ViUyRk5GZ00lMkIzTjhab3o4aW9sc2RRa2sxTTNUMXAz
+        QUphTjUwaWkzaElnWTEybTNMVzZPY0F0aURhU0JwVFhwUTdjeDExZ3k5JTJG
+        RXlTMzc1VSUyQnIlMkZsU0tOcXB2cWVDcVZWQ3IyeTVZOHFMM3REUHhhQ1VG
+        V0dQano1elkzZ1FhWXk1ZHNWR2R1QTYyTndMQ2w4OTRaYTZaY3lRSnFtODJC
+        ajVmekp4VVklMkZzQ1ZXZk9VYkFwamd4MUpZM3VVZjBlbzVvbzklMkJvcFBu
+        elpGdlolMkZDQUNQV29mOUhjRHJTYTJMdXY0SFN1YzNEVHRIcHlBcnZyRFBl
+        TTcxSmVlY1Vhemw5MGF6MUxLa2dmTTV0WU4wRGtFVzRDV0pCa0Q1WUNuJTJC
+        WThCYnpucWI5Y3lpakpLMkZPJTJGRFlGVU11UzRNJTJCR0NPNnJ6Q0F1SWNZ
+        ZkVxODBXckZuU1N4V1V4MGtXaHJVZFRYaCUyQiUyRkpoWm5kYUdvUzNkc3Fr
+        cFYlMkJvUDg3akdXaDRKdFo2bkNmczN4WVhFbVpUN3JiSVglMkIzVyUyQm1o
+        WkdXNGF2S1NYWXNZeTVUYmRXZzJpbW5HJTJCM2xuanhLUzhjZEZETTh6cHIl
+        MkZsZExhNHNoQnJxamtsbjBUb3dWY2FZOElQeWFsN0dLOCUyQnclMkJJWmp1
+        VVY1OW1IdW5jbGhhVXJMOEU4R3JRYmszSFNUbVJUYk96U3Q3dXRCUE1PbW9x
+        STl3MW91alpVeGRmdVJsNHN4NkZLczI1eFVjUzdYcTBYWW5VaUliVThVcUtN
+        V2Q3Y2FUazFYSEhYZVhwblVIZGZnaERpJTJCcXR2alh2ejR3RllWYXRYOWlK
+        Q1RleUlyS3BBWmpJU3BadHRZTmRSeHhVR1R3Q2dITWNJblU5WFVKNElpTk9G
+        MmFrJTJCeVM4d3JVTDZGeXdxeEcxcGtSemRzbHk2RkVSRkwwRnl3UTc3ZnZW
+        TFI1VnpFaTZkQyUyRnFlbnE1NEY4NGRUOFFaNG51aE5qQ3FvJTJCTzRCanFw
+        QWEwRmJ1cWdqN3o0N0VnSVN5YzZLR1BVT095SlBUVXBoV3hGZlVLcXVkMzZU
+        S2kyeW15MnVvYjlMMCUyQjU5Y2gwJTJGU2hHYXdVS1ZzR0R0SDlxWG9YOTRL
+        WlIlMkZvVklLTEQlMkJ5Zm55cVdrSHFXUSUyRjFTYUNHTEl1V0NBcVBZUWRS
+        NE9FWU9MVHJUVWRXZUo0SVFaV004ZzFQc1k0blRvSFdKOHJPcEZwUEV1VkhZ
+        aXByM3ZEclBSNW53QlpYbnRtJTJGNktlaWZjR3VqQVMwSGtSa1dKUmhlSGNv
+        WVElMkJnRmVtaUU4VmRPdyUzRCZYLUFtei1BbGdvcml0aG09QVdTNC1ITUFD
+        LVNIQTI1NiZYLUFtei1EYXRlPTIwMjQxMDIzVDEyMjc0M1omWC1BbXotU2ln
+        bmVkSGVhZGVycz1ob3N0JlgtQW16LUV4cGlyZXM9MzYwMCZYLUFtei1DcmVk
+        ZW50aWFsPUFTSUFXRDJON0VWUE1WSVNMWDNTJTJGMjAyNDEwMjMlMkZ1cy1l
+        YXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1TaWduYXR1cmU9MjJk
+        MzI3ZjJiYjI1YjVmYWM0YjkxODE2MmFkMTUzNjJmZDIwODBmODMxY2U1MmNl
+        MTY5NWYwYzQwODNkMTgxOCIsImFzc2V0SUQiOiJ1cm46YWFpZDpBUzpVRTE6
+        MjZiMDcyYjAtYzgxZC00YzRhLWEzN2UtMDA4MTY1YWE3Y2I2In0sInJlcG9y
+        dCI6eyJtZXRhZGF0YSI6eyJ0eXBlIjoiYXBwbGljYXRpb24vanNvbiIsInNp
+        emUiOjYyNTN9LCJkb3dubG9hZFVyaSI6Imh0dHBzOi8vZGNwbGF0Zm9ybXN0
+        b3JhZ2VzZXJ2aWNlLXByb2QtdXMtZWFzdC0xLnMzLWFjY2VsZXJhdGUuYW1h
+        em9uYXdzLmNvbS9hZG9iZV9jbGllbnRfaWRfRkUxNDFFN0U2NzA0NDZBMzBB
+        NDk1RTI4JTQwdGVjaGFjY3QuYWRvYmUuY29tL2M2NDljNWJiLTU0MTktNDdk
+        Yi04YTYzLTRjZTgyYzExNmM1ZT9YLUFtei1TZWN1cml0eS1Ub2tlbj1JUW9K
+        YjNKcFoybHVYMlZqRUZNYUNYVnpMV1ZoYzNRdE1TSkhNRVVDSUJhOTdFWlFP
+        ZklkeFg3RTFZbXEwc3FEWkI3bU4lMkJYY0pKcldXMmdKTW9rakFpRUF1a0xo
+        a1A3bjJ0RUMlMkJ1dTA4RTR2dGVreEJFNXZkcSUyRk43RlVvR1NKUHMlMkZB
+        cXRBVUl2UCUyRiUyRiUyRiUyRiUyRiUyRiUyRiUyRiUyRiUyRkFSQUFHZ3cw
+        TWpBMU16TTBORFU1T0RJaUROZkhmMjdKSUYyTmpIdFVRQ3FJQlZrQXhVblVO
+        R29mejM4Z2RSSjZzUzB2Q2lHb1Nsb2hoeUN1WkN2WDlMREElMkJGNSUyRmdo
+        dXU4ZDd2aU81S2FBVlR3SEloR3VEdnpSeDJjUmM0eUxYV2lKWlpoJTJGNVJj
+        RHRMRTdhUVVPRVd1OEROZW8lMkY0TjlJaWdlODNYQXFrenVWJTJGTkZnTSUy
+        QjNOOFpvejhpb2xzZFFrazFNM1QxcDNBSmFONTBpaTNoSWdZMTJtM0xXNk9j
+        QXRpRGFTQnBUWHBRN2N4MTFneTklMkZFeVMzNzVVJTJCciUyRmxTS05xcHZx
+        ZUNxVlZDcjJ5NVk4cUwzdERQeGFDVUZXR1BqejV6WTNnUWFZeTVkc1ZHZHVB
+        NjJOd0xDbDg5NFphNlpjeVFKcW04MkJqNWZ6SnhVWSUyRnNDVldmT1ViQXBq
+        Z3gxSlkzdVVmMGVvNW9vOSUyQm9wUG56WkZ2WiUyRkNBQ1BXb2Y5SGNEclNh
+        Mkx1djRIU3VjM0RUdEhweUFydnJEUGVNNzFKZWVjVWF6bDkwYXoxTEtrZ2ZN
+        NXRZTjBEa0VXNENXSkJrRDVZQ24lMkJZOEJiem5xYjljeWlpakpLMkZPJTJG
+        WUZVTXVTNE0lMkJHQ082cnpDQXVJY1lmRXE4MFdyRm5TU3hXVXgwa1doclVk
+        VFhoJTJCJTJGSmhabmRhR29TM2RzcWtwViUyQm9QODdqR1doNEp0WjZuQ2Zz
+        M3hZWEVtWlQ3cmJJWCUyQjNXJTJCbWhaR1c0YXZLU1hZc1l5NVRiZFdnMmlt
+        bkclMkIzbG5qeEtTOGNkRkRNOHpwciUyRmxkTGE0c2hCcnFqa2xuMFRvd1Zj
+        YVk4SVB5YWw3R0s4JTJCdyUyQklaanVVVjU5bUh1bmNsaGFVckw4RThHclFi
+        azNIU1RtUlRiT3pTdDd1dEJQTU9tb3FJOXcxb3VqWlV4ZGZ1Umw0c3g2Rktz
+        MjV4VWNTN1hxMFhZblVpSWJVOFVxS01XZDdjYVRrMVhISFhlWHBuVUhkZmdo
+        RGklMkJxdHZqWHZ6NHdGWVZhdFg5aUpDVGV5SXJLcEFaaklTcFp0dFlOZFJ4
+        eFVHVHdDZ0hNY0luVTlYVUo0SWlOT0YyYWslMkJ5Uzh3clVMNkZ5d3F4RzFw
+        a1J6ZHNseTZGRVJGTDBGeXdRNzdmdlZMUjVWekVpNmRDJTJGcWVucTU0Rjg0
+        ZFQ4UVo0bnVoTmpDcW8lMkJPNEJqcXBBYTBGYnVxZ2o3ejQ3RWdJU3ljNktH
+        UFVPT3lKUFRVcGhXeEZmVUtxdWQzNlRLaTJ5bXkydW9iOUwwJTJCNTljaDAl
+        MkZTaEdhd1VLVnNHRHRIOXFYb1g5NEtaUiUyRm9WSUtMRCUyQnlmbnlxV2tI
+        cVdRJTJGMVNhQ0dMSXVXQ0FxUFlRZFI0T0VZT0xUclRVZFdlSjRJUVpXTThn
+        MVBzWTRuVG9IV0o4ck9wRnBQRXVWSFlpcHIzdkRyUFI1bndCWlhudG0lMkY2
+        S2VpZmNHdWpBUzBIa1JrV0pSaGVIY29ZUSUyQmdGZW1pRThWZE93JTNEJlgt
+        QW16LUFsZ29yaXRobT1BV1M0LUhNQUMtU0hBMjU2JlgtQW16LURhdGU9MjAy
+        NDEwMjNUMTIyNzQzWiZYLUFtei1TaWduZWRIZWFkZXJzPWhvc3QmWC1BbXot
+        RXhwaXJlcz0zNjAwJlgtQW16LUNyZWRlbnRpYWw9QVNJQVdEMk43RVZQTVZJ
+        U0xYM1MlMkYyMDI0MTAyMyUyRnVzLWVhc3QtMSUyRnMzJTJGYXdzNF9yZXF1
+        ZXN0JlgtQW16LVNpZ25hdHVyZT1iNGU5NGRmMTA2MWM1MzAzZTAwM2ExY2Rl
+        YTlkNDA5NjZiZjk1OTY2ZTg2Y2E2OGFlYmM5YjRmNzcyYjZjOTdkIiwiYXNz
+        ZXRJRCI6InVybjphYWlkOkFTOlVFMToxMjZhZmFjYi1lYzU0LTQwODctOTQ2
+        Zi05NmIzOWZmYWUxYWEifX0=
+  recorded_at: Wed, 23 Oct 2024 12:27:44 GMT
+- request:
+    method: get
+    uri: https://dcplatformstorageservice-prod-us-east-1.s3-accelerate.amazonaws.com/adobe_client_id_FE141E7E670446A30A495E28@techacct.adobe.com/c649c5bb-5419-47db-8a63-4ce82c116c5e?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIAWD2N7EVPMVISLX3S/20241023/us-east-1/s3/aws4_request&X-Amz-Date=20241023T122743Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEFMaCXVzLWVhc3QtMSJHMEUCIBa97EZQOfIdxX7E1Ymq0sqDZB7mN%2BXcJJrWW2gJMokjAiEAukLhkP7n2tEC%2Buu08E4vtekxBE5vdq/N7FUoGSJPs/AqtAUIvP//////////ARAAGgw0MjA1MzM0NDU5ODIiDNfHf27JIF2NjHtUQCqIBVkAxUnUNGofz38gdRJ6sS0vCiGoSlohhyCuZCvX9LDA%2BF5/ghuu8d7viO5KaAVTwHIhGuDvzRx2cRc4yLXWiJZZh/5RcDtLE7aQUOEWu8DNeo/4N9Iige83XAqkzuV/NFgM%2B3N8Zoz8iolsdQkk1M3T1p3AJaN50ii3hIgY12m3LW6OcAtiDaSBpTXpQ7cx11gy9/EyS375U%2Br/lSKNqpvqeCqVVCr2y5Y8qL3tDPxaCUFWGPjz5zY3gQaYy5dsVGduA62NwLCl894Za6ZcyQJqm82Bj5fzJxUY/sCVWfOUbApjgx1JY3uUf0eo5oo9%2BopPnzZFvZ/CACPWof9HcDrSa2Luv4HSuc3DTtHpyArvrDPeM71JeecUazl90az1LKkgfM5tYN0DkEW4CWJBkD5YCn%2BY8Bbznqb9cyiijJK2FO/YFUMuS4M%2BGCO6rzCAuIcYfEq80WrFnSSxWUx0kWhrUdTXh%2B/JhZndaGoS3dsqkpV%2BoP87jGWh4JtZ6nCfs3xYXEmZT7rbIX%2B3W%2BmhZGW4avKSXYsYy5TbdWg2imnG%2B3lnjxKS8cdFDM8zpr/ldLa4shBrqjkln0TowVcaY8IPyal7GK8%2Bw%2BIZjuUV59mHunclhaUrL8E8GrQbk3HSTmRTbOzSt7utBPMOmoqI9w1oujZUxdfuRl4sx6FKs25xUcS7Xq0XYnUiIbU8UqKMWd7caTk1XHHXeXpnUHdfghDi%2BqtvjXvz4wFYVatX9iJCTeyIrKpAZjISpZttYNdRxxUGTwCgHMcInU9XUJ4IiNOF2ak%2ByS8wrUL6FywqxG1pkRzdsly6FERFL0FywQ77fvVLR5VzEi6dC/qenq54F84dT8QZ4nuhNjCqo%2BO4BjqpAa0Fbuqgj7z47EgISyc6KGPUOOyJPTUphWxFfUKqud36TKi2ymy2uob9L0%2B59ch0/ShGawUKVsGDtH9qXoX94KZR/oVIKLD%2ByfnyqWkHqWQ/1SaCGLIuWCAqPYQdR4OEYOLTrTUdWeJ4IQZWM8g1PsY4nToHWJ8rOpFpPEuVHYipr3vDrPR5nwBZXntm/6KeifcGujAS0HkRkWJRheHcoYQ%2BgFemiE8VdOw=&X-Amz-Signature=b4e94df1061c5303e003a1cdea9d40966bf95966e86ca68aebc9b4f772b6c97d&X-Amz-SignedHeaders=host
+    body:
+      encoding: US-ASCII
+      base64_string: ''
+    headers:
+      User-Agent:
+      - Faraday v1.10.3
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '6253'
+      Connection:
+      - keep-alive
+      X-Amz-Id-2:
+      - CqCIgYmdnFFC2l4p3kRvcAUNUd115M1OKQzvN/mCI9JYf8QoutTgboFBOGb/sBWi2mAt09DcOco=
+      X-Amz-Request-Id:
+      - WS81YGCVKA4S25NK
+      Date:
+      - Wed, 23 Oct 2024 12:27:50 GMT
+      Last-Modified:
+      - Wed, 23 Oct 2024 12:27:43 GMT
+      X-Amz-Expiration:
+      - expiry-date="Fri, 25 Oct 2024 00:00:00 GMT", rule-id="YTNmNmJlMTktM2U4YS00NDhhLTkyNzEtNjk1NTc3NGZlMDBj"
+      Etag:
+      - '"aa8620b081075d085c3fe00196ed928d"'
+      X-Amz-Server-Side-Encryption:
+      - aws:kms
+      X-Amz-Server-Side-Encryption-Aws-Kms-Key-Id:
+      - arn:aws:kms:us-east-1:420533445982:key/d51f5664-5955-44c4-abef-d01808a6c45e
+      X-Amz-Server-Side-Encryption-Bucket-Key-Enabled:
+      - 'true'
+      X-Amz-Version-Id:
+      - eg_yMybK5FQqwM_.AfKBRf9mEyN21RqF
+      Accept-Ranges:
+      - bytes
+      Server:
+      - AmazonS3
+      X-Cache:
+      - Miss from cloudfront
+      Via:
+      - 1.1 ae3759c8dc48487a424a60bd577ad554.cloudfront.net (CloudFront)
+      X-Amz-Cf-Pop:
+      - IAD89-C2
+      X-Amz-Cf-Id:
+      - cvrfVocPY7kwLI0ZZfD1eDAexLEM9eFd5D370utEuLpHWk5JEYK6Ig==
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+            "Summary": {
+                "Description": "The checker found problems which may prevent the document from being fully accessible.",
+                "Needs manual check": 2,
+                "Passed manually": 0,
+                "Failed manually": 0,
+                "Skipped": 0,
+                "Passed": 12,
+                "Failed": 18
+            },
+            "Detailed Report": {
+                "Document": [
+                    {
+                        "Rule": "Accessibility permission flag",
+                        "Status": "Passed",
+                        "Description": "Accessibility permission flag must be set"
+                    },
+                    {
+                        "Rule": "Image-only PDF",
+                        "Status": "Passed",
+                        "Description": "Document is not image-only PDF"
+                    },
+                    {
+                        "Rule": "Tagged PDF",
+                        "Status": "Failed",
+                        "Description": "Document is tagged PDF"
+                    },
+                    {
+                        "Rule": "Logical Reading Order",
+                        "Status": "Needs manual check",
+                        "Description": "Document structure provides a logical reading order"
+                    },
+                    {
+                        "Rule": "Primary language",
+                        "Status": "Failed",
+                        "Description": "Text language is specified"
+                    },
+                    {
+                        "Rule": "Title",
+                        "Status": "Failed",
+                        "Description": "Document title is showing in title bar"
+                    },
+                    {
+                        "Rule": "Bookmarks",
+                        "Status": "Passed",
+                        "Description": "Bookmarks are present in large documents"
+                    },
+                    {
+                        "Rule": "Color contrast",
+                        "Status": "Needs manual check",
+                        "Description": "Document has appropriate color contrast"
+                    }
+                ],
+                "Page Content": [
+                    {
+                        "Rule": "Tagged content",
+                        "Status": "Failed",
+                        "Description": "All page content is tagged"
+                    },
+                    {
+                        "Rule": "Tagged annotations",
+                        "Status": "Passed",
+                        "Description": "All annotations are tagged"
+                    },
+                    {
+                        "Rule": "Tab order",
+                        "Status": "Failed",
+                        "Description": "Tab order is consistent with structure order"
+                    },
+                    {
+                        "Rule": "Character encoding",
+                        "Status": "Passed",
+                        "Description": "Reliable character encoding is provided"
+                    },
+                    {
+                        "Rule": "Tagged multimedia",
+                        "Status": "Passed",
+                        "Description": "All multimedia objects are tagged"
+                    },
+                    {
+                        "Rule": "Screen flicker",
+                        "Status": "Passed",
+                        "Description": "Page will not cause screen flicker"
+                    },
+                    {
+                        "Rule": "Scripts",
+                        "Status": "Passed",
+                        "Description": "No inaccessible scripts"
+                    },
+                    {
+                        "Rule": "Timed responses",
+                        "Status": "Passed",
+                        "Description": "Page does not require timed responses"
+                    },
+                    {
+                        "Rule": "Navigation links",
+                        "Status": "Passed",
+                        "Description": "Navigation links are not repetitive"
+                    }
+                ],
+                "Forms": [
+                    {
+                        "Rule": "Tagged form fields",
+                        "Status": "Passed",
+                        "Description": "All form fields are tagged"
+                    },
+                    {
+                        "Rule": "Field descriptions",
+                        "Status": "Passed",
+                        "Description": "All form fields have description"
+                    }
+                ],
+                "Alternate Text": [
+                    {
+                        "Rule": "Figures alternate text",
+                        "Status": "Failed",
+                        "Description": "Figures require alternate text"
+                    },
+                    {
+                        "Rule": "Nested alternate text",
+                        "Status": "Failed",
+                        "Description": "Alternate text that will never be read"
+                    },
+                    {
+                        "Rule": "Associated with content",
+                        "Status": "Failed",
+                        "Description": "Alternate text must be associated with some content"
+                    },
+                    {
+                        "Rule": "Hides annotation",
+                        "Status": "Failed",
+                        "Description": "Alternate text should not hide annotation"
+                    },
+                    {
+                        "Rule": "Other elements alternate text",
+                        "Status": "Failed",
+                        "Description": "Other elements that require alternate text"
+                    }
+                ],
+                "Tables": [
+                    {
+                        "Rule": "Rows",
+                        "Status": "Failed",
+                        "Description": "TR must be a child of Table, THead, TBody, or TFoot"
+                    },
+                    {
+                        "Rule": "TH and TD",
+                        "Status": "Failed",
+                        "Description": "TH and TD must be children of TR"
+                    },
+                    {
+                        "Rule": "Headers",
+                        "Status": "Failed",
+                        "Description": "Tables should have headers"
+                    },
+                    {
+                        "Rule": "Regularity",
+                        "Status": "Failed",
+                        "Description": "Tables must contain the same number of columns in each row and rows in each column"
+                    },
+                    {
+                        "Rule": "Summary",
+                        "Status": "Failed",
+                        "Description": "Tables must have a summary"
+                    }
+                ],
+                "Lists": [
+                    {
+                        "Rule": "List items",
+                        "Status": "Failed",
+                        "Description": "LI must be a child of L"
+                    },
+                    {
+                        "Rule": "Lbl and LBody",
+                        "Status": "Failed",
+                        "Description": "Lbl and LBody must be children of LI"
+                    }
+                ],
+                "Headings": [
+                    {
+                        "Rule": "Appropriate nesting",
+                        "Status": "Failed",
+                        "Description": "Appropriate nesting"
+                    }
+                ]
+            }
+        }
+  recorded_at: Wed, 23 Oct 2024 12:27:49 GMT
+- request:
+    method: delete
+    uri: https://pdf-services.adobe.io/assets/urn:aaid:AS:UE1:95530497-4e9c-4d0d-ab5c-8ec74ebc43a4
+    body:
+      encoding: US-ASCII
+      base64_string: ''
+    headers:
+      User-Agent:
+      - Faraday v1.10.3
+      Authorization:
+      - Bearer eyJhbGciOiJSUzI1NiIsIng1dSI6Imltc19uYTEta2V5LWF0LTEuY2VyIiwia2lkIjo
+      X-Api-Key:
+      - adobe_client_id
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 204
+      message: No Content
+    headers:
+      Server:
+      - openresty
+      Date:
+      - Wed, 23 Oct 2024 12:27:54 GMT
+      Connection:
+      - keep-alive
+      X-Request-Id:
+      - jbsZ25edSiIOss1K7v4lYgOlGhctRW97
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - "[...]"
+      Access-Control-Max-Age:
+      - '60'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Headers:
+      - Authorization,Content-Type,X-Api-Key,User-Agent,If-Modified-Since
+    body:
+      encoding: UTF-8
+      string: ''
+  recorded_at: Wed, 23 Oct 2024 12:27:54 GMT
+recorded_with: VCR 6.1.0

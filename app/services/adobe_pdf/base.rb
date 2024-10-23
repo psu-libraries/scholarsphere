@@ -14,11 +14,19 @@ module AdobePdf
       attr_accessor :logger
 
       def client_id
-        ENV.fetch('ADOBE_CLIENT_ID')
+        if !Rails.env.test?
+          ENV.fetch('ADOBE_CLIENT_ID', 'adobe_client_id')
+        else
+          'adobe_client_id'
+        end
       end
 
       def client_secret
-        ENV.fetch('ADOBE_CLIENT_SECRET')
+        if !Rails.env.test?
+          ENV.fetch('ADOBE_CLIENT_SECRET', 'adobe_client_secret')
+        else
+          'adobe_client_secret'
+        end
       end
 
       def host
