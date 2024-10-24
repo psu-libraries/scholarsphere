@@ -10,13 +10,13 @@ RSpec.describe LibanswersApiService, :vcr do
 
     context 'when successful response is returned from libanswers /ticket/create endpoint' do
       it 'returns the url of the ticket created' do
-        expect(described_class.new(work.id, 'curation').admin_create_curation_ticket).to eq 'https://psu.libanswers.com/admin/ticket?qid=13226122'
+        expect(described_class.new().admin_create_curation_ticket('curation', work.id)).to eq 'https://psu.libanswers.com/admin/ticket?qid=13226122'
       end
     end
 
     context 'when unsuccessful response is returned from libanswers /ticket/create endpoint' do
       it 'raises a LibanswersApiError' do
-        expect { described_class.new(work.id, 'curation').admin_create_curation_ticket }
+        expect { described_class.new().admin_create_curation_ticket('curation', work.id) }
           .to raise_error LibanswersApiService::LibanswersApiError, 'Error saving ticket.'
       end
     end
@@ -27,7 +27,7 @@ RSpec.describe LibanswersApiService, :vcr do
       end
 
       it 'raises a LibanswersApiError' do
-        expect { described_class.new(work.id, 'curation').admin_create_curation_ticket }
+        expect { described_class.new().admin_create_curation_ticket('curation', work.id) }
           .to raise_error LibanswersApiService::LibanswersApiError, 'Error Message'
       end
     end
@@ -44,7 +44,7 @@ RSpec.describe LibanswersApiService, :vcr do
       end
 
       it 'uses id 5477 for curation types' do
-        described_class.new(work.id, 'curation').admin_create_curation_ticket
+        described_class.new().admin_create_curation_ticket('curation', work.id)
         expect(mock_faraday_connection).to have_received(:post).with(
           '/api/1.1/ticket/create',
           "quid=#{curation_quid}&pquestion=ScholarSphere Deposit Curation: #{
@@ -53,7 +53,7 @@ RSpec.describe LibanswersApiService, :vcr do
       end
 
       it 'uses id 2590 for accessibility types' do
-        described_class.new(work.id, 'accessibility').admin_create_curation_ticket
+        described_class.new().admin_create_curation_ticket('accessibility', work.id)
         expect(mock_faraday_connection).to have_received(:post).with(
           '/api/1.1/ticket/create',
           "quid=#{accessibility_quid}&pquestion=ScholarSphere Deposit Accessibility Curation: #{
@@ -61,5 +61,8 @@ RSpec.describe LibanswersApiService, :vcr do
         )
       end
     end
+  end
+
+  describe '#request_alternate_format' do
   end
 end

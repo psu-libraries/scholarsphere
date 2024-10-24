@@ -4,40 +4,51 @@ class LibanswersApiService
   class LibanswersApiError < StandardError; end
   attr_reader :work
 
-  def initialize(work_id, ticket_type)
+  def admin_create_curation_ticket(ticket_type, work_id)
     @work = Work.find(work_id)
-    @ticket_type = ticket_type
+    conn = create_connection
+    response = conn.post(create_ticket_path, "quid=#{scholarsphere_queue_id(ticket_type)}&" +
+                                             "pquestion=#{admin_subject(ticket_type)}&" +
+                                             "pname=#{work.display_name}&" +
+                                             "pemail=#{work.email}")
+    handle_response(response)
+    rescue Faraday::ConnectionFailed => e
+      raise LibanswersApiError, e.message
   end
 
-  def admin_create_curation_ticket
-    conn = Faraday.new(url: host) do |f|
-      f.headers['Authorization'] = "Bearer #{oauth_token}"
-    end
-    response = conn.post(create_ticket_path, "quid=#{scholarsphere_queue_id}&" +
-                                             "pquestion=#{subject}&" +
-                                             "pname=#{send_to_name}&" +
-                                             "pemail=#{send_to_email}")
-    if response.env.status == 200
-      host + JSON.parse(response.env.response_body)['ticketUrl']
-    else
-      raise LibanswersApiError, JSON.parse(response.env.response_body)['error']
-    end
-  rescue Faraday::ConnectionFailed => e
-    raise LibanswersApiError, e.message
+  def request_alternate_format(request)
+    conn = create_connection
+    response = conn.post(create_ticket_path,
+    "quid=#{scholarsphere_queue_id('accessibility')}&" +
+    "pquestion=Scholarsphere Alternate Format Request: #{request.title}&" +
+    "pname=#{request.name}&" +
+    "pemail=#{request.email}&" +
+    "pdetails=#{request.message} | Work url: #{request.url}&"
+    )
+
+    handle_response(response)
+    rescue Faraday::ConnectionFailed => e
+      raise LibanswersApiError, e.message
   end
 
   private
-
-    def send_to_name
-      work.display_name
+    def create_connection
+      conn = Faraday.new(url: host) do |f|
+        f.headers['Authorization'] = "Bearer #{oauth_token}"
+      end
+      conn
     end
 
-    def send_to_email
-      work.email
+    def handle_response(response)
+      if response.env.status == 200
+        host + JSON.parse(response.env.response_body)['ticketUrl']
+      else
+        raise LibanswersApiError, JSON.parse(response.env.response_body)['error']
+      end
     end
 
-    def subject
-      if @ticket_type == 'curation'
+    def admin_subject(ticket_type)
+      if ticket_type == 'curation'
         "ScholarSphere Deposit Curation: #{work.latest_version.title}"
       else
         "ScholarSphere Deposit Accessibility Curation: #{work.latest_version.title}"
@@ -66,7 +77,7 @@ class LibanswersApiService
       'https://psu.libanswers.com'
     end
 
-    def scholarsphere_queue_id
-      @ticket_type == 'curation' ? '5477' : '2590'
+    def scholarsphere_queue_id(ticket_type)
+      ticket_type == 'curation' ? '5477' : '2590'
     end
 end
