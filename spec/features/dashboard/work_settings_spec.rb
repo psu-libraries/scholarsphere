@@ -383,11 +383,11 @@ RSpec.describe 'Work Settings Page', with_user: :user do
       end
 
       describe 'clicking the accessibility team depositor button' do
-        context 'when no error is raised' do
-          it 'creates a ticket in libanswers and directs to that ticket', :vcr do
+        context 'when there is no error' do
+          it 'directs to that ticket in libanswers', :vcr do
             click_button I18n.t('resources.contact_accessibility_team_button.text')
           rescue ActionController::RoutingError
-            expect(page.driver.browser.last_response['Location']).to eq 'https://psu.libanswers.com/admin/ticket?qid=13224664'
+            expect(page.driver.browser.last_response['Location']).to eq 'https://psu.libanswers.com/admin/ticket?qid=14782516'
           end
         end
       end

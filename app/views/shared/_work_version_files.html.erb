@@ -19,9 +19,8 @@
             <span class="meta__type">mime_type: <%= file.mime_type %></span> |
             <span class="meta__date">date: <%= file.file_resource.deposited_at.to_s(:short_date) %></span>
             <%= render(FileSignatureComponent.new(file: file)) %>
-            <span>|</span> 
-            <%= link_to "Request alternate format",
-              resource_alternate_format_request_path(file.id, resource_id: work_version.uuid) %>
+            <span>|</span>
+            <%= link_to 'Request alternate format', resource_alternate_format_request_path(file.id, resource_id: work_version.uuid) %>
           </p>
         </div>
       </li>
