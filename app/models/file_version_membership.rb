@@ -36,6 +36,26 @@ class FileVersionMembership < ApplicationRecord
     !!@changed_by_system
   end
 
+  def accessibility_score
+    accessibility_result&.score
+  end
+
+  def accessibility_score_present?
+    accessibility_result&.score.present?
+  end
+
+  def accessibility_failures?
+    accessibility_result&.failures_present?
+  end
+
+  def accessibility_report_download_url
+    Rails.application.routes.url_helpers.accessibility_check_result_path(accessibility_result)
+  end
+
+  def accessibility_result
+    file_resource.accessibility_check_result
+  end
+
   private
 
     def uploader

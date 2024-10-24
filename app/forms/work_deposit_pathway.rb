@@ -38,9 +38,11 @@ class WorkDepositPathway
   end
 
   def allows_accessibility_remediation_request?
-    work? && !@resource.accessibility_remediation_requested && !@resource.draft_curation_requested && !data_and_code?
-    # will need to add on to this once the autochecker is in place
-    # remediation request allowed if any of the files have failed (or did not undergo) validation
+    work? &&
+      !@resource.accessibility_remediation_requested &&
+      !@resource.draft_curation_requested &&
+      !data_and_code? &&
+      @resource.file_version_memberships.any?(&:accessibility_failures?)
     # don't allow for instruments
   end
 
