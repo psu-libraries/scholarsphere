@@ -46,4 +46,47 @@ http_interactions:
       string: '{"userid":"agw13","cprid":"2784093","givenName":"Adam","middleName":"Garner","familyName":"Wead","preferredGivenName":"Adam","preferredFamilyName":"Wead","active":true,"confHold":false,"universityEmail":"agw13@psu.edu","serviceAccount":false,"affiliation":["STAFF"],"displayName":"Adam
         Wead","link":{"href":"https://dev.apps.psu.edu/cpr/resources/2784093"}}'
   recorded_at: Tue, 16 Mar 2021 15:14:40 GMT
-recorded_with: VCR 6.0.0
+- request:
+    method: post
+    uri: https://sessions.bugsnag.com/
+    body:
+      encoding: UTF-8
+      string: '{"notifier":{"name":"Ruby Bugsnag Notifier","url":"https://www.bugsnag.com","version":"6.27.1"},"device":{"hostname":"L5-LST-JML8735","runtimeVersions":{"ruby":"3.1.2","rails":"6.1.7.8","rack":"2.2.9","rake":"13.1.0"}},"app":{"version":null,"releaseStage":"development","type":"active
+        job"},"sessionCounts":[{"startedAt":"2024-10-24T19:21:00","sessionsStarted":20}]}'
+    headers:
+      Bugsnag-Api-Key:
+      - 4a5bd13239520eda7e393cf0c8cb855a
+      Bugsnag-Payload-Version:
+      - '1.0'
+      Content-Type:
+      - application/json
+      Bugsnag-Sent-At:
+      - '2024-10-24T19:21:43.052Z'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 202
+      message: Accepted
+    headers:
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 24 Oct 2024 19:21:43 GMT
+      Content-Length:
+      - '21'
+      Via:
+      - 1.1 google
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: UTF-8
+      string: '{"status":"accepted"}'
+  recorded_at: Thu, 24 Oct 2024 19:21:43 GMT
+recorded_with: VCR 6.1.0

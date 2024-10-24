@@ -12,31 +12,29 @@ class LibanswersApiService
                                              "pname=#{work.display_name}&" +
                                              "pemail=#{work.email}")
     handle_response(response)
-    rescue Faraday::ConnectionFailed => e
-      raise LibanswersApiError, e.message
+  rescue Faraday::ConnectionFailed => e
+    raise LibanswersApiError, e.message
   end
 
   def request_alternate_format(request)
     conn = create_connection
     response = conn.post(create_ticket_path,
-    "quid=#{scholarsphere_queue_id('accessibility')}&" +
-    "pquestion=Scholarsphere Alternate Format Request: #{request.title}&" +
-    "pname=#{request.name}&" +
-    "pemail=#{request.email}&" +
-    "pdetails=#{request.message} | Work url: #{request.url}&"
-    )
-
+                         "quid=#{scholarsphere_queue_id('accessibility')}&" +
+                         "pquestion=Scholarsphere Alternate Format Request: #{request.title}&" +
+                         "pname=#{request.name}&" +
+                         "pemail=#{request.email}&" +
+                         "pdetails=#{request.message} | Work url: #{request.url}&")
     handle_response(response)
-    rescue Faraday::ConnectionFailed => e
-      raise LibanswersApiError, e.message
+  rescue Faraday::ConnectionFailed => e
+    raise LibanswersApiError, e.message
   end
 
   private
+
     def create_connection
-      conn = Faraday.new(url: host) do |f|
+      Faraday.new(url: host) do |f|
         f.headers['Authorization'] = "Bearer #{oauth_token}"
       end
-      conn
     end
 
     def handle_response(response)

@@ -7,7 +7,6 @@ class ResourcesController < ApplicationController
     @resource.count_view! if count_view?
   end
 
-
   def new_alternate_format_request
     file_version = FileVersionMembershipDecorator.new(FileVersionMembership.find(params[:id]))
     @request = AlternateFormatRequest.new(file_version, current_user)
@@ -15,7 +14,7 @@ class ResourcesController < ApplicationController
   end
 
   def create_alternate_format_request
-    @request = AlternateFormatRequest.new()
+    @request = AlternateFormatRequest.new
     @request.attributes = alternate_format_request_params
     @request.validate!
     LibanswersApiService.new.request_alternate_format(@request)
