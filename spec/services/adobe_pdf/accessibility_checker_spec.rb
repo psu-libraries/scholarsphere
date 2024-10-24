@@ -127,8 +127,8 @@ RSpec.describe AdobePdf::AccessibilityChecker, :vcr do
       end
     end
 
-    # This test takes over a minute to complete
-    describe 'when polling takes too long' do
+    # Slow test.  1+ minutes to complete
+    describe 'when polling takes too long', :slow do
       around do |example|
         VCR.configure do |config|
           original_options = config.default_cassette_options.dup
