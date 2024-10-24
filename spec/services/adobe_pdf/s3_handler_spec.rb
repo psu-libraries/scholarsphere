@@ -13,7 +13,7 @@ RSpec.describe AdobePdf::S3Handler do
       result = instance.download_file(resource)
 
       expect(result.class).to eq(Tempfile)
-      expect(result.size).to be.positive?
+      expect(result.size).to be_positive
     end
 
     it 'raises an Aws::S3::Errors::ServiceError if the download fails' do
