@@ -18,7 +18,7 @@
 <% if form.object.file_version_memberships.any? %>
   <%= render 'uploaded_file_list', file_version_memberships: form.object.file_version_memberships %>
   <% if form.object.file_version_memberships.any?(&:accessibility_failures?) %>
-    <%= 'Link to Remediation Assistance' %>
+    <%= t('accessibility_report.remediation_help').html_safe %>
   <% end %>
 <% end %>
 

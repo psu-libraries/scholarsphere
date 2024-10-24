@@ -1,20 +1,27 @@
-<h2> <%= t('accessibility_report.header') %> <%= @title %> </h2>
-<p></p>
-<h3> <%= t('accessibility_report.success') %>  </h3>
-  <ul>
-    <% @report['Success'].each do |rule| %>
-      <li><strong><%= "#{rule['Rule']}: " %></strong><%= "#{rule['Description']} - #{rule['Status']}" %></li>
-    <% end %>
-  </ul>
-<h3> <%= t('accessibility_report.failure') %>  </h3>
-  <ul>
-    <% @report['Failures'].each do |rule| %>
-      <li><strong><%= "#{rule['Rule']}: " %></strong><%= "#{rule['Description']} - #{rule['Status']}" %>, <a href="<%= rule['link'] %>" target="_blank"><%= t('accessibility_report.tips', rule: rule['Rule']) %></a></li>
-    <% end %>
-  </ul>
-<h3> <%= t('accessibility_report.manual_review') %>  </h3>
-  <ul>
-    <% @report['Manual Review'].each do |rule| %>
-      <li><strong><%= "#{rule['Rule']}: " %></strong><%= "#{rule['Description']} - #{rule['Status']}" %></li>
-    <% end %>
-  </ul>
+  <div class="container">
+    <div class="row row--md-mb-3">
+      <div class="col-md">
+        <h2> <%= t('accessibility_report.header') %> <%= @title %> </h2>
+        <p> <%= t('accessibility_report.intro').html_safe %></p>
+        <p> <%= t('accessibility_report.remediation_help').html_safe %></p>
+        <h3> <%= t('accessibility_report.success') %>  </h3>
+        <ul>
+            <% @report['Success'].each do |rule| %>
+            <li><strong><%= "#{rule['Rule']}: " %></strong><%= "#{rule['Description']} - #{rule['Status']}" %></li>
+            <% end %>
+        </ul>
+        <h3> <%= t('accessibility_report.failure') %>  </h3>
+        <ul>
+            <% @report['Failures'].each do |rule| %>
+            <li><strong><%= "#{rule['Rule']}: " %></strong><%= "#{rule['Description']} - #{rule['Status']}" %>, <a href="<%= rule['link'] %>" target="_blank"><%= t('accessibility_report.tips', rule: rule['Rule']) %></a></li>
+            <% end %>
+        </ul>
+        <h3> <%= t('accessibility_report.manual_review') %>  </h3>
+        <ul>
+            <% @report['Manual Review'].each do |rule| %>
+            <li><strong><%= "#{rule['Rule']}: " %></strong><%= "#{rule['Description']} - #{rule['Status']}" %></li>
+            <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>

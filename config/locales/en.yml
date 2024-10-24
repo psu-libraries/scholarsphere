@@ -12,6 +12,8 @@ en:
     failure: Failures
     manual_review: Needs Manual Review
     tips: Tips for %{rule} Remediation
+    intro: Below are the results of the accessibility check of the pdf you recently uploaded. <a href="https://www.ada.gov/resources/2024-03-08-web-rule" target="_blank">Title II of the ADA</a> requires that all digital content be made accessible. More information can be found in <a href=https://policy.psu.edu/policies/ad69>Penn State’s AD69 Accessibility Policy</a>.
+    remediation_help: For remediation assistance or any questions, please contact <a href=mailto:digitalaccessibility@psu.libanswers.com>digitalaccessibility@psu.libanswers.com</a> or visit the <a href=https://smealonline.psu.edu/browse/accessibility-learning-path/courses/pdf-accessibility-overview-and-introduction>PDF Accessibility Training</a> on the <a href=https://accessibility.psu.edu/training/learningpath/>Penn State Accessibility Learning Path</a>.
   activerecord:
     attributes:
       actor:

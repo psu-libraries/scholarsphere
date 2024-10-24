@@ -15,7 +15,7 @@ class AccessibilityCheckResult < ApplicationRecord
     num_passed != num_total
   end
 
-  def readable_report
+  def formatted_report
     format_report
   end
 
