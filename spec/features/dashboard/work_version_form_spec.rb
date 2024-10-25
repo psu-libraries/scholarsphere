@@ -855,6 +855,34 @@ RSpec.describe 'Publishing a work', with_user: :user do
       expect(page).not_to have_button('Request Curation & Save as Draft')
     end
 
+    describe 'queuing an accessibility check' do
+      # The FileResource created from this upload should have an id of 1 since it's the first and only resource
+      let(:file_resource_id) { 1 }
+
+      before do
+        allow(AccessibilityCheckJob).to receive(:perform_later).with(file_resource_id)
+        visit dashboard_form_files_path(work_version)
+      end
+
+      context 'when saving an uploaded pdf' do
+        it 'kicks off an AccessibilityCheckJob' do
+          FeatureHelpers::DashboardForm.upload_file(Rails.root.join('spec', 'fixtures', 'ipsum.pdf'))
+
+          FeatureHelpers::DashboardForm.save_as_draft_and_exit
+          expect(AccessibilityCheckJob).to have_received(:perform_later).with(file_resource_id)
+        end
+      end
+
+      context 'when saving an uploaded non-pdf (png)' do
+        it 'does not kick off an AccessibilityCheckJob' do
+          FeatureHelpers::DashboardForm.upload_file(Rails.root.join('spec', 'fixtures', 'image.png'))
+
+          FeatureHelpers::DashboardForm.save_as_draft_and_exit
+          expect(AccessibilityCheckJob).not_to have_received(:perform_later).with(file_resource_id)
+        end
+      end
+    end
+
     context 'when a work is in the data & code pathway' do
       let(:work) { create :work, versions_count: 1 }
       let(:work_version) { work.versions.first }
