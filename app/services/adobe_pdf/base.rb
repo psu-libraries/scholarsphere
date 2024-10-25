@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 module AdobePdf
+  # TODO: This whole module can potentially be decoupled from scholarsphere.
+  # If the happy path returns the JSON report and everything else raises
+  # an error, this code doesn't really need to sit in scholarsphere. File handling
+  # could be more versitile, but for now it works with Aws::S3.
+  #
   # The Base class provides common configuration and authentication methods
   # for interacting with Adobe's PDF Services API. It includes methods for
   # retrieving API credentials and generating an access token.
