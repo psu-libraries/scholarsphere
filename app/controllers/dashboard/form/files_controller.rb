@@ -15,10 +15,7 @@ module Dashboard
         authorize(@resource)
         @resource.attributes = work_version_params
         process_response(on_error: :edit) do
-          @resource.file_resources.each do |file_resource|
-            mime_type = file_resource.file_data['metadata']['mime_type']
-            AccessibilityCheckJob.perform_later(file_resource.id) if mime_type == 'application/pdf'
-          end
+          send_accessibility_check_jobs
         end
       end
 
@@ -36,6 +33,12 @@ module Dashboard
 
         def next_page_path
           dashboard_form_publish_path(@resource)
+        end
+
+        def send_accessibility_check_jobs
+          @resource.file_resources.needs_accessibility_check.each do |file_resource|
+            AccessibilityCheckJob.perform_later(file_resource.id)
+          end
         end
     end
   end

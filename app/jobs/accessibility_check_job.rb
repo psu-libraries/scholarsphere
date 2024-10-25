@@ -7,8 +7,8 @@ class AccessibilityCheckJob < ApplicationJob
     resource = FileResource.find(resource_id)
     AdobePdf::AccessibilityChecker.new(resource).call
   rescue StandardError => e
-    acr = AccessibilityCheckResult.find_or_initialize_by(file_resource: resource)
-    acr.update!(report: { error: e.message })
+    AccessibilityCheckResult.create!(file_resource: resource,
+                                           detailed_report: { error: e.message })
     # Raise error so sidekiq registers the failure
     raise e
   end

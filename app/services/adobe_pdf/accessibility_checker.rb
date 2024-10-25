@@ -45,8 +45,10 @@ module AdobePdf
           counter += 1
           sleep 2
         end
-        acr = AccessibilityCheckResult.find_or_initialize_by(file_resource: resource)
-        acr.update!(report: { error: 'Accessibility check failed: Polling time limit exceeded' })
+        AccessibilityCheckResult.create!(file_resource: resource,
+                                               detailed_report: { 
+                                                error: 'Accessibility check failed: Polling time limit exceeded' 
+                                              })
       end
 
       def polling_location
@@ -75,8 +77,8 @@ module AdobePdf
 
         if response.success?
           json_response = JSON.parse(response.body)
-          acr = AccessibilityCheckResult.find_or_initialize_by(file_resource: resource)
-          acr.update!(report: json_response)
+          AccessibilityCheckResult.create!(file_resource: resource, 
+                                                 detailed_report: json_response)
         else
           raise AdobePdfApiError, "Failed to fetch JSON from presigned URL: #{response.status} - #{response.body}"
         end
