@@ -32,7 +32,7 @@ RSpec.describe AdobePdf::AccessibilityChecker, :vcr do
     describe 'happy path' do
       it 'fetches the accessibility report' do
         expect { checker.call }.to change(AccessibilityCheckResult, :count).by(1)
-        expect(AccessibilityCheckResult.last.report)
+        expect(AccessibilityCheckResult.last.detailed_report)
           .to eq({
                    'Detailed Report' => {
                      'Alternate Text' => [
@@ -144,7 +144,7 @@ RSpec.describe AdobePdf::AccessibilityChecker, :vcr do
 
       it 'stores an error in the AccessibilityChecker report field' do
         expect { checker.call }.to change(AccessibilityCheckResult, :count).by(1)
-        expect(AccessibilityCheckResult.last.report).to eq({ 'error' => 'Accessibility check failed: Polling time limit exceeded' })
+        expect(AccessibilityCheckResult.last.detailed_report).to eq({ 'error' => 'Accessibility check failed: Polling time limit exceeded' })
       end
     end
 

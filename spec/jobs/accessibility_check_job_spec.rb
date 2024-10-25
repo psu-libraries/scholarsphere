@@ -35,7 +35,7 @@ RSpec.describe AccessibilityCheckJob, type: :job do
         }.to raise_error(StandardError, error_message)
 
         acr = AccessibilityCheckResult.find_by(file_resource: resource)
-        expect(acr.report).to eq({ 'error' => error_message })
+        expect(acr.detailed_report).to eq({ 'error' => error_message })
       end
     end
   end
