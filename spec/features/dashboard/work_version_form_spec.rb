@@ -856,11 +856,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
 
     describe 'queuing an accessibility check' do
-      # The FileResource created from this upload should have an id of 1 since it's the first and only resource
-      let(:file_resource_id) { 1 }
-
       before do
-        allow(AccessibilityCheckJob).to receive(:perform_later).with(file_resource_id)
+        allow(AccessibilityCheckJob).to receive(:perform_later)
         visit dashboard_form_files_path(work_version)
       end
 
@@ -869,6 +866,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
           FeatureHelpers::DashboardForm.upload_file(Rails.root.join('spec', 'fixtures', 'ipsum.pdf'))
 
           FeatureHelpers::DashboardForm.save_as_draft_and_exit
+          file_resource_id = FileResource.last.id
           expect(AccessibilityCheckJob).to have_received(:perform_later).with(file_resource_id)
         end
       end
@@ -878,6 +876,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
           FeatureHelpers::DashboardForm.upload_file(Rails.root.join('spec', 'fixtures', 'image.png'))
 
           FeatureHelpers::DashboardForm.save_as_draft_and_exit
+          file_resource_id = FileResource.last.id
           expect(AccessibilityCheckJob).not_to have_received(:perform_later).with(file_resource_id)
         end
       end
