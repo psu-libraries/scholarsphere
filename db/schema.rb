@@ -13,7 +13,6 @@
 ActiveRecord::Schema.define(version: 2024_10_21_204531) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
 
@@ -31,8 +30,8 @@ ActiveRecord::Schema.define(version: 2024_10_21_204531) do
   end
 
   create_table "accessibility_check_results", force: :cascade do |t|
-    t.bigint "file_resource_id"
-    t.jsonb "report", default: {"error"=>"No report available"}, null: false
+    t.jsonb "detailed_report", null: false
+    t.bigint "file_resource_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["file_resource_id"], name: "index_accessibility_check_results_on_file_resource_id"
