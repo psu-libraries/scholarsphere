@@ -27,9 +27,9 @@ class FileResource < ApplicationRecord
 
   after_commit :perform_update_index, on: [:create, :update]
 
-  scope :needs_accessibility_check, -> { 
+  scope :needs_accessibility_check, -> {
     left_joins(:accessibility_check_result)
-    .where("file_data->'metadata'->>'mime_type' = ? AND accessibility_check_results.id IS NULL", PDF_MIME_TYPE) 
+      .where("file_data->'metadata'->>'mime_type' = ? AND accessibility_check_results.id IS NULL", PDF_MIME_TYPE)
   }
 
   def self.reindex_all(relation: all, async: false)
