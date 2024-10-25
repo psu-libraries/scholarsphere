@@ -3,8 +3,9 @@
 module AdobePdf
   # TODO: This whole module can potentially be decoupled from scholarsphere.
   # If the happy path returns the JSON report and everything else raises
-  # an error, this code doesn't really need to sit in scholarsphere. File handling
-  # could be more versitile, but for now it works with Aws::S3.
+  # an error, this code doesn't really need to sit in scholarsphere. File
+  # handling is another issue.  Inputs would need to be tweaked to make this
+  # work elsewhere, but it would probably be worth doing.
   #
   # The Base class provides common configuration and authentication methods
   # for interacting with Adobe's PDF Services API. It includes methods for
