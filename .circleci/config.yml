@@ -88,6 +88,7 @@ jobs:
       S3_ENDPOINT: http://localhost:9000
       AWS_BUCKET: scholarsphere
       AWS_REGION: us-east-1
+      REDIS_PASSWORD: redispassword
       SOLR_HOST: 127.0.0.1
       SOLR_COLLECTION: scholarsphere
       SOLR_PASSWORD: scholarsphere
