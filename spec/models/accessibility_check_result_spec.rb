@@ -18,6 +18,21 @@ RSpec.describe AccessibilityCheckResult, type: :model do
     it { is_expected.to validate_presence_of(:detailed_report) }
   end
 
+  describe 'When creating, updating or destroying feed sources' do
+    let(:check_result) { build_stubbed(:accessibility_check_result) }
+
+    before do
+      allow(check_result).to receive(:persisted?).and_return(true)
+      allow(check_result).to receive(:broadcast_to_file_version_memberships)
+      check_result.instance_variable_set(:@_new_record_before_last_commit, true)
+    end
+
+    it 'calls subscribe when created' do
+      check_result.run_callbacks(:commit)
+      expect(check_result).to have_received(:broadcast_to_file_version_memberships)
+    end
+  end
+
   describe '#score' do
     let(:detailed_report) {
         {
@@ -87,6 +102,32 @@ RSpec.describe AccessibilityCheckResult, type: :model do
       it 'returns true' do
         expect(accessibility_check_result.failures_present?).to be true
       end
+    end
+  end
+
+  describe '#formatted_report' do
+    let(:detailed_report) {
+        {
+          'Forms' =>
+          [{ 'Rule' => 'Tagged form fields', 'Status' => 'Passed', 'Description' => 'All form fields are tagged' }],
+          'Tables' =>
+        [{ 'Rule' => 'Rows', 'Status' => 'Failed', 'Description' => 'TR must be a child of Table, THead, TBody, or TFoot' }],
+          'Document' =>
+        [{ 'Rule' => 'Accessibility permission flag', 'Status' => 'Passed', 'Description' => 'Accessibility permission flag must be set' },
+         { 'Rule' => 'Image-only PDF', 'Status' => 'Needs manual check', 'Description' => 'Document is not image-only PDF' }]
+        } }
+    let(:expected_report) { {
+      'Success' =>
+        [{ 'Rule' => 'Tagged form fields', 'Status' => 'Passed', 'Description' => 'All form fields are tagged' },
+         { 'Rule' => 'Accessibility permission flag', 'Status' => 'Passed', 'Description' => 'Accessibility permission flag must be set' }],
+      'Failures' => [{ 'Rule' => 'Rows', 'Status' => 'Failed', 'Description' => 'TR must be a child of Table, THead, TBody, or TFoot',
+                       'link' => 'http://www.adobe.com/go/acrobat11_accessibility_checker_en#TableRows' }],
+      'Manual Review' =>
+           [{ 'Rule' => 'Image-only PDF', 'Status' => 'Needs manual check', 'Description' => 'Document is not image-only PDF' }]
+    } }
+
+    it 'returns the rules grouped by status where failures have a remediation link' do
+      expect(accessibility_check_result.formatted_report).to eq expected_report
     end
   end
 end

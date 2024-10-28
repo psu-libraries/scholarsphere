@@ -125,4 +125,184 @@ RSpec.describe FileVersionMembership, type: :model do
       end
     end
   end
+
+  describe '#accessibility_result' do
+    let(:file_version_membership) { create(:file_version_membership) }
+    let(:accessibility_check_result) do
+      create(:accessibility_check_result, file_resource_id: file_version_membership.file_resource.id, detailed_report: detailed_report)
+    end
+    let(:detailed_report) {
+      {
+        'Forms' =>
+        [{ 'Rule' => 'Tagged form fields', 'Status' => 'Passed', 'Description' => 'All form fields are tagged' }],
+        'Tables' =>
+      [{ 'Rule' => 'Rows', 'Status' => 'Passed', 'Description' => 'TR must be a child of Table, THead, TBody, or TFoot' }],
+        'Document' =>
+      [{ 'Rule' => 'Accessibility permission flag', 'Status' => 'Passed', 'Description' => 'Accessibility permission flag must be set' },
+       { 'Rule' => 'Image-only PDF', 'Status' => 'Needs manual check', 'Description' => 'Document is not image-only PDF' }]
+      } }
+
+    before { accessibility_check_result.save! }
+
+    it 'returns the file resource accessibility result' do
+      expect(file_version_membership.accessibility_result).to eq accessibility_check_result
+    end
+  end
+
+  describe '#accessibility_score' do
+    let(:file_version_membership) { create(:file_version_membership) }
+    let(:accessibility_check_result) do
+      create(:accessibility_check_result, file_resource_id: file_version_membership.file_resource.id, detailed_report: detailed_report)
+    end
+    let(:detailed_report) {
+      {
+        'Forms' =>
+        [{ 'Rule' => 'Tagged form fields', 'Status' => 'Passed', 'Description' => 'All form fields are tagged' }],
+        'Tables' =>
+      [{ 'Rule' => 'Rows', 'Status' => 'Passed', 'Description' => 'TR must be a child of Table, THead, TBody, or TFoot' }],
+        'Document' =>
+      [{ 'Rule' => 'Accessibility permission flag', 'Status' => 'Failed', 'Description' => 'Accessibility permission flag must be set' },
+       { 'Rule' => 'Image-only PDF', 'Status' => 'Needs manual check', 'Description' => 'Document is not image-only PDF' }]
+      } }
+
+    before { accessibility_check_result.save! }
+
+    it 'returns the file resource accessibility score' do
+      expect(file_version_membership.accessibility_score).to eq '2 out of 4 passed'
+    end
+  end
+
+  describe '#accessibility_score_present?' do
+    let(:file_version_membership) { create(:file_version_membership) }
+
+    context 'when there is a check result' do
+      let(:accessibility_check_result) do
+        create(:accessibility_check_result, file_resource_id: file_version_membership.file_resource.id, detailed_report: detailed_report)
+      end
+      let(:detailed_report) {
+        {
+          'Forms' =>
+          [{ 'Rule' => 'Tagged form fields', 'Status' => 'Passed', 'Description' => 'All form fields are tagged' }],
+          'Tables' =>
+        [{ 'Rule' => 'Rows', 'Status' => 'Passed', 'Description' => 'TR must be a child of Table, THead, TBody, or TFoot' }],
+          'Document' =>
+        [{ 'Rule' => 'Accessibility permission flag', 'Status' => 'Failed', 'Description' => 'Accessibility permission flag must be set' },
+         { 'Rule' => 'Image-only PDF', 'Status' => 'Needs manual check', 'Description' => 'Document is not image-only PDF' }]
+        } }
+
+      before { accessibility_check_result.save! }
+
+      it 'returns true' do
+        expect(file_version_membership.accessibility_score_present?).to eq true
+      end
+    end
+
+    context 'when there is not a check result' do
+      it 'returns false' do
+        expect(file_version_membership.accessibility_score_present?).to eq false
+      end
+    end
+  end
+
+  describe '#accessibility_failures?' do
+    let(:file_version_membership) { create(:file_version_membership) }
+
+    context 'when there is a check result' do
+      context 'when the result has failures' do
+        let(:accessibility_check_result) do
+          create(:accessibility_check_result, file_resource_id: file_version_membership.file_resource.id, detailed_report: detailed_report)
+        end
+        let(:detailed_report) {
+          {
+            'Forms' =>
+            [{ 'Rule' => 'Tagged form fields', 'Status' => 'Passed', 'Description' => 'All form fields are tagged' }],
+            'Tables' =>
+          [{ 'Rule' => 'Rows', 'Status' => 'Passed', 'Description' => 'TR must be a child of Table, THead, TBody, or TFoot' }],
+            'Document' =>
+          [{ 'Rule' => 'Accessibility permission flag', 'Status' => 'Failed', 'Description' => 'Accessibility permission flag must be set' },
+           { 'Rule' => 'Image-only PDF', 'Status' => 'Passed', 'Description' => 'Document is not image-only PDF' }]
+          } }
+
+        before { accessibility_check_result.save! }
+
+        it 'returns true' do
+          expect(file_version_membership.accessibility_failures?).to eq true
+        end
+      end
+
+      context 'when the result has a rule that needs manual check' do
+        let(:accessibility_check_result) do
+          create(:accessibility_check_result, file_resource_id: file_version_membership.file_resource.id, detailed_report: detailed_report)
+        end
+        let(:detailed_report) {
+          {
+            'Forms' =>
+            [{ 'Rule' => 'Tagged form fields', 'Status' => 'Passed', 'Description' => 'All form fields are tagged' }],
+            'Tables' =>
+          [{ 'Rule' => 'Rows', 'Status' => 'Passed', 'Description' => 'TR must be a child of Table, THead, TBody, or TFoot' }],
+            'Document' =>
+          [{ 'Rule' => 'Accessibility permission flag', 'Status' => 'Needs manual check', 'Description' => 'Accessibility permission flag must be set' },
+           { 'Rule' => 'Image-only PDF', 'Status' => 'Passed', 'Description' => 'Document is not image-only PDF' }]
+          } }
+
+        before { accessibility_check_result.save! }
+
+        it 'returns true' do
+          expect(file_version_membership.accessibility_failures?).to eq true
+        end
+      end
+
+      context 'when all rules pass' do
+        let(:accessibility_check_result) do
+          create(:accessibility_check_result, file_resource_id: file_version_membership.file_resource.id, detailed_report: detailed_report)
+        end
+        let(:detailed_report) {
+          {
+            'Forms' =>
+            [{ 'Rule' => 'Tagged form fields', 'Status' => 'Passed', 'Description' => 'All form fields are tagged' }],
+            'Tables' =>
+          [{ 'Rule' => 'Rows', 'Status' => 'Passed', 'Description' => 'TR must be a child of Table, THead, TBody, or TFoot' }],
+            'Document' =>
+          [{ 'Rule' => 'Accessibility permission flag', 'Status' => 'Passed', 'Description' => 'Accessibility permission flag must be set' },
+           { 'Rule' => 'Image-only PDF', 'Status' => 'Passed', 'Description' => 'Document is not image-only PDF' }]
+          } }
+
+        before { accessibility_check_result.save! }
+
+        it 'returns false' do
+          expect(file_version_membership.accessibility_failures?).to eq false
+        end
+      end
+    end
+
+    context 'when there is not a check result' do
+      it 'returns true' do
+        expect(file_version_membership.accessibility_failures?).to eq true
+      end
+    end
+  end
+
+  describe '#accessibility_report_download_url' do
+    let(:file_version_membership) { create(:file_version_membership) }
+    let(:accessibility_check_result) do
+      create(:accessibility_check_result, file_resource_id: file_version_membership.file_resource.id, detailed_report: detailed_report)
+    end
+    let(:detailed_report) {
+      {
+        'Forms' =>
+        [{ 'Rule' => 'Tagged form fields', 'Status' => 'Passed', 'Description' => 'All form fields are tagged' }],
+        'Tables' =>
+      [{ 'Rule' => 'Rows', 'Status' => 'Passed', 'Description' => 'TR must be a child of Table, THead, TBody, or TFoot' }],
+        'Document' =>
+      [{ 'Rule' => 'Accessibility permission flag', 'Status' => 'Passed', 'Description' => 'Accessibility permission flag must be set' },
+       { 'Rule' => 'Image-only PDF', 'Status' => 'Needs manual check', 'Description' => 'Document is not image-only PDF' }]
+      } }
+    let(:expected_url) { "/accessibility_check_results/#{accessibility_check_result.id}" }
+
+    before { accessibility_check_result.save! }
+
+    it 'returns the url to view the accessibility report' do
+      expect(file_version_membership.accessibility_report_download_url).to eq expected_url
+    end
+  end
 end

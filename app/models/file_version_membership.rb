@@ -45,7 +45,7 @@ class FileVersionMembership < ApplicationRecord
   end
 
   def accessibility_failures?
-    accessibility_result&.failures_present?
+    accessibility_result&.failures_present? || accessibility_result.blank?
   end
 
   def accessibility_report_download_url

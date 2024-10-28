@@ -253,6 +253,46 @@ RSpec.describe 'Work Settings Page', with_user: :user do
     end
   end
 
+  describe 'Viewing Accessibility Review', js: true do
+    let(:pdf) { create(:file_resource, :pdf) }
+    let(:files) { work.latest_version.file_resources }
+    let(:accessibility_check_result) do
+      create(:accessibility_check_result, file_resource_id: files.last.id, detailed_report: detailed_report)
+    end
+    let(:detailed_report) {
+      {
+        'Forms' =>
+        [{ 'Rule' => 'Tagged form fields', 'Status' => 'Passed', 'Description' => 'All form fields are tagged' }],
+        'Tables' =>
+      [{ 'Rule' => 'Rows', 'Status' => 'Passed', 'Description' => 'TR must be a child of Table, THead, TBody, or TFoot' }],
+        'Document' =>
+      [{ 'Rule' => 'Accessibility permission flag', 'Status' => 'Failed', 'Description' => 'Accessibility permission flag must be set' },
+       { 'Rule' => 'Image-only PDF', 'Status' => 'Passed', 'Description' => 'Document is not image-only PDF' }]
+      } }
+
+    it 'renders a table with review status for each file' do
+      visit edit_dashboard_work_path(work)
+      expect(page).to have_content(I18n.t!('dashboard.shared.files.heading'))
+      expect(page).to have_content(I18n.t!('dashboard.file_list.edit.accessibility_score'))
+      expect(page).to have_content(I18n.t!('dashboard.file_list.edit.accessibility_report'))
+      within('tbody.work-files__file') do
+        within('tr:nth-child(1)') do
+          expect(page).to have_content('Needs manual review')
+        end
+
+        files << pdf
+        refresh
+        within('tr:nth-child(2)') do
+          expect(page).to have_content('Processing')
+          accessibility_check_result.save!
+          refresh
+          expect(page).to have_content('3 out of 4 passed')
+          expect(page).to have_link('View Report')
+        end
+      end
+    end
+  end
+
   describe 'Deleting a work' do
     context 'when a regular user' do
       it 'does not allow a regular user to delete a work version' do
