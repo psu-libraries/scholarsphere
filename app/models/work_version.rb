@@ -117,6 +117,18 @@ class WorkVersion < ApplicationRecord
             acceptance: true,
             if: :published?
 
+  validates :psu_community_agreement,
+            acceptance: true,
+            if: :published?
+
+  validates :accessibility_agreement,
+            acceptance: true,
+            if: :published?
+
+  validates :sensitive_info_agreement,
+            acceptance: true,
+            if: :published?
+
   validates :version_number,
             presence: true,
             uniqueness: { scope: :work_id }
@@ -335,6 +347,10 @@ class WorkVersion < ApplicationRecord
 
   def has_publisher_doi?
     !!identifier.find { |id| Doi.new(id).valid? }
+  end
+
+  def needs_accessibility_review
+    latest_published_version? && !accessibility_remediation_requested
   end
 
   delegate :deposited_at,

@@ -33,6 +33,10 @@ class DeleteResourceButtonComponent < ApplicationComponent
     t('button')
   end
 
+  def tooltip
+    t('tooltip')
+  end
+
   def button_subtitle
     return t('collection') if collection?
     return t('draft') if work_version? && resource.draft?

@@ -139,6 +139,9 @@ module Dashboard
             :rights,
             :version_name,
             :published_date,
+            :sub_work_type,
+            :program,
+            :degree,
             keyword: [],
             contributor: [],
             publisher: [],
@@ -148,9 +151,6 @@ module Dashboard
             based_near: [],
             related_url: [],
             source: [],
-            sub_work_type: [],
-            program: [],
-            degree: [],
             creators_attributes: [
               :id,
               :actor_id,
@@ -171,7 +171,10 @@ module Dashboard
         params
           .require(:work_version)
           .permit(
-            :depositor_agreement
+            :depositor_agreement,
+            :psu_community_agreement,
+            :accessibility_agreement,
+            :sensitive_info_agreement
           )
       end
   end

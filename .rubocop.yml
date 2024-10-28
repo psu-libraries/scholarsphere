@@ -59,7 +59,7 @@ Rails/ApplicationController:
 
 Rails/SkipsModelValidations:
   Exclude:
-    - 'app/controllers/dashboard/form/publish_controller.rb'
+    - 'app/services/depositor_request_service.rb'
     - 'app/models/api_token.rb'
     - 'app/services/migrate_collection_ids.rb'
     - 'app/services/doi_service.rb'

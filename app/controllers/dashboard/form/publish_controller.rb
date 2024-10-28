@@ -20,6 +20,7 @@ module Dashboard
         authorize(@work_version)
 
         @resource.attributes = work_version_params
+
         # If the user clicks the "Publish" button, *and* there are validation
         # errors, we still want to persist any changes to the draft version's
         # db record, while at the same time showing the publish validation errors
@@ -34,29 +35,15 @@ module Dashboard
           @resource.indexing_source = Proc.new { nil }
           @resource.save
           @resource.publish
-        elsif request_curation? && !@resource.draft_curation_requested
-          @resource.update_column(:draft_curation_requested, true)
-          # We want validation errors to block curation requests and keep users on the edit page
-          # so WorkVersion needs to temporarily act like it's being published. It's returned to it's
-          # initial state before being saved.
+        elsif curator_action_requested?
           begin
-            @resource.save
-            initial_state = @resource.aasm_state
-            @resource.publish
-            if @resource.valid?
-              CurationTaskClient.send_curation(@resource.id, requested: true)
-              @resource.draft_curation_requested = true
-            else
-              @resource.update_column(:draft_curation_requested, false)
-              render :edit
-              return
-            end
-          rescue CurationTaskClient::CurationError => e
-            @resource.update_column(:draft_curation_requested, false)
+            DepositorRequestService.new(@resource).request_action(request_curation?)
+          rescue DepositorRequestService::RequestError => e
             logger.error(e)
-            flash[:error] = t('dashboard.form.publish.curation.error')
-          ensure
-            @resource.aasm_state = initial_state
+            flash[:error] = request_curation? ? t('dashboard.form.publish.curation.error') : t('dashboard.form.publish.remediation.error')
+          rescue DepositorRequestService::InvalidResourceError
+            render :edit
+            return
           end
         end
 
@@ -108,19 +95,31 @@ module Dashboard
           not_published || marked_as_published_but_not_persisted
         end
 
+        def curator_action_requested?
+          (request_curation? && !@resource.draft_curation_requested) ||
+            (request_accessibility_remediation? && !@resource.accessibility_remediation_requested)
+        end
+
         def work_version_params
           params
             .require(:work_version)
             .permit(
               :title,
               :description,
+              :sub_work_type,
+              :program,
+              :degree,
               :publisher_statement,
               :subtitle,
               :rights,
               :version_name,
               :published_date,
               :depositor_agreement,
+              :psu_community_agreement,
+              :accessibility_agreement,
               :draft_curation_requested,
+              :sensitive_info_agreement,
+              :accessibility_remediation_requested,
               :mint_doi_requested,
               keyword: [],
               contributor: [],
@@ -131,9 +130,6 @@ module Dashboard
               based_near: [],
               related_url: [],
               source: [],
-              sub_work_type: [],
-              program: [],
-              degree: [],
               creators_attributes: [
                 :id,
                 :actor_id,

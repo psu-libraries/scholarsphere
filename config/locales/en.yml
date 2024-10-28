@@ -138,6 +138,12 @@ en:
               blank: *required_to_publish
             published_date:
               blank: *required_to_publish
+            sub_work_type:
+              blank: *required_to_publish
+            program:
+              blank: *required_to_publish
+            degree:
+              blank: *required_to_publish
             file_resources:
               readme: must include a separate README file labeled as “README” in addition to other files
   admin:
@@ -206,7 +212,7 @@ en:
         and will work to resolve it.
   footer:
     heading: 'ScholarSphere'
-    description: 'A service of the University Libraries.'
+    description: 'An institutional repository and archive sharing and preserving Penn State’s scholarly and research outputs'
     copyright_statement: 'Copyright © 2022 The Pennsylvania State University'
   helpers:
     # Note, for hints (and only hints) you can use Markdown
@@ -404,20 +410,40 @@ en:
         publish: Review & Publish
         members: Works
       actions:
-        save_and_continue: Save and Continue
-        cancel: Cancel
-        publish: Publish
-        finish: Finish
+        save_and_continue: 
+          button: Save and Continue
+          tooltip: Save your draft and proceed to the next section of the deposit form.
+        cancel: 
+          button: Cancel
+          tooltip: Discard changes and return to the work's display page.
+        publish: 
+          button: Publish
+          tooltip: Publish your work to make it publicly visible. Changes cannot be made to the published version, but you can create a new version if updates are needed.
+        confirm:
+          publish: Confirm publish
+          request_curation: Confirm Request Curation
+          request_remediation: Confirm Request Accessibility Remediation
+          cancel: Cancel
+          cancel_tooltip: Return to the Review & Publish Page.
+        finish: 
+          button: Finish
         save_and_exit:
           collection: Save and Exit
-          work_version: Save as Draft & Exit
+          work_version: Save Draft & Exit
           admin_save: Save and Exit
-        request_curation: Request Curation & Save as Draft
+          tooltip: Save your draft. It will be accessible via your dashboard and visible only to you and those with edit access.
+        request_curation: 
+          button: Request Curation
+          tooltip: Save your work as a draft and submit it for curatorial review.
+        request_remediation: 
+          button: Request Accessibility Remediation
+          tooltip: Save your work as a draft and submit it for accessibility review and remediation.
         destroy:
           button: Delete
           collection: Collection
           draft: Draft
           work_version: Version
+          tooltip: Permanently delete the draft.
           confirm: "Are you sure you want to delete this %{type}? This cannot be undone."
       notices:
         success: "%{resource} was successfully updated."
@@ -483,10 +509,17 @@ en:
           publishing_details: Publishing Details
         curation:
           header: Request Curation (Optional)
-          request_description: Select 'Request Curation & Save as Draft' below if you would like ScholarSphere curators to review your work assessing its findability, accessibility, interoperability, and reusability prior to publication (recommended).
+          request_description: "Recommended: Select ‘Request Curation’ below to have the ScholarSphere Curation Team review your work ensuring its findability, interoperability, accessibility, and reusability prior to publication. The curatorial review will focus on enhancing metadata quality, recommending improvements for deposit interoperability and reusability, and remediating files as necessary for accessibility. While under review, your work will remain saved as a draft. Once approved by the curator, the work will be published, and if applicable, a DOI will be minted."
           publish_description: Select 'Publish' if you would like to self-submit your deposit to Scholarsphere and make it immediately public. ScholarSphere curators will review your work after publication. Note, because curatorial review occurs after publication, any changes or updates may result in a versioned work.
           curation_requested: Curation has been requested. We will notify you when curation is complete and your work is ready to be published. If you have any questions in the meantime, please contact ScholarSphere curators via our 
           error: There was an error with your curation request. Please try again later or contact us if the problem persists.
+          contact: contact form
+        remediation:
+          header: Request Accessibiility Remediation (Optional)
+          remediation_description: "Recommended: Select ‘Request Accessibility Remediation’ below to have the Adaptive Technologies Team review and improve the accessibility of your work before publication. While your work is being remediated it will remain saved as a draft and will be published upon completion of this work."
+          publish_description: Select 'Publish' if you would like to self-submit your deposit to Scholarsphere and make it immediately public. ScholarSphere curators will review your work after publication. Note, because curatorial review occurs after publication, any changes or updates may result in a versioned work.
+          remediation_requested: Remediation has been requested. We will notify you when accessibility remediation is complete and your work is ready to be published. If you have any questions in the meantime, please contact ScholarSphere curators via our 
+          error: There was an error with your accessibility remediation request. Please try again later or contact us if the problem persists.
           contact: contact form
         doi:
           header: Mint DOI (Optional)
@@ -528,9 +561,20 @@ en:
         embargo: Embargo (Optional)
       publish:
         heading: Publishing Work Version
-        agreement_preamble: I have read and agree to
-        agreement_link: the deposit agreement
         error_message: "%{error} prohibited this work from being saved:"
+        publish_heading: Ready to Publish?
+        publish_message: By selecting Publish, you are making your work publicly accessible. This means it will be broadly discoverable and downloadable (unless an embargo is applied). Once a version is published, it cannot be modified. However, you can create a new version to make changes, and the new version will supersede previous ones. Older versions will remain accessible unless they are specifically withdrawn or deleted by repository managers upon reasonable depositor request.
+        request_curation_heading: Ready to Send for Curation?
+        request_curation_message: By selecting Request Curation & Save as Draft, your draft work will be submitted to the ScholarSphere Curation Team for review. Once approved by a curator, the work will be published, and if applicable, a DOI will be minted.
+        request_remediation_heading: Ready to Send for Accessibility Remediation?
+        request_remediation_message: By selecting Request Accessibility Remediation, your draft work will be submitted to the Adaptive Technologies Team. Once remediation has been completed, the work will be published.
+        acknowledgment_preface: "If you are ready to proceed, please confirm the acknowledgments below:"
+        acknowledgments:
+          agreement_preamble: I have read and agree to
+          agreement_link: the deposit agreement
+          psu_community: I confirm that this deposit was produced or sponsored by at least one member of the Penn State community.
+          accessibility: I confirm that this deposit meets the requirements of <a href="https://policy.psu.edu/policies/ad69" target=_blank, rel=noopener>Penn State Policy AD69 Accessibility of Electronic and Information Technology</a> or that I will actively work with curators to ensure compliance.
+          sensitive_info: I confirm that the deposit does NOT contain information with a Sensitive Information Classification of Moderate (Level 2) or higher according to <a href="https://policy.psu.edu/policies/ad95" target=_blank>Penn State Policy AD95 Information Assurance and IT Security.</a>
     file_list:
       edit:
         heading: File Listing
@@ -614,6 +658,7 @@ en:
       agreement_1_0: 'Deposit Agreement'
       dashboard: 'Your Dashboard'
       home: 'Welcome to ScholarSphere'
+      home_subtitle: 'An institutional repository and archive sharing and preserving Penn State’s scholarly and research outputs'
       not_found: 'Page Not Found'
       server_error: 'Server Error'
       graphql: 'GraphQL'
@@ -640,6 +685,9 @@ en:
     contact_depositor_button:
       text: 'Contact Depositor via LibAnswers >>'
       confirm_message: 'This will create a ticket in LibAnswers and direct you to it.  An email will not be sent to the depositor until the form is completed in LibAnswers.'
+    contact_accessibility_team_button:
+      text: 'Contact Accessibility Team via LibAnswers >>'
+      confirm_message: 'This will create a ticket in LibAnswers and direct you to it.  An email will not be sent to the accessibility team until the form is completed in LibAnswers.'
     doi:
       doi: 'doi:'
       valid: 'This is a valid DOI and can be used to reference this page'
