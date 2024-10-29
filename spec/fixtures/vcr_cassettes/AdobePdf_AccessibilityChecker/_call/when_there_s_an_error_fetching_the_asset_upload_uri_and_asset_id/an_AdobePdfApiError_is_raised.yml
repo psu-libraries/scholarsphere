@@ -1,0 +1,102 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://pdf-services.adobe.io/token
+    body:
+      encoding: UTF-8
+      string: client_id=adobe_client_id&client_secret=adobe_client_secret
+    headers:
+      User-Agent:
+      - Faraday v1.10.3
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - openresty
+      Date:
+      - Wed, 23 Oct 2024 12:27:27 GMT
+      Content-Type:
+      - application/json;charset=UTF-8
+      Content-Length:
+      - '1055'
+      Connection:
+      - keep-alive
+      X-Request-Id:
+      - xzKAibhkugKigedevnPu476fZW89qPDD
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - "*"
+      Access-Control-Max-Age:
+      - '60'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Headers:
+      - Authorization,Content-Type,X-Api-Key,User-Agent,If-Modified-Since,x-api-app-info
+    body:
+      encoding: UTF-8
+      string: '{"access_token":"eyJhbGciOiJSUzI1NiIsIng1dSI6Imltc19uYTEta2V5LWF0LTEuY2VyIiwia2lkIjo","token_type":"bearer","expires_in":86399}'
+  recorded_at: Wed, 23 Oct 2024 12:27:27 GMT
+- request:
+    method: post
+    uri: https://pdf-services.adobe.io/assets
+    body:
+      encoding: UTF-8
+      string: '{"mediaType":"application/pdf"}'
+    headers:
+      User-Agent:
+      - Faraday v1.10.3
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer eyJhbGciOiJSUzI1NiIsIng1dSI6Imltc19uYTEta2V5LWF0LTEuY2VyIiwia2lkIjo
+      X-Api-Key:
+      - adobe_client_id
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 400
+      message: Bad Request
+    headers:
+      Server:
+      - openresty
+      Date:
+      - Wed, 23 Oct 2024 12:27:32 GMT
+      Content-Type:
+      - application/json;charset=UTF-8
+      Content-Length:
+      - '1972'
+      Connection:
+      - keep-alive
+      X-Request-Id:
+      - AhuAXTPg8iJsBfFnUix5bf9tPW2YUbtV
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - "[...]"
+      Access-Control-Max-Age:
+      - '60'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Headers:
+      - Authorization,Content-Type,X-Api-Key,User-Agent,If-Modified-Since
+    body:
+      encoding: UTF-8
+      string: '{"error": {"code": "BAD_REQUEST","message": "Bad Request."}}'
+  recorded_at: Wed, 23 Oct 2024 12:27:32 GMT

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_10_02_144039) do
+ActiveRecord::Schema.define(version: 2024_10_21_204531) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -28,6 +28,14 @@ ActiveRecord::Schema.define(version: 2024_10_02_144039) do
     t.index ["access_level", "agent_type", "resource_type", "agent_id", "resource_id"], name: "index_access_controls_on_access_level_agent_and_resource", unique: true
     t.index ["agent_type", "agent_id"], name: "index_access_controls_on_agent_type_and_agent_id"
     t.index ["resource_type", "resource_id"], name: "index_access_controls_on_resource_type_and_resource_id"
+  end
+
+  create_table "accessibility_check_results", force: :cascade do |t|
+    t.jsonb "detailed_report", null: false
+    t.bigint "file_resource_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["file_resource_id"], name: "index_accessibility_check_results_on_file_resource_id"
   end
 
   create_table "actors", force: :cascade do |t|
@@ -289,6 +297,7 @@ ActiveRecord::Schema.define(version: 2024_10_02_144039) do
     t.index ["proxy_id"], name: "index_works_on_proxy_id"
   end
 
+  add_foreign_key "accessibility_check_results", "file_resources"
   add_foreign_key "api_tokens", "external_apps", column: "application_id"
   add_foreign_key "authorships", "actors"
   add_foreign_key "collection_work_memberships", "collections"

@@ -14,7 +14,9 @@ module Dashboard
         @resource = WorkVersion.find(params[:id])
         authorize(@resource)
         @resource.attributes = work_version_params
-        process_response(on_error: :edit)
+        process_response(on_error: :edit) do
+          send_accessibility_check_jobs
+        end
       end
 
       private
@@ -31,6 +33,12 @@ module Dashboard
 
         def next_page_path
           dashboard_form_publish_path(@resource)
+        end
+
+        def send_accessibility_check_jobs
+          @resource.file_resources.needs_accessibility_check.each do |file_resource|
+            AccessibilityCheckJob.perform_later(file_resource.id)
+          end
         end
     end
   end

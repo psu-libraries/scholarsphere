@@ -1,0 +1,260 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://pdf-services.adobe.io/token
+    body:
+      encoding: UTF-8
+      string: client_id=adobe_client_id&client_secret=adobe_client_secret
+    headers:
+      User-Agent:
+      - Faraday v1.10.3
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - openresty
+      Date:
+      - Wed, 23 Oct 2024 12:27:27 GMT
+      Content-Type:
+      - application/json;charset=UTF-8
+      Content-Length:
+      - '1055'
+      Connection:
+      - keep-alive
+      X-Request-Id:
+      - xzKAibhkugKigedevnPu476fZW89qPDD
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - "*"
+      Access-Control-Max-Age:
+      - '60'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Headers:
+      - Authorization,Content-Type,X-Api-Key,User-Agent,If-Modified-Since,x-api-app-info
+    body:
+      encoding: UTF-8
+      string: '{"access_token":"eyJhbGciOiJSUzI1NiIsIng1dSI6Imltc19uYTEta2V5LWF0LTEuY2VyIiwia2lkIjo","token_type":"bearer","expires_in":86399}'
+  recorded_at: Wed, 23 Oct 2024 12:27:27 GMT
+- request:
+    method: post
+    uri: https://pdf-services.adobe.io/assets
+    body:
+      encoding: UTF-8
+      string: '{"mediaType":"application/pdf"}'
+    headers:
+      User-Agent:
+      - Faraday v1.10.3
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer eyJhbGciOiJSUzI1NiIsIng1dSI6Imltc19uYTEta2V5LWF0LTEuY2VyIiwia2lkIjo
+      X-Api-Key:
+      - adobe_client_id
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - openresty
+      Date:
+      - Wed, 23 Oct 2024 12:27:32 GMT
+      Content-Type:
+      - application/json;charset=UTF-8
+      Content-Length:
+      - '1972'
+      Connection:
+      - keep-alive
+      X-Request-Id:
+      - AhuAXTPg8iJsBfFnUix5bf9tPW2YUbtV
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - "[...]"
+      Access-Control-Max-Age:
+      - '60'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Headers:
+      - Authorization,Content-Type,X-Api-Key,User-Agent,If-Modified-Since
+    body:
+      encoding: UTF-8
+      string: '{"uploadUri":"https://dcplatformstorageservice-prod-us-east-1.s3-accelerate.amazonaws.com/adobe_client_id_FE141E7E670446A30A495E28%40techacct.adobe.com/3191e005-f40b-4163-b1a7-eed05978e97d?X-Amz-Security-Token=IQoJb3JpZ2luX2VjEFQaCXVzLWVhc3QtMSJGMEQCIDYCZzhw4yyiDs%2BXpTzYVcMewjLI2uUrKFJfX8yhsGFyAiAvxvyFRXtOv3iWKDdEZK0fKA8qQCDSMLkVulTP8Vq48iq0BQi9%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAAaDDQyMDUzMzQ0NTk4MiIMgirz9Gt8F0%2Bu0C0YKogFodN15YQf3W89us%2F5eRqCUpJGuYsaS8Z47cUdyvPqjcj9b0kj%2BUIIsjvzWVpeszo5%2F1%2FTfJo6TTtp0nzobVzkQ8jHC8644aMxXz60IYJtaHXxshDj82BrH%2BaHSW1T2ZRiAWW9RTxaw2hapfBl7CwkOTtmKfsmWg7q1isqR%2FTNUga7FrDEVbHedWtQ4Jp102zhfqHSn1gM0EBIeBfcgM0gR%2FusU0Zg9rWqcBDy73LGy76glYW75%2B87t39SdFQG15g1Rm7JTRkmIPBEAa03XM4eYlwEa8gAukDwej%2F9FiI8AlpYY7GxoEo68BfgRTdzBExk5Mi1BoEwRnLBZlGh04eQexC0BRxaU0N%2BvJCUKhyXlS23bAlA%2B7m4eTf5ncvkvzJyJGneIIJim3E3qkgPX5jlVm8OmjXvd%2BZD5jj1X%2F2uKp54zqTEqux0rX3bVK2K3nIufp1exzx8Ia8P0btmeuSlPH3c6juUA6b2H0xRGNEH0UG1%2B9aQ5YjqmzYCrHl2SCjqzUw10%2FYgzdneMp4L6hgGASg8xWsrDe0N5Epx9aQD2vgNnUehkd6eARBMPgSWcqHVoCZI%2FM%2BLT3uqW9Bib%2BsaCUvvDcDMbGviyNg8Y8f2LF2OWGgfaIQMZ4%2BQaKIPnr2FQMnwrgjr67V8vAt9Sw0E0uGUejrKM%2F7taFXq1kPQ6g6yWgMkoGCORj7ti%2FT5VkiddzX60gRk5rEhu5zKVsg29uJqGhStkukHkMic%2F4Vy1SZrclroC96jUeE%2B96Tb5sPTM10Vsy7NHhhQHQ32Zm6UanG%2Bvk049uqOW%2F7afhdehO3fmTlX8lK0tgnbGyt2xntRH0gJpOAXbgq%2BXQr9umk21%2B%2Bxe9P6WLApMMfH47gGOqoBCbQvwcSGvrAOPuCpPs%2BjVsIQwaysLVMr3B8i%2FM7vO7oa2t4sFjuTd2J%2Fyhag%2FtYzlVxsBzqnAJ0MNnhpLaYkuC5Sg%2FauFqZcHagfCYefklDAtMcq5Ig8zYUCgcxwzZME2K%2BznkLGC4Gi97A6SL2au31i4s5Pt%2BsMYle9gjoGkGJX6HVpWvlY6yqkwIPIQKdazMFOBIQzXnkdK5qLOvN%2Bme0wv4T4u7R%2BvX8%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20241023T122732Z&X-Amz-SignedHeaders=content-type%3Bhost&X-Amz-Expires=3600&X-Amz-Credential=ASIAWD2N7EVPH6R6YQJK%2F20241023%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=c43ca7f05592e54d21336d57051625cb5508f21d476e7211f344ef23297f6c8e","assetID":"urn:aaid:AS:UE1:95530497-4e9c-4d0d-ab5c-8ec74ebc43a4"}'
+  recorded_at: Wed, 23 Oct 2024 12:27:32 GMT
+- request:
+    method: put
+    uri: https://dcplatformstorageservice-prod-us-east-1.s3-accelerate.amazonaws.com/adobe_client_id_FE141E7E670446A30A495E28@techacct.adobe.com/3191e005-f40b-4163-b1a7-eed05978e97d?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIAWD2N7EVPH6R6YQJK/20241023/us-east-1/s3/aws4_request&X-Amz-Date=20241023T122732Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEFQaCXVzLWVhc3QtMSJGMEQCIDYCZzhw4yyiDs%2BXpTzYVcMewjLI2uUrKFJfX8yhsGFyAiAvxvyFRXtOv3iWKDdEZK0fKA8qQCDSMLkVulTP8Vq48iq0BQi9//////////8BEAAaDDQyMDUzMzQ0NTk4MiIMgirz9Gt8F0%2Bu0C0YKogFodN15YQf3W89us/5eRqCUpJGuYsaS8Z47cUdyvPqjcj9b0kj%2BUIIsjvzWVpeszo5/1/TfJo6TTtp0nzobVzkQ8jHC8644aMxXz60IYJtaHXxshDj82BrH%2BaHSW1T2ZRiAWW9RTxaw2hapfBl7CwkOTtmKfsmWg7q1isqR/TNUga7FrDEVbHedWtQ4Jp102zhfqHSn1gM0EBIeBfcgM0gR/usU0Zg9rWqcBDy73LGy76glYW75%2B87t39SdFQG15g1Rm7JTRkmIPBEAa03XM4eYlwEa8gAukDwej/9FiI8AlpYY7GxoEo68BfgRTdzBExk5Mi1BoEwRnLBZlGh04eQexC0BRxaU0N%2BvJCUKhyXlS23bAlA%2B7m4eTf5ncvkvzJyJGneIIJim3E3qkgPX5jlVm8OmjXvd%2BZD5jj1X/2uKp54zqTEqux0rX3bVK2K3nIufp1exzx8Ia8P0btmeuSlPH3c6juUA6b2H0xRGNEH0UG1%2B9aQ5YjqmzYCrHl2SCjqzUw10/YgzdneMp4L6hgGASg8xWsrDe0N5Epx9aQD2vgNnUehkd6eARBMPgSWcqHVoCZI/M%2BLT3uqW9Bib%2BsaCUvvDcDMbGviyNg8Y8f2LF2OWGgfaIQMZ4%2BQaKIPnr2FQMnwrgjr67V8vAt9Sw0E0uGUejrKM/7taFXq1kPQ6g6yWgMkoGCORj7ti/T5VkiddzX60gRk5rEhu5zKVsg29uJqGhStkukHkMic/4Vy1SZrclroC96jUeE%2B96Tb5sPTM10Vsy7NHhhQHQ32Zm6UanG%2Bvk049uqOW/7afhdehO3fmTlX8lK0tgnbGyt2xntRH0gJpOAXbgq%2BXQr9umk21%2B%2Bxe9P6WLApMMfH47gGOqoBCbQvwcSGvrAOPuCpPs%2BjVsIQwaysLVMr3B8i/M7vO7oa2t4sFjuTd2J/yhag/tYzlVxsBzqnAJ0MNnhpLaYkuC5Sg/auFqZcHagfCYefklDAtMcq5Ig8zYUCgcxwzZME2K%2BznkLGC4Gi97A6SL2au31i4s5Pt%2BsMYle9gjoGkGJX6HVpWvlY6yqkwIPIQKdazMFOBIQzXnkdK5qLOvN%2Bme0wv4T4u7R%2BvX8=&X-Amz-Signature=c43ca7f05592e54d21336d57051625cb5508f21d476e7211f344ef23297f6c8e&X-Amz-SignedHeaders=content-type%3Bhost
+    body:
+      encoding: UTF-8
+      base64_string: |
+        eyBtZXNzYWdlOiAnU3VjY2VzcycgfQ==
+    headers:
+      User-Agent:
+      - Faraday v1.10.3
+      Content-Type:
+      - application/pdf
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Length:
+      - '0'
+      Connection:
+      - keep-alive
+      X-Amz-Id-2:
+      - hYZL2sS/ze3dQ4PvPKlg4xxyGygHyauNGbGLR63I8iXGTByezUBnZMVj9JuJ7YY2pjSaigoN7o8=
+      X-Amz-Request-Id:
+      - 1RVFP7YQ61KECYH4
+      Date:
+      - Wed, 23 Oct 2024 12:27:36 GMT
+      X-Amz-Version-Id:
+      - D3IoCpD_9xGRO_cRcoWsApYRopeq6df2
+      X-Amz-Expiration:
+      - expiry-date="Fri, 25 Oct 2024 00:00:00 GMT", rule-id="YTNmNmJlMTktM2U4YS00NDhhLTkyNzEtNjk1NTc3NGZlMDBj"
+      X-Amz-Server-Side-Encryption:
+      - aws:kms
+      X-Amz-Server-Side-Encryption-Aws-Kms-Key-Id:
+      - arn:aws:kms:us-east-1:420533445982:key/d51f5664-5955-44c4-abef-d01808a6c45e
+      X-Amz-Server-Side-Encryption-Bucket-Key-Enabled:
+      - 'true'
+      Etag:
+      - '"ea9fca51cc0922da10b9f73491b75ae7"'
+      Server:
+      - AmazonS3
+      X-Cache:
+      - Miss from cloudfront
+      Via:
+      - 1.1 b051e9c33308597b659c33b8999b521c.cloudfront.net (CloudFront)
+      X-Amz-Cf-Pop:
+      - IAD89-C2
+      X-Amz-Cf-Id:
+      - CuCXX_2uGcA5poZo6hMK40ZantLeH-OSZH_4imJvO736Jq2JzSRaPA==
+    body:
+      encoding: UTF-8
+      string: ''
+  recorded_at: Wed, 23 Oct 2024 12:27:35 GMT
+- request:
+    method: post
+    uri: https://pdf-services.adobe.io/operation/accessibilitychecker
+    body:
+      encoding: UTF-8
+      string: '{"assetID":"urn:aaid:AS:UE1:95530497-4e9c-4d0d-ab5c-8ec74ebc43a4"}'
+    headers:
+      User-Agent:
+      - Faraday v1.10.3
+      Authorization:
+      - Bearer eyJhbGciOiJSUzI1NiIsIng1dSI6Imltc19uYTEta2V5LWF0LTEuY2VyIiwia2lkIjo
+      X-Api-Key:
+      - adobe_client_id
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Server:
+      - openresty
+      Date:
+      - Wed, 23 Oct 2024 12:27:41 GMT
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      X-Request-Id:
+      - loq9yjPHgj3tLkJl0ayGh9Q0aXmnBP9B
+      Location:
+      - https://pdf-services-ue1.adobe.io/operation/accessibilitychecker/loq9yjPHgj3tLkJl0ayGh9Q0aXmnBP9B/status
+      Retry-After:
+      - '1'
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - "*"
+      Access-Control-Max-Age:
+      - '60'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Headers:
+      - Authorization,Content-Type,X-Api-Key,User-Agent,If-Modified-Since,x-api-app-info
+    body:
+      encoding: UTF-8
+      string: '{"error": {"code": "NOT_FOUND","message": "Asset not found."}}'
+  recorded_at: Wed, 23 Oct 2024 12:27:41 GMT
+- request:
+    method: delete
+    uri: https://pdf-services.adobe.io/assets/urn:aaid:AS:UE1:95530497-4e9c-4d0d-ab5c-8ec74ebc43a4
+    body:
+      encoding: US-ASCII
+      base64_string: ''
+    headers:
+      User-Agent:
+      - Faraday v1.10.3
+      Authorization:
+      - Bearer eyJhbGciOiJSUzI1NiIsIng1dSI6Imltc19uYTEta2V5LWF0LTEuY2VyIiwia2lkIjo
+      X-Api-Key:
+      - adobe_client_id
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 204
+      message: No Content
+    headers:
+      Server:
+      - openresty
+      Date:
+      - Wed, 23 Oct 2024 12:27:54 GMT
+      Connection:
+      - keep-alive
+      X-Request-Id:
+      - jbsZ25edSiIOss1K7v4lYgOlGhctRW97
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - "[...]"
+      Access-Control-Max-Age:
+      - '60'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Headers:
+      - Authorization,Content-Type,X-Api-Key,User-Agent,If-Modified-Since
+    body:
+      encoding: UTF-8
+      string: ''
+  recorded_at: Wed, 23 Oct 2024 12:27:54 GMT
+recorded_with: VCR 6.1.0
