@@ -38,7 +38,7 @@ module AdobePdf
       end
 
       def host
-        'https://pdf-services.adobe.io'
+        ENV.fetch('ADOBE_PDF_HOST', 'https://pdf-services.adobe.io')
       end
 
       def oauth_token_path

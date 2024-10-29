@@ -8,7 +8,7 @@ RSpec.describe AdobePdf::AccessibilityChecker, :vcr do
   describe '#initialize' do
     context 'when the file size exceeds the limit' do
       let(:resource) { instance_double('FileResource', file_data: { 'metadata' => { 'size' => file_size } }) }
-      let(:file_size) { 150_000_000 }
+      let(:file_size) { described_class::FILE_SIZE_LIMIT * 1.5 }
 
       it 'raises a FileSizeExceededError' do
         expect { checker }.to raise_error(AdobePdf::AccessibilityChecker::FileSizeExceededError, 'File size exceeds the limit of 100Mb')
@@ -17,7 +17,7 @@ RSpec.describe AdobePdf::AccessibilityChecker, :vcr do
 
     context 'when the file size does not exceed the limit' do
       let(:resource) { instance_double('FileResource', file_data: { 'metadata' => { 'size' => file_size } }) }
-      let(:file_size) { 50_000_000 }
+      let(:file_size) { described_class::FILE_SIZE_LIMIT * 0.5 }
 
       it 'does not raise an error' do
         expect { checker }.not_to raise_error
