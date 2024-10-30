@@ -20,6 +20,7 @@ module Dashboard
         authorize(@work_version)
 
         @resource.attributes = work_version_params
+
         # If the user clicks the "Publish" button, *and* there are validation
         # errors, we still want to persist any changes to the draft version's
         # db record, while at the same time showing the publish validation errors
@@ -114,7 +115,10 @@ module Dashboard
               :version_name,
               :published_date,
               :depositor_agreement,
+              :psu_community_agreement,
+              :accessibility_agreement,
               :draft_curation_requested,
+              :sensitive_info_agreement,
               :accessibility_remediation_requested,
               :mint_doi_requested,
               keyword: [],

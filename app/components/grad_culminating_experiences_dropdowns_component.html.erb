@@ -1,12 +1,15 @@
 <%= render 'form_fields/select', form: form,
                                  attribute: :sub_work_type,
                                  options_for_select: sub_work_type_dropdown,
+                                 required: true,
                                  include_blank: true %>
 <%= render 'form_fields/select', form: form,
                                  attribute: :program,
                                  options_for_select: programs_dropdown,
+                                 required: true,
                                  include_blank: true %>
 <%= render 'form_fields/select', form: form,
                                  attribute: :degree,
                                  options_for_select: degrees_dropdown,
+                                 required: true,
                                  include_blank: true %>

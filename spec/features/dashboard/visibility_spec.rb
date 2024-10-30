@@ -26,7 +26,6 @@ RSpec.describe 'Setting visibility in the dashboard', with_user: :user do
         expect(find_field('Public')).to be_checked
 
         choose "work_version_work_attributes_visibility_#{Permissions::Visibility::AUTHORIZED}"
-        check 'work_version_depositor_agreement'
         FeatureHelpers::DashboardForm.publish
 
         work = Work.last

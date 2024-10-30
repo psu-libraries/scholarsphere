@@ -267,6 +267,9 @@ class WorkDepositPathway
               version_name
               rights
               depositor_agreement
+              psu_community_agreement
+              accessibility_agreement
+              sensitive_info_agreement
               contributor
               subject
               publisher
@@ -360,6 +363,9 @@ class WorkDepositPathway
               depositor_agreement
               contributor
               mint_doi_requested
+              psu_community_agreement
+              accessibility_agreement
+              sensitive_info_agreement
             }
           ).freeze
         end

@@ -117,6 +117,18 @@ class WorkVersion < ApplicationRecord
             acceptance: true,
             if: :published?
 
+  validates :psu_community_agreement,
+            acceptance: true,
+            if: :published?
+
+  validates :accessibility_agreement,
+            acceptance: true,
+            if: :published?
+
+  validates :sensitive_info_agreement,
+            acceptance: true,
+            if: :published?
+
   validates :version_number,
             presence: true,
             uniqueness: { scope: :work_id }

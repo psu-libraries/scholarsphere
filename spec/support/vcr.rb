@@ -19,4 +19,7 @@ VCR.configure do |c|
   c.ignore_hosts *allowed_hosts
   c.debug_logger = File.open('log/vcr.log', 'w')
   c.default_cassette_options = { erb: true, update_content_length_header: true }
+  c.preserve_exact_body_bytes do |http_message|
+    http_message.body.encoding.name != 'UTF-8' || !http_message.body.valid_encoding?
+  end
 end

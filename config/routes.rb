@@ -4,7 +4,7 @@ require 'sidekiq/web'
 
 Rails.application.routes.draw do
   default_url_options protocol: ENV.fetch('DEFAULT_URL_PROTOCOL', 'http'),
-                      host: ENV.fetch('DEFAULT_URL_HOST', 'localhost')
+                      host: ENV.fetch('DEFAULT_URL_HOST', 'localhost:3000')
 
   mount Qa::Engine => '/authorities'
   mount ActionCable.server => '/cable'
@@ -50,6 +50,8 @@ Rails.application.routes.draw do
   concern :exportable, Blacklight::Routes::Exportable.new
 
   resources :resources, only: [:show] do
+    get 'alternate_format_request/:id', to: 'resources#new_alternate_format_request', as: :alternate_format_request
+    post 'alternate_format_request/:id', to: 'resources#create_alternate_format_request', as: :create_alternate_format_request
     get 'downloads/:id', to: 'downloads#content', as: :download
     get 'analytics', to: 'analytics#show', as: :analytics
 
