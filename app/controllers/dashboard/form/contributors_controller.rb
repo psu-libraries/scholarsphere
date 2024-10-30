@@ -6,12 +6,18 @@ module Dashboard
       def edit
         @resource = resource_klass.find(params[:id])
         authorize(@resource)
-        @resource.build_creator(actor: current_user.actor) if @resource.creators.empty?
+        @resource = deposit_pathway.contributors_form
+
+        # TODO:  refactor logic into form?
+        if !deposit_pathway.instrument? && @resource.creators.empty?
+          @resource.build_creator(actor: current_user.actor)
+        end
       end
 
       def update
         @resource = resource_klass.find(params[:id])
         authorize(@resource)
+        @resource = deposit_pathway.contributors_form
         @resource.attributes = resource_params
         process_response(on_error: :edit)
       end
@@ -22,6 +28,8 @@ module Dashboard
           params
             .require(param_key)
             .permit(
+              :owner,
+              :manufacturer,
               contributor: [],
               creators_attributes: [
                 :id,

@@ -10,22 +10,21 @@ RSpec.describe WorkDepositPathway::Instrument::PublishForm, type: :model do
   let(:wv) {
     build(
       :work_version,
-      attributes: {
-        'title' => 'test title',
-        'description' => description,
-        'published_date' => '2021',
-        'owner' => 'test owner',
-        'manufacturer' => 'test manufacturer',
-        'model' => 'test model',
-        'instrument_type' => 'test type',
-        'measured_variable' => 'test measured variable',
-        'available_date' => '2022',
-        'decommission_date' => '2024',
-        'related_identifier' => 'test related id',
-        'alternative_identifier' => 'test alternative id',
-        'instrument_resource_type' => 'test resource type',
-        'funding_reference' => 'test funding ref'
-      }
+      work: build(:work, work_type: 'instrument'),
+      title: 'test title',
+      description: description,
+      published_date: '2021',
+      owner: 'test owner',
+      manufacturer: 'test manufacturer',
+      model: 'test model',
+      instrument_type: 'test type',
+      measured_variable: 'test measured variable',
+      available_date: '2022',
+      decommission_date: '2024',
+      related_identifier: 'test related id',
+      alternative_identifier: 'test alternative id',
+      instrument_resource_type: 'test resource type',
+      funding_reference: 'test funding ref'
     )
   }
 
@@ -43,6 +42,9 @@ RSpec.describe WorkDepositPathway::Instrument::PublishForm, type: :model do
   it { is_expected.to delegate_method(:aasm).to(:work_version) }
   it { is_expected.to delegate_method(:update_column).to(:work_version) }
   it { is_expected.to delegate_method(:set_thumbnail_selection).to(:work_version) }
+
+  it { is_expected.to validate_presence_of(:owner) }
+  it { is_expected.to validate_presence_of(:manufacturer) }
 
   describe '#aasm_state=' do
     before { allow(wv).to receive(:aasm_state=) }
@@ -135,7 +137,14 @@ RSpec.describe WorkDepositPathway::Instrument::PublishForm, type: :model do
 
   describe 'validation' do
     context "when the form's work version is otherwise valid for publishing" do
-      let(:wv) { build :work_version, :with_creators, description: 'description', published_date: '2020' }
+      let(:wv) {
+        build(:work_version,
+              work: build(:work, work_type: 'instrument'),
+              description: 'description',
+              published_date: '2020',
+              owner: 'owner',
+              manufacturer: 'manufacturer')
+      }
 
       context "when the form's work version is published" do
         before { wv.publish }
@@ -335,7 +344,14 @@ RSpec.describe WorkDepositPathway::Instrument::PublishForm, type: :model do
     end
 
     context "when the form's work version is not otherwise valid for publishing" do
-      let(:wv) { build :work_version, :with_creators, description: nil, published_date: '2020' }
+      let(:wv) {
+        build(:work_version,
+              work: build(:work, work_type: 'instrument'),
+              description: nil,
+              published_date: '2020',
+              owner: 'owner',
+              manufacturer: 'manufacturer')
+      }
 
       context "when the form's work version is published" do
         before { wv.publish }

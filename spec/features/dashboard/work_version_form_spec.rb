@@ -371,7 +371,6 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).not_to have_field('work_version_based_near')
         expect(page).not_to have_field('work_version_source')
         expect(page).not_to have_field('work_version_version_name')
-        expect(page).to have_field('work_version_owner')
         expect(page).to have_field('work_version_model')
       end
 
@@ -410,6 +409,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
           FeatureHelpers::DashboardForm.save_and_continue
           FeatureHelpers::DashboardForm.fill_in_instrument_work_details(metadata)
           FeatureHelpers::DashboardForm.save_and_continue
+          FeatureHelpers::DashboardForm.fill_in_instrument_contributors(metadata)
+          FeatureHelpers::DashboardForm.save_and_continue
 
           expect(Work.count).to eq(initial_work_count + 1)
           new_work = Work.last
@@ -421,10 +422,11 @@ RSpec.describe 'Publishing a work', with_user: :user do
           expect(new_work_version.version_number).to eq 1
           expect(new_work_version.title).to eq metadata[:title]
           expect(new_work_version.owner).to eq metadata[:owner]
+          expect(new_work_version.manufacturer).to eq metadata[:manufacturer]
           expect(new_work_version.model).to eq metadata[:model]
 
-          expect(page).to have_current_path(dashboard_form_contributors_path('work_version', new_work_version))
-          expect(SolrIndexingJob).to have_received(:perform_later).at_least(:twice)
+          expect(page).to have_current_path(dashboard_form_files_path(new_work_version))
+          expect(SolrIndexingJob).to have_received(:perform_later).at_least(3).times
         end
 
         context 'with invalid data' do

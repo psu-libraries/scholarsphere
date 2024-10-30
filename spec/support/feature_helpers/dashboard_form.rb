@@ -53,8 +53,12 @@ module FeatureHelpers
     def self.fill_in_instrument_work_details(work_version_metadata)
       fill_in 'work_version_description', with: work_version_metadata[:description]
       fill_in 'work_version_published_date', with: work_version_metadata[:published_date]
-      fill_in 'work_version_owner', with: work_version_metadata[:owner]
       fill_in 'work_version_model', with: work_version_metadata[:model]
+    end
+
+    def self.fill_in_instrument_contributors(work_version_metadata)
+      fill_in 'work_version_owner', with: work_version_metadata[:owner]
+      fill_in 'work_version_manufacturer', with: work_version_metadata[:manufacturer]
     end
 
     def self.fill_in_scholarly_works_work_details(work_version_metadata)

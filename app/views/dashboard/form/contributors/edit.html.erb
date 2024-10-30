@@ -18,9 +18,7 @@
 
             <%= render FormErrorMessageComponent.new(form: form) %>
 
-            <%= render 'creators', form: form %>
-
-            <%= render 'search' %>
+            <%= render "#{@resource.form_partial}_fields", form: form %>
 
             <%= render 'contributors', form: form %>
 

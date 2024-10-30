@@ -17,6 +17,16 @@ class WorkDepositPathway
     end
   end
 
+  def contributors_form
+    if work? && !instrument?
+      ContributorsFormBase.new(resource)
+    elsif work? && instrument?
+      Instrument::ContributorsForm.new(resource)
+    else
+      resource
+    end
+  end
+
   def publish_form
     if scholarly_works?
       ScholarlyWorks::PublishForm.new(resource)
@@ -143,6 +153,19 @@ class WorkDepositPathway
       validates :published_date,
                 presence: true,
                 edtf_date: true
+    end
+
+    class ContributorsFormBase < WorkVersionFormBase
+      delegate :creators,
+               :creators_attributes=,
+               :build_creator,
+               :contributor,
+               :contributor=,
+               to: :work_version, prefix: false
+
+      def form_partial
+        'non_instrument_work_version'
+      end
     end
 
     module General
@@ -292,14 +315,18 @@ class WorkDepositPathway
     end
 
     module Instrument
+      def form_partial
+        'instrument_work_version'
+      end
+
       class DetailsForm < DetailsFormBase
+        include Instrument
+
         def self.form_fields
           WorkVersionFormBase::COMMON_FIELDS.union(
             %w{
               title
-              owner
               identifier
-              manufacturer
               model
               instrument_type
               measured_variable
@@ -317,13 +344,30 @@ class WorkDepositPathway
           delegate attr_name, to: :work_version, prefix: false
           delegate "#{attr_name}=", to: :work_version, prefix: false
         end
+      end
 
-        def form_partial
-          'instrument_work_version'
+      class ContributorsForm < WorkVersionFormBase
+        include Instrument
+
+        def self.form_fields
+          %w{
+            owner
+            manufacturer
+            contributor
+          }.freeze
         end
+
+        form_fields.each do |attr_name|
+          delegate attr_name, to: :work_version, prefix: false
+          delegate "#{attr_name}=", to: :work_version, prefix: false
+        end
+
+        validates :owner, :manufacturer, presence: true
       end
 
       class PublishForm < WorkVersionFormBase
+        include Instrument
+
         def self.form_fields
           WorkVersionFormBase::COMMON_FIELDS.union(
             %w{
@@ -361,9 +405,7 @@ class WorkDepositPathway
         validates :available_date,
                   edtf_date: true
 
-        def form_partial
-          'instrument_work_version'
-        end
+        validates :owner, :manufacturer, presence: true
 
         delegate :aasm_state=,
                  :aasm_state,
