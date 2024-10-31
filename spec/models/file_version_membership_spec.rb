@@ -129,18 +129,8 @@ RSpec.describe FileVersionMembership, type: :model do
   describe '#accessibility_result' do
     let(:file_version_membership) { create(:file_version_membership) }
     let(:accessibility_check_result) do
-      create(:accessibility_check_result, file_resource_id: file_version_membership.file_resource.id, detailed_report: detailed_report)
+      create(:accessibility_check_result, file_resource_id: file_version_membership.file_resource.id)
     end
-    let(:detailed_report) {
-      {
-        'Forms' =>
-        [{ 'Rule' => 'Tagged form fields', 'Status' => 'Passed', 'Description' => 'All form fields are tagged' }],
-        'Tables' =>
-      [{ 'Rule' => 'Rows', 'Status' => 'Passed', 'Description' => 'TR must be a child of Table, THead, TBody, or TFoot' }],
-        'Document' =>
-      [{ 'Rule' => 'Accessibility permission flag', 'Status' => 'Passed', 'Description' => 'Accessibility permission flag must be set' },
-       { 'Rule' => 'Image-only PDF', 'Status' => 'Needs manual check', 'Description' => 'Document is not image-only PDF' }]
-      } }
 
     before { accessibility_check_result.save! }
 
@@ -155,7 +145,7 @@ RSpec.describe FileVersionMembership, type: :model do
       create(:accessibility_check_result, file_resource_id: file_version_membership.file_resource.id, detailed_report: detailed_report)
     end
     let(:detailed_report) {
-      {
+      { 'Detailed Report' => {
         'Forms' =>
         [{ 'Rule' => 'Tagged form fields', 'Status' => 'Passed', 'Description' => 'All form fields are tagged' }],
         'Tables' =>
@@ -163,7 +153,7 @@ RSpec.describe FileVersionMembership, type: :model do
         'Document' =>
       [{ 'Rule' => 'Accessibility permission flag', 'Status' => 'Failed', 'Description' => 'Accessibility permission flag must be set' },
        { 'Rule' => 'Image-only PDF', 'Status' => 'Needs manual check', 'Description' => 'Document is not image-only PDF' }]
-      } }
+      } } }
 
     before { accessibility_check_result.save! }
 
@@ -172,28 +162,72 @@ RSpec.describe FileVersionMembership, type: :model do
     end
   end
 
+  describe '#accessibility_error_present?' do
+    let(:file_version_membership) { create(:file_version_membership) }
+
+    context 'when there is a check result' do
+      context 'when the result has a detailed report' do
+        let(:accessibility_check_result) do
+          create(:accessibility_check_result, file_resource_id: file_version_membership.file_resource.id)
+        end
+
+        before { accessibility_check_result.save! }
+
+        it 'returns false' do
+          expect(file_version_membership.accessibility_error_present?).to eq false
+        end
+      end
+
+      context 'when the result has an error' do
+        let(:accessibility_check_result) do
+          create(:accessibility_check_result, file_resource_id: file_version_membership.file_resource.id, detailed_report: detailed_report)
+        end
+        let(:detailed_report) {
+{ 'error' => 'Authentication failed: 400 - {"error":{"code":"invalid_client","message":"invalid client_id parameter"}}' } }
+
+        before { accessibility_check_result.save! }
+
+        it 'returns true' do
+          expect(file_version_membership.accessibility_error_present?).to eq true
+        end
+      end
+    end
+
+    context 'when there is not a check result' do
+      it 'returns false' do
+        expect(file_version_membership.accessibility_error_present?).to eq false
+      end
+    end
+  end
+
   describe '#accessibility_score_present?' do
     let(:file_version_membership) { create(:file_version_membership) }
 
     context 'when there is a check result' do
-      let(:accessibility_check_result) do
-        create(:accessibility_check_result, file_resource_id: file_version_membership.file_resource.id, detailed_report: detailed_report)
+      context 'when the result has a detailed report' do
+        let(:accessibility_check_result) do
+          create(:accessibility_check_result, file_resource_id: file_version_membership.file_resource.id)
+        end
+
+        before { accessibility_check_result.save! }
+
+        it 'returns true' do
+          expect(file_version_membership.accessibility_score_present?).to eq true
+        end
       end
-      let(:detailed_report) {
-        {
-          'Forms' =>
-          [{ 'Rule' => 'Tagged form fields', 'Status' => 'Passed', 'Description' => 'All form fields are tagged' }],
-          'Tables' =>
-        [{ 'Rule' => 'Rows', 'Status' => 'Passed', 'Description' => 'TR must be a child of Table, THead, TBody, or TFoot' }],
-          'Document' =>
-        [{ 'Rule' => 'Accessibility permission flag', 'Status' => 'Failed', 'Description' => 'Accessibility permission flag must be set' },
-         { 'Rule' => 'Image-only PDF', 'Status' => 'Needs manual check', 'Description' => 'Document is not image-only PDF' }]
-        } }
 
-      before { accessibility_check_result.save! }
+      context 'when the result has an error' do
+        let(:accessibility_check_result) do
+          create(:accessibility_check_result, file_resource_id: file_version_membership.file_resource.id, detailed_report: detailed_report)
+        end
+        let(:detailed_report) {
+{ 'error' => 'Authentication failed: 400 - {"error":{"code":"invalid_client","message":"invalid client_id parameter"}}' } }
 
-      it 'returns true' do
-        expect(file_version_membership.accessibility_score_present?).to eq true
+        before { accessibility_check_result.save! }
+
+        it 'returns false' do
+          expect(file_version_membership.accessibility_score_present?).to eq false
+        end
       end
     end
 
@@ -213,7 +247,7 @@ RSpec.describe FileVersionMembership, type: :model do
           create(:accessibility_check_result, file_resource_id: file_version_membership.file_resource.id, detailed_report: detailed_report)
         end
         let(:detailed_report) {
-          {
+          { 'Detailed Report' => {
             'Forms' =>
             [{ 'Rule' => 'Tagged form fields', 'Status' => 'Passed', 'Description' => 'All form fields are tagged' }],
             'Tables' =>
@@ -221,7 +255,7 @@ RSpec.describe FileVersionMembership, type: :model do
             'Document' =>
           [{ 'Rule' => 'Accessibility permission flag', 'Status' => 'Failed', 'Description' => 'Accessibility permission flag must be set' },
            { 'Rule' => 'Image-only PDF', 'Status' => 'Passed', 'Description' => 'Document is not image-only PDF' }]
-          } }
+          } }}
 
         before { accessibility_check_result.save! }
 
@@ -235,7 +269,7 @@ RSpec.describe FileVersionMembership, type: :model do
           create(:accessibility_check_result, file_resource_id: file_version_membership.file_resource.id, detailed_report: detailed_report)
         end
         let(:detailed_report) {
-          {
+          { 'Detailed Report' => {
             'Forms' =>
             [{ 'Rule' => 'Tagged form fields', 'Status' => 'Passed', 'Description' => 'All form fields are tagged' }],
             'Tables' =>
@@ -243,7 +277,7 @@ RSpec.describe FileVersionMembership, type: :model do
             'Document' =>
           [{ 'Rule' => 'Accessibility permission flag', 'Status' => 'Needs manual check', 'Description' => 'Accessibility permission flag must be set' },
            { 'Rule' => 'Image-only PDF', 'Status' => 'Passed', 'Description' => 'Document is not image-only PDF' }]
-          } }
+          } }}
 
         before { accessibility_check_result.save! }
 
@@ -257,7 +291,7 @@ RSpec.describe FileVersionMembership, type: :model do
           create(:accessibility_check_result, file_resource_id: file_version_membership.file_resource.id, detailed_report: detailed_report)
         end
         let(:detailed_report) {
-          {
+          { 'Detailed Report' => {
             'Forms' =>
             [{ 'Rule' => 'Tagged form fields', 'Status' => 'Passed', 'Description' => 'All form fields are tagged' }],
             'Tables' =>
@@ -265,7 +299,7 @@ RSpec.describe FileVersionMembership, type: :model do
             'Document' =>
           [{ 'Rule' => 'Accessibility permission flag', 'Status' => 'Passed', 'Description' => 'Accessibility permission flag must be set' },
            { 'Rule' => 'Image-only PDF', 'Status' => 'Passed', 'Description' => 'Document is not image-only PDF' }]
-          } }
+          } }}
 
         before { accessibility_check_result.save! }
 
@@ -284,25 +318,32 @@ RSpec.describe FileVersionMembership, type: :model do
 
   describe '#accessibility_report_download_url' do
     let(:file_version_membership) { create(:file_version_membership) }
-    let(:accessibility_check_result) do
-      create(:accessibility_check_result, file_resource_id: file_version_membership.file_resource.id, detailed_report: detailed_report)
+
+    context 'when there is a detailed report present' do
+      let(:accessibility_check_result) do
+        create(:accessibility_check_result, file_resource_id: file_version_membership.file_resource.id)
+      end
+      let(:expected_url) { "/accessibility_check_results/#{accessibility_check_result.id}" }
+
+      before { accessibility_check_result.save! }
+
+      it 'returns the url to view the accessibility report' do
+        expect(file_version_membership.accessibility_report_download_url).to eq expected_url
+      end
     end
-    let(:detailed_report) {
-      {
-        'Forms' =>
-        [{ 'Rule' => 'Tagged form fields', 'Status' => 'Passed', 'Description' => 'All form fields are tagged' }],
-        'Tables' =>
-      [{ 'Rule' => 'Rows', 'Status' => 'Passed', 'Description' => 'TR must be a child of Table, THead, TBody, or TFoot' }],
-        'Document' =>
-      [{ 'Rule' => 'Accessibility permission flag', 'Status' => 'Passed', 'Description' => 'Accessibility permission flag must be set' },
-       { 'Rule' => 'Image-only PDF', 'Status' => 'Needs manual check', 'Description' => 'Document is not image-only PDF' }]
-      } }
-    let(:expected_url) { "/accessibility_check_results/#{accessibility_check_result.id}" }
 
-    before { accessibility_check_result.save! }
+    context 'when there is an error present' do
+      let(:accessibility_check_result) do
+        create(:accessibility_check_result, file_resource_id: file_version_membership.file_resource.id, detailed_report: detailed_report)
+      end
+      let(:detailed_report) {
+{ 'error' => 'Authentication failed: 400 - {"error":{"code":"invalid_client","message":"invalid client_id parameter"}}' } }
 
-    it 'returns the url to view the accessibility report' do
-      expect(file_version_membership.accessibility_report_download_url).to eq expected_url
+      before { accessibility_check_result.save! }
+
+      it 'returns nil' do
+        expect(file_version_membership.accessibility_report_download_url).to be_nil
+      end
     end
   end
 end

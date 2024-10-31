@@ -260,7 +260,7 @@ RSpec.describe 'Work Settings Page', with_user: :user do
       create(:accessibility_check_result, file_resource_id: files.last.id, detailed_report: detailed_report)
     end
     let(:detailed_report) {
-      {
+      { 'Detailed Report' => {
         'Forms' =>
         [{ 'Rule' => 'Tagged form fields', 'Status' => 'Passed', 'Description' => 'All form fields are tagged' }],
         'Tables' =>
@@ -268,7 +268,7 @@ RSpec.describe 'Work Settings Page', with_user: :user do
         'Document' =>
       [{ 'Rule' => 'Accessibility permission flag', 'Status' => 'Failed', 'Description' => 'Accessibility permission flag must be set' },
        { 'Rule' => 'Image-only PDF', 'Status' => 'Passed', 'Description' => 'Document is not image-only PDF' }]
-      } }
+      } }}
 
     it 'renders a table with review status for each file' do
       visit edit_dashboard_work_path(work)

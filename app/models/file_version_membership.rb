@@ -40,6 +40,10 @@ class FileVersionMembership < ApplicationRecord
     accessibility_result&.score
   end
 
+  def accessibility_error_present?
+    accessibility_result&.error.present?
+  end
+
   def accessibility_score_present?
     accessibility_result&.score.present?
   end
@@ -49,7 +53,7 @@ class FileVersionMembership < ApplicationRecord
   end
 
   def accessibility_report_download_url
-    Rails.application.routes.url_helpers.accessibility_check_result_path(accessibility_result)
+    Rails.application.routes.url_helpers.accessibility_check_result_path(accessibility_result) if accessibility_score_present?
   end
 
   def accessibility_result

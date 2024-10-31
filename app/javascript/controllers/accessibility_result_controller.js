@@ -23,6 +23,7 @@ export default class extends Controller {
   updateResult (data) {
     this.data.set('mimeType', data.mime_type)
     this.data.set('scorePresent', data.accessibility_score_present)
+    this.data.set('errorPresent', data.accessibility_error_present)
     this.data.set('score', data.accessibility_score)
     this.data.set('reportUrl', data.report_download_url)
     this.renderResult()
@@ -31,10 +32,11 @@ export default class extends Controller {
   renderResult () {
     const mimeType = this.data.get('mimeType') || 'unknown'
     const scorePresent = this.data.get('scorePresent') === 'true'
+    const errorPresent = this.data.get('errorPresent') === 'true'
     const score = this.data.get('score') || 'N/A'
     const reportUrl = this.data.get('reportUrl')
 
-    if (mimeType !== 'application/pdf') {
+    if (mimeType !== 'application/pdf' || errorPresent) {
       this.scoreTarget.textContent = 'Needs manual review'
     } else if (mimeType === 'application/pdf' && scorePresent) {
       this.scoreTarget.textContent = score

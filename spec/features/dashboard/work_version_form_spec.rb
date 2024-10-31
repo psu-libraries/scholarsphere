@@ -971,14 +971,18 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
     context 'when viewing accessibility results', js: true do
       let(:pdf) { create(:file_resource, :pdf) }
+      let(:pdf_with_error) { create(:file_resource, :pdf) }
       let(:work_version) { create :work_version, :article, :able_to_be_published }
       let(:user) { work_version.work.depositor.user }
       let(:files) { work_version.file_resources }
       let(:accessibility_check_result) do
         create(:accessibility_check_result, file_resource_id: files.last.id, detailed_report: detailed_report)
       end
+      let(:accessibility_check_result_with_error) do
+        create(:accessibility_check_result, file_resource_id: files.last.id, detailed_report: detailed_report_with_error)
+      end
       let(:detailed_report) {
-        {
+        { 'Detailed Report' => {
           'Forms' =>
           [{ 'Rule' => 'Tagged form fields', 'Status' => 'Passed', 'Description' => 'All form fields are tagged' }],
           'Tables' =>
@@ -986,31 +990,55 @@ RSpec.describe 'Publishing a work', with_user: :user do
           'Document' =>
         [{ 'Rule' => 'Accessibility permission flag', 'Status' => 'Failed', 'Description' => 'Accessibility permission flag must be set' },
          { 'Rule' => 'Image-only PDF', 'Status' => 'Passed', 'Description' => 'Document is not image-only PDF' }]
-        } }
+        } }}
+      let(:detailed_report_with_error) { { 'error' => 'Authentication failed: 400 - {"error":{"code":"invalid_client","message":"invalid client_id parameter"}}' } }
 
-      it 'renders a table with review status for each file' do
-        visit dashboard_form_publish_path(work_version)
-        expect(page).to have_content(I18n.t!('dashboard.file_list.edit.accessibility_score'))
-        expect(page).to have_content(I18n.t!('dashboard.file_list.edit.accessibility_report'))
-        within('tbody.work-files__file') do
-          within('tr:nth-child(1)') do
-            # initial file is a png and won't go through accessibility checking
-            expect(page).to have_content('Needs manual review')
-            expect(page).not_to have_link('View Report')
-          end
+      context 'when pdf files successfully go through the accessibility checker' do
+        it 'renders a table with review status for each file' do
+          visit dashboard_form_publish_path(work_version)
+          expect(page).to have_content(I18n.t!('dashboard.file_list.edit.accessibility_score'))
+          expect(page).to have_content(I18n.t!('dashboard.file_list.edit.accessibility_report'))
+          within('tbody.work-files__file') do
+            within('tr:nth-child(1)') do
+              # initial file is a png and won't go through accessibility checking
+              expect(page).to have_content('Needs manual review')
+              expect(page).not_to have_link('View Report')
+            end
 
-          # add another file that is a pdf and will go through checking
-          files << pdf
-          refresh
-          within('tr:nth-child(2)') do
-            expect(page).to have_content('Processing')
-            expect(page).not_to have_link('View Report')
-
-            # create a check result manually to mimic the file completing auto check
-            accessibility_check_result.save!
+            # add another file that is a pdf and will go through checking
+            files << pdf
             refresh
-            expect(page).to have_content('3 out of 4 passed')
-            expect(page).to have_link('View Report')
+            within('tr:nth-child(2)') do
+              expect(page).to have_content('Processing')
+              expect(page).not_to have_link('View Report')
+
+              # create a check result manually to mimic the file completing auto check
+              accessibility_check_result.save!
+              refresh
+              expect(page).to have_content('3 out of 4 passed')
+              expect(page).to have_link('View Report')
+            end
+          end
+        end
+      end
+
+      context 'when there is an error from the accessibility checker' do
+        it 'does not render a score when there is an error' do
+          visit dashboard_form_publish_path(work_version)
+          within('tbody.work-files__file') do
+            # add a file with an accessibility check error
+            files << pdf_with_error
+            refresh
+            within('tr:nth-child(2)') do
+              expect(page).to have_content('Processing')
+              expect(page).not_to have_link('View Report')
+
+              # create a check result manually to mimic the file completing auto check
+              accessibility_check_result_with_error.save!
+              refresh
+              expect(page).to have_content('Needs manual review')
+              expect(page).not_to have_link('View Report')
+            end
           end
         end
       end

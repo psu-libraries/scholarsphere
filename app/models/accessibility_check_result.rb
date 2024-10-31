@@ -8,11 +8,15 @@ class AccessibilityCheckResult < ApplicationRecord
   validates :detailed_report, presence: true
 
   def score
-    "#{num_passed} out of #{num_total} passed"
+    "#{num_passed} out of #{num_total} passed" if detailed_report.key?('Detailed Report')
   end
 
   def failures_present?
     num_passed != num_total
+  end
+
+  def error
+    detailed_report['error'] if detailed_report.key?('error')
   end
 
   def formatted_report
@@ -22,11 +26,11 @@ class AccessibilityCheckResult < ApplicationRecord
   private
 
     def num_passed
-      detailed_report.values.flatten.count { |rule| rule['Status'] == 'Passed' }
+      detailed_report['Detailed Report'].values.flatten.count { |rule| rule['Status'] == 'Passed' }
     end
 
     def num_total
-      detailed_report.values.flatten.count
+      detailed_report['Detailed Report'].values.flatten.count
     end
 
     def broadcast_to_file_version_memberships
@@ -42,7 +46,7 @@ class AccessibilityCheckResult < ApplicationRecord
     end
 
     def format_report
-      raw_report = detailed_report.values.flatten
+      raw_report = detailed_report['Detailed Report'].values.flatten
       failures = raw_report.select { |rule| rule['Status'] == 'Failed' }
       success = raw_report.select { |rule| rule['Status'] == 'Passed' }
       manual_review = raw_report.select { |rule| rule['Status'] == 'Needs manual check' }

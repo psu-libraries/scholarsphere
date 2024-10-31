@@ -35,7 +35,7 @@ RSpec.describe AccessibilityCheckResult, type: :model do
 
   describe '#score' do
     let(:detailed_report) {
-        {
+        { 'Detailed Report' => {
           'Forms' =>
           [{ 'Rule' => 'Tagged form fields', 'Status' => 'Passed', 'Description' => 'All form fields are tagged' }],
           'Lists' =>
@@ -45,7 +45,7 @@ RSpec.describe AccessibilityCheckResult, type: :model do
           'Document' =>
         [{ 'Rule' => 'Accessibility permission flag', 'Status' => 'Passed', 'Description' => 'Accessibility permission flag must be set' },
          { 'Rule' => 'Image-only PDF', 'Status' => 'Needs manual check', 'Description' => 'Document is not image-only PDF' }]
-        } }
+        } }}
 
     it 'returns the number of tests with Passed status out of total tests' do
       expect(accessibility_check_result.score).to eq '2 out of 5 passed'
@@ -55,15 +55,15 @@ RSpec.describe AccessibilityCheckResult, type: :model do
   describe '#failures_present?' do
     context 'when all tests pass' do
       let(:detailed_report) {
-          {
-            'Forms' =>
-            [{ 'Rule' => 'Tagged form fields', 'Status' => 'Passed', 'Description' => 'All form fields are tagged' }],
-            'Tables' =>
+        { 'Detailed Report' => {
+          'Forms' =>
+          [{ 'Rule' => 'Tagged form fields', 'Status' => 'Passed', 'Description' => 'All form fields are tagged' }],
+          'Tables' =>
           [{ 'Rule' => 'Rows', 'Status' => 'Passed', 'Description' => 'TR must be a child of Table, THead, TBody, or TFoot' }],
-            'Document' =>
+          'Document' =>
           [{ 'Rule' => 'Accessibility permission flag', 'Status' => 'Passed', 'Description' => 'Accessibility permission flag must be set' },
            { 'Rule' => 'Image-only PDF', 'Status' => 'Passed', 'Description' => 'Document is not image-only PDF' }]
-          } }
+        } }}
 
       it 'returns false' do
         expect(accessibility_check_result.failures_present?).to be false
@@ -72,15 +72,15 @@ RSpec.describe AccessibilityCheckResult, type: :model do
 
     context 'when at least one test fails' do
       let(:detailed_report) {
-          {
-            'Forms' =>
-            [{ 'Rule' => 'Tagged form fields', 'Status' => 'Passed', 'Description' => 'All form fields are tagged' }],
-            'Tables' =>
+        { 'Detailed Report' => {
+          'Forms' =>
+          [{ 'Rule' => 'Tagged form fields', 'Status' => 'Passed', 'Description' => 'All form fields are tagged' }],
+          'Tables' =>
           [{ 'Rule' => 'Rows', 'Status' => 'Failed', 'Description' => 'TR must be a child of Table, THead, TBody, or TFoot' }],
-            'Document' =>
+          'Document' =>
           [{ 'Rule' => 'Accessibility permission flag', 'Status' => 'Passed', 'Description' => 'Accessibility permission flag must be set' },
            { 'Rule' => 'Image-only PDF', 'Status' => 'Passed', 'Description' => 'Document is not image-only PDF' }]
-          } }
+        } }}
 
       it 'returns true' do
         expect(accessibility_check_result.failures_present?).to be true
@@ -89,15 +89,15 @@ RSpec.describe AccessibilityCheckResult, type: :model do
 
     context 'when at least one test needs manual review' do
       let(:detailed_report) {
-          {
-            'Forms' =>
-            [{ 'Rule' => 'Tagged form fields', 'Status' => 'Passed', 'Description' => 'All form fields are tagged' }],
-            'Tables' =>
+        { 'Detailed Report' => {
+          'Forms' =>
+          [{ 'Rule' => 'Tagged form fields', 'Status' => 'Passed', 'Description' => 'All form fields are tagged' }],
+          'Tables' =>
           [{ 'Rule' => 'Rows', 'Status' => 'Passed', 'Description' => 'TR must be a child of Table, THead, TBody, or TFoot' }],
-            'Document' =>
+          'Document' =>
           [{ 'Rule' => 'Accessibility permission flag', 'Status' => 'Passed', 'Description' => 'Accessibility permission flag must be set' },
            { 'Rule' => 'Image-only PDF', 'Status' => 'Needs manual check', 'Description' => 'Document is not image-only PDF' }]
-          } }
+        } }}
 
       it 'returns true' do
         expect(accessibility_check_result.failures_present?).to be true
@@ -105,17 +105,45 @@ RSpec.describe AccessibilityCheckResult, type: :model do
     end
   end
 
-  describe '#formatted_report' do
-    let(:detailed_report) {
-        {
+  describe '#error' do
+    context 'when there is an error present' do
+      let(:detailed_report) {
+ { 'error' => 'Authentication failed: 400 - {"error":{"code":"invalid_client","message":"invalid client_id parameter"}}' } }
+
+      it 'returns the error' do
+        expect(accessibility_check_result.error).to eq detailed_report['error']
+      end
+    end
+
+    context 'when there is not an error present' do
+      let(:detailed_report) {
+        { 'Detailed Report' => {
           'Forms' =>
           [{ 'Rule' => 'Tagged form fields', 'Status' => 'Passed', 'Description' => 'All form fields are tagged' }],
           'Tables' =>
-        [{ 'Rule' => 'Rows', 'Status' => 'Failed', 'Description' => 'TR must be a child of Table, THead, TBody, or TFoot' }],
+          [{ 'Rule' => 'Rows', 'Status' => 'Passed', 'Description' => 'TR must be a child of Table, THead, TBody, or TFoot' }],
           'Document' =>
+          [{ 'Rule' => 'Accessibility permission flag', 'Status' => 'Passed', 'Description' => 'Accessibility permission flag must be set' },
+           { 'Rule' => 'Image-only PDF', 'Status' => 'Needs manual check', 'Description' => 'Document is not image-only PDF' }]
+        } }}
+
+      it 'returns nil' do
+        expect(accessibility_check_result.error).to be_nil
+      end
+    end
+  end
+
+  describe '#formatted_report' do
+    let(:detailed_report) {
+      { 'Detailed Report' => {
+        'Forms' =>
+        [{ 'Rule' => 'Tagged form fields', 'Status' => 'Passed', 'Description' => 'All form fields are tagged' }],
+        'Tables' =>
+        [{ 'Rule' => 'Rows', 'Status' => 'Failed', 'Description' => 'TR must be a child of Table, THead, TBody, or TFoot' }],
+        'Document' =>
         [{ 'Rule' => 'Accessibility permission flag', 'Status' => 'Passed', 'Description' => 'Accessibility permission flag must be set' },
          { 'Rule' => 'Image-only PDF', 'Status' => 'Needs manual check', 'Description' => 'Document is not image-only PDF' }]
-        } }
+      } }}
     let(:expected_report) { {
       'Success' =>
         [{ 'Rule' => 'Tagged form fields', 'Status' => 'Passed', 'Description' => 'All form fields are tagged' },
