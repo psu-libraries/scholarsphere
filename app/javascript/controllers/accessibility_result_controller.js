@@ -34,15 +34,20 @@ export default class extends Controller {
     const scorePresent = this.data.get('scorePresent') === 'true'
     const errorPresent = this.data.get('errorPresent') === 'true'
     const score = this.data.get('score') || 'N/A'
-    const reportUrl = this.data.get('reportUrl')
 
     if (mimeType !== 'application/pdf' || errorPresent) {
       this.scoreTarget.textContent = 'Needs manual review'
-    } else if (mimeType === 'application/pdf' && scorePresent) {
+    } else if (scorePresent) {
       this.scoreTarget.textContent = score
     } else {
       this.scoreTarget.innerHTML = 'Processing <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>'
     }
+
+    this.renderReportUrl()
+  }
+
+  renderReportUrl () {
+    const reportUrl = this.data.get('reportUrl')
 
     if (reportUrl) {
       this.linkTarget.innerHTML = '<a href="' + reportUrl + '" target="_blank">View Report</a>'
