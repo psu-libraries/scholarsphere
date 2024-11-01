@@ -9,5 +9,5 @@ test:
 
 production:
   adapter: redis
-  url: <%= Scholarsphere::RedisConfig.new.to_hash['url'] %>
+  url: <%= Scholarsphere::RedisConfig.new.to_hash[:url] %>
   channel_prefix: scholarsphere_production
