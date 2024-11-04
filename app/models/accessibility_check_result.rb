@@ -12,7 +12,7 @@ class AccessibilityCheckResult < ApplicationRecord
   end
 
   def failures_present?
-    num_passed != num_total
+    detailed_report.key?('Detailed Report') ? num_passed != num_total : error.present?
   end
 
   def error
