@@ -1,10 +1,13 @@
 development:
-  adapter: async
+  adapter: redis
+  url: <%= Scholarsphere::RedisConfig.new.to_hash['url'] %>
+  channel_prefix: scholarsphere_development
+  password: <%= ENV.fetch("REDIS_PASSWORD", 'redispassword') %>
 
 test:
   adapter: test
 
 production:
   adapter: redis
-  url: <%= ENV.fetch("REDIS_URL") { "redis://localhost:6379/1" } %>
+  url: <%= Scholarsphere::RedisConfig.new.to_hash[:url] %>
   channel_prefix: scholarsphere_production

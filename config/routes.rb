@@ -7,6 +7,7 @@ Rails.application.routes.draw do
                       host: ENV.fetch('DEFAULT_URL_HOST', 'localhost:3000')
 
   mount Qa::Engine => '/authorities'
+  mount ActionCable.server => '/cable'
 
   namespace :admin do
     authenticate :user do
@@ -34,6 +35,7 @@ Rails.application.routes.draw do
   get 'agreement-1.0', to: 'markdown#show', page: 'agreement_1_0'
   get 'agreement-2.0', to: 'markdown#show', page: 'agreement_2_0'
   get 'agreement', to: 'markdown#show', page: 'agreement_2_0'
+  get 'accessibility_check_results/:id', to: 'accessibility_check_results#show', as: 'accessibility_check_result'
 
   get 'contact', to: 'incidents#new'
   resources :incidents, only: [:new, :create]
