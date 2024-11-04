@@ -28,6 +28,7 @@ RSpec.describe FileResource, type: :model do
     it { is_expected.to have_many(:view_statistics) }
     it { is_expected.to have_many(:legacy_identifiers) }
     it { is_expected.to have_one(:thumbnail_upload) }
+    it { is_expected.to have_one(:accessibility_check_result) }
   end
 
   describe 'scopes' do
