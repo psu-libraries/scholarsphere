@@ -1,5 +1,6 @@
 development:
   adapter: redis
+  url: <%= Scholarsphere::RedisConfig.new.to_hash[:url] %>
   channel_prefix: scholarsphere_development
   password: <%= ENV.fetch("REDIS_PASSWORD", 'redispassword') %>
 
@@ -8,4 +9,5 @@ test:
 
 production:
   adapter: redis
-  channel_prefix: scholarsphere_prod_action_cable
+  url: <%= Scholarsphere::RedisConfig.new.to_hash[:url] %>
+  channel_prefix: scholarsphere_production
