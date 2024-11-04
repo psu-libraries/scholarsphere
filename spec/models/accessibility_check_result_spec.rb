@@ -107,7 +107,7 @@ RSpec.describe AccessibilityCheckResult, type: :model do
     context 'when there was an error from Adobe' do
       let(:detailed_report) {
         { 'error' => 'Authentication failed: 400 - {"error":{"code":"invalid_client","message":"invalid client_id parameter"}}' } }
-       
+
       it 'returns true' do
         expect(accessibility_check_result.failures_present?).to be true
       end
