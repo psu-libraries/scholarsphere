@@ -1,5 +1,5 @@
 FROM harbor.k8s.libraries.psu.edu/library/ruby-3.1.2-node-16:20240701 as base
-ARG UID=2000
+ARG UID=201
 
 COPY bin/vaultshell /usr/local/bin/
 USER root
