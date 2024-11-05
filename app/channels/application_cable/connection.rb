@@ -6,10 +6,6 @@ module ApplicationCable
 
     def connect
       self.current_user = find_verified_user
-      # Log the headers for debugging
-      logger.add_tags 'ActionCable', current_user.email if current_user.present?
-      logger.info "Remote IP: #{request.headers['REMOTE_ADDR']}"
-      logger.info "X-Forwarded-For: #{request.headers['HTTP_X_FORWARDED_FOR']}"
     end
 
     private
