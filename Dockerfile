@@ -13,6 +13,10 @@ RUN apt-get update && \
 
 COPY config/policy.xml /etc/ImageMagick-6/policy.xml
 RUN useradd -u $UID app -d /app
+# adding this in attempts to see what happens with permissions 
+RUN mkdir /tmp/app/
+RUN chown app:app /tmp/app && chmod 775 /tmp/app
+
 RUN mkdir /app/tmp
 RUN chown -R app /app
 USER app
