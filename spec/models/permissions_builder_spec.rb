@@ -15,9 +15,9 @@ RSpec.describe PermissionsBuilder do
   end
 
   after(:all) do
-    ActiveSupport::Dependencies.remove_constant('Dog')
-    ActiveSupport::Dependencies.remove_constant('Cat')
-    ActiveSupport::Dependencies.remove_constant('Pole')
+    Object.send(:remove_const, 'Dog') if Object.const_defined?('Dog')
+    Object.send(:remove_const, 'Cat') if Object.const_defined?('Cat')
+    Object.send(:remove_const, 'Pole') if Object.const_defined?('Pole')
   end
 
   it { is_expected.to respond_to(:grant_scratch_access) }

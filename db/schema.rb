@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_10_02_144039) do
-
+ActiveRecord::Schema[7.2].define(version: 2024_10_21_204531) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -23,11 +22,19 @@ ActiveRecord::Schema.define(version: 2024_10_02_144039) do
     t.bigint "agent_id"
     t.string "resource_type"
     t.bigint "resource_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["access_level", "agent_type", "resource_type", "agent_id", "resource_id"], name: "index_access_controls_on_access_level_agent_and_resource", unique: true
     t.index ["agent_type", "agent_id"], name: "index_access_controls_on_agent_type_and_agent_id"
     t.index ["resource_type", "resource_id"], name: "index_access_controls_on_resource_type_and_resource_id"
+  end
+
+  create_table "accessibility_check_results", force: :cascade do |t|
+    t.jsonb "detailed_report", null: false
+    t.bigint "file_resource_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["file_resource_id"], name: "index_accessibility_check_results_on_file_resource_id"
   end
 
   create_table "actors", force: :cascade do |t|
@@ -36,8 +43,8 @@ ActiveRecord::Schema.define(version: 2024_10_02_144039) do
     t.string "email"
     t.string "psu_id"
     t.string "orcid"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "display_name"
     t.index ["orcid"], name: "index_actors_on_orcid", unique: true
     t.index ["psu_id"], name: "index_actors_on_psu_id", unique: true
@@ -45,9 +52,9 @@ ActiveRecord::Schema.define(version: 2024_10_02_144039) do
 
   create_table "api_tokens", force: :cascade do |t|
     t.string "token"
-    t.datetime "last_used_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "last_used_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "application_id"
     t.index ["application_id"], name: "index_api_tokens_on_application_id"
     t.index ["token"], name: "index_api_tokens_on_token", unique: true
@@ -56,8 +63,8 @@ ActiveRecord::Schema.define(version: 2024_10_02_144039) do
   create_table "application_settings", force: :cascade do |t|
     t.string "read_only_message"
     t.text "announcement"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "authorships", force: :cascade do |t|
@@ -70,8 +77,8 @@ ActiveRecord::Schema.define(version: 2024_10_02_144039) do
     t.string "resource_type"
     t.bigint "resource_id"
     t.bigint "actor_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["actor_id"], name: "index_authorships_on_actor_id"
     t.index ["instance_token"], name: "index_authorships_on_instance_token"
     t.index ["resource_type", "resource_id"], name: "index_authorships_on_resource_type_and_resource_id"
@@ -83,8 +90,8 @@ ActiveRecord::Schema.define(version: 2024_10_02_144039) do
     t.string "document_id"
     t.string "document_type"
     t.binary "title"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["document_id"], name: "index_bookmarks_on_document_id"
     t.index ["user_id"], name: "index_bookmarks_on_user_id"
   end
@@ -93,8 +100,8 @@ ActiveRecord::Schema.define(version: 2024_10_02_144039) do
     t.bigint "collection_id", null: false
     t.bigint "work_id", null: false
     t.integer "position"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["collection_id", "work_id"], name: "index_collection_work_memberships_on_collection_id_and_work_id", unique: true
     t.index ["collection_id"], name: "index_collection_work_memberships_on_collection_id"
     t.index ["work_id"], name: "index_collection_work_memberships_on_work_id"
@@ -105,9 +112,9 @@ ActiveRecord::Schema.define(version: 2024_10_02_144039) do
     t.uuid "uuid", default: -> { "uuid_generate_v4()" }
     t.string "doi"
     t.jsonb "metadata"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.datetime "deposited_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "deposited_at", precision: nil
     t.boolean "notify_editors", default: false
     t.string "thumbnail_selection", default: "default_icon"
     t.index ["depositor_id"], name: "index_collections_on_depositor_id"
@@ -116,8 +123,8 @@ ActiveRecord::Schema.define(version: 2024_10_02_144039) do
   create_table "curatorships", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "work_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_curatorships_on_user_id"
     t.index ["work_id"], name: "index_curatorships_on_work_id"
   end
@@ -125,8 +132,8 @@ ActiveRecord::Schema.define(version: 2024_10_02_144039) do
   create_table "external_apps", force: :cascade do |t|
     t.string "name"
     t.string "contact_email"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["name"], name: "index_external_apps_on_name", unique: true
   end
 
@@ -134,17 +141,17 @@ ActiveRecord::Schema.define(version: 2024_10_02_144039) do
     t.uuid "resource_uuid"
     t.string "resource_type"
     t.bigint "resource_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["resource_type", "resource_id"], name: "index_featured_resources_on_resource_type_and_resource_id"
     t.index ["resource_uuid", "resource_type", "resource_id"], name: "index_featured_resources_on_uuid_and_resource", unique: true
   end
 
   create_table "file_resources", force: :cascade do |t|
     t.jsonb "file_data"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.datetime "deposited_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "deposited_at", precision: nil
     t.uuid "uuid", default: -> { "uuid_generate_v4()" }
   end
 
@@ -152,8 +159,8 @@ ActiveRecord::Schema.define(version: 2024_10_02_144039) do
     t.bigint "work_version_id", null: false
     t.bigint "file_resource_id", null: false
     t.string "title"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["file_resource_id"], name: "index_file_version_memberships_on_file_resource_id"
     t.index ["work_version_id", "title"], name: "index_file_version_memberships_on_work_version_id_and_title", unique: true
     t.index ["work_version_id"], name: "index_file_version_memberships_on_work_version_id"
@@ -161,8 +168,8 @@ ActiveRecord::Schema.define(version: 2024_10_02_144039) do
 
   create_table "groups", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["name"], name: "index_groups_on_name", unique: true
   end
 
@@ -171,8 +178,8 @@ ActiveRecord::Schema.define(version: 2024_10_02_144039) do
     t.string "old_id"
     t.string "resource_type", null: false
     t.bigint "resource_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["resource_type", "resource_id"], name: "index_legacy_identifiers_on_resource_type_and_resource_id"
     t.index ["version", "old_id"], name: "index_legacy_identifiers_on_version_and_old_id", unique: true
   end
@@ -181,8 +188,8 @@ ActiveRecord::Schema.define(version: 2024_10_02_144039) do
     t.binary "query_params"
     t.integer "user_id"
     t.string "user_type"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["user_id"], name: "index_searches_on_user_id"
   end
 
@@ -190,8 +197,8 @@ ActiveRecord::Schema.define(version: 2024_10_02_144039) do
     t.string "resource_type", null: false
     t.bigint "resource_id", null: false
     t.bigint "file_resource_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["file_resource_id"], name: "index_thumbnail_uploads_on_file_resource_id", unique: true
     t.index ["resource_type", "resource_id"], name: "index_thumbnail_uploads_on_resource", unique: true
   end
@@ -199,8 +206,8 @@ ActiveRecord::Schema.define(version: 2024_10_02_144039) do
   create_table "user_group_memberships", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "group_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["group_id"], name: "index_user_group_memberships_on_group_id"
     t.index ["user_id"], name: "index_user_group_memberships_on_user_id"
   end
@@ -210,8 +217,8 @@ ActiveRecord::Schema.define(version: 2024_10_02_144039) do
     t.string "email"
     t.string "provider"
     t.string "uid"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.bigint "actor_id", null: false
     t.boolean "active", default: true
     t.boolean "admin_enabled", default: false
@@ -226,7 +233,7 @@ ActiveRecord::Schema.define(version: 2024_10_02_144039) do
     t.string "event", null: false
     t.string "whodunnit"
     t.jsonb "object"
-    t.datetime "created_at"
+    t.datetime "created_at", precision: nil
     t.jsonb "object_changes"
     t.integer "work_version_id"
     t.integer "resource_id"
@@ -242,8 +249,8 @@ ActiveRecord::Schema.define(version: 2024_10_02_144039) do
     t.integer "count", default: 0
     t.string "resource_type", null: false
     t.bigint "resource_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["resource_type", "resource_id", "date"], name: "index_view_statistics_on_resource_type_and_resource_id_and_date"
     t.index ["resource_type", "resource_id"], name: "index_view_statistics_on_resource_type_and_resource_id"
   end
@@ -252,18 +259,18 @@ ActiveRecord::Schema.define(version: 2024_10_02_144039) do
     t.bigint "work_id"
     t.string "aasm_state"
     t.jsonb "metadata"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.uuid "uuid", default: -> { "uuid_generate_v4()" }
     t.integer "version_number", null: false
     t.string "doi"
     t.bigint "external_app_id"
-    t.datetime "published_at"
-    t.datetime "withdrawn_at"
-    t.datetime "removed_at"
-    t.boolean "imported_metadata_from_rmd"
+    t.datetime "published_at", precision: nil
+    t.datetime "withdrawn_at", precision: nil
+    t.datetime "removed_at", precision: nil
     t.boolean "draft_curation_requested"
-    t.datetime "sent_for_curation_at"
+    t.datetime "sent_for_curation_at", precision: nil
+    t.boolean "imported_metadata_from_rmd"
     t.boolean "mint_doi_requested"
     t.boolean "accessibility_remediation_requested"
     t.index ["external_app_id"], name: "index_work_versions_on_external_app_id"
@@ -273,22 +280,23 @@ ActiveRecord::Schema.define(version: 2024_10_02_144039) do
 
   create_table "works", force: :cascade do |t|
     t.string "work_type"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.uuid "uuid", default: -> { "uuid_generate_v4()" }
     t.string "doi"
-    t.datetime "embargoed_until"
+    t.datetime "embargoed_until", precision: nil
     t.bigint "depositor_id", null: false
     t.bigint "proxy_id"
-    t.datetime "deposited_at"
+    t.datetime "deposited_at", precision: nil
     t.string "deposit_agreement_version"
-    t.datetime "deposit_agreed_at"
+    t.datetime "deposit_agreed_at", precision: nil
     t.boolean "notify_editors", default: false
     t.string "thumbnail_selection", default: "default_icon"
     t.index ["depositor_id"], name: "index_works_on_depositor_id"
     t.index ["proxy_id"], name: "index_works_on_proxy_id"
   end
 
+  add_foreign_key "accessibility_check_results", "file_resources"
   add_foreign_key "api_tokens", "external_apps", column: "application_id"
   add_foreign_key "authorships", "actors"
   add_foreign_key "collection_work_memberships", "collections"

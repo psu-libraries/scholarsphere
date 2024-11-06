@@ -30,8 +30,8 @@ RSpec.describe 'Publishing works from the API', :inline_jobs, type: :feature do
 
   let(:content) do
     [
-      HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_path, 'image.png'))),
-      HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_path, 'ipsum.pdf')))
+      HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_paths, 'image.png'))),
+      HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_paths, 'ipsum.pdf')))
     ]
   end
 
