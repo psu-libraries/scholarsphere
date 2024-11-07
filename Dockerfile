@@ -1,5 +1,5 @@
 FROM harbor.k8s.libraries.psu.edu/library/ruby-3.1.2-node-16:20240701 as base
-ARG UID=2000
+ARG UID=3000
 
 COPY bin/vaultshell /usr/local/bin/
 USER root
@@ -14,6 +14,9 @@ RUN apt-get update && \
 COPY config/policy.xml /etc/ImageMagick-6/policy.xml
 RUN useradd -u $UID app -d /app
 RUN mkdir /app/tmp
+# adding this in attempts to see what happens with permissions 
+RUN mkdir /tmp/app/
+RUN chown app:app /tmp/app && chmod 775 /tmp/app
 RUN chown -R app /app
 USER app
 
