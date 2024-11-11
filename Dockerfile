@@ -1,6 +1,6 @@
 FROM harbor.k8s.libraries.psu.edu/library/ruby-3.1.2-node-16:20240701 as base
 ARG UID=3000
-
+# Some comment to trigger build
 COPY bin/vaultshell /usr/local/bin/
 USER root
 RUN apt-get update && \
