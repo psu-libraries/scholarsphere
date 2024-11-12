@@ -76,17 +76,6 @@ class WorkDepositPathway
     class WorkVersionFormBase
       include ActiveModel::Model
 
-      COMMON_FIELDS = %w{
-        description
-        published_date
-        subtitle
-        keyword
-        publisher
-        related_url
-        subject
-        language
-      }.freeze
-
       def initialize(work_version)
         @work_version = work_version
       end
@@ -118,14 +107,6 @@ class WorkDepositPathway
         end
       end
 
-      def show_autocomplete_form?
-        false
-      end
-
-      def imported_metadata_from_rmd?
-        imported_metadata_from_rmd == true
-      end
-
       delegate :id,
                :to_param,
                :persisted?,
@@ -134,12 +115,10 @@ class WorkDepositPathway
                :published?,
                :draft?,
                :work,
-               :imported_metadata_from_rmd,
                :indexing_source=,
                :update_doi=,
                :work_type,
                :draft_curation_requested,
-               :mint_doi_requested,
                to: :work_version, prefix: false
 
       private
@@ -147,7 +126,32 @@ class WorkDepositPathway
         attr_reader :work_version
     end
 
+    module WorkVersionDetails
+      COMMON_FIELDS = %w{
+        description
+        published_date
+        subtitle
+        keyword
+        publisher
+        related_url
+        subject
+        language
+      }.freeze
+
+      delegate :imported_metadata_from_rmd, to: :work_version, prefix: false
+
+      def show_autocomplete_form?
+        false
+      end
+
+      def imported_metadata_from_rmd?
+        imported_metadata_from_rmd == true
+      end
+    end
+
     class DetailsFormBase < WorkVersionFormBase
+      include WorkVersionDetails
+
       validates :description, presence: true
 
       validates :published_date,
@@ -168,10 +172,14 @@ class WorkDepositPathway
       end
     end
 
+    class PublishFormBase < WorkVersionFormBase
+      include WorkVersionDetails
+    end
+
     module General
       class DetailsForm < DetailsFormBase
         def self.form_fields
-          WorkVersionFormBase::COMMON_FIELDS.union(
+          WorkVersionDetails::COMMON_FIELDS.union(
             %w{
               publisher_statement
               identifier
@@ -194,7 +202,7 @@ class WorkDepositPathway
     module ScholarlyWorks
       class DetailsForm < DetailsFormBase
         def self.form_fields
-          WorkVersionFormBase::COMMON_FIELDS.union(
+          WorkVersionDetails::COMMON_FIELDS.union(
             %w{
               title
               publisher_statement
@@ -235,7 +243,7 @@ class WorkDepositPathway
     module DataAndCode
       class DetailsForm < DetailsFormBase
         def self.form_fields
-          WorkVersionFormBase::COMMON_FIELDS.union(
+          WorkVersionDetails::COMMON_FIELDS.union(
             %w{
               based_near
               source
@@ -254,9 +262,9 @@ class WorkDepositPathway
         end
       end
 
-      class PublishForm < WorkVersionFormBase
+      class PublishForm < PublishFormBase
         def self.form_fields
-          WorkVersionFormBase::COMMON_FIELDS.union(
+          WorkVersionDetails::COMMON_FIELDS.union(
             %w{
               title
               based_near
@@ -294,6 +302,7 @@ class WorkDepositPathway
                  :aasm,
                  :update_column,
                  :draft_curation_requested=,
+                 :mint_doi_requested,
                  :mint_doi_requested=,
                  :set_thumbnail_selection,
                  to: :work_version,
@@ -323,7 +332,7 @@ class WorkDepositPathway
         include Instrument
 
         def self.form_fields
-          WorkVersionFormBase::COMMON_FIELDS.union(
+          WorkVersionDetails::COMMON_FIELDS.union(
             %w{
               title
               identifier
@@ -365,11 +374,11 @@ class WorkDepositPathway
         validates :owner, :manufacturer, presence: true
       end
 
-      class PublishForm < WorkVersionFormBase
+      class PublishForm < PublishFormBase
         include Instrument
 
         def self.form_fields
-          WorkVersionFormBase::COMMON_FIELDS.union(
+          WorkVersionDetails::COMMON_FIELDS.union(
             %w{
               title
               owner
