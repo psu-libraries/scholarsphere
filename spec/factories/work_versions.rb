@@ -88,7 +88,6 @@ FactoryBot.define do
       draft
       with_files
       with_readme_file
-      with_creators
       description { Faker::Lorem.paragraph }
       published_date { Faker::Date.between(from: 2.years.ago, to: Date.today).iso8601 }
     end
@@ -123,6 +122,7 @@ FactoryBot.define do
       related_url { Faker::Internet.url }
       source { Faker::SlackEmoji.emoji }
       owner { Faker::Book.author }
+      manufacturer { Faker::Company.name }
       model { Faker::Number.leading_zero_number(digits: 5) }
     end
   end

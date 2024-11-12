@@ -37,9 +37,7 @@ RSpec.describe WorkDepositPathway::Instrument::DetailsForm, type: :model do
     it "returns a frozen array of the names of the form's fields" do
       expect(described_class.form_fields).to match_array %w{
         title
-        owner
         identifier
-        manufacturer
         model
         instrument_type
         measured_variable
@@ -75,8 +73,6 @@ RSpec.describe WorkDepositPathway::Instrument::DetailsForm, type: :model do
         {
           description: 'test description',
           published_date: '2021',
-          owner: 'test owner',
-          manufacturer: 'test manufacturer',
           model: 'test model',
           instrument_type: 'test type',
           measured_variable: 'test measured variable',

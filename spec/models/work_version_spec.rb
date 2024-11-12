@@ -98,7 +98,8 @@ RSpec.describe WorkVersion, type: :model do
   end
 
   describe 'validations' do
-    subject(:work_version) { build(:work_version) }
+    subject(:work_version) { build(:work_version, work: work) }
+    let(:work) { build :work }
 
     context 'when draft' do
       it { is_expected.to validate_presence_of(:title) }
@@ -121,13 +122,25 @@ RSpec.describe WorkVersion, type: :model do
         expect(work_version.errors[:file_resources]).to be_empty
       end
 
-      it 'validates the presence of creators' do
-        work_version.creators = []
-        work_version.validate
-        expect(work_version.errors[:creators]).not_to be_empty
-        work_version.creators.build(attributes_for(:authorship))
-        work_version.validate
-        expect(work_version.errors[:creators]).to be_empty
+      context 'when the work is not an instrument' do
+        it 'validates the presence of creators' do
+          work_version.creators = []
+          work_version.validate
+          expect(work_version.errors[:creators]).not_to be_empty
+          work_version.creators.build(attributes_for(:authorship))
+          work_version.validate
+          expect(work_version.errors[:creators]).to be_empty
+        end
+      end
+
+      context 'when the work is an instrument' do
+        let(:work) { build(:work, work_type: 'instrument') }
+
+        it 'does not validate the presence of creators' do
+          work_version.creators = []
+          work_version.validate
+          expect(work_version.errors[:creators]).to be_empty
+        end
       end
 
       it 'validates the visibility of the work' do
