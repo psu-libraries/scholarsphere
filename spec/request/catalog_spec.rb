@@ -13,7 +13,7 @@ RSpec.describe CatalogController, type: :request do
         expect(response).to have_http_status(:not_acceptable)
       end
     end
-    
+
     context 'when requesting an atom feed' do
       specify do
         get '/catalog.atom'

@@ -17,7 +17,7 @@ RSpec.describe HealthChecks::QueueLatencyCheck, :sidekiq do
   end
 
   after(:all) do
-    Object.send(:remove_const, 'TestJob') if Object.const_defined?('TestJob')
+    Object.send(:remove_const, 'TestJob') if Object.const_defined?(:TestJob)
   end
 
   before do

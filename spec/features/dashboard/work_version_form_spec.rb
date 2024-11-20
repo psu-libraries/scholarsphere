@@ -894,7 +894,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       let(:user) { work.depositor.user }
       let(:work_version) { create :work_version, :draft }
 
-      before { work.versions = [work_version]}
+      before { work.versions = [work_version] }
 
       # RSpec mocks _cumulatively_ record the number of times they've been called,
       # we need a way to say "from this exact point, you should have been called

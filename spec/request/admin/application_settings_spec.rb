@@ -10,8 +10,8 @@
        let(:user) { create(:user) }
 
        specify do
-        get admin_application_settings_path
-        expect(response).to have_http_status(:not_found)
+         get admin_application_settings_path
+         expect(response).to have_http_status(:not_found)
        end
      end
 
@@ -36,8 +36,8 @@
        let(:user) { create(:user) }
 
        specify do
-        patch admin_application_settings_url, params: { application_setting: new_attributes }
-        expect(response).to have_http_status(:not_found)
+         patch admin_application_settings_url, params: { application_setting: new_attributes }
+         expect(response).to have_http_status(:not_found)
        end
      end
 

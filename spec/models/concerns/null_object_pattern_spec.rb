@@ -12,7 +12,7 @@ RSpec.describe NullObjectPattern do
   end
 
   after(:all) do
-    Object.send(:remove_const, 'NullTest') if Object.const_defined?('NullTest')
+    Object.send(:remove_const, 'NullTest') if Object.const_defined?(:NullTest)
   end
 
   it { is_expected.to be_nil }

@@ -65,7 +65,7 @@ module Dashboard
             @resource.validate
             @resource.errors.messages.each_key do |attribute|
               # Rails 7 changed how it handles nested attributes. This removes all nested errors.
-              @resource.errors.delete(attribute) if attribute.to_s.include?("work.versions")
+              @resource.errors.delete(attribute) if attribute.to_s.include?('work.versions')
             end
             @resource.errors.delete(:rights)
           end

@@ -54,7 +54,7 @@ gem 'seedbank'
 gem 'shakapacker', '~> 7.1'
 gem 'shrine', '~> 3.3'
 gem 'sidekiq', '~> 6.5'
-gem "sprockets-rails"
+gem 'sprockets-rails'
 gem 'stackprof'
 gem 'uppy-s3_multipart', '~> 0.3'
 gem 'view_component'

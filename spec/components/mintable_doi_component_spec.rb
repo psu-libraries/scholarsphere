@@ -34,8 +34,8 @@ RSpec.describe MintableDoiComponent, type: :component do
       expect(html.css('form').attribute('action').value)
         .to eq resource_doi_path(resource.uuid)
 
-        expect(html.at_css('button').text).to eq I18n.t!('resources.doi.create')
-      end
+      expect(html.at_css('button').text).to eq I18n.t!('resources.doi.create')
+    end
   end
 
   context 'when the user does not have permissinos to create the doi' do

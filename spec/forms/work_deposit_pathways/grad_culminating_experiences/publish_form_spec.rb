@@ -146,14 +146,14 @@ RSpec.describe WorkDepositPathway::GradCulminatingExperiences::PublishForm, type
       allow(wv).to receive(:attributes=)
     end
 
-        # RSpec mocks _cumulatively_ record the number of times they've been called,
-      # we need a way to say "from this exact point, you should have been called
-      # once." We accomplish this by tearing down the mock and setting it back up.
-      def mock_wv_save
-        RSpec::Mocks.space.proxy_for(wv)&.reset
+    # RSpec mocks _cumulatively_ record the number of times they've been called,
+    # we need a way to say "from this exact point, you should have been called
+    # once." We accomplish this by tearing down the mock and setting it back up.
+    def mock_wv_save
+      RSpec::Mocks.space.proxy_for(wv)&.reset
 
-        allow(wv).to receive(:save).and_call_original
-      end
+      allow(wv).to receive(:save).and_call_original
+    end
 
     context "when the form's work version is valid" do
       context 'when the form is valid' do

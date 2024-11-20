@@ -19,8 +19,11 @@ RSpec.describe 'Create Curation Ticket', type: :request do
 
     context 'with an admin user' do
       let(:user) { create(:user, :admin) }
+      let(:libanswer_response) { instance_double LibanswersApiService }
+
       before do
-        allow(LibanswersApiService).to receive_message_chain(:new, :admin_create_curation_ticket).and_return('Redirect Path')
+        allow(LibanswersApiService).to receive(:new).and_return libanswer_response
+        allow(libanswer_response).to receive(:admin_create_curation_ticket).and_return('Redirect Path')
       end
 
       specify do

@@ -37,7 +37,7 @@ RSpec.describe AllDois do
   end
 
   after(:all) do
-    Object.send(:remove_const, 'TestModel') if Object.const_defined?('TestModel')
+    Object.send(:remove_const, 'TestModel') if Object.const_defined?(:TestModel)
   end
 
   describe '#all_dois' do
