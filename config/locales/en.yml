@@ -6,6 +6,14 @@ en:
     ScholarSphere. All types of scholarly materials, including publications, instructional materials, creative works,
     and research data are accepted.
   read_only: Scholarsphere is undergoing maintenance. No changes can be made during this time.
+  accessibility_report:
+    header: Accessibility Report for
+    success: Successes
+    failure: Failures
+    manual_review: Needs Manual Review
+    tips: Tips for %{rule} Remediation
+    intro: Below are the results of the accessibility check of the pdf you recently uploaded. <a href="https://www.ada.gov/resources/2024-03-08-web-rule" target="_blank">Title II of the ADA</a> requires that all digital content be made accessible. More information can be found in <a href=https://policy.psu.edu/policies/ad69>Penn State’s AD69 Accessibility Policy</a>.
+    remediation_help: For remediation assistance or any questions, please contact <a href=mailto:digitalaccessibility@psu.libanswers.com>digitalaccessibility@psu.libanswers.com</a> or visit the <a href=https://smealonline.psu.edu/browse/accessibility-learning-path/courses/pdf-accessibility-overview-and-introduction>PDF Accessibility Training</a> on the <a href=https://accessibility.psu.edu/training/learningpath/>Penn State Accessibility Learning Path</a>.
   activerecord:
     attributes:
       actor:
@@ -339,6 +347,8 @@ en:
         audit_heading: "Previous Curators:"
         explanation: "Changes the curator of the work. Currently, only existing Penn State users are allowed."
         submit_button: Update Curator
+      files:
+        heading: Accessibility Review
     works:
       index:
         heading: "Your ScholarSphere Deposits"
@@ -582,6 +592,8 @@ en:
         name: Name
         size: Size
         mime_type: Type
+        accessibility_score: Accessibility Result
+        accessibility_report: Accessibility Report
         unknown_virus: unknown
         actions: ''
         rename: Rename
@@ -689,6 +701,10 @@ en:
     contact_accessibility_team_button:
       text: 'Contact Accessibility Team via LibAnswers >>'
       confirm_message: 'This will create a ticket in LibAnswers and direct you to it.  An email will not be sent to the accessibility team until the form is completed in LibAnswers.'
+    request_alternate_format_button:
+      text: 'Request Alternate Format'
+      header: "Request alternate format for %{title}"
+      success_message: 'Your request has been sent to the Accessibility Team. A team member will be in touch with you soon.'
     doi:
       doi: 'doi:'
       valid: 'This is a valid DOI and can be used to reference this page'

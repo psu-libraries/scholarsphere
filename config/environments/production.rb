@@ -117,10 +117,16 @@ Rails.application.configure do
   end
 
   config.lograge.custom_options = lambda do |event|
-    {
-      remote_addr: event.payload[:headers][:REMOTE_ADDR],
-      x_forwarded_for: event.payload[:headers][:HTTP_X_FORWARDED_FOR]
-    }
+    headers = event.payload[:headers]
+
+    if headers.present?
+      {
+        remote_addr: headers[:REMOTE_ADDR],
+        x_forwarded_for: headers[:HTTP_X_FORWARDED_FOR]
+      }
+    else
+      {}
+    end
   end
 
   # Instead of extracting event as Strings, extract as Hash. You can also extract

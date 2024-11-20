@@ -14,13 +14,16 @@ RSpec.describe WorkDepositPathway do
       draft_curation_requested: draft_curation_requested,
       accessibility_remediation_requested: accessibility_remediation_requested,
       doi_blank?: doi_blank,
-      work: work
+      work: work,
+      file_version_memberships: [file_version_membership1, file_version_membership2]
     )
   }
   let(:type) { nil }
   let(:draft_curation_requested) { false }
   let(:accessibility_remediation_requested) { false }
   let(:doi_blank) { false }
+  let(:file_version_membership1) { instance_double(FileVersionMembership, accessibility_failures?: true) }
+  let(:file_version_membership2) { instance_double(FileVersionMembership, accessibility_failures?: false) }
   let(:work) { instance_double(Work) }
 
   describe '#details_form when the given work version has a scholarly works type' do
@@ -451,8 +454,18 @@ RSpec.describe WorkDepositPathway do
             end
 
             context 'when curation has not been requested for the given work version' do
-              it 'returns true' do
-                expect(pathway.allows_accessibility_remediation_request?).to eq true
+              context 'when all files passed accessibility check' do
+                let(:file_version_membership1) { instance_double(FileVersionMembership, accessibility_failures?: false) }
+
+                it 'returns false' do
+                  expect(pathway.allows_accessibility_remediation_request?).to eq false
+                end
+              end
+
+              context 'when one of the files has failed an accessibility check' do
+                it 'returns false' do
+                  expect(pathway.allows_accessibility_remediation_request?).to eq true
+                end
               end
             end
           end

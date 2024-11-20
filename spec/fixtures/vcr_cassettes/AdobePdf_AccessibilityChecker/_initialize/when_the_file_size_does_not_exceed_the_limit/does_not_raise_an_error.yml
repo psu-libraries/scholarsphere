@@ -1,0 +1,103 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://pdf-services.adobe.io/token
+    body:
+      encoding: UTF-8
+      string: client_id=adobe_client_id&client_secret=adobe_client_secret
+    headers:
+      User-Agent:
+      - Faraday v1.10.3
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - openresty
+      Date:
+      - Tue, 22 Oct 2024 14:05:41 GMT
+      Content-Type:
+      - application/json;charset=UTF-8
+      Content-Length:
+      - '1055'
+      Connection:
+      - keep-alive
+      X-Request-Id:
+      - McXbDKVJEl8XKWAurJWZMcKOaYgJAN9D
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - "*"
+      Access-Control-Max-Age:
+      - '60'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Headers:
+      - Authorization,Content-Type,X-Api-Key,User-Agent,If-Modified-Since,x-api-app-info
+    body:
+      encoding: UTF-8
+      string: '{"access_token":"eyJhbGciOiJSUzI1NiIsIng1dSI6Imltc19uYTEta2V5LWF0LTEuY2Vy","token_type":"bearer","expires_in":86399}'
+  recorded_at: Tue, 22 Oct 2024 14:05:41 GMT
+- request:
+    method: post
+    uri: https://pdf-services.adobe.io/assets
+    body:
+      encoding: UTF-8
+      string: '{"mediaType":"application/pdf"}'
+    headers:
+      User-Agent:
+      - Faraday v1.10.3
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer eyJhbGciOiJSUzI1NiIsIng1dSI6Imltc19uYTEta2V5LWF0LTEuY2Vy
+      X-Api-Key:
+      - adobe_client_id
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - openresty
+      Date:
+      - Tue, 22 Oct 2024 14:05:46 GMT
+      Content-Type:
+      - application/json;charset=UTF-8
+      Content-Length:
+      - '1970'
+      Connection:
+      - keep-alive
+      X-Request-Id:
+      - W1DWLw3wnAjppvUfudnQvf4paZnvPL4j
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - "[...]"
+      Access-Control-Max-Age:
+      - '60'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Headers:
+      - Authorization,Content-Type,X-Api-Key,User-Agent,If-Modified-Since
+    body:
+      encoding: UTF-8
+      string: '{"uploadUri":"https://dcplatformstorageservice-prod-us-east-1.s3-accelerate.amazonaws.com/adobe_client_id_FE141E7E670446A30A495E28%40techacct.adobe.com/836fac0a-7d2b-47ce-a210-6e0d17517bea?X-Amz-Security-Token=IQoJb3JpZ2luX2VjEDsaCXVzLWVhc3QtMSJHMEUCIHOuyCJusnAJgs51nKjuz4rkZRbI4s3c0qGAi7d6p7TdAiEA0liMI6zeA5QOK1KkBYzbc6WUGOZuK%2FI4GjJL0aWPj4kqtAUIpP%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARAAGgw0MjA1MzM0NDU5ODIiDJzj%2B57RryjuauTxkyqIBd8WDsiim9bpWkbDQHhyR8CxcQjmNqu%2FGUBpb9FCAlE2CA9rJmFHkzpl%2FHJnH0fBEF50tM%2Fu0Grh9c0YoYH4RdvhuzWTmEodteZz9cwfLV%2BCn8Eh5PCB%2Fj4M9zHLfFYTcT0OMN1U7ue7OEM%2B%2Bk66S0WcIcxe11DIhKcnjZXdhfVzwweo%2F1wozicwsttntiPO5eajISe9Ra8K%2BWx%2FgqQRKe5x69s93jdK2fIVKTvPyI1mY6GpZTOzzgv8NmsaD27sfrS9LUvztq0p7MSp5DtqKlqIzMvibwscAfVGJ1voWC5BOzVQGh9690YwK5%2BAhqQO03610idcyQCF7DaCxIXIk7dUzIsb%2Bd%2Bp%2B6BbVm8zAhcdNAUPb3AfXNwuDDEzUWhzliXHJxLZQ2zcp74%2BkJtQVRaN%2BeVNkRMfMLPYCyge%2BQkYkbFKty1HAuz%2Bvi7A7uiro1f0dBmBf5z6oDR0Ho42L6G1kQyfTWqeUfCLhUaq%2Bw50whtKtbYPvDV8rcj9KsAIjLVJfHfYkkVN%2F38qb2q14UIY%2FyJx%2BJ61pxy7g%2FWJHxcsLem%2FpHEmU0HPRhUWsMSvHkMtdiAlmEEiGnP4sZKlLygtJo060e%2BXP8ctrIxniqWNRHhdi0muTcazIevrQ1TDPBM6gYP3ieXhnU5DbVXeH3K%2Fi8s95P9tJuPwuxgCWn8ooxYEL2ZIbNtEflZb7tMHR9TPGh76DR4tIGReydluXJEEijPXPRpclO%2BLXs5ngIqe6qpkUCxkFq92xEJ8jRNNS3i3CwLFcPdmJ0ZJzBNwnisXHmF0D4pNWBTrkMEmj8w9dE9iyH%2BG2pT9sxBEDkfYOjAi0LJQEJvQN5PWjFWyUStna%2FcWrob1gjCC%2F924BjqpATLZfqjX9jgJYNvqYRnAjoW0wN43U4eCuWM6nKkDDTlWSPN7oo3r0DfjzHdAMw191egeJjdYSokrAoYnwHP6CWgdVocKVgPI0Sgr0ixyX0MDnRKXu%2FdMo8Oe1aT1YgvhxzhjV%2Bk%2B7L14oKaAQnFIoG93kQbQYaRjhbyq3BKzPs6gLMahF%2BZvTJ%2F5xCWZ821s8WB%2FOSlTUgatMEB0OoC24zZc0Utq63ms5JA%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20241022T140546Z&X-Amz-SignedHeaders=content-type%3Bhost&X-Amz-Expires=3600&X-Amz-Credential=ASIAWD2N7EVPMB55W7FD%2F20241022%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=117443121384e732e9625aa49ada1e1d599d394720b726f3e7802e0cb9514819","assetID":"urn:aaid:AS:UE1:cbe85723-db65-461c-a2bf-b1fa59fb14c1"}'
+  recorded_at: Tue, 22 Oct 2024 14:05:46 GMT
+recorded_with: VCR 6.1.0

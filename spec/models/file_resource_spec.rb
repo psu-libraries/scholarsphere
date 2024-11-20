@@ -28,6 +28,23 @@ RSpec.describe FileResource, type: :model do
     it { is_expected.to have_many(:view_statistics) }
     it { is_expected.to have_many(:legacy_identifiers) }
     it { is_expected.to have_one(:thumbnail_upload) }
+    it { is_expected.to have_one(:accessibility_check_result) }
+  end
+
+  describe 'scopes' do
+    describe '.needs_accessibility_check' do
+      let(:file_resource_with_check) { create(:file_resource, :pdf) }
+      let(:file_resource_without_check) { create(:file_resource, :pdf) }
+      let(:non_pdf_file_resource) { create(:file_resource, :with_processed_image) }
+
+      before do
+        create(:accessibility_check_result, file_resource: file_resource_with_check)
+      end
+
+      it 'returns only PDF files without an accessibility check result' do
+        expect(described_class.needs_accessibility_check).to contain_exactly(file_resource_without_check)
+      end
+    end
   end
 
   describe '::reindex_all' do

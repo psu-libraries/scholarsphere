@@ -4,9 +4,10 @@ require 'sidekiq/web'
 
 Rails.application.routes.draw do
   default_url_options protocol: ENV.fetch('DEFAULT_URL_PROTOCOL', 'http'),
-                      host: ENV.fetch('DEFAULT_URL_HOST', 'localhost')
+                      host: ENV.fetch('DEFAULT_URL_HOST', 'localhost:3000')
 
   mount Qa::Engine => '/authorities'
+  mount ActionCable.server => '/cable'
 
   namespace :admin do
     authenticate :user do
@@ -34,6 +35,7 @@ Rails.application.routes.draw do
   get 'agreement-1.0', to: 'markdown#show', page: 'agreement_1_0'
   get 'agreement-2.0', to: 'markdown#show', page: 'agreement_2_0'
   get 'agreement', to: 'markdown#show', page: 'agreement_2_0'
+  get 'accessibility_check_results/:id', to: 'accessibility_check_results#show', as: 'accessibility_check_result'
 
   get 'contact', to: 'incidents#new'
   resources :incidents, only: [:new, :create]
@@ -48,6 +50,8 @@ Rails.application.routes.draw do
   concern :exportable, Blacklight::Routes::Exportable.new
 
   resources :resources, only: [:show] do
+    get 'alternate_format_request/:id', to: 'resources#new_alternate_format_request', as: :alternate_format_request
+    post 'alternate_format_request/:id', to: 'resources#create_alternate_format_request', as: :create_alternate_format_request
     get 'downloads/:id', to: 'downloads#content', as: :download
     get 'analytics', to: 'analytics#show', as: :analytics
 

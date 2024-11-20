@@ -100,6 +100,9 @@ RSpec.describe WorkDepositPathway::GradCulminatingExperiences::PublishForm, type
         depositor_agreement
         contributor
         mint_doi_requested
+        psu_community_agreement
+        accessibility_agreement
+        sensitive_info_agreement
       }
 
       expect(described_class.form_fields).to be_frozen
