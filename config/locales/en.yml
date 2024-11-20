@@ -427,6 +427,7 @@ en:
           cancel_tooltip: Return to the Review & Publish Page.
         finish: 
           button: Finish
+          tooltip: Finish edits to the published work.
         save_and_exit:
           collection: Save and Exit
           work_version: Save Draft & Exit

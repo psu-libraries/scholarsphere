@@ -7,7 +7,7 @@ RSpec.describe WorkVersions::VersionStatusBadgeComponent, type: :component do
   let(:badge) { node.css('div').first }
 
   context 'with a draft' do
-    let(:work_version) { build_stubbed :work_version, :draft }
+    let(:work_version) { build_stubbed :work_version, :draft, version_number: 1 }
 
     specify do
       expect(badge.text).to include('draft').and include('V1')

@@ -34,8 +34,8 @@ RSpec.describe Api::V1::WorkPublisher do
                                                 )),
         depositor_access_id: depositor.user_id,
         content: [
-          HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_paths, 'image.png'))),
-          HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_paths, 'ipsum.pdf')))
+          HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_paths.first, 'image.png'))),
+          HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_paths.first, 'ipsum.pdf')))
         ],
         external_app: external_app
       )
@@ -83,7 +83,7 @@ RSpec.describe Api::V1::WorkPublisher do
         depositor_access_id: depositor.user_id,
         content: [
           HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_paths, 'image.png'))),
-          HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_paths 'ipsum.pdf')))
+          HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_paths, 'ipsum.pdf')))
         ]
       )
     end

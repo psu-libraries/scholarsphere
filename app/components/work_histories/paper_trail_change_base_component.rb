@@ -54,7 +54,7 @@ class WorkHistories::PaperTrailChangeBaseComponent < ApplicationComponent
     end
 
     def timestamp
-      paper_trail_version.created_at.to_s(:long)
+      paper_trail_version.created_at.strftime("%B %d, %Y %H:%M")
     end
 
     def user_name

@@ -415,7 +415,7 @@ RSpec.describe WorkVersion, type: :model do
         embargoed_until_dtsi: nil,
         file_resource_ids_ssim: [work_version.file_resources.first.uuid],
         file_version_titles_ssim: [work_version.file_version_memberships.first.title],
-        latest_version_bsi: false,
+        latest_version_bsi: true,
         proxy_id_isi: nil,
         published_date_dtrsi: '1999',
         title_ssort: kind_of(String),

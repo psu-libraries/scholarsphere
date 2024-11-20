@@ -12,7 +12,7 @@
           <%= link_to collection.title, resource_path(collection.uuid) %>
           </h3>
           <p class="meta mb-0">
-            <span class="meta__date"><%= collection.deposited_at.to_s(:short_date) %></span>
+            <span class="meta__date"><%= collection.deposited_at.strftime("%Y-%m-%d") %></span>
           </p>
         </div>
       </li>

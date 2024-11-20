@@ -4,7 +4,7 @@ module Admin
   class CurationTicketController < ApplicationController
     def create
       response = LibanswersApiService.new(params[:id], params[:ticket_type]).admin_create_curation_ticket
-      redirect_to response
+      redirect_to response, allow_other_host: true
     rescue LibanswersApiService::LibanswersApiError => e
       flash[:error] = e.message
       redirect_to edit_dashboard_work_path(id: params[:id])

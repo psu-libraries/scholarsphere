@@ -9,7 +9,7 @@ module ApplicationHelper
 
   def date_display(args)
     Time.zone.parse(args[:document][args[:field]])
-      .to_formatted_s(:long)
+    .strftime("%B %d, %Y %H:%M")
   end
 
   def link_to_dropdown_item(link, path, options = {})

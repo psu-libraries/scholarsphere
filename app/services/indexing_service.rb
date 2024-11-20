@@ -6,7 +6,6 @@ class IndexingService
     # @param [Boolean]
     def add_document(document, commit: false)
       connection = Blacklight.default_index.connection
-      byebug
       connection.add(document)
       connection.commit if commit
     end

@@ -37,7 +37,7 @@ module OmniAuth
       end
 
       def raw_info
-        @raw_info ||= JSON.parse(Base64.decode64(access_token['id_token'].split('.')[1]))
+        @raw_info ||= JSON.parse(Base64.decode64(access_token.token.split('.')[1]))
       end
 
       private
