@@ -4,5 +4,5 @@
 
 if ENV['RAILS_ENV'] == 'production'
   Deprecation.default_deprecation_behavior = :silence
-  ActiveSupport::Deprecation.silenced = true
+  ActiveSupport::Deprecation.disallowed_behavior = [:silence]
 end
