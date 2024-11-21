@@ -63,8 +63,8 @@ module Dashboard
         def prevalidate
           temporarily_publish @resource do
             @resource.validate
+            # Rails 7 changed how it handles nested attributes. This removes all nested errors.
             @resource.errors.messages.each_key do |attribute|
-              # Rails 7 changed how it handles nested attributes. This removes all nested errors.
               @resource.errors.delete(attribute) if attribute.to_s.include?('work.versions')
             end
             @resource.errors.delete(:rights)
