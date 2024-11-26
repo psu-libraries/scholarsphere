@@ -24,6 +24,10 @@ module Dashboard
                 redirect_upon_success
               end
             else
+              # Rails 7 changed how it handles nested attributes. This removes all nested errors.
+              @resource.errors.messages.each_key do |attribute|
+                @resource.errors.delete(attribute) if attribute.to_s.include?('work.versions')
+              end
               format.html { render on_error }
             end
           end

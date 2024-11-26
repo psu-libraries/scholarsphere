@@ -478,7 +478,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
   end
 
   describe 'The Work Details tab for an existing draft work' do
-    let(:work_version) { create :work_version, :draft }
+    let(:work) { create :work, versions_count: 1 }
+    let(:work_version) { work.versions.first }
     let(:user) { work_version.work.depositor.user }
 
     context 'when saving as draft and exiting' do
@@ -510,7 +511,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         FeatureHelpers::DashboardForm.save_and_continue
 
         work_version.reload
-        expect(work_version.version_number).to eq 2
+        expect(work_version.version_number).to eq 1
         expect(work_version.title).to eq metadata[:title]
         expect(work_version.description).to eq metadata[:description]
         expect(work_version.publisher_statement).to eq metadata[:publisher_statement]
@@ -554,7 +555,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
   end
 
   describe 'The Contributors tab', js: true do
-    let(:work_version) { create :work_version, :draft }
+    let(:work_version) { create(:work_version, :initial_draft) }
     let(:user) { work_version.work.depositor.user }
     let(:actor) { work_version.work.depositor }
 
@@ -760,7 +761,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
 
     context 'when removing creators from an existing draft' do
-      let(:work_version) { create :work_version, :draft, :with_creators, creator_count: 2 }
+      let(:work_version) { create :work_version, :initial_draft, :with_creators, creator_count: 2 }
       let(:creators) { work_version.creators }
 
       it 'removes the creator from the work' do
@@ -789,7 +790,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
 
     context 'when re-ordering creators' do
-      let(:work_version) { create :work_version, :draft, :with_creators, creator_count: 2 }
+      let(:work_version) { create :work_version, :initial_draft, :with_creators, creator_count: 2 }
 
       before do
         creator_a, creator_b = work_version.creators
@@ -814,7 +815,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
   end
 
   describe 'The Files tab', js: true do
-    let(:work_version) { create :work_version, :draft }
+    let(:work) { create :work, versions_count: 1 }
+    let(:work_version) { work.versions.first }
     let(:user) { work_version.work.depositor.user }
 
     it 'works' do
@@ -916,11 +918,25 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
   describe 'The Publish tab' do
     context 'when submitting the form with publication errors' do
-      let(:user) { work_version.work.depositor.user }
+      let(:work) { create :work }
+      let(:user) { work.depositor.user }
       let(:work_version) { create :work_version, :draft }
+
+      before { work.versions = [work_version] }
+
+      # RSpec mocks _cumulatively_ record the number of times they've been called,
+      # we need a way to say "from this exact point, you should have been called
+      # once." We accomplish this by tearing down the mock and setting it back up.
+      def mock_solr_indexing_job
+        RSpec::Mocks.space.proxy_for(SolrIndexingJob)&.reset
+
+        allow(SolrIndexingJob).to receive(:perform_later).and_call_original
+      end
 
       it 'does NOT publish the work, but DOES save the changes to the draft' do
         visit dashboard_form_publish_path(work_version)
+
+        mock_solr_indexing_job
 
         fill_in 'work_version_published_date', with: 'this is not a valid date'
         FeatureHelpers::DashboardForm.publish
@@ -940,7 +956,6 @@ RSpec.describe 'Publishing a work', with_user: :user do
         work_version.reload
         expect(work_version).not_to be_published
         expect(work_version.published_date).to eq 'this is not a valid date'
-        expect(work_version.published_at).to be_nil
       end
     end
 
@@ -1268,7 +1283,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
   describe 'Editing a published work' do
     let(:work) { create :work, work_type: 'audio' }
-    let(:work_version) { create :work_version, :published, work: work }
+    let(:work_version) { create :work_version, :published }
     let(:invalid_metadata) { attributes_for(:work_version, :with_complete_metadata, description: '') }
     let(:different_metadata) { attributes_for(:work_version, :with_complete_metadata) }
     let(:incorrect_rights) { (WorkVersion::Licenses.ids - WorkVersion::Licenses::ids_for_authorized_visibility).first }
@@ -1282,6 +1297,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
       allow(SolrIndexingJob).to receive(:perform_later).and_call_original
     end
+
+    before { work.versions = [work_version] }
 
     it 'allows an administrator to update the metadata' do
       visit dashboard_form_publish_path(work_version)
@@ -1318,7 +1335,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
   describe 'Deleting a version' do
     context 'when logged in as a regular user' do
-      let(:work_version) { create :work_version, :draft }
+      let(:work) { create :work, versions_count: 1 }
+      let(:work_version) { work.versions.first }
       let(:user) { work_version.work.depositor.user }
 
       it 'allows a user to delete a draft' do

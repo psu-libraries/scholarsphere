@@ -7,11 +7,11 @@ class WorkVersionSchema < BaseSchema
       .merge(permissions_schema.document)
       .merge(
         latest_version_bsi: resource.latest_version?,
-        embargoed_until_dtsi: work.embargoed_until,
+        embargoed_until_dtsi: work.embargoed_until&.utc,
         depositor_id_isi: work.depositor.id,
         proxy_id_isi: work.proxy_id,
         migration_errors_sim: migration_errors,
-        deposited_at_dtsi: resource.deposited_at
+        deposited_at_dtsi: resource.deposited_at&.utc
       )
   end
 

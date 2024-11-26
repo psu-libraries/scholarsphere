@@ -21,8 +21,8 @@ RSpec.describe WorkVersions::VersionNavigationComponent, type: :component do
 
     let(:v1) { work.decorated_versions.first }
     let(:v2) { work.decorated_versions.last }
-    let(:v1_created_at) { v1.created_at.to_formatted_s(:long_without_time) }
-    let(:v2_created_at) { v2.created_at.to_formatted_s(:long_without_time) }
+    let(:v1_created_at) { v1.created_at.to_fs(:long_without_time) }
+    let(:v2_created_at) { v2.created_at.to_fs(:long_without_time) }
 
     before do
       allow(work).to receive(:latest_published_version)

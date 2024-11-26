@@ -20,9 +20,8 @@ RSpec.describe LegacyUrlsController, type: :request do
 
     context 'when given a nonexistent id' do
       it do
-        expect {
-          get '/concern/generic_works/doesnt-exist'
-        }.to raise_error(ActiveRecord::RecordNotFound)
+        get '/concern/generic_works/doesnt-exist'
+        expect(response).to have_http_status(:not_found)
       end
     end
 
@@ -35,9 +34,8 @@ RSpec.describe LegacyUrlsController, type: :request do
       end
 
       it do
-        expect {
-          get '/concern/generic_works/doesnt-exist'
-        }.to raise_error(ActiveRecord::RecordNotFound)
+        get '/concern/generic_works/doesnt-exist'
+        expect(response).to have_http_status(:not_found)
       end
     end
   end

@@ -12,13 +12,14 @@ RSpec.describe 'Create Curation Ticket', type: :request do
       let(:user) { create(:user) }
 
       specify do
-        expect { post admin_create_curation_ticket_url(work) }.to raise_error(ActionController::RoutingError)
+        post admin_create_curation_ticket_url(work)
+        expect(response).to have_http_status(:not_found)
       end
     end
 
     context 'with an admin user' do
       let(:user) { create(:user, :admin) }
-      let(:libanswer_response) { LibanswersApiService.new }
+      let(:libanswer_response) { instance_double LibanswersApiService }
 
       before do
         allow(LibanswersApiService).to receive(:new).and_return libanswer_response

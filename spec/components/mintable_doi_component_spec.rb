@@ -10,7 +10,7 @@ RSpec.describe MintableDoiComponent, type: :component do
   let(:resource) { instance_double('Work', doi: doi, uuid: 'abc-123') }
   let(:html) { render_inline(component) }
 
-  let(:mock_helpers) { spy 'MockHelpers', policy: mock_policy }
+  let(:mock_helpers) { double 'MockHelpers', policy: mock_policy, protect_against_forgery?: false }
   let(:mock_policy) { double 'MockPolicy', edit?: false }
 
   before do
@@ -34,7 +34,7 @@ RSpec.describe MintableDoiComponent, type: :component do
       expect(html.css('form').attribute('action').value)
         .to eq resource_doi_path(resource.uuid)
 
-      expect(html.css('input').attribute('value').text).to eq I18n.t!('resources.doi.create')
+      expect(html.at_css('button').text).to eq I18n.t!('resources.doi.create')
     end
   end
 

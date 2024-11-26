@@ -29,11 +29,11 @@ RSpec.describe DoisController, type: :controller do
       end
 
       context 'when happy path, and HTTP_REFERER is set' do
-        before { request.env['HTTP_REFERER'] = 'where_i_came_from' }
+        before { request.env['HTTP_REFERER'] = 'http://test.host/where_i_came_from/' }
 
         it 'redirects me to where I came from' do
           do_post
-          expect(response).to redirect_to 'where_i_came_from'
+          expect(response).to redirect_to 'http://test.host/where_i_came_from/'
         end
       end
 

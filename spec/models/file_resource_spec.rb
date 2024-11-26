@@ -83,7 +83,7 @@ RSpec.describe FileResource, type: :model do
 
   describe '#save' do
     let(:file_resource) { described_class.new }
-    let(:file) { File.open(File.join(fixture_path, 'image.png')) }
+    let(:file) { File.open(File.join(fixture_paths.first, 'image.png')) }
     let(:file_data) { { 'id' => file_resource.file_data['id'], 'storage' => file_resource.file_data['storage'] } }
 
     before { file_resource.file = file }

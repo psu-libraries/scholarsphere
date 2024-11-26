@@ -6,7 +6,7 @@ class DownloadsController < ApplicationController
     file_version = work_version.file_version_memberships.find(params[:id])
     authorize(file_version)
     file_version.file_resource.count_view! if count_view?(file_version.file_resource)
-    redirect_to s3_presigned_url(file_version)
+    redirect_to s3_presigned_url(file_version), allow_other_host: true
   end
 
   private
