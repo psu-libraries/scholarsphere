@@ -24,7 +24,8 @@ RSpec.describe OmniAuth::Strategies::AzureOauth do
   end
 
   let(:strategy) { described_class.new(app) }
-  let(:access_token) { { 'id_token' => "prefix.#{Base64.strict_encode64(auth_hash.to_json)}" } }
+  let(:access_token) { { 'access_token' => 'xyz987',
+                         'id_token' => "prefix.#{Base64.strict_encode64(auth_hash.to_json)}" } }
   let(:auth_hash) { build(:psu_oauth_response) }
 
   before { strategy.access_token = OAuth2::AccessToken.from_hash(client, access_token) }
