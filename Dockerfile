@@ -17,11 +17,12 @@ RUN mkdir /app/tmp
 # adding this in attempts to see what happens with permissions
 RUN mkdir /tmp/app/
 RUN chown app:app /tmp/app && chmod 775 /tmp/app
+COPY Gemfile Gemfile.lock /app/
 RUN chown -R app /app
 USER app
 
 
-COPY Gemfile Gemfile.lock /app/
+#COPY Gemfile Gemfile.lock /app/
 # in the event that bundler runs outside of docker, we get in sync with it's bundler version
 RUN gem install bundler -v "$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)"
 RUN bundle config set path 'vendor/bundle'
