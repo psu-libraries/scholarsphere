@@ -30,7 +30,7 @@ jobs:
         user: root
     steps:
       - setup_remote_docker:
-          version: docker24
+          version: default
           docker_layer_caching: true
       - checkout
       - docker/check:
@@ -112,9 +112,9 @@ jobs:
           curl -L https://npmjs.com/install.sh | sudo bash
     - run:
         name: "Install dependencies for thumbnails"
-        command: | 
+        command: |
           wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-          sudo apt-get update 
+          sudo apt-get update
           sudo apt-get install -y imagemagick ghostscript libreoffice
           sudo cp config/policy.xml /etc/ImageMagick-6/policy.xml
     - run:
@@ -135,7 +135,7 @@ jobs:
     - save_cache:
         paths:
           - vendor/bundle
-        key: bundle1-{{ checksum "Gemfile.lock" }} 
+        key: bundle1-{{ checksum "Gemfile.lock" }}
     - save_cache:
         key: yarn1-{{ checksum "yarn.lock" }}
         paths:
@@ -171,11 +171,11 @@ workflows:
                 - /.*/
       - test
       - publish:
-          context: 
+          context:
             - org-global
 
       - deploy:
-          context: 
+          context:
             - org-global
           requires:
             - test
