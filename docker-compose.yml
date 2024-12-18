@@ -1,4 +1,3 @@
-version: '3.5'
 x-web_env: &web_env
   environment:
       REDIS_HOST: redis
@@ -38,8 +37,8 @@ services:
     tty: true
     stdin_open: true
     <<: *web_env
-    build: 
-      context: . 
+    build:
+      context: .
       target: dev
     volumes:
     - bundle-data:/app/vendor/bundle
@@ -54,14 +53,14 @@ services:
     restart: always
     volumes:
     - minio-data:/data
-    environment: 
+    environment:
       MINIO_ACCESS_KEY: ${AWS_ACCESS_KEY_ID:-scholarsphere}
       MINIO_SECRET_KEY: ${AWS_SECRET_ACCESS_KEY:-scholarsphere}
     ports:
     - ${MINIO_PORT:-9000}:9000
     entrypoint:
     - /bin/sh
-    - -c 
+    - -c
     - mkdir -p /data/scholarsphere; minio --compat server --address ':9000' /data
   solr:
     image: solr:8.11.1-slim
@@ -90,10 +89,10 @@ services:
     volumes:
     - db-data:/var/lib/postgresql/data
 
-networks:                                
-  default:                               
-    driver: bridge                       
-    driver_opts:                         
+networks:
+  default:
+    driver: bridge
+    driver_opts:
       com.docker.network.driver.mtu: 1400
 
 volumes:
