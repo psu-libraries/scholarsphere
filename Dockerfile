@@ -1,4 +1,4 @@
-FROM harbor.k8s.libraries.psu.edu/library/ruby-3.1.4-node-16:20241216 as base
+FROM harbor.k8s.libraries.psu.edu/library/ruby-3.1.4-node-16:20241216 AS base
 ARG UID=3000
 
 COPY bin/vaultshell /usr/local/bin/
@@ -16,9 +16,9 @@ RUN useradd -u $UID app -d /app
 RUN mkdir /app/tmp
 # adding this in attempts to see what happens with permissions
 RUN mkdir /tmp/app/
-RUN chown app:app /tmp/app && chmod 775 /tmp/app
+RUN chown app:app /tmp/app && chmod 755 /tmp/app
 COPY Gemfile Gemfile.lock /app/
-RUN chown -R app /app
+RUN chown -R app:app /app
 USER app
 
 
@@ -32,7 +32,7 @@ RUN bundle install && \
 
 
 COPY package.json yarn.lock /app/
-RUN yarn --frozen-lockfile && \
+RUN yarn install --frozen-lockfile && \
   rm -rf /app/.cache && \
   rm -rf /app/tmp
 
@@ -41,11 +41,11 @@ COPY --chown=app . /app
 
 CMD ["/app/bin/startup"]
 
-FROM base as dev
+FROM base AS dev
 
 USER root
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-    && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
+    && echo 'deb http://dl.google.com/linux/chrome/deb/ stable main' >> /etc/apt/sources.list.d/google.list
 
 RUN apt-get update && apt-get install -y x11vnc \
     xvfb \
@@ -65,7 +65,7 @@ USER app
 RUN bundle config set path 'vendor/bundle'
 
 # Final Target
-FROM base as production
+FROM base AS production
 
 # Clean up Bundle
 RUN bundle install --without development test && \
