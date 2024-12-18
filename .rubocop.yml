@@ -14,7 +14,7 @@ RSpec/MultipleMemoizedHelpers:
   Enabled: false
 
 AllCops:
-  TargetRubyVersion: 3.1.2
+  TargetRubyVersion: 3.1.6
   Exclude:
     - 'db/**/*'
     - 'script/**/*'
