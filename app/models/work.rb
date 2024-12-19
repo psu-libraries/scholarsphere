@@ -7,6 +7,8 @@ class Work < ApplicationRecord
   include GeneratedUuids
   include ThumbnailSelections
 
+  after_destroy :notify_work_deleted
+
   fields_with_dois :doi, :latest_published_version_dois
 
   delegate :email, :display_name, to: :depositor
@@ -292,5 +294,9 @@ class Work < ApplicationRecord
         errors.add(:embargoed_until, :max)
         nil
       end
+    end
+
+    def notify_work_deleted
+      WorkRemovedWebhookJob.perform_later(uuid)
     end
 end
