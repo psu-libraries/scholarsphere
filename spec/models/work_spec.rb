@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Work, type: :model do
+RSpec.describe Work do
   it { is_expected.to delegate_method(:email).to(:depositor) }
   it { is_expected.to delegate_method(:display_name).to(:depositor) }
   it { is_expected.to delegate_method(:has_publisher_doi?).to(:latest_version) }
@@ -20,12 +20,12 @@ RSpec.describe Work, type: :model do
   it_behaves_like 'a resource that can provide all DOIs in', [:doi, :latest_published_version_dois]
 
   it_behaves_like 'a resource with a thumbnail url' do
-    let!(:work) { create :work, versions_count: 2 }
+    let!(:work) { create(:work, versions_count: 2) }
     let(:resource) { work }
   end
 
   it_behaves_like 'a resource with a thumbnail selection' do
-    let!(:work) { create :work, versions_count: 2 }
+    let!(:work) { create(:work, versions_count: 2) }
     let(:resource) { work }
   end
 
@@ -90,17 +90,31 @@ RSpec.describe Work, type: :model do
     end
   end
 
+  describe 'lifecycle callbacks' do
+    describe 'destroying a work' do
+      let!(:work) { create(:work) }
+
+      before { allow(WorkRemovedWebhookJob).to receive(:perform_later) }
+
+      it 'enqueues a notification job' do
+        work.destroy!
+
+        expect(WorkRemovedWebhookJob).to have_received(:perform_later).with(work.uuid)
+      end
+    end
+  end
+
   describe '.recently_published' do
-    let(:wv1) { build :work_version, :published, work: nil, sent_for_curation_at: nil }
-    let(:work1) { create :work, versions: [wv1] }
+    let(:wv1) { build(:work_version, :published, work: nil, sent_for_curation_at: nil) }
+    let(:work1) { create(:work, versions: [wv1]) }
 
-    let(:wv2) { build :work_version, :published, work: nil, sent_for_curation_at: Time.now }
-    let(:work2) { create :work, versions: [wv2] }
+    let(:wv2) { build(:work_version, :published, work: nil, sent_for_curation_at: Time.now) }
+    let(:work2) { create(:work, versions: [wv2]) }
 
-    let(:wv4) { build :work_version, work: nil, aasm_state: 'draft' }
-    let(:work3) { create :work, versions: [wv4] }
+    let(:wv4) { build(:work_version, work: nil, aasm_state: 'draft') }
+    let(:work3) { create(:work, versions: [wv4]) }
 
-    let(:work4) { create :work }
+    let(:work4) { create(:work) }
 
     it 'returns works with a published WorkVersion that has not been sent for curation' do
       expect(described_class.recently_published).to match_array([work1])
@@ -357,15 +371,15 @@ RSpec.describe Work, type: :model do
   end
 
   describe 'version accessors' do
-    let(:draft) { build :work_version, :draft, title: 'Draft', work: nil, created_at: 1.day.ago, version_number: 3 }
-    let(:v2) { build :work_version, :published, title: 'Published v2', work: nil, created_at: 2.days.ago, version_number: 2 }
-    let(:v1) { build :work_version, :published, title: 'Published v1', work: nil, created_at: 3.days.ago, version_number: 1 }
-    let(:withdrawn) { build :work_version, :withdrawn, work: nil, created_at: 3.days.ago, version_number: 1 }
+    let(:draft) { build(:work_version, :draft, title: 'Draft', work: nil, created_at: 1.day.ago, version_number: 3) }
+    let(:v2) { build(:work_version, :published, title: 'Published v2', work: nil, created_at: 2.days.ago, version_number: 2) }
+    let(:v1) { build(:work_version, :published, title: 'Published v1', work: nil, created_at: 3.days.ago, version_number: 1) }
+    let(:withdrawn) { build(:work_version, :withdrawn, work: nil, created_at: 3.days.ago, version_number: 1) }
 
     before { work.reload }
 
     context 'with draft, published, and withdrawn versions' do
-      subject(:work) { create :work, versions: [draft, v2, withdrawn] }
+      subject(:work) { create(:work, versions: [draft, v2, withdrawn]) }
 
       it { is_expected.not_to be_withdrawn }
 
@@ -377,7 +391,7 @@ RSpec.describe Work, type: :model do
     end
 
     context 'with draft and published versions' do
-      subject(:work) { create :work, versions: [draft, v2, v1] }
+      subject(:work) { create(:work, versions: [draft, v2, v1]) }
 
       it { is_expected.not_to be_withdrawn }
 
@@ -389,7 +403,7 @@ RSpec.describe Work, type: :model do
     end
 
     context 'with draft and withdrawn versions' do
-      subject(:work) { create :work, versions: [draft, withdrawn] }
+      subject(:work) { create(:work, versions: [draft, withdrawn]) }
 
       it { is_expected.to be_withdrawn }
 
@@ -401,7 +415,7 @@ RSpec.describe Work, type: :model do
     end
 
     context 'with published and withdrawn versions' do
-      subject(:work) { create :work, versions: [v2, withdrawn] }
+      subject(:work) { create(:work, versions: [v2, withdrawn]) }
 
       it { is_expected.not_to be_withdrawn }
 
@@ -413,7 +427,7 @@ RSpec.describe Work, type: :model do
     end
 
     context 'with only published versions' do
-      subject(:work) { create :work, versions: [v2, v1] }
+      subject(:work) { create(:work, versions: [v2, v1]) }
 
       it { is_expected.not_to be_withdrawn }
 
@@ -425,7 +439,7 @@ RSpec.describe Work, type: :model do
     end
 
     context 'with only a draft version' do
-      subject(:work) { create :work, versions: [draft] }
+      subject(:work) { create(:work, versions: [draft]) }
 
       it { is_expected.not_to be_withdrawn }
 
@@ -437,7 +451,7 @@ RSpec.describe Work, type: :model do
     end
 
     context 'with only a withdrawn version' do
-      subject(:work) { create :work, versions: [withdrawn] }
+      subject(:work) { create(:work, versions: [withdrawn]) }
 
       it { is_expected.to be_withdrawn }
 
@@ -656,7 +670,7 @@ RSpec.describe Work, type: :model do
   end
 
   describe '#stats' do
-    subject(:work) { create :work, versions_count: 3, has_draft: true }
+    subject(:work) { create(:work, versions_count: 3, has_draft: true) }
 
     before { allow(AggregateViewStatistics).to receive(:call).and_return(:returned_stats) }
 
@@ -668,11 +682,11 @@ RSpec.describe Work, type: :model do
 
   describe '#thumbnail_urls' do
     let(:mock_attacher) { instance_double FileUploader::Attacher }
-    let!(:work) { create :work, versions_count: 2 }
+    let!(:work) { create(:work, versions_count: 2) }
 
     context "when work's latest_published_version has multiple file_resources with thumbnail urls" do
       before do
-        work.latest_published_version.file_resources << (create :file_resource)
+        work.latest_published_version.file_resources << (create(:file_resource))
         work.save
         allow(mock_attacher).to receive(:url).with(:thumbnail).and_return 'url.com/path/file'
       end
@@ -687,11 +701,11 @@ RSpec.describe Work, type: :model do
   end
 
   describe '#latest_published_version_dois' do
-    let!(:work) { create :work }
+    let!(:work) { create(:work) }
     let(:work_version) do
-      create :work_version, :published,
+      create(:work_version, :published,
              doi: '10.26207/utaj-jfhi',
-             identifier: '10.26207/xyz-lmno'
+             identifier: '10.26207/xyz-lmno')
     end
 
     before do

@@ -211,6 +211,11 @@ class WorkVersion < ApplicationRecord
     end
 
     event :withdraw do
+      after_commit do
+        if work.withdrawn?
+          WorkRemovedWebhookJob.perform_later(work.uuid)
+        end
+      end
       transitions from: :published, to: :withdrawn
     end
 
