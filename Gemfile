@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.1.2'
+ruby '3.1.6'
 
 gem 'aasm'
 gem 'after_commit_everywhere', '~> 0.1', '>= 0.1.5'
