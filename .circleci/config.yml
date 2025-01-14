@@ -95,7 +95,7 @@ jobs:
       POSTGRES_PASSWORD: scholarsphere
       POSTGRES_DB: scholarsphere
       POSTGRES_HOST: 127.0.0.1
-      RMD_HOST: http://localhost
+      RMD_HOST: https://metadata.libraries.psu.edu
     steps:
     - browser-tools/install-browser-tools
     - checkout
