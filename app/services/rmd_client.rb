@@ -26,7 +26,7 @@ class RmdClient
     end
 
     def rmd_host
-      'https://metadata.libraries.psu.edu'
+      ENV['RMD_HOST']
     end
 
     def api_key
