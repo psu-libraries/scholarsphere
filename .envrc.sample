@@ -31,3 +31,4 @@ export DATACITE_USERNAME=
 export RMD_API_KEY=
 export RMD_WEBHOOK_SECRET=
 export RMD_HOST=
+export DUMMY_VAR=
