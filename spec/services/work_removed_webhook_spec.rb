@@ -20,7 +20,7 @@ RSpec.describe WorkRemovedWebhook do
 
       expect(faraday_connection).to have_received(:post).with(
         '/webhooks/scholarsphere_events',
-        publication_url: 'https://scholarsphere.psu.edu/resources/abc123'
+        publication_url: "https://#{Rails.application.routes.default_url_options[:host]}/resources/abc123"
       )
     end
   end

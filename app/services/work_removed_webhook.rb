@@ -11,7 +11,7 @@ class WorkRemovedWebhook
       headers: { 'X-API-KEY' => ENV['RMD_WEBHOOK_SECRET'] }
     )
 
-    conn.post('/webhooks/scholarsphere_events', publication_url: "https://scholarsphere.psu.edu/resources/#{work_uuid}")
+    conn.post('/webhooks/scholarsphere_events', publication_url: "https://#{Rails.application.routes.default_url_options[:host]}/resources/#{work_uuid}")
   end
 
   private
