@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
   docker: circleci/docker@2.8.2
-  browser-tools: circleci/browser-tools@1.4.8
+  browser-tools: circleci/browser-tools@1.5.2
 jobs:
   release:
     docker:
@@ -72,7 +72,11 @@ jobs:
           POSTGRES_USER: scholarsphere
           POSTGRES_DB: scholarsphere
       - image: solr:8.11.1-slim
-        command: ["/bin/bash", "-c", "solr -c && solr auth enable -credentials scholarsphere:scholarsphere -z localhost:9983; solr stop && solr -c -f"]
+        command: [
+          "/bin/bash", 
+          "-c", 
+          "solr -c && solr auth enable -credentials scholarsphere:scholarsphere -z localhost:9983; solr stop && solr -c -f",
+          ]
     environment:
       RAILS_ENV: test
       AWS_ACCESS_KEY_ID: scholarsphere
@@ -147,7 +151,6 @@ jobs:
           command: |
             ./bin/ci-rspec
 workflows:
-  version: 2
   scholarsphere:
     jobs:
       - release:
