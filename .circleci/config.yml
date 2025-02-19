@@ -22,9 +22,8 @@ jobs:
             cd scholarsphere-config
             /usr/local/bin/pr-release clusters/prod/manifests/scholarsphere/prod.yaml
   publish:
-    docker:
-      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v4.0.4
-        user: root
+    executor:
+      name: docker/docker
     steps:
       - setup_remote_docker:
           docker_layer_caching: true
