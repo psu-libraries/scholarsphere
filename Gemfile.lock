@@ -268,7 +268,8 @@ GEM
     hashdiff (1.1.2)
     hashie (5.0.0)
     html_tokenizer (0.0.8)
-    httpclient (2.8.3)
+    httpclient (2.9.0)
+      mutex_m
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
     image_processing (1.14.0)
