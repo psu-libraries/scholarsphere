@@ -356,6 +356,7 @@ GEM
     multi_xml (0.7.1)
       bigdecimal (~> 3.1)
     multipart-post (2.4.1)
+    mutex_m (0.3.0)
     net-http-persistent (4.0.5)
       connection_pool (~> 2.2)
     net-imap (0.5.6)
@@ -749,6 +750,7 @@ DEPENDENCIES
   mail_form (~> 1.8)
   matrix
   memory_profiler
+  mutex_m
   net-imap
   net-pop
   net-smtp
