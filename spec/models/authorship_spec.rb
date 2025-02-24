@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Authorship, type: :model do
+RSpec.describe Authorship do
   describe 'table' do
     it { is_expected.to have_db_column(:resource_id) }
     it { is_expected.to have_db_column(:resource_type) }

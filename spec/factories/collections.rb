@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :collection do
-    association :depositor, :with_user, factory: :actor
+    depositor factory: %i[actor with_user]
     title { generate(:work_title) }
     description { Faker::Lorem.paragraph }
     visibility { Permissions::Visibility.default }

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Reports', type: :feature, with_user: :user do
+RSpec.describe 'Reports', with_user: :user do
   context 'with a standard user' do
     let(:user) { create(:user) }
 

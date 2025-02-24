@@ -50,8 +50,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
 
     context 'when the version is NOT published or withdrawn' do
       before do
-        allow(work_version).to receive(:published?).and_return(false)
-        allow(work_version).to receive(:withdrawn?).and_return(false)
+        allow(work_version).to receive_messages(published?: false, withdrawn?: false)
       end
 
       context 'when the user has the access to the work' do
@@ -69,8 +68,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
 
     context 'when the version is published' do
       before do
-        allow(work_version).to receive(:published?).and_return(true)
-        allow(work_version).to receive(:withdrawn?).and_return(false)
+        allow(work_version).to receive_messages(published?: true, withdrawn?: false)
         allow(work_policy).to receive(:edit?).and_return(true)
       end
 
@@ -93,8 +91,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
 
     context 'when the version is withdrawn' do
       before do
-        allow(work_version).to receive(:published?).and_return(false)
-        allow(work_version).to receive(:withdrawn?).and_return(true)
+        allow(work_version).to receive_messages(published?: false, withdrawn?: true)
         allow(work_policy).to receive(:edit?).and_return(true)
       end
 

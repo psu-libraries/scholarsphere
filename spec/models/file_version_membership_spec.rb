@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe FileVersionMembership, type: :model do
+RSpec.describe FileVersionMembership do
   describe 'table' do
     it { is_expected.to have_db_column(:work_version_id) }
     it { is_expected.to have_db_column(:file_resource_id) }

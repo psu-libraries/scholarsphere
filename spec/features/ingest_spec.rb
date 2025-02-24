@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Publishing works from the API', :inline_jobs, type: :feature do
+RSpec.describe 'Publishing works from the API', :inline_jobs do
   include ActionDispatch::TestProcess::FixtureFile
 
   let(:user) { create(:user, access_id: VCRHelpers.depositor) }

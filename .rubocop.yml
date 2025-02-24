@@ -157,3 +157,6 @@ Layout/LineLength:
   Exclude:
     - 'spec/features/dashboard/work_version_form_spec.rb'
 
+RSpec/ReceiveMessages:
+  Exclude:
+    - 'spec/decorators/resource_decorator_spec.rb'

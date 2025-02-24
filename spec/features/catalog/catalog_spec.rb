@@ -8,7 +8,6 @@ RSpec.describe 'Blacklight catalog page', :inline_jobs do
   # Creates an array of all the published work versions.
   let(:published_work_versions) do
     Work
-      .all
       .includes(versions: :creators)
       .map(&:latest_published_version)
       .reject(&:blank?)
@@ -16,7 +15,6 @@ RSpec.describe 'Blacklight catalog page', :inline_jobs do
 
   let(:collections) do
     Collection
-      .all
       .includes(:creators)
   end
 

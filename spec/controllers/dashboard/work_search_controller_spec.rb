@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Dashboard::WorkSearchController, type: :controller do
+RSpec.describe Dashboard::WorkSearchController do
   let(:user) { create(:user) }
 
   describe 'GET #index' do
@@ -30,7 +30,7 @@ RSpec.describe Dashboard::WorkSearchController, type: :controller do
 
       it 'returns a successful json response' do
         expect(response).to be_successful
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
 
         expect(Blacklight::SearchService).to have_received(:new) do |params|
           expect(params[:config]).to be_an_instance_of(Blacklight::Configuration)

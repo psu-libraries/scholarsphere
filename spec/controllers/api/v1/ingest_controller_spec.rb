@@ -5,7 +5,7 @@ require 'rails_helper'
 # @note While this is technically a controller test, because it's testing our REST API, we're really using it as a
 # feature test to ensure end-to-end functionality of our ingest API.
 
-RSpec.describe Api::V1::IngestController, type: :controller do
+RSpec.describe Api::V1::IngestController do
   let(:api_token) { create(:api_token) }
   let(:depositor) { VCRHelpers.depositor }
   let(:creator) do
@@ -16,7 +16,7 @@ RSpec.describe Api::V1::IngestController, type: :controller do
 
   let(:metadata) { attributes_for(:work_version, :able_to_be_published) }
 
-  let(:json_response) { ActiveSupport::HashWithIndifferentAccess.new(JSON.parse(response.body)) }
+  let(:json_response) { ActiveSupport::HashWithIndifferentAccess.new(response.parsed_body) }
 
   before do
     allow(Api::V1::WorkPublisher).to receive(:call).and_call_original

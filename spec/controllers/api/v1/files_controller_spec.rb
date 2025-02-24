@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Api::V1::FilesController, type: :controller do
+RSpec.describe Api::V1::FilesController do
   let(:api_token) { create(:api_token).token }
 
   before { request.headers[:'X-API-Key'] = api_token }

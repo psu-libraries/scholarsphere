@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe FileResource, type: :model do
+RSpec.describe FileResource do
   it_behaves_like 'a resource with a deposited at timestamp'
 
   it_behaves_like 'a resource with view statistics' do

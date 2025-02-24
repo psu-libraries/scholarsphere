@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ImportStatisticsJob, type: :job do
+RSpec.describe ImportStatisticsJob do
   describe '#perform' do
     def import_from_csv
       csv = Pathname.new(fixture_paths.first).join('s3_export_stats.csv')

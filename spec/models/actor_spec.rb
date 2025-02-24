@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Actor, type: :model do
+RSpec.describe Actor do
   describe 'table' do
     it { is_expected.to have_db_column(:given_name).of_type(:string) }
     it { is_expected.to have_db_column(:surname).of_type(:string) }

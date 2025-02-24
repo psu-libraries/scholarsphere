@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe Api::PublicController, type: :controller do
-  let(:json_response) { ActiveSupport::HashWithIndifferentAccess.new(JSON.parse(response.body)) }
+RSpec.describe Api::PublicController do
+  let(:json_response) { ActiveSupport::HashWithIndifferentAccess.new(response.parsed_body) }
 
   describe 'POST #execute' do
     context 'without any parameters' do

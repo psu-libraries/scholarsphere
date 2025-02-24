@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe IncidentMailer, type: :mailer do
+RSpec.describe IncidentMailer do
   describe '#report' do
     subject(:mail) { described_class.report(incident) }
 

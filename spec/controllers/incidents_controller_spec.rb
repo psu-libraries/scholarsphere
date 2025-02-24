@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe IncidentsController, type: :controller do
+RSpec.describe IncidentsController do
   describe '#new' do
     before { get :new }
 

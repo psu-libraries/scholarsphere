@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ActorMailer, type: :mailer do
+RSpec.describe ActorMailer do
   let(:actor) { build(:actor) }
 
   describe '#monthly_stats' do

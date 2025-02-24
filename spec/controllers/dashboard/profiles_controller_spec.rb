@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Dashboard::ProfilesController, type: :controller do
+RSpec.describe Dashboard::ProfilesController do
   let(:actor_attrs) { attributes_for(:actor) }
 
   let(:valid_attributes) {

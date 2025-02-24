@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe CollectionWorkMembership, type: :model do
+RSpec.describe CollectionWorkMembership do
   describe 'table' do
     it { is_expected.to have_db_column(:collection_id) }
     it { is_expected.to have_db_column(:work_id) }

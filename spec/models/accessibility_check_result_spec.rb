@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe AccessibilityCheckResult, type: :model do
+RSpec.describe AccessibilityCheckResult do
   let(:accessibility_check_result) { described_class.new(detailed_report: detailed_report, file_resource_id: create(:file_resource, :pdf).id) }
 
   describe 'table' do

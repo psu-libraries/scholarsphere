@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Dashboard::WorksController, type: :controller do
+RSpec.describe Dashboard::WorksController do
   let(:valid_attributes) {
     {
       'work' => {

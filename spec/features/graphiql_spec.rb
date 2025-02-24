@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'GraphiQL interface', type: :feature do
+RSpec.describe 'GraphiQL interface' do
   it 'renders the graphiql page', :js do
     visit(graphiql_path)
     expect(page).to have_content('Welcome to GraphiQL')

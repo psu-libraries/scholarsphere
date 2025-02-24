@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Dashboard::FileVersionMembershipsController, type: :controller do
+RSpec.describe Dashboard::FileVersionMembershipsController do
   let(:user) { work_version.depositor.user }
   let(:work_version) { create(:work_version, :draft, :with_files) }
   let(:file_membership) { work_version.file_version_memberships.first }

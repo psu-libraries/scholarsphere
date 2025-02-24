@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe DoisController, type: :controller do
+RSpec.describe DoisController do
   let(:user) { create(:user) }
   let(:admin) { create(:user, :admin) }
 

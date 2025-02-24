@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Dashboard::FileListsController, type: :controller do
+RSpec.describe Dashboard::FileListsController do
   let(:user) { work_version.depositor.user }
   let(:work_version) { create(:work_version, :draft) }
 

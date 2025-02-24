@@ -46,8 +46,7 @@ RSpec.describe DoiService do
 
         context 'when the WorkVersion is PUBLISHED' do
           before do
-            allow(work_version).to receive(:draft?).and_return(false)
-            allow(work_version).to receive(:published?).and_return(true)
+            allow(work_version).to receive_messages(draft?: false, published?: true)
           end
 
           it 'publishes a new doi with metadata' do
@@ -86,8 +85,7 @@ RSpec.describe DoiService do
 
         context 'when the WorkVersion is PUBLISHED' do
           before do
-            allow(work_version).to receive(:draft?).and_return(false)
-            allow(work_version).to receive(:published?).and_return(true)
+            allow(work_version).to receive_messages(draft?: false, published?: true)
           end
 
           it 'publishes the doi with metadata' do
@@ -116,9 +114,8 @@ RSpec.describe DoiService do
       let(:work) { FactoryBot.build_stubbed(:work) }
 
       before do
-        allow(work).to receive(:latest_published_version).and_return(latest_published_version)
         allow(work).to receive(:update_attribute)
-        allow(work).to receive(:valid?).and_return(true)
+        allow(work).to receive_messages(latest_published_version: latest_published_version, valid?: true)
         allow(work).to receive(:update_index)
       end
 
@@ -140,8 +137,7 @@ RSpec.describe DoiService do
           let(:latest_published_version) { FactoryBot.build_stubbed(:work_version, work: work) }
 
           before do
-            allow(latest_published_version).to receive(:published?).and_return(true)
-            allow(latest_published_version).to receive(:draft?).and_return(false)
+            allow(latest_published_version).to receive_messages(published?: true, draft?: false)
           end
 
           it 'publishes a new doi with metadata' do
@@ -185,8 +181,7 @@ RSpec.describe DoiService do
           let(:latest_published_version) { FactoryBot.build_stubbed(:work_version, work: work) }
 
           before do
-            allow(latest_published_version).to receive(:published?).and_return(true)
-            allow(latest_published_version).to receive(:draft?).and_return(false)
+            allow(latest_published_version).to receive_messages(published?: true, draft?: false)
           end
 
           it 'publishes the doi with metadata' do

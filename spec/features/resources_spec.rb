@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Public Resources', type: :feature do
+RSpec.describe 'Public Resources' do
   describe 'given a work' do
     let(:work) { create(:work, has_draft: true, versions_count: 3) }
 

@@ -345,7 +345,7 @@ RSpec.describe Work do
     end
 
     it 'passes through any arguments provided' do
-      work_type = described_class::Types.all.first
+      work_type = described_class::Types.first
       work = described_class.build_with_empty_version(work_type: work_type)
       expect(work.versions).to be_present
       expect(work.work_type).to eq work_type

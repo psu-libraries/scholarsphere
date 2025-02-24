@@ -2,9 +2,9 @@
 
 require 'rails_helper'
 
-RSpec.describe Api::V1::DoisController, type: :controller do
+RSpec.describe Api::V1::DoisController do
   let(:api_token) { create(:api_token).token }
-  let(:json_response) { JSON.parse(response.body) }
+  let(:json_response) { response.parsed_body }
 
   before { request.headers[:'X-API-Key'] = api_token }
 

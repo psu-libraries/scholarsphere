@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Home page', type: :feature do
+RSpec.describe 'Home page' do
   context 'with featured resources' do
     let!(:featured_work) { create(:featured_work) }
     let!(:featured_work_version) { create(:featured_work_version) }

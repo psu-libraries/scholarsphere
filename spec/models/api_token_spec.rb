@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ApiToken, type: :model do
+RSpec.describe ApiToken do
   describe 'table' do
     it { is_expected.to have_db_column(:token).of_type(:string) }
     it { is_expected.to have_db_column(:last_used_at).of_type(:datetime) }

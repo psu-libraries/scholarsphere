@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Dashboard::CollectionsController, type: :controller do
+RSpec.describe Dashboard::CollectionsController do
   # TODO this appears to call identity API, we should mock this out
   # This was ~Adams~ Danns access account. he left. tests started failing.
   let(:valid_attributes) {

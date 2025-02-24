@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ResourcesController, type: :controller do
+RSpec.describe ResourcesController do
   describe '#show' do
     let(:redis) { Redis.new(Rails.configuration.redis) }
 

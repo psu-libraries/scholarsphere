@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.describe OrcidId, type: :model do
+RSpec.describe OrcidId do
   let(:id) { FactoryBotHelpers.generate_orcid }
   let(:formatted_id) { id.gsub(/(\d{4})(?!$)/, '\1-') }
   let(:uri) { URI("https://orcid.org/#{formatted_id}") }

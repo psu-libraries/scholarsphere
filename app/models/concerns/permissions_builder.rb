@@ -37,7 +37,7 @@ class PermissionsBuilder < Module
     define_method :"#{level}_access?" do |agent|
       associated_agents = agent.try(:groups) || []
       available_agents = associated_agents.to_a + [agent]
-      (send(:"#{level}_agents") & available_agents).any?
+      send(:"#{level}_agents").intersect?(available_agents)
     end
 
     define_method :"grant_#{level}_access" do |*args|

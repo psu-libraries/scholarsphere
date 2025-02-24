@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Api::V1::RestController, type: :controller do
+RSpec.describe Api::V1::RestController do
   # @note Create an anonymous controller to test the features of our base class
   controller do
     def index

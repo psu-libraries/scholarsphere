@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe LegacyIdentifier, type: :model do
+RSpec.describe LegacyIdentifier do
   describe 'table' do
     it { is_expected.to have_db_column(:version).of_type(:integer) }
     it { is_expected.to have_db_column(:old_id).of_type(:string) }

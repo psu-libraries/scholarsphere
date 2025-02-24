@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ApplicationMailer, type: :mailer do
+RSpec.describe ApplicationMailer do
   describe '#default' do
     let(:default) { described_class.default }
 

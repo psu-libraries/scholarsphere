@@ -167,8 +167,7 @@ class Collection < ApplicationRecord
 
   def empty?
     works
-      .select { |work| work.representative_version.published? }
-      .empty?
+      .none? { |work| work.representative_version.published? }
   end
 
   def form_partial
@@ -186,7 +185,7 @@ class Collection < ApplicationRecord
     end
 
     def auto_generated_thumbnail_urls
-      works.flat_map { |work| work&.latest_published_version&.file_resources }&.map { |fr| fr&.thumbnail_url }&.compact
+      works.flat_map { |work| work&.latest_published_version&.file_resources }&.filter_map { |fr| fr&.thumbnail_url }
     end
 
     def set_defaults
