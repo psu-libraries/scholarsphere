@@ -51,7 +51,7 @@ RSpec.describe Api::V1::CollectionsController, type: :controller do
           'message' => 'Collection was successfully created',
           'url' => "/resources/#{new_collection.uuid}"
         )
-        expect(new_collection.work_ids).to contain_exactly(*works.map(&:id))
+        expect(new_collection.work_ids).to match_array(works.map(&:id))
       end
     end
 

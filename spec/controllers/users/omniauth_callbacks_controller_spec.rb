@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe Users::OmniauthCallbacksController, type: :controller do
-  let(:oauth_response) { build :psu_oauth_response }
-  let(:user) { build_stubbed :user }
+  let(:oauth_response) { build(:psu_oauth_response) }
+  let(:user) { build_stubbed(:user) }
 
   before do
     OmniAuth.config.test_mode = true

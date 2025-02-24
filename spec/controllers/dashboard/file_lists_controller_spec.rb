@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Dashboard::FileListsController, type: :controller do
   let(:user) { work_version.depositor.user }
-  let(:work_version) { create :work_version, :draft }
+  let(:work_version) { create(:work_version, :draft) }
 
   describe 'GET #edit' do
     let(:perform_request) { get :edit, params: { work_version_id: work_version.to_param } }
@@ -12,7 +12,7 @@ RSpec.describe Dashboard::FileListsController, type: :controller do
     it_behaves_like 'an authorized dashboard controller'
 
     context 'when signed in' do
-      let(:work_version) { create :work_version }
+      let(:work_version) { create(:work_version) }
 
       before { sign_in user }
 
@@ -24,7 +24,7 @@ RSpec.describe Dashboard::FileListsController, type: :controller do
       end
 
       context 'when requesting a PUBLISHED version of my own work' do
-        let(:work_version) { create :work_version, :published }
+        let(:work_version) { create(:work_version, :published) }
 
         it 'returns not authorized' do
           expect {

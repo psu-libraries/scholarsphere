@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  subject(:user) { build :user }
+  subject(:user) { build(:user) }
 
   describe 'table' do
     subject { described_class.new }
@@ -31,7 +31,7 @@ RSpec.describe User, type: :model do
   end
 
   describe 'validations' do
-    subject { create :user } # validate_uniqueness_of really wants this, not sure why
+    subject { create(:user) } # validate_uniqueness_of really wants this, not sure why
 
     it { is_expected.to validate_presence_of(:access_id) }
     it { is_expected.to validate_uniqueness_of(:access_id).case_insensitive }
@@ -50,7 +50,7 @@ RSpec.describe User, type: :model do
   end
 
   describe '.from_omniauth' do
-    let(:auth_params) { build :psu_oauth_response,
+    let(:auth_params) { build(:psu_oauth_response,
                               given_name: 'Joe',
                               surname: 'Developer',
                               access_id: 'jd1',
@@ -59,7 +59,7 @@ RSpec.describe User, type: :model do
                                 'umg-reporter',
                                 'Invalid With Spaces',
                                 'umg-With Spaces'
-                              ]
+                              ])
     }
 
     context 'when the User record does not yet exist' do
@@ -98,7 +98,7 @@ RSpec.describe User, type: :model do
       end
 
       context 'when an Actor record with the same PSU ID exists' do
-        let!(:actor) { create :actor, psu_id: 'jd1' }
+        let!(:actor) { create(:actor, psu_id: 'jd1') }
 
         it 'creates a new User record' do
           expect { described_class.from_omniauth(auth_params) }
@@ -123,7 +123,7 @@ RSpec.describe User, type: :model do
     end
 
     context 'when the User record already exists' do
-      let!(:existing_user) { create :user, provider: auth_params.provider, uid: auth_params.uid }
+      let!(:existing_user) { create(:user, provider: auth_params.provider, uid: auth_params.uid) }
 
       before do
         # Manipulate the Actor record to test it being updated
@@ -173,11 +173,11 @@ RSpec.describe User, type: :model do
 
     context 'when OAuth response contains minimal user info' do
       # This wouldn't pass validation in the web ui, but will pass here
-      let(:auth_params) { build :psu_oauth_response,
+      let(:auth_params) { build(:psu_oauth_response,
                                 given_name: nil,
                                 surname: nil,
                                 access_id: 'jd1',
-                                groups: []
+                                groups: [])
       }
 
       it 'still creates the Author and User' do
@@ -230,17 +230,17 @@ RSpec.describe User, type: :model do
   end
 
   describe '#works' do
-    let(:user) { create :user }
+    let(:user) { create(:user) }
     let(:user_actor) { user.actor }
 
-    let(:different_user) { create :user }
+    let(:different_user) { create(:user) }
     let(:different_actor) { different_user.actor }
 
-    let!(:deposited_work) { create :work, depositor: user_actor }
-    let!(:proxied_work) { create :work, depositor: different_actor, proxy_depositor: user_actor }
+    let!(:deposited_work) { create(:work, depositor: user_actor) }
+    let!(:proxied_work) { create(:work, depositor: different_actor, proxy_depositor: user_actor) }
 
     before do
-      create :work, depositor: different_actor
+      create(:work, depositor: different_actor)
     end
 
     it "returns a scope of works where the User's Actor is either the depositor or proxy" do
@@ -249,16 +249,16 @@ RSpec.describe User, type: :model do
   end
 
   describe '#collections' do
-    let(:user) { create :user }
+    let(:user) { create(:user) }
     let(:user_actor) { user.actor }
 
-    let(:different_user) { create :user }
+    let(:different_user) { create(:user) }
     let(:different_actor) { different_user.actor }
 
-    let!(:deposited_collection) { create :collection, depositor: user_actor }
+    let!(:deposited_collection) { create(:collection, depositor: user_actor) }
 
     before do
-      create :collection, depositor: different_actor
+      create(:collection, depositor: different_actor)
     end
 
     it "returns a scope of works where the User's Actor is either the depositor or proxy" do
@@ -270,7 +270,7 @@ RSpec.describe User, type: :model do
     subject { user }
 
     context 'when the user is not an admin' do
-      let(:user) { build_stubbed :user }
+      let(:user) { build_stubbed(:user) }
 
       it { is_expected.not_to be_admin }
     end
@@ -292,7 +292,7 @@ RSpec.describe User, type: :model do
     subject { user }
 
     context 'when the user is not an admin' do
-      let(:user) { build_stubbed :user }
+      let(:user) { build_stubbed(:user) }
 
       it { is_expected.not_to be_admin_available }
     end

@@ -92,7 +92,7 @@ class Collection < ApplicationRecord
     related_url
     source
   ].each do |array_field|
-    define_method "#{array_field}=" do |vals|
+    define_method :"#{array_field}=" do |vals|
       super(strip_blanks_from_array(vals))
     end
   end
@@ -102,7 +102,7 @@ class Collection < ApplicationRecord
     published_date
     subtitle
   ].each do |field|
-    define_method "#{field}=" do |val|
+    define_method :"#{field}=" do |val|
       super(val.presence)
     end
   end

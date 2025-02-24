@@ -22,7 +22,7 @@ RSpec.describe FileVersionMembership, type: :model do
   end
 
   describe 'validations' do
-    subject(:membership) { create :file_version_membership }
+    subject(:membership) { create(:file_version_membership) }
 
     it { is_expected.to validate_presence_of(:title) }
     it { is_expected.to validate_uniqueness_of(:title).scoped_to(:work_version_id) }
@@ -35,7 +35,7 @@ RSpec.describe FileVersionMembership, type: :model do
   end
 
   describe 'delegate methods' do
-    subject(:membership) { build :file_version_membership }
+    subject(:membership) { build(:file_version_membership) }
 
     let(:mock_uploader) { instance_spy('FileUploader::UploadedFile') }
 
@@ -72,7 +72,7 @@ RSpec.describe FileVersionMembership, type: :model do
     end
   end
 
-  describe 'PaperTrail::Versions', versioning: true do
+  describe 'PaperTrail::Versions', :versioning do
     it { is_expected.to respond_to(:changed_by_system).and respond_to(:changed_by_system=) }
     it { is_expected.to be_versioned }
 
@@ -105,7 +105,7 @@ RSpec.describe FileVersionMembership, type: :model do
     # NOTE the :file_resource factory is created with a file named 'image.png'
 
     context 'when no title is provided' do
-      subject(:membership) { build :file_version_membership }
+      subject(:membership) { build(:file_version_membership) }
 
       it "initializes #title to the file's filename before validation" do
         expect { membership.validate }
@@ -116,7 +116,7 @@ RSpec.describe FileVersionMembership, type: :model do
     end
 
     context 'when title is provided' do
-      subject(:membership) { build :file_version_membership, title: 'provided_a_filename.png' }
+      subject(:membership) { build(:file_version_membership, title: 'provided_a_filename.png') }
 
       it "initializes #title to the file's filename before validation" do
         expect { membership.validate }

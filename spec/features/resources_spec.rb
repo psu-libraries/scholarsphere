@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Public Resources', type: :feature do
   describe 'given a work' do
-    let(:work) { create :work, has_draft: true, versions_count: 3 }
+    let(:work) { create(:work, has_draft: true, versions_count: 3) }
 
     let(:v1) { work.versions[0] }
     let(:v2) { work.versions[1] }
@@ -42,24 +42,24 @@ RSpec.describe 'Public Resources', type: :feature do
 
         ## Does not have edit controls
         within('header') do
-          expect(page).not_to have_content(I18n.t!('resources.work_version.admin_edit_button', version: 'V2'))
-          expect(page).not_to have_content(I18n.t!('resources.settings_button.text', type: 'Work'))
+          expect(page).to have_no_content(I18n.t!('resources.work_version.admin_edit_button', version: 'V2'))
+          expect(page).to have_no_content(I18n.t!('resources.settings_button.text', type: 'Work'))
         end
 
         # Does not have a menu toggle button
         within('nav.main-nav') do
-          expect(page).not_to have_selector('button')
+          expect(page).to have_no_css('button')
         end
 
         ## Ensure we cannot navigate to the draft version
         within('.version-navigation .list-group') do
-          expect(page).not_to have_content 'V3'
-          expect(page).not_to have_content 'draft'
+          expect(page).to have_no_content 'V3'
+          expect(page).to have_no_content 'draft'
         end
 
         ## Ensure we do not see work history for draft version
         within('.version-timeline') do
-          expect(page).not_to have_content 'Version 3'
+          expect(page).to have_no_content 'Version 3'
           expect(page).to have_content 'Version 2'
         end
 
@@ -78,8 +78,8 @@ RSpec.describe 'Public Resources', type: :feature do
 
         ## Does not have edit controls
         within('header') do
-          expect(page).not_to have_content(I18n.t!('resources.work_version.admin_edit_button', version: 'V3'))
-          expect(page).not_to have_content(I18n.t!('resources.settings_button.text', type: 'Work'))
+          expect(page).to have_no_content(I18n.t!('resources.work_version.admin_edit_button', version: 'V3'))
+          expect(page).to have_no_content(I18n.t!('resources.settings_button.text', type: 'Work'))
         end
 
         ## Does have draft in the navigation menu
@@ -94,7 +94,7 @@ RSpec.describe 'Public Resources', type: :feature do
       end
 
       context 'when the resource is in the data and code pathway' do
-        let(:work) { create :work, has_draft: true, versions_count: 3, work_type: 'dataset' }
+        let(:work) { create(:work, has_draft: true, versions_count: 3, work_type: 'dataset') }
 
         it 'displays a citation' do
           visit resource_path(work.uuid)
@@ -105,13 +105,13 @@ RSpec.describe 'Public Resources', type: :feature do
       end
 
       context 'when the resource is not in the dataset pathway' do
-        let(:work) { create :work, has_draft: true, versions_count: 3, work_type: 'article' }
+        let(:work) { create(:work, has_draft: true, versions_count: 3, work_type: 'article') }
 
         it 'does not display a citation' do
           visit resource_path(work.uuid)
 
-          expect(page).not_to have_content 'Citation'
-          expect(page).not_to have_button('Copy Citation to Clipboard')
+          expect(page).to have_no_content 'Citation'
+          expect(page).to have_no_button('Copy Citation to Clipboard')
         end
       end
     end
@@ -122,14 +122,14 @@ RSpec.describe 'Public Resources', type: :feature do
       before { visit resource_path(work.uuid) }
 
       context 'when no draft exists' do
-        let(:work) { create :work, has_draft: false, versions_count: 2 }
+        let(:work) { create(:work, has_draft: false, versions_count: 2) }
 
         it 'displays edit controls on the resource page' do
           expect(page).to have_content(v2.title) # Sanity
 
           within('header') do
             ## Edit Version button is hidden, but Update Work and Work Settings buttons are shown
-            expect(page).not_to have_content(I18n.t!('resources.work_version.admin_edit_button', version: 'V2'))
+            expect(page).to have_no_content(I18n.t!('resources.work_version.admin_edit_button', version: 'V2'))
 
             expect(page).to have_content(I18n.t!('resources.edit_button.text', type: 'Work'))
               .and have_content(I18n.t!('resources.settings_button.text', type: 'Work'))
@@ -140,7 +140,7 @@ RSpec.describe 'Public Resources', type: :feature do
 
           within('header') do
             ## Edit Version button is still hidden, and Update Work and Work Settings buttons are still shown
-            expect(page).not_to have_content(I18n.t!('resources.work_version.admin_edit_button', version: 'V1'))
+            expect(page).to have_no_content(I18n.t!('resources.work_version.admin_edit_button', version: 'V1'))
 
             expect(page).to have_content(I18n.t!('resources.edit_button.text', type: 'Work'))
               .and have_content(I18n.t!('resources.settings_button.text', type: 'Work'))
@@ -148,20 +148,20 @@ RSpec.describe 'Public Resources', type: :feature do
 
           # Has a menu toggle button
           within('nav.main-nav') do
-            expect(page).to have_selector('button.navbar-toggler')
+            expect(page).to have_css('button.navbar-toggler')
           end
         end
       end
 
       context 'when a draft exists' do
-        let(:work) { create :work, has_draft: true, versions_count: 3 }
+        let(:work) { create(:work, has_draft: true, versions_count: 3) }
 
         it 'displays edit controls on the resource page' do
           expect(page).to have_content(v2.title) # Sanity
 
           within('header') do
             ## Edit Version button is hidden, but Update Work and Work Settings buttons are shown
-            expect(page).not_to have_content(I18n.t!('resources.work_version.admin_edit_button', version: 'V2'))
+            expect(page).to have_no_content(I18n.t!('resources.work_version.admin_edit_button', version: 'V2'))
 
             expect(page).to have_content(I18n.t!('resources.edit_button.text', type: 'Work'))
               .and have_content(I18n.t!('resources.settings_button.text', type: 'Work'))
@@ -177,7 +177,7 @@ RSpec.describe 'Public Resources', type: :feature do
 
           within('header') do
             ## Edit Version button is still hidden, and Update Work and Work Settings buttons are still shown
-            expect(page).not_to have_content(I18n.t!('resources.work_version.admin_edit_button', version: 'V3'))
+            expect(page).to have_no_content(I18n.t!('resources.work_version.admin_edit_button', version: 'V3'))
 
             expect(page).to have_content(I18n.t!('resources.edit_button.text', type: 'Work'))
               .and have_content(I18n.t!('resources.settings_button.text', type: 'Work'))
@@ -212,7 +212,7 @@ RSpec.describe 'Public Resources', type: :feature do
     end
 
     context 'when work has a thumbnail' do
-      let(:collection) { create :collection }
+      let(:collection) { create(:collection) }
 
       context 'when work#default_thumbnail? is true' do
         before do
@@ -222,8 +222,8 @@ RSpec.describe 'Public Resources', type: :feature do
         end
 
         it 'does not display thumbnail' do
-          expect(page).not_to have_css("img[src='url.com/path/file']")
-          expect(page).not_to have_css('.thumbnail-card')
+          expect(page).to have_no_css("img[src='url.com/path/file']")
+          expect(page).to have_no_css('.thumbnail-card')
         end
       end
 
@@ -242,7 +242,7 @@ RSpec.describe 'Public Resources', type: :feature do
     end
 
     context 'when work does not have a thumbnail' do
-      let(:work) { create :work }
+      let(:work) { create(:work) }
 
       before do
         allow_any_instance_of(ThumbnailComponent).to receive(:thumbnail_url).and_return nil
@@ -255,7 +255,7 @@ RSpec.describe 'Public Resources', type: :feature do
         end
 
         it 'does not display thumbnail' do
-          expect(page).not_to have_css('.thumbnail-image')
+          expect(page).to have_no_css('.thumbnail-image')
         end
       end
 
@@ -266,7 +266,7 @@ RSpec.describe 'Public Resources', type: :feature do
         end
 
         it 'does not display thumbnail' do
-          expect(page).not_to have_css('.thumbnail-image')
+          expect(page).to have_no_css('.thumbnail-image')
         end
       end
     end
@@ -275,13 +275,13 @@ RSpec.describe 'Public Resources', type: :feature do
   describe 'a collection' do
     context 'when it does NOT have a DOI' do
       let(:collection) do
-        create :collection,
+        create(:collection,
                :with_complete_metadata,
                works: [work],
-               description: 'This *has* [markdown](https://daringfireball.net/projects/markdown/)'
+               description: 'This *has* [markdown](https://daringfireball.net/projects/markdown/)')
       end
 
-      let(:work) { build :work, has_draft: false, versions_count: 1 }
+      let(:work) { build(:work, has_draft: false, versions_count: 1) }
 
       it 'displays the public resource page for the collection' do
         visit resource_path(collection.uuid)
@@ -295,7 +295,7 @@ RSpec.describe 'Public Resources', type: :feature do
         expect(page.find('meta[property="og:url"]', visible: false)[:content])
           .to match(resource_path(collection.uuid)).and match(/^https?:/)
 
-        expect(page).to have_selector('h1', text: collection.title)
+        expect(page).to have_css('h1', text: collection.title)
         expect(page).to have_link('markdown', href: 'https://daringfireball.net/projects/markdown/')
         expect(page).to have_content work.latest_published_version.title
 
@@ -306,13 +306,13 @@ RSpec.describe 'Public Resources', type: :feature do
     end
 
     context 'when it has a DOI' do
-      let(:collection) { create :collection, :with_complete_metadata, :with_a_doi, works: [work] }
-      let(:work) { build :work, has_draft: false, versions_count: 1 }
+      let(:collection) { create(:collection, :with_complete_metadata, :with_a_doi, works: [work]) }
+      let(:work) { build(:work, has_draft: false, versions_count: 1) }
 
       it 'displays the public resource page for the collection' do
         visit resource_path(collection.uuid)
 
-        expect(page).to have_selector('h1', text: collection.title)
+        expect(page).to have_css('h1', text: collection.title)
         expect(page).to have_content collection.description
         expect(page).to have_content work.latest_published_version.title
 
@@ -323,7 +323,7 @@ RSpec.describe 'Public Resources', type: :feature do
     end
 
     context 'when logged in as the resource owner', with_user: :user do
-      let(:collection) { create :collection }
+      let(:collection) { create(:collection) }
       let(:user) { collection.depositor.user }
 
       it 'displays edit controls on the resource page' do
@@ -338,7 +338,7 @@ RSpec.describe 'Public Resources', type: :feature do
     end
 
     context 'when collection has a thumbnail' do
-      let(:collection) { create :collection }
+      let(:collection) { create(:collection) }
 
       context 'when collection#default_thumbnail? is true' do
         before do
@@ -348,8 +348,8 @@ RSpec.describe 'Public Resources', type: :feature do
         end
 
         it 'does not display thumbnail' do
-          expect(page).not_to have_css("img[src='url.com/path/file']")
-          expect(page).not_to have_css('.thumbnail-card')
+          expect(page).to have_no_css("img[src='url.com/path/file']")
+          expect(page).to have_no_css('.thumbnail-card')
         end
       end
 
@@ -368,7 +368,7 @@ RSpec.describe 'Public Resources', type: :feature do
     end
 
     context 'when collection does not have a thumbnail' do
-      let(:collection) { create :collection }
+      let(:collection) { create(:collection) }
 
       before do
         allow_any_instance_of(ThumbnailComponent).to receive(:thumbnail_url).and_return nil
@@ -381,7 +381,7 @@ RSpec.describe 'Public Resources', type: :feature do
         end
 
         it 'does not display thumbnail' do
-          expect(page).not_to have_css('.thumbnail-image')
+          expect(page).to have_no_css('.thumbnail-image')
         end
       end
 
@@ -392,7 +392,7 @@ RSpec.describe 'Public Resources', type: :feature do
         end
 
         it 'does not display thumbnail' do
-          expect(page).not_to have_css('.thumbnail-image')
+          expect(page).to have_no_css('.thumbnail-image')
         end
       end
     end

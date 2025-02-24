@@ -49,7 +49,7 @@ RSpec.describe ResourcesController, type: :controller do
 
 
     context 'when requesting a published WorkVersion' do
-      let(:work_version) { create :work_version, :published }
+      let(:work_version) { create(:work_version, :published) }
       
       it 'loads the WorkVersion' do
         get :show, params: { id: work_version.uuid }
@@ -58,7 +58,7 @@ RSpec.describe ResourcesController, type: :controller do
     end
 
     context 'when requesting a draft WorkVersion' do
-      let(:work_version) { create :work_version, :draft }
+      let(:work_version) { create(:work_version, :draft) }
 
       it 'loads the WorkVersion' do
         get :show, params: { id: work_version.uuid }
@@ -67,7 +67,7 @@ RSpec.describe ResourcesController, type: :controller do
     end
 
     context 'when requesting a Collection' do
-      let(:collection) { create :collection }
+      let(:collection) { create(:collection) }
 
       it 'loads the WorkVersion' do
         get :show, params: { id: collection.uuid }
@@ -93,7 +93,7 @@ RSpec.describe ResourcesController, type: :controller do
     end
 
     context 'when a bot is requesting the resource' do
-      let(:work_version) { create :work_version, :published }
+      let(:work_version) { create(:work_version, :published) }
       let(:bot) { Browser.new('Bot') }
 
       before { allow(controller).to receive(:browser).and_return(bot) }

@@ -117,7 +117,7 @@ RSpec.describe Work do
     let(:work4) { create(:work) }
 
     it 'returns works with a published WorkVersion that has not been sent for curation' do
-      expect(described_class.recently_published).to match_array([work1])
+      expect(described_class.recently_published).to contain_exactly(work1)
     end
   end
 
@@ -351,7 +351,7 @@ RSpec.describe Work do
       expect(work.work_type).to eq work_type
     end
 
-    it 'will not overwrite a provided version' do
+    it 'does not overwrite a provided version' do
       versions = [WorkVersion.new]
       new_work = described_class.build_with_empty_version(versions: versions)
       expect(new_work.versions).to match_array(versions)
@@ -505,7 +505,7 @@ RSpec.describe Work do
         )
       end
 
-      its(:keys) { is_expected.to contain_exactly(*keys) }
+      its(:keys) { is_expected.to match_array(keys) }
     end
 
     context 'when the work has a published version' do
@@ -580,7 +580,7 @@ RSpec.describe Work do
         )
       end
 
-      its(:keys) { is_expected.to contain_exactly(*keys) }
+      its(:keys) { is_expected.to match_array(keys) }
     end
   end
 

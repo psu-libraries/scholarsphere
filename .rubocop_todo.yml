@@ -180,7 +180,7 @@ RSpec/BeNil:
     - 'spec/lib/healthchecks/version_check_spec.rb'
 
 # Offense count: 5
-RSpec/Capybara/SpecificMatcher:
+Capybara/SpecificMatcher:
   Exclude:
     - 'spec/features/edit_multiple_fields_spec.rb'
     - 'spec/features/home_page_spec.rb'
@@ -201,7 +201,7 @@ RSpec/EmptyExampleGroup:
 
 # Offense count: 23
 # This cop supports unsafe autocorrection (--autocorrect-all).
-RSpec/FactoryBot/SyntaxMethods:
+FactoryBot/SyntaxMethods:
   Exclude:
     - 'spec/controllers/api/v1/collections_controller_spec.rb'
     - 'spec/controllers/pages_controller_spec.rb'
@@ -224,7 +224,7 @@ RSpec/LetSetup:
 
 # Offense count: 15
 # This cop supports unsafe autocorrection (--autocorrect-all).
-RSpec/Rails/HaveHttpStatus:
+RSpecRails/HaveHttpStatus:
   Exclude:
     - 'spec/controllers/api/v1/collections_controller_spec.rb'
     - 'spec/controllers/api/v1/files_controller_spec.rb'

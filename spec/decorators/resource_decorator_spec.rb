@@ -125,7 +125,7 @@ RSpec.describe ResourceDecorator do
   end
 
   describe '#display_doi' do
-    let(:resource) { build_stubbed :work }
+    let(:resource) { build_stubbed(:work) }
 
     before do
       allow(MintingStatusDoiComponent).to receive(:new).and_return(:minting_status_doi_component)
@@ -151,13 +151,13 @@ RSpec.describe ResourceDecorator do
 
   describe '#visibility_badge' do
     context 'with a WorkVersion' do
-      let(:resource) { build_stubbed :work_version }
+      let(:resource) { build_stubbed(:work_version) }
 
       its(:visibility_badge) { is_expected.to be_a(VisibilityBadgeComponent) }
     end
 
     context 'with a Work' do
-      let(:resource) { build_stubbed :work }
+      let(:resource) { build_stubbed(:work) }
 
       its(:visibility_badge) { is_expected.to be_a(VisibilityBadgeComponent) }
     end
@@ -165,13 +165,13 @@ RSpec.describe ResourceDecorator do
 
   describe '#first_creators' do
     context 'when there are only creators' do
-      let(:resource) { build_stubbed :work_version, :with_creators, creator_count: 3 }
+      let(:resource) { build_stubbed(:work_version, :with_creators, creator_count: 3) }
 
       its(:first_creators) { is_expected.to eq(resource.creators) }
     end
 
     context 'when there are more than three creators' do
-      let(:resource) { build_stubbed :work_version, :with_creators, creator_count: 4 }
+      let(:resource) { build_stubbed(:work_version, :with_creators, creator_count: 4) }
 
       its(:first_creators) { is_expected.to eq(resource.creators.take(3) + ['&hellip;']) }
     end

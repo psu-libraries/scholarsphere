@@ -50,7 +50,7 @@ RSpec.describe Actor, type: :model do
   end
 
   describe 'after_commit' do
-    let(:actor) { create :actor }
+    let(:actor) { create(:actor) }
 
     before { allow(actor).to receive(:update_index_async) }
 
@@ -71,7 +71,7 @@ RSpec.describe Actor, type: :model do
   end
 
   describe 'after destroy' do
-    let(:actor) { create :actor }
+    let(:actor) { create(:actor) }
 
     before { allow(actor).to receive(:update_index_async) }
 
@@ -82,7 +82,7 @@ RSpec.describe Actor, type: :model do
   end
 
   describe '#display_name' do
-    let(:actor) { build :actor, given_name: 'Pat', surname: 'Researcher' }
+    let(:actor) { build(:actor, given_name: 'Pat', surname: 'Researcher') }
 
     context 'when nil' do
       before { actor.display_name = nil }
@@ -113,7 +113,7 @@ RSpec.describe Actor, type: :model do
   end
 
   describe '#update_index' do
-    let(:actor) { create :actor }
+    let(:actor) { create(:actor) }
 
     it 'updates all Works and Collections that the actor has created' do
       allow(Work).to receive(:reindex_all)

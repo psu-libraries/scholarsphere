@@ -11,7 +11,7 @@ RSpec.describe CreateNewCollection do
   let(:work) { create(:work) }
 
   let(:depositor) do
-    HashWithIndifferentAccess.new(
+    ActiveSupport::HashWithIndifferentAccess.new(
       email: user.email,
       given_name: user.actor.given_name,
       surname: user.actor.surname,
@@ -22,21 +22,21 @@ RSpec.describe CreateNewCollection do
   context 'when the depositor is the same as the creator' do
     let(:new_collection) do
       described_class.call(
-        metadata: HashWithIndifferentAccess.new(collection.metadata.merge(
-                                                  work_ids: [work.id],
-                                                  creators_attributes: [
-                                                    {
-                                                      display_name: user.name,
-                                                      position: 1,
-                                                      actor_attributes: {
-                                                        email: user.email,
-                                                        given_name: user.actor.given_name,
-                                                        surname: user.actor.surname,
-                                                        psu_id: user.actor.psu_id
-                                                      }
-                                                    }
-                                                  ]
-                                                )),
+        metadata: ActiveSupport::HashWithIndifferentAccess.new(collection.metadata.merge(
+                                                                 work_ids: [work.id],
+                                                                 creators_attributes: [
+                                                                   {
+                                                                     display_name: user.name,
+                                                                     position: 1,
+                                                                     actor_attributes: {
+                                                                       email: user.email,
+                                                                       given_name: user.actor.given_name,
+                                                                       surname: user.actor.surname,
+                                                                       psu_id: user.actor.psu_id
+                                                                     }
+                                                                   }
+                                                                 ]
+                                                               )),
         depositor: depositor
       )
     end
@@ -63,21 +63,21 @@ RSpec.describe CreateNewCollection do
   context 'when the actor already exists in the system' do
     let(:new_collection) do
       described_class.call(
-        metadata: HashWithIndifferentAccess.new(collection.metadata.merge(
-                                                  work_ids: [work.id],
-                                                  creators_attributes: [
-                                                    {
-                                                      display_name: user.name,
-                                                      position: 1,
-                                                      actor_attributes: {
-                                                        email: user.email,
-                                                        given_name: user.actor.given_name,
-                                                        surname: user.actor.surname,
-                                                        psu_id: user.actor.psu_id
-                                                      }
-                                                    }
-                                                  ]
-                                                )),
+        metadata: ActiveSupport::HashWithIndifferentAccess.new(collection.metadata.merge(
+                                                                 work_ids: [work.id],
+                                                                 creators_attributes: [
+                                                                   {
+                                                                     display_name: user.name,
+                                                                     position: 1,
+                                                                     actor_attributes: {
+                                                                       email: user.email,
+                                                                       given_name: user.actor.given_name,
+                                                                       surname: user.actor.surname,
+                                                                       psu_id: user.actor.psu_id
+                                                                     }
+                                                                   }
+                                                                 ]
+                                                               )),
         depositor: depositor
       )
     end
@@ -107,21 +107,21 @@ RSpec.describe CreateNewCollection do
     let(:mock_client) { instance_spy('PsuIdentity::SearchService::Client') }
     let(:new_collection) do
       described_class.call(
-        metadata: HashWithIndifferentAccess.new(collection.metadata.merge(
-                                                  work_ids: [work.id],
-                                                  creators_attributes: [
-                                                    {
-                                                      display_name: user.name,
-                                                      position: 1,
-                                                      actor_attributes: {
-                                                        email: user.email,
-                                                        given_name: user.actor.given_name,
-                                                        surname: user.actor.surname,
-                                                        psu_id: user.actor.psu_id
-                                                      }
-                                                    }
-                                                  ]
-                                                )),
+        metadata: ActiveSupport::HashWithIndifferentAccess.new(collection.metadata.merge(
+                                                                 work_ids: [work.id],
+                                                                 creators_attributes: [
+                                                                   {
+                                                                     display_name: user.name,
+                                                                     position: 1,
+                                                                     actor_attributes: {
+                                                                       email: user.email,
+                                                                       given_name: user.actor.given_name,
+                                                                       surname: user.actor.surname,
+                                                                       psu_id: user.actor.psu_id
+                                                                     }
+                                                                   }
+                                                                 ]
+                                                               )),
         depositor: depositor,
         permissions: {
           edit_users: [edit_user.user_id],
@@ -187,22 +187,22 @@ RSpec.describe CreateNewCollection do
   context 'with custom deposit dates' do
     let(:new_collection) do
       described_class.call(
-        metadata: HashWithIndifferentAccess.new(collection.metadata.merge(
-                                                  work_ids: [work.id],
-                                                  creators_attributes: [
-                                                    {
-                                                      display_name: user.name,
-                                                      position: 1,
-                                                      actor_attributes: {
-                                                        email: user.email,
-                                                        given_name: user.actor.given_name,
-                                                        surname: user.actor.surname,
-                                                        psu_id: user.actor.psu_id
-                                                      }
-                                                    }
-                                                  ],
-                                                  deposited_at: '2017-05-11T16:20:54Z'
-                                                )),
+        metadata: ActiveSupport::HashWithIndifferentAccess.new(collection.metadata.merge(
+                                                                 work_ids: [work.id],
+                                                                 creators_attributes: [
+                                                                   {
+                                                                     display_name: user.name,
+                                                                     position: 1,
+                                                                     actor_attributes: {
+                                                                       email: user.email,
+                                                                       given_name: user.actor.given_name,
+                                                                       surname: user.actor.surname,
+                                                                       psu_id: user.actor.psu_id
+                                                                     }
+                                                                   }
+                                                                 ],
+                                                                 deposited_at: '2017-05-11T16:20:54Z'
+                                                               )),
         depositor: depositor
       )
     end

@@ -9,7 +9,7 @@ RSpec.describe DoisController, type: :controller do
   describe 'POST #create' do
     let(:do_post) { post :create, params: { resource_id: resource.uuid } }
 
-    let(:resource) { create :work, doi: nil }
+    let(:resource) { create(:work, doi: nil) }
 
     before { allow(MintDoiAsync).to receive(:call) }
 
@@ -38,7 +38,7 @@ RSpec.describe DoisController, type: :controller do
       end
 
       context 'with a Work that already has a DOI' do
-        let(:resource) { create :work, doi: FactoryBotHelpers.datacite_doi }
+        let(:resource) { create(:work, doi: FactoryBotHelpers.datacite_doi) }
 
         it 'does NOT mint a new doi' do
           do_post
@@ -71,7 +71,7 @@ RSpec.describe DoisController, type: :controller do
       end
 
       context 'with a WorkVersion' do
-        let(:resource) { create :work_version, :published }
+        let(:resource) { create(:work_version, :published) }
         let(:parent_work) { resource.work }
 
         before do

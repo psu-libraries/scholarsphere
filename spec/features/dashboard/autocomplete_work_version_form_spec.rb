@@ -3,7 +3,7 @@
 require 'rails_helper'
 require 'support/vcr'
 
-RSpec.describe 'Autocompleting WorkVersion metadata with data from RMD', with_user: :user, vcr: true do
+RSpec.describe 'Autocompleting WorkVersion metadata with data from RMD', :vcr, with_user: :user do
   let(:user) { create(:user) }
   let(:metadata) { attributes_for(:work_version, :with_complete_metadata) }
 
@@ -15,8 +15,8 @@ RSpec.describe 'Autocompleting WorkVersion metadata with data from RMD', with_us
         FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_data_and_code_draft(metadata)
         FeatureHelpers::DashboardForm.save_and_continue
 
-        expect(page).not_to have_content 'Autocomplete for Open Access Works'
-        expect(page).not_to have_css '#autocomplete_work_form_doi'
+        expect(page).to have_no_content 'Autocomplete for Open Access Works'
+        expect(page).to have_no_css '#autocomplete_work_form_doi'
       end
     end
 
@@ -34,15 +34,15 @@ RSpec.describe 'Autocompleting WorkVersion metadata with data from RMD', with_us
 
             expect(WorkVersion.last.imported_metadata_from_rmd).to eq true
             expect(page).to have_content 'We were able to find your work and autocomplete some metadata for you'
-            expect(page).not_to have_css '#autocomplete_work_form_doi'
-            expect(find('#work_version_title').value).to eq 'A Scholarly Research Article'
-            expect(find('#work_version_description').text).to eq 'A summary of the research'
-            expect(find('#work_version_published_date').value).to eq '2010-12-05'
-            expect(find('#work_version_subtitle').value).to eq 'A Comparative Analysis'
-            expect(find('#work_version_publisher').value).to eq 'An Academic Journal'
-            expect(find('#work_version_identifier').value).to eq 'https://doi.org/10.1038/abcdefg1234567'
-            expect(find('#work_version_identifier').readonly?).to eq true
-            expect(find('#work_version_identifier').find(:xpath, './../..').native.attribute_nodes.first.value).to eq 'mb-1'
+            expect(page).to have_no_css '#autocomplete_work_form_doi'
+            expect(find_by_id('work_version_title').value).to eq 'A Scholarly Research Article'
+            expect(find_by_id('work_version_description').text).to eq 'A summary of the research'
+            expect(find_by_id('work_version_published_date').value).to eq '2010-12-05'
+            expect(find_by_id('work_version_subtitle').value).to eq 'A Comparative Analysis'
+            expect(find_by_id('work_version_publisher').value).to eq 'An Academic Journal'
+            expect(find_by_id('work_version_identifier').value).to eq 'https://doi.org/10.1038/abcdefg1234567'
+            expect(find_by_id('work_version_identifier').readonly?).to eq true
+            expect(find_by_id('work_version_identifier').find(:xpath, './../..').native.attribute_nodes.first.value).to eq 'mb-1'
             keywords = find_all('#work_version_keyword')
             expect(keywords[0].value).to eq 'A Topic'
             expect(keywords[1].value).to eq 'Another Topic'
@@ -52,27 +52,27 @@ RSpec.describe 'Autocompleting WorkVersion metadata with data from RMD', with_us
             # Check that the contributors were imported
             click_on 'Contributors'
 
-            expect(find('#work_version_creators_attributes_0_display_name').value).to eq 'Anne Example Contributor'
-            expect(find('#work_version_creators_attributes_0_given_name').value).to eq 'Anne'
-            expect(find('#work_version_creators_attributes_0_surname').value).to eq 'Contributor'
-            expect(find('#work_version_creators_attributes_0_email').value).to eq nil
+            expect(find_by_id('work_version_creators_attributes_0_display_name').value).to eq 'Anne Example Contributor'
+            expect(find_by_id('work_version_creators_attributes_0_given_name').value).to eq 'Anne'
+            expect(find_by_id('work_version_creators_attributes_0_surname').value).to eq 'Contributor'
+            expect(find_by_id('work_version_creators_attributes_0_email').value).to eq nil
             expect(page).to have_content('Unidentified').once
-            expect(find('#work_version_creators_attributes_1_display_name').value).to eq 'Joe Fakeman Person'
-            expect(find('#work_version_creators_attributes_1_given_name').value).to eq 'Joe'
-            expect(find('#work_version_creators_attributes_1_surname').value).to eq 'Person'
-            expect(find('#work_version_creators_attributes_1_email').value).to eq 'def1234@psu.edu'
+            expect(find_by_id('work_version_creators_attributes_1_display_name').value).to eq 'Joe Fakeman Person'
+            expect(find_by_id('work_version_creators_attributes_1_given_name').value).to eq 'Joe'
+            expect(find_by_id('work_version_creators_attributes_1_surname').value).to eq 'Person'
+            expect(find_by_id('work_version_creators_attributes_1_email').value).to eq 'def1234@psu.edu'
             expect(page).to have_content('Access Account: def1234').once
 
             click_on 'Work Type'
 
             # Check that work type is disabled on work type form
-            expect(find('#work_version_work_attributes_work_type').disabled?).to eq true
+            expect(find_by_id('work_version_work_attributes_work_type').disabled?).to eq true
 
             click_on 'Review & Publish'
 
             # Check that work type and identifier are disabled on publish form
-            expect(find('#work_version_work_attributes_work_type').disabled?).to eq true
-            expect(find('#work_version_identifier').readonly?).to eq true
+            expect(find_by_id('work_version_work_attributes_work_type').disabled?).to eq true
+            expect(find_by_id('work_version_identifier').readonly?).to eq true
           end
         end
 
@@ -88,8 +88,8 @@ RSpec.describe 'Autocompleting WorkVersion metadata with data from RMD', with_us
 
             expect(WorkVersion.last.imported_metadata_from_rmd).to eq false
             expect(page).to have_content 'We were not able to find and autocomplete the metadata for your work'
-            expect(page).not_to have_css '#autocomplete_work_form_doi'
-            expect(page).not_to have_css '#work_version_title'
+            expect(page).to have_no_css '#autocomplete_work_form_doi'
+            expect(page).to have_no_css '#work_version_title'
           end
         end
       end

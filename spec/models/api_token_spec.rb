@@ -23,7 +23,7 @@ RSpec.describe ApiToken, type: :model do
   end
 
   describe 'creating a new token' do
-    let(:new_token) { build :api_token, token: nil }
+    let(:new_token) { build(:api_token, token: nil) }
 
     it 'sets a value for the token' do
       new_token.save!
@@ -32,7 +32,7 @@ RSpec.describe ApiToken, type: :model do
   end
 
   describe '#record_usage' do
-    let(:token) { create :api_token }
+    let(:token) { create(:api_token) }
 
     it 'touches last_used_at in the database' do
       expect {

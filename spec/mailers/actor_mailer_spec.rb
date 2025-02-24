@@ -33,7 +33,7 @@ RSpec.describe ActorMailer, type: :mailer do
     subject(:mail) { described_class.with(actor: actor, resource: resource).added_as_editor }
 
     context 'when given a Collection' do
-      let(:resource) { build :collection, title: 'Some Collection' }
+      let(:resource) { build(:collection, title: 'Some Collection') }
 
       it 'sends an email to the user' do
         expect(mail.subject).to match(/Edit Access for.*Some Collection/)
@@ -44,7 +44,7 @@ RSpec.describe ActorMailer, type: :mailer do
     end
 
     context 'when given a Work' do
-      let(:resource) { create :work, has_draft: false, versions_count: 1 }
+      let(:resource) { create(:work, has_draft: false, versions_count: 1) }
 
       before { resource.representative_version.update(title: 'Some Work') }
 

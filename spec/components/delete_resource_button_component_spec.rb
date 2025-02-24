@@ -9,7 +9,7 @@ RSpec.describe DeleteResourceButtonComponent, type: :component do
   let(:link) { node.css('a').first }
 
   context 'when given a collection' do
-    let(:resource) { build_stubbed :collection }
+    let(:resource) { build_stubbed(:collection) }
 
     it 'renders a delete button for the collection' do
       text = I18n.t!('dashboard.form.actions.destroy.button')
@@ -26,7 +26,7 @@ RSpec.describe DeleteResourceButtonComponent, type: :component do
   end
 
   context 'when given a draft version' do
-    let(:resource) { build_stubbed :work_version }
+    let(:resource) { build_stubbed(:work_version) }
 
     before { allow(resource).to receive(:draft?).and_return(true) }
 
@@ -44,7 +44,7 @@ RSpec.describe DeleteResourceButtonComponent, type: :component do
   end
 
   context 'when given a published version' do
-    let(:resource) { build_stubbed :work_version }
+    let(:resource) { build_stubbed(:work_version) }
     let(:instance) do
       described_class.new(resource: resource,
                           html_class: 'btn my-class',

@@ -76,7 +76,7 @@ RSpec.describe EditorsForm, type: :model do
 
       [:work, :collection].each do |resource_type|
         context "when given a #{resource_type}" do
-          let(:resource) { build resource_type }
+          let(:resource) { build(resource_type) }
 
           it 'adds the user as an editor' do
             expect(resource.edit_users).to be_empty

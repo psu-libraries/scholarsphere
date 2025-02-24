@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Dashboard::FileVersionMembershipsController, type: :controller do
   let(:user) { work_version.depositor.user }
-  let(:work_version) { create :work_version, :draft, :with_files }
+  let(:work_version) { create(:work_version, :draft, :with_files) }
   let(:file_membership) { work_version.file_version_memberships.first }
 
   describe 'GET #edit' do
@@ -23,7 +23,7 @@ RSpec.describe Dashboard::FileVersionMembershipsController, type: :controller do
       end
 
       context 'when requesting a file on a PUBLISHED version of my own work' do
-        let(:work_version) { create :work_version, :published, :with_files }
+        let(:work_version) { create(:work_version, :published, :with_files) }
 
         it 'returns not authorized' do
           expect {
@@ -68,7 +68,7 @@ RSpec.describe Dashboard::FileVersionMembershipsController, type: :controller do
       end
 
       context 'when requesting a file on a PUBLISHED version of my own work' do
-        let(:work_version) { create :work_version, :published, :with_files }
+        let(:work_version) { create(:work_version, :published, :with_files) }
 
         it 'returns not authorized' do
           expect {
@@ -94,7 +94,7 @@ RSpec.describe Dashboard::FileVersionMembershipsController, type: :controller do
       end
 
       context 'when requesting a file on a PUBLISHED version of my own work' do
-        let(:work_version) { create :work_version, :published, :with_files }
+        let(:work_version) { create(:work_version, :published, :with_files) }
 
         it 'returns not authorized' do
           expect {

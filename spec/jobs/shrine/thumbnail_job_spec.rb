@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Shrine::ThumbnailJob, type: :job, skip: !ci_build? do
+RSpec.describe Shrine::ThumbnailJob, skip: !ci_build?, type: :job do
   let(:pdf_record) { build(:file_resource, :pdf) }
   let(:doc_record) { build(:file_resource, :doc) }
   let(:image_record) { build(:file_resource, :with_processed_image) }

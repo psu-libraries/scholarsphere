@@ -82,7 +82,7 @@ RSpec.describe Authorship, type: :model do
     it_behaves_like 'a singlevalued field', :email
   end
 
-  describe 'PaperTrail::Versions', versioning: true do
+  describe 'PaperTrail::Versions', :versioning do
     it { is_expected.to respond_to(:changed_by_system).and respond_to(:changed_by_system=) }
     it { is_expected.to be_versioned }
 

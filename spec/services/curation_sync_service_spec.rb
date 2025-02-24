@@ -5,17 +5,17 @@ require 'rails_helper'
 RSpec.describe CurationSyncService do
   describe '.sync' do
     context 'when the latest work version for curation is found in tasks table' do
-      let(:work_version1) { build :work_version,
+      let(:work_version1) { build(:work_version,
                                   work: nil,
                                   aasm_state: 'published',
                                   draft_curation_requested: nil,
-                                  published_at: Time.new(2024, 3, 10, 10, 30, 0)
+                                  published_at: Time.new(2024, 3, 10, 10, 30, 0))
       }
-      let(:work_version2) { build :work_version,
+      let(:work_version2) { build(:work_version,
                                   work: nil,
                                   aasm_state: 'draft',
                                   draft_curation_requested: true,
-                                  published_at: nil
+                                  published_at: nil)
       }
       let(:work) { create(:work, versions: [work_version1, work_version2]) }
       let(:task) { instance_double 'Submission',
@@ -36,11 +36,11 @@ RSpec.describe CurationSyncService do
     end
 
     context 'when there is an error' do
-      let(:work_version1) { build :work_version,
+      let(:work_version1) { build(:work_version,
                                   work: nil,
                                   aasm_state: 'draft',
                                   draft_curation_requested: true,
-                                  published_at: Time.new(2024, 3, 10, 10, 30, 0)
+                                  published_at: Time.new(2024, 3, 10, 10, 30, 0))
       }
       let(:work) { create(:work, versions: [work_version1]) }
 
@@ -72,23 +72,23 @@ RSpec.describe CurationSyncService do
     end
 
     context 'when the latest work version for curation is not found in tasks table' do
-      let(:work_version1) { build :work_version,
+      let(:work_version1) { build(:work_version,
                                   work: nil,
                                   aasm_state: 'published',
                                   draft_curation_requested: nil,
-                                  published_at: Time.new(2024, 2, 10, 10, 30, 0)
+                                  published_at: Time.new(2024, 2, 10, 10, 30, 0))
       }
-      let(:work_version2) { build :work_version,
+      let(:work_version2) { build(:work_version,
                                   work: nil,
                                   aasm_state: 'published',
                                   draft_curation_requested: true,
-                                  published_at: Time.new(2024, 3, 10, 10, 30, 0)
+                                  published_at: Time.new(2024, 3, 10, 10, 30, 0))
       }
-      let(:work_version3) { build :work_version,
+      let(:work_version3) { build(:work_version,
                                   work: nil,
                                   aasm_state: 'draft',
                                   draft_curation_requested: nil,
-                                  published_at: nil
+                                  published_at: nil)
       }
       let(:work) { create(:work, versions: [work_version1, work_version2, work_version3]) }
       let(:task1) { instance_double 'Submission',

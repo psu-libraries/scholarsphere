@@ -43,7 +43,7 @@ RSpec.describe Api::V1::RestController, type: :controller do
   context 'with an authenticated request' do
     subject { response }
 
-    let!(:api_key) { create :api_token }
+    let!(:api_key) { create(:api_token) }
 
     before do
       request.headers[:'X-API-Key'] = api_key.token
@@ -60,7 +60,7 @@ RSpec.describe Api::V1::RestController, type: :controller do
   end
 
   context 'when a record is not found' do
-    let!(:api_key) { create :api_token }
+    let!(:api_key) { create(:api_token) }
 
     before do
       allow(controller).to receive(:index).and_raise(ActiveRecord::RecordNotFound)
@@ -79,7 +79,7 @@ RSpec.describe Api::V1::RestController, type: :controller do
   end
 
   context 'when there is an unexpected error' do
-    let!(:api_key) { create :api_token }
+    let!(:api_key) { create(:api_token) }
 
     before do
       allow(controller).to receive(:index).and_raise(NoMethodError)
@@ -101,7 +101,7 @@ RSpec.describe Api::V1::RestController, type: :controller do
   describe '#current_user' do
     subject { controller.current_user }
 
-    let(:api_key) { create :api_token }
+    let(:api_key) { create(:api_token) }
 
     before { request.headers[:'X-API-Key'] = api_key.token }
 
@@ -109,7 +109,7 @@ RSpec.describe Api::V1::RestController, type: :controller do
   end
 
   describe '#user_for_paper_trail' do
-    let(:api_key) { create :api_token }
+    let(:api_key) { create(:api_token) }
 
     before { request.headers[:'X-API-Key'] = api_key.token }
 

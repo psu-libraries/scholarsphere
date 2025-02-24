@@ -303,11 +303,11 @@ RSpec.describe WorkVersionPolicy, type: :policy do
 
     context 'with an embargoed public work' do
       let(:work) do
-        create :work,
+        create(:work,
                has_draft: false,
                embargoed_until: (Time.zone.now + 6.days),
                edit_users: [edit_user],
-               proxy_depositor: proxy.actor
+               proxy_depositor: proxy.actor)
       end
 
       it { is_expected.to permit(depositor, work_version) }

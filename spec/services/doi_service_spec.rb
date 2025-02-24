@@ -19,7 +19,7 @@ RSpec.describe DoiService do
   describe '.call' do
     context 'when given a WorkVersion' do
       let(:resource) { work_version }
-      let(:work_version) { FactoryBot.build_stubbed :work_version }
+      let(:work_version) { FactoryBot.build_stubbed(:work_version) }
 
       before do
         allow(resource).to receive(:update_attribute)
@@ -113,7 +113,7 @@ RSpec.describe DoiService do
 
     context 'when given a Work' do
       let(:resource) { work }
-      let(:work) { FactoryBot.build_stubbed :work }
+      let(:work) { FactoryBot.build_stubbed(:work) }
 
       before do
         allow(work).to receive(:latest_published_version).and_return(latest_published_version)
@@ -137,7 +137,7 @@ RSpec.describe DoiService do
         end
 
         context 'when the work has a latest published version' do
-          let(:latest_published_version) { FactoryBot.build_stubbed :work_version, work: work }
+          let(:latest_published_version) { FactoryBot.build_stubbed(:work_version, work: work) }
 
           before do
             allow(latest_published_version).to receive(:published?).and_return(true)
@@ -182,7 +182,7 @@ RSpec.describe DoiService do
         end
 
         context 'when the work has a published version' do
-          let(:latest_published_version) { FactoryBot.build_stubbed :work_version, work: work }
+          let(:latest_published_version) { FactoryBot.build_stubbed(:work_version, work: work) }
 
           before do
             allow(latest_published_version).to receive(:published?).and_return(true)
@@ -213,7 +213,7 @@ RSpec.describe DoiService do
 
     context 'when given a Collection' do
       let(:resource) { collection }
-      let(:collection) { FactoryBot.build_stubbed :collection }
+      let(:collection) { FactoryBot.build_stubbed(:collection) }
 
       before do
         allow(collection).to receive(:valid?).and_return(true)
@@ -267,7 +267,7 @@ RSpec.describe DoiService do
     end
 
     context 'when given some other type of object' do
-      let(:resource) { FactoryBot.build_stubbed :user }
+      let(:resource) { FactoryBot.build_stubbed(:user) }
 
       it { expect { call_service }.to raise_error(ArgumentError) }
     end
@@ -313,7 +313,7 @@ RSpec.describe DoiService do
       end
 
       context 'when given a Collection' do
-        let(:resource) { create :collection }
+        let(:resource) { create(:collection) }
 
         before { resource.update_attribute(:description, nil) }
 
@@ -331,7 +331,7 @@ RSpec.describe DoiService do
     end
 
     context 'when the metadata mapper cannot build valid metadata' do
-      let(:resource) { FactoryBot.create :work_version, doi: nil }
+      let(:resource) { FactoryBot.create(:work_version, doi: nil) }
 
       before do
         allow(resource).to receive(:draft?).and_return(false)
@@ -346,7 +346,7 @@ RSpec.describe DoiService do
     end
 
     context 'when the doi client raises an error' do
-      let(:resource) { FactoryBot.create :work_version, doi: nil }
+      let(:resource) { FactoryBot.create(:work_version, doi: nil) }
 
       before do
         allow(resource).to receive(:draft?).and_return(true)

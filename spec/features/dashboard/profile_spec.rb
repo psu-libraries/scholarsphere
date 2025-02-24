@@ -25,7 +25,7 @@ RSpec.describe 'Profile', type: :feature, with_user: :user do
       fill_in 'Email', with: attributes[:email]
       fill_in 'ORCiD', with: attributes[:orcid]
       uncheck('Receive monthly report on downloads and views')
-      expect(page).not_to have_content('Administrative privileges enabled')
+      expect(page).to have_no_content('Administrative privileges enabled')
       click_button 'Save'
       user.actor.reload
       expect(user.actor.given_name).to eq(attributes[:given_name])
@@ -72,8 +72,8 @@ RSpec.describe 'Profile', type: :feature, with_user: :user do
       expect(page).to have_content(I18n.t!('dashboard.profiles.update.success'))
       within('#topbar') do
         expect(page).to have_content(user.access_id)
-        expect(page).not_to have_link('Sidekiq')
-        expect(page).not_to have_link('Health Checks')
+        expect(page).to have_no_link('Sidekiq')
+        expect(page).to have_no_link('Health Checks')
       end
     end
   end

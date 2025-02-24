@@ -20,7 +20,7 @@ RSpec.describe Dashboard::ProfilesController, type: :controller do
     }
   }
 
-  let(:user) { create :user }
+  let(:user) { create(:user) }
   let(:actor) { user.actor }
 
   describe 'GET #edit' do
