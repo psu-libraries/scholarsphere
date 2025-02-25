@@ -237,7 +237,7 @@ class WorkVersion < ApplicationRecord
     related_url
     source
   ].each do |array_field|
-    define_method "#{array_field}=" do |vals|
+    define_method :"#{array_field}=" do |vals|
       super(strip_blanks_from_array(vals))
     end
   end
@@ -254,7 +254,7 @@ class WorkVersion < ApplicationRecord
     program
     degree
   ].each do |field|
-    define_method "#{field}=" do |val|
+    define_method :"#{field}=" do |val|
       super(val.presence)
     end
   end
@@ -404,7 +404,7 @@ class WorkVersion < ApplicationRecord
       over_limit_errors = []
       errors.errors.each_with_index do |error, index|
         if error.type == :max &&
-            (error.attribute == :'work.embargoed_until' || error.attribute == :'work.versions.work.embargoed_until')
+            [:'work.embargoed_until', :'work.versions.work.embargoed_until'].include?(error.attribute)
           over_limit_errors << index
         end
       end

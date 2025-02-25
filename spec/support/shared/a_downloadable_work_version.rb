@@ -88,11 +88,11 @@ RSpec.shared_examples 'a downloadable work version' do
 
       context 'with an embargoed work editable by me' do
         let(:work) do
-          create :work,
+          create(:work,
                  has_draft: false,
                  depositor: someone_else.actor,
                  embargoed_until: (Time.zone.now + 6.days),
-                 edit_users: [me]
+                 edit_users: [me])
         end
         let(:work_version) { work.versions[0] }
 

@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :work do
-    association :depositor, :with_user, factory: :actor
+    depositor factory: %i[actor with_user]
     work_type { Work::Types.default }
     visibility { Permissions::Visibility.default }
 

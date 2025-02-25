@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe DownloadsController, type: :controller do
+RSpec.describe DownloadsController do
   describe 'GET #content' do
     context 'when requesting a valid file from a work version' do
       let(:work_version) { create(:work_version, :published, :with_files, file_count: 2) }

@@ -4,8 +4,8 @@ require 'rails_helper'
 require 'data_cite'
 
 RSpec.describe 'minting a doi', skip: !ci_build? do
-  let!(:work) { create :work, versions: [work_version] }
-  let(:work_version) { build :work_version, :able_to_be_published, work: nil }
+  let!(:work) { create(:work, versions: [work_version]) }
+  let(:work_version) { build(:work_version, :able_to_be_published, work: nil) }
 
   let(:client) { DataCite::Client.new }
 

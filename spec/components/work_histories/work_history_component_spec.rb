@@ -2,16 +2,16 @@
 
 require 'rails_helper'
 
-RSpec.describe WorkHistories::WorkHistoryComponent, type: :component, versioning: true do
+RSpec.describe WorkHistories::WorkHistoryComponent, :versioning, type: :component do
   let(:result) { render_inline(component) }
   let(:component) { described_class.new(work: work) }
 
-  let(:user) { create :user }
+  let(:user) { create(:user) }
 
-  let(:work) { create :work, versions: [draft, v1], depositor: user.actor }
+  let(:work) { create(:work, versions: [draft, v1], depositor: user.actor) }
 
-  let(:draft) { build :work_version, :draft, title: 'Draft Version', work: nil, created_at: 1.day.ago }
-  let(:v1) { build :work_version, :published, title: 'Published v1', work: nil, created_at: 3.days.ago }
+  let(:draft) { build(:work_version, :draft, title: 'Draft Version', work: nil, created_at: 1.day.ago) }
+  let(:v1) { build(:work_version, :published, title: 'Published v1', work: nil, created_at: 3.days.ago) }
 
   let(:mock_helpers) { spy 'MockHelpers', policy: mock_policy }
   let(:mock_policy) { instance_spy 'WorkVersionPolicy', navigable?: true }

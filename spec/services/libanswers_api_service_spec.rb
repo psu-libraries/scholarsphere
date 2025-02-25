@@ -5,8 +5,8 @@ require 'support/vcr'
 
 RSpec.describe LibanswersApiService, :vcr do
   describe '#admin_create_curation_ticket' do
-    let!(:user) { create :user, access_id: 'test', email: 'test@psu.edu' }
-    let!(:work) { create :work, depositor: user.actor }
+    let!(:user) { create(:user, access_id: 'test', email: 'test@psu.edu') }
+    let!(:work) { create(:work, depositor: user.actor) }
 
     context 'when successful response is returned from libanswers /ticket/create endpoint' do
       it 'returns the url of the ticket created' do
@@ -64,7 +64,7 @@ RSpec.describe LibanswersApiService, :vcr do
   end
 
   describe '#request_alternate_format' do
-    let! (:request) { build :alternate_format_request }
+    let! (:request) { build(:alternate_format_request) }
 
     context 'when called' do
       let!(:mock_faraday_connection) { instance_spy('Faraday::Connection') }

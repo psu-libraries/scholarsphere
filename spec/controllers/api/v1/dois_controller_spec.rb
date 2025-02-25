@@ -2,9 +2,9 @@
 
 require 'rails_helper'
 
-RSpec.describe Api::V1::DoisController, type: :controller do
+RSpec.describe Api::V1::DoisController do
   let(:api_token) { create(:api_token).token }
-  let(:json_response) { JSON.parse(response.body) }
+  let(:json_response) { response.parsed_body }
 
   before { request.headers[:'X-API-Key'] = api_token }
 
@@ -53,10 +53,7 @@ RSpec.describe Api::V1::DoisController, type: :controller do
       it 'returns 200 and a list of resource urls' do
         expect(DoiSearch).to have_received(:new).with(doi: 'some-doi')
         expect(response).to be_ok
-        expect(json_response).to match_array([
-                                               { 'url' => '/resources/uuid-1' },
-                                               { 'url' => '/resources/uuid-2' }
-                                             ])
+        expect(json_response).to contain_exactly({ 'url' => '/resources/uuid-1' }, { 'url' => '/resources/uuid-2' })
       end
     end
 

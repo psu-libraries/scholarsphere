@@ -24,7 +24,7 @@ class FormTabsComponent < ApplicationComponent
     end
 
     def base_tabs
-      send("#{resource.model_name.param_key}_tabs")
+      send(:"#{resource.model_name.param_key}_tabs")
     end
 
     def work_version_tabs

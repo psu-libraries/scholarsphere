@@ -72,7 +72,7 @@ RSpec.describe LinkDisabledByTooltipComponent, type: :component do
     let(:element) { result.css('*').first }
 
     context 'when enabled' do
-      let(:enabled) {  true }
+      let(:enabled) { true }
 
       it { is_expected.to match_array(%w(my custom classes)) }
     end

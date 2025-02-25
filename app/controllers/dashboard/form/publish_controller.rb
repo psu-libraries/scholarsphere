@@ -91,10 +91,9 @@ module Dashboard
         helper_method :form_should_publish?
         def form_should_publish?
           not_published = !@resource.published?
-          marked_as_published_but_not_persisted = (
+          marked_as_published_but_not_persisted =
             @resource.aasm.from_state != :published &&
-              @resource.aasm.to_state == :published
-          )
+            @resource.aasm.to_state == :published
 
           not_published || marked_as_published_but_not_persisted
         end

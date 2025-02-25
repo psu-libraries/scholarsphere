@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ErrorsController, type: :controller do
+RSpec.describe ErrorsController do
   subject { response }
 
   let(:non_html_format) do

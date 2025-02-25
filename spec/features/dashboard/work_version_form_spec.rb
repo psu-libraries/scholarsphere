@@ -131,9 +131,9 @@ RSpec.describe 'Publishing a work', with_user: :user do
         FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_scholarly_works_draft(metadata)
         FeatureHelpers::DashboardForm.save_and_continue
 
-        expect(page).not_to have_field('work_version_based_near')
-        expect(page).not_to have_field('work_version_source')
-        expect(page).not_to have_field('work_version_version_name')
+        expect(page).to have_no_field('work_version_based_near')
+        expect(page).to have_no_field('work_version_source')
+        expect(page).to have_no_field('work_version_version_name')
       end
 
       context 'when saving as draft and exiting' do
@@ -251,8 +251,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
         FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_data_and_code_draft(metadata)
         FeatureHelpers::DashboardForm.save_and_continue
 
-        expect(page).not_to have_field('publisher_statement')
-        expect(page).not_to have_field('work_version_identifier')
+        expect(page).to have_no_field('publisher_statement')
+        expect(page).to have_no_field('work_version_identifier')
       end
 
       context 'when saving as draft and exiting' do
@@ -367,10 +367,10 @@ RSpec.describe 'Publishing a work', with_user: :user do
         FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_grad_culminating_experiences_draft(metadata)
         FeatureHelpers::DashboardForm.save_and_continue
 
-        expect(page).not_to have_field('publisher_statement')
-        expect(page).not_to have_field('work_version_based_near')
-        expect(page).not_to have_field('work_version_source')
-        expect(page).not_to have_field('work_version_version_name')
+        expect(page).to have_no_field('publisher_statement')
+        expect(page).to have_no_field('work_version_based_near')
+        expect(page).to have_no_field('work_version_source')
+        expect(page).to have_no_field('work_version_version_name')
         expect(page).to have_field('work_version_sub_work_type')
         expect(page).to have_field('work_version_program')
         expect(page).to have_field('work_version_degree')
@@ -478,7 +478,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
   end
 
   describe 'The Work Details tab for an existing draft work' do
-    let(:work) { create :work, versions_count: 1 }
+    let(:work) { create(:work, versions_count: 1) }
     let(:work_version) { work.versions.first }
     let(:user) { work_version.work.depositor.user }
 
@@ -493,7 +493,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         expect(page).to have_current_path(resource_path(work_version.uuid))
         expect(Work.count).to eq(initial_work_count)
-        expect(page).not_to have_button('Request Curation')
+        expect(page).to have_no_button('Request Curation')
 
         work_version.reload
         expect(work_version.title).to eq metadata[:title]
@@ -532,7 +532,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       end
     end
 
-    context 'when navigating away from unsaved changes', js: true do
+    context 'when navigating away from unsaved changes', :js do
       it 'warns the user' do
         visit dashboard_form_work_version_type_path(work_version)
 
@@ -554,7 +554,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
   end
 
-  describe 'The Contributors tab', js: true do
+  describe 'The Contributors tab', :js do
     let(:work_version) { create(:work_version, :initial_draft) }
     let(:user) { work_version.work.depositor.user }
     let(:actor) { work_version.work.depositor }
@@ -574,7 +574,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
           expect(page).to have_content("Access Account: #{actor.psu_id}".upcase)
         end
 
-        expect(page).not_to have_button('Request Curation')
+        expect(page).to have_no_button('Request Curation')
 
         fill_in 'work_version_contributor', with: metadata[:contributor]
 
@@ -609,7 +609,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
           expect(page).to have_content('Nathan Andrew Weader')
         end
 
-        find('#search-creators').set("\n")
+        find_by_id('search-creators').set("\n")
 
         within('#creators') do
           expect(page).to have_content('CREATOR 1')
@@ -761,7 +761,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
 
     context 'when removing creators from an existing draft' do
-      let(:work_version) { create :work_version, :initial_draft, :with_creators, creator_count: 2 }
+      let(:work_version) { create(:work_version, :initial_draft, :with_creators, creator_count: 2) }
       let(:creators) { work_version.creators }
 
       it 'removes the creator from the work' do
@@ -777,7 +777,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         page.find_all('.remove_fields').first.click
         within('#creators') do
           expect(page).to have_content('CREATOR 1')
-          expect(page).not_to have_content('CREATOR 2')
+          expect(page).to have_no_content('CREATOR 2')
           expect(page).to have_field('Display Name', count: 1)
         end
 
@@ -790,7 +790,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
 
     context 'when re-ordering creators' do
-      let(:work_version) { create :work_version, :initial_draft, :with_creators, creator_count: 2 }
+      let(:work_version) { create(:work_version, :initial_draft, :with_creators, creator_count: 2) }
 
       before do
         creator_a, creator_b = work_version.creators
@@ -814,8 +814,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
   end
 
-  describe 'The Files tab', js: true do
-    let(:work) { create :work, versions_count: 1 }
+  describe 'The Files tab', :js do
+    let(:work) { create(:work, versions_count: 1) }
     let(:work_version) { work.versions.first }
     let(:user) { work_version.work.depositor.user }
 
@@ -855,7 +855,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         end
       end
 
-      expect(page).not_to have_button('Request Curation')
+      expect(page).to have_no_button('Request Curation')
     end
 
     describe 'queuing an accessibility check' do
@@ -886,7 +886,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
 
     context 'when a work is in the data & code pathway' do
-      let(:work) { create :work, versions_count: 1 }
+      let(:work) { create(:work, versions_count: 1) }
       let(:work_version) { work.versions.first }
       let(:user) { work.depositor.user }
 
@@ -901,26 +901,26 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
 
     context 'when a work is not in the data & code pathway' do
-      let(:work) { create :work, :article, versions_count: 1 }
+      let(:work) { create(:work, :article, versions_count: 1) }
       let(:work_version) { work.versions.first }
       let(:user) { work.depositor.user }
 
       it 'does not display helper text' do
         visit dashboard_form_files_path(work_version)
 
-        expect(page).not_to have_content(I18n.t!('dashboard.form.details.readme.header'))
-        expect(page).not_to have_content(I18n.t!('dashboard.form.details.readme.format'))
-        expect(page).not_to have_content(I18n.t!('dashboard.form.details.readme.zip'))
-        expect(page).not_to have_link(I18n.t!('dashboard.form.details.readme.documentation'), href: 'https://docs.scholarsphere.psu.edu/guides/writing-readme/')
+        expect(page).to have_no_content(I18n.t!('dashboard.form.details.readme.header'))
+        expect(page).to have_no_content(I18n.t!('dashboard.form.details.readme.format'))
+        expect(page).to have_no_content(I18n.t!('dashboard.form.details.readme.zip'))
+        expect(page).to have_no_link(I18n.t!('dashboard.form.details.readme.documentation'), href: 'https://docs.scholarsphere.psu.edu/guides/writing-readme/')
       end
     end
   end
 
   describe 'The Publish tab' do
     context 'when submitting the form with publication errors' do
-      let(:work) { create :work }
+      let(:work) { create(:work) }
       let(:user) { work.depositor.user }
-      let(:work_version) { create :work_version, :draft }
+      let(:work_version) { create(:work_version, :draft) }
 
       before { work.versions = [work_version] }
 
@@ -961,18 +961,18 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
     context 'with a non v1 draft version' do
       let(:user) { work_version.work.depositor.user }
-      let(:work_version) { create :work_version }
+      let(:work_version) { create(:work_version) }
 
       it 'does not display visibility fields' do
         visit dashboard_form_publish_path(work_version)
 
-        expect(page).not_to have_content('Penn State Only')
-        expect(page).not_to have_content('Embargo')
+        expect(page).to have_no_content('Penn State Only')
+        expect(page).to have_no_content('Embargo')
       end
     end
 
     context 'with a v1 draft version' do
-      let(:work) { create :work, versions_count: 1, has_draft: true, work_type: 'article' }
+      let(:work) { create(:work, versions_count: 1, has_draft: true, work_type: 'article') }
       let(:work_version) { work.versions.first }
       let(:user) { work.depositor.user }
 
@@ -984,10 +984,10 @@ RSpec.describe 'Publishing a work', with_user: :user do
       end
     end
 
-    context 'when viewing accessibility results', js: true do
+    context 'when viewing accessibility results', :js do
       let(:pdf) { create(:file_resource, :pdf) }
       let(:pdf_with_error) { create(:file_resource, :pdf) }
-      let(:work_version) { create :work_version, :article, :able_to_be_published }
+      let(:work_version) { create(:work_version, :article, :able_to_be_published) }
       let(:user) { work_version.work.depositor.user }
       let(:files) { work_version.file_resources }
       let(:accessibility_check_result) do
@@ -1017,7 +1017,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
             within('tr:nth-child(1)') do
               # initial file is a png and won't go through accessibility checking
               expect(page).to have_content('Needs manual review')
-              expect(page).not_to have_link('View Report')
+              expect(page).to have_no_link('View Report')
             end
 
             # add another file that is a pdf and will go through checking
@@ -1025,7 +1025,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
             refresh
             within('tr:nth-child(2)') do
               expect(page).to have_content('Processing')
-              expect(page).not_to have_link('View Report')
+              expect(page).to have_no_link('View Report')
 
               # create a check result manually to mimic the file completing auto check
               accessibility_check_result.save!
@@ -1046,13 +1046,13 @@ RSpec.describe 'Publishing a work', with_user: :user do
             refresh
             within('tr:nth-child(2)') do
               expect(page).to have_content('Processing')
-              expect(page).not_to have_link('View Report')
+              expect(page).to have_no_link('View Report')
 
               # create a check result manually to mimic the file completing auto check
               accessibility_check_result_with_error.save!
               refresh
               expect(page).to have_content('Needs manual review')
-              expect(page).not_to have_link('View Report')
+              expect(page).to have_no_link('View Report')
             end
           end
         end
@@ -1060,7 +1060,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
 
     context 'with a work that uses the general deposit pathway' do
-      let(:work) { create :work, versions_count: 1, work_type: 'audio' }
+      let(:work) { create(:work, versions_count: 1, work_type: 'audio') }
       let(:work_version) { work.versions.first }
       let(:user) { work.depositor.user }
 
@@ -1077,16 +1077,16 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
 
     context 'with a work that uses the scholarly works deposit pathway' do
-      let(:work) { create :work, :article, versions_count: 1 }
+      let(:work) { create(:work, :article, versions_count: 1) }
       let(:work_version) { work.versions.first }
       let(:user) { work.depositor.user }
 
       it 'shows only the fields for a scholarly work' do
         visit dashboard_form_publish_path(work_version)
 
-        expect(page).not_to have_field('work_version_based_near')
-        expect(page).not_to have_field('work_version_source')
-        expect(page).not_to have_field('work_version_version_name')
+        expect(page).to have_no_field('work_version_based_near')
+        expect(page).to have_no_field('work_version_source')
+        expect(page).to have_no_field('work_version_version_name')
         expect(page).to have_field('work_version_publisher_statement')
         expect(page).to have_field('work_version_work_attributes_visibility_open')
         expect(page).to have_field('work_version_work_attributes_visibility_authenticated')
@@ -1094,7 +1094,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
 
     context 'with a work that uses the data & code deposit pathway' do
-      let(:work) { create :work, versions_count: 1 }
+      let(:work) { create(:work, versions_count: 1) }
       let(:work_version) { work.versions.first }
       let(:user) { work.depositor.user }
 
@@ -1104,25 +1104,25 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).to have_field('work_version_based_near')
         expect(page).to have_field('work_version_source')
         expect(page).to have_field('work_version_version_name')
-        expect(page).not_to have_field('work_version_publisher_statement')
-        expect(page).not_to have_field('work_version_identifier')
-        expect(page).not_to have_field('work_version_work_attributes_visibility_open')
-        expect(page).not_to have_field('work_version_work_attributes_visibility_authenticated')
+        expect(page).to have_no_field('work_version_publisher_statement')
+        expect(page).to have_no_field('work_version_identifier')
+        expect(page).to have_no_field('work_version_work_attributes_visibility_open')
+        expect(page).to have_no_field('work_version_work_attributes_visibility_authenticated')
       end
     end
 
     context 'with a work that uses the grad_culminating_experiences works deposit pathway' do
-      let(:work) { create :work, :masters_culminating_experience, versions_count: 1 }
+      let(:work) { create(:work, :masters_culminating_experience, versions_count: 1) }
       let(:work_version) { work.versions.first }
       let(:user) { work.depositor.user }
 
       it 'shows only the fields for a grad_culminating_experiences work' do
         visit dashboard_form_publish_path(work_version)
 
-        expect(page).not_to have_field('work_version_based_near')
-        expect(page).not_to have_field('work_version_source')
-        expect(page).not_to have_field('work_version_version_name')
-        expect(page).not_to have_field('work_version_publisher_statement')
+        expect(page).to have_no_field('work_version_based_near')
+        expect(page).to have_no_field('work_version_source')
+        expect(page).to have_no_field('work_version_version_name')
+        expect(page).to have_no_field('work_version_publisher_statement')
         expect(page).to have_field('work_version_keyword')
         expect(page).to have_field('work_version_sub_work_type')
         expect(page).to have_field('work_version_program')
@@ -1131,7 +1131,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
   end
 
-  describe 'Publishing a new work from end-to-end', js: true do
+  describe 'Publishing a new work from end-to-end', :js do
     let(:different_metadata) { attributes_for(:work_version, :with_complete_metadata) }
 
     it 'routes the user through the workflow' do
@@ -1162,7 +1162,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       FeatureHelpers::DashboardForm.save_and_continue
 
       # Don't yell at them for something they haven't seen yet
-      expect(page).not_to have_selector('div#error_explanation')
+      expect(page).to have_no_css('div#error_explanation')
 
       # On the review page, change all the details metadata to ensure the params
       # are submitted correctly
@@ -1179,7 +1179,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       version = work.versions.first
 
       expect(page).to have_current_path(resource_path(work.uuid))
-      expect(page).to have_selector('h1', text: version.title)
+      expect(page).to have_css('h1', text: version.title)
 
       expect(version).to be_published
       expect(version.published_at).to be_present.and be_within(2.seconds).of(Time.zone.now)
@@ -1201,7 +1201,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
   end
 
-  describe 'Publishing a Penn State only work', js: true do
+  describe 'Publishing a Penn State only work', :js do
     let(:different_metadata) { attributes_for(:work_version, :with_complete_metadata) }
     let(:correct_rights) { WorkVersion::Licenses::ids_for_authorized_visibility.first }
     let(:incorrect_rights) { (WorkVersion::Licenses.ids - WorkVersion::Licenses::ids_for_authorized_visibility).first }
@@ -1223,7 +1223,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       FeatureHelpers::DashboardForm.save_and_continue
 
       # Don't yell at them for something they haven't seen yet
-      expect(page).not_to have_selector('div#error_explanation')
+      expect(page).to have_no_css('div#error_explanation')
 
       # On the review page, change all the details metadata to ensure the params
       # are submitted correctly
@@ -1260,7 +1260,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       version = work.versions.first
 
       expect(page).to have_current_path(resource_path(work.uuid))
-      expect(page).to have_selector('h1', text: version.title)
+      expect(page).to have_css('h1', text: version.title)
 
       expect(version).to be_published
       expect(work.visibility).to eq(Permissions::Visibility::AUTHORIZED)
@@ -1282,8 +1282,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
   end
 
   describe 'Editing a published work' do
-    let(:work) { create :work, work_type: 'audio' }
-    let(:work_version) { create :work_version, :published }
+    let(:work) { create(:work, work_type: 'audio') }
+    let(:work_version) { create(:work_version, :published) }
     let(:invalid_metadata) { attributes_for(:work_version, :with_complete_metadata, description: '') }
     let(:different_metadata) { attributes_for(:work_version, :with_complete_metadata) }
     let(:incorrect_rights) { (WorkVersion::Licenses.ids - WorkVersion::Licenses::ids_for_authorized_visibility).first }
@@ -1335,7 +1335,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
   describe 'Deleting a version' do
     context 'when logged in as a regular user' do
-      let(:work) { create :work, versions_count: 1 }
+      let(:work) { create(:work, versions_count: 1) }
       let(:work_version) { work.versions.first }
       let(:user) { work_version.work.depositor.user }
 
@@ -1348,7 +1348,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
 
     context 'when logged in as an admin' do
-      let(:work_version) { create :work_version, :published }
+      let(:work_version) { create(:work_version, :published) }
       let(:user) { create(:user, :admin) }
 
       it 'hides the delete button on published versions' do
@@ -1360,13 +1360,13 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
   end
 
-  describe 'Requesting curation', js: true do
+  describe 'Requesting curation', :js do
     let(:user) { work_version.work.depositor.user }
     let(:request_description) { 'Recommended: Select ‘Request Curation’ below to have the ScholarSphere Curation Team review your work ensuring its findability, interoperability, accessibility, and reusability prior to publication. The curatorial review will focus on enhancing metadata quality, recommending improvements for deposit interoperability and reusability, and remediating files as necessary for accessibility. While under review, your work will remain saved as a draft. Once approved by the curator, the work will be published, and if applicable, a DOI will be minted.' }
     let(:publish_description) { "Select 'Publish' if you would like to self-submit your deposit to Scholarsphere and make it immediately public. ScholarSphere curators will review your work after publication. Note, because curatorial review occurs after publication, any changes or updates may result in a versioned work." }
 
     context 'with a draft eligible for curation request' do
-      let(:work_version) { create :work_version, :draft, draft_curation_requested: nil }
+      let(:work_version) { create(:work_version, :draft, draft_curation_requested: nil) }
 
       it 'renders buttons for requesting curation and publish and shows helper text explaing requesting curation' do
         visit dashboard_form_publish_path(work_version)
@@ -1380,20 +1380,20 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
 
     context 'with a draft not eligible for curation request' do
-      let(:work) { create :work, :article, versions_count: 1, has_draft: true }
+      let(:work) { create(:work, :article, versions_count: 1, has_draft: true) }
       let(:work_version) { work.versions.first }
 
       it 'does not render a button for requesting curation but does render publish and does not show helper text about requesting curation' do
         visit dashboard_form_publish_path(work_version)
 
-        expect(page).not_to have_button('Request Curation')
+        expect(page).to have_no_button('Request Curation')
         expect(page).to have_button('Publish')
-        expect(page).not_to have_content(request_description)
+        expect(page).to have_no_content(request_description)
       end
     end
 
     context 'with a draft that already has curation requested' do
-      let(:work_version) { create :work_version, :dataset_able_to_be_published, draft_curation_requested: true }
+      let(:work_version) { create(:work_version, :dataset_able_to_be_published, draft_curation_requested: true) }
       let(:curation_requested) { 'Curation has been requested. We will notify you when curation is complete and your work is ready to be published. If you have any questions in the meantime, please contact ScholarSphere curators via our ' }
 
       context 'when user is an admin' do
@@ -1414,8 +1414,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
         it 'does not render buttons for requesting curation or publish & shows text that curation has been requested' do
           visit dashboard_form_publish_path(work_version)
 
-          expect(page).not_to have_button('Request Curation')
-          expect(page).not_to have_button('Publish')
+          expect(page).to have_no_button('Request Curation')
+          expect(page).to have_no_button('Publish')
           expect(page).to have_content(curation_requested)
           expect(page).to have_link('contact form')
         end
@@ -1423,7 +1423,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
 
     context 'when curation is successfully requested' do
-      let(:work_version) { create :work_version, :dataset_able_to_be_published, draft_curation_requested: nil }
+      let(:work_version) { create(:work_version, :dataset_able_to_be_published, draft_curation_requested: nil) }
 
       before do
         allow(CurationTaskClient).to receive(:send_curation).with(work_version.id, requested: true, remediation_requested: false)
@@ -1440,7 +1440,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
 
     context 'when an error occurs within the curation exporter' do
-      let(:work_version) { create :work_version, :dataset_able_to_be_published, draft_curation_requested: nil }
+      let(:work_version) { create(:work_version, :dataset_able_to_be_published, draft_curation_requested: nil) }
 
       before { allow(CurationTaskClient).to receive(:send_curation).with(work_version.id, requested: true, remediation_requested: false).and_raise(CurationTaskClient::CurationError) }
 
@@ -1463,7 +1463,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
 
     context 'when there is a validation error' do
-      let(:work_version) { create :work_version, :dataset_able_to_be_published, draft_curation_requested: nil }
+      let(:work_version) { create(:work_version, :dataset_able_to_be_published, draft_curation_requested: nil) }
 
       before { allow(CurationTaskClient).to receive(:send_curation).with(work_version.id, requested: true, remediation_requested: false) }
 
@@ -1492,13 +1492,13 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
   end
 
-  describe 'Requesting accessibility remediation', js: true do
+  describe 'Requesting accessibility remediation', :js do
     let(:user) { work_version.work.depositor.user }
     let(:request_description) { 'Recommended: Select ‘Request Accessibility Remediation’ below to have the Adaptive Technologies Team review and improve the accessibility of your work before publication. While your work is being remediated it will remain saved as a draft and will be published upon completion of this work.' }
     let(:publish_description) { "Select 'Publish' if you would like to self-submit your deposit to Scholarsphere and make it immediately public. ScholarSphere curators will review your work after publication. Note, because curatorial review occurs after publication, any changes or updates may result in a versioned work." }
 
     context 'with a draft eligible for remediation request' do
-      let(:work_version) { create :work_version, :article, :draft, :able_to_be_published, accessibility_remediation_requested: nil }
+      let(:work_version) { create(:work_version, :article, :draft, :able_to_be_published, accessibility_remediation_requested: nil) }
 
       it 'renders buttons for requesting remediation and publish and shows helper text explaing requesting curation' do
         visit dashboard_form_publish_path(work_version)
@@ -1512,40 +1512,40 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
 
     context 'with a draft that already has remediation request' do
-      let(:work_version) { create :work_version, :draft, draft_curation_requested: true }
+      let(:work_version) { create(:work_version, :draft, draft_curation_requested: true) }
 
       it 'does not render a button for requesting remediation does not show helper text about requesting remediation' do
         visit dashboard_form_publish_path(work_version)
 
-        expect(page).not_to have_button('Request Accessibility Remediation')
-        expect(page).not_to have_content(request_description)
+        expect(page).to have_no_button('Request Accessibility Remediation')
+        expect(page).to have_no_content(request_description)
       end
     end
 
     context 'with a draft work type that is not eligible for remediation request' do
-      let(:work_version) { create :work_version, :dataset_able_to_be_published }
+      let(:work_version) { create(:work_version, :dataset_able_to_be_published) }
 
       it 'does not render a button for requesting remediation does not show helper text about requesting remediation' do
         visit dashboard_form_publish_path(work_version)
 
-        expect(page).not_to have_button('Request Accessibility Remediation')
-        expect(page).not_to have_content(request_description)
+        expect(page).to have_no_button('Request Accessibility Remediation')
+        expect(page).to have_no_content(request_description)
       end
     end
 
     context 'with a draft that passes all accessibility checks' do
-      let(:work_version) { create :work_version, :article, :draft, accessibility_remediation_requested: nil }
+      let(:work_version) { create(:work_version, :article, :draft, accessibility_remediation_requested: nil) }
 
       it 'does not render a button for requesting remediation does not show helper text about requesting remediation' do
         visit dashboard_form_publish_path(work_version)
 
-        expect(page).not_to have_button('Request Accessibility Remediation')
-        expect(page).not_to have_content(request_description)
+        expect(page).to have_no_button('Request Accessibility Remediation')
+        expect(page).to have_no_content(request_description)
       end
     end
 
     context 'with a draft that already has remediation requested' do
-      let(:work_version) { create :work_version, :article, :able_to_be_published, accessibility_remediation_requested: true }
+      let(:work_version) { create(:work_version, :article, :able_to_be_published, accessibility_remediation_requested: true) }
       let(:remediation_requested) { 'Remediation has been requested. We will notify you when accessibility remediation is complete and your work is ready to be published. If you have any questions in the meantime, please contact ScholarSphere curators via our ' }
 
       context 'when user is an admin' do
@@ -1566,9 +1566,9 @@ RSpec.describe 'Publishing a work', with_user: :user do
         it 'does not render buttons for requesting remediation, requesting curation, or publish & shows text that remediation has been requested' do
           visit dashboard_form_publish_path(work_version)
 
-          expect(page).not_to have_button('Request Accessibility Remediation')
-          expect(page).not_to have_button('Request Curation')
-          expect(page).not_to have_button('Publish')
+          expect(page).to have_no_button('Request Accessibility Remediation')
+          expect(page).to have_no_button('Request Curation')
+          expect(page).to have_no_button('Publish')
           expect(page).to have_content(remediation_requested)
           expect(page).to have_link('contact form')
         end
@@ -1576,7 +1576,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
 
     context 'when remediation is successfully requested' do
-      let(:work_version) { create :work_version, :article, :able_to_be_published, accessibility_remediation_requested: nil }
+      let(:work_version) { create(:work_version, :article, :able_to_be_published, accessibility_remediation_requested: nil) }
 
       before do
         allow(CurationTaskClient).to receive(:send_curation).with(work_version.id, remediation_requested: true, requested: false)
@@ -1595,7 +1595,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
 
     context 'when an error occurs within the curation task exporter' do
-      let(:work_version) { create :work_version, :article, :able_to_be_published, accessibility_remediation_requested: nil }
+      let(:work_version) { create(:work_version, :article, :able_to_be_published, accessibility_remediation_requested: nil) }
 
       before { allow(CurationTaskClient).to receive(:send_curation).with(work_version.id, remediation_requested: true, requested: false).and_raise(CurationTaskClient::CurationError) }
 
@@ -1617,7 +1617,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
 
     context 'when there is a validation error' do
-      let(:work_version) { create :work_version, :article, :able_to_be_published, accessibility_remediation_requested: nil }
+      let(:work_version) { create(:work_version, :article, :able_to_be_published, accessibility_remediation_requested: nil) }
 
       before { allow(CurationTaskClient).to receive(:send_curation).with(work_version.id, remediation_requested: true, requested: false) }
 
@@ -1645,12 +1645,12 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
   end
 
-  describe 'minting a doi', js: true do
+  describe 'minting a doi', :js do
     let(:user) { work_version.work.depositor.user }
 
     context 'with a draft eligible for doi minting' do
       context 'when data and code pathway' do
-        let(:work) { create :work, work_type: 'dataset', versions_count: 1, has_draft: true, doi: nil }
+        let(:work) { create(:work, work_type: 'dataset', versions_count: 1, has_draft: true, doi: nil) }
         let(:work_version) { work.versions.first }
 
         it 'renders a checkbox requesting a doi be minted upon publish' do
@@ -1661,7 +1661,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       end
 
       context 'when grad culminating experiences pathway' do
-        let(:work) { create :work, work_type: 'masters_culminating_experience', versions_count: 1, has_draft: true, doi: nil }
+        let(:work) { create(:work, work_type: 'masters_culminating_experience', versions_count: 1, has_draft: true, doi: nil) }
         let(:work_version) { work.versions.first }
 
         it 'renders a checkbox requesting a doi be minted upon publish' do
@@ -1673,19 +1673,19 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
 
     context 'with a draft not eligible for doi minting' do
-      let(:work) { create :work, work_type: 'dataset', versions_count: 1, has_draft: true, doi: '10.26207/x8qe-xp35' }
+      let(:work) { create(:work, work_type: 'dataset', versions_count: 1, has_draft: true, doi: '10.26207/x8qe-xp35') }
       let(:work_version) { work.versions.first }
 
       it 'does not render a checkbox requesting a doi be minted upon publish' do
         visit dashboard_form_publish_path(work_version)
 
-        expect(page).not_to have_content(I18n.t('dashboard.form.publish.doi.label'))
+        expect(page).to have_no_content(I18n.t('dashboard.form.publish.doi.label'))
       end
     end
 
     context 'when minting doi is successfully requested' do
-      let(:work_version) { create :work_version, :dataset_able_to_be_published }
-      let(:work) { create :work, work_type: 'dataset', versions_count: 1, has_draft: true, doi: nil, versions: [work_version] }
+      let(:work_version) { create(:work_version, :dataset_able_to_be_published) }
+      let(:work) { create(:work, work_type: 'dataset', versions_count: 1, has_draft: true, doi: nil, versions: [work_version]) }
 
       before do
         allow(MintDoiAsync).to receive(:call).with(work_version.work)
@@ -1702,8 +1702,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
 
     context 'when an error occurs and the work version does not publish' do
-      let(:work_version) { create :work_version, :dataset_able_to_be_published }
-      let(:work) { create :work, work_type: 'dataset', versions_count: 1, has_draft: true, doi: nil, versions: [work_version] }
+      let(:work_version) { create(:work_version, :dataset_able_to_be_published) }
+      let(:work) { create(:work, work_type: 'dataset', versions_count: 1, has_draft: true, doi: nil, versions: [work_version]) }
 
       before do
         work_version.work.doi = nil

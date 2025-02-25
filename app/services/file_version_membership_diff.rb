@@ -18,8 +18,8 @@
 class FileVersionMembershipDiff
   # @param obj1 [WorkVersion]
   # @param obj2 [WorkVersion]
-  def self.call(*args)
-    new(*args).diff
+  def self.call(*)
+    new(*).diff
   end
 
   attr_reader :base_version, :comparison_version

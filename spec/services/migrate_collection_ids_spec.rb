@@ -71,10 +71,7 @@ describe MigrateCollectionIds do
 
         expect(
           target_work.latest_version.view_statistics.map { |vs| [vs.date, vs.count] }
-        ).to match_array([
-                           [Date.parse('2022-02-06'), 1],
-                           [Date.parse('2022-02-07'), 2]
-                         ])
+        ).to contain_exactly([Date.parse('2022-02-06'), 1], [Date.parse('2022-02-07'), 2])
       end
     end
 

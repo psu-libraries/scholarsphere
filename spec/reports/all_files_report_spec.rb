@@ -18,10 +18,10 @@ RSpec.describe AllFilesReport do
   end
 
   describe '#rows' do
-    let!(:file1) { create :file_resource }
-    let!(:file2) { create :file_resource }
+    let!(:file1) { create(:file_resource) }
+    let!(:file2) { create(:file_resource) }
 
-    let!(:work_published) { create :work, has_draft: false, versions_count: 2 }
+    let!(:work_published) { create(:work, has_draft: false, versions_count: 2) }
 
     let(:version1) { work_published.versions[0] }
     let(:version2) { work_published.versions[1] }
@@ -35,8 +35,8 @@ RSpec.describe AllFilesReport do
       end
 
       # Create view (download) statistics for file(s)
-      create :view_statistic, resource: file1, count: 1
-      create :view_statistic, resource: file1, count: 3
+      create(:view_statistic, resource: file1, count: 1)
+      create(:view_statistic, resource: file1, count: 3)
 
       # Change the filename of file2-version2's membership
       version2

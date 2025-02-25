@@ -31,11 +31,11 @@ RSpec.describe AllWorksReport do
   end
 
   describe '#rows' do
-    let!(:work_published) { create :work, has_draft: false, versions_count: 2 }
-    let!(:work_published_and_draft) { create :work, has_draft: true, versions_count: 2 }
-    let!(:work_draft_only) { create :work, has_draft: true, versions_count: 1 }
-    let!(:work_withdrawn_only) { create :work, versions: [withdrawn_version] }
-    let(:withdrawn_version) { build :work_version, :withdrawn, work: nil }
+    let!(:work_published) { create(:work, has_draft: false, versions_count: 2) }
+    let!(:work_published_and_draft) { create(:work, has_draft: true, versions_count: 2) }
+    let!(:work_draft_only) { create(:work, has_draft: true, versions_count: 1) }
+    let!(:work_withdrawn_only) { create(:work, versions: [withdrawn_version]) }
+    let(:withdrawn_version) { build(:work_version, :withdrawn, work: nil) }
 
     before do
       #
@@ -44,8 +44,8 @@ RSpec.describe AllWorksReport do
 
       # Create some views for every version of a work
       work_published.versions.each do |work_version|
-        create :view_statistic, resource: work_version, count: 1, date: Time.zone.yesterday
-        create :view_statistic, resource: work_version, count: 1, date: Time.zone.today
+        create(:view_statistic, resource: work_version, count: 1, date: Time.zone.yesterday)
+        create(:view_statistic, resource: work_version, count: 1, date: Time.zone.today)
       end
 
       #
@@ -61,20 +61,20 @@ RSpec.describe AllWorksReport do
       end
 
       # Create downloads (stored as view statistics) for that single file created above
-      create :view_statistic, resource: version1_file, count: 1, date: Time.zone.yesterday
-      create :view_statistic, resource: version1_file, count: 1, date: Time.zone.today
+      create(:view_statistic, resource: version1_file, count: 1, date: Time.zone.yesterday)
+      create(:view_statistic, resource: version1_file, count: 1, date: Time.zone.today)
 
       # Make another file on the latest version of the work above
-      another_file = create :file_resource
+      another_file = create(:file_resource)
       work_published.latest_published_version.file_resources << another_file
       work_published.save!
-      create :view_statistic, resource: another_file, count: 100, date: Time.zone.today
+      create(:view_statistic, resource: another_file, count: 100, date: Time.zone.today)
 
       # Create a download for another work
-      create :view_statistic,
+      create(:view_statistic,
              resource: work_published_and_draft.latest_published_version.file_resources.first,
              count: 5,
-             date: Time.zone.today
+             date: Time.zone.today)
     end
 
     it 'yields each row to the given block' do

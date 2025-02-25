@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ThumbnailUpload, type: :model do
+RSpec.describe ThumbnailUpload do
   describe 'table' do
     it { is_expected.to have_db_column(:resource_type).of_type(:string).with_options(null: false) }
     it { is_expected.to have_db_column(:resource_id).with_options(null: false) }

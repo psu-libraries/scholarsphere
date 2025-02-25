@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe SolrDeleteJob, type: :job do
+RSpec.describe SolrDeleteJob do
   describe '#perform' do
     before { allow(IndexingService).to receive(:delete_document) }
 

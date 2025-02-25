@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Dashboard::CollectionsController, type: :controller do
+RSpec.describe Dashboard::CollectionsController do
   # TODO this appears to call identity API, we should mock this out
   # This was ~Adams~ Danns access account. he left. tests started failing.
   let(:valid_attributes) {
@@ -22,9 +22,9 @@ RSpec.describe Dashboard::CollectionsController, type: :controller do
     }
   }
 
-  let(:collection) { create :collection, depositor: user.actor }
+  let(:collection) { create(:collection, depositor: user.actor) }
 
-  let(:user) { create :user }
+  let(:user) { create(:user) }
 
   describe 'GET #edit' do
     context 'when signed in' do
@@ -95,8 +95,8 @@ RSpec.describe Dashboard::CollectionsController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    let(:users_collection) { create :collection, depositor: user.actor }
-    let(:someone_elses_collection) { create :collection }
+    let(:users_collection) { create(:collection, depositor: user.actor) }
+    let(:someone_elses_collection) { create(:collection) }
 
     context 'when signed in' do
       before { sign_in user }

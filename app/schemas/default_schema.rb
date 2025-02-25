@@ -33,6 +33,6 @@ class DefaultSchema < BaseSchema
     end
 
     def attribute_types
-      @attribute_types ||= (resource.class.try(:attribute_types) || {})
+      @attribute_types ||= resource.class.try(:attribute_types) || {}
     end
 end

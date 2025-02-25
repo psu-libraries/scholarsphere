@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Qa::TermsController, type: :controller, skip: ci_build? do
+RSpec.describe Qa::TermsController, skip: ci_build?, type: :controller do
   before { @routes = Qa::Engine.routes }
 
   describe 'GET #search' do

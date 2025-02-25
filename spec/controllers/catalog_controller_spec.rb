@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe CatalogController, type: :controller do
+RSpec.describe CatalogController do
   describe 'GET #search' do
     it 'does NOT save search history' do
       expect {

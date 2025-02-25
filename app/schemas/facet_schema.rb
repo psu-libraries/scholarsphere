@@ -5,6 +5,6 @@ class FacetSchema < BaseSchema
     {
       subject_sim: resource.try(:subject),
       keyword_sim: resource.try(:keyword)
-    }.select { |_k, v| v.present? }
+    }.compact_blank
   end
 end

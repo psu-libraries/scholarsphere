@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe DepositorRequestService do
   describe '#request_action' do
-    let(:work_version) { create :work_version, :able_to_be_published, published_date: pub_date }
+    let(:work_version) { create(:work_version, :able_to_be_published, published_date: pub_date) }
     let(:pub_date) { '2024' }
     let(:curation_requested) { true }
 

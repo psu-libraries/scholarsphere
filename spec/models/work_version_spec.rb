@@ -346,7 +346,7 @@ RSpec.describe WorkVersion do
       wv = described_class.build_with_empty_work({
                                                    title: 'My work',
                                                    work_attributes: {
-                                                     work_type: Work::Types.all.first
+                                                     work_type: Work::Types.first
                                                    }
                                                  },
                                                  depositor: depositor)
@@ -358,13 +358,13 @@ RSpec.describe WorkVersion do
       wv = described_class.build_with_empty_work({
                                                    title: 'my title',
                                                    work_attributes: {
-                                                     work_type: Work::Types.all.first
+                                                     work_type: Work::Types.first
                                                    }
                                                  },
                                                  depositor: depositor)
 
       expect(wv.title).to eq 'my title'
-      expect(wv.work.work_type).to eq Work::Types.all.first
+      expect(wv.work.work_type).to eq Work::Types.first
     end
   end
 

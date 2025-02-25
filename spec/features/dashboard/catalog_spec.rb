@@ -12,8 +12,8 @@ RSpec.describe 'Dashboard catalog page', :inline_jobs do
       expect(page.title).to eq('ScholarSphere')
 
       expect(page).to have_link('Dashboard', class: 'disabled')
-      expect(page).to have_selector('h4', text: 'What is my dashboard?')
-      expect(page).to have_selector('h4', text: 'Get Started')
+      expect(page).to have_css('h4', text: 'What is my dashboard?')
+      expect(page).to have_css('h4', text: 'Get Started')
       expect(page).to have_link('Create New Work')
     end
   end
@@ -46,7 +46,7 @@ RSpec.describe 'Dashboard catalog page', :inline_jobs do
 
       expect(page).to have_content("1 - #{work_versions.count} of #{work_versions.count}")
 
-      expect(page.find_all('.card-title').map(&:text)).to contain_exactly(*work_versions.map(&:title))
+      expect(page.find_all('.card-title').map(&:text)).to match_array(work_versions.map(&:title))
 
       click_link(work_versions.first.title)
       expect(page).to have_content(work_versions.first.title)
@@ -78,7 +78,7 @@ RSpec.describe 'Dashboard catalog page', :inline_jobs do
 
       expect(page).to have_content("1 - #{collections.count} of #{collections.count}")
 
-      expect(page.find_all('.card-title').map(&:text)).to contain_exactly(*collections.map(&:title))
+      expect(page.find_all('.card-title').map(&:text)).to match_array(collections.map(&:title))
 
       click_link(collections.first.title)
       expect(page).to have_content(collections.first.title)
@@ -96,15 +96,15 @@ RSpec.describe 'Dashboard catalog page', :inline_jobs do
 
       expect(user.actor.deposited_works).to be_empty
       expect(page).to have_link('Dashboard', class: 'disabled')
-      expect(page).not_to have_text('What is my dashboard?')
-      expect(page).not_to have_text('Get Started')
+      expect(page).to have_no_text('What is my dashboard?')
+      expect(page).to have_no_text('Get Started')
 
       expect(page.find_all('.card-title').map(&:text)).to contain_exactly(
         editable_work.versions.first.title,
         editable_collection.title
       )
-      expect(page).not_to have_text(restricted_work.versions.first.title)
-      expect(page).not_to have_text(restricted_collection.title)
+      expect(page).to have_no_text(restricted_work.versions.first.title)
+      expect(page).to have_no_text(restricted_collection.title)
       click_link(editable_work.versions.first.title)
       expect(page).to have_link('Update Work')
     end
@@ -116,7 +116,7 @@ RSpec.describe 'Dashboard catalog page', :inline_jobs do
     it 'displays no search results', with_user: :user do
       visit(dashboard_root_path(q: 'asdfasdfasdfasdfasdfasdfasdf'))
 
-      expect(page).to have_selector('h4', text: I18n.t!('dashboard.catalog.zero_results.info.heading'))
+      expect(page).to have_css('h4', text: I18n.t!('dashboard.catalog.zero_results.info.heading'))
       expect(page).to have_content(I18n.t!('dashboard.catalog.zero_results.info.content'))
     end
   end
@@ -143,7 +143,7 @@ RSpec.describe 'Dashboard catalog page', :inline_jobs do
     it 'shows the withdrawn version in the dashboard' do
       visit(dashboard_root_path)
 
-      expect(page).to have_selector('span.badge--content', text: 'withdrawn')
+      expect(page).to have_css('span.badge--content', text: 'withdrawn')
       click_link(work.versions.first.title)
 
       within('.version-navigation .list-group') do

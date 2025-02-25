@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Authorship, type: :model do
+RSpec.describe Authorship do
   describe 'table' do
     it { is_expected.to have_db_column(:resource_id) }
     it { is_expected.to have_db_column(:resource_type) }
@@ -82,7 +82,7 @@ RSpec.describe Authorship, type: :model do
     it_behaves_like 'a singlevalued field', :email
   end
 
-  describe 'PaperTrail::Versions', versioning: true do
+  describe 'PaperTrail::Versions', :versioning do
     it { is_expected.to respond_to(:changed_by_system).and respond_to(:changed_by_system=) }
     it { is_expected.to be_versioned }
 

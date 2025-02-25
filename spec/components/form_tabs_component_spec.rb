@@ -8,7 +8,7 @@ RSpec.describe FormTabsComponent, type: :component do
 
   context 'with a work version that has NOT been persisted' do
     let(:current_controller) { 'work_version_details' }
-    let(:resource) { build :work_version }
+    let(:resource) { build(:work_version) }
 
     it 'does NOT render the tabs as links' do
       expect(tabs.css('a')).to be_empty
@@ -22,7 +22,7 @@ RSpec.describe FormTabsComponent, type: :component do
 
   context 'with a work version has been persisted' do
     let(:current_controller) { 'work_version_details' }
-    let(:resource) { build_stubbed :work_version }
+    let(:resource) { build_stubbed(:work_version) }
 
     it 'renders the inactive tabs as links' do
       expect(tabs.css('a.nav-item').length).to eq 4
@@ -36,7 +36,7 @@ RSpec.describe FormTabsComponent, type: :component do
 
   context 'with a collection that has NOT been persisted' do
     let(:current_controller) { 'collection_details' }
-    let(:resource) { build :collection }
+    let(:resource) { build(:collection) }
 
     it 'does NOT render the tabs as links' do
       expect(tabs.css('a')).to be_empty
@@ -50,7 +50,7 @@ RSpec.describe FormTabsComponent, type: :component do
 
   context 'with a collection has been persisted' do
     let(:current_controller) { 'collection_details' }
-    let(:resource) { build_stubbed :collection }
+    let(:resource) { build_stubbed(:collection) }
 
     it 'renders the inactive tabs as links' do
       expect(tabs.css('a.nav-item').length).to eq 2

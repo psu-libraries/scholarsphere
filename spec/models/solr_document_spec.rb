@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe SolrDocument, type: :model do
+RSpec.describe SolrDocument do
   subject (:solr_document) { described_class.new(document) }
 
   describe '#deposited_at' do

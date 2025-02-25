@@ -11,7 +11,7 @@ RSpec.describe Dashboard::CatalogController do
 
   describe 'GET #index' do
     context 'when signed in' do
-      let(:user) { create :user }
+      let(:user) { create(:user) }
 
       before { log_in user }
 

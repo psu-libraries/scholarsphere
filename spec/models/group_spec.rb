@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Group, type: :model do
+RSpec.describe Group do
   describe 'table' do
     it { is_expected.to have_db_column(:name) }
     it { is_expected.to have_db_index(:name) }

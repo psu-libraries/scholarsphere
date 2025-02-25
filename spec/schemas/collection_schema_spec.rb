@@ -18,7 +18,7 @@ RSpec.describe CollectionSchema do
       let(:resource) { build(:collection) }
 
       before do
-        resource.works = [(create :work, has_draft: false, versions_count: 1)]
+        resource.works = [create(:work, has_draft: false, versions_count: 1)]
       end
 
       its(:document) do

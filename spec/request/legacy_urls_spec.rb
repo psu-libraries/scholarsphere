@@ -4,13 +4,13 @@ require 'rails_helper'
 
 RSpec.describe LegacyUrlsController, type: :request do
   describe 'Scholarsphere v3 legacy URLs to a Work/Version' do
-    let(:resource) { create :work_version }
+    let(:resource) { create(:work_version) }
 
     before do
-      create :legacy_identifier,
+      create(:legacy_identifier,
              version: 3,
              old_id: 'old-v3-id-123',
-             resource: resource
+             resource: resource)
     end
 
     it do
@@ -27,10 +27,10 @@ RSpec.describe LegacyUrlsController, type: :request do
 
     context 'when given an ID to a scholarsphere-2 record' do
       before do
-        create :legacy_identifier,
+        create(:legacy_identifier,
                version: 2,
                old_id: 'old-v2-id-222',
-               resource: resource
+               resource: resource)
       end
 
       it do
@@ -41,13 +41,13 @@ RSpec.describe LegacyUrlsController, type: :request do
   end
 
   describe 'Scholarsphere v3 legacy URLs to a Collection' do
-    let(:resource) { create :collection }
+    let(:resource) { create(:collection) }
 
     before do
-      create :legacy_identifier,
+      create(:legacy_identifier,
              version: 3,
              old_id: 'old-v3-id-456',
-             resource: resource
+             resource: resource)
     end
 
     it do

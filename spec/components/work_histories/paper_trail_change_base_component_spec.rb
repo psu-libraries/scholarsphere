@@ -6,7 +6,7 @@ require 'rails_helper'
 # subclasses to test various scenarios
 
 RSpec.describe WorkHistories::PaperTrailChangeBaseComponent, type: :component do
-  let(:user) { build_stubbed :user }
+  let(:user) { build_stubbed(:user) }
   let(:paper_trail_version) { instance_spy('PaperTrail::Version', item_type: 'ExpectedItemType') }
 
   before do

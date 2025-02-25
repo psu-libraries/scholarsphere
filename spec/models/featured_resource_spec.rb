@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe FeaturedResource, type: :model do
+RSpec.describe FeaturedResource do
   describe 'table' do
     it { is_expected.to have_db_column(:resource_uuid).of_type(:uuid) }
     it { is_expected.to have_db_column(:resource_type) }

@@ -23,11 +23,11 @@ RSpec.describe CollectionMetadataComponent, type: :component do
   end
 
   describe 'rendering' do
-    let(:collection) { build_stubbed :collection,
+    let(:collection) { build_stubbed(:collection,
                                      subtitle: 'My subtitle',
                                      deposited_at: Time.zone.parse('2020-01-15 16:07'),
                                      keyword: %w(one two),
-                                     subject: []
+                                     subject: [])
     }
 
     it 'renders a string with label' do
@@ -58,7 +58,7 @@ RSpec.describe CollectionMetadataComponent, type: :component do
   end
 
   describe 'fully loaded' do
-    let(:collection) { build_stubbed :collection, :with_complete_metadata, :with_creators }
+    let(:collection) { build_stubbed(:collection, :with_complete_metadata, :with_creators) }
 
     it 'renders every field' do
       # Titles

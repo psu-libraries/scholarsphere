@@ -46,34 +46,34 @@ class ThumbnailComponent < ApplicationComponent
 
     # @note Maps a work type or class with an icon from https://material.io/resources/icons
     def icon_map
-      HashWithIndifferentAccess.new({
-                                      # part_of_book: nil,
-                                      # poster: nil,
-                                      # project: nil,
-                                      # software_or_program_code: nil,
-                                      # TODO: Remove capstone_project, masters_thesis, and dissertation
-                                      # once they are cleared from the database
-                                      article: 'article',
-                                      audio: 'headset',
-                                      book: 'book',
-                                      capstone_project: 'landscape',
-                                      collection: 'view_carousel',
-                                      conference_proceeding: 'groups',
-                                      dataset: 'analytics',
-                                      dissertation: 'subject',
-                                      image: 'image',
-                                      journal: 'subject',
-                                      map_or_cartographic_material: 'map',
-                                      masters_culminating_experience: 'landscape',
-                                      professional_doctoral_culminating_experience: 'landscape',
-                                      masters_thesis: 'subject',
-                                      other: 'bar_chart',
-                                      presentation: 'stacked_line_chart',
-                                      report: 'stacked_line_chart',
-                                      research_paper: 'biotech',
-                                      thesis: 'subject',
-                                      unspecified: 'bar_chart',
-                                      video: 'movie'
-                                    })
+      ActiveSupport::HashWithIndifferentAccess.new({
+                                                     # part_of_book: nil,
+                                                     # poster: nil,
+                                                     # project: nil,
+                                                     # software_or_program_code: nil,
+                                                     # TODO: Remove capstone_project, masters_thesis, and dissertation
+                                                     # once they are cleared from the database
+                                                     article: 'article',
+                                                     audio: 'headset',
+                                                     book: 'book',
+                                                     capstone_project: 'landscape',
+                                                     collection: 'view_carousel',
+                                                     conference_proceeding: 'groups',
+                                                     dataset: 'analytics',
+                                                     dissertation: 'subject',
+                                                     image: 'image',
+                                                     journal: 'subject',
+                                                     map_or_cartographic_material: 'map',
+                                                     masters_culminating_experience: 'landscape',
+                                                     professional_doctoral_culminating_experience: 'landscape',
+                                                     masters_thesis: 'subject',
+                                                     other: 'bar_chart',
+                                                     presentation: 'stacked_line_chart',
+                                                     report: 'stacked_line_chart',
+                                                     research_paper: 'biotech',
+                                                     thesis: 'subject',
+                                                     unspecified: 'bar_chart',
+                                                     video: 'movie'
+                                                   })
     end
 end

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe UserGroupMembership, type: :model do
+RSpec.describe UserGroupMembership do
   describe 'table' do
     it { is_expected.to have_db_column(:user_id) }
     it { is_expected.to have_db_column(:group_id) }

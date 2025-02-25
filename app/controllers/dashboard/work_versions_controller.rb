@@ -2,6 +2,19 @@
 
 module Dashboard
   class WorkVersionsController < BaseController
+    def show
+      @work_version = WorkVersionDecorator.new(WorkVersion.find(params[:id]))
+      authorize(@work_version)
+      @work = WorkDecorator.new(@work_version.work)
+    end
+
+    def edit
+      @work_version = WorkVersion.find(params[:id])
+      authorize(@work_version)
+
+      @work_version.build_creator(actor: current_user.actor)
+    end
+
     def create
       work = Work.find(params[:work_id])
       authorize(work, :create_version?)
@@ -26,19 +39,6 @@ module Dashboard
           format.json { render json: @work_version.errors, status: :unprocessable_entity }
         end
       end
-    end
-
-    def show
-      @work_version = WorkVersionDecorator.new(WorkVersion.find(params[:id]))
-      authorize(@work_version)
-      @work = WorkDecorator.new(@work_version.work)
-    end
-
-    def edit
-      @work_version = WorkVersion.find(params[:id])
-      authorize(@work_version)
-
-      @work_version.build_creator(actor: current_user.actor)
     end
 
     def update

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ApplicationSetting, type: :model do
+RSpec.describe ApplicationSetting do
   describe 'table' do
     it { is_expected.to have_db_column(:read_only_message).of_type(:string) }
     it { is_expected.to have_db_column(:announcement).of_type(:text) }

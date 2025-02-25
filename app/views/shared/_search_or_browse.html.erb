@@ -4,7 +4,9 @@
     <%= form_tag search_action_url, method: :get do %>
       <div class="input-group input-group--icon mb-2">
         <label class="sr-only" for="q"><%= t('shared.search.label') %></label>
-        <%= text_field_tag :q, params[:q], placeholder: t('shared.search.placeholder'), class: 'form-control' %>
+        <%= text_field_tag :q, params[:q], placeholder: t('shared.search.placeholder'),
+                                           class: 'form-control',
+                                           autocomplete: 'on' %>
         <div class="input-group-append">
           <button class="btn btn-primary" type="submit">
             <i class="material-icons"><%= t('shared.search.submit') %></i>

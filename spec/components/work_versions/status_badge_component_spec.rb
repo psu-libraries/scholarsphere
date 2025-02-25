@@ -9,7 +9,7 @@ RSpec.describe WorkVersions::StatusBadgeComponent, type: :component do
   let(:common_expected_classes) { %w(badge badge--nudge-up ml-1) }
 
   context 'with a draft' do
-    let(:work_version) { build_stubbed :work_version, :draft }
+    let(:work_version) { build_stubbed(:work_version, :draft) }
 
     specify do
       expect(badge.text).to include('draft')
@@ -32,7 +32,7 @@ RSpec.describe WorkVersions::StatusBadgeComponent, type: :component do
   end
 
   context 'with a published version' do
-    let(:work_version) { create :work_version, :published, version_number: 3 }
+    let(:work_version) { create(:work_version, :published, version_number: 3) }
 
     specify do
       expect(badge.text).to include('published')
@@ -55,7 +55,7 @@ RSpec.describe WorkVersions::StatusBadgeComponent, type: :component do
   end
 
   context 'with a withdrawn version' do
-    let(:work_version) { create :work_version, :withdrawn, version_number: 3 }
+    let(:work_version) { create(:work_version, :withdrawn, version_number: 3) }
 
     specify do
       expect(badge.text).to include('withdrawn')

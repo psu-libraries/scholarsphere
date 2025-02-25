@@ -46,7 +46,8 @@ class WorkHistories::PaperTrailChangeBaseComponent < ApplicationComponent
     def event_class
       return 'create' if create?
       return 'update' if update?
-      return 'delete' if destroy?
+
+      'delete' if destroy?
     end
 
     def action

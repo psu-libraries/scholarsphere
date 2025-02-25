@@ -104,7 +104,7 @@ Rails.application.configure do
     config.lograge.formatter = Lograge::Formatters::Json.new
     config.log_formatter = JSONLogFormatter.new
   else
-    config.log_formatter = ::Logger::Formatter.new
+    config.log_formatter = Logger::Formatter.new
   end
 
   config.lograge.custom_payload do |controller|

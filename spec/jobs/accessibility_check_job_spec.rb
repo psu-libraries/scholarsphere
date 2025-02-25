@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe AccessibilityCheckJob, type: :job do
+RSpec.describe AccessibilityCheckJob do
   let(:resource) { create(:file_resource) }
   let(:service) { instance_double(AdobePdf::AccessibilityChecker, call: true) }
 

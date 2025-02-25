@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe SitemapController, type: :controller do
+RSpec.describe SitemapController do
   let(:sitemap) { described_class.new }
 
   describe 'GET #index' do

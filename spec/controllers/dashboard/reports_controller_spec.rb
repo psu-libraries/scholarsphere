@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Dashboard::ReportsController, type: :controller do
+RSpec.describe Dashboard::ReportsController do
   describe 'GET #index' do
     let(:perform_request) { get :index }
 

@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe 'Work Settings Page', with_user: :user do
-  let(:user) { create :user }
-  let(:work) { create :work, versions_count: 1, has_draft: false, depositor: user.actor }
+  let(:user) { create(:user) }
+  let(:work) { create(:work, versions_count: 1, has_draft: false, depositor: user.actor) }
 
   before do
     allow(WorkIndexer).to receive(:call).and_call_original
@@ -35,7 +35,7 @@ RSpec.describe 'Work Settings Page', with_user: :user do
     end
 
     context 'when the work is not subject to the data & code deposit pathway' do
-      let(:work) { create :work, :article, versions_count: 1, has_draft: false, depositor: user.actor }
+      let(:work) { create(:work, :article, versions_count: 1, has_draft: false, depositor: user.actor) }
 
       before do
         work.update(visibility: Permissions::Visibility::AUTHORIZED)
@@ -96,9 +96,9 @@ RSpec.describe 'Work Settings Page', with_user: :user do
     end
 
     context 'when the work has been published' do
-      let(:work) { create :work, depositor: user.actor }
+      let(:work) { create(:work, depositor: user.actor) }
 
-      before { create :work_version, :published, work: work, identifier: identifier }
+      before { create(:work_version, :published, work: work, identifier: identifier) }
 
       context 'when the work has a publisher DOI' do
         let(:identifier) { ['http://doi.org/10.47366/sabia.v5n1a3'] }
@@ -106,7 +106,7 @@ RSpec.describe 'Work Settings Page', with_user: :user do
         it 'is not allowed' do
           visit edit_dashboard_work_path(work)
 
-          expect(page).not_to have_content I18n.t!('resources.doi.create')
+          expect(page).to have_no_content I18n.t!('resources.doi.create')
           expect(page).to have_content I18n.t!('dashboard.works.edit.doi.not_allowed')
         end
       end
@@ -119,18 +119,18 @@ RSpec.describe 'Work Settings Page', with_user: :user do
           click_button I18n.t!('resources.doi.create')
 
           expect(page).to have_current_path(edit_dashboard_work_path(work))
-          expect(page).not_to have_button I18n.t!('resources.doi.create')
+          expect(page).to have_no_button I18n.t!('resources.doi.create')
         end
       end
     end
 
     context 'when the work has not yet been published' do
-      let(:work) { create :work, versions_count: 1, has_draft: true, depositor: user.actor }
+      let(:work) { create(:work, versions_count: 1, has_draft: true, depositor: user.actor) }
 
       it 'is not allowed' do
         visit edit_dashboard_work_path(work)
 
-        expect(page).not_to have_content I18n.t!('resources.doi.create')
+        expect(page).to have_no_content I18n.t!('resources.doi.create')
         expect(page).to have_content I18n.t!('dashboard.works.edit.doi.not_allowed')
       end
     end
@@ -138,7 +138,7 @@ RSpec.describe 'Work Settings Page', with_user: :user do
 
   describe 'Updating Editors', :vcr do
     context 'when adding a new editor' do
-      let(:work) { create :work, depositor: user.actor }
+      let(:work) { create(:work, depositor: user.actor) }
       let(:mailer_spy) { instance_spy('MailerSpy') }
 
       before do
@@ -183,7 +183,7 @@ RSpec.describe 'Work Settings Page', with_user: :user do
 
     context 'when removing an existing editor' do
       let(:editor) { create(:user) }
-      let(:work) { create :work, depositor: user.actor, edit_users: [editor] }
+      let(:work) { create(:work, depositor: user.actor, edit_users: [editor]) }
 
       it 'adds a user as an editor' do
         visit edit_dashboard_work_path(work)
@@ -199,7 +199,7 @@ RSpec.describe 'Work Settings Page', with_user: :user do
     end
 
     context 'when the user does not exist' do
-      let(:work) { create :work, depositor: user.actor }
+      let(:work) { create(:work, depositor: user.actor) }
 
       it 'adds a user as an editor' do
         visit edit_dashboard_work_path(work)
@@ -213,11 +213,11 @@ RSpec.describe 'Work Settings Page', with_user: :user do
       end
     end
 
-    context 'when selecting a group', js: true do
+    context 'when selecting a group', :js do
       context 'when a regular user' do
         let(:user) { create(:user, groups: User.default_groups + [group]) }
         let(:group) { create(:group) }
-        let(:work) { create :work, depositor: user.actor }
+        let(:work) { create(:work, depositor: user.actor) }
 
         it 'adds the group as an editor' do
           visit edit_dashboard_work_path(work)
@@ -236,7 +236,7 @@ RSpec.describe 'Work Settings Page', with_user: :user do
         let(:user) { create(:user, :admin) }
         let(:group1) { create(:group) }
         let(:group2) { create(:group) }
-        let(:work) { create :work, edit_groups: [group1, group2] }
+        let(:work) { create(:work, edit_groups: [group1, group2]) }
 
         it 'allows admins to remove a group as an editor' do
           visit edit_dashboard_work_path(work)
@@ -253,7 +253,7 @@ RSpec.describe 'Work Settings Page', with_user: :user do
     end
   end
 
-  describe 'Viewing Accessibility Review', js: true do
+  describe 'Viewing Accessibility Review', :js do
     let(:pdf) { create(:file_resource, :pdf) }
     let(:files) { work.latest_version.file_resources }
     let(:accessibility_check_result) do
@@ -297,13 +297,13 @@ RSpec.describe 'Work Settings Page', with_user: :user do
     context 'when a regular user' do
       it 'does not allow a regular user to delete a work version' do
         visit edit_dashboard_work_path(work)
-        expect(page).not_to have_content(I18n.t!('dashboard.works.edit.danger.delete_draft.explanation'))
-        expect(page).not_to have_link(I18n.t!('dashboard.form.actions.destroy.button'))
+        expect(page).to have_no_content(I18n.t!('dashboard.works.edit.danger.delete_draft.explanation'))
+        expect(page).to have_no_link(I18n.t!('dashboard.form.actions.destroy.button'))
       end
     end
 
     context 'when an admin user' do
-      let(:user) { create :user, :admin }
+      let(:user) { create(:user, :admin) }
 
       it 'allows a work version to be deleted' do
         visit edit_dashboard_work_path(work)
@@ -317,13 +317,13 @@ RSpec.describe 'Work Settings Page', with_user: :user do
     context 'with a standard user' do
       it 'does not allow the change' do
         visit edit_dashboard_work_path(work)
-        expect(page).not_to have_content(I18n.t!('dashboard.shared.depositor_form.heading'))
-        expect(page).not_to have_link(I18n.t!('dashboard.shared.depositor_form.submit_button'))
+        expect(page).to have_no_content(I18n.t!('dashboard.shared.depositor_form.heading'))
+        expect(page).to have_no_link(I18n.t!('dashboard.shared.depositor_form.submit_button'))
       end
     end
 
     context 'with an admin user' do
-      let(:user) { create :user, :admin }
+      let(:user) { create(:user, :admin) }
       let(:actor) { create(:actor) }
 
       it 'allows the change' do
@@ -341,17 +341,17 @@ RSpec.describe 'Work Settings Page', with_user: :user do
     context 'with a standard user' do
       it 'does not allow the change' do
         visit edit_dashboard_work_path(work)
-        expect(page).not_to have_content(I18n.t!('dashboard.shared.curator_form.heading'))
-        expect(page).not_to have_link(I18n.t!('dashboard.shared.curator_form.submit_button'))
+        expect(page).to have_no_content(I18n.t!('dashboard.shared.curator_form.heading'))
+        expect(page).to have_no_link(I18n.t!('dashboard.shared.curator_form.submit_button'))
       end
     end
 
     context 'with an admin user' do
-      let(:user) { create :user, :admin }
+      let(:user) { create(:user, :admin) }
 
       it 'allows the change and lists previous curators' do
         visit edit_dashboard_work_path(work)
-        expect(page).not_to have_content('Previous Curators')
+        expect(page).to have_no_content('Previous Curators')
         find('[name="curator_form[access_id]"]', visible: true).set(user.access_id)
         click_on(I18n.t!('dashboard.shared.curator_form.submit_button'))
         expect(page).to have_content(I18n.t!('dashboard.works.update.success'))
@@ -367,13 +367,13 @@ RSpec.describe 'Work Settings Page', with_user: :user do
     context 'with a standard user' do
       it 'does not allow the change' do
         visit edit_dashboard_work_path(work)
-        expect(page).not_to have_content(I18n.t!('dashboard.works.edit.danger.withdraw_versions.heading'))
-        expect(page).not_to have_button(I18n.t!('dashboard.works.withdraw_versions_form.submit_button'))
+        expect(page).to have_no_content(I18n.t!('dashboard.works.edit.danger.withdraw_versions.heading'))
+        expect(page).to have_no_button(I18n.t!('dashboard.works.withdraw_versions_form.submit_button'))
       end
     end
 
     context 'with an admin user' do
-      let(:user) { create :user, :admin }
+      let(:user) { create(:user, :admin) }
 
       it 'allows the version to be withdrawn' do
         visit edit_dashboard_work_path(work)
@@ -391,12 +391,12 @@ RSpec.describe 'Work Settings Page', with_user: :user do
 
     context 'when regular user' do
       it 'does not have button' do
-        expect(page).not_to have_button 'Contact Depositor via LibAnswers >>'
+        expect(page).to have_no_button 'Contact Depositor via LibAnswers >>'
       end
     end
 
     context 'when admin user' do
-      let(:user) { create :user, :admin }
+      let(:user) { create(:user, :admin) }
 
       describe 'clicking the contact depositor button' do
         context 'when no error is raised' do

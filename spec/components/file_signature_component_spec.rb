@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe FileSignatureComponent, type: :component do
   let(:content) { render_inline(described_class.new(file: file)).to_s }
-  let(:membership) { build :file_version_membership }
+  let(:membership) { build(:file_version_membership) }
   let(:file_resource) { membership.file_resource }
   let(:file) { file_resource.file }
 

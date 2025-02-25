@@ -42,9 +42,7 @@ RSpec.describe AllDois do
 
   describe '#all_dois' do
     it 'filters all values returned by #fields_with_dois and returns canonical DOIs' do
-      expect(instance.all_dois).to match_array(['doi:10.18113/3ln3-2by1',
-                                                'doi:10.1515/pol-2020-2011',
-                                                'doi:10.1007/s10570-013-0029-x'])
+      expect(instance.all_dois).to contain_exactly('doi:10.18113/3ln3-2by1', 'doi:10.1515/pol-2020-2011', 'doi:10.1007/s10570-013-0029-x')
     end
   end
 end

@@ -7,7 +7,7 @@ RSpec.describe WorkVersions::VersionStatusBadgeComponent, type: :component do
   let(:badge) { node.css('div').first }
 
   context 'with a draft' do
-    let(:work_version) { build_stubbed :work_version, :draft, version_number: 1 }
+    let(:work_version) { build_stubbed(:work_version, :draft, version_number: 1) }
 
     specify do
       expect(badge.text).to include('draft').and include('V1')
@@ -16,7 +16,7 @@ RSpec.describe WorkVersions::VersionStatusBadgeComponent, type: :component do
   end
 
   context 'with a published version' do
-    let(:work_version) { create :work_version, :published, version_number: 3 }
+    let(:work_version) { create(:work_version, :published, version_number: 3) }
 
     specify do
       expect(badge.text).to include('published')
@@ -26,7 +26,7 @@ RSpec.describe WorkVersions::VersionStatusBadgeComponent, type: :component do
   end
 
   context 'with a withdrawn version' do
-    let(:work_version) { create :work_version, :withdrawn, version_number: 3 }
+    let(:work_version) { create(:work_version, :withdrawn, version_number: 3) }
 
     specify do
       expect(badge.text).to include('withdrawn')
@@ -36,7 +36,7 @@ RSpec.describe WorkVersions::VersionStatusBadgeComponent, type: :component do
   end
 
   context 'when version_name is provided' do
-    let(:work_version) { build_stubbed :work_version, version_name: '1.2.3' }
+    let(:work_version) { build_stubbed(:work_version, version_name: '1.2.3') }
 
     specify do
       expect(badge.text).to include('V1.2.3')

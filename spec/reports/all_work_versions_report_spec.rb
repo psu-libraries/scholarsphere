@@ -46,19 +46,19 @@ RSpec.describe AllWorkVersionsReport do
   describe '#rows' do
     # Due to our data model, it's much easier to create Works, then pluck the
     # versions off them, rather that create WorkVersions here
-    let!(:published_work) { create :work, has_draft: false, versions_count: 1 }
-    let!(:draft_work) { create :work, has_draft: true, versions_count: 1 }
-    let!(:work_with_two_versions) { create :work, has_draft: true, versions_count: 2 }
+    let!(:published_work) { create(:work, has_draft: false, versions_count: 1) }
+    let!(:draft_work) { create(:work, has_draft: true, versions_count: 1) }
+    let!(:work_with_two_versions) { create(:work, has_draft: true, versions_count: 2) }
 
     let(:published_version) { published_work.versions.first }
     let(:draft_version) { draft_work.versions.first }
 
     before do
       # Add some view statistics
-      create :view_statistic, resource: published_version, count: 5, date: Time.zone.yesterday
-      create :view_statistic, resource: published_version, count: 1, date: Time.zone.today
+      create(:view_statistic, resource: published_version, count: 5, date: Time.zone.yesterday)
+      create(:view_statistic, resource: published_version, count: 1, date: Time.zone.today)
 
-      create :view_statistic, resource: work_with_two_versions.versions.first, count: 1
+      create(:view_statistic, resource: work_with_two_versions.versions.first, count: 1)
     end
 
     it 'yields each row to the given block' do

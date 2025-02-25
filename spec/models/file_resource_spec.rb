@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe FileResource, type: :model do
+RSpec.describe FileResource do
   it_behaves_like 'a resource with a deposited at timestamp'
 
   it_behaves_like 'a resource with view statistics' do
@@ -219,7 +219,7 @@ RSpec.describe FileResource, type: :model do
       )
     end
 
-    its(:keys) { is_expected.to contain_exactly(*expected_keys) }
+    its(:keys) { is_expected.to match_array(expected_keys) }
   end
 
   describe '#update_index' do
@@ -243,7 +243,7 @@ RSpec.describe FileResource, type: :model do
   end
 
   describe '#thumbnailable' do
-    let!(:file_resource) { create :file_resource }
+    let!(:file_resource) { create(:file_resource) }
     let(:file_data) { { 'metadata' => { 'mime_type' => mime_type } } }
 
     before do

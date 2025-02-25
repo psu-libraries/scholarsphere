@@ -6,7 +6,7 @@ RSpec.describe FieldHintComponent, type: :component do
   subject(:component) { described_class.new(form: form, attribute: :doi) }
 
   let(:form) { instance_spy 'FormBuilder', object: resource, object_name: 'work_form' }
-  let(:resource) { build_stubbed :work }
+  let(:resource) { build_stubbed(:work) }
 
   context 'when there is an entry in en.yml' do
     let(:translation) { 'The Hint' }

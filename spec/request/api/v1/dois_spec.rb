@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 describe 'API V1 DOIs', type: :request do
-  let!(:collection) { create :collection, doi: '10.26207/utaj-jfhi' }
+  let!(:collection) { create(:collection, doi: '10.26207/utaj-jfhi') }
 
   let(:api_token) { create(:api_token).token }
   let(:json_response) { JSON.parse(response.body) }
@@ -26,7 +26,7 @@ describe 'API V1 DOIs', type: :request do
 
     it 'returns a valid response' do
       expect(response).to be_ok
-      expect(json_response).to match_array([{ 'url' => "/resources/#{collection.uuid}" }])
+      expect(json_response).to contain_exactly({ 'url' => "/resources/#{collection.uuid}" })
     end
   end
 end
