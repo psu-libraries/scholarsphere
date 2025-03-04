@@ -117,7 +117,7 @@ module DataCite
 
       def connection
         @connection ||= Faraday.new(url: endpoint) do |conn|
-          conn.request :basic_auth, username, password
+          conn.request :authorization, :basic, username, password
           conn.adapter :net_http
         end
       end
