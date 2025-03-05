@@ -3,6 +3,7 @@
 class Group < ApplicationRecord
   PUBLIC_AGENT_NAME = 'public'
   AUTHORIZED_AGENT_NAME = 'authorized'
+  PSU_AFFILIATED_AGENT_NAME = Scholarsphere::Application.config.psu_affiliated_group
 
   # @note This agent must be seeded in the database prior to deployment
   def self.public_agent
@@ -15,6 +16,13 @@ class Group < ApplicationRecord
     @authorized_agent ||= find_by!(name: AUTHORIZED_AGENT_NAME)
   end
   delegate :authorized_agent, to: :class
+
+  # @note This agent must be seeded in the database unless connection to azure is live
+  # The group will be imported during the first login of a PSU affiliated user
+  def self.psu_affiliated_agent
+    @psu_affiliated_agent ||= find_by!(name: PSU_AFFILIATED_AGENT_NAME)
+  end
+  delegate :psu_affiliated_agent, to: :class
 
   def public?
     self == public_agent

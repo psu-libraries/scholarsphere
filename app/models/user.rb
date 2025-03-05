@@ -60,6 +60,13 @@ class User < ApplicationRecord
     [Group.public_agent, Group.authorized_agent]
   end
 
+  def deauth_non_psu_affiliated!
+    # Remove the authorized agent group membership if the user isn't psu affiliated group
+    unless groups.any?(Group.psu_affiliated_agent)
+      user_group_memberships.where(group_id: Group.authorized_agent.id).destroy_all
+    end
+  end
+
   def self.from_omniauth(auth)
     user = find_or_initialize_by(provider: auth.provider, uid: auth.uid) do |new_user|
       new_user.access_id = auth.uid
@@ -79,11 +86,13 @@ class User < ApplicationRecord
     transaction do
       psu_groups = auth.info.groups
         .compact
-        .select { |group_name| group_name.start_with?('umg') }
+        .select { |group_name| group_name.start_with?('umg') || 
+                               group_name == Scholarsphere::Application.config.psu_affiliated_group }
         .reject { |group_name| group_name.include?(' ') }
         .map { |group_name| Group.find_or_create_by(name: group_name) }
 
       user.groups = default_groups + psu_groups
+      user.deauth_non_psu_affiliated!
 
       user.actor.save!(context: :from_omniauth)
       user.save!(context: :from_omniauth)
