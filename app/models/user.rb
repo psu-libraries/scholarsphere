@@ -106,6 +106,10 @@ class User < ApplicationRecord
     @guest || false
   end
 
+  def psu_affiliated?
+    groups.any? { |group| group.name == Scholarsphere::Application.config.psu_affiliated_group }
+  end
+
   def name
     actor.display_name
   end
