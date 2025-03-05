@@ -98,13 +98,14 @@ RSpec.describe User, type: :model do
           )
         end
 
-        context 'when Group::PSU_AFFILIATED_AGENT_NAME is not present in auth_params' do
+        context 'when Group::PSU_AFFILIATED_AGENT_NAME is not present in auth_params groups' do
           before do
             auth_params.info.groups.delete(Group::PSU_AFFILIATED_AGENT_NAME)
           end
 
           it 'removes Group::AUTHORIZED_AGENT_NAME' do
             new_user = described_class.from_omniauth(auth_params)
+            expect(new_user.groups.length).to eq 3
             expect(new_user.groups.map(&:name)).to contain_exactly(
               'umg-admin',
               'umg-reporter',
@@ -135,6 +136,22 @@ RSpec.describe User, type: :model do
           expect(new_user.actor).to eq actor
 
           expect(new_user.groups.length).to eq 5
+        end
+
+        context 'when Group::PSU_AFFILIATED_AGENT_NAME is not present in auth_params groups' do
+          before do
+            auth_params.info.groups.delete(Group::PSU_AFFILIATED_AGENT_NAME)
+          end
+
+          it 'removes Group::AUTHORIZED_AGENT_NAME' do
+            new_user = described_class.from_omniauth(auth_params)
+            expect(new_user.groups.length).to eq 3
+            expect(new_user.groups.map(&:name)).to contain_exactly(
+              'umg-admin',
+              'umg-reporter',
+              Group::PUBLIC_AGENT_NAME
+            )
+          end
         end
       end
     end
@@ -186,6 +203,22 @@ RSpec.describe User, type: :model do
 
       it 'returns the User record' do
         expect(described_class.from_omniauth(auth_params)).to eq existing_user
+      end
+
+      context 'when Group::PSU_AFFILIATED_AGENT_NAME is not present in auth_params groups' do
+        before do
+          auth_params.info.groups.delete(Group::PSU_AFFILIATED_AGENT_NAME)
+        end
+
+        it 'removes Group::AUTHORIZED_AGENT_NAME' do
+          new_user = described_class.from_omniauth(auth_params)
+          expect(new_user.groups.length).to eq 3
+          expect(new_user.groups.map(&:name)).to contain_exactly(
+            'umg-admin',
+            'umg-reporter',
+            Group::PUBLIC_AGENT_NAME
+          )
+        end
       end
     end
 
@@ -243,6 +276,32 @@ RSpec.describe User, type: :model do
         expect { described_class.from_omniauth(auth_params) }
           .to raise_error(described_class::OAuthError)
           .with_message(/ack/)
+      end
+    end
+  end
+
+  describe '#assign_groups' do
+    context 'when psu_affiliated_agent group is one of the psu_groups' do
+      let(:psu_groups) { [Group.new(name: 'abc-group'),
+                          Group.new(name: 'def-group'),
+                          Group.psu_affiliated_agent] }
+
+      it 'assigns default groups and psu_groups' do
+        user = described_class.new
+        user.assign_groups(psu_groups)
+        expect(user.groups).to contain_exactly(Group.public_agent, Group.authorized_agent,
+                                               Group.psu_affiliated_agent, psu_groups[0], psu_groups[1])
+      end
+    end
+
+    context 'when psu_affiliated_agent group is not one of the psu_groups' do
+      let(:psu_groups) { [Group.new(name: 'abc-group'),
+                          Group.new(name: 'def-group')] }
+
+      it 'assigns public_agent group and psu_groups (not authorized_agent group)' do
+        user = described_class.new
+        user.assign_groups(psu_groups)
+        expect(user.groups).to contain_exactly(Group.public_agent, psu_groups[0], psu_groups[1])
       end
     end
   end
