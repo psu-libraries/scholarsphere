@@ -213,10 +213,11 @@ RSpec.describe Api::V1::WorkPublisher do
       create(:actor, psu_id: depositor.user_id)
       Group.public_agent
       Group.authorized_agent
+      Group.psu_affiliated_agent
     end
 
     it 'creates a new Group record for the edit group in the permissions parameter' do
-      expect { new_work }.to change(Group, :count).from(2).to(3)
+      expect { new_work }.to change(Group, :count).from(3).to(4)
     end
 
     it 'creates a new User record for the edit user in the permissions parameter' do

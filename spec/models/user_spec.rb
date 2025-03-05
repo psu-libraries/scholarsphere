@@ -58,7 +58,8 @@ RSpec.describe User, type: :model do
                                 'umg-admin',
                                 'umg-reporter',
                                 'Invalid With Spaces',
-                                'umg-With Spaces'
+                                'umg-With Spaces',
+                                Group::PSU_AFFILIATED_AGENT_NAME
                               ]
     }
 
@@ -87,13 +88,29 @@ RSpec.describe User, type: :model do
             expect(actor.surname).to eq 'Developer'
           end
 
-          expect(new_user.groups.length).to eq 4
+          expect(new_user.groups.length).to eq 5
           expect(new_user.groups.map(&:name)).to contain_exactly(
             'umg-admin',
             'umg-reporter',
             Group::AUTHORIZED_AGENT_NAME,
-            Group::PUBLIC_AGENT_NAME
+            Group::PUBLIC_AGENT_NAME,
+            Group::PSU_AFFILIATED_AGENT_NAME
           )
+        end
+
+        context 'when Group::PSU_AFFILIATED_AGENT_NAME is not present in auth_params' do
+          before do
+            auth_params.info.groups.delete(Group::PSU_AFFILIATED_AGENT_NAME)
+          end
+
+          it 'removes Group::AUTHORIZED_AGENT_NAME' do
+            new_user = described_class.from_omniauth(auth_params)
+            expect(new_user.groups.map(&:name)).to contain_exactly(
+              'umg-admin',
+              'umg-reporter',
+              Group::PUBLIC_AGENT_NAME
+            )
+          end
         end
       end
 
@@ -117,7 +134,7 @@ RSpec.describe User, type: :model do
 
           expect(new_user.actor).to eq actor
 
-          expect(new_user.groups.length).to eq 4
+          expect(new_user.groups.length).to eq 5
         end
       end
     end
@@ -162,7 +179,8 @@ RSpec.describe User, type: :model do
           'umg-admin',
           'umg-reporter',
           Group::AUTHORIZED_AGENT_NAME,
-          Group::PUBLIC_AGENT_NAME
+          Group::PUBLIC_AGENT_NAME,
+          Group::PSU_AFFILIATED_AGENT_NAME
         )
       end
 

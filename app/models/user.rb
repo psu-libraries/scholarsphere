@@ -60,11 +60,13 @@ class User < ApplicationRecord
     [Group.public_agent, Group.authorized_agent]
   end
 
-  def deauth_non_psu_affiliated!
-    # Remove the authorized agent group membership if the user isn't psu affiliated group
-    unless groups.any?(Group.psu_affiliated_agent)
-      user_group_memberships.where(group_id: Group.authorized_agent.id).destroy_all
-    end
+  def assign_groups(psu_groups)
+    # Non psu affiliated users should not have authorized agent group
+    self.groups = if psu_groups.any?(Group.psu_affiliated_agent)
+                    (User.default_groups + psu_groups)
+                  else
+                    ([Group.public_agent] + psu_groups)
+                  end
   end
 
   def self.from_omniauth(auth)
@@ -93,8 +95,7 @@ class User < ApplicationRecord
         .reject { |group_name| group_name.include?(' ') }
         .map { |group_name| Group.find_or_create_by(name: group_name) }
 
-      user.groups = default_groups + psu_groups
-      user.deauth_non_psu_affiliated!
+      user.assign_groups(psu_groups)
 
       user.actor.save!(context: :from_omniauth)
       user.save!(context: :from_omniauth)
