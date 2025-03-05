@@ -79,7 +79,10 @@ class User < ApplicationRecord
     transaction do
       psu_groups = auth.info.groups
         .compact
-        .select { |group_name| group_name.start_with?('umg') }
+        .select do |group_name|
+          group_name.start_with?('umg') ||
+            group_name == Scholarsphere::Application.config.psu_affiliated_group
+        end
         .reject { |group_name| group_name.include?(' ') }
         .map { |group_name| Group.find_or_create_by(name: group_name) }
 

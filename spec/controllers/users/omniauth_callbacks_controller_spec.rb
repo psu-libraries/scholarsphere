@@ -16,6 +16,9 @@ RSpec.describe Users::OmniauthCallbacksController, type: :controller do
     allow(User).to receive(:from_omniauth)
       .with(oauth_response)
       .and_return(user)
+
+    allow(user).to receive(:psu_affiliated?)
+      .and_return(true)
   end
 
   describe '#azure_oauth' do
@@ -72,9 +75,7 @@ RSpec.describe Users::OmniauthCallbacksController, type: :controller do
         get :azure_oauth
       end
 
-      it 'redirects to root_path' do
-        it { is_expected.to redirect_to root_path }
-      end
+      it { is_expected.to redirect_to root_path }
     end
   end
 end

@@ -58,7 +58,8 @@ RSpec.describe User, type: :model do
                                 'umg-admin',
                                 'umg-reporter',
                                 'Invalid With Spaces',
-                                'umg-With Spaces'
+                                'umg-With Spaces',
+                                Scholarsphere::Application.config.psu_affiliated_group
                               ]
     }
 
@@ -87,12 +88,13 @@ RSpec.describe User, type: :model do
             expect(actor.surname).to eq 'Developer'
           end
 
-          expect(new_user.groups.length).to eq 4
+          expect(new_user.groups.length).to eq 5
           expect(new_user.groups.map(&:name)).to contain_exactly(
             'umg-admin',
             'umg-reporter',
             Group::AUTHORIZED_AGENT_NAME,
-            Group::PUBLIC_AGENT_NAME
+            Group::PUBLIC_AGENT_NAME,
+            Scholarsphere::Application.config.psu_affiliated_group
           )
         end
       end
@@ -117,7 +119,7 @@ RSpec.describe User, type: :model do
 
           expect(new_user.actor).to eq actor
 
-          expect(new_user.groups.length).to eq 4
+          expect(new_user.groups.length).to eq 5
         end
       end
     end
@@ -162,7 +164,8 @@ RSpec.describe User, type: :model do
           'umg-admin',
           'umg-reporter',
           Group::AUTHORIZED_AGENT_NAME,
-          Group::PUBLIC_AGENT_NAME
+          Group::PUBLIC_AGENT_NAME,
+          Scholarsphere::Application.config.psu_affiliated_group
         )
       end
 
