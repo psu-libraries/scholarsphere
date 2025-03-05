@@ -107,7 +107,7 @@ class User < ApplicationRecord
   end
 
   def psu_affiliated?
-    groups.any? { |group| group.name == Scholarsphere::Application.config.psu_affiliated_group }
+    groups.exists?(name: Scholarsphere::Application.config.psu_affiliated_group)
   end
 
   def name

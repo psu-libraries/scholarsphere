@@ -324,6 +324,24 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe '#psu_affiliated?' do
+    subject { user.psu_affiliated? }
+
+    let(:user) { create :user }
+
+    context 'when the user is affiliated with PSU' do
+      before do
+        user.groups << create(:group, name: Scholarsphere::Application.config.psu_affiliated_group)
+      end
+
+      it { is_expected.to be true }
+    end
+
+    context 'when the user is not affiliated with PSU' do
+      it { is_expected.to be false }
+    end
+  end
+
   describe '#name' do
     it { is_expected.to delegate_method(:name).to(:actor).as(:display_name) }
   end

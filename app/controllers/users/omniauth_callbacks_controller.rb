@@ -16,7 +16,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     logger.error(e.backtrace.join("\n"))
     redirect_to root_path, alert: t('omniauth.login_error')
   rescue NotAffiliatedWithPsu
-    redirect_to root_path, alert: t('omniauth.not_affiliated_with_psu') 
+    redirect_to root_path, alert: t('omniauth.not_affiliated_with_psu')
   end
 
   def failure

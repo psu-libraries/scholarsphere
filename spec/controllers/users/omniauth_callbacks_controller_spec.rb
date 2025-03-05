@@ -64,5 +64,17 @@ RSpec.describe Users::OmniauthCallbacksController, type: :controller do
 
       it { is_expected.to redirect_to root_path }
     end
+
+    context 'when the user is not affiliated with PSU' do
+      before do
+        allow(user).to receive(:psu_affiliated?)
+          .and_return(false)
+        get :azure_oauth
+      end
+
+      it 'redirects to root_path' do
+        it { is_expected.to redirect_to root_path }
+      end
+    end
   end
 end
