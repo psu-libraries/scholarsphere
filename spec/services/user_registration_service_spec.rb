@@ -31,9 +31,8 @@ RSpec.describe UserRegistrationService do
           expect(actor.surname).to eq person.family_name
         end
 
-        expect(new_user.groups.length).to eq 2
+        expect(new_user.groups.length).to eq 1
         expect(new_user.groups.map(&:name)).to contain_exactly(
-          Group::AUTHORIZED_AGENT_NAME,
           Group::PUBLIC_AGENT_NAME
         )
       end

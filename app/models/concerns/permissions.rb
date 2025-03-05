@@ -37,7 +37,7 @@ module Permissions
   # agents when setting permissions on a resource.
   class GroupsToIgnore
     def self.call
-      [Group.public_agent, Group.authorized_agent]
+      [Group.public_agent, Group.authorized_agent, Group.psu_affiliated_agent]
     end
   end
 
