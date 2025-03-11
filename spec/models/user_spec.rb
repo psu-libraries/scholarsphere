@@ -330,7 +330,7 @@ RSpec.describe User do
   describe '#psu_affiliated?' do
     subject { user.psu_affiliated? }
 
-    let(:user) { create :user }
+    let(:user) { create(:user) }
 
     context 'when the user is affiliated with PSU' do
       before do
