@@ -651,7 +651,7 @@ GEM
     unicode-display_width (3.1.4)
       unicode-emoji (~> 4.0, >= 4.0.4)
     unicode-emoji (4.0.4)
-    uppy-s3_multipart (0.3.4)
+    uppy-s3_multipart (1.2.1)
       aws-sdk-s3 (~> 1.0)
       content_disposition (~> 1.0)
       roda (>= 2.27, < 4)
@@ -779,7 +779,7 @@ DEPENDENCIES
   sprockets-rails
   stackprof
   timecop
-  uppy-s3_multipart (~> 0.3)
+  uppy-s3_multipart (~> 1.0)
   vcr
   view_component
   web-console (>= 3.3.0)

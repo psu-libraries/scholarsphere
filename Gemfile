@@ -58,7 +58,7 @@ gem 'shrine', '~> 3.3'
 gem 'sidekiq', '~> 6.5'
 gem 'sprockets-rails'
 gem 'stackprof'
-gem 'uppy-s3_multipart', '~> 0.3'
+gem 'uppy-s3_multipart', '~> 1.0'
 gem 'view_component'
 
 group :development, :test do
