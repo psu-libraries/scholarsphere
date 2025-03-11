@@ -70,8 +70,8 @@ class Work < ApplicationRecord
         .union(grad_culminating_experiences).freeze
     end
 
-    def  self.each(&block)
-      all.each(&block)
+    def self.each(&)
+      all.each(&)
     end
 
     def self.general
