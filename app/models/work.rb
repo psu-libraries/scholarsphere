@@ -62,10 +62,16 @@ class Work < ApplicationRecord
   validate :embargoed_until_is_valid_date
 
   module Types
+    extend Enumerable
+
     def self.all
       general.union(scholarly_works)
         .union(data_and_code)
         .union(grad_culminating_experiences).freeze
+    end
+
+    def  self.each(&block)
+      all.each(&block)
     end
 
     def self.general
