@@ -12,6 +12,7 @@
 
 ActiveRecord::Schema[7.2].define(version: 2024_10_21_204531) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
 
@@ -227,8 +228,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_21_204531) do
   end
 
   create_table "versions", force: :cascade do |t|
-    t.string "item_type"
-    t.string "{:null=>false}"
+    t.string "item_type", null: false
     t.bigint "item_id", null: false
     t.string "event", null: false
     t.string "whodunnit"
@@ -269,8 +269,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_21_204531) do
     t.datetime "withdrawn_at", precision: nil
     t.datetime "removed_at", precision: nil
     t.boolean "draft_curation_requested"
-    t.boolean "imported_metadata_from_rmd"
     t.datetime "sent_for_curation_at", precision: nil
+    t.boolean "imported_metadata_from_rmd"
     t.boolean "mint_doi_requested"
     t.boolean "accessibility_remediation_requested"
     t.index ["external_app_id"], name: "index_work_versions_on_external_app_id"
