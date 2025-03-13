@@ -11,14 +11,14 @@ module Dashboard
         @resource = new_collection(depositor: current_user.actor)
       end
 
-      def create
-        @resource = new_collection(collection_params.merge(depositor: current_user.actor))
-        process_response(on_error: :new)
-      end
-
       def edit
         @resource = Collection.find(params[:id])
         authorize(@resource)
+      end
+
+      def create
+        @resource = new_collection(collection_params.merge(depositor: current_user.actor))
+        process_response(on_error: :new)
       end
 
       def update

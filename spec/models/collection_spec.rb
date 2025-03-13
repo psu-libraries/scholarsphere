@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Collection, type: :model do
+RSpec.describe Collection do
   it_behaves_like 'a resource with permissions' do
     let(:factory_name) { :collection }
   end
@@ -20,15 +20,15 @@ RSpec.describe Collection, type: :model do
   it_behaves_like 'a resource that can provide all DOIs in', [:doi, :identifier]
 
   it_behaves_like 'a resource with a thumbnail url' do
-    let!(:resource) { create :collection }
+    let!(:resource) { create(:collection) }
 
     before do
-      resource.works = [(create :work, versions_count: 2)]
+      resource.works = [create(:work, versions_count: 2)]
     end
   end
 
   it_behaves_like 'a resource with a thumbnail selection' do
-    let!(:resource) { create :collection }
+    let!(:resource) { create(:collection) }
   end
 
   describe 'table' do
@@ -69,12 +69,12 @@ RSpec.describe Collection, type: :model do
     it { is_expected.to have_one(:thumbnail_upload) }
 
     describe 'default order of works' do
-      let(:collection) { build :collection }
+      let(:collection) { build(:collection) }
 
       # Note we create these records in the database "out of order"
-      let!(:work_3) { create :work }
-      let!(:work_1) { create :work }
-      let!(:work_2) { create :work }
+      let!(:work_3) { create(:work) }
+      let!(:work_1) { create(:work) }
+      let!(:work_2) { create(:work) }
 
       before do
         # Note we create these records in the database "out of order"
@@ -111,7 +111,7 @@ RSpec.describe Collection, type: :model do
     end
 
     it 'validates that a work cannot be added twice' do
-      work = create :work
+      work = create(:work)
 
       collection.works = [work, work]
       expect(collection).not_to be_valid
@@ -186,8 +186,8 @@ RSpec.describe Collection, type: :model do
   end
 
   describe '#build_creator' do
-    let(:actor) { build_stubbed :actor }
-    let(:collection) { build_stubbed :collection }
+    let(:actor) { build_stubbed(:actor) }
+    let(:collection) { build_stubbed(:collection) }
 
     it 'builds a creator for the given Actor but does not persist it' do
       expect {
@@ -269,11 +269,11 @@ RSpec.describe Collection, type: :model do
       )
     end
 
-    its(:keys) { is_expected.to contain_exactly(*expected_keys) }
+    its(:keys) { is_expected.to match_array(expected_keys) }
   end
 
   describe 'after save' do
-    let(:collection) { build :collection }
+    let(:collection) { build(:collection) }
 
     # I've heard it's bad practice to mock the object under test, but I can't
     # think of a better way to do this without testing the contents of
@@ -375,10 +375,10 @@ RSpec.describe Collection, type: :model do
 
   describe '#auto_generated_thumbnail_urls' do
     let(:mock_attacher) { instance_double FileUploader::Attacher }
-    let!(:collection) { create :collection }
+    let!(:collection) { create(:collection) }
 
     before do
-      collection.works = [(create :work, versions_count: 2), (create :work, versions_count: 3)]
+      collection.works = [create(:work, versions_count: 2), create(:work, versions_count: 3)]
     end
 
     context 'when collection has many works with thumbnail urls' do
@@ -404,7 +404,7 @@ RSpec.describe Collection, type: :model do
 
     context 'when collection has published works' do
       before do
-        collection.works = [(create :work, versions_count: 2)]
+        collection.works = [create(:work, versions_count: 2)]
       end
 
       it 'is not empty' do

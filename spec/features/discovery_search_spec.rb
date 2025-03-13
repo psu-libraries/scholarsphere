@@ -25,7 +25,7 @@ RSpec.describe 'Searching discoverable resources', :inline_jobs do
       expect(page).to have_content(public_work.latest_published_version.title)
       expect(page).to have_content(previous_embargoed_work.latest_published_version.title)
       expect(page).to have_content(public_collection.title)
-      expect(page).not_to have_content(current_embargoed_work.latest_published_version.title)
+      expect(page).to have_no_content(current_embargoed_work.latest_published_version.title)
       expect(page).to have_content(authorized_work.latest_published_version.title)
       expect(page).to have_content(authorized_collection.title)
     end
@@ -39,7 +39,7 @@ RSpec.describe 'Searching discoverable resources', :inline_jobs do
 
       expect(page).to have_content(public_work.latest_published_version.title)
       expect(page).to have_content(previous_embargoed_work.latest_published_version.title)
-      expect(page).not_to have_content(current_embargoed_work.latest_published_version.title)
+      expect(page).to have_no_content(current_embargoed_work.latest_published_version.title)
       expect(page).to have_content(authorized_work.latest_published_version.title)
       expect(page).to have_content(public_collection.title)
       expect(page).to have_content(authorized_collection.title)

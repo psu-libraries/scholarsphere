@@ -13,7 +13,7 @@ RSpec.describe FindResource, type: :model do
     end
 
     context 'when requesting a WorkVersion' do
-      let(:work_version) { create :work_version }
+      let(:work_version) { create(:work_version) }
 
       it 'returns the WorkVersion' do
         expect(described_class.call(work_version.uuid)).to eq work_version
@@ -21,7 +21,7 @@ RSpec.describe FindResource, type: :model do
     end
 
     context 'when requesting a Collection' do
-      let(:collection) { create :collection }
+      let(:collection) { create(:collection) }
 
       it 'returns the WorkVersion' do
         expect(described_class.call(collection.uuid)).to eq collection

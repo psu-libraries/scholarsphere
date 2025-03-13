@@ -19,9 +19,7 @@ RSpec.describe ThumbnailComponent, type: :component do
 
     context 'when uploaded thumbnail' do
       it 'renders a thumbnail with image tag' do
-        allow(resource).to receive(:auto_generated_thumbnail?).and_return false
-        allow(resource).to receive(:default_thumbnail?).and_return false
-        allow(resource).to receive(:thumbnail_url).and_return 'url.com/path/file'
+        allow(resource).to receive_messages(auto_generated_thumbnail?: false, default_thumbnail?: false, thumbnail_url: 'url.com/path/file')
         expect(result.css('div').first.classes).to contain_exactly('ft-work__img',
                                                                    'thumbnail-image')
         expect(result.css('img').attribute('src').value).to include('url.com/path/file')
@@ -35,17 +33,14 @@ RSpec.describe ThumbnailComponent, type: :component do
 
     context 'when default thumbnail' do
       it 'renders a thumbnail' do
-        allow(resource).to receive(:default_thumbnail?).and_return true
-        allow(resource).to receive(:auto_generated_thumbnail?).and_return false
+        allow(resource).to receive_messages(default_thumbnail?: true, auto_generated_thumbnail?: false)
         expect(result.css('div').first.classes).to contain_exactly('thumbnail-icon')
       end
     end
 
     context 'when uploaded thumbnail' do
       it 'renders a thumbnail with image tag' do
-        allow(resource).to receive(:auto_generated_thumbnail?).and_return false
-        allow(resource).to receive(:default_thumbnail?).and_return false
-        allow(resource).to receive(:thumbnail_url).and_return 'url.com/path/file'
+        allow(resource).to receive_messages(auto_generated_thumbnail?: false, default_thumbnail?: false, thumbnail_url: 'url.com/path/file')
         expect(result.css('div').first.classes).to contain_exactly('thumbnail-image')
         expect(result.css('img').attribute('src').value).to include('url.com/path/file')
       end

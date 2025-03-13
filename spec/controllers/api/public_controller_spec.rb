@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe Api::PublicController, type: :controller do
-  let(:json_response) { HashWithIndifferentAccess.new(JSON.parse(response.body)) }
+RSpec.describe Api::PublicController do
+  let(:json_response) { ActiveSupport::HashWithIndifferentAccess.new(response.parsed_body) }
 
   describe 'POST #execute' do
     context 'without any parameters' do
@@ -40,7 +40,7 @@ RSpec.describe Api::PublicController, type: :controller do
     end
 
     context 'when querying for authenticated-only content' do
-      let!(:api_key) { create :api_token }
+      let!(:api_key) { create(:api_token) }
       let(:resource) { create(:work, :with_authorized_access, has_draft: false) }
       let(:query) do
         <<-QUERY

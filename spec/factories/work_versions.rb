@@ -27,11 +27,11 @@ FactoryBot.define do
     end
 
     trait :article do
-      association :work, :article
+      work factory: %i[work article]
     end
 
     trait :grad_culminating_experience do
-      association :work, :masters_culminating_experience
+      work factory: %i[work masters_culminating_experience]
     end
 
     trait :initial_draft do

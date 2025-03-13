@@ -4,9 +4,9 @@ require 'rails_helper'
 
 RSpec.describe CurationTaskClient do
   describe '.send_curation' do
-    let(:work_version) { create :work_version,
+    let(:work_version) { create(:work_version,
                                 uuid: uuid,
-                                title: 'Test Submission'
+                                title: 'Test Submission')
     }
     let(:depositor) { build(:actor, psu_id: 'abc1234', display_name: 'Test Depositor') }
     let(:work) { build(:work, uuid: uuid, deposited_at: deposited_time, embargoed_until: embargo) }

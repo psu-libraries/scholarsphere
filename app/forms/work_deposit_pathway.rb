@@ -218,8 +218,8 @@ class WorkDepositPathway
           ).freeze
         end
 
-        def self.method_missing(method_name, *args)
-          WorkVersion.public_send(method_name, *args)
+        def self.method_missing(method_name, *)
+          WorkVersion.public_send(method_name, *)
         end
 
         def self.respond_to_missing?(method_name, *)

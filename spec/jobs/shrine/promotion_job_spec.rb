@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Shrine::PromotionJob, type: :job do
+RSpec.describe Shrine::PromotionJob do
   let(:record) { build(:file_resource) }
   let(:name) { 'file' }
   let(:file_data) { { id: SecureRandom.uuid, storage: 'cache' } }

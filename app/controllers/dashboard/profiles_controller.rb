@@ -11,7 +11,7 @@ module Dashboard
 
       if @actor.update(creator_params)
         redirect_to dashboard_root_path,
-                    notice: t('dashboard.profiles.update.success')
+                    notice: t('.success')
       else
         render :edit
       end

@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe MonthlyUserWorksReport do
   subject(:report) { described_class.new(actor: depositor, date: Date.parse('2022-02-16')) }
 
-  let(:depositor) { create :actor }
+  let(:depositor) { create(:actor) }
 
   it_behaves_like 'a report' do
     subject { report }
@@ -38,11 +38,11 @@ RSpec.describe MonthlyUserWorksReport do
   end
 
   describe '#rows' do
-    let!(:work_published) { create :work, has_draft: false, versions_count: 2, depositor: depositor }
-    let!(:work_published_and_draft) { create :work, has_draft: true, versions_count: 2, depositor: depositor }
-    let!(:other_users_work) { create :work, has_draft: false, versions_count: 1, depositor: build(:actor) }
-    let!(:work_withdrawn_only) { create :work, versions: [withdrawn_version], depositor: depositor }
-    let(:withdrawn_version) { build :work_version, :withdrawn, work: nil }
+    let!(:work_published) { create(:work, has_draft: false, versions_count: 2, depositor: depositor) }
+    let!(:work_published_and_draft) { create(:work, has_draft: true, versions_count: 2, depositor: depositor) }
+    let!(:other_users_work) { create(:work, has_draft: false, versions_count: 1, depositor: build(:actor)) }
+    let!(:work_withdrawn_only) { create(:work, versions: [withdrawn_version], depositor: depositor) }
+    let(:withdrawn_version) { build(:work_version, :withdrawn, work: nil) }
 
     before do
       #
@@ -51,13 +51,13 @@ RSpec.describe MonthlyUserWorksReport do
 
       # Create some views for every version of a work
       work_published.versions.each do |work_version|
-        create :view_statistic, resource: work_version, count: 1, date: Date.parse('2022-02-01')
-        create :view_statistic, resource: work_version, count: 1, date: Date.parse('2022-02-16')
-        create :view_statistic, resource: work_version, count: 1, date: Date.parse('2022-02-28')
+        create(:view_statistic, resource: work_version, count: 1, date: Date.parse('2022-02-01'))
+        create(:view_statistic, resource: work_version, count: 1, date: Date.parse('2022-02-16'))
+        create(:view_statistic, resource: work_version, count: 1, date: Date.parse('2022-02-28'))
 
         # Should not be included in the counts
-        create :view_statistic, resource: work_version, count: 1, date: Date.parse('2022-01-31')
-        create :view_statistic, resource: work_version, count: 1, date: Date.parse('2022-03-01')
+        create(:view_statistic, resource: work_version, count: 1, date: Date.parse('2022-01-31'))
+        create(:view_statistic, resource: work_version, count: 1, date: Date.parse('2022-03-01'))
       end
 
       #
@@ -73,25 +73,25 @@ RSpec.describe MonthlyUserWorksReport do
       end
 
       # Create downloads (stored as view statistics) for that single file created above
-      create :view_statistic, resource: version1_file, count: 1, date: Date.parse('2022-02-01')
-      create :view_statistic, resource: version1_file, count: 1, date: Date.parse('2022-02-16')
-      create :view_statistic, resource: version1_file, count: 1, date: Date.parse('2022-02-28')
+      create(:view_statistic, resource: version1_file, count: 1, date: Date.parse('2022-02-01'))
+      create(:view_statistic, resource: version1_file, count: 1, date: Date.parse('2022-02-16'))
+      create(:view_statistic, resource: version1_file, count: 1, date: Date.parse('2022-02-28'))
 
       # Should not be included in the counts
-      create :view_statistic, resource: version1_file, count: 1, date: Date.parse('2022-01-31')
-      create :view_statistic, resource: version1_file, count: 1, date: Date.parse('2022-03-01')
+      create(:view_statistic, resource: version1_file, count: 1, date: Date.parse('2022-01-31'))
+      create(:view_statistic, resource: version1_file, count: 1, date: Date.parse('2022-03-01'))
 
       # Make another file on the latest version of the work above
-      another_file = create :file_resource
+      another_file = create(:file_resource)
       work_published.latest_published_version.file_resources << another_file
       work_published.save!
-      create :view_statistic, resource: another_file, count: 100, date: Date.parse('2022-02-16')
+      create(:view_statistic, resource: another_file, count: 100, date: Date.parse('2022-02-16'))
 
       # Create a download for another work
-      create :view_statistic,
+      create(:view_statistic,
              resource: work_published_and_draft.latest_published_version.file_resources.first,
              count: 5,
-             date: Date.parse('2022-02-16')
+             date: Date.parse('2022-02-16'))
     end
 
     it 'yields each row to the given block' do

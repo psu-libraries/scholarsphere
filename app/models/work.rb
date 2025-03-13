@@ -62,10 +62,16 @@ class Work < ApplicationRecord
   validate :embargoed_until_is_valid_date
 
   module Types
+    extend Enumerable
+
     def self.all
       general.union(scholarly_works)
         .union(data_and_code)
         .union(grad_culminating_experiences).freeze
+    end
+
+    def self.each(&)
+      all.each(&)
     end
 
     def self.general
@@ -149,7 +155,7 @@ class Work < ApplicationRecord
     CURRENT_VERSION = '2.0'
   end
 
-  enum work_type: Types.all.zip(Types.all).to_h
+  enum :work_type, Types.all.zip(Types.all).to_h
 
   validates :work_type,
             presence: true
@@ -157,8 +163,8 @@ class Work < ApplicationRecord
   validates :versions,
             presence: true
 
-  def self.build_with_empty_version(*args)
-    work = new(*args)
+  def self.build_with_empty_version(*)
+    work = new(*)
     work.versions.build if work.versions.empty?
     work.versions.first.version_number = 1
     work

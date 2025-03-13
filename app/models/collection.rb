@@ -92,7 +92,7 @@ class Collection < ApplicationRecord
     related_url
     source
   ].each do |array_field|
-    define_method "#{array_field}=" do |vals|
+    define_method :"#{array_field}=" do |vals|
       super(strip_blanks_from_array(vals))
     end
   end
@@ -102,7 +102,7 @@ class Collection < ApplicationRecord
     published_date
     subtitle
   ].each do |field|
-    define_method "#{field}=" do |val|
+    define_method :"#{field}=" do |val|
       super(val.presence)
     end
   end
@@ -167,8 +167,7 @@ class Collection < ApplicationRecord
 
   def empty?
     works
-      .select { |work| work.representative_version.published? }
-      .empty?
+      .none? { |work| work.representative_version.published? }
   end
 
   def form_partial
@@ -186,7 +185,7 @@ class Collection < ApplicationRecord
     end
 
     def auto_generated_thumbnail_urls
-      works.flat_map { |work| work&.latest_published_version&.file_resources }&.map { |fr| fr&.thumbnail_url }&.compact
+      works.flat_map { |work| work&.latest_published_version&.file_resources }&.filter_map { |fr| fr&.thumbnail_url }
     end
 
     def set_defaults

@@ -15,13 +15,13 @@ RSpec.describe 'Editing multiple fields' do
   context 'when adding new fields for entry' do
     def check_field(field)
       within(parent_div(field)) do
-        expect(page).to have_selector('a.add', text: /add_circle_outline/)
-        expect(page).not_to have_selector('a.remove', text: /highlight_off/)
-        expect(page).to have_selector('div', class: 'removable-input', count: 1)
+        expect(page).to have_css('a.add', text: /add_circle_outline/)
+        expect(page).to have_no_css('a.remove', text: /highlight_off/)
+        expect(page).to have_css('div', class: 'removable-input', count: 1)
         retry_click { click_on 'add_circle_outline' }
-        expect(page).to have_selector('div', class: 'removable-input', count: 2)
+        expect(page).to have_css('div', class: 'removable-input', count: 2)
         retry_click { click_on('highlight_off') }
-        expect(page).to have_selector('div', class: 'removable-input', count: 1)
+        expect(page).to have_css('div', class: 'removable-input', count: 1)
       end
     end
 
@@ -47,7 +47,7 @@ RSpec.describe 'Editing multiple fields' do
       removeable_inputs[1].has_content?('add another')
     end
 
-    it 'inserts new inputs with remove buttons', with_user: :user, js: true do
+    it 'inserts new inputs with remove buttons', :js, with_user: :user do
       visit dashboard_form_work_version_details_path(work.latest_version)
       check_field(:keyword)
       check_field(:publisher)

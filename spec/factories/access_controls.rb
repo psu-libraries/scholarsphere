@@ -4,15 +4,15 @@ FactoryBot.define do
   factory :access_control do
     access_level { AccessControl::Level.default }
 
-    association(:agent, factory: :user)
-    association(:resource, factory: :work)
+    agent factory: %i[user]
+    resource factory: %i[work]
 
     trait :with_user do
-      association(:agent, factory: :user)
+      agent factory: %i[user]
     end
 
     trait :with_group do
-      association(:agent, factory: :group)
+      agent factory: %i[group]
     end
   end
 end

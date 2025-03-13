@@ -5,7 +5,7 @@ require 'support/vcr'
 
 RSpec.describe AutopopulateWorkVersionService do
   let(:service) { described_class.new(work_version, doi) }
-  let(:work) { create :work }
+  let(:work) { create(:work) }
   let(:work_version) { work.latest_version }
   let(:doi) { 'https://doi.org/10.1038/abcdefg1234567' }
   let(:rmd_publication) do
@@ -25,7 +25,7 @@ RSpec.describe AutopopulateWorkVersionService do
       tags: ['A Topic', 'Another Topic']
     )
   end
-  let!(:existing_actor) { create :actor, psu_id: 'def1234', display_name: 'Existing Actor' }
+  let!(:existing_actor) { create(:actor, psu_id: 'def1234', display_name: 'Existing Actor') }
 
   before do
     allow(service).to receive(:rmd_pub).and_return(rmd_publication)

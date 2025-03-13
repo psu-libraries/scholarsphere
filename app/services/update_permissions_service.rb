@@ -26,10 +26,10 @@ class UpdatePermissionsService
 
   def update
     [:discover_users, :read_users, :edit_users].map do |users|
-      resource.send("#{users}=", build_user_list(users).compact)
+      resource.send(:"#{users}=", build_user_list(users).compact)
     end
     [:discover_groups, :read_groups, :edit_groups].map do |groups|
-      resource.send("#{groups}=", build_group_list(groups).compact)
+      resource.send(:"#{groups}=", build_group_list(groups).compact)
     end
   end
 

@@ -8,7 +8,7 @@ RSpec.describe AdobePdf::S3Handler do
     let(:instance) { dummy_class.new }
 
     it 'downloads the file from S3 and returns a Tempfile object' do
-      resource = create :file_resource
+      resource = create(:file_resource)
 
       result = instance.download_file(resource)
 

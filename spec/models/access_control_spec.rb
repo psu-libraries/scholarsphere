@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe AccessControl, type: :model do
+RSpec.describe AccessControl do
   describe 'table' do
     it { is_expected.to have_db_column(:resource_type) }
     it { is_expected.to have_db_column(:resource_id) }

@@ -10,19 +10,19 @@ FactoryBot.define do
     of_work
 
     trait :of_work do
-      association(:resource, factory: :work_version)
+      resource factory: %i[work_version]
     end
 
     trait :of_collection do
-      association(:resource, factory: :collection)
+      resource factory: %i[collection]
     end
 
     trait :with_orcid do
-      association(:actor)
+      actor
     end
 
     trait :with_actor do
-      association(:actor)
+      actor
     end
   end
 end

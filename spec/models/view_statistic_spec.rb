@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ViewStatistic, type: :model do
+RSpec.describe ViewStatistic do
   describe 'table' do
     it { is_expected.to have_db_column(:count).of_type(:integer) }
     it { is_expected.to have_db_column(:date).of_type(:date) }

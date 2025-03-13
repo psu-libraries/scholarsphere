@@ -4,9 +4,9 @@ require 'rails_helper'
 
 RSpec.describe 'Search Facets', :inline_jobs do
   describe 'renaming a user updates their Creator facet' do
-    let(:my_actor) { build :actor, display_name: 'Me Before Rename' }
+    let(:my_actor) { build(:actor, display_name: 'Me Before Rename') }
 
-    let(:another_actor) { build :actor, display_name: 'Someone Else' }
+    let(:another_actor) { build(:actor, display_name: 'Someone Else') }
 
     it 'updates the facet (but not the resource) when an actor changes their default display_name' do
       pending('Requires further input from stakeholders on design and metadata changes')
@@ -30,7 +30,7 @@ RSpec.describe 'Search Facets', :inline_jobs do
 
       # Documents retain the original display_name from when the resource was created
       within '#documents' do
-        expect(page).not_to have_content('Me After Rename')
+        expect(page).to have_no_content('Me After Rename')
         expect(page).to have_content('Me Before Rename')
         expect(page).to have_content('Someone Else')
       end
@@ -38,7 +38,7 @@ RSpec.describe 'Search Facets', :inline_jobs do
       # Facets are "Canonized" to the Actor's display_name
       within '#facets' do
         expect(page).to have_content('Me After Rename')
-        expect(page).not_to have_content('Me Before Rename')
+        expect(page).to have_no_content('Me Before Rename')
         expect(page).to have_content('Someone Else')
       end
 
@@ -47,7 +47,7 @@ RSpec.describe 'Search Facets', :inline_jobs do
       within '#documents' do
         expect(page).to have_content 'A Work I Created'
         expect(page).to have_content 'A Collection I Created'
-        expect(page).not_to have_content 'A Work Someone Else Created'
+        expect(page).to have_no_content 'A Work Someone Else Created'
       end
     end
   end

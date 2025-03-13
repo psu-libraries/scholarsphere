@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Api::V1::FilesController, type: :controller do
+RSpec.describe Api::V1::FilesController do
   let(:api_token) { create(:api_token).token }
 
   before { request.headers[:'X-API-Key'] = api_token }
@@ -21,7 +21,7 @@ RSpec.describe Api::V1::FilesController, type: :controller do
     end
 
     def file_data
-      HashWithIndifferentAccess.new(file.reload.file_data['metadata'])
+      ActiveSupport::HashWithIndifferentAccess.new(file.reload.file_data['metadata'])
     end
 
     context 'with valid input' do
