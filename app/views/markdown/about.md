@@ -22,7 +22,7 @@ Dann Bohn, Dan Coughlin, Eric Durante, Alex Kiessling, Binky Lush, Ryan Schenk, 
 
 #### Curation
 
-Allie Schoffner, Briana Wham
+Allie Shoffner, Briana Wham, Jessica Scharf
 
 #### Policy Task Force
 
