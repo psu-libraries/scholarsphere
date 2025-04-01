@@ -116,7 +116,7 @@ class Work < ApplicationRecord
     def self.instrument
       %w[
         instrument
-    ].freeze
+      ].freeze
     end
 
     def self.grad_culminating_experiences

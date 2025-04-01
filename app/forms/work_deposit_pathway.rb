@@ -374,6 +374,7 @@ class WorkDepositPathway
           end
       end
     end
+
     module GradCulminatingExperiences
       REQUIRE_FIELDS = %w{
         sub_work_type
@@ -566,8 +567,8 @@ class WorkDepositPathway
               fr.file_data['metadata']['size'].positive? &&
                   fr.file_data['metadata']['filename'] =~ /readme/i
             end && file_resources.find do |fr|
-              (fr.file_data['metadata']['filename'] !~ /readme/i &&
-              fr.file_data['metadata']['filename'] =~ /png|jpeg|tiff/i)
+              fr.file_data['metadata']['filename'] !~ /readme/i &&
+                  fr.file_data['metadata']['filename'] =~ /png|jpeg|tiff/i
             end
               errors.add(:file_resources, :readme_and_image)
             end

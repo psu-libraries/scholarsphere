@@ -483,10 +483,10 @@ RSpec.describe 'Publishing a work', with_user: :user do
         FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_instrument_draft(metadata)
         FeatureHelpers::DashboardForm.save_and_continue
 
-        expect(page).not_to have_field('publisher_statement')
-        expect(page).not_to have_field('work_version_based_near')
-        expect(page).not_to have_field('work_version_source')
-        expect(page).not_to have_field('work_version_version_name')
+        expect(page).to have_no_field('publisher_statement')
+        expect(page).to have_no_field('work_version_based_near')
+        expect(page).to have_no_field('work_version_source')
+        expect(page).to have_no_field('work_version_version_name')
         expect(page).to have_field('work_version_model')
       end
 
@@ -1247,43 +1247,17 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
 
     context 'with a work that uses the instrument works deposit pathway' do
-      let(:work) { create :work, :instrument, versions_count: 1 }
+      let(:work) { create(:work, :instrument, versions_count: 1) }
       let(:work_version) { work.versions.first }
       let(:user) { work.depositor.user }
 
       it 'shows only the fields for an instrument work' do
         visit dashboard_form_publish_path(work_version)
 
-        expect(page).not_to have_field('work_version_based_near')
-        expect(page).not_to have_field('work_version_source')
-        expect(page).not_to have_field('work_version_version_name')
-        expect(page).not_to have_field('work_version_publisher_statement')
-        expect(page).to have_field('work_version_keyword')
-        expect(page).to have_field('work_version_owner')
-        expect(page).to have_field('work_version_manufacturer')
-        expect(page).to have_field('work_version_instrument_type')
-        expect(page).to have_field('work_version_measured_variable')
-        expect(page).to have_field('work_version_available_date')
-        expect(page).to have_field('work_version_decommission_date')
-        expect(page).to have_field('work_version_related_identifier')
-        expect(page).to have_field('work_version_alternative_identifier')
-        expect(page).to have_field('work_version_instrument_resource_type')
-        expect(page).to have_field('work_version_funding_reference')
-      end
-    end
-
-    context 'with a work that uses the instrument works deposit pathway' do
-      let(:work) { create :work, :instrument, versions_count: 1 }
-      let(:work_version) { work.versions.first }
-      let(:user) { work.depositor.user }
-
-      it 'shows only the fields for an instrument work' do
-        visit dashboard_form_publish_path(work_version)
-
-        expect(page).not_to have_field('work_version_based_near')
-        expect(page).not_to have_field('work_version_source')
-        expect(page).not_to have_field('work_version_version_name')
-        expect(page).not_to have_field('work_version_publisher_statement')
+        expect(page).to have_no_field('work_version_based_near')
+        expect(page).to have_no_field('work_version_source')
+        expect(page).to have_no_field('work_version_version_name')
+        expect(page).to have_no_field('work_version_publisher_statement')
         expect(page).to have_field('work_version_keyword')
         expect(page).to have_field('work_version_owner')
         expect(page).to have_field('work_version_manufacturer')
@@ -1817,7 +1791,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
     let(:user) { work_version.work.depositor.user }
 
     context 'with an instrument draft eligible for doi minting' do
-      let(:work) { create :work, work_type: 'instrument', versions_count: 1, has_draft: true, doi: nil }
+      let(:work) { create(:work, work_type: 'instrument', versions_count: 1, has_draft: true, doi: nil) }
       let(:work_version) { work.versions.first }
 
       it 'renders a checkbox requesting a doi be minted upon publish' do
@@ -1828,25 +1802,24 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
 
     context 'with a data and code draft eligible for doi minting' do
-      let(:work) { create :work, work_type: 'dataset', versions_count: 1, has_draft: true, doi: nil }
+      let(:work) { create(:work, work_type: 'dataset', versions_count: 1, has_draft: true, doi: nil) }
       let(:work_version) { work.versions.first }
 
-        it 'renders a checkbox requesting a doi be minted upon publish' do
-          visit dashboard_form_publish_path(work_version)
+      it 'renders a checkbox requesting a doi be minted upon publish' do
+        visit dashboard_form_publish_path(work_version)
 
-          expect(page).to have_content(I18n.t('dashboard.form.publish.doi.label'))
-        end
+        expect(page).to have_content(I18n.t('dashboard.form.publish.doi.label'))
       end
+    end
 
-      context 'when grad culminating experiences pathway' do
-        let(:work) { create(:work, work_type: 'masters_culminating_experience', versions_count: 1, has_draft: true, doi: nil) }
-        let(:work_version) { work.versions.first }
+    context 'when grad culminating experiences pathway' do
+      let(:work) { create(:work, work_type: 'masters_culminating_experience', versions_count: 1, has_draft: true, doi: nil) }
+      let(:work_version) { work.versions.first }
 
-        it 'renders a checkbox requesting a doi be minted upon publish' do
-          visit dashboard_form_publish_path(work_version)
+      it 'renders a checkbox requesting a doi be minted upon publish' do
+        visit dashboard_form_publish_path(work_version)
 
-          expect(page).to have_content(I18n.t('dashboard.form.publish.doi.label'))
-        end
+        expect(page).to have_content(I18n.t('dashboard.form.publish.doi.label'))
       end
     end
 

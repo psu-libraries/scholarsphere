@@ -129,7 +129,8 @@ RSpec.describe WorkVersion do
 
   describe 'validations' do
     subject(:work_version) { build(:work_version, work: work) }
-    let(:work) { build :work }
+
+    let(:work) { build(:work) }
 
     context 'when draft' do
       it { is_expected.to validate_presence_of(:title) }
@@ -547,7 +548,7 @@ RSpec.describe WorkVersion do
     end
 
     context 'with a work that uses the instrument works deposit pathway' do
-      let(:work_version) { create :work_version, :instrument_able_to_be_published, work: build(:work, work_type: 'instrument') }
+      let(:work_version) { create(:work_version, :instrument_able_to_be_published, work: build(:work, work_type: 'instrument')) }
 
       it 'sets the publisher to Scholarsphere automatically' do
         work_version.save
@@ -559,7 +560,7 @@ RSpec.describe WorkVersion do
     end
 
     context 'with a work that does not use the instrument works deposit pathway' do
-      let(:work_version) { create :work_version, :able_to_be_published, work: build(:work, work_type: 'article') }
+      let(:work_version) { create(:work_version, :able_to_be_published, work: build(:work, work_type: 'article')) }
 
       it 'does not edit the publisher field' do
         work_version.save
