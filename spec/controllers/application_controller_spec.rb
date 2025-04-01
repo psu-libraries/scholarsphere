@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ApplicationController, type: :controller do
+RSpec.describe ApplicationController do
   describe ActionDispatch::ExceptionWrapper do
     subject { described_class }
 

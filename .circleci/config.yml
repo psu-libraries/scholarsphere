@@ -2,6 +2,7 @@ version: 2.1
 orbs:
   docker: circleci/docker@2.8.2
   browser-tools: circleci/browser-tools@1.5.2
+
 jobs:
   release:
     docker:
@@ -55,7 +56,7 @@ jobs:
             ./generate_app
   test:
     docker:
-      - image: cimg/ruby:3.1.6-browsers
+      - image: cimg/ruby:3.4.1-browsers
       - image: redis:6.2.6
       - image: minio/minio:RELEASE.2021-03-17T02-33-02Z
         entrypoint:

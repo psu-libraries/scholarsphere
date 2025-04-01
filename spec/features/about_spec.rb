@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'About', type: :feature do
+RSpec.describe 'About' do
   it 'renders content from a markdown template' do
     visit(about_path)
     expect(page).to have_content('About')

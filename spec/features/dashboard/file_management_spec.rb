@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Dashboard File Management', with_user: :user do
-  let(:work_version) { create :work_version, :draft, :with_files }
+  let(:work_version) { create(:work_version, :draft, :with_files) }
   let(:user) { work_version.depositor.user }
   let(:file_membership) { work_version.file_version_memberships.first }
 
@@ -25,7 +25,7 @@ RSpec.describe 'Dashboard File Management', with_user: :user do
     end
   end
 
-  it 'renames a file inline with JavaScript', js: true do
+  it 'renames a file inline with JavaScript', :js do
     visit(dashboard_work_version_file_list_path(work_version))
 
     edited_filename = "EDITED#{File.extname(file_membership.title)}"
@@ -51,6 +51,6 @@ RSpec.describe 'Dashboard File Management', with_user: :user do
 
     expect { file_membership.reload }.to raise_error(ActiveRecord::RecordNotFound)
 
-    expect(page).not_to have_content file_membership.title
+    expect(page).to have_no_content file_membership.title
   end
 end

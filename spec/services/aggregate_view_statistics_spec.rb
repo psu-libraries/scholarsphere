@@ -11,9 +11,9 @@ describe AggregateViewStatistics, type: :model do
   describe '#call' do
     subject(:view_stats) { described_class.call(models: [model_1, model_2]) }
 
-    let(:model_1) { create :work_version, :draft }
-    let(:model_2) { create :work_version, :draft }
-    let(:another_model) { create :work_version, :draft }
+    let(:model_1) { create(:work_version, :draft) }
+    let(:model_2) { create(:work_version, :draft) }
+    let(:another_model) { create(:work_version, :draft) }
 
     before do
       {

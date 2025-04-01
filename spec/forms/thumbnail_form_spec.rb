@@ -15,7 +15,7 @@ RSpec.describe ThumbnailForm, type: :model do
                 FileHelpers.shrine_upload(file: Pathname.new(fixture_paths.first).join('image.png')).to_json }
         end
 
-        let!(:thumbnail_upload) { create :thumbnail_upload, resource: work }
+        let!(:thumbnail_upload) { create(:thumbnail_upload, resource: work) }
 
         it 'deletes existing thumbnail_upload and file_resource and uploads the new one' do
           form.save

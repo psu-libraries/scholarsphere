@@ -8,11 +8,11 @@ class DoiMintingStatus
   ).freeze
 
   STATUSES.each do |status|
-    define_method "#{status}!" do
+    define_method :"#{status}!" do
       set status.to_s
     end
 
-    define_method "#{status}?" do
+    define_method :"#{status}?" do
       current_status.to_s == status.to_s
     end
   end

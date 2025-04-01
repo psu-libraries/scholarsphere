@@ -103,7 +103,7 @@ class Actor < ApplicationRecord
     orcid
     psu_id
   ].each do |field|
-    define_method "#{field}=" do |val|
+    define_method :"#{field}=" do |val|
       super(val.presence)
     end
   end

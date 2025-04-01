@@ -124,6 +124,7 @@ module Permissions
 
   def visibility_agent
     return Group.public_agent if open_access?
-    return Group.authorized_agent if authorized_access?
+
+    Group.authorized_agent if authorized_access?
   end
 end

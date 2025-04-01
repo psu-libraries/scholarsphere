@@ -11,7 +11,7 @@ module AdobePdf
     def initialize(resource)
       raise FileSizeExceededError, 'File size exceeds the limit of 100Mb' unless valid?(resource)
 
-      super(resource)
+      super
     end
 
     def call

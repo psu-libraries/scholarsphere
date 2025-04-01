@@ -49,9 +49,7 @@ RSpec.describe MintingStatusDoiComponent, type: :component do
 
     context 'when the doi minter is waiting' do
       before do
-        allow(mock_minting_status).to receive(:waiting?).and_return(true)
-        allow(mock_minting_status).to receive(:minting?).and_return(false)
-        allow(mock_minting_status).to receive(:error?).and_return(false)
+        allow(mock_minting_status).to receive_messages(waiting?: true, minting?: false, error?: false)
       end
 
       its(:css_class) { is_expected.to eq('badge badge-light') }
@@ -60,9 +58,7 @@ RSpec.describe MintingStatusDoiComponent, type: :component do
 
     context 'when the doi minter is minting' do
       before do
-        allow(mock_minting_status).to receive(:waiting?).and_return(false)
-        allow(mock_minting_status).to receive(:minting?).and_return(true)
-        allow(mock_minting_status).to receive(:error?).and_return(false)
+        allow(mock_minting_status).to receive_messages(waiting?: false, minting?: true, error?: false)
       end
 
       its(:css_class) { is_expected.to eq('badge badge-light') }
@@ -71,9 +67,7 @@ RSpec.describe MintingStatusDoiComponent, type: :component do
 
     context 'when the doi minter is error' do
       before do
-        allow(mock_minting_status).to receive(:waiting?).and_return(false)
-        allow(mock_minting_status).to receive(:minting?).and_return(false)
-        allow(mock_minting_status).to receive(:error?).and_return(true)
+        allow(mock_minting_status).to receive_messages(waiting?: false, minting?: false, error?: true)
       end
 
       its(:css_class) { is_expected.to eq('text-danger') }

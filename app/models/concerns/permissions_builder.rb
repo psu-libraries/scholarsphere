@@ -25,7 +25,7 @@
 
 class PermissionsBuilder < Module
   def initialize(level:, agents:, inherit: [], white_list: nil)
-    define_method "#{level}_agents" do
+    define_method :"#{level}_agents" do
       access_controls.map do |control|
         control.agent if control.access_level == level
       end
@@ -34,21 +34,21 @@ class PermissionsBuilder < Module
     # @note There's a little bit of "concern bleed" because an agent, like a user, can have associated agents, i.e.
     # groups, which impact how we determine access. For now, we can ask the agent if it has any groups, and that should
     # be fine, but we can refactor later, if desired.
-    define_method "#{level}_access?" do |agent|
+    define_method :"#{level}_access?" do |agent|
       associated_agents = agent.try(:groups) || []
       available_agents = associated_agents.to_a + [agent]
-      (send("#{level}_agents") & available_agents).any?
+      send(:"#{level}_agents").intersect?(available_agents)
     end
 
-    define_method "grant_#{level}_access" do |*args|
+    define_method :"grant_#{level}_access" do |*args|
       args.map do |agent|
         Array.wrap(inherit).push(level).map do |access_level|
-          access_controls.build(access_level: access_level, agent: agent) unless send("#{level}_access?", agent)
+          access_controls.build(access_level: access_level, agent: agent) unless send(:"#{level}_access?", agent)
         end
       end
     end
 
-    define_method "revoke_#{level}_access" do |*args|
+    define_method :"revoke_#{level}_access" do |*args|
       args.map do |agent|
         Array.wrap(inherit).push(level).map do |access_level|
           self.access_controls = access_controls.reject do |control|
@@ -59,19 +59,19 @@ class PermissionsBuilder < Module
     end
 
     agents.each do |agent|
-      define_method "#{level}_#{agent.to_s.pluralize.downcase}" do
-        send("#{level}_agents").select { |level_agent| level_agent.is_a?(agent) }
+      define_method :"#{level}_#{agent.to_s.pluralize.downcase}" do
+        send(:"#{level}_agents").select { |level_agent| level_agent.is_a?(agent) }
       end
     end
 
     agents.each do |agent|
-      define_method "#{level}_#{agent.to_s.pluralize.downcase}=" do |list|
+      define_method :"#{level}_#{agent.to_s.pluralize.downcase}=" do |list|
         # Remove access to agents not in the list or in the white list function
-        revoke = send("#{level}_#{agent.to_s.pluralize.downcase}") - list - Array.wrap(white_list.try(:call))
-        send("revoke_#{level}_access", *revoke)
+        revoke = send(:"#{level}_#{agent.to_s.pluralize.downcase}") - list - Array.wrap(white_list.try(:call))
+        send(:"revoke_#{level}_access", *revoke)
 
         # Grant access to agents in the list
-        send("grant_#{level}_access", *list)
+        send(:"grant_#{level}_access", *list)
       end
     end
   end

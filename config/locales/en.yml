@@ -633,6 +633,7 @@ en:
         truncated_attributes: "and %{count} more"
   omniauth:
     login_error: 'There was a problem logging you in. We have been notified of the issue and will work to fix it. Please try again later.'
+    not_affiliated_with_psu: 'You are not affiliated with Penn State and cannot log in.'
   home:
     intro:
       heading: 'ScholarSphere Updates'

@@ -58,7 +58,7 @@ RSpec.describe 'Creating and editing collections', :inline_jobs, with_user: :use
 
     let(:another_user) { create(:user) }
 
-    it 'steps through each tab of the form until the collection is complete', js: true do
+    it 'steps through each tab of the form until the collection is complete', :js do
       initial_collection_count = Collection.count
 
       visit dashboard_form_collections_path
@@ -140,22 +140,22 @@ RSpec.describe 'Creating and editing collections', :inline_jobs, with_user: :use
 
       find_all('.select2').first.click
 
-      expect(page).to have_selector('li[data-select2-id]', count: 5)
+      expect(page).to have_css('li[data-select2-id]', count: 5)
 
-      expect(page).to have_selector('li[data-select2-id]', text: published_work.representative_version.title)
-      expect(page).to have_selector('li[data-select2-id]', text: published_work_with_draft.representative_version.title)
-      expect(page).to have_selector('li[data-select2-id]', text: proxy_work.representative_version.title)
-      expect(page).to have_selector('li[data-select2-id]', text: edit_work.representative_version.title)
-      expect(page).to have_selector('li[data-select2-id]', text: draft_work.representative_version.title)
-      expect(page).not_to have_selector('li[data-select2-id]', text: other_work.representative_version.title)
+      expect(page).to have_css('li[data-select2-id]', text: published_work.representative_version.title)
+      expect(page).to have_css('li[data-select2-id]', text: published_work_with_draft.representative_version.title)
+      expect(page).to have_css('li[data-select2-id]', text: proxy_work.representative_version.title)
+      expect(page).to have_css('li[data-select2-id]', text: edit_work.representative_version.title)
+      expect(page).to have_css('li[data-select2-id]', text: draft_work.representative_version.title)
+      expect(page).to have_no_css('li[data-select2-id]', text: other_work.representative_version.title)
 
       mock_solr_indexing_job
       FeatureHelpers::DashboardForm.select_work(published_work.representative_version.title)
 
       # Test that the work that was selected no longer appears in the dropdown
       find_all('.select2').first.click
-      expect(page).to have_selector('li[data-select2-id]', count: 4)
-      expect(page).not_to have_selector('li[data-select2-id]', text: published_work.representative_version.title)
+      expect(page).to have_css('li[data-select2-id]', count: 4)
+      expect(page).to have_no_css('li[data-select2-id]', text: published_work.representative_version.title)
 
       FeatureHelpers::DashboardForm.finish
       expect(SolrIndexingJob).to have_received(:perform_later).once
