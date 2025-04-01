@@ -28,12 +28,12 @@ class FlashMessageComponent < ApplicationComponent
     end
 
     def alert_class
-      HashWithIndifferentAccess.new({
-                                      success: 'alert-success',
-                                      notice: 'alert-info',
-                                      alert: 'alert-warning',
-                                      error: 'alert-danger'
-                                    })
+      ActiveSupport::HashWithIndifferentAccess.new({
+                                                     success: 'alert-success',
+                                                     notice: 'alert-info',
+                                                     alert: 'alert-warning',
+                                                     error: 'alert-danger'
+                                                   })
     end
 
     def default_class

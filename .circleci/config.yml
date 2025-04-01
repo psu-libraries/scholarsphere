@@ -1,8 +1,8 @@
 version: 2.1
 
 orbs:
-  docker: circleci/docker@2.1.2
-  browser-tools: circleci/browser-tools@1.4.7
+  docker: circleci/docker@2.6.0
+  browser-tools: circleci/browser-tools@1.5.2
 
 jobs:
   release:
@@ -30,7 +30,6 @@ jobs:
         user: root
     steps:
       - setup_remote_docker:
-          version: docker24
           docker_layer_caching: true
       - checkout
       - docker/check:
@@ -60,7 +59,7 @@ jobs:
             ./generate_app
   test:
     docker:
-      - image: cimg/ruby:3.1.2-browsers
+      - image: cimg/ruby:3.4.1-browsers
       - image: redis:6.2.6
       - image: minio/minio:RELEASE.2021-03-17T02-33-02Z
         entrypoint:
@@ -96,6 +95,7 @@ jobs:
       POSTGRES_PASSWORD: scholarsphere
       POSTGRES_DB: scholarsphere
       POSTGRES_HOST: 127.0.0.1
+      RMD_HOST: https://metadata.libraries.psu.edu
     steps:
     - browser-tools/install-browser-tools
     - checkout
@@ -112,9 +112,9 @@ jobs:
           curl -L https://npmjs.com/install.sh | sudo bash
     - run:
         name: "Install dependencies for thumbnails"
-        command: | 
+        command: |
           wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-          sudo apt-get update 
+          sudo apt-get update
           sudo apt-get install -y imagemagick ghostscript libreoffice
           sudo cp config/policy.xml /etc/ImageMagick-6/policy.xml
     - run:
@@ -135,7 +135,7 @@ jobs:
     - save_cache:
         paths:
           - vendor/bundle
-        key: bundle1-{{ checksum "Gemfile.lock" }} 
+        key: bundle1-{{ checksum "Gemfile.lock" }}
     - save_cache:
         key: yarn1-{{ checksum "yarn.lock" }}
         paths:
@@ -171,11 +171,11 @@ workflows:
                 - /.*/
       - test
       - publish:
-          context: 
+          context:
             - org-global
 
       - deploy:
-          context: 
+          context:
             - org-global
           requires:
             - test

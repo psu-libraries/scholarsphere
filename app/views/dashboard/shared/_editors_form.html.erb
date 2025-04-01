@@ -18,12 +18,19 @@
   <%= render FormErrorMessageComponent.new(form: form) %>
 
   <%= render 'form_fields/multi_text', form: form, attribute: :edit_users %>
-  <%= render 'form_fields/select',
-             form: form,
-             attribute: :edit_groups,
-             options_for_select: form.object.group_options,
-             include_blank: true,
-             multiple: true %>
+  <% if current_user.admin? %>
+    <%= render 'form_fields/multi_text',
+               form: form,
+               attribute: :edit_groups,
+               options_for_select: form.object.edit_groups %>
+  <% else %>
+    <%= render 'form_fields/select',
+               form: form,
+               attribute: :edit_groups,
+               options_for_select: form.object.group_options,
+               include_blank: true,
+               multiple: true %>
+  <% end %>
 
   <div class="form-group mb-3">
     <div class="form-check">

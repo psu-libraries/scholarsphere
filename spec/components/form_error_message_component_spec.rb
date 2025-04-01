@@ -9,7 +9,7 @@ RSpec.describe FormErrorMessageComponent, type: :component do
   let(:result) { render_inline(component) }
 
   let(:form) { instance_double('ActionView::Helpers::FormBuilder', object: record) }
-  let(:record) { build_stubbed :work_version, title: nil }
+  let(:record) { build_stubbed(:work_version, title: nil) }
   let(:heading) { 'My Heading' }
 
   before { record.validate }

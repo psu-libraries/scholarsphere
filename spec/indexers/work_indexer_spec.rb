@@ -51,7 +51,7 @@ RSpec.describe WorkIndexer, :inline_jobs do
 
   context 'when the work belongs to a collection' do
     let(:work) { create(:work, :with_authorized_access) }
-    let(:work_version) { create :work_version, :able_to_be_published, work: work }
+    let(:work_version) { create(:work_version, :able_to_be_published, work: work) }
     let(:collection) { create(:collection) }
 
     before do

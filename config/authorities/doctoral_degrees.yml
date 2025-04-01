@@ -1,0 +1,16 @@
+terms:
+  - id: DED
+    term: Doctor of Education
+    active: true
+  - id: DMA
+    term: Doctor of Musical Arts
+    active: true
+  - id: DNP
+    term: Doctor of Nursing Practice
+    active: true
+  - id: DrPH
+    term: Doctor of Public Health
+    active: true
+  - id: PHD
+    term: Doctor of Philosophy
+    active: true

@@ -14,7 +14,7 @@ RSpec/MultipleMemoizedHelpers:
   Enabled: false
 
 AllCops:
-  TargetRubyVersion: 3.1.2
+  TargetRubyVersion: 3.4.1
   Exclude:
     - 'db/**/*'
     - 'script/**/*'
@@ -59,7 +59,7 @@ Rails/ApplicationController:
 
 Rails/SkipsModelValidations:
   Exclude:
-    - 'app/controllers/dashboard/form/publish_controller.rb'
+    - 'app/services/depositor_request_service.rb'
     - 'app/models/api_token.rb'
     - 'app/services/migrate_collection_ids.rb'
     - 'app/services/doi_service.rb'
@@ -158,3 +158,6 @@ Layout/LineLength:
     - 'spec/features/dashboard/work_version_form_spec.rb'
     - 'spec/forms/work_deposit_pathways/instrument/publish_form_spec.rb'
 
+RSpec/ReceiveMessages:
+  Exclude:
+    - 'spec/decorators/resource_decorator_spec.rb'

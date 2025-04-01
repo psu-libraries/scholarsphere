@@ -7,6 +7,8 @@ class Work < ApplicationRecord
   include GeneratedUuids
   include ThumbnailSelections
 
+  after_destroy :notify_work_deleted
+
   fields_with_dois :doi, :latest_published_version_dois
 
   delegate :email, :display_name, to: :depositor
@@ -60,8 +62,18 @@ class Work < ApplicationRecord
   validate :embargoed_until_is_valid_date
 
   module Types
+    extend Enumerable
+
     def self.all
-      general.union(scholarly_works).union(data_and_code).union(instrument).freeze
+      general.union(scholarly_works)
+        .union(data_and_code)
+        .union(grad_culminating_experiences)
+        .union(instrument)
+        .freeze
+    end
+
+    def self.each(&)
+      all.each(&)
     end
 
     def self.general
@@ -86,7 +98,6 @@ class Work < ApplicationRecord
         capstone_project
         conference_proceeding
         dissertation
-        masters_culminating_experience
         masters_thesis
         part_of_book
         report
@@ -105,6 +116,13 @@ class Work < ApplicationRecord
     def self.instrument
       %w[
         instrument
+    ].freeze
+    end
+
+    def self.grad_culminating_experiences
+      %w[
+        masters_culminating_experience
+        professional_doctoral_culminating_experience
       ].freeze
     end
 
@@ -120,12 +138,22 @@ class Work < ApplicationRecord
       'unspecified'
     end
 
+    # TODO: Once these have been totally cleaned from the db,
+    # we'll no longer need to define them here.
+    def self.retired
+      %w{
+        capstone_project
+        dissertation
+        masters_thesis
+      }
+    end
+
     def self.display(type)
       type.humanize.titleize
     end
 
     def self.options_for_select_box
-      (all - [unspecified, thesis])
+      (all - [unspecified, thesis, retired].flatten)
         .sort
         .map { |type| [display(type), type] }
     end
@@ -135,7 +163,7 @@ class Work < ApplicationRecord
     CURRENT_VERSION = '2.0'
   end
 
-  enum work_type: Types.all.zip(Types.all).to_h
+  enum :work_type, Types.all.zip(Types.all).to_h
 
   validates :work_type,
             presence: true
@@ -143,8 +171,8 @@ class Work < ApplicationRecord
   validates :versions,
             presence: true
 
-  def self.build_with_empty_version(*args)
-    work = new(*args)
+  def self.build_with_empty_version(*)
+    work = new(*)
     work.versions.build if work.versions.empty?
     work.versions.first.version_number = 1
     work
@@ -280,5 +308,9 @@ class Work < ApplicationRecord
         errors.add(:embargoed_until, :max)
         nil
       end
+    end
+
+    def notify_work_deleted
+      WorkRemovedWebhookJob.perform_later(uuid)
     end
 end

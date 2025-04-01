@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Dashboard::BaseController, type: :controller do
+RSpec.describe Dashboard::BaseController do
   describe '#user_for_paper_trail' do
     let(:user) { create(:user) }
 

@@ -3,7 +3,7 @@
 RSpec::Matchers.define :have_jsonb_accessor do |attribute_name|
   match do |model|
     model.respond_to?(attribute_name) &&
-      model.respond_to?("#{attribute_name}=") &&
+      model.respond_to?(:"#{attribute_name}=") &&
       test_default_value(model, attribute_name) &&
       test_accessor_value(model, attribute_name)
   end
@@ -45,7 +45,7 @@ RSpec::Matchers.define :have_jsonb_accessor do |attribute_name|
             else 'string'
             end
     value = [value] if @is_array
-    model.send("#{attribute_name}=", value)
+    model.send(:"#{attribute_name}=", value)
     model.send(attribute_name) == value
   end
 end

@@ -2,7 +2,6 @@
   <%= render 'form_fields/select',
              form: form,
              attribute: :rights,
-             required: true,
              options_for_select: WorkVersion::Licenses.options_for_select_box,
              include_blank: true %>
 </div>
@@ -30,28 +29,12 @@
       <%= render 'curation', form: form %>
     <% end %>
 
+    <% if allow_accessibility_remediation? || @resource.accessibility_remediation_requested %>
+      <%= render 'remediation', form: form %>
+    <% end %>
+
     <% if allow_mint_doi? %>
       <%= render 'doi', form: form %>
     <% end %>
-
-    <div class="form-group mt-5">
-      <div class="keyline keyline--left">
-        <h2 id="<%= WorkVersion.human_attribute_name(:depositor_agreement).parameterize %>" class="h4">
-          <%= WorkVersion.human_attribute_name(:depositor_agreement) %>
-        </h2>
-      </div>
-
-      <div class="form-check">
-        <%= form.check_box :depositor_agreement,
-                           required: true,
-                           class: 'form-check-input' %>
-
-        <%= form.label :depositor_agreement, class: 'form-check-label' do %>
-          <%= t('dashboard.work_versions.publish.agreement_preamble') %>
-          <%= link_to t('dashboard.work_versions.publish.agreement_link'), agreement_path, target: :_blank, rel: 'noopener' %>.
-        <% end %>
-
-      </div>
-    </div>
   </div>
 <% end %>

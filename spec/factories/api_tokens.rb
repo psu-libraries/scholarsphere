@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :api_token do
-    association :application
+    application
     token { nil } # Typically generated in an after_initialize
   end
 end

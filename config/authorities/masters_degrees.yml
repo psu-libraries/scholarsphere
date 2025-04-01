@@ -1,0 +1,7 @@
+terms:
+  - id: MA
+    term: Master of Arts
+    active: true
+  - id: MS
+    term: Master of Science
+    active: true

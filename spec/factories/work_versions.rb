@@ -27,7 +27,11 @@ FactoryBot.define do
     end
 
     trait :article do
-      association :work, :article
+      work factory: %i[work article]
+    end
+
+    trait :grad_culminating_experience do
+      work factory: %i[work masters_culminating_experience]
     end
 
     trait :instrument do
@@ -92,6 +96,19 @@ FactoryBot.define do
       published_date { Faker::Date.between(from: 2.years.ago, to: Date.today).iso8601 }
     end
 
+    # A draft masters_culminating_experience that has everything needed to pass validations and be published
+    trait :grad_culminating_experience_able_to_be_published do
+      grad_culminating_experience
+      draft
+      with_files
+      with_creators
+      description { Faker::Lorem.paragraph }
+      published_date { Faker::Date.between(from: 2.years.ago, to: Date.today).iso8601 }
+      sub_work_type { 'Capstone Project' }
+      program { 'Computer Science' }
+      degree { 'Master of Science' }
+    end
+
     # A valid published work-version
     trait :published do
       able_to_be_published
@@ -124,6 +141,9 @@ FactoryBot.define do
       owner { Faker::Book.author }
       manufacturer { Faker::Company.name }
       model { Faker::Number.leading_zero_number(digits: 5) }
+      sub_work_type { 'Capstone Project' }
+      program { 'Computer Science' }
+      degree { 'Master of Science' }
     end
   end
 end

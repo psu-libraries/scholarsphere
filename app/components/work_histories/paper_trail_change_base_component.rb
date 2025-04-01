@@ -46,7 +46,8 @@ class WorkHistories::PaperTrailChangeBaseComponent < ApplicationComponent
     def event_class
       return 'create' if create?
       return 'update' if update?
-      return 'delete' if destroy?
+
+      'delete' if destroy?
     end
 
     def action
@@ -54,7 +55,7 @@ class WorkHistories::PaperTrailChangeBaseComponent < ApplicationComponent
     end
 
     def timestamp
-      paper_trail_version.created_at.to_s(:long)
+      paper_trail_version.created_at.strftime('%B %d, %Y %H:%M')
     end
 
     def user_name

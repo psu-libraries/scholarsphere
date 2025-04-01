@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe WorkVersion, type: :model do
+RSpec.describe WorkVersion do
   it_behaves_like 'a resource with view statistics' do
     let(:resource) { create(:work_version) }
   end
@@ -41,6 +41,9 @@ RSpec.describe WorkVersion, type: :model do
     it { is_expected.to have_jsonb_accessor(:based_near).of_type(:string).is_array.with_default([]) }
     it { is_expected.to have_jsonb_accessor(:related_url).of_type(:string).is_array.with_default([]) }
     it { is_expected.to have_jsonb_accessor(:source).of_type(:string).is_array.with_default([]) }
+    it { is_expected.to have_jsonb_accessor(:sub_work_type).of_type(:string) }
+    it { is_expected.to have_jsonb_accessor(:program).of_type(:string) }
+    it { is_expected.to have_jsonb_accessor(:degree).of_type(:string) }
   end
 
   describe 'factory' do
@@ -95,6 +98,33 @@ RSpec.describe WorkVersion, type: :model do
     it { is_expected.to transition_from(:withdrawn).to(:published).on_event(:publish) }
     it { is_expected.to transition_from(:draft).to(:removed).on_event(:remove) }
     it { is_expected.to transition_from(:withdrawn).to(:removed).on_event(:remove) }
+  end
+
+  describe 'state transition events' do
+    let(:work) { create(:work) }
+    let!(:work_version) { create(:work_version, :published, work: work) }
+
+    before { allow(WorkRemovedWebhookJob).to receive(:perform_later) }
+
+    describe '#withdraw!' do
+      context 'when withdrawing the work version causes the parent work to be withdrawn' do
+        it 'enqueues a notification job' do
+          work_version.withdraw!
+
+          expect(WorkRemovedWebhookJob).to have_received(:perform_later).with(work.uuid)
+        end
+      end
+
+      context 'when withdrawing the work version does not cause the parent work to be withdrawn' do
+        before { create(:work_version, :published, work: work) }
+
+        it 'does not enqueue a notification job' do
+          work_version.withdraw!
+
+          expect(WorkRemovedWebhookJob).not_to have_received(:perform_later).with(work.uuid)
+        end
+      end
+    end
   end
 
   describe 'validations' do
@@ -273,7 +303,7 @@ RSpec.describe WorkVersion, type: :model do
   it { is_expected.to delegate_method(:thumbnail_url).to(:work) }
 
   describe 'after save' do
-    let(:work_version) { build :work_version, :published }
+    let(:work_version) { build(:work_version, :published) }
 
     # I've heard it's bad practice to mock the object under test, but I can't
     # think of a better way to do this without testing the contents of
@@ -287,7 +317,7 @@ RSpec.describe WorkVersion, type: :model do
   end
 
   describe '.build_with_empty_work' do
-    let(:depositor) { build :actor, surname: 'Expected Depositor' }
+    let(:depositor) { build(:actor, surname: 'Expected Depositor') }
 
     it 'builds a WorkVersion with an initialized work' do
       wv = described_class.build_with_empty_work(depositor: depositor)
@@ -329,7 +359,7 @@ RSpec.describe WorkVersion, type: :model do
       wv = described_class.build_with_empty_work({
                                                    title: 'My work',
                                                    work_attributes: {
-                                                     work_type: Work::Types.all.first
+                                                     work_type: Work::Types.first
                                                    }
                                                  },
                                                  depositor: depositor)
@@ -341,18 +371,18 @@ RSpec.describe WorkVersion, type: :model do
       wv = described_class.build_with_empty_work({
                                                    title: 'my title',
                                                    work_attributes: {
-                                                     work_type: Work::Types.all.first
+                                                     work_type: Work::Types.first
                                                    }
                                                  },
                                                  depositor: depositor)
 
       expect(wv.title).to eq 'my title'
-      expect(wv.work.work_type).to eq Work::Types.all.first
+      expect(wv.work.work_type).to eq Work::Types.first
     end
   end
 
   describe '#resource_with_doi' do
-    let(:work) { build_stubbed :work }
+    let(:work) { build_stubbed(:work) }
     let(:work_version) { described_class.new(work: work) }
 
     it 'returns the parent work' do
@@ -361,8 +391,8 @@ RSpec.describe WorkVersion, type: :model do
   end
 
   describe '#build_creator' do
-    let(:actor) { build_stubbed :actor }
-    let(:work_version) { build_stubbed :work_version, :with_creators, creator_count: 0 }
+    let(:actor) { build_stubbed(:actor) }
+    let(:work_version) { build_stubbed(:work_version, :with_creators, creator_count: 0) }
 
     it 'builds a creator for the given Actor but does not persist it' do
       expect {
@@ -425,7 +455,7 @@ RSpec.describe WorkVersion, type: :model do
         embargoed_until_dtsi: nil,
         file_resource_ids_ssim: [work_version.file_resources.first.uuid],
         file_version_titles_ssim: [work_version.file_version_memberships.first.title],
-        latest_version_bsi: false,
+        latest_version_bsi: true,
         proxy_id_isi: nil,
         published_date_dtrsi: '1999',
         title_ssort: kind_of(String),
@@ -496,7 +526,7 @@ RSpec.describe WorkVersion, type: :model do
   end
 
   describe '#publish' do
-    let(:work_version) { build :work_version, :able_to_be_published }
+    let(:work_version) { build(:work_version, :able_to_be_published) }
     let(:work) { work_version.work }
 
     it "updates the work's deposit agreement" do
@@ -538,6 +568,43 @@ RSpec.describe WorkVersion, type: :model do
         expect(work_version).to be_published
         expect(work_version.reload.publisher).to eq []
       end
+    end
+  end
+
+  context 'with a masters_culminating_experience work type' do
+    let(:work_version) { create(:work_version, :grad_culminating_experience_able_to_be_published) }
+
+    it 'sets the publisher to ScholarSphere automatically' do
+      work_version.save
+      expect(work_version.publisher).to eq []
+      work_version.publish!
+      expect(work_version).to be_published
+      expect(work_version.reload.publisher).to eq ['ScholarSphere']
+    end
+  end
+
+  context 'with a professional_doctoral_culminating_experience work type' do
+    let(:work_version) { create(:work_version, :grad_culminating_experience_able_to_be_published,
+                                work: build(:work, work_type: 'professional_doctoral_culminating_experience')) }
+
+    it 'sets the publisher to ScholarSphere automatically' do
+      work_version.save
+      expect(work_version.publisher).to eq []
+      work_version.publish!
+      expect(work_version).to be_published
+      expect(work_version.reload.publisher).to eq ['ScholarSphere']
+    end
+  end
+
+  context 'with a work that is not a masters_culminating_experience or a professional_doctoral_culminating_experience' do
+    let(:work_version) { create(:work_version, :able_to_be_published, work: build(:work, work_type: 'article')) }
+
+    it 'does not edit the publisher field' do
+      work_version.save
+      expect(work_version.publisher).to eq []
+      work_version.publish!
+      expect(work_version).to be_published
+      expect(work_version.reload.publisher).to eq []
     end
   end
 
@@ -682,10 +749,10 @@ RSpec.describe WorkVersion, type: :model do
 
   describe '#set_thumbnail_selection' do
     context 'when associated work does not have any published versions' do
-      let(:work) { create :work, has_draft: true }
+      let(:work) { create(:work, has_draft: true) }
 
       before do
-        work.versions.last.file_resources << (create :file_resource)
+        work.versions.last.file_resources << (create(:file_resource))
         work.versions.last.save
       end
 
@@ -706,10 +773,10 @@ RSpec.describe WorkVersion, type: :model do
     end
 
     context 'when associated work does have a published version' do
-      let(:work) { create :work, versions_count: 1, has_draft: false }
+      let(:work) { create(:work, versions_count: 1, has_draft: false) }
 
       before do
-        work.versions.last.file_resources << (create :file_resource)
+        work.versions.last.file_resources << (create(:file_resource))
         work.versions.last.save
       end
 
@@ -847,6 +914,40 @@ RSpec.describe WorkVersion, type: :model do
 
       it 'returns true' do
         expect(wv.has_publisher_doi?).to eq true
+      end
+    end
+  end
+
+  describe '#needs_accessibility_review' do
+    context 'when version is not the latest published version' do
+      let(:wv) { create(:work_version, :published, accessibility_remediation_requested: requested) }
+      let(:requested) { false }
+      let(:wv2) { create(:work_version, :published) }
+      let(:work) { create(:work) }
+
+      it 'returns false' do
+        work.versions << [wv, wv2]
+        expect(wv.needs_accessibility_review).to be false
+      end
+    end
+
+    context 'when version is the latest published version' do
+      let(:wv) { create(:work_version, :published, accessibility_remediation_requested: requested) }
+      let(:work) { create(:work, versions: [wv]) }
+      let(:requested) { false }
+
+      context 'when remediation has not been requested' do
+        it 'returns true' do
+          expect(wv.needs_accessibility_review).to be true
+        end
+      end
+
+      context 'when remediation has been requested' do
+        let(:requested) { true }
+
+        it 'returns false' do
+          expect(wv.needs_accessibility_review).to be false
+        end
       end
     end
   end

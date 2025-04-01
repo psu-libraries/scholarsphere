@@ -10,7 +10,7 @@ require 'rails_helper'
 # objects as possible in a single it-block with big comments to denote each test
 
 RSpec.describe WorkHistories::FileMembershipChangeComponent, type: :component do
-  let(:user) { build_stubbed :user }
+  let(:user) { build_stubbed(:user) }
 
   describe '#initialize' do
     it 'requires paper_trail_version to apply to a FileVersionMembership' do
@@ -23,14 +23,14 @@ RSpec.describe WorkHistories::FileMembershipChangeComponent, type: :component do
     end
   end
 
-  describe 'rendering', versioning: true do
+  describe 'rendering', :versioning do
     it 'renders the correct state given the paper trail version' do
       ##########################################################################
       #
       # Context: when the FileVersionMembership has been created
       #
       ##########################################################################
-      file_version_membership = create :file_version_membership
+      file_version_membership = create(:file_version_membership)
       paper_trail_version = file_version_membership.versions.last
       allow(paper_trail_version).to receive(:created_at)
         .and_return(Time.zone.parse('2019-12-20 14:00:00'))
