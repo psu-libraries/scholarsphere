@@ -4,22 +4,7 @@ import consumer from "../channels/consumer"
 export default class extends Controller {
   static targets = ['show_buttons'];
 
-//   updatePublishStatus(data) {
-//     console.log("TESTING: PublishStatusController updatePublishStatus called");
-//     const allowPublish = data.allow_publish === "true";
-//     const primaryAction = data.primary_action;
-//     const show = allowPublish || primaryAction === "save_and_continue";
-//     // if (show) {
-//     //     this.show_buttonsTarget.classList.remove('d-none')
-//     //   } else {
-//     //     this.show_buttonsTarget.classList.add('d-none')
-//     //   }
-//     console.log("TESTING: PublishStatusController show set as ", show);
-//     this.show_buttonsTarget.classList.toggle('d-none', !show);
-//   }
-
   connect() {
-    console.log("TESTING: PublishStatusController connected");
     consumer.subscriptions.create(
       { channel: "PublishStatusChannel" },
       {
@@ -47,9 +32,5 @@ export default class extends Controller {
 
     console.log("TESTING: PublishStatusController show set as ", show);
     this.show_buttonsTarget.classList.toggle('d-none', !show);
-  }
-
-  disconnect() {
-    this.subscription.unsubscribe();
   }
 }

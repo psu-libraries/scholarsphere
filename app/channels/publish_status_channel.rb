@@ -1,5 +1,5 @@
 class PublishStatusChannel < ApplicationCable::Channel
     def subscribed
-      stream_for "publish_status"
+      stream_from "publish_status_channel"
     end
   end
