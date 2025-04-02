@@ -16,7 +16,7 @@ Rails.application.routes.draw do
 
         get   'settings', to: 'application_settings#edit', as: :application_settings
         match 'settings', to: 'application_settings#update', via: %i[patch put]
-        post 'works/:id/curation_ticket', to: 'curation_ticket#create', as: 'create_curation_ticket'
+        post 'works/:id/admin_create_curation_ticket', to: 'curation_ticket#create', as: 'create_curation_ticket'
       end
     end
   end

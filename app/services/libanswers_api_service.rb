@@ -6,9 +6,11 @@ class LibanswersApiService
 
   def admin_create_curation_ticket(ticket_type, work_id)
     @work = Work.find(work_id)
+    accessibility_check_results = get_accessibility_check_results(@work, ticket_type)
     conn = create_connection
     response = conn.post(create_ticket_path, "quid=#{scholarsphere_queue_id(ticket_type)}&" +
                                              "pquestion=#{admin_subject(ticket_type)}&" +
+                                              (accessibility_check_results.empty? ? '' : "pdetails=#{accessibility_check_results}") +
                                              "pname=#{work.display_name}&" +
                                              "pemail=#{work.email}")
     handle_response(response)
@@ -30,6 +32,16 @@ class LibanswersApiService
   end
 
   private
+
+    def get_accessibility_check_results(work, ticket_type)
+      accessibility_check_results = []
+      if ticket_type == 'accessibility'
+        work.latest_version.file_resources.each do |fr|
+          accessibility_check_results << "#{fr.file_data['metadata']['filename']}: #{fr.accessibility_check_result&.formatted_report}"
+        end
+      end
+      accessibility_check_results.join("\n")
+    end
 
     def create_connection
       Faraday.new(url: host) do |f|
