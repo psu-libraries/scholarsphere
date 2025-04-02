@@ -4,6 +4,7 @@ class AccessibilityCheckResult < ApplicationRecord
   belongs_to :file_resource
 
   after_commit :broadcast_to_file_version_memberships
+  after_commit :broadcast_publish_status
 
   validates :detailed_report, presence: true
 
@@ -43,6 +44,15 @@ class AccessibilityCheckResult < ApplicationRecord
           accessibility_score: membership.accessibility_score
         )
       end
+    end
+
+    def broadcast_publish_status
+      resource = file_resource.work_versions.last
+
+      ActionCable.server.broadcast(
+        "publish_status_channel",
+        { allow_publish: AllowPublishService.check(resource) }
+      )
     end
 
     def format_report
