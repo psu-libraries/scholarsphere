@@ -2,7 +2,7 @@ import { Controller } from 'stimulus'
 import consumer from "../channels/consumer"
 
 export default class extends Controller {
-  static targets = ['show_buttons'];
+  static targets = ['show_buttons', 'help_text'];
 
   connect() {
     consumer.subscriptions.create(
@@ -32,5 +32,6 @@ export default class extends Controller {
 
     console.log("TESTING: PublishStatusController show set as ", show);
     this.show_buttonsTarget.classList.toggle('d-none', !show);
+    this.help_textTarget.classList.toggle('d-none', show);
   }
 }
