@@ -140,6 +140,7 @@ class WorkDepositPathway
                :published?,
                :draft?,
                :work,
+               :imported_metadata_from_rmd,
                :indexing_source=,
                :update_doi=,
                :work_type,
