@@ -26,6 +26,7 @@ RSpec.describe AccessibilityCheckResult do
     before do
       allow(check_result).to receive(:persisted?).and_return(true)
       allow(check_result).to receive(:broadcast_to_file_version_memberships)
+      allow(check_result).to receive(:broadcast_publish_status)
       check_result.instance_variable_set(:@_new_record_before_last_commit, true)
       test_user = user
       AllowPublishService.class_eval do
@@ -36,6 +37,7 @@ RSpec.describe AccessibilityCheckResult do
     it 'calls subscribe when created' do
       check_result.run_callbacks(:commit)
       expect(check_result).to have_received(:broadcast_to_file_version_memberships)
+      expect(check_result).to have_received(:broadcast_publish_status)
     end
   end
 
