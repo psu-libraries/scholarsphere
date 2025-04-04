@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe LegacyIdentifier, type: :model do
+RSpec.describe LegacyIdentifier do
   describe 'table' do
     it { is_expected.to have_db_column(:version).of_type(:integer) }
     it { is_expected.to have_db_column(:old_id).of_type(:string) }
@@ -22,14 +22,14 @@ RSpec.describe LegacyIdentifier, type: :model do
   end
 
   describe '.find_uuid' do
-    let(:work_version) { create :work_version }
+    let(:work_version) { create(:work_version) }
 
     context 'when the ID can be found' do
       before do
-        create :legacy_identifier,
+        create(:legacy_identifier,
                version: 1,
                old_id: 'old-123',
-               resource: work_version
+               resource: work_version)
       end
 
       it 'returns the UUID of the associated resource' do

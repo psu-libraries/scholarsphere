@@ -5,8 +5,8 @@ require 'rails_helper'
 RSpec.describe SessionViewStatsCache do
   let(:session) { double('session', id: 1) }
   let(:another_session) { double('session', id: 2) }
-  let(:work) { build_stubbed :work, id: 1 }
-  let(:collection) { build_stubbed :collection, id: 1 }
+  let(:work) { build_stubbed(:work, id: 1) }
+  let(:collection) { build_stubbed(:collection, id: 1) }
 
   before(:all) do
     redis = Redis.new(Rails.configuration.redis)

@@ -5,7 +5,7 @@ require 'rails_helper'
 # @note While this is technically a controller test, because it's testing our REST API, we're really using it as a
 # feature test to ensure end-to-end functionality of our ingest API.
 
-RSpec.describe Api::V1::IngestController, type: :controller do
+RSpec.describe Api::V1::IngestController do
   let(:api_token) { create(:api_token) }
   let(:depositor) { VCRHelpers.depositor }
   let(:creator) do
@@ -16,7 +16,7 @@ RSpec.describe Api::V1::IngestController, type: :controller do
 
   let(:metadata) { attributes_for(:work_version, :able_to_be_published) }
 
-  let(:json_response) { HashWithIndifferentAccess.new(JSON.parse(response.body)) }
+  let(:json_response) { ActiveSupport::HashWithIndifferentAccess.new(response.parsed_body) }
 
   before do
     allow(Api::V1::WorkPublisher).to receive(:call).and_call_original
@@ -38,7 +38,7 @@ RSpec.describe Api::V1::IngestController, type: :controller do
             visibility: Permissions::Visibility::OPEN
           },
           depositor: depositor,
-          content: [{ file: fixture_file_upload(File.join(fixture_path, 'image.png')) }]
+          content: [{ file: fixture_file_upload(File.join(fixture_paths, 'image.png')) }]
         }
       end
 
@@ -72,7 +72,7 @@ RSpec.describe Api::V1::IngestController, type: :controller do
             visibility: Permissions::Visibility::OPEN
           },
           depositor: depositor,
-          content: [{ file: fixture_file_upload(File.join(fixture_path, 'image.png')) }]
+          content: [{ file: fixture_file_upload(File.join(fixture_paths, 'image.png')) }]
         }
       end
 
@@ -103,7 +103,7 @@ RSpec.describe Api::V1::IngestController, type: :controller do
             visibility: Permissions::Visibility::OPEN
           },
           depositor: depositor,
-          content: [{ file: fixture_file_upload(File.join(fixture_path, 'image.png')) }]
+          content: [{ file: fixture_file_upload(File.join(fixture_paths, 'image.png')) }]
         }
       end
 
@@ -117,7 +117,7 @@ RSpec.describe Api::V1::IngestController, type: :controller do
 
     context 'when uploading files from S3', vcr: VCRHelpers.depositor_cassette do
       let(:s3_file) do
-        FileHelpers.shrine_upload(file: Pathname.new(fixture_path).join('image.png'))
+        FileHelpers.shrine_upload(file: Pathname.new(fixture_paths.first).join('image.png'))
       end
 
       before do
@@ -146,7 +146,7 @@ RSpec.describe Api::V1::IngestController, type: :controller do
 
     context 'with missing parameters' do
       let(:s3_file) do
-        FileHelpers.shrine_upload(file: Pathname.new(fixture_path).join('image.png'))
+        FileHelpers.shrine_upload(file: Pathname.new(fixture_paths.first).join('image.png'))
       end
 
       before do
@@ -168,7 +168,7 @@ RSpec.describe Api::V1::IngestController, type: :controller do
         post :create, params: {
           metadata: { title: nil },
           depositor: depositor,
-          content: [{ file: fixture_file_upload(File.join(fixture_path, 'image.png')) }]
+          content: [{ file: fixture_file_upload(File.join(fixture_paths, 'image.png')) }]
         }
       end
 
@@ -212,7 +212,7 @@ RSpec.describe Api::V1::IngestController, type: :controller do
             published_date: metadata[:published_date]
           },
           depositor: depositor,
-          content: [{ file: fixture_file_upload(File.join(fixture_path, 'image.png')) }]
+          content: [{ file: fixture_file_upload(File.join(fixture_paths, 'image.png')) }]
         }
       end
 
@@ -238,7 +238,7 @@ RSpec.describe Api::V1::IngestController, type: :controller do
             visibility: Permissions::Visibility::OPEN
           },
           depositor: 'unknown',
-          content: [{ file: fixture_file_upload(File.join(fixture_path, 'image.png')) }]
+          content: [{ file: fixture_file_upload(File.join(fixture_paths, 'image.png')) }]
         }
       end
 

@@ -13,8 +13,8 @@ class MetadataDiff
   # @param [WorkVersion, Object]
   # @param [Hash] opts
   # @example opts[:separator] will concatenate multiple values together. Default is ", "
-  def self.call(*args)
-    new(*args).hash
+  def self.call(*)
+    new(*).hash
   end
 
   def initialize(*args)

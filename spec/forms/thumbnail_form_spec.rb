@@ -12,10 +12,10 @@ RSpec.describe ThumbnailForm, type: :model do
       context 'when a thumbnail_upload already exists' do
         let(:params) do
           { thumbnail_upload:
-                FileHelpers.shrine_upload(file: Pathname.new(fixture_path).join('image.png')).to_json }
+                FileHelpers.shrine_upload(file: Pathname.new(fixture_paths.first).join('image.png')).to_json }
         end
 
-        let!(:thumbnail_upload) { create :thumbnail_upload, resource: work }
+        let!(:thumbnail_upload) { create(:thumbnail_upload, resource: work) }
 
         it 'deletes existing thumbnail_upload and file_resource and uploads the new one' do
           form.save
@@ -28,7 +28,7 @@ RSpec.describe ThumbnailForm, type: :model do
       context 'when a thumbnail_upload does not already exist' do
         let(:params) do
           { thumbnail_upload:
-                FileHelpers.shrine_upload(file: Pathname.new(fixture_path).join('image.png')).to_json }
+                FileHelpers.shrine_upload(file: Pathname.new(fixture_paths.first).join('image.png')).to_json }
         end
 
         it 'creates a thumbnail_upload and file_resource' do

@@ -46,4 +46,4 @@ http_interactions:
       string: '{"userid":"agw13","cprid":"2784093","givenName":"Adam","middleName":"Garner","familyName":"Wead","preferredGivenName":"Adam","preferredFamilyName":"Wead","active":true,"confHold":false,"universityEmail":"agw13@psu.edu","serviceAccount":false,"affiliation":["STAFF"],"displayName":"Adam
         Wead","link":{"href":"https://dev.apps.psu.edu/cpr/resources/2784093"}}'
   recorded_at: Tue, 16 Mar 2021 15:14:40 GMT
-recorded_with: VCR 6.0.0
+-recorded_with: VCR 6.0.0

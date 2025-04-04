@@ -35,7 +35,7 @@ class BaseMetadataComponent < ApplicationComponent
       if value.is_a? Enumerable
         format_multi_value(value: value, attr: attr)
       elsif value.respond_to?(:strftime) # Date/Time/DateTime/TimeWithZone etc
-        value.to_formatted_s(:long_without_time)
+        value.to_fs(:long_without_time)
       elsif value.is_a? Authorship
         value.display_name
       elsif value.is_a? ApplicationComponent

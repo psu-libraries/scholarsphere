@@ -35,7 +35,7 @@ class Authorship < ApplicationRecord
     given_name
     email
   ].each do |field|
-    define_method "#{field}=" do |val|
+    define_method :"#{field}=" do |val|
       super(val.presence)
     end
   end

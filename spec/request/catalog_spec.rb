@@ -9,13 +9,15 @@ RSpec.describe CatalogController, type: :request do
     # to display correctly, but that is currently out of scope.
     context 'when requesting an rss feed' do
       specify do
-        expect { get '/catalog.rss' }.to raise_error(ActionController::UnknownFormat)
+        get '/catalog.rss'
+        expect(response).to have_http_status(:not_acceptable)
       end
     end
 
     context 'when requesting an atom feed' do
       specify do
-        expect { get '/catalog.atom' }.to raise_error(ActionController::UnknownFormat)
+        get '/catalog.atom'
+        expect(response).to have_http_status(:not_acceptable)
       end
     end
   end

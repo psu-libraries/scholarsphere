@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe SolrIndexingJob, type: :job do
+RSpec.describe SolrIndexingJob do
   let(:indexable_resource) { instance_spy('WorkVerison') }
 
   describe '#perform' do

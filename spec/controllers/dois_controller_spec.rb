@@ -2,14 +2,14 @@
 
 require 'rails_helper'
 
-RSpec.describe DoisController, type: :controller do
+RSpec.describe DoisController do
   let(:user) { create(:user) }
   let(:admin) { create(:user, :admin) }
 
   describe 'POST #create' do
     let(:do_post) { post :create, params: { resource_id: resource.uuid } }
 
-    let(:resource) { create :work, doi: nil }
+    let(:resource) { create(:work, doi: nil) }
 
     before { allow(MintDoiAsync).to receive(:call) }
 
@@ -29,16 +29,16 @@ RSpec.describe DoisController, type: :controller do
       end
 
       context 'when happy path, and HTTP_REFERER is set' do
-        before { request.env['HTTP_REFERER'] = 'where_i_came_from' }
+        before { request.env['HTTP_REFERER'] = 'http://test.host/where_i_came_from/' }
 
         it 'redirects me to where I came from' do
           do_post
-          expect(response).to redirect_to 'where_i_came_from'
+          expect(response).to redirect_to 'http://test.host/where_i_came_from/'
         end
       end
 
       context 'with a Work that already has a DOI' do
-        let(:resource) { create :work, doi: FactoryBotHelpers.datacite_doi }
+        let(:resource) { create(:work, doi: FactoryBotHelpers.datacite_doi) }
 
         it 'does NOT mint a new doi' do
           do_post
@@ -71,7 +71,7 @@ RSpec.describe DoisController, type: :controller do
       end
 
       context 'with a WorkVersion' do
-        let(:resource) { create :work_version, :published }
+        let(:resource) { create(:work_version, :published) }
         let(:parent_work) { resource.work }
 
         before do

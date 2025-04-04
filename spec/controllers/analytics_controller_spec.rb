@@ -5,8 +5,8 @@ require 'rails_helper'
 # @note While this is technically a controller test, because it's testing our
 # REST API, we're really using it as a feature/request test
 
-RSpec.describe AnalyticsController, type: :controller do
-  let(:parsed_body) { JSON.parse response.body }
+RSpec.describe AnalyticsController do
+  let(:parsed_body) { response.parsed_body }
 
   describe 'GET #show' do
     context 'with a work version' do

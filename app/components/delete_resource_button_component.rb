@@ -33,6 +33,10 @@ class DeleteResourceButtonComponent < ApplicationComponent
     t('button')
   end
 
+  def tooltip
+    t('tooltip')
+  end
+
   def button_subtitle
     return t('collection') if collection?
     return t('draft') if work_version? && resource.draft?
@@ -53,13 +57,17 @@ class DeleteResourceButtonComponent < ApplicationComponent
     def work_version?
       [
         'WorkVersion',
+        'WorkDepositPathway::ContributorsFormBase',
         'WorkDepositPathway::ScholarlyWorks::DetailsForm',
         'WorkDepositPathway::ScholarlyWorks::PublishForm',
         'WorkDepositPathway::General::DetailsForm',
         'WorkDepositPathway::DataAndCode::DetailsForm',
         'WorkDepositPathway::DataAndCode::PublishForm',
         'WorkDepositPathway::Instrument::DetailsForm',
-        'WorkDepositPathway::Instrument::PublishForm'
+        'WorkDepositPathway::Instrument::ContributorsForm',
+        'WorkDepositPathway::Instrument::PublishForm',
+        'WorkDepositPathway::GradCulminatingExperiences::DetailsForm',
+        'WorkDepositPathway::GradCulminatingExperiences::PublishForm'
       ].include?(type)
     end
 

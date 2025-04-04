@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe 'Collection Settings Page', with_user: :user do
-  let(:user) { create :user }
-  let(:collection) { create :collection, depositor: user.actor }
+  let(:user) { create(:user) }
+  let(:collection) { create(:collection, depositor: user.actor) }
 
   it_behaves_like 'a resource with thumbnail settings' do
     let(:resource) { collection }
@@ -26,7 +26,7 @@ RSpec.describe 'Collection Settings Page', with_user: :user do
       click_button I18n.t!('resources.doi.create')
 
       expect(page).to have_current_path(edit_dashboard_collection_path(collection))
-      expect(page).not_to have_button I18n.t!('resources.doi.create')
+      expect(page).to have_no_button I18n.t!('resources.doi.create')
     end
   end
 
@@ -46,7 +46,7 @@ RSpec.describe 'Collection Settings Page', with_user: :user do
 
     context 'when removing an existing editor' do
       let(:editor) { create(:user) }
-      let(:collection) { create :collection, depositor: user.actor, edit_users: [editor] }
+      let(:collection) { create(:collection, depositor: user.actor, edit_users: [editor]) }
 
       it 'adds a user as an editor' do
         visit edit_dashboard_collection_path(collection)
@@ -61,7 +61,7 @@ RSpec.describe 'Collection Settings Page', with_user: :user do
     end
 
     context 'when the user does not exist' do
-      let(:collection) { create :collection, depositor: user.actor }
+      let(:collection) { create(:collection, depositor: user.actor) }
 
       it 'adds a user as an editor' do
         visit edit_dashboard_collection_path(collection)
@@ -77,7 +77,7 @@ RSpec.describe 'Collection Settings Page', with_user: :user do
     context 'when selecting a group' do
       let(:user) { create(:user, groups: User.default_groups + [group]) }
       let(:group) { create(:group) }
-      let(:collection) { create :collection, depositor: user.actor }
+      let(:collection) { create(:collection, depositor: user.actor) }
 
       it 'adds the group as an editor' do
         visit edit_dashboard_collection_path(collection)
@@ -96,13 +96,13 @@ RSpec.describe 'Collection Settings Page', with_user: :user do
     context 'when a regular user' do
       it 'does not allow a regular user to delete a collection' do
         visit edit_dashboard_collection_path(collection)
-        expect(page).not_to have_content(I18n.t!('dashboard.collections.edit.danger.explanation'))
-        expect(page).not_to have_link(I18n.t!('dashboard.form.actions.destroy.button'))
+        expect(page).to have_no_content(I18n.t!('dashboard.collections.edit.danger.explanation'))
+        expect(page).to have_no_link(I18n.t!('dashboard.form.actions.destroy.button'))
       end
     end
 
     context 'when an admin user' do
-      let(:user) { create :user, :admin }
+      let(:user) { create(:user, :admin) }
 
       before { collection.update!(doi: FactoryBotHelpers.datacite_doi) }
 
@@ -118,13 +118,13 @@ RSpec.describe 'Collection Settings Page', with_user: :user do
     context 'with a standard user' do
       it 'does not allow the change' do
         visit edit_dashboard_collection_path(collection)
-        expect(page).not_to have_content(I18n.t!('dashboard.shared.depositor_form.heading'))
-        expect(page).not_to have_link(I18n.t!('dashboard.shared.depositor_form.submit_button'))
+        expect(page).to have_no_content(I18n.t!('dashboard.shared.depositor_form.heading'))
+        expect(page).to have_no_link(I18n.t!('dashboard.shared.depositor_form.submit_button'))
       end
     end
 
     context 'with an admin user' do
-      let(:user) { create :user, :admin }
+      let(:user) { create(:user, :admin) }
       let(:actor) { create(:actor) }
 
       it 'allows the change' do

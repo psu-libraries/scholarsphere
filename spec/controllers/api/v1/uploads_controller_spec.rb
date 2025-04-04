@@ -2,15 +2,15 @@
 
 require 'rails_helper'
 
-RSpec.describe Api::V1::UploadsController, type: :controller do
+RSpec.describe Api::V1::UploadsController do
   let(:api_token) { create(:api_token).token }
 
   before { request.headers[:'X-API-Key'] = api_token }
 
   describe 'POST #create' do
-    let(:presigned_url) { JSON.parse(response.body)['url'] }
-    let(:id) { JSON.parse(response.body)['id'] }
-    let(:prefix) { JSON.parse(response.body)['prefix'] }
+    let(:presigned_url) { response.parsed_body['url'] }
+    let(:id) { response.parsed_body['id'] }
+    let(:prefix) { response.parsed_body['prefix'] }
 
     let(:checksum) { 'md5sum' }
 

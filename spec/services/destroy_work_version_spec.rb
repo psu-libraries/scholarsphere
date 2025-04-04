@@ -9,7 +9,7 @@ RSpec.describe DestroyWorkVersion, type: :model do
   end
 
   context 'when the work has more than one version' do
-    let(:work) { create :work, versions_count: 2, has_draft: true }
+    let(:work) { create(:work, versions_count: 2, has_draft: true) }
     let(:work_version) { work.draft_version }
 
     it 'deletes only the given work_version' do
@@ -39,7 +39,7 @@ RSpec.describe DestroyWorkVersion, type: :model do
     end
 
     context 'when the given version is published' do
-      let(:work) { create :work, versions_count: 2, has_draft: false }
+      let(:work) { create(:work, versions_count: 2, has_draft: false) }
       let(:work_version) { work.versions.first }
 
       context 'when force: false' do
@@ -72,7 +72,7 @@ RSpec.describe DestroyWorkVersion, type: :model do
   end
 
   context 'when the work has only a single version' do
-    let(:work) { create :work, versions_count: 1, has_draft: true }
+    let(:work) { create(:work, versions_count: 1, has_draft: true) }
     let(:work_version) { work.draft_version }
 
     it 'deletes the entire work' do
@@ -98,7 +98,7 @@ RSpec.describe DestroyWorkVersion, type: :model do
     end
 
     context 'when that version is published' do
-      let(:work) { create :work, versions_count: 1, has_draft: false }
+      let(:work) { create(:work, versions_count: 1, has_draft: false) }
       let(:work_version) { work.latest_version }
 
       context 'when force: false' do

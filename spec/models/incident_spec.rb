@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Incident, type: :model do
+RSpec.describe Incident do
   subject { build(:incident) }
 
   describe '::attributes' do

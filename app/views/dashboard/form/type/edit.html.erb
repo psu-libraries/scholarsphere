@@ -7,7 +7,7 @@
 
       <div class="tab-content">
         <div class="tab-pane active show">
-          <%= render 'form', url: send("dashboard_form_#{param_key}_type_path", @resource) %>
+          <%= render 'form', url: send(:"dashboard_form_#{param_key}_type_path", @resource) %>
         </div>
       </div>
     </div>

@@ -55,7 +55,7 @@ RSpec.describe Qa::Authorities::Persons, type: :authority do
       end
 
       context 'when PSU ID is not present, but ORCiD is' do
-        let!(:creator) { create :actor, psu_id: nil }
+        let!(:creator) { create(:actor, psu_id: nil) }
         let(:search_term) { creator.surname.slice(0..3).downcase }
 
         let(:expected_result) { formatted_result.merge(

@@ -7,7 +7,7 @@ RSpec.describe FeaturedWorkMetadataComponent, type: :component do
   let(:result) { render_inline(described_class.new(work_version: decorated_work_version)) }
 
   describe 'rendering' do
-    let(:work_version) { build_stubbed :work_version, :with_complete_metadata, :with_creators }
+    let(:work_version) { build_stubbed(:work_version, :with_complete_metadata, :with_creators) }
 
     it 'renders creators' do
       expect(result.css('dt.creators').text).to eq WorkVersion.human_attribute_name(:creators)

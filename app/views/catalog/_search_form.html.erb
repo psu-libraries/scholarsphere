@@ -20,7 +20,8 @@
       <%= text_field_tag :q, params[:q],
                          placeholder: t('blacklight.search.form.search.placeholder'),
                          class: 'form-control',
-                         id: 'q' %>
+                         id: 'q',
+                         autocomplete: 'on' %>
 
       <div class="input-group-append">
         <%= button_tag type: 'submit', class: 'btn btn-primary' do %>

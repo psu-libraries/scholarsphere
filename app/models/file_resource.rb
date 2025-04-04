@@ -6,6 +6,8 @@ class FileResource < ApplicationRecord
   include ViewStatistics
   include GeneratedUuids
 
+  PDF_MIME_TYPE = 'application/pdf'
+
   attr_writer :indexing_source
 
   has_many :file_version_memberships, dependent: :destroy
@@ -19,7 +21,16 @@ class FileResource < ApplicationRecord
           required: false,
           dependent: :destroy
 
+  has_one :accessibility_check_result,
+          required: false,
+          dependent: :destroy
+
   after_commit :perform_update_index, on: [:create, :update]
+
+  scope :needs_accessibility_check, -> {
+    left_joins(:accessibility_check_result)
+      .where("file_data->'metadata'->>'mime_type' = ? AND accessibility_check_results.id IS NULL", PDF_MIME_TYPE)
+  }
 
   def self.reindex_all(relation: all, async: false)
     relation.find_each do |file|

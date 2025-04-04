@@ -2,13 +2,13 @@
 
 require 'rails_helper'
 
-RSpec.describe Dashboard::WorkVersionsController, type: :controller do
+RSpec.describe Dashboard::WorkVersionsController do
   let(:user) { work_version.depositor.user }
-  let(:work_version) { create :work_version, :draft }
+  let(:work_version) { create(:work_version, :draft) }
 
   describe 'POST #create' do
     let(:user) { work.depositor.user }
-    let(:work) { create :work, versions_count: 1, has_draft: false }
+    let(:work) { create(:work, versions_count: 1, has_draft: false) }
     let(:perform_request) { post :create, params: { work_id: work.to_param } }
 
     it_behaves_like 'an authorized dashboard controller'
@@ -41,7 +41,7 @@ RSpec.describe Dashboard::WorkVersionsController, type: :controller do
       end
 
       context 'when the newly built draft version is invalid (highly unlikely)' do
-        let(:bad_draft) { build_stubbed :work_version }
+        let(:bad_draft) { build_stubbed(:work_version) }
 
         before do
           allow(BuildNewWorkVersion).to receive(:call).and_return(bad_draft)
@@ -90,7 +90,7 @@ RSpec.describe Dashboard::WorkVersionsController, type: :controller do
       end
 
       context 'when requesting a PUBLISHED version of my own work' do
-        let(:work_version) { create :work_version, :published }
+        let(:work_version) { create(:work_version, :published) }
 
         it 'returns not authorized' do
           expect {
@@ -165,7 +165,7 @@ RSpec.describe Dashboard::WorkVersionsController, type: :controller do
     end
 
     context 'with a restricted work' do
-      let(:work) { create :work, :with_no_access }
+      let(:work) { create(:work, :with_no_access) }
 
       it_behaves_like 'an authorized dashboard controller'
     end
@@ -222,7 +222,7 @@ RSpec.describe Dashboard::WorkVersionsController, type: :controller do
         work_version: attributes
       }
     end
-    let(:work_version) { create :work_version, :able_to_be_published }
+    let(:work_version) { create(:work_version, :able_to_be_published) }
 
     it_behaves_like 'an authorized dashboard controller'
 
@@ -246,7 +246,7 @@ RSpec.describe Dashboard::WorkVersionsController, type: :controller do
       end
 
       context 'when the work version does not have all attributes required to be published' do
-        let(:work_version) { create :work_version, :draft }
+        let(:work_version) { create(:work_version, :draft) }
 
         context 'with valid attributes' do
           let(:attributes) { valid_attributes }

@@ -5,7 +5,7 @@ require 'rails_helper'
 # @note While this is technically a controller test, because it's testing our REST API, we're really using it as a
 # feature test to ensure end-to-end functionality for migrating collections.
 
-RSpec.describe Api::V1::CollectionsController, type: :controller do
+RSpec.describe Api::V1::CollectionsController do
   let(:api_token) { create(:api_token).token }
   let(:user) { build(:actor) }
   let(:creator) do
@@ -20,7 +20,7 @@ RSpec.describe Api::V1::CollectionsController, type: :controller do
       }
     }
   end
-  let(:json_response) { JSON.parse(response.body) }
+  let(:json_response) { response.parsed_body }
   let(:new_collection) { Collection.last }
 
   before { request.headers[:'X-API-Key'] = api_token }
@@ -51,7 +51,7 @@ RSpec.describe Api::V1::CollectionsController, type: :controller do
           'message' => 'Collection was successfully created',
           'url' => "/resources/#{new_collection.uuid}"
         )
-        expect(new_collection.work_ids).to contain_exactly(*works.map(&:id))
+        expect(new_collection.work_ids).to match_array(works.map(&:id))
       end
     end
 

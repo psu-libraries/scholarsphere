@@ -6,11 +6,11 @@ FactoryBot.define do
     with_work_version
 
     trait :with_work_version do
-      association :resource, factory: :work_version
+      resource factory: %i[work_version]
     end
 
     trait :with_collection do
-      association :resource, factory: :collection
+      resource factory: %i[collection]
     end
   end
 end

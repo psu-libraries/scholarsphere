@@ -23,19 +23,19 @@ RSpec.describe Api::V1::WorkPublisher do
   context 'when the depositor is the same as the creator' do
     let(:publisher) do
       described_class.call(
-        metadata: HashWithIndifferentAccess.new(work.metadata.merge(
-                                                  work_type: 'dataset',
-                                                  visibility: Permissions::Visibility::OPEN,
-                                                  creators: [
-                                                    {
-                                                      psu_id: depositor.user_id
-                                                    }
-                                                  ]
-                                                )),
+        metadata: ActiveSupport::HashWithIndifferentAccess.new(work.metadata.merge(
+                                                                 work_type: 'dataset',
+                                                                 visibility: Permissions::Visibility::OPEN,
+                                                                 creators: [
+                                                                   {
+                                                                     psu_id: depositor.user_id
+                                                                   }
+                                                                 ]
+                                                               )),
         depositor_access_id: depositor.user_id,
         content: [
-          HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_path, 'image.png'))),
-          HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_path, 'ipsum.pdf')))
+          ActiveSupport::HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_paths.first, 'image.png'))),
+          ActiveSupport::HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_paths.first, 'ipsum.pdf')))
         ],
         external_app: external_app
       )
@@ -70,20 +70,20 @@ RSpec.describe Api::V1::WorkPublisher do
     let(:authorship) { attributes_for(:authorship) }
     let(:publisher) do
       described_class.call(
-        metadata: HashWithIndifferentAccess.new(work.metadata.merge(
-                                                  work_type: 'dataset',
-                                                  visibility: Permissions::Visibility::OPEN,
-                                                  creators: [
-                                                    {
-                                                      psu_id: depositor.user_id,
-                                                      display_name: authorship[:display_name]
-                                                    }
-                                                  ]
-                                                )),
+        metadata: ActiveSupport::HashWithIndifferentAccess.new(work.metadata.merge(
+                                                                 work_type: 'dataset',
+                                                                 visibility: Permissions::Visibility::OPEN,
+                                                                 creators: [
+                                                                   {
+                                                                     psu_id: depositor.user_id,
+                                                                     display_name: authorship[:display_name]
+                                                                   }
+                                                                 ]
+                                                               )),
         depositor_access_id: depositor.user_id,
         content: [
-          HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_path, 'image.png'))),
-          HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_path, 'ipsum.pdf')))
+          ActiveSupport::HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_paths, 'image.png'))),
+          ActiveSupport::HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_paths, 'ipsum.pdf')))
         ]
       )
     end
@@ -105,18 +105,18 @@ RSpec.describe Api::V1::WorkPublisher do
   context 'when the actor already exists in the system' do
     let(:publisher) do
       described_class.call(
-        metadata: HashWithIndifferentAccess.new(work.metadata.merge(
-                                                  work_type: 'dataset',
-                                                  visibility: Permissions::Visibility::OPEN,
-                                                  creators: [
-                                                    {
-                                                      psu_id: depositor.user_id
-                                                    }
-                                                  ]
-                                                )),
+        metadata: ActiveSupport::HashWithIndifferentAccess.new(work.metadata.merge(
+                                                                 work_type: 'dataset',
+                                                                 visibility: Permissions::Visibility::OPEN,
+                                                                 creators: [
+                                                                   {
+                                                                     psu_id: depositor.user_id
+                                                                   }
+                                                                 ]
+                                                               )),
         depositor_access_id: depositor.user_id,
         content: [
-          HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_path, 'image.png')))
+          ActiveSupport::HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_paths, 'image.png')))
         ]
       )
     end
@@ -144,18 +144,18 @@ RSpec.describe Api::V1::WorkPublisher do
 
     let(:publisher) do
       described_class.call(
-        metadata: HashWithIndifferentAccess.new(work.metadata.merge(
-                                                  work_type: 'dataset',
-                                                  visibility: Permissions::Visibility::OPEN,
-                                                  creators: [
-                                                    first_creator,
-                                                    second_creator,
-                                                    third_creator
-                                                  ]
-                                                )),
+        metadata: ActiveSupport::HashWithIndifferentAccess.new(work.metadata.merge(
+                                                                 work_type: 'dataset',
+                                                                 visibility: Permissions::Visibility::OPEN,
+                                                                 creators: [
+                                                                   first_creator,
+                                                                   second_creator,
+                                                                   third_creator
+                                                                 ]
+                                                               )),
         depositor_access_id: depositor.user_id,
         content: [
-          HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_path, 'image.png')))
+          ActiveSupport::HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_paths, 'image.png')))
         ]
       )
     end
@@ -186,18 +186,18 @@ RSpec.describe Api::V1::WorkPublisher do
     let(:edit_group) { build(:group) }
     let(:publisher) do
       described_class.call(
-        metadata: HashWithIndifferentAccess.new(work.metadata.merge(
-                                                  work_type: 'dataset',
-                                                  visibility: Permissions::Visibility::OPEN,
-                                                  creators: [
-                                                    {
-                                                      psu_id: depositor.user_id
-                                                    }
-                                                  ]
-                                                )),
+        metadata: ActiveSupport::HashWithIndifferentAccess.new(work.metadata.merge(
+                                                                 work_type: 'dataset',
+                                                                 visibility: Permissions::Visibility::OPEN,
+                                                                 creators: [
+                                                                   {
+                                                                     psu_id: depositor.user_id
+                                                                   }
+                                                                 ]
+                                                               )),
         depositor_access_id: depositor.user_id,
         content: [
-          HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_path, 'image.png')))
+          ActiveSupport::HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_paths, 'image.png')))
         ],
         permissions: {
           edit_users: [edit_user.user_id],
@@ -266,18 +266,18 @@ RSpec.describe Api::V1::WorkPublisher do
   context 'when the work has restricted visbility' do
     let(:publisher) do
       described_class.call(
-        metadata: HashWithIndifferentAccess.new(work.metadata.merge(
-                                                  work_type: 'dataset',
-                                                  visibility: Permissions::Visibility::PRIVATE,
-                                                  creators: [
-                                                    {
-                                                      psu_id: depositor.user_id
-                                                    }
-                                                  ]
-                                                )),
+        metadata: ActiveSupport::HashWithIndifferentAccess.new(work.metadata.merge(
+                                                                 work_type: 'dataset',
+                                                                 visibility: Permissions::Visibility::PRIVATE,
+                                                                 creators: [
+                                                                   {
+                                                                     psu_id: depositor.user_id
+                                                                   }
+                                                                 ]
+                                                               )),
         depositor_access_id: depositor.user_id,
         content: [
-          HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_path, 'image.png')))
+          ActiveSupport::HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_paths, 'image.png')))
         ]
       )
     end
@@ -302,19 +302,19 @@ RSpec.describe Api::V1::WorkPublisher do
   context 'when the work is embargoed' do
     let(:publisher) do
       described_class.call(
-        metadata: HashWithIndifferentAccess.new(work.metadata.merge(
-                                                  work_type: 'dataset',
-                                                  visibility: Permissions::Visibility::OPEN,
-                                                  creators: [
-                                                    {
-                                                      psu_id: depositor.user_id
-                                                    }
-                                                  ],
-                                                  embargoed_until: (Time.zone.now + 2.months)
-                                                )),
+        metadata: ActiveSupport::HashWithIndifferentAccess.new(work.metadata.merge(
+                                                                 work_type: 'dataset',
+                                                                 visibility: Permissions::Visibility::OPEN,
+                                                                 creators: [
+                                                                   {
+                                                                     psu_id: depositor.user_id
+                                                                   }
+                                                                 ],
+                                                                 embargoed_until: (Time.zone.now + 2.months)
+                                                               )),
         depositor_access_id: depositor.user_id,
         content: [
-          HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_path, 'image.png')))
+          ActiveSupport::HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_paths, 'image.png')))
         ]
       )
     end
@@ -333,20 +333,20 @@ RSpec.describe Api::V1::WorkPublisher do
   context 'with custom deposit dates' do
     let(:publisher) do
       described_class.call(
-        metadata: HashWithIndifferentAccess.new(work.metadata.merge(
-                                                  work_type: 'dataset',
-                                                  visibility: Permissions::Visibility::OPEN,
-                                                  creators: [
-                                                    {
-                                                      psu_id: depositor.user_id
-                                                    }
-                                                  ],
-                                                  deposited_at: '2018-02-28T15:12:54Z'
-                                                )),
+        metadata: ActiveSupport::HashWithIndifferentAccess.new(work.metadata.merge(
+                                                                 work_type: 'dataset',
+                                                                 visibility: Permissions::Visibility::OPEN,
+                                                                 creators: [
+                                                                   {
+                                                                     psu_id: depositor.user_id
+                                                                   }
+                                                                 ],
+                                                                 deposited_at: '2018-02-28T15:12:54Z'
+                                                               )),
         depositor_access_id: depositor.user_id,
         content: [
-          HashWithIndifferentAccess.new(
-            file: fixture_file_upload(File.join(fixture_path, 'image.png')),
+          ActiveSupport::HashWithIndifferentAccess.new(
+            file: fixture_file_upload(File.join(fixture_paths, 'image.png')),
             deposited_at: '2018-03-01T10:13:00Z'
           )
         ]
@@ -372,17 +372,17 @@ RSpec.describe Api::V1::WorkPublisher do
   context 'without a work type' do
     let(:publisher) do
       described_class.call(
-        metadata: HashWithIndifferentAccess.new(work.metadata.merge(
-                                                  work_type: '',
-                                                  creators: [
-                                                    {
-                                                      psu_id: depositor.user_id
-                                                    }
-                                                  ]
-                                                )),
+        metadata: ActiveSupport::HashWithIndifferentAccess.new(work.metadata.merge(
+                                                                 work_type: '',
+                                                                 creators: [
+                                                                   {
+                                                                     psu_id: depositor.user_id
+                                                                   }
+                                                                 ]
+                                                               )),
         depositor_access_id: depositor.user_id,
         content: [
-          HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_path, 'image.png')))
+          ActiveSupport::HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_paths, 'image.png')))
         ]
       )
     end
@@ -401,19 +401,19 @@ RSpec.describe Api::V1::WorkPublisher do
   context 'when a given ids do not exist' do
     let(:publisher) do
       described_class.call(
-        metadata: HashWithIndifferentAccess.new(work.metadata.merge(
-                                                  work_type: 'dataset',
-                                                  visibility: Permissions::Visibility::OPEN,
-                                                  creators: [
-                                                    { orcid: 'missing-orcid' },
-                                                    { psu_id: depositor.user_id },
-                                                    { psu_id: 'missing-id' }
-                                                  ]
-                                                )),
+        metadata: ActiveSupport::HashWithIndifferentAccess.new(work.metadata.merge(
+                                                                 work_type: 'dataset',
+                                                                 visibility: Permissions::Visibility::OPEN,
+                                                                 creators: [
+                                                                   { orcid: 'missing-orcid' },
+                                                                   { psu_id: depositor.user_id },
+                                                                   { psu_id: 'missing-id' }
+                                                                 ]
+                                                               )),
         depositor_access_id: depositor.user_id,
         content: [
-          HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_path, 'image.png'))),
-          HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_path, 'ipsum.pdf')))
+          ActiveSupport::HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_paths, 'image.png'))),
+          ActiveSupport::HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_paths, 'ipsum.pdf')))
         ]
       )
     end
@@ -441,17 +441,17 @@ RSpec.describe Api::V1::WorkPublisher do
 
     let(:publisher) do
       described_class.call(
-        metadata: HashWithIndifferentAccess.new(work.metadata.merge(
-                                                  work_type: 'dataset',
-                                                  visibility: Permissions::Visibility::OPEN,
-                                                  creators: [
-                                                    { psu_id: creator.user_id }
-                                                  ]
-                                                )),
+        metadata: ActiveSupport::HashWithIndifferentAccess.new(work.metadata.merge(
+                                                                 work_type: 'dataset',
+                                                                 visibility: Permissions::Visibility::OPEN,
+                                                                 creators: [
+                                                                   { psu_id: creator.user_id }
+                                                                 ]
+                                                               )),
         depositor_access_id: 'missing-id',
         content: [
-          HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_path, 'image.png'))),
-          HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_path, 'ipsum.pdf')))
+          ActiveSupport::HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_paths, 'image.png'))),
+          ActiveSupport::HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_paths, 'ipsum.pdf')))
         ]
       )
     end

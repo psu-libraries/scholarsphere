@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe CollectionWorkMembership, type: :model do
+RSpec.describe CollectionWorkMembership do
   describe 'table' do
     it { is_expected.to have_db_column(:collection_id) }
     it { is_expected.to have_db_column(:work_id) }
@@ -24,21 +24,21 @@ RSpec.describe CollectionWorkMembership, type: :model do
   end
 
   describe 'validations' do
-    let(:work) { create :work }
-    let(:collection) { create :collection }
+    let(:work) { create(:work) }
+    let(:collection) { create(:collection) }
 
     it 'validates that a collection cannot contain the same work twice' do
-      create :collection_work_membership, collection: collection, work: work
+      create(:collection_work_membership, collection: collection, work: work)
 
-      second_one = build :collection_work_membership, collection: collection, work: work
+      second_one = build(:collection_work_membership, collection: collection, work: work)
       expect(second_one).not_to be_valid
     end
   end
 
   describe 'after_create' do
     context 'when the associated collection has just been created (does not have any collection_work_memberships)' do
-      let(:collection) { create :collection }
-      let(:work) { create :work }
+      let(:collection) { create(:collection) }
+      let(:work) { create(:work) }
 
       context 'when the associated work has an auto_generated_thumbnail_url' do
         it "updates the associated collection's thumbnail_selection to '#{ThumbnailSelections::AUTO_GENERATED}'}" do
@@ -73,11 +73,11 @@ RSpec.describe CollectionWorkMembership, type: :model do
     end
 
     context 'when the associated collection already has associated works' do
-      let(:collection) { create :collection }
-      let(:work) { create :work }
+      let(:collection) { create(:collection) }
+      let(:work) { create(:work) }
 
       before do
-        collection.works << (create :work)
+        collection.works << (create(:work))
         collection.save
       end
 

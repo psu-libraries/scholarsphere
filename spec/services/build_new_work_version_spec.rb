@@ -3,15 +3,15 @@
 require 'rails_helper'
 
 RSpec.describe BuildNewWorkVersion, type: :model do
-  let!(:work) { create :work, versions: [initial_work_version] }
+  let!(:work) { create(:work, versions: [initial_work_version]) }
   let(:initial_work_version) do
-    build :work_version,
+    build(:work_version,
           :published,
           work: nil, # FactoryBot trick needed for above
           title: 'My Happy Version',
           version_number: 4,
           file_count: 1,
-          creator_count: 1
+          creator_count: 1)
   end
 
   let(:initial_file_membership) { initial_work_version.file_version_memberships.first }
@@ -74,7 +74,7 @@ RSpec.describe BuildNewWorkVersion, type: :model do
           .and change(FileResource, :count).by(0)
 
         new_version.reload
-        expect(new_version.file_resources).to match_array [file_resource]
+        expect(new_version.file_resources).to contain_exactly(file_resource)
       end
     end
   end

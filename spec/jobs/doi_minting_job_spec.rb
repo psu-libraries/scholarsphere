@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe DoiMintingJob, type: :job do
+RSpec.describe DoiMintingJob do
   let(:resource) { instance_spy('Work') }
   let(:mock_doi_status) { instance_spy('DoiMintingStatus') }
 

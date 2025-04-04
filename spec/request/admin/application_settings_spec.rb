@@ -10,7 +10,8 @@
        let(:user) { create(:user) }
 
        specify do
-         expect { get admin_application_settings_path }.to raise_error(ActionController::RoutingError)
+         get admin_application_settings_path
+         expect(response).to have_http_status(:not_found)
        end
      end
 
@@ -35,9 +36,8 @@
        let(:user) { create(:user) }
 
        specify do
-         expect {
-           patch admin_application_settings_url, params: { application_setting: new_attributes }
-         }.to raise_error(ActionController::RoutingError)
+         patch admin_application_settings_url, params: { application_setting: new_attributes }
+         expect(response).to have_http_status(:not_found)
        end
      end
 

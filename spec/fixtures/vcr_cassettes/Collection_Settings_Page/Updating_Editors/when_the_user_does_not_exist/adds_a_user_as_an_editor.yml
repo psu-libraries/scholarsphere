@@ -46,4 +46,4 @@ http_interactions:
       string: '{"status":{"code":404,"message":"NOT_FOUND"},"errorMessage":["No person
         matched the input userid: iamnotpennstate"],"link":null}'
   recorded_at: Thu, 25 Feb 2021 19:37:23 GMT
-recorded_with: VCR 6.0.0
+  recorded_with: VCR 6.0.0

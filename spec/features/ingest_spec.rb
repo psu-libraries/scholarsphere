@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Publishing works from the API', :inline_jobs, type: :feature do
+RSpec.describe 'Publishing works from the API', :inline_jobs do
   include ActionDispatch::TestProcess::FixtureFile
 
   let(:user) { create(:user, access_id: VCRHelpers.depositor) }
@@ -11,7 +11,7 @@ RSpec.describe 'Publishing works from the API', :inline_jobs, type: :feature do
   let(:mock_client) { instance_spy(PsuIdentity::SearchService::Client) }
 
   let(:metadata) do
-    HashWithIndifferentAccess.new(
+    ActiveSupport::HashWithIndifferentAccess.new(
       title: work[:title],
       description: work[:description],
       work_type: 'dataset',
@@ -30,8 +30,8 @@ RSpec.describe 'Publishing works from the API', :inline_jobs, type: :feature do
 
   let(:content) do
     [
-      HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_path, 'image.png'))),
-      HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_path, 'ipsum.pdf')))
+      ActiveSupport::HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_paths, 'image.png'))),
+      ActiveSupport::HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_paths, 'ipsum.pdf')))
     ]
   end
 

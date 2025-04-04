@@ -91,9 +91,9 @@ class MergeCollection
     def validate_access_controls(work)
       %i[discover read edit].each do |level|
         %i[users groups].each do |agent|
-          if canonical_work.send("#{level}_#{agent}").map(&:id) != work.send("#{level}_#{agent}").map(&:id)
-            w_access = work.send("#{level}_#{agent}").inspect
-            canonical_access = canonical_work.send("#{level}_#{agent}").inspect
+          if canonical_work.send(:"#{level}_#{agent}").map(&:id) != work.send(:"#{level}_#{agent}").map(&:id)
+            w_access = work.send(:"#{level}_#{agent}").inspect
+            canonical_access = canonical_work.send(:"#{level}_#{agent}").inspect
             diff = "#{canonical_access}\n#{w_access}"
 
             errors << "Work-#{canonical_work.id} has different #{level} #{agent} than Work-#{work.id}\n#{diff}"

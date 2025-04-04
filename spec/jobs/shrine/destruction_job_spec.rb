@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Shrine::DestructionJob, type: :job do
+RSpec.describe Shrine::DestructionJob do
   let(:mock_attacher) { instance_spy(FileUploader::Attacher) }
 
   before do

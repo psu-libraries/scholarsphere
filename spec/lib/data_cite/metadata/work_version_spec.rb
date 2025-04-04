@@ -10,10 +10,10 @@ RSpec.describe DataCite::Metadata::WorkVersion do
 
   let(:attributes) { metadata.attributes }
 
-  let(:work_version) { FactoryBot.build_stubbed :work_version, :with_complete_metadata, creators: [creator] }
+  let(:work_version) { FactoryBot.build_stubbed(:work_version, :with_complete_metadata, creators: [creator]) }
   let(:work) { work_version.work }
 
-  let(:creator) { FactoryBot.build_stubbed :authorship, :with_orcid }
+  let(:creator) { FactoryBot.build_stubbed(:authorship, :with_orcid) }
 
   before do
     metadata.public_url_source = ->(id) { "http://example.test/resources/#{id}" }

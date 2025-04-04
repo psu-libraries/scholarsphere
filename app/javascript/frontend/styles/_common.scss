@@ -249,23 +249,26 @@ h4,
 
 .navbar-brand {
   &--center {
-    top: 7px;
-    position: absolute;
+    position: relative;
+    right: 0;
+    width: 100vw;
+    text-align: center;
+    margin-left: -50vw;
     left: 50%;
-    transform: translateX(-50%);
 
-    a {
+    .home-heading {
+      font-size: $navbar-brand-font-size;
       color: $white;
-
-      &:hover {
-        text-decoration: none;
-      }
     }
 
-    @include media-breakpoint-down(xs) {
-      font-size: 16px;
-      top: 13px;
+    .home-subtitle {
+      font-size: 1rem;
+      color: $white;
+      margin-top: .25rem;
     }
+
+    background-color: $dark-blue;
+    padding: 1rem 2rem;
   }
 }
 
@@ -673,6 +676,7 @@ h4,
       p {
         color: $mid-blue;
         margin-bottom: 0;
+        font-size: $font-size-sm;
       }
     }
 
@@ -1458,4 +1462,11 @@ form.edit-work-visibility .label {
 
 .alert-info {
   color: $alert-info-text;
+}
+
+dialog {
+  padding: $spacer * 2;
+  border: 1px solid $gray-300;
+  border-radius: $border-radius;
+  max-width: 50%;
 }

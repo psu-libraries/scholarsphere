@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :work do
-    association :depositor, :with_user, factory: :actor
+    depositor factory: %i[actor with_user]
     work_type { Work::Types.default }
     visibility { Permissions::Visibility.default }
 
@@ -84,6 +84,10 @@ FactoryBot.define do
 
   trait(:instrument) do
     work_type { 'instrument' }
+  end
+
+  trait(:masters_culminating_experience) do
+    work_type { 'masters_culminating_experience' }
   end
 
   trait(:general) do

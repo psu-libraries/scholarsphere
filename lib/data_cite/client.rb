@@ -59,7 +59,7 @@ module DataCite
     end
 
     def search(params)
-      process_body connection.get('/dois', **params.merge('client-id' => username))
+      process_body connection.get('/dois', **params, 'client-id' => username)
     end
 
     def delete(doi:)
@@ -117,7 +117,7 @@ module DataCite
 
       def connection
         @connection ||= Faraday.new(url: endpoint) do |conn|
-          conn.request :basic_auth, username, password
+          conn.request :authorization, :basic, username, password
           conn.adapter :net_http
         end
       end

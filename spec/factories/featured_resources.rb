@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :featured_resource, aliases: [:featured_work] do
-    association(:resource, factory: :work, has_draft: false)
+    resource factory: %i[work], has_draft: false
 
     resource_uuid { resource.uuid }
 
@@ -11,7 +11,7 @@ FactoryBot.define do
     end
 
     factory :featured_collection do
-      association(:resource, factory: :collection)
+      resource factory: %i[collection]
     end
   end
 end

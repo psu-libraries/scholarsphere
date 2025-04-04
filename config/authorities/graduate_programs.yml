@@ -1,0 +1,418 @@
+terms:
+- id: ACS
+  term: Acoustics
+  active: true
+- id: AMD
+  term: Additive Manufacturing and Design
+  active: true
+- id: ADTED
+  term: Adult Education
+  active: true
+- id: AERSP
+  term: Aerospace Engineering
+  active: true
+- id: ABENG
+  term: Agricultural and Biological Engineering
+  active: true
+- id: AEPS
+  term: Agricultural and Environmental Plant Science
+  active: true
+- id: AEE
+  term: Agricultural and Extension Education
+  active: true
+- id: AEREC
+  term: Agricultural, Environmental and Regional Economics
+  active: true
+- id: AGRO
+  term: Agronomy
+  active: true
+- id: AMSTD
+  term: American Studies
+  active: true
+- id: ANAT
+  term: Anatomy
+  active: true
+- id: AMS
+  term: Ancient Mediterranean Studies
+  active: true
+- id: ANSC
+  term: Animal Science
+  active: true
+- id: ANTH
+  term: Anthropology
+  active: true
+- id: ABA
+  term: Applied Behavior Analysis
+  active: true
+- id: ACPSY
+  term: Applied Clinical Psychology
+  active: true
+- id: APLNG
+  term: Applied Linguistics
+  active: true
+- id: AE
+  term: Architectural Engineering
+  active: true
+- id: ARCH
+  term: Architecture
+  active: true
+- id: AED
+  term: Art Education
+  active: true
+- id: ARTH
+  term: Art History
+  active: true
+- id: ASTRO
+  term: Astronomy and Astrophysics
+  active: true
+- id: BBH
+  term: Biobehavioral Health
+  active: true
+- id: BMMB
+  term: Biochemistry, Microbiology, and Molecular Biology
+  active: true
+- id: BIOE
+  term: Bioengineering
+  active: true
+- id: BGEN
+  term: Bioinformatics and Genomics
+  active: true
+- id: BIOL
+  term: Biology
+  active: true
+- id: BME
+  term: Biomedical Engineering
+  active: true
+- id: BMS
+  term: Biomedical Sciences
+  active: true
+- id: BRS
+  term: Biorenewable Systems
+  active: true
+- id: BIOST
+  term: Biostatistics
+  active: true
+- id: BUSA
+  term: Business Administration
+  active: true
+- id: CHE
+  term: Chemical Engineering
+  active: true
+- id: CHEM
+  term: Chemistry
+  active: true
+- id: CENG
+  term: Civil Engineering
+  active: true
+- id: CE
+  term: Civil Engineering
+  active: true
+- id: CR
+  term: Clinical Research
+  active: true
+- id: CAS
+  term: Communication Arts and Sciences
+  active: true
+- id: CSD
+  term: Communication Sciences and Disorders
+  active: true
+- id: COMMS
+  term: Communications
+  active: true
+- id: CPSC
+  term: Community Psychology and Social Change
+  active: true
+- id: CMLIT
+  term: Comparative Literature
+  active: true
+- id: COMP
+  term: Computer Science
+  active: true
+- id: CSE
+  term: Computer Science and Engineering
+  active: true
+- id: CNED
+  term: Counselor Education
+  active: true
+- id: CRIMJ
+  term: Criminal Justice
+  active: true
+- id: CRIM
+  term: Criminology
+  active: true
+- id: CI
+  term: Curriculum and Instruction
+  active: true
+- id: CYMPS
+  term: Cybersecurity Analytics and Operations
+  active: true
+- id: DAAN
+  term: Data Analytics
+  active: true
+- id: ECLGY
+  term: Ecology
+  active: true
+- id: ECON
+  term: Economics
+  active: true
+- id: EDUC
+  term: Education
+  active: true
+- id: EPL
+  term: Education Policy and Leadership
+  active: true
+- id: EDCE
+  term: Education, Development, and Community Engagement
+  active: true
+- id: EDLDR
+  term: Educational Leadership
+  active: true
+- id: EDPSY
+  term: Educational Psychology
+  active: true
+- id: EDTHP
+  term: Educational Theory and Policy
+  active: true
+- id: EENG
+  term: Electrical Engineering
+  active: true
+- id: EE
+  term: Electrical Engineering
+  active: true
+- id: EME
+  term: Energy and Mineral Engineering
+  active: true
+- id: EEFE
+  term: Energy, Environmental, and Food Economics
+  active: true
+- id: EDSGN
+  term: Engineering Design
+  active: true
+- id: ESMCH
+  term: Engineering Science and Mechanics
+  active: true
+- id: ENGSY
+  term: Engineering Systems
+  active: true
+- id: NANO
+  term: Engineering at the Nano-scale
+  active: true
+- id: ENGL
+  term: English
+  active: true
+- id: ENT
+  term: Entomology
+  active: true
+- id: ENV
+  term: Environmental Engineering
+  active: true
+- id: EPC
+  term: Environmental Pollution Control
+  active: true
+- id: EPID
+  term: Epidemiology
+  active: true
+- id: FDSC
+  term: Food Science
+  active: true
+- id: FORR
+  term: Forest Resources
+  active: true
+- id: FR
+  term: French
+  active: true
+- id: FFS
+  term: French and Francophone Studies
+  active: true
+- id: GENET
+  term: Genetics
+  active: true
+- id: GEOG
+  term: Geography
+  active: true
+- id: GEOSC
+  term: Geosciences
+  active: true
+- id: GER
+  term: German
+  active: true
+- id: HPA
+  term: Health Policy and Administration
+  active: true
+- id: HIED
+  term: Higher Education
+  active: true
+- id: HIST
+  term: History
+  active: true
+- id: HORT
+  term: Horticulture
+  active: true
+- id: HM
+  term: Hospitality Management
+  active: true
+- id: HDFS
+  term: Human Development and Family Studies
+  active: true
+- id: HRER
+  term: Human Resources and Employment Relations
+  active: true
+- id: HUM
+  term: Humanities
+  active: true
+- id: I-ID
+  term: Immunology and Infectious Diseases
+  active: true
+- id: IE
+  term: Industrial Engineering
+  active: true
+- id: INMAC
+  term: Informatics
+  active: true
+- id: INSC
+  term: Information Science
+  active: true
+- id: IST
+  term: Information Sciences and Technology
+  active: true
+- id: INFSY
+  term: Information Systems
+  active: true
+- id: PHSIO
+  term: Integrative and Biomedical Physiology
+  active: true
+- id: KINES
+  term: Kinesiology
+  active: true
+- id: LAM
+  term: Laboratory Animal Medicine
+  active: true
+- id: LARCH
+  term: Landscape Architecture
+  active: true
+- id: LDT
+  term: Learning, Design, and Technology
+  active: true
+- id: LLAED
+  term: Lifelong Learning and Adult Education
+  active: true
+- id: MASSC
+  term: Mass Communications
+  active: true
+- id: MATSC
+  term: Materials Science and Engineering
+  active: true
+- id: MATH
+  term: Mathematics
+  active: true
+- id: ME
+  term: Mechanical Engineering
+  active: true
+- id: MCENG
+  term: Mechanical Engineering
+  active: true
+- id: MEDIA
+  term: Media Studies
+  active: true
+- id: METEO
+  term: Meteorology and Atmospheric Science
+  active: true
+- id: MCIBS
+  term: Molecular, Cellular, and Integrative Biosciences
+  active: true
+- id: MUSMA
+  term: Music
+  active: true
+- id: MUED
+  term: Music Education
+  active: true
+- id: MUTH
+  term: Music Theory
+  active: true
+- id: NEURS
+  term: Neuroscience
+  active: true
+- id: NEURO
+  term: Neuroscience
+  active: true
+- id: NERV
+  term: Neuroscience
+  active: true
+- id: NUCE
+  term: Nuclear Engineering
+  active: true
+- id: NURS
+  term: Nursing
+  active: true
+- id: NUTR
+  term: Nutritional Sciences
+  active: true
+- id: PATHB
+  term: Pathobiology
+  active: true
+- id: PHIL
+  term: Philosophy
+  active: true
+- id: PHYS
+  term: Physics
+  active: true
+- id: PLBIO
+  term: Plant Biology
+  active: true
+- id: PPATH
+  term: Plant Pathology
+  active: true
+- id: PLSC
+  term: Political Science
+  active: true
+- id: PSY
+  term: Psychology
+  active: true
+- id: PADM
+  term: Public Administration
+  active: true
+- id: PHS
+  term: Public Health Sciences
+  active: true
+- id: REA
+  term: Real Estate Analysis and Development
+  active: true
+- id: RPTM
+  term: Recreation, Park and Tourism Management
+  active: true
+- id: RSOC
+  term: Rural Sociology
+  active: true
+- id: RUSCL
+  term: Russian and Comparative Literature
+  active: true
+- id: SPSY
+  term: School Psychology
+  active: true
+- id: SOC
+  term: Sociology
+  active: true
+- id: SOILS
+  term: Soil Science
+  active: true
+- id: SPAN
+  term: Spanish
+  active: true
+- id: SDS
+  term: Spatial Data Science
+  active: true
+- id: SPLED
+  term: Special Education
+  active: true
+- id: STAT
+  term: Statistics
+  active: true
+- id: TESL
+  term: Teaching English As a Second Language
+  active: true
+- id: WFS
+  term: Wildlife and Fisheries Science
+  active: true
+- id: WFED
+  term: Workforce Education and Development
+  active: true

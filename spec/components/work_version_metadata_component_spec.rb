@@ -23,12 +23,12 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
   end
 
   describe 'rendering' do
-    let(:work) { build_stubbed :work, deposited_at: Time.zone.parse('2020-01-15 16:07') }
-    let(:work_version) { build_stubbed :work_version,
+    let(:work) { build_stubbed(:work, deposited_at: Time.zone.parse('2020-01-15 16:07')) }
+    let(:work_version) { build_stubbed(:work_version,
                                        work: work,
                                        subtitle: 'My subtitle',
                                        keyword: %w(one two),
-                                       published_date: nil
+                                       published_date: nil)
     }
 
     it 'renders a string with label' do
@@ -76,7 +76,7 @@ RSpec.describe WorkVersionMetadataComponent, type: :component do
   end
 
   describe 'fully loaded' do
-    let(:work_version) { build_stubbed :work_version, :with_complete_metadata, :with_creators }
+    let(:work_version) { build_stubbed(:work_version, :with_complete_metadata, :with_creators) }
 
     it 'renders every field' do
       # Titles

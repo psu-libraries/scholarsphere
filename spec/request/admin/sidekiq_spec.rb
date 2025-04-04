@@ -8,7 +8,8 @@ RSpec.describe 'Sidekiq admin', type: :request do
 
   it 'Raises an error when NOT an admin user' do
     sign_in user
-    expect { get '/admin/sidekiq' }.to raise_error(ActionController::RoutingError)
+    get '/admin/sidekiq'
+    expect(response).to have_http_status(:not_found)
   end
 
   it 'is successful when you ARE an admin user' do

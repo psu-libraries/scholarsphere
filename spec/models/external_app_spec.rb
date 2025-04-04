@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ExternalApp, type: :model do
+RSpec.describe ExternalApp do
   describe 'table' do
     it { is_expected.to have_db_column(:name).of_type(:string) }
     it { is_expected.to have_db_column(:contact_email).of_type(:string) }

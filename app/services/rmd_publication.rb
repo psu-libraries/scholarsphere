@@ -42,7 +42,7 @@ class RmdPublication < RmdClient
   end
 
   def tags
-    attributes['tags'].map { |t| t['name'] }
+    attributes['tags'].pluck('name')
   end
 
   private

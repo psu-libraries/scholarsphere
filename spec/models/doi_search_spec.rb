@@ -3,12 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe DoiSearch do
-  let!(:work_version_1) { create :work_version, :published, doi: '10.26207/rb4s-33xs' }
-  let!(:work_version_2) { create :work_version, :published, doi: '10.26207/jjd7-0is4', work: work_1 }
-  let!(:work_1) { create :work, doi: '10.18113/dmnf-6dzs' }
-  let(:work_2) { create :work, versions_count: 4, has_draft: false, doi: nil }
-  let!(:collection_1) { create :collection, doi: '10.18113/dmnf-6dzs', identifier: ['doi:10.26207/upw2-pkx3'] }
-  let!(:collection_2) { create :collection, doi: '10.18113/qi03-b693' }
+  let!(:work_version_1) { create(:work_version, :published, doi: '10.26207/rb4s-33xs') }
+  let!(:work_version_2) { create(:work_version, :published, doi: '10.26207/jjd7-0is4', work: work_1) }
+  let!(:work_1) { create(:work, doi: '10.18113/dmnf-6dzs') }
+  let(:work_2) { create(:work, versions_count: 4, has_draft: false, doi: nil) }
+  let!(:collection_1) { create(:collection, doi: '10.18113/dmnf-6dzs', identifier: ['doi:10.26207/upw2-pkx3']) }
+  let!(:collection_2) { create(:collection, doi: '10.18113/qi03-b693') }
 
   before do
     Work.reindex_all(async: false)

@@ -10,7 +10,7 @@ require 'rails_helper'
 # objects as possible in a single it-block with big comments to denote each test
 
 RSpec.describe WorkHistories::WorkVersionChangeComponent, type: :component do
-  let(:user) { build_stubbed :user }
+  let(:user) { build_stubbed(:user) }
 
   describe '#initialize' do
     it 'requires paper_trail_version to apply to a WorkVersion' do
@@ -23,14 +23,14 @@ RSpec.describe WorkHistories::WorkVersionChangeComponent, type: :component do
     end
   end
 
-  describe 'rendering', versioning: true do
+  describe 'rendering', :versioning do
     it 'renders the correct state given the paper trail version' do
       ##########################################################################
       #
       # Context: when the WorkVersion has been created
       #
       ##########################################################################
-      work_version = create :work_version
+      work_version = create(:work_version)
       paper_trail_version = work_version.versions.last
       allow(paper_trail_version).to receive(:created_at)
         .and_return(Time.zone.parse('2019-12-20 14:00:00'))

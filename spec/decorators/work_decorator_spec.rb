@@ -10,7 +10,7 @@ RSpec.describe WorkDecorator do
   end
 
   describe '#decorated_versions' do
-    let(:work) { create :work, versions_count: 2, has_draft: true }
+    let(:work) { create(:work, versions_count: 2, has_draft: true) }
 
     it 'creates version decorators with their indices' do
       allow(WorkVersionDecorator).to receive(:new)

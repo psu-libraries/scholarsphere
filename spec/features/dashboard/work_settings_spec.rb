@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe 'Work Settings Page', with_user: :user do
-  let(:user) { create :user }
-  let(:work) { create :work, versions_count: 1, has_draft: false, depositor: user.actor }
+  let(:user) { create(:user) }
+  let(:work) { create(:work, versions_count: 1, has_draft: false, depositor: user.actor) }
 
   before do
     allow(WorkIndexer).to receive(:call).and_call_original
@@ -35,7 +35,7 @@ RSpec.describe 'Work Settings Page', with_user: :user do
     end
 
     context 'when the work is not subject to the data & code deposit pathway' do
-      let(:work) { create :work, :article, versions_count: 1, has_draft: false, depositor: user.actor }
+      let(:work) { create(:work, :article, versions_count: 1, has_draft: false, depositor: user.actor) }
 
       before do
         work.update(visibility: Permissions::Visibility::AUTHORIZED)
@@ -96,9 +96,9 @@ RSpec.describe 'Work Settings Page', with_user: :user do
     end
 
     context 'when the work has been published' do
-      let(:work) { create :work, depositor: user.actor }
+      let(:work) { create(:work, depositor: user.actor) }
 
-      before { create :work_version, :published, work: work, identifier: identifier }
+      before { create(:work_version, :published, work: work, identifier: identifier) }
 
       context 'when the work has a publisher DOI' do
         let(:identifier) { ['http://doi.org/10.47366/sabia.v5n1a3'] }
@@ -106,7 +106,7 @@ RSpec.describe 'Work Settings Page', with_user: :user do
         it 'is not allowed' do
           visit edit_dashboard_work_path(work)
 
-          expect(page).not_to have_content I18n.t!('resources.doi.create')
+          expect(page).to have_no_content I18n.t!('resources.doi.create')
           expect(page).to have_content I18n.t!('dashboard.works.edit.doi.not_allowed')
         end
       end
@@ -119,18 +119,18 @@ RSpec.describe 'Work Settings Page', with_user: :user do
           click_button I18n.t!('resources.doi.create')
 
           expect(page).to have_current_path(edit_dashboard_work_path(work))
-          expect(page).not_to have_button I18n.t!('resources.doi.create')
+          expect(page).to have_no_button I18n.t!('resources.doi.create')
         end
       end
     end
 
     context 'when the work has not yet been published' do
-      let(:work) { create :work, versions_count: 1, has_draft: true, depositor: user.actor }
+      let(:work) { create(:work, versions_count: 1, has_draft: true, depositor: user.actor) }
 
       it 'is not allowed' do
         visit edit_dashboard_work_path(work)
 
-        expect(page).not_to have_content I18n.t!('resources.doi.create')
+        expect(page).to have_no_content I18n.t!('resources.doi.create')
         expect(page).to have_content I18n.t!('dashboard.works.edit.doi.not_allowed')
       end
     end
@@ -138,7 +138,7 @@ RSpec.describe 'Work Settings Page', with_user: :user do
 
   describe 'Updating Editors', :vcr do
     context 'when adding a new editor' do
-      let(:work) { create :work, depositor: user.actor }
+      let(:work) { create(:work, depositor: user.actor) }
       let(:mailer_spy) { instance_spy('MailerSpy') }
 
       before do
@@ -183,7 +183,7 @@ RSpec.describe 'Work Settings Page', with_user: :user do
 
     context 'when removing an existing editor' do
       let(:editor) { create(:user) }
-      let(:work) { create :work, depositor: user.actor, edit_users: [editor] }
+      let(:work) { create(:work, depositor: user.actor, edit_users: [editor]) }
 
       it 'adds a user as an editor' do
         visit edit_dashboard_work_path(work)
@@ -199,7 +199,7 @@ RSpec.describe 'Work Settings Page', with_user: :user do
     end
 
     context 'when the user does not exist' do
-      let(:work) { create :work, depositor: user.actor }
+      let(:work) { create(:work, depositor: user.actor) }
 
       it 'adds a user as an editor' do
         visit edit_dashboard_work_path(work)
@@ -213,21 +213,82 @@ RSpec.describe 'Work Settings Page', with_user: :user do
       end
     end
 
-    context 'when selecting a group' do
-      let(:user) { create(:user, groups: User.default_groups + [group]) }
-      let(:group) { create(:group) }
-      let(:work) { create :work, depositor: user.actor }
+    context 'when selecting a group', :js do
+      context 'when a regular user' do
+        let(:user) { create(:user, groups: User.default_groups + [group]) }
+        let(:group) { create(:group) }
+        let(:work) { create(:work, depositor: user.actor) }
 
-      it 'adds the group as an editor' do
-        visit edit_dashboard_work_path(work)
+        it 'adds the group as an editor' do
+          visit edit_dashboard_work_path(work)
 
-        expect(work.edit_groups).to be_empty
-        select(group.name, from: 'Edit groups')
-        click_button('Update Editors')
+          expect(work.edit_groups).to be_empty
+          select(group.name, from: 'Edit groups')
+          click_button('Update Editors')
 
-        work.reload
-        expect(work.edit_groups).to contain_exactly(group)
-        expect(WorkIndexer).to have_received(:call)
+          work.reload
+          expect(work.edit_groups).to contain_exactly(group)
+          expect(WorkIndexer).to have_received(:call)
+        end
+      end
+
+      context 'when an admin' do
+        let(:user) { create(:user, :admin) }
+        let(:group1) { create(:group) }
+        let(:group2) { create(:group) }
+        let(:work) { create(:work, edit_groups: [group1, group2]) }
+
+        it 'allows admins to remove a group as an editor' do
+          visit edit_dashboard_work_path(work)
+
+          expect(work.edit_groups).to eq [group1, group2]
+          find('a[data-action="multiple-fields#remove"]').click
+          click_button('Update Editors')
+
+          work.reload
+          expect(work.edit_groups).to contain_exactly(group2)
+          expect(WorkIndexer).to have_received(:call)
+        end
+      end
+    end
+  end
+
+  describe 'Viewing Accessibility Review', :js do
+    let(:pdf) { create(:file_resource, :pdf) }
+    let(:files) { work.latest_version.file_resources }
+    let(:accessibility_check_result) do
+      create(:accessibility_check_result, file_resource_id: files.last.id, detailed_report: detailed_report)
+    end
+    let(:detailed_report) {
+      { 'Detailed Report' => {
+        'Forms' =>
+        [{ 'Rule' => 'Tagged form fields', 'Status' => 'Passed', 'Description' => 'All form fields are tagged' }],
+        'Tables' =>
+      [{ 'Rule' => 'Rows', 'Status' => 'Passed', 'Description' => 'TR must be a child of Table, THead, TBody, or TFoot' }],
+        'Document' =>
+      [{ 'Rule' => 'Accessibility permission flag', 'Status' => 'Failed', 'Description' => 'Accessibility permission flag must be set' },
+       { 'Rule' => 'Image-only PDF', 'Status' => 'Passed', 'Description' => 'Document is not image-only PDF' }]
+      } }}
+
+    it 'renders a table with review status for each file' do
+      visit edit_dashboard_work_path(work)
+      expect(page).to have_content(I18n.t!('dashboard.shared.files.heading'))
+      expect(page).to have_content(I18n.t!('dashboard.file_list.edit.accessibility_score'))
+      expect(page).to have_content(I18n.t!('dashboard.file_list.edit.accessibility_report'))
+      within('tbody.work-files__file') do
+        within('tr:nth-child(1)') do
+          expect(page).to have_content('Needs manual review')
+        end
+
+        files << pdf
+        refresh
+        within('tr:nth-child(2)') do
+          expect(page).to have_content('Processing')
+          accessibility_check_result.save!
+          refresh
+          expect(page).to have_content('3 out of 4 passed')
+          expect(page).to have_link('View Report')
+        end
       end
     end
   end
@@ -236,13 +297,13 @@ RSpec.describe 'Work Settings Page', with_user: :user do
     context 'when a regular user' do
       it 'does not allow a regular user to delete a work version' do
         visit edit_dashboard_work_path(work)
-        expect(page).not_to have_content(I18n.t!('dashboard.works.edit.danger.delete_draft.explanation'))
-        expect(page).not_to have_link(I18n.t!('dashboard.form.actions.destroy.button'))
+        expect(page).to have_no_content(I18n.t!('dashboard.works.edit.danger.delete_draft.explanation'))
+        expect(page).to have_no_link(I18n.t!('dashboard.form.actions.destroy.button'))
       end
     end
 
     context 'when an admin user' do
-      let(:user) { create :user, :admin }
+      let(:user) { create(:user, :admin) }
 
       it 'allows a work version to be deleted' do
         visit edit_dashboard_work_path(work)
@@ -256,13 +317,13 @@ RSpec.describe 'Work Settings Page', with_user: :user do
     context 'with a standard user' do
       it 'does not allow the change' do
         visit edit_dashboard_work_path(work)
-        expect(page).not_to have_content(I18n.t!('dashboard.shared.depositor_form.heading'))
-        expect(page).not_to have_link(I18n.t!('dashboard.shared.depositor_form.submit_button'))
+        expect(page).to have_no_content(I18n.t!('dashboard.shared.depositor_form.heading'))
+        expect(page).to have_no_link(I18n.t!('dashboard.shared.depositor_form.submit_button'))
       end
     end
 
     context 'with an admin user' do
-      let(:user) { create :user, :admin }
+      let(:user) { create(:user, :admin) }
       let(:actor) { create(:actor) }
 
       it 'allows the change' do
@@ -280,17 +341,17 @@ RSpec.describe 'Work Settings Page', with_user: :user do
     context 'with a standard user' do
       it 'does not allow the change' do
         visit edit_dashboard_work_path(work)
-        expect(page).not_to have_content(I18n.t!('dashboard.shared.curator_form.heading'))
-        expect(page).not_to have_link(I18n.t!('dashboard.shared.curator_form.submit_button'))
+        expect(page).to have_no_content(I18n.t!('dashboard.shared.curator_form.heading'))
+        expect(page).to have_no_link(I18n.t!('dashboard.shared.curator_form.submit_button'))
       end
     end
 
     context 'with an admin user' do
-      let(:user) { create :user, :admin }
+      let(:user) { create(:user, :admin) }
 
       it 'allows the change and lists previous curators' do
         visit edit_dashboard_work_path(work)
-        expect(page).not_to have_content('Previous Curators')
+        expect(page).to have_no_content('Previous Curators')
         find('[name="curator_form[access_id]"]', visible: true).set(user.access_id)
         click_on(I18n.t!('dashboard.shared.curator_form.submit_button'))
         expect(page).to have_content(I18n.t!('dashboard.works.update.success'))
@@ -306,13 +367,13 @@ RSpec.describe 'Work Settings Page', with_user: :user do
     context 'with a standard user' do
       it 'does not allow the change' do
         visit edit_dashboard_work_path(work)
-        expect(page).not_to have_content(I18n.t!('dashboard.works.edit.danger.withdraw_versions.heading'))
-        expect(page).not_to have_button(I18n.t!('dashboard.works.withdraw_versions_form.submit_button'))
+        expect(page).to have_no_content(I18n.t!('dashboard.works.edit.danger.withdraw_versions.heading'))
+        expect(page).to have_no_button(I18n.t!('dashboard.works.withdraw_versions_form.submit_button'))
       end
     end
 
     context 'with an admin user' do
-      let(:user) { create :user, :admin }
+      let(:user) { create(:user, :admin) }
 
       it 'allows the version to be withdrawn' do
         visit edit_dashboard_work_path(work)
@@ -330,17 +391,17 @@ RSpec.describe 'Work Settings Page', with_user: :user do
 
     context 'when regular user' do
       it 'does not have button' do
-        expect(page).not_to have_button 'Contact Depositor via LibAnswers >>'
+        expect(page).to have_no_button 'Contact Depositor via LibAnswers >>'
       end
     end
 
     context 'when admin user' do
-      let(:user) { create :user, :admin }
+      let(:user) { create(:user, :admin) }
 
       describe 'clicking the contact depositor button' do
         context 'when no error is raised' do
           it 'creates a ticket in libanswers and directs to that ticket', :vcr do
-            click_button 'Contact Depositor via LibAnswers >>'
+            click_button I18n.t('resources.contact_depositor_button.text')
           rescue ActionController::RoutingError
             # This is a bit unconventional.  Since clicking the button will redirect to an external site,
             # a routing error will be raised in the test env.  Rescue it and check the correct redirect location
@@ -354,9 +415,19 @@ RSpec.describe 'Work Settings Page', with_user: :user do
           end
 
           it 'redirects to the work settings page and presents a flash message with the error message' do
-            click_on 'Contact Depositor via LibAnswers >>'
+            click_button I18n.t('resources.contact_depositor_button.text')
             expect(page).to have_content 'Error Message'
             expect(page).to have_current_path edit_dashboard_work_path(work)
+          end
+        end
+      end
+
+      describe 'clicking the accessibility team depositor button' do
+        context 'when there is no error' do
+          it 'directs to that ticket in libanswers', :vcr do
+            click_button I18n.t('resources.contact_accessibility_team_button.text')
+          rescue ActionController::RoutingError
+            expect(page.driver.browser.last_response['Location']).to eq 'https://psu.libanswers.com/admin/ticket?qid=14782516'
           end
         end
       end

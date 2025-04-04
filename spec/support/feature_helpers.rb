@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative './feature_helpers/dashboard_form'
+require_relative 'feature_helpers/dashboard_form'
 
 module FeatureHelpers
   def retry_click(count: 0)

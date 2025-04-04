@@ -11,6 +11,7 @@ shared_examples_for 'a work deposit pathway details form' do
 
     before do
       allow(wv).to receive(:save).with(context: context).and_return true
+      allow(wv).to receive(:save).with(hash_including(validate: false))
       allow(wv).to receive(:attributes=)
     end
 
