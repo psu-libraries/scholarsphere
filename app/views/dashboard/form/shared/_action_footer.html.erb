@@ -3,9 +3,9 @@
 
 <footer class="footer footer--actions footer--fixed d-flex justify-content-center">
   <div>
-<span data-controller="publish-status" 
-      data-publish-status-allow-publish="<%= allow_publish? %>" 
-      data-publish-status-primary-action="<%= primary_action %>" >
+<span data-controller="publish-status"
+      data-publish-status-allow-publish="<%= allow_publish? %>"
+      data-publish-status-primary-action="<%= primary_action %>">
       <span data-target="publish-status.show_buttons">
       <% if primary_action == :publish %>
         <span data-controller="publishing-check">
@@ -23,7 +23,7 @@
       <% end %>
       </span>
       <span data-target="publish-status.help_text">
-        <%= t("dashboard.form.actions.publish.blocked") %>
+        <%= t('dashboard.form.actions.publish.blocked') %>
       </span>
   </span>
 

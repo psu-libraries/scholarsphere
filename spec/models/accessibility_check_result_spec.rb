@@ -3,7 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe AccessibilityCheckResult do
-  let(:accessibility_check_result) { described_class.new(detailed_report: detailed_report, file_resource_id: create(:file_resource, :pdf).id) }
+  let(:accessibility_check_result) { described_class.new(detailed_report: detailed_report, file_resource_id: file_resource.id) }
+  let(:file_resource) { create(:file_resource, :pdf, work_versions: [create(:work_version)]) }
 
   describe 'table' do
     it { is_expected.to have_db_column(:detailed_report).of_type(:jsonb) }
@@ -19,12 +20,17 @@ RSpec.describe AccessibilityCheckResult do
   end
 
   describe 'When creating, updating or destroying feed sources' do
-    let(:check_result) { build_stubbed(:accessibility_check_result) }
+    let(:check_result) { build_stubbed(:accessibility_check_result, file_resource: file_resource) }
+    let(:user) { instance_double(User, admin?: false) }
 
     before do
       allow(check_result).to receive(:persisted?).and_return(true)
       allow(check_result).to receive(:broadcast_to_file_version_memberships)
       check_result.instance_variable_set(:@_new_record_before_last_commit, true)
+      test_user = user
+      AllowPublishService.class_eval do
+        define_method(:current_user) { test_user }
+      end
     end
 
     it 'calls subscribe when created' do

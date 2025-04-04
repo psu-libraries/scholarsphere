@@ -33,9 +33,9 @@ RSpec.describe FileResource do
 
   describe 'scopes' do
     describe '.needs_accessibility_check' do
-      let(:file_resource_with_check) { create(:file_resource, :pdf) }
-      let(:file_resource_without_check) { create(:file_resource, :pdf) }
-      let(:non_pdf_file_resource) { create(:file_resource, :with_processed_image) }
+      let(:file_resource_with_check) { create(:file_resource, :pdf, work_versions: [create(:work_version)]) }
+      let(:file_resource_without_check) { create(:file_resource, :pdf, work_versions: [create(:work_version)]) }
+      let(:non_pdf_file_resource) { create(:file_resource, :with_processed_image, work_versions: [create(:work_version)]) }
 
       before do
         create(:accessibility_check_result, file_resource: file_resource_with_check)

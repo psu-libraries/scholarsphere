@@ -50,7 +50,7 @@ class AccessibilityCheckResult < ApplicationRecord
       resource = file_resource.work_versions.last
 
       ActionCable.server.broadcast(
-        "publish_status_channel",
+        'publish_status_channel',
         { allow_publish: AllowPublishService.check(resource) }
       )
     end

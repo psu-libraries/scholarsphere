@@ -49,7 +49,7 @@ class FileVersionMembership < ApplicationRecord
   end
 
   def accessibility_score_pending?
-    mime_type == 'application/pdf' && !accessibility_result.present?
+    mime_type == 'application/pdf' && accessibility_result.blank?
   end
 
   def accessibility_failures?
