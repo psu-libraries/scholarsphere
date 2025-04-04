@@ -9,7 +9,7 @@ module AllowPublish
 
   def allow_publish?(resource)
     deposit_pathway ||= WorkDepositPathway.new(resource)
-    if deposit_pathway.work? && resource.is_a?(WorkVersion)
+    if deposit_pathway.work?
       (!resource.draft_curation_requested &&
         !resource.accessibility_remediation_requested &&
         resource.file_version_memberships.none?(&:accessibility_score_pending?)) || current_user.admin?
