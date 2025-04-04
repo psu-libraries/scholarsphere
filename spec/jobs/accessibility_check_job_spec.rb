@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe AccessibilityCheckJob do
-  let(:resource) { create(:file_resource) }
+  let(:resource) { create(:file_resource, :pdf, work_versions: [create(:work_version)]) }
   let(:service) { instance_double(AdobePdf::AccessibilityChecker, call: true) }
 
   before do

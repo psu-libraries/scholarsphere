@@ -136,6 +136,8 @@ class WorkDepositPathway
                :work_type,
                :draft_curation_requested,
                :accessibility_remediation_requested,
+               :file_resources,
+               :file_version_memberships,
                :mint_doi_requested,
                to: :work_version, prefix: false
 

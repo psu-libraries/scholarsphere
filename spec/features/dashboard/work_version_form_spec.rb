@@ -1645,6 +1645,72 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
   end
 
+  describe 'blocking publication during accessibility checking', :js do
+    context 'when the user is an admin' do
+      let(:work_version) { create(:work_version, :able_to_be_published) }
+      let(:user) { create(:user, :admin) }
+
+      it 'allows admin to publish' do
+        visit dashboard_form_publish_path(work_version)
+
+        expect(page).to have_button('Publish')
+
+        FeatureHelpers::DashboardForm.publish
+
+        expect(work_version.reload.aasm_state).to eq 'published'
+      end
+    end
+
+    context 'when the user is not an admin' do
+      let(:user) { work_version.work.depositor.user }
+
+      context 'when none of the files are pdfs' do
+        let(:work_version) { create(:work_version, :able_to_be_published) }
+
+        it 'allows the user to publish' do
+          visit dashboard_form_publish_path(work_version)
+
+          expect(page).to have_button('Publish')
+
+          FeatureHelpers::DashboardForm.publish
+
+          expect(work_version.reload.aasm_state).to eq 'published'
+        end
+      end
+
+      context 'when there is a pdf file' do
+        let(:work_version) { create(:work_version, :able_to_be_published_with_pdf) }
+
+        context 'when the file has an accessibility check result' do
+          let(:accessibility_check_result) do
+            create(:accessibility_check_result, file_resource_id: work_version.file_resources.last.id)
+          end
+
+          before { accessibility_check_result.save! }
+
+          it 'allows the user to publish' do
+            visit dashboard_form_publish_path(work_version)
+
+            expect(page).to have_button('Publish')
+
+            FeatureHelpers::DashboardForm.publish
+
+            expect(work_version.reload.aasm_state).to eq 'published'
+          end
+        end
+
+        context 'when the file does not have an accessibility check result' do
+          it 'blocks the user from publishing' do
+            visit dashboard_form_publish_path(work_version)
+
+            expect(page).to have_no_button('Publish')
+            expect(page).to have_content(I18n.t!('dashboard.form.actions.publish.blocked'))
+          end
+        end
+      end
+    end
+  end
+
   describe 'minting a doi', :js do
     let(:user) { work_version.work.depositor.user }
 

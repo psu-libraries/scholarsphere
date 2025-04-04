@@ -3,7 +3,10 @@
 
 <footer class="footer footer--actions footer--fixed d-flex justify-content-center">
   <div>
-    <% if allow_publish? || primary_action == :save_and_continue %>
+<span data-controller="publish-status"
+      data-publish-status-allow-publish="<%= allow_publish? %>"
+      data-publish-status-primary-action="<%= primary_action %>">
+      <span data-target="publish-status.show_buttons">
       <% if primary_action == :publish %>
         <span data-controller="publishing-check">
           <%= render 'dashboard/form/publish/publish_dialog', f: form %>
@@ -27,7 +30,11 @@
       <% else %>
         <%= form.submit t("dashboard.form.actions.#{primary_action}.button"), name: primary_action, data: { toggle: 'tooltip', placement: 'top', title: t("dashboard.form.actions.#{primary_action}.tooltip") }, class: 'btn btn-primary btn--rounded' %>
       <% end %>
-  <% end %>
+      </span>
+      <span data-target="publish-status.help_text">
+        <%= t('dashboard.form.actions.publish.blocked') %>
+      </span>
+  </span>
 
     <%= link_to t('dashboard.form.actions.cancel.button'), cancel_path, data: { toggle: 'tooltip', placement: 'top', title: t('dashboard.form.actions.cancel.tooltip') }, class: 'btn btn-outline-dark btn--rounded ml-2' %>
   </div>

@@ -429,6 +429,7 @@ en:
         publish: 
           button: Publish
           tooltip: Publish your work to make it publicly visible. Changes cannot be made to the published version, but you can create a new version if updates are needed.
+          blocked: Publishing blocked until Accessibility Results are finished processing
         confirm:
           publish: Confirm publish
           request_curation: Confirm Request Curation

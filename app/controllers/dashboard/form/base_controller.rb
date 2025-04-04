@@ -3,6 +3,8 @@
 module Dashboard
   module Form
     class BaseController < ::Dashboard::BaseController
+      include AllowPublish
+
       private
 
         def resource_klass
@@ -101,13 +103,8 @@ module Dashboard
           deposit_pathway.allows_mint_doi_request?
         end
 
-        helper_method :allow_publish?
         def allow_publish?
-          if deposit_pathway.work?
-            (!@resource.draft_curation_requested && !@resource.accessibility_remediation_requested) || current_user.admin?
-          else
-            true
-          end
+          super(@resource)
         end
 
         helper_method :param_key
