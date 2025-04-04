@@ -1492,7 +1492,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
   end
 
-  describe 'Requesting accessibility remediation', :js do
+  describe 'Requesting accessibility remediation', :js, skip: 'Until request accessibility remediation is available again' do
     let(:user) { work_version.work.depositor.user }
     let(:request_description) { 'Recommended: Select ‘Request Accessibility Remediation’ below to have the Adaptive Technologies Team review and improve the accessibility of your work before publication. While your work is being remediated it will remain saved as a draft and will be published upon completion of this work.' }
     let(:publish_description) { "Select 'Publish' if you would like to self-submit your deposit to Scholarsphere and make it immediately public. ScholarSphere curators will review your work after publication. Note, because curatorial review occurs after publication, any changes or updates may result in a versioned work." }
