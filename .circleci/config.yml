@@ -1,7 +1,6 @@
 version: 2.1
-
 orbs:
-  docker: circleci/docker@2.6.0
+  docker: circleci/docker@2.8.2
   browser-tools: circleci/browser-tools@1.5.2
 
 jobs:
@@ -23,11 +22,9 @@ jobs:
             git clone $CONFIG_REPO
             cd scholarsphere-config
             /usr/local/bin/pr-release clusters/prod/manifests/scholarsphere/prod.yaml
-
   publish:
-    docker:
-      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v4.0.4
-        user: root
+    executor:
+      name: docker/docker
     steps:
       - setup_remote_docker:
           docker_layer_caching: true
@@ -63,9 +60,9 @@ jobs:
       - image: redis:6.2.6
       - image: minio/minio:RELEASE.2021-03-17T02-33-02Z
         entrypoint:
-        - /bin/sh
-        - -c
-        - mkdir -p /data/scholarsphere; minio --compat server --address ':9000' /data
+          - /bin/sh
+          - -c
+          - mkdir -p /data/scholarsphere; minio --compat server --address ':9000' /data
         environment:
           MINIO_ACCESS_KEY: scholarsphere
           MINIO_SECRET_KEY: scholarsphere
@@ -76,10 +73,10 @@ jobs:
           POSTGRES_DB: scholarsphere
       - image: solr:8.11.1-slim
         command: [
-          "/bin/bash",
-          "-c",
+          "/bin/bash", 
+          "-c", 
           "solr -c && solr auth enable -credentials scholarsphere:scholarsphere -z localhost:9983; solr stop && solr -c -f",
-        ]
+          ]
     environment:
       RAILS_ENV: test
       AWS_ACCESS_KEY_ID: scholarsphere
@@ -97,65 +94,63 @@ jobs:
       POSTGRES_HOST: 127.0.0.1
       RMD_HOST: https://metadata.libraries.psu.edu
     steps:
-    - browser-tools/install-browser-tools
-    - checkout
-    - restore_cache:
-        keys:
-          - bundle1-{{ checksum "Gemfile.lock" }}
-    - restore_cache:
-        keys:
-          - yarn1-{{ checksum "yarn.lock" }}
-    - run:
-        name: "Update Node.js and npm"
-        command: |
-          curl -sSL "https://nodejs.org/dist/v16.13.1/node-v16.13.1-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v16.13.1-linux-x64/bin/node
-          curl -L https://npmjs.com/install.sh | sudo bash
-    - run:
-        name: "Install dependencies for thumbnails"
-        command: |
-          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-          sudo apt-get update
-          sudo apt-get install -y imagemagick ghostscript libreoffice
-          sudo cp config/policy.xml /etc/ImageMagick-6/policy.xml
-    - run:
-        name: "Bundle"
-        command: |
-          gem install bundler
-          bundle check --path vendor/bundle || bundle install --deployment
-    - run:
-        name: "Yarn"
-        command: |
-          yarn install --cache-folder ~/.cache/yarn --frozen-lockfile
-    - run:
-        name: "Wait for Redis"
-        command: dockerize -wait tcp://localhost:6379 -timeout 1m
-    - run:
-        name: "Wait for Solr"
-        command: dockerize -wait tcp://localhost:8983 -timeout 2m
-    - save_cache:
-        paths:
-          - vendor/bundle
-        key: bundle1-{{ checksum "Gemfile.lock" }}
-    - save_cache:
-        key: yarn1-{{ checksum "yarn.lock" }}
-        paths:
-          - ~/.cache/yarn
-    - run:
-        name: "Lint"
-        command: |
-          bundle exec niftany
-          yarn lint
-    - run:
-        name: "Jest"
-        command: |
-          yarn test
-    - run:
-        name: "RSpec"
-        command: |
-          ./bin/ci-rspec
-
+      - browser-tools/install-browser-tools
+      - checkout
+      - restore_cache:
+          keys:
+            - bundle1-{{ checksum "Gemfile.lock" }}
+      - restore_cache:
+          keys:
+            - yarn1-{{ checksum "yarn.lock" }}
+      - run:
+          name: "Update Node.js and npm"
+          command: |
+            curl -sSL "https://nodejs.org/dist/v16.13.1/node-v16.13.1-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v16.13.1-linux-x64/bin/node
+            curl -L https://npmjs.com/install.sh | sudo bash
+      - run:
+          name: "Install dependencies for thumbnails"
+          command: |
+            wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+            sudo apt-get update
+            sudo apt-get install -y imagemagick ghostscript libreoffice
+            sudo cp config/policy.xml /etc/ImageMagick-6/policy.xml
+      - run:
+          name: "Bundle"
+          command: |
+            gem install bundler
+            bundle check --path vendor/bundle || bundle install --deployment
+      - run:
+          name: "Yarn"
+          command: |
+            yarn install --cache-folder ~/.cache/yarn --frozen-lockfile
+      - run:
+          name: "Wait for Redis"
+          command: dockerize -wait tcp://localhost:6379 -timeout 1m
+      - run:
+          name: "Wait for Solr"
+          command: dockerize -wait tcp://localhost:8983 -timeout 2m
+      - save_cache:
+          paths:
+            - vendor/bundle
+          key: bundle1-{{ checksum "Gemfile.lock" }}
+      - save_cache:
+          key: yarn1-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
+      - run:
+          name: "Lint"
+          command: |
+            bundle exec niftany
+            yarn lint
+      - run:
+          name: "Jest"
+          command: |
+            yarn test
+      - run:
+          name: "RSpec"
+          command: |
+            ./bin/ci-rspec
 workflows:
-  version: 2
   scholarsphere:
     jobs:
       - release:
@@ -173,7 +168,6 @@ workflows:
       - publish:
           context:
             - org-global
-
       - deploy:
           context:
             - org-global

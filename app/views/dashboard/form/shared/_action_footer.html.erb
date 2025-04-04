@@ -14,7 +14,16 @@
             <%= button_tag t('dashboard.form.actions.request_curation.button'), type: 'button', data: { action: 'publishing-check#openDialog', dialog: 'curation', toggle: 'tooltip', placement: 'top', title: t('dashboard.form.actions.request_curation.tooltip') }, class: 'btn btn-primary btn--rounded' %>
           <% end %>
           <% if allow_accessibility_remediation? %>
-            <%= button_tag t('dashboard.form.actions.request_remediation.button'), type: 'button', data: { action: 'publishing-check#openDialog', dialog: 'remediation', toggle: 'tooltip', placement: 'top', title: t('dashboard.form.actions.request_remediation.tooltip') }, class: 'btn btn-primary btn--rounded' %>
+            <%= button_tag t('dashboard.form.actions.request_remediation.button'),
+                           type: 'button',
+                           data: { action: 'publishing-check#openDialog',
+                                   dialog: 'remediation',
+                                   toggle: 'tooltip',
+                                   placement: 'top',
+                                   title: t('dashboard.form.actions.request_remediation.tooltip') },
+                           class: 'btn btn-primary btn--rounded',
+                           ## TODO: Unhide when ready
+                           style: 'display: none' %>
           <% end %>
           <%= button_tag t('dashboard.form.actions.publish.button'), type: 'button', data: { action: 'publishing-check#openDialog', dialog: 'publish', toggle: 'tooltip', placement: 'top', title: t("dashboard.form.actions.#{primary_action}.tooltip") }, class: 'btn btn-primary btn--rounded' %>
         </span>
