@@ -16,7 +16,6 @@ export default class extends Controller {
         }
       }
     )
-    console.log('TESTING: PublishStatusChannel subscription created')
   }
 
   updatePublishStatus (data) {
@@ -30,7 +29,6 @@ export default class extends Controller {
     const allowPublish = this.data.get('allowPublish') === 'true'
     const show = allowPublish || primaryAction === 'save_and_continue'
 
-    console.log('TESTING: PublishStatusController show set as ', show)
     this.show_buttonsTarget.classList.toggle('d-none', !show)
     this.help_textTarget.classList.toggle('d-none', show)
   }
