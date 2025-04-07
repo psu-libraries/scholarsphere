@@ -129,10 +129,10 @@ RSpec.describe AllWorkVersionsReport do
       end
 
       # Spot check view statistics
-      expect(yielded_rows[0][34]).to eq 6
-      expect(yielded_rows[1][34]).to eq 0
-      expect(yielded_rows[2][34]).to eq 1
-      expect(yielded_rows[3][34]).to eq 0
+      expect(yielded_rows[0][35]).to eq 6
+      expect(yielded_rows[1][35]).to eq 0
+      expect(yielded_rows[2][35]).to eq 1
+      expect(yielded_rows[3][35]).to eq 0
     end
   end
 end

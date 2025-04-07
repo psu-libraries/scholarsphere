@@ -35,8 +35,7 @@ FactoryBot.define do
     end
 
     trait :instrument do
-      work
-      instrument
+      work factory: %i[work instrument]
     end
 
     trait :initial_draft do

@@ -548,14 +548,14 @@ RSpec.describe WorkVersion do
     end
 
     context 'with a work that uses the instrument works deposit pathway' do
-      let(:work_version) { create(:work_version, :instrument_able_to_be_published, work: build(:work, work_type: 'instrument')) }
+      let(:work_version) { create(:work_version, :instrument_able_to_be_published) }
 
       it 'sets the publisher to Scholarsphere automatically' do
         work_version.save
         expect(work_version.publisher).to eq []
         work_version.publish!
         expect(work_version).to be_published
-        expect(work_version.reload.publisher).to eq ['Scholarsphere']
+        expect(work_version.reload.publisher).to eq ['ScholarSphere']
       end
     end
 
