@@ -56,7 +56,7 @@ RSpec.describe LibanswersApiService, :vcr do
   describe '#admin_create_accessibility_ticket' do
     let!(:user) { create(:user, access_id: 'test', email: 'test@psu.edu') }
     let!(:work) { create(:work, depositor: user.actor) }
-    let!(:base_url) { 'www.example.com'}
+    let!(:base_url) { 'www.example.com' }
 
     context 'when successful response is returned from libanswers /ticket/create endpoint' do
       it 'returns the libanswers ticket url' do
