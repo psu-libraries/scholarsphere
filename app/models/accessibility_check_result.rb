@@ -23,10 +23,6 @@ class AccessibilityCheckResult < ApplicationRecord
     format_report
   end
 
-  def accessibility_report_download_url
-    Rails.application.routes.url_helpers.accessibility_check_result_path(self)
-  end
-
   private
 
     def num_passed

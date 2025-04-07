@@ -53,11 +53,10 @@ class LibanswersApiService
       accessibility_check_results = []
       work.latest_version.file_resources.each do |fr|
         byebug
-        accessibility_check_results << "#{fr.file_data['metadata']['filename']}: #{base_url + fr.accessibility_check_result&.accessibility_report_download_url} "
+        accessibility_check_results << "#{fr.file_data['metadata']['filename']}: #{base_url + fr.file_version_memberships&.first&.accessibility_report_download_url} "
       end
       accessibility_check_results.join("\n")
     end
-
 
     def create_connection
       Faraday.new(url: host) do |f|
