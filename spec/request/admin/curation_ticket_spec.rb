@@ -27,7 +27,7 @@ RSpec.describe 'Create Curation Ticket', type: :request do
       end
 
       specify do
-        post admin_create_curation_ticket_url(work)
+        post admin_create_curation_ticket_url(work), params: { ticket_type: 'curation' }
         expect(response).to redirect_to('Redirect Path')
       end
     end
