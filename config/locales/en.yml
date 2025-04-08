@@ -85,7 +85,7 @@ en:
         instrument_type: Instrument Type
         measured_variable: Measured Variable
         available_date: Available Date
-        decommission_date: Decommission Date
+        decommission_date: Decommissioned Date
         related_identifier: Related Identifier
         alternative_identifier: Alternative Identifier
         instrument_resource_type: Instrument Resource Type
@@ -241,6 +241,12 @@ en:
         publisher_statement: If the original publisher requires a set statement to upload this work to ScholarSphere, include it here
         published_date: The publication date can be specific to the year (2020), month (2020-11), or day (2020-11-22).
         version_name: For datasets or software using semantic versioning (e.g., x.y.z)
+        available_date: Date that the instrument became available for use.
+        decommission_date: Date that the instrument was decommissioned.
+        instrument_type: Include the general classification of the type of instrument.
+        model: Include the model of the instrument.
+        owner: Organization or individual that manages the instrument.
+        manufacturer: Organization or individual that built the instrument.
         rights: The license you select determines how your work can be used by others. [Read More](https://docs.scholarsphere.psu.edu/guides/licenses/)
       autocomplete_work_form:
         doi: Please enter a valid DOI (e.g. https://doi.org/10.xxxx/xxxxxx or 10.xxxx/xxxxxx)
