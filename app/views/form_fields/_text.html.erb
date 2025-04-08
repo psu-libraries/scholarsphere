@@ -1,5 +1,5 @@
 <%- hint = FieldHintComponent.new(form: form, attribute: attribute) %>
-
+<%= render hint %>
 <div class="form-group has-float-label mb-3">
   <%= form.text_field attribute,
                       class: 'form-control',
@@ -13,6 +13,4 @@
   <% if form.object.errors.include?(attribute) %>
     <small class="form-text feedback-invalid"><%= form.object.errors[attribute].join('; ') %></small>
   <% end %>
-
-  <%= render hint %>
 </div>
