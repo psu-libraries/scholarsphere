@@ -3,7 +3,7 @@
 class FileHelpers
   class << self
     def fixture_file(filename)
-      Pathname.new(RSpec.configuration.fixture_path).join(filename)
+      Pathname.new(RSpec.configuration.fixture_paths.first).join(filename)
     end
 
     def text_file

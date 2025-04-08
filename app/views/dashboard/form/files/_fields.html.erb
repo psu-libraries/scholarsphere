@@ -26,6 +26,9 @@
 
 <% if form.object.file_version_memberships.any? %>
   <%= render 'uploaded_file_list', file_version_memberships: form.object.file_version_memberships %>
+  <% if form.object.file_version_memberships.any?(&:accessibility_failures?) %>
+    <%= t('accessibility_report.remediation_help').html_safe %>
+  <% end %>
 <% end %>
 
 <%# Dude what? In order for Save and Continue to work as a "next" button, i.e.

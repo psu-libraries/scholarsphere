@@ -43,6 +43,9 @@ class WorkVersion < ApplicationRecord
                  alternative_identifier: :string,
                  instrument_resource_type: :string,
                  funding_reference: :string
+                 sub_work_type: :string,
+                 program: :string,
+                 degree: :string
 
   belongs_to :work,
              inverse_of: :versions
@@ -122,6 +125,18 @@ class WorkVersion < ApplicationRecord
             if: :published?
 
   validates :depositor_agreement,
+            acceptance: true,
+            if: :published?
+
+  validates :psu_community_agreement,
+            acceptance: true,
+            if: :published?
+
+  validates :accessibility_agreement,
+            acceptance: true,
+            if: :published?
+
+  validates :sensitive_info_agreement,
             acceptance: true,
             if: :published?
 
@@ -207,12 +222,19 @@ class WorkVersion < ApplicationRecord
                   to: :published,
                   after: Proc.new {
                     work.try(:update_deposit_agreement)
-                    set_publisher_as_scholarsphere if work_type == 'instrument'
+                    if work.professional_doctoral_culminating_experience? || work.masters_culminating_experience? || work_type == 'instrument'
+                      set_publisher_as_scholarsphere
+                    end
                     self.reload_on_index = true
                   }
     end
 
     event :withdraw do
+      after_commit do
+        if work.withdrawn?
+          WorkRemovedWebhookJob.perform_later(work.uuid)
+        end
+      end
       transitions from: :published, to: :withdrawn
     end
 
@@ -234,7 +256,7 @@ class WorkVersion < ApplicationRecord
     related_url
     source
   ].each do |array_field|
-    define_method "#{array_field}=" do |vals|
+    define_method :"#{array_field}=" do |vals|
       super(strip_blanks_from_array(vals))
     end
   end
@@ -258,8 +280,11 @@ class WorkVersion < ApplicationRecord
     alternative_identifier
     instrument_resource_type
     funding_reference
+    sub_work_type
+    program
+    degree
   ].each do |field|
-    define_method "#{field}=" do |val|
+    define_method :"#{field}=" do |val|
       super(val.presence)
     end
   end
@@ -331,7 +356,7 @@ class WorkVersion < ApplicationRecord
   end
 
   def set_publisher_as_scholarsphere
-    metadata['publisher'] = ['Scholarsphere']
+    metadata['publisher'] = ['ScholarSphere']
   end
 
   def initial_draft?
@@ -357,6 +382,10 @@ class WorkVersion < ApplicationRecord
 
   def has_publisher_doi?
     !!identifier.find { |id| Doi.new(id).valid? }
+  end
+
+  def needs_accessibility_review
+    latest_published_version? && !accessibility_remediation_requested
   end
 
   delegate :deposited_at,
@@ -405,7 +434,7 @@ class WorkVersion < ApplicationRecord
       over_limit_errors = []
       errors.errors.each_with_index do |error, index|
         if error.type == :max &&
-            (error.attribute == :'work.embargoed_until' || error.attribute == :'work.versions.work.embargoed_until')
+            [:'work.embargoed_until', :'work.versions.work.embargoed_until'].include?(error.attribute)
           over_limit_errors << index
         end
       end

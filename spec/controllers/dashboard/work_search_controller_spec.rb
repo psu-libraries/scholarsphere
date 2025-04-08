@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe Dashboard::WorkSearchController, type: :controller do
-  let(:user) { create :user }
+RSpec.describe Dashboard::WorkSearchController do
+  let(:user) { create(:user) }
 
   describe 'GET #index' do
     let(:perform_request) { get :index, params: { q: 'test query', max_documents: 20 } }
@@ -30,7 +30,7 @@ RSpec.describe Dashboard::WorkSearchController, type: :controller do
 
       it 'returns a successful json response' do
         expect(response).to be_successful
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
 
         expect(Blacklight::SearchService).to have_received(:new) do |params|
           expect(params[:config]).to be_an_instance_of(Blacklight::Configuration)
@@ -43,12 +43,7 @@ RSpec.describe Dashboard::WorkSearchController, type: :controller do
 
         expect(mock_search_service).to have_received(:search_results)
 
-        expect(json_response).to match_array(
-          [
-            { 'id' => 123, 'text' => 'title1' },
-            { 'id' => 456, 'text' => 'title2' }
-          ]
-        )
+        expect(json_response).to contain_exactly({ 'id' => 123, 'text' => 'title1' }, { 'id' => 456, 'text' => 'title2' })
       end
 
       context 'when the max_documents param is not provided in the request' do

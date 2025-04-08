@@ -4,7 +4,7 @@ require 'rails_helper'
 
 describe 'migration' do
   describe ':statistics' do
-    let(:csv) { Pathname.new(fixture_path).join('s3_export_stats.csv') }
+    let(:csv) { Pathname.new(fixture_paths.first).join('s3_export_stats.csv') }
 
     before { allow(ImportStatisticsJob).to receive(:perform_later) }
 

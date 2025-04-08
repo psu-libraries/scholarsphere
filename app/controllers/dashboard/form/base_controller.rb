@@ -3,6 +3,8 @@
 module Dashboard
   module Form
     class BaseController < ::Dashboard::BaseController
+      include AllowPublish
+
       private
 
         def resource_klass
@@ -24,6 +26,10 @@ module Dashboard
                 redirect_upon_success
               end
             else
+              # Rails 7 changed how it handles nested attributes. This removes all nested errors.
+              @resource.errors.messages.each_key do |attribute|
+                @resource.errors.delete(attribute) if attribute.to_s.include?('work.versions')
+              end
               format.html { render on_error }
             end
           end
@@ -41,6 +47,10 @@ module Dashboard
           params.key?(:request_curation)
         end
 
+        def request_accessibility_remediation?
+          params.key?(:request_remediation)
+        end
+
         def create?
           @resource.new_record?
         end
@@ -54,7 +64,7 @@ module Dashboard
         end
 
         def redirect_upon_success
-          if save_and_exit? || finish? || request_curation?
+          if save_and_exit? || finish? || request_curation? || request_accessibility_remediation?
             redirect_to resource_path(@resource.uuid),
                         notice: I18n.t('dashboard.form.notices.success', resource: @resource.model_name.human)
           elsif publish?
@@ -83,18 +93,18 @@ module Dashboard
           deposit_pathway.allows_curation_request? && in_publish_edit_action?
         end
 
+        helper_method :allow_accessibility_remediation?
+        def allow_accessibility_remediation?
+          deposit_pathway.allows_accessibility_remediation_request? && in_publish_edit_action?
+        end
+
         helper_method :allow_mint_doi?
         def allow_mint_doi?
           deposit_pathway.allows_mint_doi_request?
         end
 
-        helper_method :allow_publish?
         def allow_publish?
-          if deposit_pathway.work?
-            !@resource.draft_curation_requested || current_user.admin?
-          else
-            true
-          end
+          super(@resource)
         end
 
         helper_method :param_key

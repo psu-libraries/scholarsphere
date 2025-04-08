@@ -74,8 +74,8 @@ Rails.application.configure do
   # the I18n.default_locale when a translation cannot be found).
   config.i18n.fallbacks = true
 
-  # Send deprecation notices to registered listeners.
-  config.active_support.deprecation = :notify
+  # Silence deprecation warnings
+  config.active_support.report_deprecations = false
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
@@ -104,7 +104,7 @@ Rails.application.configure do
     config.lograge.formatter = Lograge::Formatters::Json.new
     config.log_formatter = JSONLogFormatter.new
   else
-    config.log_formatter = ::Logger::Formatter.new
+    config.log_formatter = Logger::Formatter.new
   end
 
   config.lograge.custom_payload do |controller|
@@ -115,10 +115,16 @@ Rails.application.configure do
   end
 
   config.lograge.custom_options = lambda do |event|
-    {
-      remote_addr: event.payload[:headers][:REMOTE_ADDR],
-      x_forwarded_for: event.payload[:headers][:HTTP_X_FORWARDED_FOR]
-    }
+    headers = event.payload[:headers]
+
+    if headers.present?
+      {
+        remote_addr: headers[:REMOTE_ADDR],
+        x_forwarded_for: headers[:HTTP_X_FORWARDED_FOR]
+      }
+    else
+      {}
+    end
   end
 
   # Instead of extracting event as Strings, extract as Hash. You can also extract

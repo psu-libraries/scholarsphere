@@ -11,14 +11,14 @@ module Dashboard
         @resource = WorkVersion.build_with_empty_work(depositor: current_user.actor)
       end
 
-      def create
-        @resource = WorkVersion.build_with_empty_work(work_version_params, depositor: current_user.actor)
-        process_response(on_error: :new)
-      end
-
       def edit
         @resource = WorkVersion.includes(:work).find(params[:id])
         authorize(@resource)
+      end
+
+      def create
+        @resource = WorkVersion.build_with_empty_work(work_version_params, depositor: current_user.actor)
+        process_response(on_error: :new)
       end
 
       def update

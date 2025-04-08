@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe DoiUpdatingJob, type: :job do
+RSpec.describe DoiUpdatingJob do
   describe '#perform' do
     before { allow(DoiService).to receive(:call) }
 

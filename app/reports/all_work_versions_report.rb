@@ -39,6 +39,9 @@ class AllWorkVersionsReport
       alternative_identifier
       instrument_resource_type
       funding_reference
+      sub_work_type
+      program
+      degree
       views
     ]
   end
@@ -86,6 +89,9 @@ class AllWorkVersionsReport
           wv.alternative_identifier,
           wv.instrument_resource_type,
           wv.funding_reference,
+          wv.sub_work_type,
+          wv.program,
+          wv.degree,
           views
         ]
 

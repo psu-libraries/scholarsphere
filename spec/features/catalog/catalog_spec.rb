@@ -8,7 +8,6 @@ RSpec.describe 'Blacklight catalog page', :inline_jobs do
   # Creates an array of all the published work versions.
   let(:published_work_versions) do
     Work
-      .all
       .includes(versions: :creators)
       .map(&:latest_published_version)
       .reject(&:blank?)
@@ -16,7 +15,6 @@ RSpec.describe 'Blacklight catalog page', :inline_jobs do
 
   let(:collections) do
     Collection
-      .all
       .includes(:creators)
   end
 
@@ -82,10 +80,10 @@ RSpec.describe 'Blacklight catalog page', :inline_jobs do
     expect(page).to have_content("1 - #{indexed_resources.count} of #{indexed_resources.count}")
 
     # Check facets
-    expect(page).to have_selector('h3', text: 'Keywords')
-    expect(page).to have_selector('h3', text: 'Subject')
-    expect(page).to have_selector('h3', text: 'Creators')
-    expect(page).to have_selector('h3', text: 'Work Type')
+    expect(page).to have_css('h3', text: 'Keywords')
+    expect(page).to have_css('h3', text: 'Subject')
+    expect(page).to have_css('h3', text: 'Creators')
+    expect(page).to have_css('h3', text: 'Work Type')
 
     # Display all indexed resources and check fields
     indexed_resources.each do |resource|
@@ -100,7 +98,7 @@ RSpec.describe 'Blacklight catalog page', :inline_jobs do
         end
 
         within('.meta-table') do
-          expect(page).to have_content(resource.deposited_at.to_formatted_s(:long_without_time))
+          expect(page).to have_content(resource.deposited_at.to_fs(:long_without_time))
         end
       end
     end
@@ -148,7 +146,7 @@ RSpec.describe 'Blacklight catalog page', :inline_jobs do
     it 'displays no search results', with_user: :user do
       visit(search_catalog_path(q: 'asdfasdfasdfasdfasdfasdfasdf'))
 
-      expect(page).to have_selector('h4', text: I18n.t!('catalog.zero_results.info.heading'))
+      expect(page).to have_css('h4', text: I18n.t!('catalog.zero_results.info.heading'))
       expect(page).to have_content(I18n.t!('catalog.zero_results.info.content'))
     end
   end
@@ -159,7 +157,7 @@ RSpec.describe 'Blacklight catalog page', :inline_jobs do
     it 'displays search results correctly', with_user: :user do
       visit(search_catalog_path(q: work_version.title))
 
-      expect(page).to have_selector('h3', text: work_version.title)
+      expect(page).to have_css('h3', text: work_version.title)
     end
   end
 

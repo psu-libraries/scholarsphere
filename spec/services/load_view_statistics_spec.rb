@@ -11,8 +11,8 @@ describe LoadViewStatistics, type: :model do
   describe '#call' do
     subject(:view_stats) { described_class.call(model: model) }
 
-    let(:model) { create :work_version, :draft }
-    let(:another_model) { create :work_version, :draft }
+    let(:model) { create(:work_version, :draft) }
+    let(:another_model) { create(:work_version, :draft) }
 
     before do
       {

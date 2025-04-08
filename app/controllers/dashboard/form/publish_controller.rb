@@ -20,6 +20,7 @@ module Dashboard
         authorize(@work_version)
 
         @resource.attributes = work_version_params
+
         # If the user clicks the "Publish" button, *and* there are validation
         # errors, we still want to persist any changes to the draft version's
         # db record, while at the same time showing the publish validation errors
@@ -34,29 +35,15 @@ module Dashboard
           @resource.indexing_source = Proc.new { nil }
           @resource.save
           @resource.publish
-        elsif request_curation? && !@resource.draft_curation_requested
-          @resource.update_column(:draft_curation_requested, true)
-          # We want validation errors to block curation requests and keep users on the edit page
-          # so WorkVersion needs to temporarily act like it's being published. It's returned to it's
-          # initial state before being saved.
+        elsif curator_action_requested?
           begin
-            @resource.save
-            initial_state = @resource.aasm_state
-            @resource.publish
-            if @resource.valid?
-              CurationTaskClient.send_curation(@resource.id, requested: true)
-              @resource.draft_curation_requested = true
-            else
-              @resource.update_column(:draft_curation_requested, false)
-              render :edit
-              return
-            end
-          rescue CurationTaskClient::CurationError => e
-            @resource.update_column(:draft_curation_requested, false)
+            DepositorRequestService.new(@resource).request_action(request_curation?)
+          rescue DepositorRequestService::RequestError => e
             logger.error(e)
-            flash[:error] = t('dashboard.form.publish.curation.error')
-          ensure
-            @resource.aasm_state = initial_state
+            flash[:error] = request_curation? ? t('dashboard.form.publish.curation.error') : t('dashboard.form.publish.remediation.error')
+          rescue DepositorRequestService::InvalidResourceError
+            render :edit
+            return
           end
         end
 
@@ -76,6 +63,10 @@ module Dashboard
         def prevalidate
           temporarily_publish @resource do
             @resource.validate
+            # Rails 7 changed how it handles nested attributes. This removes all nested errors.
+            @resource.errors.messages.each_key do |attribute|
+              @resource.errors.delete(attribute) if attribute.to_s.include?('work.versions')
+            end
             @resource.errors.delete(:rights)
           end
         end
@@ -100,12 +91,16 @@ module Dashboard
         helper_method :form_should_publish?
         def form_should_publish?
           not_published = !@resource.published?
-          marked_as_published_but_not_persisted = (
+          marked_as_published_but_not_persisted =
             @resource.aasm.from_state != :published &&
-              @resource.aasm.to_state == :published
-          )
+            @resource.aasm.to_state == :published
 
           not_published || marked_as_published_but_not_persisted
+        end
+
+        def curator_action_requested?
+          (request_curation? && !@resource.draft_curation_requested) ||
+            (request_accessibility_remediation? && !@resource.accessibility_remediation_requested)
         end
 
         def work_version_params
@@ -114,12 +109,17 @@ module Dashboard
             .permit(
               :title,
               :description,
+              :sub_work_type,
+              :program,
+              :degree,
               :publisher_statement,
               :subtitle,
               :rights,
               :version_name,
               :published_date,
               :depositor_agreement,
+              :psu_community_agreement,
+              :accessibility_agreement,
               :draft_curation_requested,
               :owner,
               :manufacturer,
@@ -132,6 +132,8 @@ module Dashboard
               :alternative_identifier,
               :instrument_resource_type,
               :funding_reference,
+              :sensitive_info_agreement,
+              :accessibility_remediation_requested,
               :mint_doi_requested,
               keyword: [],
               contributor: [],

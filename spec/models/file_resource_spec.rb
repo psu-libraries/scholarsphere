@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe FileResource, type: :model do
+RSpec.describe FileResource do
   it_behaves_like 'a resource with a deposited at timestamp'
 
   it_behaves_like 'a resource with view statistics' do
@@ -28,6 +28,23 @@ RSpec.describe FileResource, type: :model do
     it { is_expected.to have_many(:view_statistics) }
     it { is_expected.to have_many(:legacy_identifiers) }
     it { is_expected.to have_one(:thumbnail_upload) }
+    it { is_expected.to have_one(:accessibility_check_result) }
+  end
+
+  describe 'scopes' do
+    describe '.needs_accessibility_check' do
+      let(:file_resource_with_check) { create(:file_resource, :pdf, work_versions: [create(:work_version)]) }
+      let(:file_resource_without_check) { create(:file_resource, :pdf, work_versions: [create(:work_version)]) }
+      let(:non_pdf_file_resource) { create(:file_resource, :with_processed_image, work_versions: [create(:work_version)]) }
+
+      before do
+        create(:accessibility_check_result, file_resource: file_resource_with_check)
+      end
+
+      it 'returns only PDF files without an accessibility check result' do
+        expect(described_class.needs_accessibility_check).to contain_exactly(file_resource_without_check)
+      end
+    end
   end
 
   describe '::reindex_all' do
@@ -66,7 +83,7 @@ RSpec.describe FileResource, type: :model do
 
   describe '#save' do
     let(:file_resource) { described_class.new }
-    let(:file) { File.open(File.join(fixture_path, 'image.png')) }
+    let(:file) { File.open(File.join(fixture_paths.first, 'image.png')) }
     let(:file_data) { { 'id' => file_resource.file_data['id'], 'storage' => file_resource.file_data['storage'] } }
 
     before { file_resource.file = file }
@@ -202,7 +219,7 @@ RSpec.describe FileResource, type: :model do
       )
     end
 
-    its(:keys) { is_expected.to contain_exactly(*expected_keys) }
+    its(:keys) { is_expected.to match_array(expected_keys) }
   end
 
   describe '#update_index' do
@@ -226,7 +243,7 @@ RSpec.describe FileResource, type: :model do
   end
 
   describe '#thumbnailable' do
-    let!(:file_resource) { create :file_resource }
+    let!(:file_resource) { create(:file_resource) }
     let(:file_data) { { 'metadata' => { 'mime_type' => mime_type } } }
 
     before do

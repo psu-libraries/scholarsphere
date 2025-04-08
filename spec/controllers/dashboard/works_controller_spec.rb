@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Dashboard::WorksController, type: :controller do
+RSpec.describe Dashboard::WorksController do
   let(:valid_attributes) {
     {
       'work' => {
@@ -19,9 +19,9 @@ RSpec.describe Dashboard::WorksController, type: :controller do
     }
   }
 
-  let(:work) { create :work, depositor: user.actor }
+  let(:work) { create(:work, depositor: user.actor) }
 
-  let(:user) { create :user }
+  let(:user) { create(:user) }
 
   describe 'GET #edit' do
     context 'when signed in' do

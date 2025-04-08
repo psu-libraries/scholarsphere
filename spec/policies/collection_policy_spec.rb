@@ -7,9 +7,9 @@ RSpec.describe CollectionPolicy, type: :policy do
 
   let(:depositor) { create(:user) }
   let(:depositor_actor) { depositor.actor }
-  let(:edit_user) { build_stubbed :user }
-  let(:discover_user) { build_stubbed :user }
-  let(:other_user) { build_stubbed :user }
+  let(:edit_user) { build_stubbed(:user) }
+  let(:discover_user) { build_stubbed(:user) }
+  let(:other_user) { build_stubbed(:user) }
   let(:public) { User.guest }
   let(:admin) { create(:user, :admin) }
   let(:application) { create(:external_app) }
@@ -19,7 +19,7 @@ RSpec.describe CollectionPolicy, type: :policy do
 
     let(:depositors_collection) { create(:collection, depositor: depositor_actor) }
 
-    before { create :collection }
+    before { create(:collection) }
 
     it { is_expected.to contain_exactly(depositors_collection) }
   end
@@ -27,8 +27,8 @@ RSpec.describe CollectionPolicy, type: :policy do
   permissions :show? do
     context 'with a public collection' do
       let(:collection) do
-        create :collection,
-               depositor: depositor_actor
+        create(:collection,
+               depositor: depositor_actor)
       end
 
       it { is_expected.to permit(depositor, collection) }
@@ -42,8 +42,8 @@ RSpec.describe CollectionPolicy, type: :policy do
 
     context 'with a restricted collection' do
       let(:collection) do
-        create :collection, :with_no_access,
-               depositor: depositor_actor
+        create(:collection, :with_no_access,
+               depositor: depositor_actor)
       end
 
       it { is_expected.to permit(depositor, collection) }
@@ -57,8 +57,8 @@ RSpec.describe CollectionPolicy, type: :policy do
 
     context 'when granting discover access to a specific user' do
       let(:collection) do
-        create :collection, :with_no_access,
-               depositor: depositor_actor
+        create(:collection, :with_no_access,
+               depositor: depositor_actor)
       end
 
       before { collection.discover_users = [discover_user] }
@@ -75,9 +75,9 @@ RSpec.describe CollectionPolicy, type: :policy do
 
   permissions :edit?, :update?, :mint_doi? do
     let(:collection) do
-      create :collection,
+      create(:collection,
              depositor: depositor_actor,
-             edit_users: [edit_user]
+             edit_users: [edit_user])
     end
 
     it { is_expected.to permit(depositor, collection) }
@@ -91,9 +91,9 @@ RSpec.describe CollectionPolicy, type: :policy do
 
   permissions :destroy? do
     let(:collection) do
-      create :collection,
+      create(:collection,
              depositor: depositor_actor,
-             edit_users: [edit_user]
+             edit_users: [edit_user])
     end
 
     context 'when the collection does NOT have a doi' do

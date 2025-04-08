@@ -8,7 +8,7 @@ RSpec.describe MetadataDiff do
   let(:first) { build(:work_version) }
   let(:second) { build(:work_version) }
 
-  it { is_expected.to be_a(HashWithIndifferentAccess) }
+  it { is_expected.to be_a(ActiveSupport::HashWithIndifferentAccess) }
 
   context 'when the titles are different' do
     its(:keys) { is_expected.to include('title') }

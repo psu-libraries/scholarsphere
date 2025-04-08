@@ -43,6 +43,9 @@ RSpec.describe AllWorkVersionsReport do
       alternative_identifier
       instrument_resource_type
       funding_reference
+      sub_work_type
+      program
+      degree
       views
     ] }
   end
@@ -54,19 +57,19 @@ RSpec.describe AllWorkVersionsReport do
   describe '#rows' do
     # Due to our data model, it's much easier to create Works, then pluck the
     # versions off them, rather that create WorkVersions here
-    let!(:published_work) { create :work, has_draft: false, versions_count: 1 }
-    let!(:draft_work) { create :work, has_draft: true, versions_count: 1 }
-    let!(:work_with_two_versions) { create :work, has_draft: true, versions_count: 2 }
+    let!(:published_work) { create(:work, has_draft: false, versions_count: 1) }
+    let!(:draft_work) { create(:work, has_draft: true, versions_count: 1) }
+    let!(:work_with_two_versions) { create(:work, has_draft: true, versions_count: 2) }
 
     let(:published_version) { published_work.versions.first }
     let(:draft_version) { draft_work.versions.first }
 
     before do
       # Add some view statistics
-      create :view_statistic, resource: published_version, count: 5, date: Time.zone.yesterday
-      create :view_statistic, resource: published_version, count: 1, date: Time.zone.today
+      create(:view_statistic, resource: published_version, count: 5, date: Time.zone.yesterday)
+      create(:view_statistic, resource: published_version, count: 1, date: Time.zone.today)
 
-      create :view_statistic, resource: work_with_two_versions.versions.first, count: 1
+      create(:view_statistic, resource: work_with_two_versions.versions.first, count: 1)
     end
 
     it 'yields each row to the given block' do
@@ -120,13 +123,16 @@ RSpec.describe AllWorkVersionsReport do
         expect(row[29]).to eq version.alternative_identifier
         expect(row[30]).to eq version.instrument_resource_type
         expect(row[31]).to eq version.funding_reference
+        expect(row[32]).to eq version.sub_work_type
+        expect(row[33]).to eq version.program
+        expect(row[34]).to eq version.degree
       end
 
       # Spot check view statistics
-      expect(yielded_rows[0][32]).to eq 6
-      expect(yielded_rows[1][32]).to eq 0
-      expect(yielded_rows[2][32]).to eq 1
-      expect(yielded_rows[3][32]).to eq 0
+      expect(yielded_rows[0][35]).to eq 6
+      expect(yielded_rows[1][35]).to eq 0
+      expect(yielded_rows[2][35]).to eq 1
+      expect(yielded_rows[3][35]).to eq 0
     end
   end
 end

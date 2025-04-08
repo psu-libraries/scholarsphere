@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Dashboard::ProfilesController, type: :controller do
+RSpec.describe Dashboard::ProfilesController do
   let(:actor_attrs) { attributes_for(:actor) }
 
   let(:valid_attributes) {
@@ -20,7 +20,7 @@ RSpec.describe Dashboard::ProfilesController, type: :controller do
     }
   }
 
-  let(:user) { create :user }
+  let(:user) { create(:user) }
   let(:actor) { user.actor }
 
   describe 'GET #edit' do

@@ -24,6 +24,11 @@ module FeatureHelpers
       select Work::Types.display('instrument'), from: 'work_version_work_attributes_work_type'
     end
 
+    def self.fill_in_minimal_work_details_for_grad_culminating_experiences_draft(work_version_metadata)
+      fill_in 'work_version_title', with: work_version_metadata[:title]
+      select Work::Types.display('masters_culminating_experience'), from: 'work_version_work_attributes_work_type'
+    end
+
     def self.fill_in_common_work_details(work_version_metadata)
       fill_in 'work_version_description', with: work_version_metadata[:description]
       fill_in 'work_version_published_date', with: work_version_metadata[:published_date]
@@ -61,6 +66,15 @@ module FeatureHelpers
       fill_in_common_work_details(work_version_metadata)
       fill_in 'work_version_identifier', with: work_version_metadata[:identifier]
       fill_in 'work_version_publisher_statement', with: work_version_metadata[:publisher_statement]
+    end
+
+    def self.fill_in_grad_culminating_experiences_work_details(work_version_metadata)
+      fill_in 'work_version_description', with: work_version_metadata[:description]
+      fill_in 'work_version_published_date', with: work_version_metadata[:published_date]
+      select work_version_metadata[:sub_work_type], from: 'work_version_sub_work_type'
+      select work_version_metadata[:program], from: 'work_version_program'
+      select work_version_metadata[:degree], from: 'work_version_degree'
+      fill_in 'work_version_keyword', with: work_version_metadata[:keyword]
     end
 
     def self.fill_in_minimal_collection_details(collection_metadata)
@@ -114,12 +128,10 @@ module FeatureHelpers
 
     def self.fill_in_publishing_details(metadata, visibility: Permissions::Visibility::OPEN)
       choose "work_version_work_attributes_visibility_#{visibility}"
-      check 'work_version_depositor_agreement'
       select WorkVersion::Licenses.label(metadata[:rights]), from: 'work_version_rights'
     end
 
     def self.fill_in_publishing_details_published(metadata)
-      check 'work_version_depositor_agreement'
       select WorkVersion::Licenses.label(metadata[:rights]), from: 'work_version_rights'
     end
 
@@ -135,17 +147,33 @@ module FeatureHelpers
 
     def self.save_and_continue
       fix_sticky_footer
-      click_on I18n.t!('dashboard.form.actions.save_and_continue')
+      click_on I18n.t!('dashboard.form.actions.save_and_continue.button')
     end
 
     def self.publish
       fix_sticky_footer
-      click_on I18n.t!('dashboard.form.actions.publish')
+      click_on I18n.t!('dashboard.form.actions.publish.button')
+      check_agreement_boxes
+      click_on I18n.t!('dashboard.form.actions.confirm.publish')
+    end
+
+    def self.request_curation
+      fix_sticky_footer
+      click_on I18n.t!('dashboard.form.actions.request_curation.button')
+      check_agreement_boxes
+      click_on I18n.t!('dashboard.form.actions.confirm.request_curation')
+    end
+
+    def self.request_remediation
+      fix_sticky_footer
+      click_on I18n.t!('dashboard.form.actions.request_remediation.button')
+      check_agreement_boxes
+      click_on I18n.t!('dashboard.form.actions.confirm.request_remediation')
     end
 
     def self.finish
       fix_sticky_footer
-      click_on I18n.t!('dashboard.form.actions.finish')
+      click_on I18n.t!('dashboard.form.actions.finish.button')
     end
 
     def self.delete
@@ -155,12 +183,19 @@ module FeatureHelpers
 
     def self.cancel
       fix_sticky_footer
-      click_on I18n.t!('dashboard.form.actions.cancel')
+      click_on I18n.t!('dashboard.form.actions.cancel.button')
     end
 
     def self.fix_sticky_footer
       Capybara.current_session.current_window.resize_to(1000, 1000)
     rescue Capybara::NotSupportedByDriverError
+    end
+
+    def self.check_agreement_boxes
+      check 'work_version_depositor_agreement'
+      check 'work_version_psu_community_agreement'
+      check 'work_version_accessibility_agreement'
+      check 'work_version_sensitive_info_agreement'
     end
 
     # @note In theory, #assert_selector should be AJAX-aware

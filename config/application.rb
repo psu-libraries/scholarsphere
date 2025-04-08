@@ -34,13 +34,14 @@ module Scholarsphere
       ENV['READ_ONLY'] == 'true'
     end
 
-    config.active_record.yaml_column_permitted_classes = [HashWithIndifferentAccess]
+    config.active_record.yaml_column_permitted_classes = [ActiveSupport::HashWithIndifferentAccess]
 
     config.generators { |generator| generator.test_framework :rspec }
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.0
+    config.load_defaults 7.0
 
     config.admin_group = ENV.fetch('ADMIN_GROUP', 'umg-up.dlt.scholarsphere-admin')
+    config.psu_affiliated_group = ENV.fetch('PSU_AFFILIATED_GROUP', 'psu-affiliated-group')
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
