@@ -103,6 +103,9 @@ RSpec.describe WorkDepositPathway::Instrument::PublishForm, type: :model do
         subtitle
         contributor
         depositor_agreement
+        psu_community_agreement
+        accessibility_agreement
+        sensitive_info_agreement
         rights
       }
 

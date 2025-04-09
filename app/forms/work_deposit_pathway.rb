@@ -46,8 +46,8 @@ class WorkDepositPathway
       !@resource.accessibility_remediation_requested &&
       !@resource.draft_curation_requested &&
       !data_and_code? &&
-      !instrument?
-    @resource.file_version_memberships.any?(&:accessibility_failures?)
+      !instrument? &&
+      @resource.file_version_memberships.any?(&:accessibility_failures?)
   end
 
   def allows_mint_doi_request?
