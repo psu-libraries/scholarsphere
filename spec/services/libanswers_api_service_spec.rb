@@ -92,13 +92,38 @@ RSpec.describe LibanswersApiService, :vcr do
         allow(mock_faraday_connection).to receive(:post).and_return dummy_response
       end
 
-      it 'uses id 5477 for quid and ScholarSphere Deposit Curation for question' do
+      it 'uses id 2590 for quid and ScholarSphere Deposit Accessibility Curation for question' do
         described_class.new.admin_create_accessibility_ticket(work.id, base_url)
         expect(mock_faraday_connection).to have_received(:post).with(
           '/api/1.1/ticket/create',
           "quid=#{accessibility_quid}&pquestion=ScholarSphere Deposit Accessibility Curation: #{
-          work.latest_version.title}&pname=#{work.display_name}&pemail=#{work.email}"
+            work.latest_version.title}&pname=#{work.display_name}&pemail=#{work.email}"
         )
+      end
+
+      context 'when accessibility report exists' do
+        let!(:work_2) { create(:work, depositor: user.actor) }
+        let(:file_resource) { create(:file_resource, :pdf) }
+        let(:files) { work_2.latest_version.file_resources }
+        let(:accessibility_check_result) do
+          create(:accessibility_check_result, file_resource_id: files.last.id, detailed_report:
+            { 'Detailed Report': {} })
+        end
+
+        before do
+          files << file_resource
+          accessibility_check_result.save!
+        end
+
+        it 'includes "pdetails" containing an accessibility report url' do
+          described_class.new.admin_create_accessibility_ticket(work_2.id, base_url)
+          details = "#{file_resource.file_data['metadata']['filename']}: #{base_url}/accessibility_check_results/#{accessibility_check_result.id}"
+          expect(mock_faraday_connection).to have_received(:post).with(
+            '/api/1.1/ticket/create',
+            "quid=#{accessibility_quid}&pquestion=ScholarSphere Deposit Accessibility Curation: #{
+            work_2.latest_version.title}&pdetails=#{details}&pname=#{work_2.display_name}&pemail=#{work.email}"
+          )
+        end
       end
     end
   end

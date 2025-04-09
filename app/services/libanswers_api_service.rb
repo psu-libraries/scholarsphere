@@ -52,7 +52,7 @@ class LibanswersApiService
 
     def get_accessibility_result_links(work, base_url)
       accessibility_check_results = work.latest_version.file_resources.map do |fr|
-        "#{fr.file_data['metadata']['filename']}: #{base_url + fr.file_version_memberships&.first&.accessibility_report_download_url} "
+        "#{fr.file_data['metadata']['filename']}: #{base_url + fr.file_version_memberships&.first&.accessibility_report_download_url}"
       end
       accessibility_check_results.join("\n")
     end
