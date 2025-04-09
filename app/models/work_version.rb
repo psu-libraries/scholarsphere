@@ -42,7 +42,7 @@ class WorkVersion < ApplicationRecord
                  related_identifier: :string,
                  alternative_identifier: :string,
                  instrument_resource_type: :string,
-                 funding_reference: :string
+                 funding_reference: :string,
                  sub_work_type: :string,
                  program: :string,
                  degree: :string

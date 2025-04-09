@@ -541,7 +541,7 @@ RSpec.describe WorkVersion do
         expect(work_version.publisher).to eq []
         work_version.publish!
         expect(work_version).to be_published
-        expect(work_version.reload.publisher).to eq ['Scholarsphere']
+        expect(work_version.reload.publisher).to eq ['ScholarSphere']
       end
     end
 

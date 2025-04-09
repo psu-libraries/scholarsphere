@@ -590,7 +590,6 @@ RSpec.describe 'Publishing a work', with_user: :user do
       end
     end
   end
-end
 
   describe 'The Work Details tab for an existing draft work' do
     let(:work) { create(:work, versions_count: 1) }
@@ -984,6 +983,9 @@ end
           FeatureHelpers::DashboardForm.upload_file(Rails.root.join('spec', 'fixtures', 'ipsum.pdf'))
 
           FeatureHelpers::DashboardForm.save_as_draft_and_exit
+          while FileResource.last.nil?
+            sleep 0.1
+          end
           file_resource_id = FileResource.last.id
           expect(AccessibilityCheckJob).to have_received(:perform_later).with(file_resource_id)
         end
@@ -994,6 +996,9 @@ end
           FeatureHelpers::DashboardForm.upload_file(Rails.root.join('spec', 'fixtures', 'image.png'))
 
           FeatureHelpers::DashboardForm.save_as_draft_and_exit
+          while FileResource.last.nil?
+            sleep 0.1
+          end
           file_resource_id = FileResource.last.id
           expect(AccessibilityCheckJob).not_to have_received(:perform_later).with(file_resource_id)
         end

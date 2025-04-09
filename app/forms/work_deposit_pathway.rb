@@ -340,6 +340,9 @@ class WorkDepositPathway
           WorkVersionFormBase::COMMON_FIELDS.union(
             %w{
               title
+              subject
+              publisher
+              subtitle
               owner
               identifier
               manufacturer
@@ -371,6 +374,9 @@ class WorkDepositPathway
           WorkVersionFormBase::COMMON_FIELDS.union(
             %w{
               title
+              subject
+              publisher
+              subtitle
               owner
               identifier
               manufacturer
