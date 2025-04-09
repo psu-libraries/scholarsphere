@@ -2,7 +2,7 @@
 
 <div class="mb-3">
   <%= render FieldHintComponent.new(form: form, attribute: attribute) %>
-  <div data-controller="multiple-fields">
+  <div class="mt-1" data-controller="multiple-fields">
     <% terms.each_with_index do |term, index| %>
       <div class="<%= local_assigns[:readonly].present? ? '' : 'removable-input js-multiple-field-group ' %>mb-1">
         <label class="has-float-label">
