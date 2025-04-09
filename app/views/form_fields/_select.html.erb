@@ -11,7 +11,8 @@
                     required: local_assigns[:required].presence,
                     multiple: local_assigns.fetch(:multiple, false),
                     aria: { describedby: hint.dom_id },
-                    disabled: local_assigns[:disabled].presence
+                    disabled: local_assigns[:disabled].presence,
+                    data: local_assigns[:data].presence,
                   } %>
   <%= form.label attribute %>
 
