@@ -522,6 +522,17 @@ RSpec.describe WorkDepositPathway do
         end
       end
     end
+
+    context 'when in instrument pathway' do
+      %w[
+        instrument
+      ].each do |t|
+        let(:type) { t }
+        it 'returns false' do
+          expect(pathway.allows_accessibility_remediation_request?).to eq false
+        end
+      end
+    end
   end
 
   describe '#allows_accessibility_remediation_request? when the given work version does not have a work type' do
