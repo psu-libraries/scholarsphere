@@ -4,11 +4,30 @@ class LibanswersApiService
   class LibanswersApiError < StandardError; end
   attr_reader :work
 
-  def admin_create_curation_ticket(ticket_type, work_id)
+  ACCESSIBILITY_QUEUE_ID = '2590'
+  SCHOLARSPHERE_QUEUE_ID = '5477'
+
+  def admin_create_curation_ticket(work_id)
     @work = Work.find(work_id)
+    admin_subject = "ScholarSphere Deposit Curation: #{work.latest_version.title}"
     conn = create_connection
-    response = conn.post(create_ticket_path, "quid=#{scholarsphere_queue_id(ticket_type)}&" +
-                                             "pquestion=#{admin_subject(ticket_type)}&" +
+    response = conn.post(create_ticket_path, "quid=#{SCHOLARSPHERE_QUEUE_ID}&" +
+                                             "pquestion=#{admin_subject}&" +
+                                             "pname=#{work.display_name}&" +
+                                             "pemail=#{work.email}")
+    handle_response(response)
+  rescue Faraday::ConnectionFailed => e
+    raise LibanswersApiError, e.message
+  end
+
+  def admin_create_accessibility_ticket(work_id, base_url)
+    @work = Work.find(work_id)
+    admin_subject = "ScholarSphere Deposit Accessibility Curation: #{work.latest_version.title}"
+    accessibility_check_results = get_accessibility_result_links(work, base_url)
+    conn = create_connection
+    response = conn.post(create_ticket_path, "quid=#{ACCESSIBILITY_QUEUE_ID}&" +
+                                             "pquestion=#{admin_subject}&" +
+                                              (accessibility_check_results.empty? ? '' : "pdetails=#{accessibility_check_results}&") +
                                              "pname=#{work.display_name}&" +
                                              "pemail=#{work.email}")
     handle_response(response)
@@ -19,7 +38,7 @@ class LibanswersApiService
   def request_alternate_format(request)
     conn = create_connection
     response = conn.post(create_ticket_path,
-                         "quid=#{scholarsphere_queue_id('accessibility')}&" +
+                         "quid=#{'ACCESSIBILITY_QUEUE_ID'}&" +
                          "pquestion=Scholarsphere Alternate Format Request: #{request.title}&" +
                          "pname=#{request.name}&" +
                          "pemail=#{request.email}&" +
@@ -30,6 +49,13 @@ class LibanswersApiService
   end
 
   private
+
+    def get_accessibility_result_links(work, base_url)
+      accessibility_check_results = work.latest_version.file_resources.map do |fr|
+        "#{fr.file_data['metadata']['filename']}: #{base_url + fr.file_version_memberships&.first&.accessibility_report_download_url}"
+      end
+      accessibility_check_results.join("\n")
+    end
 
     def create_connection
       Faraday.new(url: host) do |f|
@@ -42,14 +68,6 @@ class LibanswersApiService
         host + JSON.parse(response.env.response_body)['ticketUrl']
       else
         raise LibanswersApiError, JSON.parse(response.env.response_body)['error']
-      end
-    end
-
-    def admin_subject(ticket_type)
-      if ticket_type == 'curation'
-        "ScholarSphere Deposit Curation: #{work.latest_version.title}"
-      else
-        "ScholarSphere Deposit Accessibility Curation: #{work.latest_version.title}"
       end
     end
 
@@ -73,9 +91,5 @@ class LibanswersApiService
 
     def host
       'https://psu.libanswers.com'
-    end
-
-    def scholarsphere_queue_id(ticket_type)
-      ticket_type == 'curation' ? '5477' : '2590'
     end
 end
