@@ -341,6 +341,44 @@ RSpec.describe WorkDepositPathway do
       end
     end
 
+    context 'when the given work version has an instrument type' do
+      %w[
+        instrument
+      ].each do |t|
+        let(:type) { t }
+
+        context 'when the associated work does not have a doi' do
+          let(:doi_blank) { true }
+
+          context 'when doi minting is not already in progress' do
+            before do
+              allow_any_instance_of(DoiMintingStatus).to receive(:blank?).and_return(true)
+            end
+
+            it 'returns true' do
+              expect(pathway.allows_mint_doi_request?).to eq true
+            end
+          end
+
+          context 'when doi minting is already in progress' do
+            before do
+              allow_any_instance_of(DoiMintingStatus).to receive(:blank?).and_return(false)
+            end
+
+            it 'returns false' do
+              expect(pathway.allows_mint_doi_request?).to eq false
+            end
+          end
+        end
+
+        context 'when the associated work has a doi' do
+          it 'returns false' do
+            expect(pathway.allows_mint_doi_request?).to eq false
+          end
+        end
+      end
+    end
+
     context 'when the given work version has a grad culminating experiences type' do
       %w[
         masters_culminating_experience
@@ -380,7 +418,7 @@ RSpec.describe WorkDepositPathway do
       end
     end
 
-    context 'when the given work version does not have a data and code or grad culminating experience type' do
+    context 'when the given work version does not have a data and code, instrument, or grad culminating experience type' do
       %w[
         article
         book
@@ -477,6 +515,17 @@ RSpec.describe WorkDepositPathway do
       %w[
         dataset
         software_or_program_code
+      ].each do |t|
+        let(:type) { t }
+        it 'returns false' do
+          expect(pathway.allows_accessibility_remediation_request?).to eq false
+        end
+      end
+    end
+
+    context 'when in instrument pathway' do
+      %w[
+        instrument
       ].each do |t|
         let(:type) { t }
         it 'returns false' do

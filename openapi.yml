@@ -267,6 +267,7 @@ components:
             - conference_proceeding
             - dataset
             - image
+            - instrument
             - journal
             - map_or_cartographic_material
             - masters_culminating_experience
@@ -332,6 +333,29 @@ components:
           type: "array"
           items:
             type: "string"
+
+        owner:
+          type: "string"
+        manufacturer:
+          type: "string"
+        model:
+          type: "string"
+        instrument_type:
+          type: "string"
+        measured_variable:
+          type: "string"
+        available_date:
+          type: "string"
+        decommission_date:
+          type: "string"
+        related_identifier:
+          type: "string"
+        alternative_identifier:
+          type: "string"
+        instrument_resource_type:
+          type: "string"
+        funding_reference:
+          type: "string"
         related_url:
           type: "array"
           items:

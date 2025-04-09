@@ -62,6 +62,8 @@ class DeleteResourceButtonComponent < ApplicationComponent
         'WorkDepositPathway::General::DetailsForm',
         'WorkDepositPathway::DataAndCode::DetailsForm',
         'WorkDepositPathway::DataAndCode::PublishForm',
+        'WorkDepositPathway::Instrument::DetailsForm',
+        'WorkDepositPathway::Instrument::PublishForm',
         'WorkDepositPathway::GradCulminatingExperiences::DetailsForm',
         'WorkDepositPathway::GradCulminatingExperiences::PublishForm'
       ].include?(type)

@@ -32,6 +32,17 @@ class WorkVersion < ApplicationRecord
                  based_near: [:string, array: true, default: []],
                  related_url: [:string, array: true, default: []],
                  source: [:string, array: true, default: []],
+                 owner: :string,
+                 manufacturer: :string,
+                 model: :string,
+                 instrument_type: :string,
+                 measured_variable: :string,
+                 available_date: :string,
+                 decommission_date: :string,
+                 related_identifier: :string,
+                 alternative_identifier: :string,
+                 instrument_resource_type: :string,
+                 funding_reference: :string,
                  sub_work_type: :string,
                  program: :string,
                  degree: :string
@@ -175,6 +186,14 @@ class WorkVersion < ApplicationRecord
             edtf_date: true,
             if: :published?
 
+  validates :decommission_date,
+            edtf_date: true,
+            if: :published?
+
+  validates :available_date,
+            edtf_date: true,
+            if: :published?
+
   validates :description,
             presence: true,
             if: :published?
@@ -203,7 +222,7 @@ class WorkVersion < ApplicationRecord
                   to: :published,
                   after: Proc.new {
                     work.try(:update_deposit_agreement)
-                    if work.professional_doctoral_culminating_experience? || work.masters_culminating_experience?
+                    if work.professional_doctoral_culminating_experience? || work.masters_culminating_experience? || work_type == 'instrument'
                       set_publisher_as_scholarsphere
                     end
                     self.reload_on_index = true
@@ -250,6 +269,17 @@ class WorkVersion < ApplicationRecord
     rights
     subtitle
     version_name
+    owner
+    manufacturer
+    model
+    instrument_type
+    measured_variable
+    available_date
+    decommission_date
+    related_identifier
+    alternative_identifier
+    instrument_resource_type
+    funding_reference
     sub_work_type
     program
     degree

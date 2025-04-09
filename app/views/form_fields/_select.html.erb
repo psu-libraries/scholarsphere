@@ -1,6 +1,8 @@
 <%- hint = FieldHintComponent.new(form: form, attribute: attribute) %>
 
-<div class="form-group has-float-label mb-3">
+<%= render hint %>
+
+<div class="mt-1 form-group has-float-label mb-3">
   <%= form.select attribute,
                   options_for_select,
                   { include_blank: local_assigns.fetch(:include_blank, false) },
@@ -9,13 +11,12 @@
                     required: local_assigns[:required].presence,
                     multiple: local_assigns.fetch(:multiple, false),
                     aria: { describedby: hint.dom_id },
-                    disabled: local_assigns[:disabled].presence
+                    disabled: local_assigns[:disabled].presence,
+                    data: local_assigns[:data].presence
                   } %>
   <%= form.label attribute %>
 
   <% if form.object.errors.include?(attribute) %>
     <small class="form-text feedback-invalid"><%= form.object.errors[attribute].join('; ') %></small>
   <% end %>
-
-  <%= render hint %>
 </div>

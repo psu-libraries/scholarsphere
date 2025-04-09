@@ -14,6 +14,7 @@ module DataCite
         'dataset' => 'Dataset',
         'dissertation' => 'Text',
         'image' => 'Image',
+        'instrument' => 'Instrument',
         'journal' => 'Text',
         'map_or_cartographic_material' => 'Image',
         'masters_culminating_experience' => 'Text',

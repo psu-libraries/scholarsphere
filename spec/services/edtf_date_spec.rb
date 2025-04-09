@@ -9,6 +9,10 @@ RSpec.describe EdtfDate do
       '1999-uu-uu' => true,
       '1984?-01~' => true,
 
+      # Blank values
+      nil => true,
+      '' => true,
+
       # Valid Ruby dates, but invalid EDTF dates
       'January 21, 2019' => false,
       'January' => false,
@@ -16,8 +20,6 @@ RSpec.describe EdtfDate do
 
       # Invalid values
       'asdf' => false,
-      nil => false,
-      '' => false,
       'January 41, 2019' => false
 
     }.each do |date, expected_value|
