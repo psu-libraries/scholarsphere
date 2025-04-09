@@ -69,7 +69,7 @@ RSpec.describe CitationComponent, type: :component do
           doi: '10.26207/123'
         )
       }
-      let(:authorship1) { build :authorship, given_name: 'Alan', surname: 'Grant' }
+      let(:authorship1) { build(:authorship, given_name: 'Alan', surname: 'Grant') }
       let(:citation_component) { render_inline(component) }
       let(:data_and_code) { false }
       let(:instrument) { true }
@@ -87,8 +87,8 @@ RSpec.describe CitationComponent, type: :component do
 
       context 'when there are multiple creators' do
         let(:expected_citation) { 'Grant, Alan; Sattler, Ellie; Malcolm, Ian (2024). Citation Title [Data set]. Scholarsphere. https://doi.org/10.26207/123' }
-        let(:authorship2) { build :authorship, given_name: 'Ellie', surname: 'Sattler' }
-        let(:authorship3) { build :authorship, given_name: 'Ian', surname: 'Malcolm' }
+        let(:authorship2) { build(:authorship, given_name: 'Ellie', surname: 'Sattler') }
+        let(:authorship3) { build(:authorship, given_name: 'Ian', surname: 'Malcolm') }
 
         before { work_version.creators << [authorship2, authorship3] }
 

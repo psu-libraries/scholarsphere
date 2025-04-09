@@ -117,7 +117,7 @@ class Work < ApplicationRecord
         instrument
       ].freeze
     end
-  
+
     def self.grad_culminating_experiences
       %w[
         masters_culminating_experience

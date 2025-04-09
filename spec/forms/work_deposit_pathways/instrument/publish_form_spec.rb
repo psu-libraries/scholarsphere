@@ -135,7 +135,7 @@ RSpec.describe WorkDepositPathway::Instrument::PublishForm, type: :model do
 
   describe 'validation' do
     context "when the form's work version is otherwise valid for publishing" do
-      let(:wv) { build :work_version, :with_creators, description: 'description', published_date: '2020' }
+      let(:wv) { build(:work_version, :with_creators, description: 'description', published_date: '2020') }
 
       context "when the form's work version is published" do
         before { wv.publish }
@@ -335,7 +335,7 @@ RSpec.describe WorkDepositPathway::Instrument::PublishForm, type: :model do
     end
 
     context "when the form's work version is not otherwise valid for publishing" do
-      let(:wv) { build :work_version, :with_creators, description: nil, published_date: '2020' }
+      let(:wv) { build(:work_version, :with_creators, description: nil, published_date: '2020') }
 
       context "when the form's work version is published" do
         before { wv.publish }
