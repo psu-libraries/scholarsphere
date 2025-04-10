@@ -10,10 +10,10 @@ class WorkDepositPathway
       ScholarlyWorks::DetailsForm.new(resource)
     elsif data_and_code?
       DataAndCode::DetailsForm.new(resource)
-    elsif grad_culminating_experiences?
-      GradCulminatingExperiences::DetailsForm.new(resource)
     elsif instrument?
       Instrument::DetailsForm.new(resource)
+    elsif grad_culminating_experiences?
+      GradCulminatingExperiences::DetailsForm.new(resource)
     else
       General::DetailsForm.new(resource)
     end
@@ -34,10 +34,10 @@ class WorkDepositPathway
       ScholarlyWorks::PublishForm.new(resource)
     elsif data_and_code?
       DataAndCode::PublishForm.new(resource)
-    elsif grad_culminating_experiences?
-      GradCulminatingExperiences::PublishForm.new(resource)
     elsif instrument?
       Instrument::PublishForm.new(resource)
+    elsif grad_culminating_experiences?
+      GradCulminatingExperiences::PublishForm.new(resource)
     else
       resource
     end
@@ -56,12 +56,12 @@ class WorkDepositPathway
       !@resource.accessibility_remediation_requested &&
       !@resource.draft_curation_requested &&
       !data_and_code? &&
+      !instrument? &&
       @resource.file_version_memberships.any?(&:accessibility_failures?)
-    # don't allow for instruments
   end
 
   def allows_mint_doi_request?
-    (data_and_code? || grad_culminating_experiences? || instrument?) && @resource.doi_blank? && DoiMintingStatus.new(@resource.work).blank?
+    (data_and_code? || instrument? || grad_culminating_experiences?) && @resource.doi_blank? && DoiMintingStatus.new(@resource.work).blank?
   end
 
   def work?
@@ -72,12 +72,12 @@ class WorkDepositPathway
     Work::Types.data_and_code.include?(work_type)
   end
 
-  def grad_culminating_experiences?
-    Work::Types.grad_culminating_experiences.include?(work_type)
-  end
-
   def instrument?
     Work::Types.instrument.include?(work_type)
+  end
+
+  def grad_culminating_experiences?
+    Work::Types.grad_culminating_experiences.include?(work_type)
   end
 
   private
@@ -146,6 +146,9 @@ class WorkDepositPathway
                :work_type,
                :draft_curation_requested,
                :accessibility_remediation_requested,
+               :file_resources,
+               :file_version_memberships,
+               :mint_doi_requested,
                to: :work_version, prefix: false
 
       private
@@ -376,79 +379,6 @@ class WorkDepositPathway
       end
     end
 
-    module GradCulminatingExperiences
-      REQUIRE_FIELDS = %w{
-        sub_work_type
-        program
-        degree
-      }.freeze
-
-      class DetailsForm < DetailsFormBase
-        REQUIRE_FIELDS.each { |f| validates f.to_sym, presence: true }
-
-        def self.form_fields
-          WorkVersionFormBase::COMMON_FIELDS.union(
-            REQUIRE_FIELDS
-          ).freeze
-        end
-
-        form_fields.each do |attr_name|
-          delegate attr_name, to: :work_version, prefix: false
-          delegate "#{attr_name}=", to: :work_version, prefix: false
-        end
-
-        def form_partial
-          'grad_culminating_experiences_work_version'
-        end
-      end
-
-      class PublishForm < WorkVersionFormBase
-        REQUIRE_FIELDS.each { |f| validates f.to_sym, presence: true }
-
-        def self.form_fields
-          WorkVersionFormBase::COMMON_FIELDS.union(
-            REQUIRE_FIELDS
-          ).union(
-            %w{
-              title
-              rights
-              depositor_agreement
-              contributor
-              mint_doi_requested
-              psu_community_agreement
-              accessibility_agreement
-              sensitive_info_agreement
-            }
-          ).freeze
-        end
-
-        form_fields.each do |attr_name|
-          delegate attr_name, to: :work_version, prefix: false
-          delegate "#{attr_name}=", to: :work_version, prefix: false
-        end
-
-        def form_partial
-          'grad_culminating_experiences_work_version'
-        end
-
-        delegate :aasm_state=,
-                 :aasm_state,
-                 :publish,
-                 :file_resources,
-                 :work_attributes=,
-                 :creators_attributes=,
-                 :creators,
-                 :contributor,
-                 :file_version_memberships,
-                 :initial_draft?,
-                 :aasm,
-                 :update_column,
-                 :set_thumbnail_selection,
-                 to: :work_version,
-                 prefix: false
-      end
-    end
-
     module Instrument
       def form_partial
         'instrument_work_version'
@@ -507,6 +437,9 @@ class WorkDepositPathway
           WorkVersionDetails::COMMON_FIELDS.union(
             %w{
               title
+              subject
+              publisher
+              subtitle
               owner
               identifier
               manufacturer
@@ -542,6 +475,10 @@ class WorkDepositPathway
 
         validates :owner, :manufacturer, presence: true
 
+        def form_partial
+          'instrument_work_version'
+        end
+
         delegate :aasm_state=,
                  :aasm_state,
                  :publish,
@@ -570,10 +507,81 @@ class WorkDepositPathway
             end && file_resources.find do |fr|
               fr.file_data['metadata']['filename'] !~ /readme/i &&
                   fr.file_data['metadata']['filename'] =~ /png|jpeg|tiff/i
+              fr.file_data['metadata']['filename'] !~ /readme/i &&
+                  fr.file_data['metadata']['filename'] =~ /png|jpeg|tiff/i
             end
               errors.add(:file_resources, :readme_and_image)
             end
           end
+      end
+    end
+
+    module GradCulminatingExperiences
+      REQUIRE_FIELDS = %w{
+        sub_work_type
+        program
+        degree
+      }.freeze
+
+      def form_partial
+        'grad_culminating_experiences_work_version'
+      end
+
+      class DetailsForm < DetailsFormBase
+        REQUIRE_FIELDS.each { |f| validates f.to_sym, presence: true }
+
+        def self.form_fields
+          WorkVersionFormBase::COMMON_FIELDS.union(
+            REQUIRE_FIELDS
+          ).freeze
+        end
+
+        form_fields.each do |attr_name|
+          delegate attr_name, to: :work_version, prefix: false
+          delegate "#{attr_name}=", to: :work_version, prefix: false
+        end
+      end
+
+      class PublishForm < WorkVersionFormBase
+        REQUIRE_FIELDS.each { |f| validates f.to_sym, presence: true }
+
+        def self.form_fields
+          WorkVersionFormBase::COMMON_FIELDS.union(
+            REQUIRE_FIELDS
+          ).union(
+            %w{
+              title
+              rights
+              depositor_agreement
+              contributor
+              mint_doi_requested
+              psu_community_agreement
+              accessibility_agreement
+              sensitive_info_agreement
+            }
+          ).freeze
+        end
+
+        form_fields.each do |attr_name|
+          delegate attr_name, to: :work_version, prefix: false
+          delegate "#{attr_name}=", to: :work_version, prefix: false
+        end
+
+        delegate :aasm_state=,
+                 :aasm_state,
+                 :publish,
+                 :file_resources,
+                 :work_attributes=,
+                 :creators_attributes=,
+                 :creators,
+                 :contributor,
+                 :file_version_memberships,
+                 :initial_draft?,
+                 :aasm,
+                 :update_column,
+                 :set_thumbnail_selection,
+                 to: :work_version,
+                 prefix: false
       end
     end
 end

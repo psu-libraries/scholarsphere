@@ -364,8 +364,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
       it 'shows only the fields for grad_culminating_experiences works' do
         visit dashboard_form_work_versions_path
 
-        FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_grad_culminating_experiences_draft(metadata)
-        FeatureHelpers::DashboardForm.save_and_continue
+      FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_grad_culminating_experiences_draft(metadata)
+      FeatureHelpers::DashboardForm.save_and_continue
 
         expect(page).to have_no_field('publisher_statement')
         expect(page).to have_no_field('work_version_based_near')
@@ -379,36 +379,36 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).to have_field('work_version_language')
       end
 
-      context 'when saving as draft and exiting' do
-        it 'creates a new work with all fields provided' do
-          initial_work_count = Work.count
+    context 'when saving as draft and exiting' do
+      it 'creates a new work with all fields provided' do
+        initial_work_count = Work.count
 
-          visit dashboard_form_work_versions_path
+        visit dashboard_form_work_versions_path
 
           FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_grad_culminating_experiences_draft(metadata)
           FeatureHelpers::DashboardForm.save_as_draft_and_exit
 
-          expect(Work.count).to eq(initial_work_count + 1)
+        expect(Work.count).to eq(initial_work_count + 1)
 
           new_work = Work.last
           expect(new_work.work_type).to eq 'masters_culminating_experience'
           expect(new_work.versions.length).to eq 1
 
-          new_work_version = new_work.versions.last
-          expect(page).to have_content(metadata[:title])
-          expect(new_work_version.title).to eq metadata[:title]
-          expect(new_work_version.version_number).to eq 1
+        new_work_version = new_work.versions.last
+        expect(page).to have_content(metadata[:title])
+        expect(new_work_version.title).to eq metadata[:title]
+        expect(new_work_version.version_number).to eq 1
 
-          expect(page).to have_current_path(resource_path(new_work_version.uuid))
-          expect(SolrIndexingJob).to have_received(:perform_later).at_least(:once)
-        end
+        expect(page).to have_current_path(resource_path(new_work_version.uuid))
+        expect(SolrIndexingJob).to have_received(:perform_later).at_least(:once)
       end
+    end
 
-      context 'when saving and_continuing' do
-        it 'creates a new work with all fields provided' do
-          initial_work_count = Work.count
+    context 'when saving and_continuing' do
+      it 'creates a new work with all fields provided' do
+        initial_work_count = Work.count
 
-          visit dashboard_form_work_versions_path
+        visit dashboard_form_work_versions_path
 
           FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_grad_culminating_experiences_draft(metadata)
           FeatureHelpers::DashboardForm.save_and_continue
@@ -420,7 +420,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
           expect(new_work.work_type).to eq 'masters_culminating_experience'
           expect(new_work.versions.length).to eq 1
 
-          new_work_version = new_work.versions.last
+        new_work_version = new_work.versions.last
 
           expect(new_work_version.version_number).to eq 1
           expect(new_work_version.title).to eq metadata[:title]
@@ -431,13 +431,13 @@ RSpec.describe 'Publishing a work', with_user: :user do
           expect(new_work_version.degree).to eq metadata[:degree]
           expect(new_work_version.keyword).to eq [metadata[:keyword]]
 
-          expect(page).to have_current_path(dashboard_form_contributors_path('work_version', new_work_version))
-          expect(SolrIndexingJob).to have_received(:perform_later).at_least(:twice)
-        end
+        expect(page).to have_current_path(dashboard_form_contributors_path('work_version', new_work_version))
+        expect(SolrIndexingJob).to have_received(:perform_later).at_least(:twice)
+      end
 
-        context 'with invalid data' do
-          it 'does not save the data and rerenders the form with errors' do
-            visit dashboard_form_work_versions_path
+      context 'with invalid data' do
+        it 'does not save the data and rerenders the form with errors' do
+          visit dashboard_form_work_versions_path
 
             FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_grad_culminating_experiences_draft(metadata)
             FeatureHelpers::DashboardForm.save_and_continue
@@ -555,11 +555,11 @@ RSpec.describe 'Publishing a work', with_user: :user do
             fill_in 'work_version_description', with: ''
             FeatureHelpers::DashboardForm.save_and_continue
 
-            new_work_version = Work.last.versions.last
+          new_work_version = Work.last.versions.last
 
-            expect(page).to have_current_path(dashboard_form_work_version_details_path(new_work_version))
-            expect(page).to have_content 'Description is required to publish the work'
-            expect(SolrIndexingJob).to have_received(:perform_later).once
+          expect(page).to have_current_path(dashboard_form_work_version_details_path(new_work_version))
+          expect(page).to have_content 'Description is required to publish the work'
+          expect(SolrIndexingJob).to have_received(:perform_later).once
 
             expect(new_work_version.description).to be_nil
             expect(new_work_version.published_date).to be_nil
@@ -576,16 +576,16 @@ RSpec.describe 'Publishing a work', with_user: :user do
         end
       end
 
-      context 'when saving-and-continuing, then hitting cancel' do
-        it 'returns to the resource page' do
-          visit dashboard_form_work_versions_path
+    context 'when saving-and-continuing, then hitting cancel' do
+      it 'returns to the resource page' do
+        visit dashboard_form_work_versions_path
 
           FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_instrument_draft(metadata)
           FeatureHelpers::DashboardForm.save_and_continue
           FeatureHelpers::DashboardForm.fill_in_instrument_work_details(metadata)
           FeatureHelpers::DashboardForm.save_and_continue
 
-          FeatureHelpers::DashboardForm.cancel
+        FeatureHelpers::DashboardForm.cancel
 
           expect(page).to have_content metadata[:title]
         end
@@ -985,6 +985,9 @@ RSpec.describe 'Publishing a work', with_user: :user do
           FeatureHelpers::DashboardForm.upload_file(Rails.root.join('spec', 'fixtures', 'ipsum.pdf'))
 
           FeatureHelpers::DashboardForm.save_as_draft_and_exit
+          while FileResource.last.nil?
+            sleep 0.1
+          end
           file_resource_id = FileResource.last.id
           expect(AccessibilityCheckJob).to have_received(:perform_later).with(file_resource_id)
         end
@@ -995,6 +998,9 @@ RSpec.describe 'Publishing a work', with_user: :user do
           FeatureHelpers::DashboardForm.upload_file(Rails.root.join('spec', 'fixtures', 'image.png'))
 
           FeatureHelpers::DashboardForm.save_as_draft_and_exit
+          while FileResource.last.nil?
+            sleep 0.1
+          end
           file_resource_id = FileResource.last.id
           expect(AccessibilityCheckJob).not_to have_received(:perform_later).with(file_resource_id)
         end
@@ -1248,12 +1254,17 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
     context 'with a work that uses the instrument works deposit pathway' do
       let(:work) { create(:work, :instrument, versions_count: 1) }
+      let(:work) { create(:work, :instrument, versions_count: 1) }
       let(:work_version) { work.versions.first }
       let(:user) { work.depositor.user }
 
       it 'shows only the fields for an instrument work' do
         visit dashboard_form_publish_path(work_version)
 
+        expect(page).to have_no_field('work_version_based_near')
+        expect(page).to have_no_field('work_version_source')
+        expect(page).to have_no_field('work_version_version_name')
+        expect(page).to have_no_field('work_version_publisher_statement')
         expect(page).to have_no_field('work_version_based_near')
         expect(page).to have_no_field('work_version_source')
         expect(page).to have_no_field('work_version_version_name')
@@ -1634,7 +1645,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
   end
 
-  describe 'Requesting accessibility remediation', :js do
+  describe 'Requesting accessibility remediation', :js, skip: 'Until request accessibility remediation is available again' do
     let(:user) { work_version.work.depositor.user }
     let(:request_description) { 'Recommended: Select ‘Request Accessibility Remediation’ below to have the Adaptive Technologies Team review and improve the accessibility of your work before publication. While your work is being remediated it will remain saved as a draft and will be published upon completion of this work.' }
     let(:publish_description) { "Select 'Publish' if you would like to self-submit your deposit to Scholarsphere and make it immediately public. ScholarSphere curators will review your work after publication. Note, because curatorial review occurs after publication, any changes or updates may result in a versioned work." }
@@ -1787,6 +1798,72 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
   end
 
+  describe 'blocking publication during accessibility checking', :js do
+    context 'when the user is an admin' do
+      let(:work_version) { create(:work_version, :able_to_be_published) }
+      let(:user) { create(:user, :admin) }
+
+      it 'allows admin to publish' do
+        visit dashboard_form_publish_path(work_version)
+
+        expect(page).to have_button('Publish')
+
+        FeatureHelpers::DashboardForm.publish
+
+        expect(work_version.reload.aasm_state).to eq 'published'
+      end
+    end
+
+    context 'when the user is not an admin' do
+      let(:user) { work_version.work.depositor.user }
+
+      context 'when none of the files are pdfs' do
+        let(:work_version) { create(:work_version, :able_to_be_published) }
+
+        it 'allows the user to publish' do
+          visit dashboard_form_publish_path(work_version)
+
+          expect(page).to have_button('Publish')
+
+          FeatureHelpers::DashboardForm.publish
+
+          expect(work_version.reload.aasm_state).to eq 'published'
+        end
+      end
+
+      context 'when there is a pdf file' do
+        let(:work_version) { create(:work_version, :able_to_be_published_with_pdf) }
+
+        context 'when the file has an accessibility check result' do
+          let(:accessibility_check_result) do
+            create(:accessibility_check_result, file_resource_id: work_version.file_resources.last.id)
+          end
+
+          before { accessibility_check_result.save! }
+
+          it 'allows the user to publish' do
+            visit dashboard_form_publish_path(work_version)
+
+            expect(page).to have_button('Publish')
+
+            FeatureHelpers::DashboardForm.publish
+
+            expect(work_version.reload.aasm_state).to eq 'published'
+          end
+        end
+
+        context 'when the file does not have an accessibility check result' do
+          it 'blocks the user from publishing' do
+            visit dashboard_form_publish_path(work_version)
+
+            expect(page).to have_no_button('Publish')
+            expect(page).to have_content(I18n.t!('dashboard.form.actions.publish.blocked'))
+          end
+        end
+      end
+    end
+  end
+
   describe 'minting a doi', :js do
     let(:user) { work_version.work.depositor.user }
 
@@ -1794,12 +1871,12 @@ RSpec.describe 'Publishing a work', with_user: :user do
       let(:work) { create(:work, work_type: 'instrument', versions_count: 1, has_draft: true, doi: nil) }
       let(:work_version) { work.versions.first }
 
-      it 'renders a checkbox requesting a doi be minted upon publish' do
-        visit dashboard_form_publish_path(work_version)
+        it 'renders a checkbox requesting a doi be minted upon publish' do
+          visit dashboard_form_publish_path(work_version)
 
-        expect(page).to have_content(I18n.t('dashboard.form.publish.doi.label'))
+          expect(page).to have_content(I18n.t('dashboard.form.publish.doi.label'))
+        end
       end
-    end
 
     context 'with a data and code draft eligible for doi minting' do
       let(:work) { create(:work, work_type: 'dataset', versions_count: 1, has_draft: true, doi: nil) }

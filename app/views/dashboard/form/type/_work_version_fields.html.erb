@@ -8,13 +8,11 @@
   <%= render 'form_fields/text', form: form, attribute: :title, required: true %>
 
   <%= form.fields_for :work do |work_form| %>
-    <%= work_form.select :work_type,
-                         Work::Types.options_for_select_box,
-                         {},
-                         { class: 'form-control custom-select',
-                           id: 'work_version_work_attributes_work_type',
-                           data: { target: 'work-type.workTypeSelect' },
-                           disabled: local_assigns[:work_type_disabled] } %>
+    <%= render 'form_fields/select', form: work_form,
+                                     attribute: :work_type,
+                                     options_for_select: Work::Types.options_for_select_box,
+                                     data: { target: 'work-type.workTypeSelect' },
+                                     disabled: local_assigns[:work_type_disabled] %>
   <% end %>
 
   <div class="form-text text-muted" id="work-title-help-text" data-target="work-type.helpText" style="display: none;">

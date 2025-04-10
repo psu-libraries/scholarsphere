@@ -418,7 +418,7 @@ RSpec.describe WorkDepositPathway do
       end
     end
 
-    context 'when the given work version does not have a data and code or grad culminating experience type' do
+    context 'when the given work version does not have a data and code, instrument, or grad culminating experience type' do
       %w[
         article
         book
@@ -515,6 +515,17 @@ RSpec.describe WorkDepositPathway do
       %w[
         dataset
         software_or_program_code
+      ].each do |t|
+        let(:type) { t }
+        it 'returns false' do
+          expect(pathway.allows_accessibility_remediation_request?).to eq false
+        end
+      end
+    end
+
+    context 'when in instrument pathway' do
+      %w[
+        instrument
       ].each do |t|
         let(:type) { t }
         it 'returns false' do

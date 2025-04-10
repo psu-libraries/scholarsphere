@@ -26,7 +26,7 @@ RSpec.describe AdobePdf::AccessibilityChecker, :vcr do
   end
 
   describe '#call' do
-    let(:resource) { create(:file_resource, :pdf) }
+    let(:resource) { create(:file_resource, :pdf, work_versions: [create(:work_version)]) }
 
     # Turn off vcr here for a full, live integration test
     describe 'happy path' do

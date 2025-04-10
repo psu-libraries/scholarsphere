@@ -148,7 +148,7 @@ class CatalogController < ApplicationController
     config.add_show_field 'instrument_type_tesim', label: 'Instrument Type'
     config.add_show_field 'measured_variable_tesim', label: 'Measured Variable'
     config.add_show_field 'available_date_tesim', label: 'Available Date'
-    config.add_show_field 'decommission_date_tesim', label: 'Decommission Date'
+    config.add_show_field 'decommission_date_tesim', label: 'Decommissioned Date'
     config.add_show_field 'related_identifier_tesim', label: 'Related Identifier'
     config.add_show_field 'alternative_identifier_tesim', label: 'Alternative Identifier'
     config.add_show_field 'instrument_resource_type_tesim', label: 'Resource Type'

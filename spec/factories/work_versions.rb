@@ -61,6 +61,12 @@ FactoryBot.define do
       end
     end
 
+    trait :with_pdf_file do
+      after(:build, :stub) do |work_version|
+        work_version.file_resources << build(:file_resource, :pdf)
+      end
+    end
+
     # Bare minimum for a valid draft
     trait :draft do
       aasm_state { WorkVersion::STATE_DRAFT }
@@ -71,6 +77,17 @@ FactoryBot.define do
       article
       draft
       with_files
+      with_creators
+      description { Faker::Lorem.paragraph }
+      published_date { Faker::Date.between(from: 2.years.ago, to: Date.today).iso8601 }
+    end
+
+    # A draft article including a pdf that has everything needed to pass validations and be published
+    trait :able_to_be_published_with_pdf do
+      article
+      draft
+      with_files
+      with_pdf_file
       with_creators
       description { Faker::Lorem.paragraph }
       published_date { Faker::Date.between(from: 2.years.ago, to: Date.today).iso8601 }

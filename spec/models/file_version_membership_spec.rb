@@ -238,6 +238,39 @@ RSpec.describe FileVersionMembership do
     end
   end
 
+  describe '#accessibility_score_pending?' do
+    let(:file_version_membership) { create(:file_version_membership, file_resource: file) }
+    let(:file) { create(:file_resource) }
+
+    context 'when there is not a check result' do
+      context 'when the file is a pdf' do
+        let(:file) { create(:file_resource, :pdf) }
+
+        it 'returns true' do
+          expect(file_version_membership.accessibility_score_pending?).to eq true
+        end
+      end
+
+      context 'when the file is not a pdf' do
+        it 'returns false' do
+          expect(file_version_membership.accessibility_score_pending?).to eq false
+        end
+      end
+    end
+
+    context 'when there is a check result' do
+      let(:accessibility_check_result) do
+        create(:accessibility_check_result, file_resource_id: file_version_membership.file_resource.id)
+      end
+
+      before { accessibility_check_result.save! }
+
+      it 'returns false' do
+        expect(file_version_membership.accessibility_score_pending?).to eq false
+      end
+    end
+  end
+
   describe '#accessibility_failures?' do
     let(:file_version_membership) { create(:file_version_membership) }
 

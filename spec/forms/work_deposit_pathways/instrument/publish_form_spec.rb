@@ -105,6 +105,9 @@ RSpec.describe WorkDepositPathway::Instrument::PublishForm, type: :model do
         subtitle
         contributor
         depositor_agreement
+        psu_community_agreement
+        accessibility_agreement
+        sensitive_info_agreement
         rights
       }
 
@@ -139,7 +142,7 @@ RSpec.describe WorkDepositPathway::Instrument::PublishForm, type: :model do
     context "when the form's work version is otherwise valid for publishing" do
       let(:wv) {
         build(:work_version,
-              work: build(:work, work_type: 'instrument'),
+              :with_creators,
               description: 'description',
               published_date: '2020',
               owner: 'owner',
@@ -346,7 +349,7 @@ RSpec.describe WorkDepositPathway::Instrument::PublishForm, type: :model do
     context "when the form's work version is not otherwise valid for publishing" do
       let(:wv) {
         build(:work_version,
-              work: build(:work, work_type: 'instrument'),
+              :with_creators,
               description: nil,
               published_date: '2020',
               owner: 'owner',
@@ -570,7 +573,17 @@ RSpec.describe WorkDepositPathway::Instrument::PublishForm, type: :model do
 
     before do
       allow(wv).to receive(:save).with(context: context).and_return true
+      allow(wv).to receive(:save).with(hash_including(validate: false))
       allow(wv).to receive(:attributes=)
+    end
+
+    # RSpec mocks _cumulatively_ record the number of times they've been called,
+    # we need a way to say "from this exact point, you should have been called
+    # once." We accomplish this by tearing down the mock and setting it back up.
+    def mock_wv_save
+      RSpec::Mocks.space.proxy_for(wv)&.reset
+
+      allow(wv).to receive(:save).and_call_original
     end
 
     context "when the form's work version is valid" do
@@ -595,6 +608,7 @@ RSpec.describe WorkDepositPathway::Instrument::PublishForm, type: :model do
         end
 
         it 'does not persist the form data' do
+          mock_wv_save
           form.save(context: context)
           expect(wv).not_to have_received(:save)
         end
