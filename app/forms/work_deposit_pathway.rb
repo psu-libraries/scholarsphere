@@ -523,10 +523,6 @@ class WorkDepositPathway
         degree
       }.freeze
 
-      def form_partial
-        'grad_culminating_experiences_work_version'
-      end
-
       class DetailsForm < DetailsFormBase
         REQUIRE_FIELDS.each { |f| validates f.to_sym, presence: true }
 
@@ -539,6 +535,10 @@ class WorkDepositPathway
         form_fields.each do |attr_name|
           delegate attr_name, to: :work_version, prefix: false
           delegate "#{attr_name}=", to: :work_version, prefix: false
+        end
+
+        def form_partial
+          'grad_culminating_experiences_work_version'
         end
       end
 
@@ -565,6 +565,10 @@ class WorkDepositPathway
         form_fields.each do |attr_name|
           delegate attr_name, to: :work_version, prefix: false
           delegate "#{attr_name}=", to: :work_version, prefix: false
+        end
+
+        def form_partial
+          'grad_culminating_experiences_work_version'
         end
 
         delegate :aasm_state=,
