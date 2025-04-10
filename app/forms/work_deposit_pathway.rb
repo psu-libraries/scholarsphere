@@ -200,6 +200,10 @@ class WorkDepositPathway
       def form_partial
         'non_instrument_work_version'
       end
+
+      def build_form(actor)
+        build_creator(actor: actor) if creators.empty?
+      end
     end
 
     class PublishFormBase < WorkVersionFormBase
@@ -427,6 +431,10 @@ class WorkDepositPathway
           delegate "#{attr_name}=", to: :work_version, prefix: false
         end
 
+        def build_form(*)
+          # No-op
+        end
+
         validates :owner, :manufacturer, presence: true
       end
 
@@ -508,8 +516,6 @@ class WorkDepositPathway
               fr.file_data['metadata']['size'].positive? &&
                   fr.file_data['metadata']['filename'] =~ /readme/i
             end && file_resources.find do |fr|
-              fr.file_data['metadata']['filename'] !~ /readme/i &&
-                  fr.file_data['metadata']['filename'] =~ /png|jpeg|tiff/i
               fr.file_data['metadata']['filename'] !~ /readme/i &&
                   fr.file_data['metadata']['filename'] =~ /png|jpeg|tiff/i
             end

@@ -7,11 +7,7 @@ module Dashboard
         @resource = resource_klass.find(params[:id])
         authorize(@resource)
         @resource = deposit_pathway.contributors_form
-
-        # TODO:  refactor logic into form?
-        if !deposit_pathway.instrument? && @resource.creators.empty?
-          @resource.build_creator(actor: current_user.actor)
-        end
+        @resource.build_form(current_user.actor)
       end
 
       def update
