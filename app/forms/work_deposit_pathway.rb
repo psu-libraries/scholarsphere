@@ -455,6 +455,9 @@ class WorkDepositPathway
               rights
               depositor_agreement
               contributor
+              accessibility_agreement
+              psu_community_agreement
+              sensitive_info_agreement
             }
           ).freeze
         end
