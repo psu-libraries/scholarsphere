@@ -296,7 +296,10 @@ class Work < ApplicationRecord
     def embargoed_until_is_valid_date
       return if embargoed_until.blank?
 
-      unless embargoed_until < (DateTime.now + 4.years)
+      if Types.grad_culminating_experiences.include?(work_type) && embargoed_until > (DateTime.now + 2.years)
+        errors.add(:embargoed_until, :grad_max)
+        nil
+      elsif embargoed_until > (DateTime.now + 4.years)
         errors.add(:embargoed_until, :max)
         nil
       end
