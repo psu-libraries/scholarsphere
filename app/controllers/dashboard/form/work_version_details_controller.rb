@@ -64,8 +64,6 @@ module Dashboard
               :rights,
               :version_name,
               :published_date,
-              :owner,
-              :manufacturer,
               :model,
               :instrument_type,
               :measured_variable,
