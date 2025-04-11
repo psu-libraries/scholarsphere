@@ -428,18 +428,4 @@ RSpec.describe Collection do
       expect(c.show_autocomplete_form?).to eq false
     end
   end
-
-  describe '#build_form' do
-    let(:actor) { create(:actor,
-                         display_name: 'Test 1',
-                         surname: 'Test 2',
-                         given_name: 'Test 3',
-                         email: 'abc@email.com') }
-    let(:c) { described_class.new }
-
-    it 'does not call any methods on the work_version' do
-      expect { c.build_form(actor) }.to change { c.creators.length }.by(1)
-      expect(c.creators.first.display_name).to eq actor.display_name
-    end
-  end
 end

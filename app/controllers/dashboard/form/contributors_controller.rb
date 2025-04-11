@@ -7,7 +7,7 @@ module Dashboard
         @resource = resource_klass.find(params[:id])
         authorize(@resource)
         @resource = deposit_pathway.contributors_form
-        @resource.build_form(current_user.actor)
+        @resource.build_creator(actor: current_user.actor)
       end
 
       def update

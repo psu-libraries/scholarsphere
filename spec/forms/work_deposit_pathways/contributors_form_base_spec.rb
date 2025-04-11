@@ -68,31 +68,4 @@ RSpec.describe WorkDepositPathway::ContributorsFormBase, type: :model do
       expect(form.form_partial).to eq('non_instrument_work_version')
     end
   end
-
-  describe '#build_form' do
-    let(:actor) { instance_double(Actor) }
-
-    before do
-      allow(wv).to receive(:creators).and_return(creators)
-      allow(wv).to receive(:build_creator)
-    end
-
-    context 'when creators are empty' do
-      let(:creators) { [] }
-
-      it 'calls build_creator with the actor' do
-        form.build_form(actor)
-        expect(wv).to have_received(:build_creator).with(actor: actor)
-      end
-    end
-
-    context 'when creators are present' do
-      let(:creators) { [instance_double(Authorship)] }
-
-      it 'does not call build_creator' do
-        form.build_form(actor)
-        expect(wv).not_to have_received(:build_creator)
-      end
-    end
-  end
 end

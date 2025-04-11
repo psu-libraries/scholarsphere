@@ -178,10 +178,6 @@ class Collection < ApplicationRecord
     false
   end
 
-  def build_form(actor)
-    build_creator(actor: actor)
-  end
-
   private
 
     def uploaded_thumbnail_url

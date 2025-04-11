@@ -48,15 +48,15 @@ RSpec.describe WorkDepositPathway::Instrument::ContributorsForm, type: :model do
     end
   end
 
-  describe '#build_form' do
+  describe '#build_creator' do
     let(:actor) { instance_double(Actor) }
 
     before do
       allow(wv).to receive(:build_creator)
     end
 
-    it 'does not call any methods on the work_version' do
-      form.build_form(actor)
+    it 'overrides the work_version build_creator method and does nothing' do
+      form.build_creator(actor)
       expect(wv).not_to have_received(:build_creator)
     end
   end

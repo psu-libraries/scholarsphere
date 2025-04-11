@@ -200,10 +200,6 @@ class WorkDepositPathway
       def form_partial
         'non_instrument_work_version'
       end
-
-      def build_form(actor)
-        build_creator(actor: actor) if creators.empty?
-      end
     end
 
     class PublishFormBase < WorkVersionFormBase
@@ -431,7 +427,7 @@ class WorkDepositPathway
           delegate "#{attr_name}=", to: :work_version, prefix: false
         end
 
-        def build_form(*)
+        def build_creator(*)
           # No-op
         end
 
