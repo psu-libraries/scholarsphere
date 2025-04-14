@@ -77,13 +77,14 @@ RSpec.describe Work do
 
     context 'when the work is in the grad culminating experience pathway' do
       let(:work) { build(:work, work_type: 'masters_culminating_experience') }
+
       context 'when embargoed_until is within 2 years from now' do
         it 'is valid' do
           work.embargoed_until = DateTime.now + 1.year
           expect(work.valid?).to eq true
         end
       end
-  
+
       context 'when embargoed_until is more than 2 years from now' do
         it 'is not valid' do
           work.embargoed_until = DateTime.now + 3.years
@@ -99,7 +100,7 @@ RSpec.describe Work do
           expect(work.valid?).to eq true
         end
       end
-  
+
       context 'when embargoed_until is more than 4 years from now' do
         it 'is not valid' do
           work.embargoed_until = DateTime.now + 5.years
