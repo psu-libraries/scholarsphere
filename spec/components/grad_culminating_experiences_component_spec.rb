@@ -55,10 +55,38 @@ RSpec.describe GradCulminatingExperiencesDropdownsComponent, type: :component do
   end
 
   describe '#programs_dropdown' do
-    it 'returns programs from the file based authority graduate_programs' do
-      expect(component.programs_dropdown).to eq(Qa::Authorities::Local::FileBasedAuthority.new(:graduate_programs)
+    context 'when work type is professional doctoral culminating experience' do
+      before do
+        allow(work).to receive(:professional_doctoral_culminating_experience?).and_return(true)
+      end
+
+      it 'returns programs from the file based authority doctoral_programs' do
+        expect(component.programs_dropdown).to eq(Qa::Authorities::Local::FileBasedAuthority.new(:doctoral_programs)
         .all
         .filter_map { |p| p['label'] })
+      end
+    end
+
+    context 'when work type is masters culminating experience' do
+      before do
+        allow(work).to receive(:masters_culminating_experience?).and_return(true)
+      end
+
+      it 'returns programs from the file based authority graduate_programs' do
+        expect(component.programs_dropdown).to eq(Qa::Authorities::Local::FileBasedAuthority.new(:graduate_programs)
+        .all
+        .filter_map { |p| p['label'] })
+      end
+    end
+
+    context 'when work type is not recognized' do
+      before do
+        allow(resource).to receive(:work_type).and_return(nil)
+      end
+
+      it 'returns nil' do
+        expect(component.programs_dropdown).to be_nil
+      end
     end
   end
 
