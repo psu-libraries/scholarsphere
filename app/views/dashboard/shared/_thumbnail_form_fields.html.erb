@@ -31,11 +31,12 @@
           </div>
         <% end %>
       </div>
-      <%= render FieldHintComponent.new(form: form, attribute: :thumbnail_upload) %>
+            <%= render FieldHintComponent.new(form: form, attribute: :thumbnail_upload) %>
+
+      <%= render FieldHintComponent.new(form: form, attribute: :thumbnail_upload_details) %>
       <div class="m-1">
         <%= form.file_field :thumbnail_upload, accept: 'image/*' %>
       </div>
-      <%= render FieldHintComponent.new(form: form, attribute: :thumbnail_upload_details) %>
     </div>
     <% if thumbnail_form.resource.auto_generated_thumbnail_url.present? %>
       <div class="col-sm-4">
