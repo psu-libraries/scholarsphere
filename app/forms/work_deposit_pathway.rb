@@ -62,6 +62,10 @@ class WorkDepositPathway
     Work::Types.grad_culminating_experiences.include?(work_type)
   end
 
+  def fields_to_reset(original_work_type)
+    pathway_fields(original_work_type) - pathway_fields(work_type)
+  end
+
   private
 
     attr_reader :resource
@@ -70,6 +74,21 @@ class WorkDepositPathway
 
     def scholarly_works?
       Work::Types.scholarly_works.include?(work_type)
+    end
+
+    def pathway_fields(work_type)
+      if Work::Types.scholarly_works.include?(work_type)
+        ScholarlyWorks::DetailsForm.form_fields.union(ScholarlyWorks::PublishForm.form_fields)
+      elsif Work::Types.data_and_code.include?(work_type)
+        DataAndCode::DetailsForm.form_fields.union(DataAndCode::PublishForm.form_fields)
+      elsif Work::Types.grad_culminating_experiences.include?(work_type)
+        GradCulminatingExperiences::DetailsForm.form_fields.union(GradCulminatingExperiences::PublishForm.form_fields)
+        # will need to add instruments once that pathway is merged
+        # elsif Work::Types.instrument.include?(work_type)
+        # Instrument::DetailsForm.form_fields.union(Instrument::PublishForm.form_fields)
+      else
+        General::DetailsForm.form_fields.union(WorkVersionFormBase::COMMON_PUBLISH_FIELDS)
+      end
     end
 
     class WorkVersionFormBase
@@ -81,6 +100,16 @@ class WorkDepositPathway
         keyword
         related_url
         language
+      }.freeze
+
+      COMMON_PUBLISH_FIELDS = %w{
+        title
+        rights
+        depositor_agreement
+        psu_community_agreement
+        accessibility_agreement
+        sensitive_info_agreement
+        contributor
       }.freeze
 
       def initialize(work_version)
@@ -211,7 +240,7 @@ class WorkDepositPathway
 
       class PublishForm < SimpleDelegator
         def self.form_fields
-          WorkVersionFormBase::COMMON_FIELDS.union(
+          WorkVersionFormBase::COMMON_FIELDS.union(WorkVersionFormBase::COMMON_PUBLISH_FIELDS).union(
             %w{
               subject
               publisher
@@ -261,18 +290,12 @@ class WorkDepositPathway
 
       class PublishForm < WorkVersionFormBase
         def self.form_fields
-          WorkVersionFormBase::COMMON_FIELDS.union(
+          WorkVersionFormBase::COMMON_FIELDS.union(WorkVersionFormBase::COMMON_PUBLISH_FIELDS).union(
             %w{
               title
               based_near
               source
               version_name
-              rights
-              depositor_agreement
-              psu_community_agreement
-              accessibility_agreement
-              sensitive_info_agreement
-              contributor
               subject
               publisher
               subtitle
@@ -356,18 +379,12 @@ class WorkDepositPathway
         REQUIRE_FIELDS.each { |f| validates f.to_sym, presence: true }
 
         def self.form_fields
-          WorkVersionFormBase::COMMON_FIELDS.union(
+          WorkVersionFormBase::COMMON_FIELDS.union(WorkVersionFormBase::COMMON_PUBLISH_FIELDS).union(
             REQUIRE_FIELDS
           ).union(
             %w{
               title
-              rights
-              depositor_agreement
-              contributor
               mint_doi_requested
-              psu_community_agreement
-              accessibility_agreement
-              sensitive_info_agreement
             }
           ).freeze
         end
