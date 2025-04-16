@@ -122,7 +122,8 @@ class WorkVersion < ApplicationRecord
 
   validates :creators,
             presence: true,
-            if: :published?
+            if: :published?,
+            unless: :instrument?
 
   validates :depositor_agreement,
             acceptance: true,
@@ -442,5 +443,9 @@ class WorkVersion < ApplicationRecord
       if over_limit_errors.length > 1
         errors.errors.delete_at(over_limit_errors[1])
       end
+    end
+
+    def instrument?
+      WorkDepositPathway.new(self).instrument?
     end
 end

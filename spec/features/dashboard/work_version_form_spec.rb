@@ -360,6 +360,122 @@ RSpec.describe 'Publishing a work', with_user: :user do
       end
     end
 
+    context 'when selecting a work type that uses the grad_culminating_experiences deposit pathway' do
+      it 'shows only the fields for grad_culminating_experiences works' do
+        visit dashboard_form_work_versions_path
+
+        FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_grad_culminating_experiences_draft(metadata)
+        FeatureHelpers::DashboardForm.save_and_continue
+
+        expect(page).to have_no_field('publisher_statement')
+        expect(page).to have_no_field('work_version_based_near')
+        expect(page).to have_no_field('work_version_source')
+        expect(page).to have_no_field('work_version_version_name')
+        expect(page).to have_field('work_version_sub_work_type')
+        expect(page).to have_field('work_version_program')
+        expect(page).to have_field('work_version_degree')
+        expect(page).to have_field('work_version_keyword')
+        expect(page).to have_field('work_version_related_url')
+        expect(page).to have_field('work_version_language')
+      end
+
+      context 'when saving as draft and exiting' do
+        it 'creates a new work with all fields provided' do
+          initial_work_count = Work.count
+
+          visit dashboard_form_work_versions_path
+
+          FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_grad_culminating_experiences_draft(metadata)
+          FeatureHelpers::DashboardForm.save_as_draft_and_exit
+
+          expect(Work.count).to eq(initial_work_count + 1)
+
+          new_work = Work.last
+          expect(new_work.work_type).to eq 'masters_culminating_experience'
+          expect(new_work.versions.length).to eq 1
+
+          new_work_version = new_work.versions.last
+          expect(page).to have_content(metadata[:title])
+          expect(new_work_version.title).to eq metadata[:title]
+          expect(new_work_version.version_number).to eq 1
+
+          expect(page).to have_current_path(resource_path(new_work_version.uuid))
+          expect(SolrIndexingJob).to have_received(:perform_later).at_least(:once)
+        end
+      end
+
+      context 'when saving and_continuing' do
+        it 'creates a new work with all fields provided' do
+          initial_work_count = Work.count
+
+          visit dashboard_form_work_versions_path
+
+          FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_grad_culminating_experiences_draft(metadata)
+          FeatureHelpers::DashboardForm.save_and_continue
+          FeatureHelpers::DashboardForm.fill_in_grad_culminating_experiences_work_details(metadata)
+          FeatureHelpers::DashboardForm.save_and_continue
+
+          expect(Work.count).to eq(initial_work_count + 1)
+          new_work = Work.last
+          expect(new_work.work_type).to eq 'masters_culminating_experience'
+          expect(new_work.versions.length).to eq 1
+
+          new_work_version = new_work.versions.last
+
+          expect(new_work_version.version_number).to eq 1
+          expect(new_work_version.title).to eq metadata[:title]
+          expect(new_work_version.description).to eq metadata[:description]
+          expect(new_work_version.published_date).to eq metadata[:published_date]
+          expect(new_work_version.sub_work_type).to eq metadata[:sub_work_type]
+          expect(new_work_version.program).to eq metadata[:program]
+          expect(new_work_version.degree).to eq metadata[:degree]
+          expect(new_work_version.keyword).to eq [metadata[:keyword]]
+
+          expect(page).to have_current_path(dashboard_form_contributors_path('work_version', new_work_version))
+          expect(SolrIndexingJob).to have_received(:perform_later).at_least(:twice)
+        end
+
+        context 'with invalid data' do
+          it 'does not save the data and rerenders the form with errors' do
+            visit dashboard_form_work_versions_path
+
+            FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_grad_culminating_experiences_draft(metadata)
+            FeatureHelpers::DashboardForm.save_and_continue
+            FeatureHelpers::DashboardForm.fill_in_grad_culminating_experiences_work_details(metadata)
+            fill_in 'work_version_description', with: ''
+            FeatureHelpers::DashboardForm.save_and_continue
+
+            new_work_version = Work.last.versions.last
+
+            expect(page).to have_current_path(dashboard_form_work_version_details_path(new_work_version))
+            expect(page).to have_content 'Description is required to publish the work'
+            expect(SolrIndexingJob).to have_received(:perform_later).once
+
+            expect(new_work_version.description).to be_nil
+            expect(new_work_version.published_date).to be_nil
+            expect(new_work_version.sub_work_type).to be_nil
+            expect(new_work_version.program).to be_nil
+            expect(new_work_version.degree).to be_nil
+          end
+        end
+      end
+
+      context 'when saving-and-continuing, then hitting cancel' do
+        it 'returns to the resource page' do
+          visit dashboard_form_work_versions_path
+
+          FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_grad_culminating_experiences_draft(metadata)
+          FeatureHelpers::DashboardForm.save_and_continue
+          FeatureHelpers::DashboardForm.fill_in_grad_culminating_experiences_work_details(metadata)
+          FeatureHelpers::DashboardForm.save_and_continue
+
+          FeatureHelpers::DashboardForm.cancel
+
+          expect(page).to have_content metadata[:title]
+        end
+      end
+    end
+
     context 'when selecting a work type that uses the instrument deposit pathway' do
       it 'shows only the fields for instrument works' do
         visit dashboard_form_work_versions_path
@@ -371,7 +487,6 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).to have_no_field('work_version_based_near')
         expect(page).to have_no_field('work_version_source')
         expect(page).to have_no_field('work_version_version_name')
-        expect(page).to have_field('work_version_owner')
         expect(page).to have_field('work_version_model')
       end
 
@@ -410,6 +525,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
           FeatureHelpers::DashboardForm.save_and_continue
           FeatureHelpers::DashboardForm.fill_in_instrument_work_details(metadata)
           FeatureHelpers::DashboardForm.save_and_continue
+          FeatureHelpers::DashboardForm.fill_in_instrument_contributors(metadata)
+          FeatureHelpers::DashboardForm.save_and_continue
 
           expect(Work.count).to eq(initial_work_count + 1)
           new_work = Work.last
@@ -421,10 +538,11 @@ RSpec.describe 'Publishing a work', with_user: :user do
           expect(new_work_version.version_number).to eq 1
           expect(new_work_version.title).to eq metadata[:title]
           expect(new_work_version.owner).to eq metadata[:owner]
+          expect(new_work_version.manufacturer).to eq metadata[:manufacturer]
           expect(new_work_version.model).to eq metadata[:model]
 
-          expect(page).to have_current_path(dashboard_form_contributors_path('work_version', new_work_version))
-          expect(SolrIndexingJob).to have_received(:perform_later).at_least(:twice)
+          expect(page).to have_current_path(dashboard_form_files_path(new_work_version))
+          expect(SolrIndexingJob).to have_received(:perform_later).at_least(3).times
         end
 
         context 'with invalid data' do
@@ -471,122 +589,6 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
           expect(page).to have_content metadata[:title]
         end
-      end
-    end
-  end
-
-  context 'when selecting a work type that uses the grad_culminating_experiences deposit pathway' do
-    it 'shows only the fields for grad_culminating_experiences works' do
-      visit dashboard_form_work_versions_path
-
-      FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_grad_culminating_experiences_draft(metadata)
-      FeatureHelpers::DashboardForm.save_and_continue
-
-      expect(page).to have_no_field('publisher_statement')
-      expect(page).to have_no_field('work_version_based_near')
-      expect(page).to have_no_field('work_version_source')
-      expect(page).to have_no_field('work_version_version_name')
-      expect(page).to have_field('work_version_sub_work_type')
-      expect(page).to have_field('work_version_program')
-      expect(page).to have_field('work_version_degree')
-      expect(page).to have_field('work_version_keyword')
-      expect(page).to have_field('work_version_related_url')
-      expect(page).to have_field('work_version_language')
-    end
-
-    context 'when saving as draft and exiting' do
-      it 'creates a new work with all fields provided' do
-        initial_work_count = Work.count
-
-        visit dashboard_form_work_versions_path
-
-        FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_grad_culminating_experiences_draft(metadata)
-        FeatureHelpers::DashboardForm.save_as_draft_and_exit
-
-        expect(Work.count).to eq(initial_work_count + 1)
-
-        new_work = Work.last
-        expect(new_work.work_type).to eq 'masters_culminating_experience'
-        expect(new_work.versions.length).to eq 1
-
-        new_work_version = new_work.versions.last
-        expect(page).to have_content(metadata[:title])
-        expect(new_work_version.title).to eq metadata[:title]
-        expect(new_work_version.version_number).to eq 1
-
-        expect(page).to have_current_path(resource_path(new_work_version.uuid))
-        expect(SolrIndexingJob).to have_received(:perform_later).at_least(:once)
-      end
-    end
-
-    context 'when saving and_continuing' do
-      it 'creates a new work with all fields provided' do
-        initial_work_count = Work.count
-
-        visit dashboard_form_work_versions_path
-
-        FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_grad_culminating_experiences_draft(metadata)
-        FeatureHelpers::DashboardForm.save_and_continue
-        FeatureHelpers::DashboardForm.fill_in_grad_culminating_experiences_work_details(metadata)
-        FeatureHelpers::DashboardForm.save_and_continue
-
-        expect(Work.count).to eq(initial_work_count + 1)
-        new_work = Work.last
-        expect(new_work.work_type).to eq 'masters_culminating_experience'
-        expect(new_work.versions.length).to eq 1
-
-        new_work_version = new_work.versions.last
-
-        expect(new_work_version.version_number).to eq 1
-        expect(new_work_version.title).to eq metadata[:title]
-        expect(new_work_version.description).to eq metadata[:description]
-        expect(new_work_version.published_date).to eq metadata[:published_date]
-        expect(new_work_version.sub_work_type).to eq metadata[:sub_work_type]
-        expect(new_work_version.program).to eq metadata[:program]
-        expect(new_work_version.degree).to eq metadata[:degree]
-        expect(new_work_version.keyword).to eq [metadata[:keyword]]
-
-        expect(page).to have_current_path(dashboard_form_contributors_path('work_version', new_work_version))
-        expect(SolrIndexingJob).to have_received(:perform_later).at_least(:twice)
-      end
-
-      context 'with invalid data' do
-        it 'does not save the data and rerenders the form with errors' do
-          visit dashboard_form_work_versions_path
-
-          FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_grad_culminating_experiences_draft(metadata)
-          FeatureHelpers::DashboardForm.save_and_continue
-          FeatureHelpers::DashboardForm.fill_in_grad_culminating_experiences_work_details(metadata)
-          fill_in 'work_version_description', with: ''
-          FeatureHelpers::DashboardForm.save_and_continue
-
-          new_work_version = Work.last.versions.last
-
-          expect(page).to have_current_path(dashboard_form_work_version_details_path(new_work_version))
-          expect(page).to have_content 'Description is required to publish the work'
-          expect(SolrIndexingJob).to have_received(:perform_later).once
-
-          expect(new_work_version.description).to be_nil
-          expect(new_work_version.published_date).to be_nil
-          expect(new_work_version.sub_work_type).to be_nil
-          expect(new_work_version.program).to be_nil
-          expect(new_work_version.degree).to be_nil
-        end
-      end
-    end
-
-    context 'when saving-and-continuing, then hitting cancel' do
-      it 'returns to the resource page' do
-        visit dashboard_form_work_versions_path
-
-        FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_grad_culminating_experiences_draft(metadata)
-        FeatureHelpers::DashboardForm.save_and_continue
-        FeatureHelpers::DashboardForm.fill_in_grad_culminating_experiences_work_details(metadata)
-        FeatureHelpers::DashboardForm.save_and_continue
-
-        FeatureHelpers::DashboardForm.cancel
-
-        expect(page).to have_content metadata[:title]
       end
     end
   end
@@ -1262,6 +1264,10 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).to have_no_field('work_version_source')
         expect(page).to have_no_field('work_version_version_name')
         expect(page).to have_no_field('work_version_publisher_statement')
+        expect(page).to have_no_field('work_version_based_near')
+        expect(page).to have_no_field('work_version_source')
+        expect(page).to have_no_field('work_version_version_name')
+        expect(page).to have_no_field('work_version_publisher_statement')
         expect(page).to have_field('work_version_keyword')
         expect(page).to have_field('work_version_owner')
         expect(page).to have_field('work_version_manufacturer')
@@ -1860,38 +1866,36 @@ RSpec.describe 'Publishing a work', with_user: :user do
   describe 'minting a doi', :js do
     let(:user) { work_version.work.depositor.user }
 
-    context 'with a draft eligible for doi minting' do
-      context 'when data and code pathway' do
-        let(:work) { create(:work, work_type: 'dataset', versions_count: 1, has_draft: true, doi: nil) }
-        let(:work_version) { work.versions.first }
+    context 'with an instrument draft eligible for doi minting' do
+      let(:work) { create(:work, work_type: 'instrument', versions_count: 1, has_draft: true, doi: nil) }
+      let(:work_version) { work.versions.first }
 
-        it 'renders a checkbox requesting a doi be minted upon publish' do
-          visit dashboard_form_publish_path(work_version)
+      it 'renders a checkbox requesting a doi be minted upon publish' do
+        visit dashboard_form_publish_path(work_version)
 
-          expect(page).to have_content(I18n.t('dashboard.form.publish.doi.label'))
-        end
+        expect(page).to have_content(I18n.t('dashboard.form.publish.doi.label'))
       end
+    end
 
-      context 'when instrument pathway' do
-        let(:work) { create(:work, work_type: 'instrument', versions_count: 1, has_draft: true, doi: nil) }
-        let(:work_version) { work.versions.first }
+    context 'with a data and code draft eligible for doi minting' do
+      let(:work) { create(:work, work_type: 'dataset', versions_count: 1, has_draft: true, doi: nil) }
+      let(:work_version) { work.versions.first }
 
-        it 'renders a checkbox requesting a doi be minted upon publish' do
-          visit dashboard_form_publish_path(work_version)
+      it 'renders a checkbox requesting a doi be minted upon publish' do
+        visit dashboard_form_publish_path(work_version)
 
-          expect(page).to have_content(I18n.t('dashboard.form.publish.doi.label'))
-        end
+        expect(page).to have_content(I18n.t('dashboard.form.publish.doi.label'))
       end
+    end
 
-      context 'when grad culminating experiences pathway' do
-        let(:work) { create(:work, work_type: 'masters_culminating_experience', versions_count: 1, has_draft: true, doi: nil) }
-        let(:work_version) { work.versions.first }
+    context 'when grad culminating experiences pathway' do
+      let(:work) { create(:work, work_type: 'masters_culminating_experience', versions_count: 1, has_draft: true, doi: nil) }
+      let(:work_version) { work.versions.first }
 
-        it 'renders a checkbox requesting a doi be minted upon publish' do
-          visit dashboard_form_publish_path(work_version)
+      it 'renders a checkbox requesting a doi be minted upon publish' do
+        visit dashboard_form_publish_path(work_version)
 
-          expect(page).to have_content(I18n.t('dashboard.form.publish.doi.label'))
-        end
+        expect(page).to have_content(I18n.t('dashboard.form.publish.doi.label'))
       end
     end
 

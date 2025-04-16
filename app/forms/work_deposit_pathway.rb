@@ -19,6 +19,16 @@ class WorkDepositPathway
     end
   end
 
+  def contributors_form
+    if work? && !instrument?
+      ContributorsFormBase.new(resource)
+    elsif work? && instrument?
+      Instrument::ContributorsForm.new(resource)
+    else
+      resource
+    end
+  end
+
   def publish_form
     if scholarly_works?
       ScholarlyWorks::PublishForm.new(resource)
@@ -122,14 +132,6 @@ class WorkDepositPathway
         end
       end
 
-      def show_autocomplete_form?
-        false
-      end
-
-      def imported_metadata_from_rmd?
-        imported_metadata_from_rmd == true
-      end
-
       delegate :id,
                :to_param,
                :persisted?,
@@ -154,7 +156,32 @@ class WorkDepositPathway
         attr_reader :work_version
     end
 
+    module WorkVersionDetails
+      COMMON_FIELDS = %w{
+        description
+        published_date
+        subtitle
+        keyword
+        publisher
+        related_url
+        subject
+        language
+      }.freeze
+
+      delegate :imported_metadata_from_rmd, to: :work_version, prefix: false
+
+      def show_autocomplete_form?
+        false
+      end
+
+      def imported_metadata_from_rmd?
+        imported_metadata_from_rmd == true
+      end
+    end
+
     class DetailsFormBase < WorkVersionFormBase
+      include WorkVersionDetails
+
       validates :description, presence: true
 
       validates :published_date,
@@ -162,10 +189,27 @@ class WorkDepositPathway
                 edtf_date: true
     end
 
+    class ContributorsFormBase < WorkVersionFormBase
+      delegate :creators,
+               :creators_attributes=,
+               :build_creator,
+               :contributor,
+               :contributor=,
+               to: :work_version, prefix: false
+
+      def form_partial
+        'non_instrument_work_version'
+      end
+    end
+
+    class PublishFormBase < WorkVersionFormBase
+      include WorkVersionDetails
+    end
+
     module General
       class DetailsForm < DetailsFormBase
         def self.form_fields
-          WorkVersionFormBase::COMMON_FIELDS.union(
+          WorkVersionDetails::COMMON_FIELDS.union(
             %w{
               publisher_statement
               identifier
@@ -191,7 +235,7 @@ class WorkDepositPathway
     module ScholarlyWorks
       class DetailsForm < DetailsFormBase
         def self.form_fields
-          WorkVersionFormBase::COMMON_FIELDS.union(
+          WorkVersionDetails::COMMON_FIELDS.union(
             %w{
               title
               publisher_statement
@@ -245,7 +289,7 @@ class WorkDepositPathway
     module DataAndCode
       class DetailsForm < DetailsFormBase
         def self.form_fields
-          WorkVersionFormBase::COMMON_FIELDS.union(
+          WorkVersionDetails::COMMON_FIELDS.union(
             %w{
               based_near
               source
@@ -267,9 +311,9 @@ class WorkDepositPathway
         end
       end
 
-      class PublishForm < WorkVersionFormBase
+      class PublishForm < PublishFormBase
         def self.form_fields
-          WorkVersionFormBase::COMMON_FIELDS.union(
+          WorkVersionDetails::COMMON_FIELDS.union(
             %w{
               title
               based_near
@@ -314,6 +358,7 @@ class WorkDepositPathway
                  :update_column,
                  :draft_curation_requested=,
                  :accessibility_remediation_requested=,
+                 :mint_doi_requested,
                  :mint_doi_requested=,
                  :set_thumbnail_selection,
                  to: :work_version,
@@ -335,17 +380,18 @@ class WorkDepositPathway
     end
 
     module Instrument
+      def form_partial
+        'instrument_work_version'
+      end
+
       class DetailsForm < DetailsFormBase
+        include Instrument
+
         def self.form_fields
-          WorkVersionFormBase::COMMON_FIELDS.union(
+          WorkVersionDetails::COMMON_FIELDS.union(
             %w{
               title
-              subject
-              publisher
-              subtitle
-              owner
               identifier
-              manufacturer
               model
               instrument_type
               measured_variable
@@ -363,15 +409,39 @@ class WorkDepositPathway
           delegate attr_name, to: :work_version, prefix: false
           delegate "#{attr_name}=", to: :work_version, prefix: false
         end
-
-        def form_partial
-          'instrument_work_version'
-        end
       end
 
-      class PublishForm < WorkVersionFormBase
+      class ContributorsForm < WorkVersionFormBase
+        include Instrument
+
+        delegate :creators,
+                 to: :work_version, prefix: false
+
         def self.form_fields
-          WorkVersionFormBase::COMMON_FIELDS.union(
+          %w{
+            owner
+            manufacturer
+            contributor
+          }.freeze
+        end
+
+        form_fields.each do |attr_name|
+          delegate attr_name, to: :work_version, prefix: false
+          delegate "#{attr_name}=", to: :work_version, prefix: false
+        end
+
+        def build_creator(*)
+          # No-op: Other contributor forms do build_creators but this one does not
+        end
+
+        validates :owner, :manufacturer, presence: true
+      end
+
+      class PublishForm < PublishFormBase
+        include Instrument
+
+        def self.form_fields
+          WorkVersionDetails::COMMON_FIELDS.union(
             %w{
               title
               subject
@@ -391,10 +461,10 @@ class WorkDepositPathway
               funding_reference
               rights
               depositor_agreement
-              psu_community_agreement
-              accessibility_agreement
-              sensitive_info_agreement
               contributor
+              accessibility_agreement
+              psu_community_agreement
+              sensitive_info_agreement
             }
           ).freeze
         end
@@ -412,6 +482,8 @@ class WorkDepositPathway
 
         validates :available_date,
                   edtf_date: true
+
+        validates :owner, :manufacturer, presence: true
 
         def form_partial
           'instrument_work_version'
