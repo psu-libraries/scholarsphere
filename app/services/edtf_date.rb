@@ -2,7 +2,7 @@
 
 module EdtfDate
   def self.valid?(str)
-    Date.edtf(str).present?
+    Date.edtf(str).present? || str.blank?
   end
 
   def self.humanize(str)

@@ -26,7 +26,18 @@ class WorkVersionMetadataComponent < BaseMetadataComponent
     :based_near,
     :related_url,
     :source,
-    :deposited_at
+    :deposited_at,
+    :owner,
+    :manufacturer,
+    :model,
+    :instrument_type,
+    :measured_variable,
+    :available_date,
+    :decommission_date,
+    :related_identifier,
+    :alternative_identifier,
+    :instrument_resource_type,
+    :funding_reference
   ].freeze
 
   MINI_ATTRIBUTES = [

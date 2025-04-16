@@ -67,7 +67,9 @@ class Work < ApplicationRecord
     def self.all
       general.union(scholarly_works)
         .union(data_and_code)
-        .union(grad_culminating_experiences).freeze
+        .union(instrument)
+        .union(grad_culminating_experiences)
+        .freeze
     end
 
     def self.each(&)
@@ -108,6 +110,12 @@ class Work < ApplicationRecord
       %w[
         dataset
         software_or_program_code
+      ].freeze
+    end
+
+    def self.instrument
+      %w[
+        instrument
       ].freeze
     end
 

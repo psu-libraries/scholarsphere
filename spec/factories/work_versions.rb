@@ -34,6 +34,10 @@ FactoryBot.define do
       work factory: %i[work masters_culminating_experience]
     end
 
+    trait :instrument do
+      work factory: %i[work instrument]
+    end
+
     trait :initial_draft do
       after(:build, :stub) do |work_version, evaluator|
         evaluator.work.versions.destroy_all
@@ -99,6 +103,16 @@ FactoryBot.define do
       published_date { Faker::Date.between(from: 2.years.ago, to: Date.today).iso8601 }
     end
 
+    # A draft instrument that has everything needed to pass validations and be published
+    trait :instrument_able_to_be_published do
+      instrument
+      draft
+      with_files
+      with_readme_file
+      description { Faker::Lorem.paragraph }
+      published_date { Faker::Date.between(from: 2.years.ago, to: Date.today).iso8601 }
+    end
+
     # A draft masters_culminating_experience that has everything needed to pass validations and be published
     trait :grad_culminating_experience_able_to_be_published do
       grad_culminating_experience
@@ -141,6 +155,9 @@ FactoryBot.define do
       based_near { FactoryBotHelpers.fancy_geo_location }
       related_url { Faker::Internet.url }
       source { Faker::SlackEmoji.emoji }
+      owner { Faker::Book.author }
+      manufacturer { Faker::Company.name }
+      model { Faker::Number.leading_zero_number(digits: 5) }
       sub_work_type { 'Capstone Project' }
       program { 'Computer Science' }
       degree { 'Master of Science' }

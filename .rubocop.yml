@@ -156,6 +156,7 @@ Style/EmptyCaseCondition:
 Layout/LineLength:
   Exclude:
     - 'spec/features/dashboard/work_version_form_spec.rb'
+    - 'spec/forms/work_deposit_pathways/instrument/publish_form_spec.rb'
 
 RSpec/ReceiveMessages:
   Exclude:
