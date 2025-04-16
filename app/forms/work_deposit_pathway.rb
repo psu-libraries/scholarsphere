@@ -428,7 +428,7 @@ class WorkDepositPathway
         end
 
         def build_creator(*)
-          # No-op
+          # No-op: Other contributor forms do build_creators but this one does not
         end
 
         validates :owner, :manufacturer, presence: true
