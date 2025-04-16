@@ -191,10 +191,6 @@ class WorkDepositPathway
 
     class ContributorsFormBase < WorkVersionFormBase
       delegate :creators,
-               :creators_attributes=,
-               :build_creator,
-               :contributor,
-               :contributor=,
                to: :work_version, prefix: false
 
       def form_partial
@@ -413,6 +409,9 @@ class WorkDepositPathway
 
       class ContributorsForm < WorkVersionFormBase
         include Instrument
+
+        delegate :creators,
+                 to: :work_version, prefix: false
 
         def self.form_fields
           %w{
