@@ -41,6 +41,42 @@ RSpec.describe AccessibilityCheckResult do
     end
   end
 
+  describe 'after_commit callbacks' do
+    let(:detailed_report) {
+      { 'Detailed Report' => { 'Status' => 'Something' } }
+    }
+
+    before do
+      accessibility_check_result.save!
+      allow(accessibility_check_result).to receive(:broadcast_to_file_version_memberships)
+      allow(accessibility_check_result).to receive(:broadcast_publish_status)
+    end
+
+    context 'when create' do
+      it 'calls broadcast_to_file_version_memberships and broadcast_publish_status' do
+        accessibility_check_result.save!
+        expect(accessibility_check_result).to have_received(:broadcast_to_file_version_memberships)
+        expect(accessibility_check_result).to have_received(:broadcast_publish_status)
+      end
+    end
+
+    context 'when update' do
+      it 'calls broadcast_to_file_version_memberships and broadcast_publish_status' do
+        accessibility_check_result.update!(detailed_report: { 'Detailed Report' => {} })
+        expect(accessibility_check_result).to have_received(:broadcast_to_file_version_memberships)
+        expect(accessibility_check_result).to have_received(:broadcast_publish_status)
+      end
+    end
+
+    context 'when destroy' do
+      it 'does not call broadcast_to_file_version_memberships or broadcast_publish_status' do
+        accessibility_check_result.destroy!
+        expect(accessibility_check_result).not_to have_received(:broadcast_to_file_version_memberships)
+        expect(accessibility_check_result).not_to have_received(:broadcast_publish_status)
+      end
+    end
+  end
+
   describe '#score' do
     let(:detailed_report) {
         { 'Detailed Report' => {

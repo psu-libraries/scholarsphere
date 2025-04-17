@@ -3,8 +3,8 @@
 class AccessibilityCheckResult < ApplicationRecord
   belongs_to :file_resource
 
-  after_commit :broadcast_to_file_version_memberships
-  after_commit :broadcast_publish_status
+  after_commit :broadcast_to_file_version_memberships, on: [:create, :update]
+  after_commit :broadcast_publish_status, on: [:create, :update]
 
   validates :detailed_report, presence: true
 
