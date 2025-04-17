@@ -7,6 +7,9 @@ class WorkVersion < ApplicationRecord
   include GeneratedUuids
   include UpdatingDois
 
+  after_validation :remove_duplicate_errors
+  before_save :reset_irrelevant_fields_if_work_type_changed
+
   fields_with_dois :doi, :identifier
 
   has_paper_trail
@@ -40,7 +43,6 @@ class WorkVersion < ApplicationRecord
                  available_date: :string,
                  decommission_date: :string,
                  related_identifier: :string,
-                 alternative_identifier: :string,
                  instrument_resource_type: :string,
                  funding_reference: :string,
                  sub_work_type: :string,
@@ -202,7 +204,6 @@ class WorkVersion < ApplicationRecord
   validates_with ChangedWorkVersionValidator,
                  if: :published?
 
-  after_validation :remove_duplicate_errors
   after_commit :perform_update_index, on: [:create, :update]
 
   attr_accessor :force_destroy
@@ -278,7 +279,6 @@ class WorkVersion < ApplicationRecord
     available_date
     decommission_date
     related_identifier
-    alternative_identifier
     instrument_resource_type
     funding_reference
     sub_work_type
@@ -401,6 +401,15 @@ class WorkVersion < ApplicationRecord
            :thumbnail_url, to: :work
 
   private
+
+    def reset_irrelevant_fields_if_work_type_changed
+      return unless work.will_save_change_to_work_type?
+
+      fields_to_reset = WorkDepositPathway.new(self).fields_to_reset(work.work_type_before_last_save || work.work_type_was)
+      fields_to_reset.each do |field|
+        send(:"#{field}=", nil)
+      end
+    end
 
     def perform_update_index
       indexing_source.call(self)

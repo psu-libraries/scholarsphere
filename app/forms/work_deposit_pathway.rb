@@ -80,6 +80,10 @@ class WorkDepositPathway
     Work::Types.grad_culminating_experiences.include?(work_type)
   end
 
+  def fields_to_reset(original_work_type)
+    pathway_fields(original_work_type) - pathway_fields(work_type)
+  end
+
   private
 
     attr_reader :resource
@@ -88,6 +92,23 @@ class WorkDepositPathway
 
     def scholarly_works?
       Work::Types.scholarly_works.include?(work_type)
+    end
+
+    def pathway_fields(work_type)
+      module_mapping = {
+        Work::Types.scholarly_works => ScholarlyWorks,
+        Work::Types.data_and_code => DataAndCode,
+        Work::Types.grad_culminating_experiences => GradCulminatingExperiences,
+        Work::Types.instrument => Instrument
+      }
+
+      mod = module_mapping.find { |types, _| types.include?(work_type) }&.last
+
+      if mod
+        mod::DetailsForm.form_fields.union(mod::PublishForm.form_fields)
+      else
+        General::DetailsForm.form_fields.union(WorkVersionFormBase::COMMON_PUBLISH_FIELDS)
+      end
     end
 
     class WorkVersionFormBase
@@ -99,6 +120,16 @@ class WorkDepositPathway
         keyword
         related_url
         language
+      }.freeze
+
+      COMMON_PUBLISH_FIELDS = %w{
+        title
+        rights
+        depositor_agreement
+        psu_community_agreement
+        accessibility_agreement
+        sensitive_info_agreement
+        contributor
       }.freeze
 
       def initialize(work_version)
@@ -263,7 +294,7 @@ class WorkDepositPathway
 
       class PublishForm < SimpleDelegator
         def self.form_fields
-          WorkVersionFormBase::COMMON_FIELDS.union(
+          WorkVersionFormBase::COMMON_FIELDS.union(WorkVersionFormBase::COMMON_PUBLISH_FIELDS).union(
             %w{
               subject
               publisher
@@ -313,18 +344,12 @@ class WorkDepositPathway
 
       class PublishForm < PublishFormBase
         def self.form_fields
-          WorkVersionDetails::COMMON_FIELDS.union(
+          WorkVersionFormBase::COMMON_FIELDS.union(WorkVersionFormBase::COMMON_PUBLISH_FIELDS).union(
             %w{
               title
               based_near
               source
               version_name
-              rights
-              depositor_agreement
-              psu_community_agreement
-              accessibility_agreement
-              sensitive_info_agreement
-              contributor
               subject
               publisher
               subtitle
@@ -392,13 +417,15 @@ class WorkDepositPathway
             %w{
               title
               identifier
+              subject
+              publisher
+              subtitle
               model
               instrument_type
               measured_variable
               available_date
               decommission_date
               related_identifier
-              alternative_identifier
               instrument_resource_type
               funding_reference
             }
@@ -441,7 +468,7 @@ class WorkDepositPathway
         include Instrument
 
         def self.form_fields
-          WorkVersionDetails::COMMON_FIELDS.union(
+          WorkVersionDetails::COMMON_FIELDS.union(WorkVersionFormBase::COMMON_PUBLISH_FIELDS).union(
             %w{
               title
               subject
@@ -456,15 +483,8 @@ class WorkDepositPathway
               available_date
               decommission_date
               related_identifier
-              alternative_identifier
               instrument_resource_type
               funding_reference
-              rights
-              depositor_agreement
-              contributor
-              accessibility_agreement
-              psu_community_agreement
-              sensitive_info_agreement
             }
           ).freeze
         end
@@ -554,18 +574,12 @@ class WorkDepositPathway
         REQUIRE_FIELDS.each { |f| validates f.to_sym, presence: true }
 
         def self.form_fields
-          WorkVersionFormBase::COMMON_FIELDS.union(
+          WorkVersionFormBase::COMMON_FIELDS.union(WorkVersionFormBase::COMMON_PUBLISH_FIELDS).union(
             REQUIRE_FIELDS
           ).union(
             %w{
               title
-              rights
-              depositor_agreement
-              contributor
               mint_doi_requested
-              psu_community_agreement
-              accessibility_agreement
-              sensitive_info_agreement
             }
           ).freeze
         end

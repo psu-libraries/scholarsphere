@@ -476,6 +476,48 @@ RSpec.describe 'Publishing a work', with_user: :user do
       end
     end
 
+    context 'when changing the work type to a different pathway' do
+      it 'removes only values for fields specific to the former pathway' do
+        visit dashboard_form_work_versions_path
+
+        FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_grad_culminating_experiences_draft(metadata)
+        FeatureHelpers::DashboardForm.save_and_continue
+        FeatureHelpers::DashboardForm.fill_in_grad_culminating_experiences_work_details(metadata)
+        FeatureHelpers::DashboardForm.save_and_continue
+
+        new_work = Work.last
+        expect(new_work.work_type).to eq 'masters_culminating_experience'
+        expect(new_work.versions.length).to eq 1
+
+        new_work_version = new_work.versions.last
+
+        expect(new_work_version.version_number).to eq 1
+        expect(new_work_version.title).to eq metadata[:title]
+        expect(new_work_version.description).to eq metadata[:description]
+        expect(new_work_version.published_date).to eq metadata[:published_date]
+        expect(new_work_version.sub_work_type).to eq metadata[:sub_work_type]
+        expect(new_work_version.program).to eq metadata[:program]
+        expect(new_work_version.degree).to eq metadata[:degree]
+        expect(new_work_version.keyword).to eq [metadata[:keyword]]
+
+        click_on 'Work Type'
+
+        FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_scholarly_works_draft(metadata)
+        FeatureHelpers::DashboardForm.save_and_continue
+
+        expect(new_work.reload.work_type).to eq 'article'
+        expect(new_work.reload.versions.length).to eq 1
+        expect(new_work_version.reload.version_number).to eq 1
+        expect(new_work_version.reload.title).to eq metadata[:title]
+        expect(new_work_version.reload.description).to eq metadata[:description]
+        expect(new_work_version.reload.published_date).to eq metadata[:published_date]
+        expect(new_work_version.reload.sub_work_type).to be_nil
+        expect(new_work_version.reload.program).to be_nil
+        expect(new_work_version.reload.degree).to be_nil
+        expect(new_work_version.reload.keyword).to eq [metadata[:keyword]]
+      end
+    end
+
     context 'when selecting a work type that uses the instrument deposit pathway' do
       it 'shows only the fields for instrument works' do
         visit dashboard_form_work_versions_path
@@ -1276,7 +1318,6 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).to have_field('work_version_available_date')
         expect(page).to have_field('work_version_decommission_date')
         expect(page).to have_field('work_version_related_identifier')
-        expect(page).to have_field('work_version_alternative_identifier')
         expect(page).to have_field('work_version_instrument_resource_type')
         expect(page).to have_field('work_version_funding_reference')
       end

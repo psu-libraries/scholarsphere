@@ -29,9 +29,11 @@
       <%= render 'curation', form: form %>
     <% end %>
 
+  <!-- Remove while remediation request is unavailable
     <% if allow_accessibility_remediation? || @resource.accessibility_remediation_requested %>
       <%= render 'remediation', form: form %>
     <% end %>
+  -->
 
     <% if allow_mint_doi? %>
       <%= render 'doi', form: form %>

@@ -36,7 +36,6 @@ class AllWorkVersionsReport
       available_date
       decommission_date
       related_identifier
-      alternative_identifier
       instrument_resource_type
       funding_reference
       sub_work_type
@@ -86,7 +85,6 @@ class AllWorkVersionsReport
           wv.available_date,
           wv.decommission_date,
           wv.related_identifier,
-          wv.alternative_identifier,
           wv.instrument_resource_type,
           wv.funding_reference,
           wv.sub_work_type,
