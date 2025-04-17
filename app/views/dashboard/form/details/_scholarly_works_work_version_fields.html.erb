@@ -6,6 +6,6 @@
   <%= render 'form_fields/text_area', form: form, attribute: :publisher_statement %>
   <%= render 'form_fields/multi_text', form: form,
                                        attribute: :identifier,
-                                       readonly: @resource.imported_metadata_from_rmd? %>
+                                       readonly: @resource.imported_metadata_from_rmd? && !current_user.admin? %>
   <%= render 'dashboard/form/details/common_work_version_optional_fields', form: form %>
 </div>
