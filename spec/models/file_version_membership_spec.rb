@@ -50,7 +50,7 @@ RSpec.describe FileVersionMembership do
     context 'when the file_resource is not orphaned' do
       it 'does not destroy the file_resource' do
         file_version_membership1 = create(:file_version_membership, file_resource: file_resource)
-        file_version_membership2 = create(:file_version_membership, file_resource: file_resource)
+        create(:file_version_membership, file_resource: file_resource)
         expect(FileResource.exists?(file_resource.id)).to be true
 
         file_version_membership1.destroy

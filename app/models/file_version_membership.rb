@@ -4,11 +4,10 @@ class FileVersionMembership < ApplicationRecord
   belongs_to :work_version
   belongs_to :file_resource
 
+  before_validation :initialize_title, on: :create
   after_destroy :destroy_file_if_orphaned
 
   default_scope { order(title: :asc) }
-
-  before_validation :initialize_title, on: :create
 
   validates :title,
             presence: true,

@@ -1,11 +1,10 @@
-namespace :cleanup do
-  desc "Destroy orphaned file resources"
-  task destroy_orphaned_file_resources: :environment do
-    orphaned_file_resources = FileResource.left_joins(:file_version_memberships)
-                                          .where(file_version_memberships: { id: nil })
+# frozen_string_literal: true
 
-    orphaned_file_resources.each do |file_resource|
-      file_resource.destroy
-    end
+namespace :cleanup do
+  desc 'Destroy orphaned file resources'
+  task destroy_orphaned_file_resources: :environment do
+    orphaned_file_resources = FileResource.where.missing(:file_version_memberships)
+
+    orphaned_file_resources.each(&:destroy)
   end
 end
