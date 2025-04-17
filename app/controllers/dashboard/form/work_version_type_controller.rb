@@ -23,15 +23,8 @@ module Dashboard
 
       def update
         @resource = WorkVersion.includes(:work).find(params[:id])
-        original_work_type = @resource.work_type
         authorize(@resource)
         @resource.attributes = work_version_params
-        if original_work_type != @resource.work_type
-          fields_to_reset = WorkDepositPathway.new(@resource).fields_to_reset(original_work_type)
-          fields_to_reset.each do |field|
-            @resource.send(:"#{field}=", nil)
-          end
-        end
         process_response(on_error: :edit)
       end
 

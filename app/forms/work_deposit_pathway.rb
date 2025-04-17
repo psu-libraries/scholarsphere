@@ -95,15 +95,17 @@ class WorkDepositPathway
     end
 
     def pathway_fields(work_type)
-      if Work::Types.scholarly_works.include?(work_type)
-        ScholarlyWorks::DetailsForm.form_fields.union(ScholarlyWorks::PublishForm.form_fields)
-      elsif Work::Types.data_and_code.include?(work_type)
-        DataAndCode::DetailsForm.form_fields.union(DataAndCode::PublishForm.form_fields)
-      elsif Work::Types.grad_culminating_experiences.include?(work_type)
-        GradCulminatingExperiences::DetailsForm.form_fields.union(GradCulminatingExperiences::PublishForm.form_fields)
-        # will need to add instruments once that pathway is merged
-        # elsif Work::Types.instrument.include?(work_type)
-        # Instrument::DetailsForm.form_fields.union(Instrument::PublishForm.form_fields)
+      module_mapping = {
+        Work::Types.scholarly_works => ScholarlyWorks,
+        Work::Types.data_and_code => DataAndCode,
+        Work::Types.grad_culminating_experiences => GradCulminatingExperiences,
+        Work::Types.instrument => Instrument
+      }
+
+      mod = module_mapping.find { |types, _| types.include?(work_type) }&.last
+
+      if mod
+        mod::DetailsForm.form_fields.union(mod::PublishForm.form_fields)
       else
         General::DetailsForm.form_fields.union(WorkVersionFormBase::COMMON_PUBLISH_FIELDS)
       end
@@ -415,13 +417,15 @@ class WorkDepositPathway
             %w{
               title
               identifier
+              subject
+              publisher
+              subtitle
               model
               instrument_type
               measured_variable
               available_date
               decommission_date
               related_identifier
-              alternative_identifier
               instrument_resource_type
               funding_reference
             }
@@ -464,7 +468,7 @@ class WorkDepositPathway
         include Instrument
 
         def self.form_fields
-          WorkVersionDetails::COMMON_FIELDS.union(
+          WorkVersionDetails::COMMON_FIELDS.union(WorkVersionFormBase::COMMON_PUBLISH_FIELDS).union(
             %w{
               title
               subject
@@ -479,15 +483,8 @@ class WorkDepositPathway
               available_date
               decommission_date
               related_identifier
-              alternative_identifier
               instrument_resource_type
               funding_reference
-              rights
-              depositor_agreement
-              contributor
-              accessibility_agreement
-              psu_community_agreement
-              sensitive_info_agreement
             }
           ).freeze
         end
