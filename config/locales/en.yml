@@ -95,7 +95,6 @@ en:
         available_date: Available Date
         decommission_date: Decommissioned Date
         related_identifier: Related Identifier
-        alternative_identifier: Alternative Identifier
         instrument_resource_type: Instrument Resource Type
         funding_reference: Funding Reference
         sub_work_type: Sub Work Type

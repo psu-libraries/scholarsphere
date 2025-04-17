@@ -22,7 +22,6 @@ RSpec.describe WorkDepositPathway::Instrument::PublishForm, type: :model do
       available_date: '2022',
       decommission_date: '2024',
       related_identifier: 'test related id',
-      alternative_identifier: 'test alternative id',
       instrument_resource_type: 'test resource type',
       funding_reference: 'test funding ref'
     )
@@ -92,7 +91,6 @@ RSpec.describe WorkDepositPathway::Instrument::PublishForm, type: :model do
         available_date
         decommission_date
         related_identifier
-        alternative_identifier
         instrument_resource_type
         funding_reference
         description
@@ -130,7 +128,6 @@ RSpec.describe WorkDepositPathway::Instrument::PublishForm, type: :model do
           available_date: '2022',
           decommission_date: '2024',
           related_identifier: 'test related id',
-          alternative_identifier: 'test alternative id',
           instrument_resource_type: 'test resource type',
           funding_reference: 'test funding ref'
         }

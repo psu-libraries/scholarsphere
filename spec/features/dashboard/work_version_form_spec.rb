@@ -1318,7 +1318,6 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).to have_field('work_version_available_date')
         expect(page).to have_field('work_version_decommission_date')
         expect(page).to have_field('work_version_related_identifier')
-        expect(page).to have_field('work_version_alternative_identifier')
         expect(page).to have_field('work_version_instrument_resource_type')
         expect(page).to have_field('work_version_funding_reference')
       end

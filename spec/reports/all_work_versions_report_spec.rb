@@ -40,7 +40,6 @@ RSpec.describe AllWorkVersionsReport do
       available_date
       decommission_date
       related_identifier
-      alternative_identifier
       instrument_resource_type
       funding_reference
       sub_work_type
@@ -120,19 +119,18 @@ RSpec.describe AllWorkVersionsReport do
         expect(row[26]).to eq version.available_date
         expect(row[27]).to eq version.decommission_date
         expect(row[28]).to eq version.related_identifier
-        expect(row[29]).to eq version.alternative_identifier
-        expect(row[30]).to eq version.instrument_resource_type
-        expect(row[31]).to eq version.funding_reference
-        expect(row[32]).to eq version.sub_work_type
-        expect(row[33]).to eq version.program
-        expect(row[34]).to eq version.degree
+        expect(row[29]).to eq version.instrument_resource_type
+        expect(row[30]).to eq version.funding_reference
+        expect(row[31]).to eq version.sub_work_type
+        expect(row[32]).to eq version.program
+        expect(row[33]).to eq version.degree
       end
 
       # Spot check view statistics
-      expect(yielded_rows[0][35]).to eq 6
-      expect(yielded_rows[1][35]).to eq 0
-      expect(yielded_rows[2][35]).to eq 1
-      expect(yielded_rows[3][35]).to eq 0
+      expect(yielded_rows[0][34]).to eq 6
+      expect(yielded_rows[1][34]).to eq 0
+      expect(yielded_rows[2][34]).to eq 1
+      expect(yielded_rows[3][34]).to eq 0
     end
   end
 end

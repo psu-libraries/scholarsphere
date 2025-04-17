@@ -576,7 +576,6 @@ RSpec.describe Work do
           removed_at_dtsi
           withdrawn_at_dtsi
           imported_metadata_from_rmd_tesim
-          alternative_identifier_tesim
           instrument_type_tesim
           available_date_tesim
           decommission_date_tesim

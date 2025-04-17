@@ -70,7 +70,6 @@ module Dashboard
               :available_date,
               :decommission_date,
               :related_identifier,
-              :alternative_identifier,
               :instrument_resource_type,
               :funding_reference,
               :sub_work_type,
