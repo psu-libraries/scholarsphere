@@ -15,6 +15,16 @@ RSpec.describe 'Setting visibility in the dashboard', with_user: :user do
     end
   end
 
+  context 'when the work uses the Grad Culminating Experience pathway' do
+    let(:work_version) { create(:work_version, :grad_culminating_experience_able_to_be_published, :initial_draft) }
+
+    it 'does not allow the visibility to be changed' do
+      visit dashboard_form_publish_path(work_version)
+
+      expect(page).to have_no_field('Penn State Only')
+    end
+  end
+
   context 'when the work uses the Scholarly Works pathway' do
     context 'when changing from public to Penn State' do
       let(:work) { create(:work, :article) }

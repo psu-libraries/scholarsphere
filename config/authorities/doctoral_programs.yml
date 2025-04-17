@@ -1,0 +1,29 @@
+terms:
+- id: BUSA
+  term: Business Administration
+  active: true
+- id: EDUC
+  term: Education
+  active: true
+- id: EDLDR
+  term: Educational Leadership
+  active: true
+- id: ENG
+  term: Engineering
+  active: true
+- id: HIED
+  term: Higher Education
+  active: true
+- id: LLAED
+  term: Lifelong Learning and Adult Education
+  active: true
+- id: NURS
+  term: Nursing
+  active: true
+- id: PH
+  term: Public Health
+  active: true
+- id: PERF
+  term: Piano Performance
+  active: true
+  

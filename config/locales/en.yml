@@ -129,6 +129,7 @@ en:
           attributes:
             embargoed_until:
               max: maximum is four years
+              grad_max: maximum is two years
   activemodel:
     attributes:
       depositor_form:
@@ -265,6 +266,7 @@ en:
         owner: Organization or individual that manages the instrument.
         manufacturer: Organization or individual that built the instrument.
         rights: The license you select determines how your work can be used by others. [Read More](https://docs.scholarsphere.psu.edu/guides/licenses/)
+        contributor: If applicable, please include a brief acknowledgment of any funding sources that supported your research. This helps ensure proper attribution and increases the visibility of your funder’s contribution.
       autocomplete_work_form:
         doi: Please enter a valid DOI (e.g. https://doi.org/10.xxxx/xxxxxx or 10.xxxx/xxxxxx)
       actor:
