@@ -4,6 +4,8 @@ class FileVersionMembership < ApplicationRecord
   belongs_to :work_version
   belongs_to :file_resource
 
+  after_destroy :destroy_file_if_orphaned
+
   default_scope { order(title: :asc) }
 
   before_validation :initialize_title, on: :create
@@ -78,5 +80,9 @@ class FileVersionMembership < ApplicationRecord
       return if title.blank? || File.extname(title) == File.extname(original_filename)
 
       errors.add(:title, :different_extension, original: original_filename)
+    end
+
+    def destroy_file_if_orphaned
+      file_resource.destroy if file_resource.file_version_memberships.reload.empty?
     end
 end
