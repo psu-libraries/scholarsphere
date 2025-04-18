@@ -416,7 +416,6 @@ class WorkDepositPathway
           WorkVersionDetails::COMMON_FIELDS.union(
             %w{
               title
-              identifier
               subject
               publisher
               subtitle
@@ -475,7 +474,6 @@ class WorkDepositPathway
               publisher
               subtitle
               owner
-              identifier
               manufacturer
               model
               instrument_type

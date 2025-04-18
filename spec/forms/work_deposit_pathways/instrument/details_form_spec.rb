@@ -36,7 +36,6 @@ RSpec.describe WorkDepositPathway::Instrument::DetailsForm, type: :model do
     it "returns a frozen array of the names of the form's fields" do
       expect(described_class.form_fields).to match_array %w{
         title
-        identifier
         model
         instrument_type
         measured_variable
