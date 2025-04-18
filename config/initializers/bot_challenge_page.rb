@@ -23,12 +23,8 @@ Rails.application.config.to_prepare do
     '/catalog'
   ]
 
-  # allow rate_limit_count requests in rate_limit_period, before issuing challenge
-  BotChallengePage::BotChallengePageController.bot_challenge_config.rate_limit_period = 36.hours
-  BotChallengePage::BotChallengePageController.bot_challenge_config.rate_limit_count = 3
-
-  BotChallengePage::BotChallengePageController.bot_challenge_config.challenge_renderer = -> {
-    render 'pages/challenge', layout: 'frontend'
+  BotChallengePage::BotChallengePageController.bot_challenge_config.challenge_renderer = ->  {
+    render 'pages/challenge', layout: "frontend"
   }
 
   # Exempt some requests from bot challenge protection
