@@ -3,6 +3,7 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+  post "/challenge", to: "bot_challenge_page/bot_challenge_page#verify_challenge", as: :bot_detect_challenge
   default_url_options protocol: ENV.fetch('DEFAULT_URL_PROTOCOL', 'http'),
                       host: ENV.fetch('DEFAULT_URL_HOST', 'localhost:3000')
 

@@ -27,5 +27,16 @@ Rails.application.config.to_prepare do
   BotChallengePage::BotChallengePageController.bot_challenge_config.rate_limit_period = 36.hours
   BotChallengePage::BotChallengePageController.bot_challenge_config.rate_limit_count = 3
 
-  BotChallengePage::BotChallengePageController.rack_attack_init
+  # Exempt some requests from bot challenge protection
+  # BotChallengePage::BotChallengePageController.bot_challenge_config.allow_exempt = ->(controller) {
+  #   # controller.params
+  #   # controller.request
+  #   # controller.session
+
+  #   # Here's a way to identify browser `fetch` API requests; note
+  #   # it can be faked by an "attacker"
+  #   controller.request.headers["sec-fetch-dest"] == "empty"
+  # }
+
+  # More configuration is available
 end
