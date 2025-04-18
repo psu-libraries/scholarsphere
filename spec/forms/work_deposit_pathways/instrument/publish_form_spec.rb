@@ -83,7 +83,6 @@ RSpec.describe WorkDepositPathway::Instrument::PublishForm, type: :model do
       expect(described_class.form_fields).to match_array %w{
         title
         owner
-        identifier
         manufacturer
         model
         instrument_type

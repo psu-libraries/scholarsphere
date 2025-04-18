@@ -727,7 +727,7 @@ RSpec.describe WorkDepositPathway do
 
       context 'when the original type was instrument' do
         it 'returns the fields in instrument that are not in data and code' do
-          expect(pathway.fields_to_reset(instrument)).to contain_exactly('identifier', 'model', 'instrument_type', 'measured_variable', 'available_date',
+          expect(pathway.fields_to_reset(instrument)).to contain_exactly('model', 'instrument_type', 'measured_variable', 'available_date',
                                                                          'decommission_date', 'related_identifier', 'instrument_resource_type',
                                                                          'funding_reference', 'owner', 'manufacturer')
         end
@@ -751,7 +751,7 @@ RSpec.describe WorkDepositPathway do
 
       context 'when the original type was instrument' do
         it 'returns the fields in instrument that are not in grad culminating experience' do
-          expect(pathway.fields_to_reset(instrument)).to contain_exactly('identifier', 'subject', 'publisher', 'subtitle', 'model', 'instrument_type',
+          expect(pathway.fields_to_reset(instrument)).to contain_exactly('subject', 'publisher', 'subtitle', 'model', 'instrument_type',
                                                                          'measured_variable', 'available_date', 'decommission_date', 'related_identifier',
                                                                          'instrument_resource_type', 'funding_reference', 'owner', 'manufacturer')
         end
@@ -782,13 +782,13 @@ RSpec.describe WorkDepositPathway do
 
       context 'when the original type was general' do
         it 'returns the fields in general that are not in instrument' do
-          expect(pathway.fields_to_reset(general)).to contain_exactly('publisher_statement', 'based_near', 'source', 'version_name')
+          expect(pathway.fields_to_reset(general)).to contain_exactly('identifier', 'publisher_statement', 'based_near', 'source', 'version_name')
         end
       end
 
       context 'when original type was scholarly work' do
         it 'returns the fields in scholarly work that are not in instrument' do
-          expect(pathway.fields_to_reset(scholarly_work)).to contain_exactly('publisher_statement')
+          expect(pathway.fields_to_reset(scholarly_work)).to contain_exactly('identifier', 'publisher_statement')
         end
       end
 
