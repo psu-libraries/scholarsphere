@@ -19,27 +19,13 @@ Rails.application.config.to_prepare do
       '1x0000000000000000000000000000000AA'
     )
 
-  BotChallengePage::BotChallengePageController.bot_challenge_config.redirect_for_challenge = false
+  BotChallengePage::BotChallengePageController.bot_challenge_config.rate_limited_locations = [
+    '/catalog'
+  ]
 
-  # How long will a challenge success exempt a session from further challenges?
-  BotChallengePage::BotChallengePageController.bot_challenge_config.session_passed_good_for = 2.seconds
-  # #BotChallengePage::BotChallengePageController.bot_challenge_config.allow_exempt = ->(controller, _config) {
-  # Does not challenge the user if they are not making a search (EG "About Page")
-  # Does not challenge "Good Bots" – we have another layer of filters so Header containing "Bot" should be legit
-  # #controller.params[:search_field] == nil || !!(controller.request.headers['User-Agent'] =~ /bot|nagios-plugins/i)
-  # #}
-  # BotChallengePage::BotChallengePageController.bot_challenge_config.allow_exempt = ->(controller) {
+  # allow rate_limit_count requests in rate_limit_period, before issuing challenge
+  BotChallengePage::BotChallengePageController.bot_challenge_config.rate_limit_period = 36.hours
+  BotChallengePage::BotChallengePageController.bot_challenge_config.rate_limit_count = 3
 
-  # Exempt some requests from bot challenge protection
-  # BotChallengePage::BotChallengePageController.bot_challenge_config.allow_exempt = ->(controller) {
-  #   # controller.params
-  #   # controller.request
-  #   # controller.session
-
-  #   # Here's a way to identify browser `fetch` API requests; note
-  #   # it can be faked by an "attacker"
-  #   controller.request.headers["sec-fetch-dest"] == "empty"
-  # }
-
-  # More configuration is available
+  BotChallengePage::BotChallengePageController.rack_attack_init
 end
