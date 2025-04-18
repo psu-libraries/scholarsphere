@@ -3,7 +3,6 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
-  post '/challenge', to: 'bot_challenge_page/bot_challenge_page#verify_challenge', as: :bot_detect_challenge
   default_url_options protocol: ENV.fetch('DEFAULT_URL_PROTOCOL', 'http'),
                       host: ENV.fetch('DEFAULT_URL_HOST', 'localhost:3000')
 
@@ -184,4 +183,7 @@ Rails.application.routes.draw do
   # lead to an extraordinarily unlikely false positive, but it would never lead to a false negative.
   get '/concern/generic_works/:id', to: 'legacy_urls#v3'
   get '/collections/:id', to: 'legacy_urls#v3'
+
+  # Bot challenge page
+  post '/challenge', to: 'bot_challenge_page/bot_challenge_page#verify_challenge', as: :bot_detect_challenge
 end
