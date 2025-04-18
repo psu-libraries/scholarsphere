@@ -11,6 +11,7 @@ gem 'airrecord'
 gem 'blacklight', '~> 7.38'
 gem 'blacklight_oai_provider', github: 'projectblacklight/blacklight_oai_provider', ref: '7728dba'
 gem 'bootsnap', '>= 1.4.2', require: false
+gem 'bot_challenge_page', '~> 0.3.1'
 gem 'browser'
 gem 'bugsnag', '~> 6.26'
 gem 'cocoon'
