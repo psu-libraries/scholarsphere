@@ -1,0 +1,30 @@
+<%# Override the default challenge page just to add "ml-5" because the css override won't work %>
+<div class="bot_challenge_page ml-5">
+  <h1 class="mb-4"><%= t('bot_challenge_page.title') %></h1>
+
+  <%= render "bot_challenge_page/turnstile_widget_placeholder", bot_challenge_config: @bot_challenge_config %>
+
+  <noscript>
+    <div class="alert alert-danger"><%= t('bot_challenge_page.noscript') %></div>
+  </noscript>
+
+  <%= t('bot_challenge_page.blurb_html') %>
+
+  <template id="botChallengePageErrorTemplate">
+    <div class="alert alert-danger" role="alert">
+      <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+      <%= t('bot_challenge_page.error') %>
+    </div>
+  </template>
+
+  <template id="botChallengePageStillAroundTemplate" data-still_around_delay_ms="<%= @bot_challenge_config.still_around_delay_ms %>">
+    <div class="alert alert-info" role="alert">
+      <i class="fa fa-info-circle" aria-hidden="true"></i>
+      <%= t('bot_challenge_page.still_around') %>
+    </div>
+  </template>
+
+  <script src="<%= @bot_challenge_config.cf_turnstile_js_url %>" async defer></script>
+
+  <%= render "bot_challenge_page/local_turnstile_script_tag", bot_challenge_config: @bot_challenge_config %>
+</div>

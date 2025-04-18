@@ -27,6 +27,10 @@ Rails.application.config.to_prepare do
   BotChallengePage::BotChallengePageController.bot_challenge_config.rate_limit_period = 36.hours
   BotChallengePage::BotChallengePageController.bot_challenge_config.rate_limit_count = 3
 
+  BotChallengePage::BotChallengePageController.bot_challenge_config.challenge_renderer = ->  {
+    render 'pages/challenge', layout: "frontend"
+  }
+
   # Exempt some requests from bot challenge protection
   # BotChallengePage::BotChallengePageController.bot_challenge_config.allow_exempt = ->(controller) {
   #   # controller.params
