@@ -6,7 +6,7 @@
   <%= render 'meta_tags', resource: work_version, uuid: params[:id] %>
 <% end %>
 
-<%= content_for :navbar_items do %>
+<%= content_for :top_section_items do %>
   <% if current_user.admin? %>
     <li class="nav-item py-1">
       <a class="btn btn-outline-light btn--squish mr-lg-2 qa-edit-version"

@@ -616,7 +616,7 @@ h4,
 
   &--actions {
     padding: $spacer;
-
+    background-color: $white;
     @include media-breakpoint-up(md) {
       > .pull-left,
         .pull-right {
@@ -1467,4 +1467,5 @@ dialog {
   border: 1px solid $gray-300;
   border-radius: $border-radius;
   max-width: 50%;
+  font-family: $slab-font-family;
 }

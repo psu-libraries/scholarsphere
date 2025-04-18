@@ -1,0 +1,16 @@
+<div id="offcanvasMain" class="offcanvas offcanvas-end offcanvas_main" tabindex="-1">
+  <div class="offcanvas-header">
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <div class="region region-nav-offcanvas">
+      <nav role="navigation" aria-labelledby="block-alumni-mainnavigation-2-menu" id="block-alumni-mainnavigation-2" class="block block-menu navigation menu--main">
+        <div id="block-alumni-mainnavigation-2-menu" class="visually-hidden block-menu--title block-menu--title--main">Main navigation</div>
+          <div class="sidebar-menu sidebar-menu--main">
+            <%= render partial: 'shared/navbar_links', locals: { current_location: params[:action] } %>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </div>
+</div>

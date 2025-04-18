@@ -1,8 +1,7 @@
 <% primary_action = local_assigns.fetch(:primary_action, :save_and_continue) %>
 <% secondary_action = current_user.admin? ? :admin_save : param_key %>
 
-<footer class="footer footer--actions footer--fixed d-flex justify-content-center">
-  <div>
+<div class="footer footer--actions footer--fixed d-flex justify-content-center">
 <span data-controller="publish-status"
       data-publish-status-allow-publish="<%= allow_publish? %>"
       data-publish-status-primary-action="<%= primary_action %>">
@@ -37,7 +36,6 @@
   </span>
 
     <%= link_to t('dashboard.form.actions.cancel.button'), cancel_path, data: { toggle: 'tooltip', placement: 'top', title: t('dashboard.form.actions.cancel.tooltip') }, class: 'btn btn-outline-dark btn--rounded ml-2' %>
-  </div>
 
   <%= form.button t("dashboard.form.actions.save_and_exit.#{secondary_action}"), name: 'save_and_exit', data: { toggle: 'tooltip', placement: 'top', title: t('dashboard.form.actions.save_and_exit.tooltip') }, class: 'btn btn-outline-primary btn--rounded pull-left' %>
 
@@ -48,4 +46,4 @@
           hide_if_published: true
         ) %>
   <% end %>
-</footer>
+</div>
