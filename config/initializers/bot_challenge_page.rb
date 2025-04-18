@@ -23,8 +23,8 @@ Rails.application.config.to_prepare do
     '/catalog'
   ]
 
-  BotChallengePage::BotChallengePageController.bot_challenge_config.challenge_renderer = ->  {
-    render 'pages/challenge', layout: "frontend"
+  BotChallengePage::BotChallengePageController.bot_challenge_config.challenge_renderer = -> {
+    render 'pages/challenge', layout: 'frontend'
   }
 
   # Exempt some requests from bot challenge protection
