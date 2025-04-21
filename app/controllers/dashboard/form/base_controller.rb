@@ -3,8 +3,6 @@
 module Dashboard
   module Form
     class BaseController < ::Dashboard::BaseController
-      include AllowPublish
-
       private
 
         def resource_klass
@@ -104,7 +102,7 @@ module Dashboard
         end
 
         def allow_publish?
-          super(@resource)
+          AllowPublishService.new(@resource).allow?(current_user:)
         end
 
         helper_method :param_key
