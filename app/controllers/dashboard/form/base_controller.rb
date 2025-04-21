@@ -104,6 +104,7 @@ module Dashboard
         def allow_publish?
           AllowPublishService.new(@resource).allow?(current_user:)
         end
+        helper_method :allow_publish?
 
         helper_method :param_key
         def param_key
