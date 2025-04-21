@@ -1,13 +1,17 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe AllowPublishService, type: :service do
-  let(:resource) { instance_double('Resource', work_type: 'article', 
-                                               draft_curation_requested: false, 
-                                               accessibility_remediation_requested: false, 
+  let(:resource) { instance_double('Resource', work_type: 'article',
+                                               draft_curation_requested: false,
+                                               accessibility_remediation_requested: false,
                                                file_version_memberships: []) }
   let(:service) { described_class.new(resource) }
-  let(:admin_user) { instance_double('User', admin?: true) }
-  let(:regular_user) { instance_double('User', admin?: false) }
+  let(:admin_user) { instance_double('User',
+                                     admin?: true) }
+  let(:regular_user) { instance_double('User',
+                                       admin?: false) }
 
   describe '#allow?' do
     context 'when the resource is a work' do
@@ -28,7 +32,8 @@ RSpec.describe AllowPublishService, type: :service do
       end
 
       context 'when file version memberships have pending accessibility scores' do
-        let(:file_version_membership) { instance_double('FileVersionMembership', accessibility_score_pending?: true) }
+        let(:file_version_membership) { instance_double('FileVersionMembership',
+                                                        accessibility_score_pending?: true) }
 
         before { allow(resource).to receive(:file_version_memberships).and_return([file_version_membership]) }
 
@@ -45,9 +50,10 @@ RSpec.describe AllowPublishService, type: :service do
 
       context 'when the user is an admin' do
         it 'returns true regardless of conditions' do
-          allow(resource).to receive(:draft_curation_requested).and_return(true)
-          allow(resource).to receive(:accessibility_remediation_requested).and_return(true)
-          allow(resource).to receive(:file_version_memberships).and_return([instance_double('FileVersionMembership', accessibility_score_pending?: true)])
+          allow(resource).to receive_messages(draft_curation_requested: true,
+                                              accessibility_remediation_requested: true,
+                                              file_version_memberships: [instance_double('FileVersionMembership',
+                                                                                         accessibility_score_pending?: true)])
 
           expect(service.allow?(current_user: admin_user)).to be true
         end
@@ -55,17 +61,17 @@ RSpec.describe AllowPublishService, type: :service do
 
       context 'when no current_user is passed' do
         it 'returns false if conditions are not met' do
-          allow(resource).to receive(:draft_curation_requested).and_return(true)
-          allow(resource).to receive(:accessibility_remediation_requested).and_return(false)
-          allow(resource).to receive(:file_version_memberships).and_return([])
+          allow(resource).to receive_messages(draft_curation_requested: true,
+                                              accessibility_remediation_requested: false,
+                                              file_version_memberships: [])
 
           expect(service.allow?).to be false
         end
 
         it 'returns true if conditions are met' do
-          allow(resource).to receive(:draft_curation_requested).and_return(false)
-          allow(resource).to receive(:accessibility_remediation_requested).and_return(false)
-          allow(resource).to receive(:file_version_memberships).and_return([])
+          allow(resource).to receive_messages(draft_curation_requested: false,
+                                              accessibility_remediation_requested: false,
+                                              file_version_memberships: [])
 
           expect(service.allow?).to be true
         end
