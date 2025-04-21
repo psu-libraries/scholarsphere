@@ -125,6 +125,21 @@ RSpec.describe LibanswersApiService, :vcr do
           )
         end
       end
+
+      context 'when accessibility report does not exist' do
+        let!(:work_2) { create(:work, depositor: user.actor) }
+        let(:file_resource) { create(:file_resource, :pdf) }
+        let(:files) { work_2.latest_version.file_resources }
+
+        it 'does not include "pdetails" containing an accessibility report url' do
+          described_class.new.admin_create_accessibility_ticket(work_2.id, base_url)
+          expect(mock_faraday_connection).to have_received(:post).with(
+            '/api/1.1/ticket/create',
+            "quid=#{accessibility_quid}&pquestion=ScholarSphere Deposit Accessibility Curation: #{
+            work_2.latest_version.title}&pname=#{work_2.display_name}&pemail=#{work.email}"
+          )
+        end
+      end
     end
   end
 
