@@ -17,7 +17,7 @@ RSpec.describe 'Home page' do
         expect(page).to have_link('ScholarSphere')
       end
 
-      within('nav.main-nav') do
+      within('#top-section') do
         expect(page).to have_content('Welcome to ScholarSphere')
         expect(page).to have_no_css('button')
       end
@@ -35,7 +35,7 @@ RSpec.describe 'Home page' do
       expect(page).to have_css('h3', text: featured_collection.resource.title)
 
       within('footer') do
-        expect(page).to have_css('h3', text: 'ScholarSphere')
+        expect(page).to have_css('p', text: 'ScholarSphere')
         expect(page).to have_content(I18n.t!('footer.description'))
         expect(page).to have_content('Copyright')
         expect(page).to have_link('Penn State')

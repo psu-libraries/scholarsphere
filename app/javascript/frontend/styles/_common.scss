@@ -259,6 +259,7 @@ h4,
     .home-heading {
       font-size: $navbar-brand-font-size;
       color: $white;
+      margin-top: 1rem;
     }
 
     .home-subtitle {
@@ -1326,6 +1327,7 @@ h4,
 }
 
 .nav-tabs {
+  --bs-border-width: 0;
   @include media-breakpoint-down(md) {
     .nav-item {
       padding-left: 2rem;
@@ -1352,6 +1354,9 @@ h4,
     font-weight: 600;
 
     &.active {
+      --bs-nav-tabs-link-active-bg: #{$blue};
+      --bs-nav-tabs-link-active-color: #{$white};
+      --bs-nav-tabs-border-radius: 0.25rem;
       position: relative;
 
       &::after {
