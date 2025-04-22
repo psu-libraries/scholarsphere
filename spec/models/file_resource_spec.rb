@@ -31,6 +31,18 @@ RSpec.describe FileResource do
     it { is_expected.to have_one(:accessibility_check_result) }
   end
 
+  describe 'cascade delete' do
+    let!(:work_version) { create(:work_version) }
+    let!(:file_resource) { create(:file_resource, work_versions: [work_version]) }
+    let!(:accessibility_check_result) { create(:accessibility_check_result, file_resource: file_resource) }
+
+    it 'deletes associated AccessibilityCheckResult when FileResource is destroyed' do
+      expect(AccessibilityCheckResult.exists?(accessibility_check_result.id)).to be(true)
+      file_resource.destroy
+      expect(AccessibilityCheckResult.exists?(accessibility_check_result.id)).to be(false)
+    end
+  end
+
   describe 'scopes' do
     describe '.needs_accessibility_check' do
       let(:file_resource_with_check) { create(:file_resource, :pdf, work_versions: [create(:work_version)]) }
