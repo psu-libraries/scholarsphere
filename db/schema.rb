@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_21_204531) do
+ActiveRecord::Schema[7.2].define(version: 2025_04_22_181534) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -296,7 +296,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_21_204531) do
     t.index ["proxy_id"], name: "index_works_on_proxy_id"
   end
 
-  add_foreign_key "accessibility_check_results", "file_resources"
+  add_foreign_key "accessibility_check_results", "file_resources", on_delete: :cascade
   add_foreign_key "api_tokens", "external_apps", column: "application_id"
   add_foreign_key "authorships", "actors"
   add_foreign_key "collection_work_memberships", "collections"
