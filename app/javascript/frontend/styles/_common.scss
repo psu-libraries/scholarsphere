@@ -291,6 +291,11 @@ h4,
 
 .main-nav {
   min-height: 53px;
+  @include media-breakpoint-down(sm){
+    .scaling-nav {
+      gap: 0;
+    }
+  }
 
   @include media-breakpoint-down(md) {
     &:not(.main-nav--no-pad) {
