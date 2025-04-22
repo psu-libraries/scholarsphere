@@ -291,7 +291,8 @@ h4,
 
 .main-nav {
   min-height: 53px;
-  @include media-breakpoint-down(sm){
+
+  @include media-breakpoint-down(sm) {
     .scaling-nav {
       gap: 0;
     }
@@ -622,6 +623,7 @@ h4,
   &--actions {
     padding: $spacer;
     background-color: $white;
+
     @include media-breakpoint-up(md) {
       > .pull-left,
         .pull-right {
