@@ -17,7 +17,7 @@ class User < ApplicationRecord
   # Connects this user object to Blacklights Bookmarks.
   include Blacklight::User
 
-  devise :omniauthable, omniauth_providers: %i[azure_oauth]
+  devise :timeoutable, :omniauthable, omniauth_providers: %i[azure_oauth]
 
   attr_writer :guest
 
