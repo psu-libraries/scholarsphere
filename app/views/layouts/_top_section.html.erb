@@ -1,7 +1,7 @@
 <div class="bg-dark-blue pr-0" id="top-section">
   <div class="container-fluid">
     <%= yield :top_section_heading %>
-    <ul class="nav pt-1 pb-1">
+    <ul class="nav">
       <% if content_for? :top_section_items %>
         <%= yield :top_section_items %>
       <% else %>

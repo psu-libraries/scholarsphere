@@ -78,6 +78,7 @@ h4,
     display: inline-block;
     margin: 0;
     background: $white;
+    font-size: 1rem;
   }
 
   &--left {
@@ -273,6 +274,21 @@ h4,
   }
 }
 
+.header-nav {
+  a.nav-link.dropdown-toggle::after {
+  display: block !important;
+  border-top: 0.3em solid;
+  border-right: 0.3em solid transparent;
+  border-bottom: 0;
+  border-left: 0.3em solid transparent;
+  }
+
+  .dropdown-item {
+    color: black;
+    font-size: 1.125rem;
+  }
+}
+
 .sidebar {
   ul {
     li.nav-item {
@@ -352,6 +368,15 @@ h4,
   }
 }
 
+.navbar-toggler {
+  --bs-navbar-toggler-font-size: 1.4rem;
+}
+
+@include media-breakpoint-down(sm) {
+  .header-nav .navbar-nav {
+    flex-direction: column;
+  }
+}
 
 //
 // Custom Components
@@ -1481,3 +1506,7 @@ dialog {
   max-width: 50%;
   font-family: $slab-font-family;
 }
+
+// .custom-select {
+//   font-size: 1.125rem;
+// }

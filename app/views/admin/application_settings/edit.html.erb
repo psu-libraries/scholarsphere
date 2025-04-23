@@ -13,12 +13,12 @@
       <div class="form-wrapper">
         <%= render 'form_fields/text', form: form, attribute: :read_only_message %>
         <%= render 'form_fields/text_area', form: form, attribute: :announcement %>
+        <div class="actions">
+          <%= form.submit 'Save', class: 'btn btn-primary' %>
+          <%= link_to 'Cancel', :back, class: 'btn btn-text' %>
+        </div>
       </div>
 
-      <div class="actions">
-        <%= form.submit 'Save', class: 'btn btn-primary' %>
-        <%= link_to 'Cancel', :back, class: 'btn btn-text' %>
-      </div>
     <% end %>
   </div>
 </div>
