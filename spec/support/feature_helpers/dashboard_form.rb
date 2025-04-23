@@ -140,59 +140,45 @@ module FeatureHelpers
     end
 
     def self.save_as_draft_and_exit
-      fix_sticky_footer
       click_on I18n.t!('dashboard.form.actions.save_and_exit.work_version')
     end
 
     def self.save_and_exit
-      fix_sticky_footer
       click_on I18n.t!('dashboard.form.actions.save_and_exit.collection')
     end
 
     def self.save_and_continue
-      fix_sticky_footer
       click_on I18n.t!('dashboard.form.actions.save_and_continue.button')
     end
 
     def self.publish
-      fix_sticky_footer
       click_on I18n.t!('dashboard.form.actions.publish.button')
       check_agreement_boxes
       click_on I18n.t!('dashboard.form.actions.confirm.publish')
     end
 
     def self.request_curation
-      fix_sticky_footer
       click_on I18n.t!('dashboard.form.actions.request_curation.button')
       check_agreement_boxes
       click_on I18n.t!('dashboard.form.actions.confirm.request_curation')
     end
 
     def self.request_remediation
-      fix_sticky_footer
       click_on I18n.t!('dashboard.form.actions.request_remediation.button')
       check_agreement_boxes
       click_on I18n.t!('dashboard.form.actions.confirm.request_remediation')
     end
 
     def self.finish
-      fix_sticky_footer
       click_on I18n.t!('dashboard.form.actions.finish.button')
     end
 
     def self.delete
-      fix_sticky_footer
       click_on I18n.t!('dashboard.form.actions.destroy.button')
     end
 
     def self.cancel
-      fix_sticky_footer
       click_on I18n.t!('dashboard.form.actions.cancel.button')
-    end
-
-    def self.fix_sticky_footer
-      Capybara.current_session.current_window.resize_to(1000, 1000)
-    rescue Capybara::NotSupportedByDriverError
     end
 
     def self.check_agreement_boxes
