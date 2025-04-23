@@ -2,11 +2,21 @@
 @import '@uppy/core/dist/style';
 @import '@uppy/dashboard/dist/style';
 
-// Import Google Fonts
+// Import Fonts from Google and PSU Base
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400&family=Roboto+Slab&display=swap');
+@import url("https://assets.libraries.psu.edu/psulib_base/assets/fonts/Roboto/roboto-regular-webfont.woff2");
+@import url("https://assets.libraries.psu.edu/psulib_base/assets/fonts/Roboto/roboto-bold-webfont.woff2");
+@import url("https://assets.libraries.psu.edu/psulib_base/assets/fonts/Roboto/roboto-italic-webfont.woff2");
+@import url("https://assets.libraries.psu.edu/psulib_base/assets/fonts/Roboto_Slab/static/RobotoSlab-Bold.woff2");
+@import url("https://assets.libraries.psu.edu/psulib_base/assets/fonts/Roboto_Condensed/RobotoCondensed-VariableFont_wght.woff2");
 
 // Import Material Icons
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+// Import Stylesheets from PSU Base
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css");
+@import url("https://assets.qa.k8s.libraries.psu.edu/psulib_base/dist/peripheral/peripheral.css");
+
 
 // Import floating label styles for bootstrap forms
 @import 'vendor/bootstrap-float-label';
