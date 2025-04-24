@@ -767,7 +767,9 @@ RSpec.describe 'Publishing a work', with_user: :user do
           expect(page).to have_content('Nathan Andrew Weader')
         end
 
-        find_by_id('search-creators').set("\n")
+        within('.aa-dataset-1') do
+          all('*', text: 'Access Account: agw13')[2].click
+        end
 
         within('#creators') do
           expect(page).to have_content('CREATOR 1')
