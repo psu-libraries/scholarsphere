@@ -13,7 +13,7 @@ class CitationComponent < ApplicationComponent
   end
 
   def citation_display
-    return unless deposit_pathway.data_and_code?
+    return unless deposit_pathway.data_and_code? || deposit_pathway.instrument?
 
     "#{creators_citation_display}(#{year_published}). #{work_version.title} [Data set]. Scholarsphere.#{doi_url}"
   end

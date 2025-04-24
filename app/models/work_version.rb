@@ -7,6 +7,9 @@ class WorkVersion < ApplicationRecord
   include GeneratedUuids
   include UpdatingDois
 
+  after_validation :remove_duplicate_errors
+  before_save :reset_irrelevant_fields_if_work_type_changed
+
   fields_with_dois :doi, :identifier
 
   has_paper_trail
@@ -32,6 +35,16 @@ class WorkVersion < ApplicationRecord
                  based_near: [:string, array: true, default: []],
                  related_url: [:string, array: true, default: []],
                  source: [:string, array: true, default: []],
+                 owner: :string,
+                 manufacturer: :string,
+                 model: :string,
+                 instrument_type: :string,
+                 measured_variable: :string,
+                 available_date: :string,
+                 decommission_date: :string,
+                 related_identifier: :string,
+                 instrument_resource_type: :string,
+                 funding_reference: :string,
                  sub_work_type: :string,
                  program: :string,
                  degree: :string
@@ -111,7 +124,8 @@ class WorkVersion < ApplicationRecord
 
   validates :creators,
             presence: true,
-            if: :published?
+            if: :published?,
+            unless: :instrument?
 
   validates :depositor_agreement,
             acceptance: true,
@@ -175,6 +189,14 @@ class WorkVersion < ApplicationRecord
             edtf_date: true,
             if: :published?
 
+  validates :decommission_date,
+            edtf_date: true,
+            if: :published?
+
+  validates :available_date,
+            edtf_date: true,
+            if: :published?
+
   validates :description,
             presence: true,
             if: :published?
@@ -182,7 +204,6 @@ class WorkVersion < ApplicationRecord
   validates_with ChangedWorkVersionValidator,
                  if: :published?
 
-  after_validation :remove_duplicate_errors
   after_commit :perform_update_index, on: [:create, :update]
 
   attr_accessor :force_destroy
@@ -203,7 +224,7 @@ class WorkVersion < ApplicationRecord
                   to: :published,
                   after: Proc.new {
                     work.try(:update_deposit_agreement)
-                    if work.professional_doctoral_culminating_experience? || work.masters_culminating_experience?
+                    if work.professional_doctoral_culminating_experience? || work.masters_culminating_experience? || work_type == 'instrument'
                       set_publisher_as_scholarsphere
                     end
                     self.reload_on_index = true
@@ -250,6 +271,16 @@ class WorkVersion < ApplicationRecord
     rights
     subtitle
     version_name
+    owner
+    manufacturer
+    model
+    instrument_type
+    measured_variable
+    available_date
+    decommission_date
+    related_identifier
+    instrument_resource_type
+    funding_reference
     sub_work_type
     program
     degree
@@ -371,6 +402,15 @@ class WorkVersion < ApplicationRecord
 
   private
 
+    def reset_irrelevant_fields_if_work_type_changed
+      return unless work.will_save_change_to_work_type?
+
+      fields_to_reset = WorkDepositPathway.new(self).fields_to_reset(work.work_type_before_last_save || work.work_type_was)
+      fields_to_reset.each do |field|
+        send(:"#{field}=", nil)
+      end
+    end
+
     def perform_update_index
       indexing_source.call(self)
     end
@@ -412,5 +452,9 @@ class WorkVersion < ApplicationRecord
       if over_limit_errors.length > 1
         errors.errors.delete_at(over_limit_errors[1])
       end
+    end
+
+    def instrument?
+      WorkDepositPathway.new(self).instrument?
     end
 end

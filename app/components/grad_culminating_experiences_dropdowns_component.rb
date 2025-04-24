@@ -29,7 +29,11 @@ class GradCulminatingExperiencesDropdownsComponent < ApplicationComponent
   end
 
   def programs_dropdown
-    qa_labels(:graduate_programs)
+    if work.professional_doctoral_culminating_experience?
+      qa_labels(:doctoral_programs)
+    elsif work.masters_culminating_experience?
+      qa_labels(:graduate_programs)
+    end
   end
 
   def degrees_dropdown

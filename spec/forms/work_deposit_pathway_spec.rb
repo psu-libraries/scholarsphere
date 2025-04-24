@@ -341,6 +341,44 @@ RSpec.describe WorkDepositPathway do
       end
     end
 
+    context 'when the given work version has an instrument type' do
+      %w[
+        instrument
+      ].each do |t|
+        let(:type) { t }
+
+        context 'when the associated work does not have a doi' do
+          let(:doi_blank) { true }
+
+          context 'when doi minting is not already in progress' do
+            before do
+              allow_any_instance_of(DoiMintingStatus).to receive(:blank?).and_return(true)
+            end
+
+            it 'returns true' do
+              expect(pathway.allows_mint_doi_request?).to eq true
+            end
+          end
+
+          context 'when doi minting is already in progress' do
+            before do
+              allow_any_instance_of(DoiMintingStatus).to receive(:blank?).and_return(false)
+            end
+
+            it 'returns false' do
+              expect(pathway.allows_mint_doi_request?).to eq false
+            end
+          end
+        end
+
+        context 'when the associated work has a doi' do
+          it 'returns false' do
+            expect(pathway.allows_mint_doi_request?).to eq false
+          end
+        end
+      end
+    end
+
     context 'when the given work version has a grad culminating experiences type' do
       %w[
         masters_culminating_experience
@@ -380,7 +418,7 @@ RSpec.describe WorkDepositPathway do
       end
     end
 
-    context 'when the given work version does not have a data and code or grad culminating experience type' do
+    context 'when the given work version does not have a data and code, instrument, or grad culminating experience type' do
       %w[
         article
         book
@@ -477,6 +515,17 @@ RSpec.describe WorkDepositPathway do
       %w[
         dataset
         software_or_program_code
+      ].each do |t|
+        let(:type) { t }
+        it 'returns false' do
+          expect(pathway.allows_accessibility_remediation_request?).to eq false
+        end
+      end
+    end
+
+    context 'when in instrument pathway' do
+      %w[
+        instrument
       ].each do |t|
         let(:type) { t }
         it 'returns false' do
@@ -625,6 +674,163 @@ RSpec.describe WorkDepositPathway do
       context "when the given work version has a work type of #{t}" do
         it 'returns true' do
           expect(pathway.grad_culminating_experiences?).to eq true
+        end
+      end
+    end
+  end
+
+  describe '#fields_to_reset' do
+    let(:data_and_code) { 'dataset' }
+    let(:grad_culminating_experience) { 'masters_culminating_experience' }
+    let(:general) { 'audio' }
+    let(:scholarly_work) { 'article' }
+    let(:instrument) { 'instrument' }
+
+    context 'when the current work type is scholarly work' do
+      let(:type) { scholarly_work }
+
+      context 'when the original type was data and code' do
+        it 'returns the fields in data and code that are not in scholarly work' do
+          expect(pathway.fields_to_reset(data_and_code)).to contain_exactly('based_near', 'source', 'version_name')
+        end
+      end
+
+      context 'when the original type was grad culminating experience' do
+        it 'returns the fields in grad culminating experience that are not in scholarly work' do
+          expect(pathway.fields_to_reset(grad_culminating_experience)).to contain_exactly('sub_work_type', 'program', 'degree', 'mint_doi_requested')
+        end
+      end
+
+      context 'when the original type was general' do
+        it 'returns the fields in general that are not in scholarly work' do
+          expect(pathway.fields_to_reset(general)).to contain_exactly('based_near', 'source', 'version_name')
+        end
+      end
+
+      context 'when the original type was instrument' do
+        it 'returns the fields in instrument that are not in scholarly work' do
+          expect(pathway.fields_to_reset(instrument)).to contain_exactly('model', 'instrument_type', 'measured_variable', 'available_date',
+                                                                         'decommission_date', 'related_identifier', 'instrument_resource_type',
+                                                                         'funding_reference', 'owner', 'manufacturer')
+        end
+      end
+    end
+
+    context 'when the current work type is data and code' do
+      let(:type) { data_and_code }
+
+      context 'when original type was scholarly work' do
+        it 'returns the fields in scholarly work that are not in data and code' do
+          expect(pathway.fields_to_reset(scholarly_work)).to contain_exactly('publisher_statement', 'identifier')
+        end
+      end
+
+      context 'when the original type was instrument' do
+        it 'returns the fields in instrument that are not in data and code' do
+          expect(pathway.fields_to_reset(instrument)).to contain_exactly('model', 'instrument_type', 'measured_variable', 'available_date',
+                                                                         'decommission_date', 'related_identifier', 'instrument_resource_type',
+                                                                         'funding_reference', 'owner', 'manufacturer')
+        end
+      end
+
+      context 'when original type was grad culminating experience' do
+        it 'returns the fields in data and code that are not in grad culminating experience' do
+          expect(pathway.fields_to_reset(grad_culminating_experience)).to contain_exactly('sub_work_type', 'program', 'degree', 'mint_doi_requested')
+        end
+      end
+
+      context 'when original type was general' do
+        it 'returns the fields in general that are not in data and code' do
+          expect(pathway.fields_to_reset(general)).to contain_exactly('publisher_statement', 'identifier')
+        end
+      end
+    end
+
+    context 'when the current work type is grad culminating experience' do
+      let(:type) { grad_culminating_experience }
+
+      context 'when the original type was instrument' do
+        it 'returns the fields in instrument that are not in grad culminating experience' do
+          expect(pathway.fields_to_reset(instrument)).to contain_exactly('subject', 'publisher', 'subtitle', 'model', 'instrument_type',
+                                                                         'measured_variable', 'available_date', 'decommission_date', 'related_identifier',
+                                                                         'instrument_resource_type', 'funding_reference', 'owner', 'manufacturer')
+        end
+      end
+
+      context 'when original type was scholarly work' do
+        it 'returns the fields in scholarly work that are not in grad culminating experience' do
+          expect(pathway.fields_to_reset(scholarly_work)).to contain_exactly('publisher_statement', 'identifier', 'subject', 'publisher', 'subtitle')
+        end
+      end
+
+      context 'when original type was data and code' do
+        it 'returns the fields in data and code that are not in grad culminating experience' do
+          expect(pathway.fields_to_reset(data_and_code)).to contain_exactly('based_near', 'source', 'version_name', 'subject', 'publisher', 'subtitle')
+        end
+      end
+
+      context 'when original type was general' do
+        it 'returns the fields in general that are not in grad culminating experience' do
+          expect(pathway.fields_to_reset(general)).to contain_exactly('publisher_statement', 'identifier', 'based_near', 'source', 'version_name', 'subject',
+                                                                      'publisher', 'subtitle')
+        end
+      end
+    end
+
+    context 'when the current type is instrument' do
+      let(:type) { instrument }
+
+      context 'when the original type was general' do
+        it 'returns the fields in general that are not in instrument' do
+          expect(pathway.fields_to_reset(general)).to contain_exactly('identifier', 'publisher_statement', 'based_near', 'source', 'version_name')
+        end
+      end
+
+      context 'when original type was scholarly work' do
+        it 'returns the fields in scholarly work that are not in instrument' do
+          expect(pathway.fields_to_reset(scholarly_work)).to contain_exactly('identifier', 'publisher_statement')
+        end
+      end
+
+      context 'when original type was data and code' do
+        it 'returns the fields in data and code that are not in instrument' do
+          expect(pathway.fields_to_reset(data_and_code)).to contain_exactly('based_near', 'source', 'version_name')
+        end
+      end
+
+      context 'when original type was grad culminating experience' do
+        it 'returns the fields in grad culminating experience that are not in instrument' do
+          expect(pathway.fields_to_reset(grad_culminating_experience)).to contain_exactly('sub_work_type', 'program', 'degree', 'mint_doi_requested')
+        end
+      end
+    end
+
+    context 'when the current type is general' do
+      let(:type) { general }
+
+      context 'when the original type was instrument' do
+        it 'returns the fields in instrument that are not in general' do
+          expect(pathway.fields_to_reset(instrument)).to contain_exactly('model', 'instrument_type', 'measured_variable', 'available_date',
+                                                                         'decommission_date', 'related_identifier', 'instrument_resource_type',
+                                                                         'funding_reference', 'owner', 'manufacturer')
+        end
+      end
+
+      context 'when original type was scholarly work' do
+        it 'returns the fields in scholarly work that are not in general' do
+          expect(pathway.fields_to_reset(scholarly_work)).to eq([])
+        end
+      end
+
+      context 'when original type was data and code' do
+        it 'returns the fields in data and code that are not in general' do
+          expect(pathway.fields_to_reset(data_and_code)).to eq([])
+        end
+      end
+
+      context 'when original type was grad culminating experience' do
+        it 'returns the fields in grad culminating experience that are not in general' do
+          expect(pathway.fields_to_reset(grad_culminating_experience)).to contain_exactly('sub_work_type', 'program', 'degree', 'mint_doi_requested')
         end
       end
     end

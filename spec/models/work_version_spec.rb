@@ -128,7 +128,9 @@ RSpec.describe WorkVersion do
   end
 
   describe 'validations' do
-    subject(:work_version) { build(:work_version) }
+    subject(:work_version) { build(:work_version, work: work) }
+
+    let(:work) { build(:work) }
 
     context 'when draft' do
       it { is_expected.to validate_presence_of(:title) }
@@ -151,13 +153,25 @@ RSpec.describe WorkVersion do
         expect(work_version.errors[:file_resources]).to be_empty
       end
 
-      it 'validates the presence of creators' do
-        work_version.creators = []
-        work_version.validate
-        expect(work_version.errors[:creators]).not_to be_empty
-        work_version.creators.build(attributes_for(:authorship))
-        work_version.validate
-        expect(work_version.errors[:creators]).to be_empty
+      context 'when the work is not an instrument' do
+        it 'validates the presence of creators' do
+          work_version.creators = []
+          work_version.validate
+          expect(work_version.errors[:creators]).not_to be_empty
+          work_version.creators.build(attributes_for(:authorship))
+          work_version.validate
+          expect(work_version.errors[:creators]).to be_empty
+        end
+      end
+
+      context 'when the work is an instrument' do
+        let(:work) { build(:work, work_type: 'instrument') }
+
+        it 'does not validate the presence of creators' do
+          work_version.creators = []
+          work_version.validate
+          expect(work_version.errors[:creators]).to be_empty
+        end
       end
 
       it 'validates the visibility of the work' do
@@ -531,6 +545,30 @@ RSpec.describe WorkVersion do
       work_version.publish!
       expect(work_version).to be_published
       expect(work_version.reload.published_at).to be_present.and be_within(1.second).of(Time.zone.now)
+    end
+
+    context 'with a work that uses the instrument works deposit pathway' do
+      let(:work_version) { create(:work_version, :instrument_able_to_be_published) }
+
+      it 'sets the publisher to Scholarsphere automatically' do
+        work_version.save
+        expect(work_version.publisher).to eq []
+        work_version.publish!
+        expect(work_version).to be_published
+        expect(work_version.reload.publisher).to eq ['ScholarSphere']
+      end
+    end
+
+    context 'with a work that does not use the instrument works deposit pathway' do
+      let(:work_version) { create(:work_version, :able_to_be_published, work: build(:work, work_type: 'article')) }
+
+      it 'does not edit the publisher field' do
+        work_version.save
+        expect(work_version.publisher).to eq []
+        work_version.publish!
+        expect(work_version).to be_published
+        expect(work_version.reload.publisher).to eq []
+      end
     end
   end
 

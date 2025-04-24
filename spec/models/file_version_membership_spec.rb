@@ -34,6 +34,31 @@ RSpec.describe FileVersionMembership do
     end
   end
 
+  describe 'after_destroy callback' do
+    let(:file_resource) { create(:file_resource) }
+
+    context 'when the file_resource becomes orphaned' do
+      it 'destroys the file_resource' do
+        file_version_membership = create(:file_version_membership, file_resource: file_resource)
+        expect(FileResource.exists?(file_resource.id)).to be true
+
+        file_version_membership.destroy
+        expect(FileResource.exists?(file_resource.id)).to be false
+      end
+    end
+
+    context 'when the file_resource is not orphaned' do
+      it 'does not destroy the file_resource' do
+        file_version_membership1 = create(:file_version_membership, file_resource: file_resource)
+        create(:file_version_membership, file_resource: file_resource)
+        expect(FileResource.exists?(file_resource.id)).to be true
+
+        file_version_membership1.destroy
+        expect(FileResource.exists?(file_resource.id)).to be true
+      end
+    end
+  end
+
   describe 'delegate methods' do
     subject(:membership) { build(:file_version_membership) }
 

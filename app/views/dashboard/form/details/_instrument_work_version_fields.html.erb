@@ -1,0 +1,16 @@
+<%= render 'dashboard/form/details/common_work_version_required_fields', form: form %>
+
+ <div class="form-wrapper">
+   <%= render 'form_fields/text', form: form, attribute: :subtitle %>
+   <%= render 'form_fields/multi_text', form: form, attribute: :keyword %>
+   <%= render 'form_fields/multi_text', form: form, attribute: :publisher %>
+   <%= render 'form_fields/multi_text', form: form, attribute: :subject %>
+   <%= render 'form_fields/text', form: form, attribute: :related_identifier %>
+   <%= render 'form_fields/text', form: form, attribute: :instrument_resource_type %>
+   <%= render 'form_fields/text', form: form, attribute: :funding_reference %>
+   <%= render 'form_fields/text', form: form, attribute: :measured_variable %>
+   <%= render 'form_fields/text', form: form, attribute: :model %>
+   <%= render 'form_fields/text', form: form, attribute: :instrument_type %>
+   <%= render 'form_fields/text', form: form, attribute: :available_date %>
+   <%= render 'form_fields/text', form: form, attribute: :decommission_date %>
+ </div>

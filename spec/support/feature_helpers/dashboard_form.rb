@@ -19,6 +19,11 @@ module FeatureHelpers
       select Work::Types.display('dataset'), from: 'work_version_work_attributes_work_type'
     end
 
+    def self.fill_in_minimal_work_details_for_instrument_draft(work_version_metadata)
+      fill_in 'work_version_title', with: work_version_metadata[:title]
+      select Work::Types.display('instrument'), from: 'work_version_work_attributes_work_type'
+    end
+
     def self.fill_in_minimal_work_details_for_grad_culminating_experiences_draft(work_version_metadata)
       fill_in 'work_version_title', with: work_version_metadata[:title]
       select Work::Types.display('masters_culminating_experience'), from: 'work_version_work_attributes_work_type'
@@ -48,6 +53,17 @@ module FeatureHelpers
       fill_in_common_work_details(work_version_metadata)
       fill_in 'work_version_based_near', with: work_version_metadata[:based_near]
       fill_in 'work_version_source', with: work_version_metadata[:source]
+    end
+
+    def self.fill_in_instrument_work_details(work_version_metadata)
+      fill_in 'work_version_description', with: work_version_metadata[:description]
+      fill_in 'work_version_published_date', with: work_version_metadata[:published_date]
+      fill_in 'work_version_model', with: work_version_metadata[:model]
+    end
+
+    def self.fill_in_instrument_contributors(work_version_metadata)
+      fill_in 'work_version_owner', with: work_version_metadata[:owner]
+      fill_in 'work_version_manufacturer', with: work_version_metadata[:manufacturer]
     end
 
     def self.fill_in_scholarly_works_work_details(work_version_metadata)
@@ -124,59 +140,45 @@ module FeatureHelpers
     end
 
     def self.save_as_draft_and_exit
-      fix_sticky_footer
       click_on I18n.t!('dashboard.form.actions.save_and_exit.work_version')
     end
 
     def self.save_and_exit
-      fix_sticky_footer
       click_on I18n.t!('dashboard.form.actions.save_and_exit.collection')
     end
 
     def self.save_and_continue
-      fix_sticky_footer
       click_on I18n.t!('dashboard.form.actions.save_and_continue.button')
     end
 
     def self.publish
-      fix_sticky_footer
       click_on I18n.t!('dashboard.form.actions.publish.button')
       check_agreement_boxes
       click_on I18n.t!('dashboard.form.actions.confirm.publish')
     end
 
     def self.request_curation
-      fix_sticky_footer
       click_on I18n.t!('dashboard.form.actions.request_curation.button')
       check_agreement_boxes
       click_on I18n.t!('dashboard.form.actions.confirm.request_curation')
     end
 
     def self.request_remediation
-      fix_sticky_footer
       click_on I18n.t!('dashboard.form.actions.request_remediation.button')
       check_agreement_boxes
       click_on I18n.t!('dashboard.form.actions.confirm.request_remediation')
     end
 
     def self.finish
-      fix_sticky_footer
       click_on I18n.t!('dashboard.form.actions.finish.button')
     end
 
     def self.delete
-      fix_sticky_footer
       click_on I18n.t!('dashboard.form.actions.destroy.button')
     end
 
     def self.cancel
-      fix_sticky_footer
       click_on I18n.t!('dashboard.form.actions.cancel.button')
-    end
-
-    def self.fix_sticky_footer
-      Capybara.current_session.current_window.resize_to(1000, 1000)
-    rescue Capybara::NotSupportedByDriverError
     end
 
     def self.check_agreement_boxes

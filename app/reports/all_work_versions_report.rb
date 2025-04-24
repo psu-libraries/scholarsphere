@@ -28,6 +28,16 @@ class AllWorkVersionsReport
       based_near
       related_url
       source
+      owner
+      manufacturer
+      model
+      instrument_type
+      measured_variable
+      available_date
+      decommission_date
+      related_identifier
+      instrument_resource_type
+      funding_reference
       sub_work_type
       program
       degree
@@ -67,6 +77,16 @@ class AllWorkVersionsReport
           wv.based_near,
           wv.related_url,
           wv.source,
+          wv.owner,
+          wv.manufacturer,
+          wv.model,
+          wv.instrument_type,
+          wv.measured_variable,
+          wv.available_date,
+          wv.decommission_date,
+          wv.related_identifier,
+          wv.instrument_resource_type,
+          wv.funding_reference,
           wv.sub_work_type,
           wv.program,
           wv.degree,

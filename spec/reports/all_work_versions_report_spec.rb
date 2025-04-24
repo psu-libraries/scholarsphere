@@ -32,6 +32,16 @@ RSpec.describe AllWorkVersionsReport do
       based_near
       related_url
       source
+      owner
+      manufacturer
+      model
+      instrument_type
+      measured_variable
+      available_date
+      decommission_date
+      related_identifier
+      instrument_resource_type
+      funding_reference
       sub_work_type
       program
       degree
@@ -101,16 +111,26 @@ RSpec.describe AllWorkVersionsReport do
         expect(row[18]).to eq version.based_near
         expect(row[19]).to eq version.related_url
         expect(row[20]).to eq version.source
-        expect(row[21]).to eq version.sub_work_type
-        expect(row[22]).to eq version.program
-        expect(row[23]).to eq version.degree
+        expect(row[21]).to eq version.owner
+        expect(row[22]).to eq version.manufacturer
+        expect(row[23]).to eq version.model
+        expect(row[24]).to eq version.instrument_type
+        expect(row[25]).to eq version.measured_variable
+        expect(row[26]).to eq version.available_date
+        expect(row[27]).to eq version.decommission_date
+        expect(row[28]).to eq version.related_identifier
+        expect(row[29]).to eq version.instrument_resource_type
+        expect(row[30]).to eq version.funding_reference
+        expect(row[31]).to eq version.sub_work_type
+        expect(row[32]).to eq version.program
+        expect(row[33]).to eq version.degree
       end
 
       # Spot check view statistics
-      expect(yielded_rows[0][24]).to eq 6
-      expect(yielded_rows[1][24]).to eq 0
-      expect(yielded_rows[2][24]).to eq 1
-      expect(yielded_rows[3][24]).to eq 0
+      expect(yielded_rows[0][34]).to eq 6
+      expect(yielded_rows[1][34]).to eq 0
+      expect(yielded_rows[2][34]).to eq 1
+      expect(yielded_rows[3][34]).to eq 0
     end
   end
 end

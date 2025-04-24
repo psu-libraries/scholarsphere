@@ -58,6 +58,16 @@
         subject_tesim
         subtitle_tesim
         title_tesim
+        owner_tesim
+        manufacturer_tesim
+        model_tesim
+        instrument_type_tesim
+        measured_variable_tesim
+        available_date_tesim
+        decommission_date_tesim
+        related_identifier_tesim
+        instrument_resource_type_tesim
+        funding_reference_tesim
         work_type_ss
         degree_tesim
         program_tesim
