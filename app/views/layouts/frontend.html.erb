@@ -10,8 +10,6 @@
     <%= yield(:meta_tags) if content_for? :meta_tags %>
 
     <title><%= render_page_title %></title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" integrity="sha384-tViUnnbYAV00FLIhhi3v/dWt3Jxw4gZQcNoSCxCIFNJVCx7/D55/wXsrNIRANwdD" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://assets.qa.k8s.libraries.psu.edu/psulib_base/dist/peripheral/peripheral.css">
     <%= javascript_pack_tag 'frontend' %>
     <%= stylesheet_pack_tag 'frontend', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= csrf_meta_tags %>
