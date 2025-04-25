@@ -2,41 +2,41 @@
 <% secondary_action = current_user.admin? ? :admin_save : param_key %>
 
 <div class="footer footer--actions footer--fixed d-flex justify-content-center">
-<span data-controller="publish-status"
-      data-publish-status-allow-publish="<%= allow_publish? %>"
-      data-publish-status-primary-action="<%= primary_action %>">
-      <span data-target="publish-status.show_buttons">
-      <% if primary_action == :publish %>
-        <span data-controller="publishing-check">
-          <%= render 'dashboard/form/publish/publish_dialog', f: form %>
-          <% if allow_curation? %>
-            <%= button_tag t('dashboard.form.actions.request_curation.button'), type: 'button', data: { action: 'publishing-check#openDialog', dialog: 'curation', toggle: 'tooltip', placement: 'top', title: t('dashboard.form.actions.request_curation.tooltip') }, class: 'btn btn-primary btn--rounded' %>
-          <% end %>
-          <% if allow_accessibility_remediation? %>
-            <%= button_tag t('dashboard.form.actions.request_remediation.button'),
-                           type: 'button',
-                           data: { action: 'publishing-check#openDialog',
-                                   dialog: 'remediation',
-                                   toggle: 'tooltip',
-                                   placement: 'top',
-                                   title: t('dashboard.form.actions.request_remediation.tooltip') },
-                           class: 'btn btn-primary btn--rounded',
-                           ## TODO: Unhide when ready
-                           style: 'display: none' %>
-          <% end %>
-          <%= button_tag t('dashboard.form.actions.publish.button'), type: 'button', data: { action: 'publishing-check#openDialog', dialog: 'publish', toggle: 'tooltip', placement: 'top', title: t("dashboard.form.actions.#{primary_action}.tooltip") }, class: 'btn btn-primary btn--rounded' %>
+  <div>
+      <span data-controller="publish-status"
+            data-publish-status-allow-publish="<%= allow_publish? %>"
+            data-publish-status-primary-action="<%= primary_action %>">
+            <span data-target="publish-status.show_buttons">
+            <% if primary_action == :publish %>
+              <span data-controller="publishing-check">
+                <%= render 'dashboard/form/publish/publish_dialog', f: form %>
+                <% if allow_curation? %>
+                  <%= button_tag t('dashboard.form.actions.request_curation.button'), type: 'button', data: { action: 'publishing-check#openDialog', dialog: 'curation', toggle: 'tooltip', placement: 'top', title: t('dashboard.form.actions.request_curation.tooltip') }, class: 'btn btn-primary btn--rounded' %>
+                <% end %>
+                <% if allow_accessibility_remediation? %>
+                  <%= button_tag t('dashboard.form.actions.request_remediation.button'),
+                                type: 'button',
+                                data: { action: 'publishing-check#openDialog',
+                                        dialog: 'remediation',
+                                        toggle: 'tooltip',
+                                        placement: 'top',
+                                        title: t('dashboard.form.actions.request_remediation.tooltip') },
+                                class: 'btn btn-primary btn--rounded',
+                                ## TODO: Unhide when ready
+                                style: 'display: none' %>
+                <% end %>
+                <%= button_tag t('dashboard.form.actions.publish.button'), type: 'button', data: { action: 'publishing-check#openDialog', dialog: 'publish', toggle: 'tooltip', placement: 'top', title: t("dashboard.form.actions.#{primary_action}.tooltip") }, class: 'btn btn-primary btn--rounded' %>
+              </span>
+            <% else %>
+              <%= form.submit t("dashboard.form.actions.#{primary_action}.button"), name: primary_action, data: { toggle: 'tooltip', placement: 'top', title: t("dashboard.form.actions.#{primary_action}.tooltip") }, class: 'btn btn-primary btn--rounded' %>
+            <% end %>
+            </span>
+            <span data-target="publish-status.help_text">
+              <%= t('dashboard.form.actions.publish.blocked') %>
+            </span>
         </span>
-      <% else %>
-        <%= form.submit t("dashboard.form.actions.#{primary_action}.button"), name: primary_action, data: { toggle: 'tooltip', placement: 'top', title: t("dashboard.form.actions.#{primary_action}.tooltip") }, class: 'btn btn-primary btn--rounded' %>
-      <% end %>
-      </span>
-      <span data-target="publish-status.help_text">
-        <%= t('dashboard.form.actions.publish.blocked') %>
-      </span>
-  </span>
-
     <%= link_to t('dashboard.form.actions.cancel.button'), cancel_path, data: { toggle: 'tooltip', placement: 'top', title: t('dashboard.form.actions.cancel.tooltip') }, class: 'btn btn-outline-dark btn--rounded ml-2' %>
-
+  </div>
   <%= form.button t("dashboard.form.actions.save_and_exit.#{secondary_action}"), name: 'save_and_exit', data: { toggle: 'tooltip', placement: 'top', title: t('dashboard.form.actions.save_and_exit.tooltip') }, class: 'btn btn-outline-primary btn--rounded pull-left' %>
 
   <% if form.object.persisted? && policy(form.object).destroy? %>
