@@ -1,5 +1,6 @@
 // See the shakacode/shakapacker README and docs directory for advice on customizing your webpackConfig.
 const { generateWebpackConfig, inliningCss, merge } = require('shakapacker');
+const { experiments } = require('webpack');
 const webpackConfig = generateWebpackConfig()
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -8,7 +9,11 @@ const options = {
     extensions: ['.css', '.scss'],
     alias: {
       jquery: 'jquery/src/jquery',
-    }
+    },
+    fullySpecified: false,
+  },
+  experiments: {
+    topLevelAwait: true,
   },
   mode: isDevelopment ? 'development' : 'production'
 };
