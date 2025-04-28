@@ -275,6 +275,14 @@ h4,
 }
 
 .header-nav {
+  .navbar-nav a.nav-link.dropdown-toggle {
+    justify-content: start;
+
+    @include media-breakpoint-up(md) {
+      justify-content: end;
+    }
+  }
+
   a.nav-link.dropdown-toggle::after {
     display: block !important;
     border-top: .3em solid;
@@ -375,6 +383,26 @@ h4,
 @include media-breakpoint-down(sm) {
   .header-nav .navbar-nav {
     flex-direction: column;
+  }
+}
+
+.user-menu {
+  @include media-breakpoint-down(sm) {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+  @include media-breakpoint-up(md) {
+    margin-left: auto;
+    text-align: right;
+  }
+}
+
+.header-nav .navbar-nav .dropdown:hover:not(.user-menu > .show) {
+  .dropdown-menu {
+    padding: 0;
+  }
+  .nav-link {
+    padding: 0 0 5px 0;
   }
 }
 

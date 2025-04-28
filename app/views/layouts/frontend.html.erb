@@ -11,6 +11,8 @@
 
     <title><%= render_page_title %></title>
     <%= javascript_pack_tag 'frontend' %>
+    <%= stylesheet_link_tag 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css', media: 'all', crossorigin: 'anonymous' %>
+    <%= stylesheet_link_tag 'https://assets.qa.k8s.libraries.psu.edu/psulib_base/dist/peripheral/peripheral.css', media: 'all', crossorigin: 'anonymous' %>
     <%= stylesheet_pack_tag 'frontend', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= csrf_meta_tags %>
     <%= content_for(:head) %>
@@ -50,7 +52,7 @@
               <div class="header-mark--name-slogan">
                 <%= link_to 'ScholarSphere', root_path, class: 'site-title' %>
               </div>
-              <div class="header--nav-search navbar-expand-lg pb-1">
+              <div class="header--nav-search navbar-expand-md pb-1">
               <button class="navbar-toggler navbar-dark"
                       type="button"
                       data-toggle="collapse"
@@ -64,19 +66,21 @@
             </div>
           </div>
         </div>
-        <nav class="navbar navbar-expand-lg block-menu menu--main">
+        <nav class="navbar navbar-expand-md block-menu menu--main">
           <div class="container-fluid">
             <div class="collapse navbar-collapse header-nav" id="topbar">
-              <ul class="navbar-nav row-gap-2 pl-2">
-                <li class="nav-item">
-                  <%= link_to 'About', about_path, class: 'nav-link' %>
-                </li>
-                <li class="nav-item">
-                  <%= link_to 'Help', Rails.configuration.docs_url, class: 'nav-link' %>
-                </li>
-                <li class="nav-item">
-                  <%= link_to 'Contact', new_incident_path, class: 'nav-link' %>
-                </li>
+              <ul class="navbar-nav row-gap-2 pl-2 w-100">
+                <span class="navbar-nav">
+                  <li class="nav-item">
+                    <%= link_to 'About', about_path, class: 'nav-link' %>
+                  </li>
+                  <li class="nav-item">
+                    <%= link_to 'Help', Rails.configuration.docs_url, class: 'nav-link' %>
+                  </li>
+                  <li class="nav-item">
+                    <%= link_to 'Contact', new_incident_path, class: 'nav-link' %>
+                  </li>
+                </span>
                 <%= render '/layouts/user_menu' %>
               </ul>
             </div>
