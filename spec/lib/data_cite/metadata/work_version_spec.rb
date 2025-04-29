@@ -37,6 +37,9 @@ RSpec.describe DataCite::Metadata::WorkVersion do
     context 'when given the happy path' do
       it "maps the given WorkVersion's attributes into ones needed by DataCite" do
         expect(attributes[:titles]).to eq([{ title: work_version.title }])
+        description = attributes[:descriptions].first
+        expect(description[:descriptionType]).to eq 'Abstract'
+        expect(description[:description]).to eq work_version.description
 
         # The following are tested thoroughly below
         expect(attributes[:url]).to be_present
@@ -148,6 +151,13 @@ RSpec.describe DataCite::Metadata::WorkVersion do
 
     context 'when work_type is empty' do
       before { work.work_type = nil }
+
+      it { expect { metadata.validate! }.to raise_error(DataCite::Metadata::ValidationError) }
+      it { expect(metadata).not_to be_valid }
+    end
+
+    context 'when description is empty' do
+      before { work_version.description = nil }
 
       it { expect { metadata.validate! }.to raise_error(DataCite::Metadata::ValidationError) }
       it { expect(metadata).not_to be_valid }

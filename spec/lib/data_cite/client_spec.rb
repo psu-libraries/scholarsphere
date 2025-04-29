@@ -11,6 +11,12 @@ RSpec.describe DataCite::Client do
   let(:valid_metadata) {
     {
       titles: [{ title: 'Work Title' }],
+      descriptions: [
+        {
+          descriptionType: 'Abstract',
+          description: 'Work Description'
+        }
+      ],
       creators: [{ name: 'Creator' }],
       publicationYear: 2019,
       types: { resourceTypeGeneral: 'Text' },
@@ -108,7 +114,7 @@ RSpec.describe DataCite::Client do
 
   describe '#update' do
     context 'with a valid doi', :vcr do
-      let(:suffix) { 'abc802' }
+      let(:suffix) { 'abc805' }
 
       it 'updates the metadata' do
         existing_doi, _resp = client.register(suffix)
@@ -117,6 +123,7 @@ RSpec.describe DataCite::Client do
         expect(doi).to eq existing_doi
         expect(response_hash.dig('data', 'attributes', 'state')).to eq 'draft'
         expect(response_hash.dig('data', 'attributes', 'titles')).to include('title' => 'Work Title')
+        expect(response_hash.dig('data', 'attributes', 'descriptions')).to include({'description' => 'Work Description', 'descriptionType' => 'Abstract'})
       end
     end
 

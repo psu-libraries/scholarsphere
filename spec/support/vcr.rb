@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'vcr'
+require 'webmock'
 
 # Fix flaky behavior ("Too many open files - socket(2) for "127.0.0.1" port 9515")
 #   - https://github.com/teamcapybara/capybara#gotchas

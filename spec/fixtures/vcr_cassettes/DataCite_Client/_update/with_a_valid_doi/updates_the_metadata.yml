@@ -5,14 +5,14 @@ http_interactions:
     uri: https://api.test.datacite.org/dois
     body:
       encoding: UTF-8
-      string: '{"data":{"type":"dois","attributes":{"doi":"10.33532/abc802"}}}'
+      string: '{"data":{"type":"dois","attributes":{"doi":"10.33532/abc805"}}}'
     headers:
       User-Agent:
-      - Faraday v0.17.0
+      - Faraday v2.12.2
       Content-Type:
       - application/vnd.api+json
       Authorization:
-      - Basic cHN1LnNzLWRldjpzc2RldjIwMTg=
+      - Basic cHN1LnNzLWRldjpPYnN0YWNsZT1DYXRob3VzZV9kZXRlc3Q=
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
@@ -23,7 +23,7 @@ http_interactions:
       message: Created
     headers:
       Date:
-      - Thu, 05 Dec 2019 20:42:35 GMT
+      - Tue, 29 Apr 2025 18:58:23 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -35,41 +35,87 @@ http_interactions:
       Cache-Control:
       - max-age=0, private, must-revalidate
       Vary:
-      - Accept-Encoding, Origin
+      - Accept,Accept-Encoding
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-Xss-Protection:
+      - '0'
       X-Credential-Username:
       - psu.ss-dev
       X-Request-Id:
-      - 31d64bc2-40a7-4084-8786-509be349a5b7
+      - e5098db0-d347-4892-85ea-cf6692182744
       Location:
-      - https://api.test.datacite.org/dois/3132202
+      - https://api.test.datacite.org/dois/14074334
       Etag:
-      - W/"a5bfedba3d2df7cff215c33a3dbb0413"
+      - W/"027a6c86ce2c826d1782abf82ba0171e"
+      X-Frame-Options:
+      - SAMEORIGIN
       X-Runtime:
-      - '0.068090'
+      - '0.088778'
+      X-Content-Type-Options:
+      - nosniff
       X-Powered-By:
-      - Phusion Passenger 6.0.4
+      - Phusion Passenger(R) 6.0.26
       Server:
-      - nginx/1.17.3 + Phusion Passenger 6.0.4
+      - nginx/1.18.0 + Phusion Passenger(R) 6.0.26
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, PATCH, DELETE, OPTIONS
+      Access-Control-Allow-Headers:
+      - Accept,Access-Control-Allow-Origin,Access-Control-Expose-Headers,Access-Control-Allow-Methods,Access-Control-Allow-Headers,Authorization,Cache-Control,Content-Type,DNT,If-Modified-Since,Keep-Alive,Origin,User-Agent,X-Mx-ReqToken,X-Requested-With
+      Access-Control-Expose-Headers:
+      - Authorization
     body:
       encoding: ASCII-8BIT
-      string: '{"data":{"id":"10.33532/abc802","type":"dois","attributes":{"doi":"10.33532/abc802","prefix":"10.33532","suffix":"abc802","identifiers":null,"creators":[],"titles":null,"publisher":null,"container":{},"publicationYear":null,"subjects":null,"contributors":[],"dates":null,"language":null,"types":{},"relatedIdentifiers":null,"sizes":null,"formats":null,"version":null,"rightsList":[],"descriptions":null,"geoLocations":null,"fundingReferences":null,"xml":null,"url":null,"contentUrl":null,"metadataVersion":0,"schemaVersion":null,"source":null,"isActive":false,"state":"draft","reason":null,"landingPage":null,"created":"2019-12-05T20:42:35.000Z","registered":null,"published":"","updated":"2019-12-05T20:42:35.000Z"},"relationships":{"client":{"data":{"id":"psu.ss-dev","type":"clients"}},"media":{"data":{"id":"10.33532/abc802","type":"media"}}}},"included":[{"id":"psu.ss-dev","type":"clients","attributes":{"name":"Scholarsphere
-        Devlopement","symbol":"PSU.SS-DEV","year":2018,"contactEmail":"awead@psu.edu","alternateName":null,"description":null,"language":null,"clientType":"repository","domains":"*","re3data":null,"opendoar":null,"issn":null,"url":null,"created":"2018-11-02T18:30:18.000Z","updated":"2018-11-02T18:31:18.000Z","isActive":true,"hasPassword":true},"relationships":{"provider":{"data":{"id":"psu","type":"providers"}},"prefixes":{"data":[{"id":"10.33532","type":"prefixes"}]}}}]}'
-    http_version: 
-  recorded_at: Thu, 05 Dec 2019 20:42:35 GMT
+      base64_string: |
+        eyJkYXRhIjp7ImlkIjoiMTAuMzM1MzIvYWJjODA1IiwidHlwZSI6ImRvaXMi
+        LCJhdHRyaWJ1dGVzIjp7ImRvaSI6IjEwLjMzNTMyL2FiYzgwNSIsInByZWZp
+        eCI6IjEwLjMzNTMyIiwic3VmZml4IjoiYWJjODA1IiwiaWRlbnRpZmllcnMi
+        OltdLCJhbHRlcm5hdGVJZGVudGlmaWVycyI6W10sImNyZWF0b3JzIjpbXSwi
+        dGl0bGVzIjpbXSwicHVibGlzaGVyIjpudWxsLCJjb250YWluZXIiOnt9LCJw
+        dWJsaWNhdGlvblllYXIiOm51bGwsInN1YmplY3RzIjpbXSwiY29udHJpYnV0
+        b3JzIjpbXSwiZGF0ZXMiOltdLCJsYW5ndWFnZSI6bnVsbCwidHlwZXMiOnt9
+        LCJyZWxhdGVkSWRlbnRpZmllcnMiOltdLCJyZWxhdGVkSXRlbXMiOltdLCJz
+        aXplcyI6W10sImZvcm1hdHMiOltdLCJ2ZXJzaW9uIjpudWxsLCJyaWdodHNM
+        aXN0IjpbXSwiZGVzY3JpcHRpb25zIjpbXSwiZ2VvTG9jYXRpb25zIjpbXSwi
+        ZnVuZGluZ1JlZmVyZW5jZXMiOltdLCJ4bWwiOm51bGwsInVybCI6bnVsbCwi
+        Y29udGVudFVybCI6bnVsbCwibWV0YWRhdGFWZXJzaW9uIjowLCJzY2hlbWFW
+        ZXJzaW9uIjpudWxsLCJzb3VyY2UiOiJhcGkiLCJpc0FjdGl2ZSI6ZmFsc2Us
+        InN0YXRlIjoiZHJhZnQiLCJyZWFzb24iOm51bGwsImxhbmRpbmdQYWdlIjpu
+        dWxsLCJ2aWV3Q291bnQiOjAsInZpZXdzT3ZlclRpbWUiOltdLCJkb3dubG9h
+        ZENvdW50IjowLCJkb3dubG9hZHNPdmVyVGltZSI6W10sInJlZmVyZW5jZUNv
+        dW50IjowLCJjaXRhdGlvbkNvdW50IjowLCJjaXRhdGlvbnNPdmVyVGltZSI6
+        W10sInBhcnRDb3VudCI6MCwicGFydE9mQ291bnQiOjAsInZlcnNpb25Db3Vu
+        dCI6MCwidmVyc2lvbk9mQ291bnQiOjAsImNyZWF0ZWQiOiIyMDI1LTA0LTI5
+        VDE4OjU4OjIzLjAwMFoiLCJyZWdpc3RlcmVkIjpudWxsLCJwdWJsaXNoZWQi
+        OiIiLCJ1cGRhdGVkIjoiMjAyNS0wNC0yOVQxODo1ODoyMy4wMDBaIn0sInJl
+        bGF0aW9uc2hpcHMiOnsiY2xpZW50Ijp7ImRhdGEiOnsiaWQiOiJwc3Uuc3Mt
+        ZGV2IiwidHlwZSI6ImNsaWVudHMifX0sInByb3ZpZGVyIjp7ImRhdGEiOnsi
+        aWQiOiJwc3UiLCJ0eXBlIjoicHJvdmlkZXJzIn19LCJtZWRpYSI6eyJkYXRh
+        Ijp7ImlkIjoiMTAuMzM1MzIvYWJjODA1IiwidHlwZSI6Im1lZGlhIn19LCJy
+        ZWZlcmVuY2VzIjp7ImRhdGEiOltdfSwiY2l0YXRpb25zIjp7ImRhdGEiOltd
+        fSwicGFydHMiOnsiZGF0YSI6W119LCJwYXJ0T2YiOnsiZGF0YSI6W119LCJ2
+        ZXJzaW9ucyI6eyJkYXRhIjpbXX0sInZlcnNpb25PZiI6eyJkYXRhIjpbXX19
+        fX0=
+  recorded_at: Tue, 29 Apr 2025 18:58:23 GMT
 - request:
     method: put
-    uri: https://api.test.datacite.org/dois/10.33532/abc802
+    uri: https://api.test.datacite.org/dois/10.33532/abc805
     body:
       encoding: UTF-8
-      string: '{"data":{"type":"dois","id":"10.33532/abc802","attributes":{"titles":[{"title":"Work
-        Title"}]}}}'
+      string: '{"data":{"type":"dois","id":"10.33532/abc805","attributes":{"titles":[{"title":"Work
+        Title"}],"descriptions":[{"descriptionType":"Abstract","description":"Work
+        Description"}],"creators":[{"name":"Creator"}],"publicationYear":2019,"types":{"resourceTypeGeneral":"Text"},"url":"http://example.test"}}}'
     headers:
       User-Agent:
-      - Faraday v0.17.0
+      - Faraday v2.12.2
       Content-Type:
       - application/vnd.api+json
       Authorization:
-      - Basic cHN1LnNzLWRldjpzc2RldjIwMTg=
+      - Basic cHN1LnNzLWRldjpPYnN0YWNsZT1DYXRob3VzZV9kZXRlc3Q=
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
@@ -80,7 +126,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Thu, 05 Dec 2019 20:42:36 GMT
+      - Tue, 29 Apr 2025 18:58:24 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -92,24 +138,96 @@ http_interactions:
       Cache-Control:
       - max-age=0, private, must-revalidate
       Vary:
-      - Accept-Encoding, Origin
+      - Accept,Accept-Encoding
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-Xss-Protection:
+      - '0'
       X-Credential-Username:
       - psu.ss-dev
       X-Request-Id:
-      - 9b687036-ff97-453e-9c84-03f525a3f286
+      - 53053065-ac51-48df-ba0a-8620835e0623
       Etag:
-      - W/"daf007085e620b0babceafc092612994"
+      - W/"ed655cc7da1fc9458cc94e18e9a9ab10"
+      X-Frame-Options:
+      - SAMEORIGIN
       X-Runtime:
-      - '0.071207'
+      - '0.085024'
+      X-Content-Type-Options:
+      - nosniff
       X-Powered-By:
-      - Phusion Passenger 6.0.4
+      - Phusion Passenger(R) 6.0.26
       Server:
-      - nginx/1.17.3 + Phusion Passenger 6.0.4
+      - nginx/1.18.0 + Phusion Passenger(R) 6.0.26
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, PATCH, DELETE, OPTIONS
+      Access-Control-Allow-Headers:
+      - Accept,Access-Control-Allow-Origin,Access-Control-Expose-Headers,Access-Control-Allow-Methods,Access-Control-Allow-Headers,Authorization,Cache-Control,Content-Type,DNT,If-Modified-Since,Keep-Alive,Origin,User-Agent,X-Mx-ReqToken,X-Requested-With
+      Access-Control-Expose-Headers:
+      - Authorization
     body:
       encoding: ASCII-8BIT
-      string: '{"data":{"id":"10.33532/abc802","type":"dois","attributes":{"doi":"10.33532/abc802","prefix":"10.33532","suffix":"abc802","identifiers":null,"creators":[],"titles":[{"title":"Work
-        Title"}],"publisher":null,"container":{},"publicationYear":null,"subjects":null,"contributors":[],"dates":null,"language":null,"types":{},"relatedIdentifiers":null,"sizes":null,"formats":null,"version":null,"rightsList":[],"descriptions":null,"geoLocations":null,"fundingReferences":null,"xml":"PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHJlc291cmNlIHhtbG5zOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhtbG5zPSJodHRwOi8vZGF0YWNpdGUub3JnL3NjaGVtYS9rZXJuZWwtNCIgeHNpOnNjaGVtYUxvY2F0aW9uPSJodHRwOi8vZGF0YWNpdGUub3JnL3NjaGVtYS9rZXJuZWwtNCBodHRwOi8vc2NoZW1hLmRhdGFjaXRlLm9yZy9tZXRhL2tlcm5lbC00L21ldGFkYXRhLnhzZCI+CiAgPGlkZW50aWZpZXIgaWRlbnRpZmllclR5cGU9IkRPSSI+MTAuMzM1MzIvQUJDODAyPC9pZGVudGlmaWVyPgogIDxjcmVhdG9ycy8+CiAgPHRpdGxlcz4KICAgIDx0aXRsZT5Xb3JrIFRpdGxlPC90aXRsZT4KICA8L3RpdGxlcz4KICA8cHVibGlzaGVyLz4KICA8cHVibGljYXRpb25ZZWFyLz4KICA8dmVyc2lvbi8+CjwvcmVzb3VyY2U+Cg==","url":null,"contentUrl":null,"metadataVersion":0,"schemaVersion":null,"source":null,"isActive":false,"state":"draft","reason":null,"landingPage":null,"created":"2019-12-05T20:42:35.000Z","registered":null,"published":"","updated":"2019-12-05T20:42:36.000Z"},"relationships":{"client":{"data":{"id":"psu.ss-dev","type":"clients"}},"media":{"data":{"id":"10.33532/abc802","type":"media"}}}},"included":[{"id":"psu.ss-dev","type":"clients","attributes":{"name":"Scholarsphere
-        Devlopement","symbol":"PSU.SS-DEV","year":2018,"contactEmail":"awead@psu.edu","alternateName":null,"description":null,"language":null,"clientType":"repository","domains":"*","re3data":null,"opendoar":null,"issn":null,"url":null,"created":"2018-11-02T18:30:18.000Z","updated":"2018-11-02T18:31:18.000Z","isActive":true,"hasPassword":true},"relationships":{"provider":{"data":{"id":"psu","type":"providers"}},"prefixes":{"data":[{"id":"10.33532","type":"prefixes"}]}}}]}'
-    http_version: 
-  recorded_at: Thu, 05 Dec 2019 20:42:36 GMT
-recorded_with: VCR 5.0.0
+      base64_string: |
+        eyJkYXRhIjp7ImlkIjoiMTAuMzM1MzIvYWJjODA1IiwidHlwZSI6ImRvaXMi
+        LCJhdHRyaWJ1dGVzIjp7ImRvaSI6IjEwLjMzNTMyL2FiYzgwNSIsInByZWZp
+        eCI6IjEwLjMzNTMyIiwic3VmZml4IjoiYWJjODA1IiwiaWRlbnRpZmllcnMi
+        OltdLCJhbHRlcm5hdGVJZGVudGlmaWVycyI6W10sImNyZWF0b3JzIjpbeyJu
+        YW1lIjoiQ3JlYXRvciIsImFmZmlsaWF0aW9uIjpbXSwibmFtZUlkZW50aWZp
+        ZXJzIjpbXX1dLCJ0aXRsZXMiOlt7InRpdGxlIjoiV29yayBUaXRsZSJ9XSwi
+        cHVibGlzaGVyIjpudWxsLCJjb250YWluZXIiOnt9LCJwdWJsaWNhdGlvblll
+        YXIiOjIwMTksInN1YmplY3RzIjpbXSwiY29udHJpYnV0b3JzIjpbXSwiZGF0
+        ZXMiOltdLCJsYW5ndWFnZSI6bnVsbCwidHlwZXMiOnsic2NoZW1hT3JnIjoi
+        U2Nob2xhcmx5QXJ0aWNsZSIsImNpdGVwcm9jIjoiYXJ0aWNsZS1qb3VybmFs
+        IiwiYmlidGV4IjoiYXJ0aWNsZSIsInJpcyI6IlJQUlQiLCJyZXNvdXJjZVR5
+        cGVHZW5lcmFsIjoiVGV4dCJ9LCJyZWxhdGVkSWRlbnRpZmllcnMiOltdLCJy
+        ZWxhdGVkSXRlbXMiOltdLCJzaXplcyI6W10sImZvcm1hdHMiOltdLCJ2ZXJz
+        aW9uIjpudWxsLCJyaWdodHNMaXN0IjpbXSwiZGVzY3JpcHRpb25zIjpbeyJk
+        ZXNjcmlwdGlvbiI6IldvcmsgRGVzY3JpcHRpb24iLCJkZXNjcmlwdGlvblR5
+        cGUiOiJBYnN0cmFjdCJ9XSwiZ2VvTG9jYXRpb25zIjpbXSwiZnVuZGluZ1Jl
+        ZmVyZW5jZXMiOltdLCJ4bWwiOiJQRDk0Yld3Z2RtVnljMmx2YmowaU1TNHdJ
+        aUJsYm1OdlpHbHVaejBpVlZSR0xUZ2lQejRLUEhKbGMyOTFjbU5sSUhodGJH
+        NXpPbmh6YVQwaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNUzlZVFV4
+        VFkyaGxiV0V0YVc1emRHRnVZMlVpSUhodGJHNXpQU0pvZEhSd09pOHZaR0Yw
+        WVdOcGRHVXViM0puTDNOamFHVnRZUzlyWlhKdVpXd3ROQ0lnZUhOcE9uTmph
+        R1Z0WVV4dlkyRjBhVzl1UFNKb2RIUndPaTh2WkdGMFlXTnBkR1V1YjNKbkwz
+        TmphR1Z0WVM5clpYSnVaV3d0TkNCb2RIUndPaTh2YzJOb1pXMWhMbVJoZEdG
+        amFYUmxMbTl5Wnk5dFpYUmhMMnRsY201bGJDMDBMMjFsZEdGa1lYUmhMbmh6
+        WkNJK0NpQWdQR2xrWlc1MGFXWnBaWElnYVdSbGJuUnBabWxsY2xSNWNHVTlJ
+        a1JQU1NJK01UQXVNek0xTXpJdlFVSkRPREExUEM5cFpHVnVkR2xtYVdWeVBn
+        b2dJRHhqY21WaGRHOXljejRLSUNBZ0lEeGpjbVZoZEc5eVBnb2dJQ0FnSUNB
+        OFkzSmxZWFJ2Y2s1aGJXVStRM0psWVhSdmNqd3ZZM0psWVhSdmNrNWhiV1Ur
+        Q2lBZ0lDQThMMk55WldGMGIzSStDaUFnUEM5amNtVmhkRzl5Y3o0S0lDQThk
+        R2wwYkdWelBnb2dJQ0FnUEhScGRHeGxQbGR2Y21zZ1ZHbDBiR1U4TDNScGRH
+        eGxQZ29nSUR3dmRHbDBiR1Z6UGdvZ0lEeHdkV0pzYVhOb1pYSXZQZ29nSUR4
+        d2RXSnNhV05oZEdsdmJsbGxZWEkrTWpBeE9Ud3ZjSFZpYkdsallYUnBiMjVa
+        WldGeVBnb2dJRHh5WlhOdmRYSmpaVlI1Y0dVZ2NtVnpiM1Z5WTJWVWVYQmxS
+        MlZ1WlhKaGJEMGlWR1Y0ZENJdlBnb2dJRHh6YVhwbGN5OCtDaUFnUEdadmNt
+        MWhkSE12UGdvZ0lEeDJaWEp6YVc5dUx6NEtJQ0E4WkdWelkzSnBjSFJwYjI1
+        elBnb2dJQ0FnUEdSbGMyTnlhWEIwYVc5dUlHUmxjMk55YVhCMGFXOXVWSGx3
+        WlQwaVFXSnpkSEpoWTNRaVBsZHZjbXNnUkdWelkzSnBjSFJwYjI0OEwyUmxj
+        Mk55YVhCMGFXOXVQZ29nSUR3dlpHVnpZM0pwY0hScGIyNXpQZ284TDNKbGMy
+        OTFjbU5sUGdvPSIsInVybCI6Imh0dHA6Ly9leGFtcGxlLnRlc3QiLCJjb250
+        ZW50VXJsIjpudWxsLCJtZXRhZGF0YVZlcnNpb24iOjAsInNjaGVtYVZlcnNp
+        b24iOiJodHRwOi8vZGF0YWNpdGUub3JnL3NjaGVtYS9rZXJuZWwtNCIsInNv
+        dXJjZSI6ImFwaSIsImlzQWN0aXZlIjpmYWxzZSwic3RhdGUiOiJkcmFmdCIs
+        InJlYXNvbiI6bnVsbCwibGFuZGluZ1BhZ2UiOm51bGwsInZpZXdDb3VudCI6
+        MCwidmlld3NPdmVyVGltZSI6W10sImRvd25sb2FkQ291bnQiOjAsImRvd25s
+        b2Fkc092ZXJUaW1lIjpbXSwicmVmZXJlbmNlQ291bnQiOjAsImNpdGF0aW9u
+        Q291bnQiOjAsImNpdGF0aW9uc092ZXJUaW1lIjpbXSwicGFydENvdW50Ijow
+        LCJwYXJ0T2ZDb3VudCI6MCwidmVyc2lvbkNvdW50IjowLCJ2ZXJzaW9uT2ZD
+        b3VudCI6MCwiY3JlYXRlZCI6IjIwMjUtMDQtMjlUMTg6NTg6MjMuMDAwWiIs
+        InJlZ2lzdGVyZWQiOm51bGwsInB1Ymxpc2hlZCI6IjIwMTkiLCJ1cGRhdGVk
+        IjoiMjAyNS0wNC0yOVQxODo1ODoyNC4wMDBaIn0sInJlbGF0aW9uc2hpcHMi
+        OnsiY2xpZW50Ijp7ImRhdGEiOnsiaWQiOiJwc3Uuc3MtZGV2IiwidHlwZSI6
+        ImNsaWVudHMifX0sInByb3ZpZGVyIjp7ImRhdGEiOnsiaWQiOiJwc3UiLCJ0
+        eXBlIjoicHJvdmlkZXJzIn19LCJtZWRpYSI6eyJkYXRhIjp7ImlkIjoiMTAu
+        MzM1MzIvYWJjODA1IiwidHlwZSI6Im1lZGlhIn19LCJyZWZlcmVuY2VzIjp7
+        ImRhdGEiOltdfSwiY2l0YXRpb25zIjp7ImRhdGEiOltdfSwicGFydHMiOnsi
+        ZGF0YSI6W119LCJwYXJ0T2YiOnsiZGF0YSI6W119LCJ2ZXJzaW9ucyI6eyJk
+        YXRhIjpbXX0sInZlcnNpb25PZiI6eyJkYXRhIjpbXX19fX0=
+  recorded_at: Tue, 29 Apr 2025 18:58:24 GMT
+recorded_with: VCR 6.3.1
