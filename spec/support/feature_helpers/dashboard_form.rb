@@ -6,7 +6,7 @@ module FeatureHelpers
 
     def self.fill_in_minimal_work_details_for_draft(work_version_metadata)
       fill_in 'work_version_title', with: work_version_metadata[:title]
-      page.scroll_to(find('#work_version_work_attributes_work_type')) if RSpec.current_example.metadata[:js]
+      page.scroll_to(find_by_id('work_version_work_attributes_work_type')) if RSpec.current_example.metadata[:js]
       select Work::Types.display('other'), from: 'work_version_work_attributes_work_type'
     end
 

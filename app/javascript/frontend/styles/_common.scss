@@ -391,6 +391,7 @@ h4,
     padding-top: 2rem;
     padding-bottom: 2rem;
   }
+
   @include media-breakpoint-up(md) {
     margin-left: auto;
     text-align: right;
@@ -401,8 +402,9 @@ h4,
   .dropdown-menu {
     padding: 0;
   }
+
   .nav-link {
-    padding: 0 0 5px 0;
+    padding: 0 0 5px;
   }
 }
 
