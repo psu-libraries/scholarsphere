@@ -6,10 +6,10 @@
 
 <div class="form-wrapper">
   <% if @resource.imported_metadata_from_rmd %>
-    <%= render 'form_fields/text', form: form, attribute: :title %>
+    <%= render 'form_fields/text', form: form, attribute: :title, aria_required: true %>
   <% end %>
-  <%= render 'form_fields/text_area', form: form, attribute: :description %>
-  <%= render 'form_fields/text', form: form, attribute: :published_date %>
+  <%= render 'form_fields/text_area', form: form, attribute: :description, aria_required: true %>
+  <%= render 'form_fields/text', form: form, attribute: :published_date, aria_required: true%>
   <% if deposit_pathway.grad_culminating_experiences? %>
     <%= render GradCulminatingExperiencesDropdownsComponent.new(form: form, resource: @resource) %>
   <% end %>
