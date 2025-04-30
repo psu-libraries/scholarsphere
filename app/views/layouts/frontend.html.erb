@@ -38,6 +38,7 @@
   </head>
 
   <body <%= yield :body_attributes %>>
+    <div class="d-flex flex-column min-vh-100">
     <header>
         <div class='container-fluid'>
           <div class="header--nav-branding d-flex w-100 py-2">
@@ -104,7 +105,7 @@
     </main>
 
     <% if show_footer? %>
-      <footer class="footer footer--landing text-light">
+      <footer class="footer footer--landing text-light mt-auto">
         <div class="container-fluid">
           <div class="row">
             <div class='site-logo col-lg-3'>
@@ -131,7 +132,7 @@
         </div>
       </footer>
     <% end %>
-
+    </div>
     <%= render partial: 'shared/modal' %>
   </body>
 </html>
