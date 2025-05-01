@@ -38,6 +38,20 @@ RSpec.describe LegacyUrlsController, type: :request do
         expect(response).to have_http_status(:not_found)
       end
     end
+
+    context 'when directed from a v3 file download path' do
+      before do
+        create(:legacy_identifier,
+               version: 3,
+               old_id: 'old1234id',
+               resource: resource)
+      end
+
+      it do
+        get '/downloads/old1234id'
+        expect(response).to redirect_to resource_path(resource.uuid)
+      end
+    end
   end
 
   describe 'Scholarsphere v3 legacy URLs to a Collection' do
