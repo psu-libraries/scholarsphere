@@ -123,7 +123,7 @@ RSpec.describe DataCite::Client do
         expect(doi).to eq existing_doi
         expect(response_hash.dig('data', 'attributes', 'state')).to eq 'draft'
         expect(response_hash.dig('data', 'attributes', 'titles')).to include('title' => 'Work Title')
-        expect(response_hash.dig('data', 'attributes', 'descriptions')).to include({'description' => 'Work Description', 'descriptionType' => 'Abstract'})
+        expect(response_hash.dig('data', 'attributes', 'descriptions')).to include({ 'description' => 'Work Description', 'descriptionType' => 'Abstract' })
       end
     end
 
