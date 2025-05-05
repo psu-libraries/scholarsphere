@@ -4,7 +4,7 @@ import AwsS3Multipart from '@uppy/aws-s3-multipart'
 import Dashboard from '@uppy/dashboard'
 
 export default class extends Controller {
-  connect () {
+  connect() {
     this.uploadSubmit = document.querySelector('.upload-submit')
     this.parentForm = document.getElementById(this.data.get('parentForm'))
     this.blacklist = JSON.parse(this.data.get('blacklist') || '[]')
@@ -12,8 +12,8 @@ export default class extends Controller {
     this.initializeUppy()
   }
 
-  initializeUppy () {
-    var uppy = Uppy({
+  initializeUppy() {
+    const uppy = new Uppy({
       id: 'uppy_' + (new Date().getTime()),
       autoProceed: true,
       allowMultipleUploads: true,
@@ -40,14 +40,14 @@ export default class extends Controller {
       .on('complete', result => this.onUppyComplete(result))
   }
 
-  onUppyComplete (result) {
+  onUppyComplete(result) {
     // this.uploadSubmit.style.visibility='visible'
     result.successful.forEach(success => {
       this.parentForm.appendChild(this.createHiddenFileInput(success))
     })
   }
 
-  createHiddenFileInput (success) {
+  createHiddenFileInput(success) {
     const inputName = this.data.get('inputName')
     const uploadedFileData = JSON.stringify({
       id: success.uploadURL.match(/\/cache\/([^?]+)/)[1],
