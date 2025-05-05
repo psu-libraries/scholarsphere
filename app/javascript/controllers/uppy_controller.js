@@ -15,7 +15,7 @@ export default class extends Controller {
   initializeUppy() {
     const uppy = new Uppy({
       id: 'uppy_' + (new Date().getTime()),
-      autoProceed: true,
+      autoProceed: false,
       allowMultipleUploads: true,
       onBeforeFileAdded: (currentFile, files) => {
         const filename = currentFile.name
@@ -33,12 +33,33 @@ export default class extends Controller {
         inline: 'true',
         showProgressDetails: true,
         height: 350,
-        doneButtonHandler: null
-      }).use(AwsS3Multipart, {
+        doneButtonHandler: null,
+        metaFields: [
+          { id: 'alt_text', name: 'Alt Text', placeholder: 'Describe this image for accessibility' }
+        ]
+      })
+      .use(AwsS3Multipart, {
         companionUrl: '/'
+      })
+      .on('file-added', (file) => {
+        if (file.type.startsWith('image/')) {
+          uppy.pauseResume(file.id);
+          setTimeout(() => {
+            const editButton = document.querySelector('.uppy-u-reset');
+
+            if (editButton) {
+              // Simulate a click on the edit button
+              editButton.click();
+            }
+          }, 100);
+        } else {
+          uppy.upload();
+        }
       })
       .on('complete', result => this.onUppyComplete(result))
   }
+
+
 
   onUppyComplete(result) {
     // this.uploadSubmit.style.visibility='visible'
@@ -55,7 +76,8 @@ export default class extends Controller {
       metadata: {
         size: success.data.size,
         filename: success.data.name,
-        mime_type: success.data.type
+        mime_type: success.data.type,
+        alt_text: success.meta.alt_text,
       }
     })
 
@@ -67,3 +89,5 @@ export default class extends Controller {
     return input
   }
 }
+
+
