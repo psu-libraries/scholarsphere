@@ -29,29 +29,33 @@ export default class extends Controller {
       onBeforeUpload: (files) => {
         const fileCount = Object.keys(files).length
         const file = Object.values(files)[fileCount - 1]
-        const missingAltText = file.type?.startsWith('image/') && !file.meta.alt_text?.trim();
+        const missingAltText = file.type?.startsWith('image/') && !file.meta.alt_text?.trim()
 
         if (missingAltText) {
           uppy.info('Please provide alt text for all image files before uploading.', 'error')
-          const editButton = document.querySelector('.uppy-u-reset');
+          const editButton = document.querySelector('.uppy-u-reset')
 
           if (editButton) {
             // Simulate a click on the edit button
-            editButton.click();
+            editButton.click()
             setTimeout(() => {
               document.addEventListener('click', (e) => {
                 // Detect "Save changes" button click in Uppy metadata editor
-                if (e.target.type === "submit") {
+                if (e.target.type === 'submit') {
                   // Wait a tick to let the file card close and upload button render
                   setTimeout(() => {
-                    const uploadButton = document.querySelector('.uppy-StatusBar-actionBtn--upload');
-                    if (uploadButton) uploadButton.click();
-                  }, 100); // Adjust timing if needed
+                    const uploadButton = document.querySelector('.uppy-StatusBar-actionBtn--upload')
+                    if (uploadButton) {
+                      // Simulate a click on the upload button
+                      uploadButton.click()
+                      console.log('Upload button clicked successfully after saving changes.')
+                    }
+                  }, 100) // Adjust timing if needed
                 }
-              }), 100
-            });
+              })
+            }, 100)
           }
-          return false;
+          return false
         }
       }
     })
@@ -76,30 +80,29 @@ export default class extends Controller {
       })
       .on('file-added', (file) => {
         if (file.type.startsWith('image/')) {
-          uppy.pauseResume(file.id);
+          uppy.pauseResume(file.id)
           setTimeout(() => {
-            const editButton = document.querySelector('.uppy-u-reset');
+            const editButton = document.querySelector('.uppy-u-reset')
 
             if (editButton) {
               // Simulate a click on the edit button
-              editButton.click();
+              editButton.click()
               setTimeout(() => {
                 document.addEventListener('click', (e) => {
                   // Detect "Save changes" button click in Uppy metadata editor
-                  if (e.target.type === "submit") {
+                  if (e.target.type === 'submit') {
                     // Wait a tick to let the file card close and upload button render
                     setTimeout(() => {
-                      const uploadButton = document.querySelector('.uppy-StatusBar-actionBtn--upload');
-                      if (uploadButton) uploadButton.click();
-                    }, 100); // Adjust timing if needed
+                      const uploadButton = document.querySelector('.uppy-StatusBar-actionBtn--upload')
+                      if (uploadButton) uploadButton.click()
+                    }, 100) // Adjust timing if needed
                   }
                 }), 100
-              });
-
+              })
             }
-          }, 100);
+          }, 100)
         } else {
-          uppy.upload();
+          uppy.upload()
         }
       })
       .on('complete', result => this.onUppyComplete(result))
@@ -121,7 +124,7 @@ export default class extends Controller {
         size: success.data.size,
         filename: success.data.name,
         mime_type: success.data.type,
-        alt_text: success.meta.alt_text,
+        alt_text: success.meta.alt_text
       }
     })
 
@@ -133,5 +136,3 @@ export default class extends Controller {
     return input
   }
 }
-
-
