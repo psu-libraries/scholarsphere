@@ -32,29 +32,8 @@ export default class extends Controller {
         const missingAltText = file.type?.startsWith('image/') && !file.meta.alt_text?.trim()
 
         if (missingAltText) {
-          uppy.info('Please provide alt text for all image files before uploading.', 'error')
-          const editButton = document.querySelector('.uppy-u-reset')
-
-          if (editButton) {
-            // Simulate a click on the edit button
-            editButton.click()
-            setTimeout(() => {
-              document.addEventListener('click', (e) => {
-                // Detect "Save changes" button click in Uppy metadata editor
-                if (e.target.type === 'submit') {
-                  // Wait a tick to let the file card close and upload button render
-                  setTimeout(() => {
-                    const uploadButton = document.querySelector('.uppy-StatusBar-actionBtn--upload')
-                    if (uploadButton) {
-                      // Simulate a click on the upload button
-                      uploadButton.click()
-                      console.log('Upload button clicked successfully after saving changes.')
-                    }
-                  }, 100) // Adjust timing if needed
-                }
-              })
-            }, 100)
-          }
+          uppy.info('Please provide alt text for all image files before uploading.', 'error', 5000)
+          this.simulateEditAndUpload()
           return false
         }
       }
@@ -80,28 +59,13 @@ export default class extends Controller {
       })
       .on('file-added', (file) => {
         if (file.type.startsWith('image/')) {
+          // Pause the upload to allow for alt text input
           uppy.pauseResume(file.id)
           setTimeout(() => {
-            const editButton = document.querySelector('.uppy-u-reset')
-
-            if (editButton) {
-              // Simulate a click on the edit button
-              editButton.click()
-              setTimeout(() => {
-                document.addEventListener('click', (e) => {
-                  // Detect "Save changes" button click in Uppy metadata editor
-                  if (e.target.type === 'submit') {
-                    // Wait a tick to let the file card close and upload button render
-                    setTimeout(() => {
-                      const uploadButton = document.querySelector('.uppy-StatusBar-actionBtn--upload')
-                      if (uploadButton) uploadButton.click()
-                    }, 100) // Adjust timing if needed
-                  }
-                })
-              }, 100)
-            }
+            this.simulateEditAndUpload()
           }, 100)
         } else {
+          // Proceed with the upload for non-image files
           uppy.upload()
         }
       })
@@ -134,5 +98,29 @@ export default class extends Controller {
     input.setAttribute('value', uploadedFileData)
 
     return input
+  }
+
+  simulateEditAndUpload () {
+    const editButton = document.querySelector('.uppy-u-reset')
+
+    if (editButton) {
+      // Simulate a click on the edit button
+      editButton.click()
+      setTimeout(() => {
+        document.addEventListener('click', (e) => {
+          // Detect "Save changes" button click in Uppy metadata editor
+          if (e.target.type === 'submit') {
+            // Wait a tick to let the file card close and upload button render
+            setTimeout(() => {
+              const uploadButton = document.querySelector('.uppy-StatusBar-actionBtn--upload')
+              if (uploadButton) {
+                // Simulate a click on the upload button
+                uploadButton.click()
+              }
+            }, 100)
+          }
+        })
+      }, 100)
+    }
   }
 }
