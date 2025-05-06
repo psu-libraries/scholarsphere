@@ -17,3 +17,11 @@
   @extend .btn--rounded;
   @include button-outline-variant($primary);
 }
+
+.uppy-DashboardContent-bar .uppy-DashboardContent-back {
+  display: none !important;
+}
+
+.uppy-Dashboard-FileCard-actionsBtn[type="button"] {
+  display: none !important;
+}
