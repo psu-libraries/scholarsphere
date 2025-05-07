@@ -42,12 +42,6 @@ module DataCite
         raise ValidationError.new("description can't be blank") if attributes[:descriptions].map { |d| d[:description] }.all?(&:blank?)
       end
 
-      def valid?
-        validate! && true
-      rescue Error
-        false
-      end
-
       def public_url_source
         @public_url_source ||= ->(id) {
           Rails.application.routes.url_helpers.resource_url(id)

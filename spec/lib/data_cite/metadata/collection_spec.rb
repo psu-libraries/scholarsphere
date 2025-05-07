@@ -106,12 +106,11 @@ RSpec.describe DataCite::Metadata::Collection do
     end
   end
 
-  describe '#validate! and #valid?' do
+  describe '#validate!' do
     context 'when title is blank' do
       before { collection.title = nil }
 
       it { expect { metadata.validate! }.to raise_error(DataCite::Metadata::ValidationError) }
-      it { expect(metadata).not_to be_valid }
     end
 
     context 'when publication_date and created_at are empty/blank' do
@@ -121,14 +120,12 @@ RSpec.describe DataCite::Metadata::Collection do
       end
 
       it { expect { metadata.validate! }.to raise_error(DataCite::Metadata::ValidationError) }
-      it { expect(metadata).not_to be_valid }
     end
 
     context 'when description is empty' do
       before { collection.description = nil }
 
       it { expect { metadata.validate! }.to raise_error(DataCite::Metadata::ValidationError) }
-      it { expect(metadata).not_to be_valid }
     end
   end
 end

@@ -131,12 +131,11 @@ RSpec.describe DataCite::Metadata::WorkVersion do
     end
   end
 
-  describe '#validate! and #valid?' do
+  describe '#validate!' do
     context 'when title is blank' do
       before { work_version.title = nil }
 
       it { expect { metadata.validate! }.to raise_error(DataCite::Metadata::ValidationError) }
-      it { expect(metadata).not_to be_valid }
     end
 
     context 'when publication_date and created_at are empty/blank' do
@@ -146,21 +145,18 @@ RSpec.describe DataCite::Metadata::WorkVersion do
       end
 
       it { expect { metadata.validate! }.to raise_error(DataCite::Metadata::ValidationError) }
-      it { expect(metadata).not_to be_valid }
     end
 
     context 'when work_type is empty' do
       before { work.work_type = nil }
 
       it { expect { metadata.validate! }.to raise_error(DataCite::Metadata::ValidationError) }
-      it { expect(metadata).not_to be_valid }
     end
 
     context 'when description is empty' do
       before { work_version.description = nil }
 
       it { expect { metadata.validate! }.to raise_error(DataCite::Metadata::ValidationError) }
-      it { expect(metadata).not_to be_valid }
     end
   end
 end
