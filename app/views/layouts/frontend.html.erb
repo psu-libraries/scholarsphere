@@ -11,6 +11,8 @@
 
     <title><%= render_page_title %></title>
     <%= javascript_pack_tag 'frontend' %>
+    <%= stylesheet_link_tag 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css', media: 'all', crossorigin: 'anonymous' %>
+    <%= stylesheet_link_tag 'https://assets.libraries.psu.edu/psulib_base/dist/peripheral/peripheral.min.css', media: 'all', crossorigin: 'anonymous' %>
     <%= stylesheet_pack_tag 'frontend', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= csrf_meta_tags %>
     <%= content_for(:head) %>
@@ -36,40 +38,55 @@
   </head>
 
   <body <%= yield :body_attributes %>>
+    <div class="d-flex flex-column min-vh-100">
     <header>
-      <nav class="navbar navbar-light navbar-expand-lg topbar">
-        <%= link_to 'ScholarSphere', root_path, class: 'navbar-brand slab-font' %>
-        <%= link_to image_pack_tag(
-              'static/frontend/img/logo-penn_state_university_libraries.png',
-              alt: 'Penn State – University Libraries'
-            ),
-                    'https://libraries.psu.edu/' %>
-        <button class="navbar-toggler ml-auto"
-                type="button"
-                data-toggle="collapse"
-                data-target="#topbar"
-                aria-controls="topbar"
-                aria-expanded="false"
-                aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="topbar">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <%= link_to 'About', about_path, class: 'nav-link' %>
-            </li>
-            <li class="nav-item">
-              <%= link_to 'Help', Rails.configuration.docs_url, class: 'nav-link' %>
-            </li>
-            <li class="nav-item">
-              <%= link_to 'Contact', new_incident_path, class: 'nav-link' %>
-            </li>
-            <%= render '/layouts/user_menu' %>
-          </ul>
+        <div class='container-fluid'>
+          <div class="header--nav-branding d-flex w-100 py-2">
+            <div class="header-mark">
+              <div class='site-logo'>
+                <%= link_to image_pack_tag(
+                      'static/frontend/img/logo-penn_state_university_libraries_2.png',
+                      alt: 'Penn State – University Libraries'
+                    ),
+                            'https://libraries.psu.edu/' %>
+              </div>
+              <div class="header-mark--name-slogan">
+                <%= link_to 'ScholarSphere', root_path, class: 'site-title' %>
+              </div>
+              <div class="header--nav-search navbar-expand-md pb-1">
+              <button class="navbar-toggler navbar-dark"
+                      type="button"
+                      data-toggle="collapse"
+                      data-target="#topbar"
+                      aria-controls="topbar"
+                      aria-expanded="false"
+                      aria-label="Toggle navigation">
+                <i class="bi bi-list"></i>
+              </button>
+              </div>
+            </div>
+          </div>
         </div>
-      </nav>
+        <nav class="navbar navbar-expand-md block-menu menu--main container-fluid">
+          <div class="collapse navbar-collapse header-nav" id="topbar">
+            <ul class="navbar-nav row-gap-2 pl-2 w-100">
+              <span class="navbar-nav">
+                <li class="nav-item">
+                  <%= link_to 'About', about_path, class: 'nav-link' %>
+                </li>
+                <li class="nav-item">
+                  <%= link_to 'Help', Rails.configuration.docs_url, class: 'nav-link' %>
+                </li>
+                <li class="nav-item">
+                  <%= link_to 'Contact', new_incident_path, class: 'nav-link' %>
+                </li>
+              </span>
+              <%= render '/layouts/user_menu' %>
+            </ul>
+          </div>
+        </nav>
 
-      <%= render '/layouts/navbar' %>
+      <%= render '/layouts/top_section' %>
 
       <%= yield(:detail_components) %>
     </header>
@@ -86,25 +103,34 @@
     </main>
 
     <% if show_footer? %>
-      <footer class="footer footer--landing">
-        <nav class="navbar navbar-light footer__nav">
-          <div>
-            <h3><%= t('footer.heading') %></h3>
-            <p><%= t('footer.description') %></p>
+      <footer class="footer footer--landing text-light mt-auto">
+        <div class="container-fluid">
+          <div class="row">
+            <div class='site-logo col-lg-3'>
+              <%= link_to image_pack_tag(
+                    'static/frontend/img/logo-penn_state_university_libraries_2.png',
+                    alt: 'Penn State – University Libraries'
+                  ),
+                          'https://libraries.psu.edu/' %>
+            </div>
+            <div class="col-lg-6">
+              <p><%= t('footer.heading') %></p>
+              <p><%= t('footer.description') %></p>
+            </div>
+            <div class="col-lg-3">
+              <p><%= t('footer.copyright_statement') %></p>
+              <p>
+                <%= link_to 'Penn State', 'https://www.psu.edu' %> |
+                <%= link_to 'University Libraries', 'https://libraries.psu.edu/' %> |
+                <%= link_to 'Accessibility', 'https://accessibility.psu.edu/' %> |
+                <%= link_to 'Terms of Use', terms_path %>
+              </p>
+            </div>
           </div>
-          <div class="ml-auto">
-            <p><%= t('footer.copyright_statement') %></p>
-            <p>
-              <%= link_to 'Penn State', 'https://www.psu.edu' %> |
-              <%= link_to 'University Libraries', 'https://libraries.psu.edu/' %> |
-              <%= link_to 'Accessibility', 'https://accessibility.psu.edu/' %> |
-              <%= link_to 'Terms of Use', terms_path %>
-            </p>
-          </div>
-        </nav>
+        </div>
       </footer>
     <% end %>
-
+    </div>
     <%= render partial: 'shared/modal' %>
   </body>
 </html>

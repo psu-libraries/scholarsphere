@@ -1,0 +1,16 @@
+<div class="bg-dark-blue pr-0" id="top-section">
+  <div class="container-fluid">
+    <%= yield :top_section_heading %>
+    <ul class="nav">
+      <% if content_for? :top_section_items %>
+        <%= yield :top_section_items %>
+      <% else %>
+
+        <%# Fill-out the navbar with empty space so that the headings will appear %>
+        <li class="nav-item">
+          <span class='navbar-filler' />
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>

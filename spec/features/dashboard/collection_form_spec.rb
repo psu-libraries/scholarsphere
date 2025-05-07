@@ -70,7 +70,6 @@ RSpec.describe 'Creating and editing collections', :inline_jobs, with_user: :use
       mock_solr_indexing_job
       FeatureHelpers::DashboardForm.fill_in_collection_details(metadata)
       FeatureHelpers::DashboardForm.save_and_continue
-
       expect(SolrIndexingJob).to have_received(:perform_later).once
 
       expect(Collection.count).to eq(initial_collection_count + 1)

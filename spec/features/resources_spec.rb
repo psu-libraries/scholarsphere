@@ -47,7 +47,7 @@ RSpec.describe 'Public Resources' do
         end
 
         # Does not have a menu toggle button
-        within('nav.main-nav') do
+        within('#top-section') do
           expect(page).to have_no_css('button')
         end
 
@@ -144,11 +144,6 @@ RSpec.describe 'Public Resources' do
 
             expect(page).to have_content(I18n.t!('resources.edit_button.text', type: 'Work'))
               .and have_content(I18n.t!('resources.settings_button.text', type: 'Work'))
-          end
-
-          # Has a menu toggle button
-          within('nav.main-nav') do
-            expect(page).to have_css('button.navbar-toggler')
           end
         end
       end

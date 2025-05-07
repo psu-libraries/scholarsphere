@@ -1,4 +1,4 @@
-<% content_for :navbar_heading do %>
+<% content_for :top_section_heading do %>
   <h1 class="navbar-brand navbar-brand--center slab-font"><%= t('admin.application_setting.heading') %></h1>
 <% end %>
 
@@ -13,12 +13,12 @@
       <div class="form-wrapper">
         <%= render 'form_fields/text', form: form, attribute: :read_only_message %>
         <%= render 'form_fields/text_area', form: form, attribute: :announcement %>
+        <div class="actions">
+          <%= form.submit 'Save', class: 'btn btn-primary' %>
+          <%= link_to 'Cancel', :back, class: 'btn btn-text' %>
+        </div>
       </div>
 
-      <div class="actions">
-        <%= form.submit 'Save', class: 'btn btn-primary' %>
-        <%= link_to 'Cancel', :back, class: 'btn btn-text' %>
-      </div>
     <% end %>
   </div>
 </div>

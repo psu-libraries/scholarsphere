@@ -6,7 +6,7 @@
   <%= render 'meta_tags', resource: collection, uuid: params[:id] %>
 <% end %>
 
-<%= content_for :navbar_items do %>
+<%= content_for :top_section_items do %>
   <% if policy(collection).edit? %>
     <li class="nav-item py-1">
       <%= render ResourceEditButton.new(resource: collection, policy: policy(collection)) %>
