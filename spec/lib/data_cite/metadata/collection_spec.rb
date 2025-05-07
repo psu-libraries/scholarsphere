@@ -30,6 +30,9 @@ RSpec.describe DataCite::Metadata::Collection do
     context 'when given the happy path' do
       it "maps the given Collection's attributes into ones needed by DataCite" do
         expect(attributes[:titles]).to eq([{ title: collection.title }])
+        description = attributes[:descriptions].first
+        expect(description[:descriptionType]).to eq 'Abstract'
+        expect(description[:description]).to eq collection.description
 
         # The following are tested thoroughly below
         expect(attributes[:url]).to be_present
@@ -103,12 +106,11 @@ RSpec.describe DataCite::Metadata::Collection do
     end
   end
 
-  describe '#validate! and #valid?' do
+  describe '#validate!' do
     context 'when title is blank' do
       before { collection.title = nil }
 
       it { expect { metadata.validate! }.to raise_error(DataCite::Metadata::ValidationError) }
-      it { expect(metadata).not_to be_valid }
     end
 
     context 'when publication_date and created_at are empty/blank' do
@@ -118,7 +120,12 @@ RSpec.describe DataCite::Metadata::Collection do
       end
 
       it { expect { metadata.validate! }.to raise_error(DataCite::Metadata::ValidationError) }
-      it { expect(metadata).not_to be_valid }
+    end
+
+    context 'when description is empty' do
+      before { collection.description = nil }
+
+      it { expect { metadata.validate! }.to raise_error(DataCite::Metadata::ValidationError) }
     end
   end
 end

@@ -3,17 +3,17 @@
 require 'rails_helper'
 require 'data_cite'
 
-RSpec.describe DataCite::Metadata::WorkVersion do
+RSpec.describe DataCite::Metadata::NonInstrumentWorkVersion do
   subject(:metadata) { described_class.new(resource: work_version, public_identifier: uuid) }
 
   let(:uuid) { 'abc-123' }
 
   let(:attributes) { metadata.attributes }
 
-  let(:work_version) { FactoryBot.build_stubbed(:work_version, :with_complete_metadata, creators: [creator]) }
+  let(:work_version) { build_stubbed(:work_version, :with_complete_metadata, creators: [creator]) }
   let(:work) { work_version.work }
 
-  let(:creator) { FactoryBot.build_stubbed(:authorship, :with_orcid) }
+  let(:creator) { build_stubbed(:authorship, :with_orcid) }
 
   before do
     metadata.public_url_source = ->(id) { "http://example.test/resources/#{id}" }
@@ -21,7 +21,7 @@ RSpec.describe DataCite::Metadata::WorkVersion do
 
   describe '::RESOURCE_TYPES' do
     it 'maps each of our Work::Types to a corresponding one in DataCite' do
-      expect(described_class::RESOURCE_TYPES.keys).to match_array Work::Types.all
+      expect(described_class::RESOURCE_TYPES.keys).to match_array(Work::Types.all - ['instrument'])
     end
   end
 
@@ -37,6 +37,9 @@ RSpec.describe DataCite::Metadata::WorkVersion do
     context 'when given the happy path' do
       it "maps the given WorkVersion's attributes into ones needed by DataCite" do
         expect(attributes[:titles]).to eq([{ title: work_version.title }])
+        description = attributes[:descriptions].first
+        expect(description[:descriptionType]).to eq 'Abstract'
+        expect(description[:description]).to eq work_version.description
 
         # The following are tested thoroughly below
         expect(attributes[:url]).to be_present
@@ -58,13 +61,13 @@ RSpec.describe DataCite::Metadata::WorkVersion do
     end
 
     context 'when given variants of the publication year' do
-      subject(:publicationYear) { attributes[:publicationYear] }
+      subject(:publication_year) { attributes[:publicationYear] }
 
       context 'when the publication_date can be parsed' do
         before { work_version.published_date = '2019-12-16' }
 
         it 'parses the publication_date and uses the year' do
-          expect(publicationYear).to eq 2019
+          expect(publication_year).to eq 2019
         end
       end
 
@@ -72,7 +75,7 @@ RSpec.describe DataCite::Metadata::WorkVersion do
         before { work_version.published_date = '2019-06?' }
 
         it 'parses the publication_date and uses the year' do
-          expect(publicationYear).to eq 2019
+          expect(publication_year).to eq 2019
         end
       end
 
@@ -83,7 +86,7 @@ RSpec.describe DataCite::Metadata::WorkVersion do
         end
 
         it 'uses the year from the date the record was created' do
-          expect(publicationYear).to eq 2019
+          expect(publication_year).to eq 2019
         end
       end
     end
@@ -128,12 +131,11 @@ RSpec.describe DataCite::Metadata::WorkVersion do
     end
   end
 
-  describe '#validate! and #valid?' do
+  describe '#validate!' do
     context 'when title is blank' do
       before { work_version.title = nil }
 
       it { expect { metadata.validate! }.to raise_error(DataCite::Metadata::ValidationError) }
-      it { expect(metadata).not_to be_valid }
     end
 
     context 'when publication_date and created_at are empty/blank' do
@@ -143,14 +145,18 @@ RSpec.describe DataCite::Metadata::WorkVersion do
       end
 
       it { expect { metadata.validate! }.to raise_error(DataCite::Metadata::ValidationError) }
-      it { expect(metadata).not_to be_valid }
     end
 
     context 'when work_type is empty' do
       before { work.work_type = nil }
 
       it { expect { metadata.validate! }.to raise_error(DataCite::Metadata::ValidationError) }
-      it { expect(metadata).not_to be_valid }
+    end
+
+    context 'when description is empty' do
+      before { work_version.description = nil }
+
+      it { expect { metadata.validate! }.to raise_error(DataCite::Metadata::ValidationError) }
     end
   end
 end

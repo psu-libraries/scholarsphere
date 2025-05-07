@@ -44,6 +44,8 @@ RSpec.describe WorkVersion do
     it { is_expected.to have_jsonb_accessor(:sub_work_type).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:program).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:degree).of_type(:string) }
+    it { is_expected.to have_jsonb_accessor(:owner).of_type(:string) }
+    it { is_expected.to have_jsonb_accessor(:manufacturer).of_type(:string) }
   end
 
   describe 'factory' do

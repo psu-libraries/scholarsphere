@@ -14,7 +14,11 @@ module DoiService
   # mint a DOI with DataCite, we _definitely_ want that DOI saved to the db,
   # regardless of whether some internal vagaries denote the record as invalid.
   def self.call(resource, client_source: nil, metadata_source: nil)
-    strategy_class = [WorkAndVersionStrategy, CollectionStrategy].find { |klass| klass.applicable_to?(resource) }
+    strategy_class = [
+      NonInstrumentWorkAndVersionStrategy,
+      InstrumentWorkAndVersionStrategy,
+      CollectionStrategy
+    ].find { |klass| klass.applicable_to?(resource) }
 
     raise ArgumentError, "DoiService cannot be called with a #{resource.class.name}" if strategy_class.blank?
 
@@ -37,16 +41,18 @@ module DoiService
     response_doi
   end
 
-  class WorkAndVersionStrategy
+  class BaseStrategy
+    def client_source
+      @client_source ||= DataCite::Client.public_method(:new)
+    end
+  end
+
+  class WorkAndVersionStrategy < BaseStrategy
     attr_reader :resource,
                 :work_version
 
     attr_writer :client_source,
                 :metadata_source
-
-    def self.applicable_to?(obj)
-      obj.is_a?(Work) || obj.is_a?(WorkVersion)
-    end
 
     def initialize(resource)
       unless self.class.applicable_to?(resource)
@@ -62,6 +68,61 @@ module DoiService
                       elsif resource.is_a? Work
                         resource.latest_published_version
                       end
+    end
+
+    def update_index
+      return unless resource.is_a? Work
+
+      resource.update_index
+    end
+
+    private
+
+      def register_new_doi
+        response_doi, _response_metadata = client_source.call.register
+        response_doi
+      end
+
+      def publish_doi(doi:)
+        metadata_adapter = metadata_source
+          .call(resource: work_version, public_identifier: resource.uuid)
+
+        client = client_source.call
+
+        DoiService.publish_doi(doi: doi, metadata_adapter: metadata_adapter, client: client)
+      end
+  end
+
+  class InstrumentWorkAndVersionStrategy < WorkAndVersionStrategy
+    def self.applicable_to?(obj)
+      (obj.is_a?(Work) || obj.is_a?(WorkVersion)) && obj.work_type == 'instrument'
+    end
+
+    def call
+      is_draft = work_version.draft?
+
+      case
+      when work_version.is_a?(NullWorkVersion)
+        # No-op
+      when is_draft
+        doi = register_new_doi
+        resource.update_attribute(:doi, doi)
+        update_index
+      when !is_draft
+        doi = publish_doi(doi: nil)
+        resource.update_attribute(:doi, doi)
+        update_index
+      end
+    end
+
+    def metadata_source
+      @metadata_source ||= DataCite::Metadata::InstrumentWorkVersion.public_method(:new)
+    end
+  end
+
+  class NonInstrumentWorkAndVersionStrategy < WorkAndVersionStrategy
+    def self.applicable_to?(obj)
+      (obj.is_a?(Work) || obj.is_a?(WorkVersion)) && obj.work_type != 'instrument'
     end
 
     def call
@@ -87,38 +148,12 @@ module DoiService
       end
     end
 
-    def update_index
-      return unless resource.is_a? Work
-
-      resource.update_index
-    end
-
-    def client_source
-      @client_source ||= DataCite::Client.public_method(:new)
-    end
-
     def metadata_source
-      @metadata_source ||= DataCite::Metadata::WorkVersion.public_method(:new)
+      @metadata_source ||= DataCite::Metadata::NonInstrumentWorkVersion.public_method(:new)
     end
-
-    private
-
-      def register_new_doi
-        response_doi, _response_metadata = client_source.call.register
-        response_doi
-      end
-
-      def publish_doi(doi:)
-        metadata_adapter = metadata_source
-          .call(resource: work_version, public_identifier: resource.uuid)
-
-        client = client_source.call
-
-        DoiService.publish_doi(doi: doi, metadata_adapter: metadata_adapter, client: client)
-      end
   end
 
-  class CollectionStrategy
+  class CollectionStrategy < BaseStrategy
     attr_reader :collection
 
     attr_writer :client_source,
@@ -143,10 +178,6 @@ module DoiService
         new_doi = publish_doi(doi: nil)
         collection.update_attribute(:doi, new_doi)
       end
-    end
-
-    def client_source
-      @client_source ||= DataCite::Client.public_method(:new)
     end
 
     def metadata_source
