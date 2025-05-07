@@ -2,6 +2,7 @@ import { Controller } from 'stimulus'
 import Uppy from '@uppy/core'
 import AwsS3Multipart from '@uppy/aws-s3-multipart'
 import Dashboard from '@uppy/dashboard'
+import { generateUploadedFileData, simulateEditAndUpload } from './uppy_utils'
 
 export default class extends Controller {
   connect() {
@@ -74,7 +75,7 @@ export default class extends Controller {
 
     if (missingAltText) {
       this.uppy.info('Please provide alt text for all image files before uploading.', 'error', 5000)
-      this.simulateEditAndUpload()
+      simulateEditAndUpload()
       return false
     }
   }
@@ -98,7 +99,7 @@ export default class extends Controller {
 
   createHiddenFileInput(success) {
     const inputName = this.data.get('inputName')
-    const uploadedFileData = this.generateUploadedFileData(success)
+    const uploadedFileData = generateUploadedFileData(success)
 
     const input = document.createElement('input')
     input.setAttribute('type', 'hidden')
@@ -106,38 +107,5 @@ export default class extends Controller {
     input.setAttribute('value', uploadedFileData)
 
     return input
-  }
-
-  generateUploadedFileData(success) {
-    return JSON.stringify({
-      id: success.uploadURL.match(/\/cache\/([^?]+)/)[1],
-      storage: 'cache',
-      metadata: {
-        size: success.data.size,
-        filename: success.data.name,
-        mime_type: success.data.type,
-        alt_text: success.meta.alt_text
-      }
-    })
-  }
-
-  simulateEditAndUpload() {
-    const editButton = document.querySelector('.uppy-u-reset')
-
-    if (editButton) {
-      editButton.click()
-      setTimeout(() => {
-        document.addEventListener('click', (e) => {
-          if (e.target.type === 'submit') {
-            setTimeout(() => {
-              const uploadButton = document.querySelector('.uppy-StatusBar-actionBtn--upload')
-              if (uploadButton) {
-                uploadButton.click()
-              }
-            }, 100)
-          }
-        })
-      }, 100)
-    }
   }
 }
