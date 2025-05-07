@@ -7,7 +7,7 @@
                       required: local_assigns[:required].presence,
                       data: local_assigns[:data],
                       readonly: local_assigns[:readonly].presence,
-                      aria: { describedby: hint.dom_id, required: local_assigns[:aria_required].presence} %>
+                      aria: { describedby: hint.dom_id, required: local_assigns[:aria_required].presence } %>
   <%= form.label attribute %>
 
   <% if form.object.errors.include?(attribute) %>
