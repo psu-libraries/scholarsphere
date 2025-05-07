@@ -17,3 +17,13 @@
   @extend .btn--rounded;
   @include button-outline-variant($primary);
 }
+
+// Hide the back button in the uppy file edit screen
+.uppy-DashboardContent-bar .uppy-DashboardContent-back {
+  display: none;
+}
+
+// Hide the cancel button in the uppy file edit screen
+.uppy-Dashboard-FileCard-actionsBtn[type="button"] {
+  display: none;
+}
