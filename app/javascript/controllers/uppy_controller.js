@@ -4,7 +4,7 @@ import AwsS3Multipart from '@uppy/aws-s3-multipart'
 import Dashboard from '@uppy/dashboard'
 
 export default class extends Controller {
-  connect () {
+  connect() {
     this.uploadSubmit = document.querySelector('.upload-submit')
     this.parentForm = document.getElementById(this.data.get('parentForm'))
     this.blacklist = JSON.parse(this.data.get('blacklist') || '[]')
@@ -12,32 +12,24 @@ export default class extends Controller {
     this.initializeUppy()
   }
 
-  initializeUppy () {
-    const uppy = new Uppy({
+  initializeUppy() {
+    this.uppy = this.createUppyInstance()
+    this.configureUppyPlugins()
+    this.registerUppyEventHandlers()
+  }
+
+  createUppyInstance() {
+    return new Uppy({
       id: 'uppy_' + (new Date().getTime()),
       autoProceed: false,
       allowMultipleUploads: true,
-      onBeforeFileAdded: (currentFile, files) => {
-        const filename = currentFile.name
-        const isBlacklisted = this.blacklist.includes(filename)
-
-        if (isBlacklisted) {
-          uppy.info(`Error: ${filename} already exists in this version`, 'error', 10000)
-          return false
-        }
-      },
-      onBeforeUpload: (files) => {
-        const fileCount = Object.keys(files).length
-        const file = Object.values(files)[fileCount - 1]
-        const missingAltText = file.type?.startsWith('image/') && !file.meta.alt_text?.trim()
-
-        if (missingAltText) {
-          uppy.info('Please provide alt text for all image files before uploading.', 'error', 5000)
-          this.simulateEditAndUpload()
-          return false
-        }
-      }
+      onBeforeFileAdded: (currentFile, files) => this.handleBeforeFileAdded(currentFile, files),
+      onBeforeUpload: (files) => this.handleBeforeUpload(files)
     })
+  }
+
+  configureUppyPlugins() {
+    this.uppy
       .use(Dashboard, {
         id: 'dashboard',
         target: this.element,
@@ -57,40 +49,56 @@ export default class extends Controller {
       .use(AwsS3Multipart, {
         companionUrl: '/'
       })
-      .on('file-added', (file) => {
-        if (file.type.startsWith('image/')) {
-          // Pause the upload to allow for alt text input
-          uppy.pauseResume(file.id)
-          setTimeout(() => {
-            this.simulateEditAndUpload()
-          }, 100)
-        } else {
-          // Proceed with the upload for non-image files
-          uppy.upload()
-        }
-      })
-      .on('complete', result => this.onUppyComplete(result))
   }
 
-  onUppyComplete (result) {
-    // this.uploadSubmit.style.visibility='visible'
+  registerUppyEventHandlers() {
+    this.uppy
+      .on('file-added', (file) => this.handleFileAdded(file))
+      .on('complete', (result) => this.onUppyComplete(result))
+  }
+
+  handleBeforeFileAdded(currentFile, files) {
+    const filename = currentFile.name
+    const isBlacklisted = this.blacklist.includes(filename)
+
+    if (isBlacklisted) {
+      this.uppy.info(`Error: ${filename} already exists in this version`, 'error', 10000)
+      return false
+    }
+  }
+
+  handleBeforeUpload(files) {
+    const fileCount = Object.keys(files).length
+    const file = Object.values(files)[fileCount - 1]
+    const missingAltText = file.type?.startsWith('image/') && !file.meta.alt_text?.trim()
+
+    if (missingAltText) {
+      this.uppy.info('Please provide alt text for all image files before uploading.', 'error', 5000)
+      this.simulateEditAndUpload()
+      return false
+    }
+  }
+
+  handleFileAdded(file) {
+    if (file.type.startsWith('image/')) {
+      this.uppy.pauseResume(file.id)
+      setTimeout(() => {
+        this.simulateEditAndUpload()
+      }, 100)
+    } else {
+      this.uppy.upload()
+    }
+  }
+
+  onUppyComplete(result) {
     result.successful.forEach(success => {
       this.parentForm.appendChild(this.createHiddenFileInput(success))
     })
   }
 
-  createHiddenFileInput (success) {
+  createHiddenFileInput(success) {
     const inputName = this.data.get('inputName')
-    const uploadedFileData = JSON.stringify({
-      id: success.uploadURL.match(/\/cache\/([^?]+)/)[1],
-      storage: 'cache',
-      metadata: {
-        size: success.data.size,
-        filename: success.data.name,
-        mime_type: success.data.type,
-        alt_text: success.meta.alt_text
-      }
-    })
+    const uploadedFileData = this.generateUploadedFileData(success)
 
     const input = document.createElement('input')
     input.setAttribute('type', 'hidden')
@@ -100,21 +108,30 @@ export default class extends Controller {
     return input
   }
 
-  simulateEditAndUpload () {
+  generateUploadedFileData(success) {
+    return JSON.stringify({
+      id: success.uploadURL.match(/\/cache\/([^?]+)/)[1],
+      storage: 'cache',
+      metadata: {
+        size: success.data.size,
+        filename: success.data.name,
+        mime_type: success.data.type,
+        alt_text: success.meta.alt_text
+      }
+    })
+  }
+
+  simulateEditAndUpload() {
     const editButton = document.querySelector('.uppy-u-reset')
 
     if (editButton) {
-      // Simulate a click on the edit button
       editButton.click()
       setTimeout(() => {
         document.addEventListener('click', (e) => {
-          // Detect "Save changes" button click in Uppy metadata editor
           if (e.target.type === 'submit') {
-            // Wait a tick to let the file card close and upload button render
             setTimeout(() => {
               const uploadButton = document.querySelector('.uppy-StatusBar-actionBtn--upload')
               if (uploadButton) {
-                // Simulate a click on the upload button
                 uploadButton.click()
               }
             }, 100)

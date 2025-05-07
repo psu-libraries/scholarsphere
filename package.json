@@ -13,7 +13,6 @@
     "@uppy/aws-s3-multipart": "^3.3.0",
     "@uppy/core": "^3.13.0",
     "@uppy/dashboard": "^3.7.0",
-    "@uppy/xhr-upload": "^3.6.0",
     "autocomplete.js": "^0.38.0",
     "axios": "^1.6.0",
     "babel-loader": "^9.1.3",
