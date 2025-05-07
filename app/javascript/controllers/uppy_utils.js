@@ -1,4 +1,4 @@
-export function generateUploadedFileData(success) {
+export function generateUploadedFileData (success) {
   return JSON.stringify({
     id: success.uploadURL.match(/\/cache\/([^?]+)/)[1],
     storage: 'cache',
@@ -11,7 +11,7 @@ export function generateUploadedFileData(success) {
   })
 }
 
-export function simulateEditAndUpload() {
+export function simulateEditAndUpload () {
   const editButton = document.querySelector('.uppy-u-reset')
 
   if (editButton) {
