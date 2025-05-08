@@ -27,6 +27,8 @@ RSpec.describe Authorship do
 
   describe 'validations' do
     it { is_expected.to validate_presence_of(:display_name) }
+    it { is_expected.to validate_presence_of(:given_name) }
+    it { is_expected.to validate_presence_of(:surname) }
     it { is_expected.to validate_presence_of(:position) }
   end
 
@@ -77,8 +79,6 @@ RSpec.describe Authorship do
   end
 
   describe 'singlevalued fields' do
-    it_behaves_like 'a singlevalued field', :surname
-    it_behaves_like 'a singlevalued field', :given_name
     it_behaves_like 'a singlevalued field', :email
   end
 

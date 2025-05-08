@@ -11,6 +11,8 @@ class Authorship < ApplicationRecord
   accepts_nested_attributes_for :actor
 
   validates :display_name,
+            :surname,
+            :given_name,
             :position,
             presence: true
 
@@ -31,8 +33,6 @@ class Authorship < ApplicationRecord
 
   # Fields that contain single values automatically remove blank values
   %i[
-    surname
-    given_name
     email
   ].each do |field|
     define_method :"#{field}=" do |val|
