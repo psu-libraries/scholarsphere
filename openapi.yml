@@ -437,6 +437,8 @@ components:
       type: "object"
       required:
         - "display_name"
+        - "surname"
+        - "given_name"
       properties:
         display_name:
           type: "string"
