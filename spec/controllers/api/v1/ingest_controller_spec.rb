@@ -10,7 +10,9 @@ RSpec.describe Api::V1::IngestController do
   let(:depositor) { VCRHelpers.depositor }
   let(:creator) do
     {
-      display_name: attributes_for(:authorship)[:display_name]
+      display_name: attributes_for(:authorship)[:display_name],
+      given_name: attributes_for(:authorship)[:given_name],
+      surname: attributes_for(:authorship)[:surname]
     }
   end
 
