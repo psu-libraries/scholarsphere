@@ -228,9 +228,21 @@ class WorkDepositPathway
                :contributor=,
                to: :work_version, prefix: false
 
+      validate :validate_creator_names
+
       def form_partial
         'non_instrument_work_version'
       end
+
+      private
+
+        def validate_creator_names
+          creators.each do |creator|
+            if creator.given_name.blank? || creator.surname.blank?
+              errors.add(:creators, 'Each creator must have a given name and a surname.')
+            end
+          end
+        end
     end
 
     class PublishFormBase < WorkVersionFormBase
