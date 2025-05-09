@@ -49,7 +49,6 @@ main {
 
 h4,
 .h4 {
-  text-transform: uppercase;
   letter-spacing: 1px;
   font-weight: $font-weight-bolder;
   font-size: $h4-font-size;
@@ -62,7 +61,6 @@ h4,
 
 .keyline {
   font-size: 1.25rem;
-  text-transform: uppercase;
   font-weight: $font-weight-bold;
   letter-spacing: 1px;
   color: $gray-700;
@@ -762,6 +760,10 @@ h4,
 
 .meta {
   @extend .small;
+
+  a {
+    font-weight: 800;
+  }
 }
 
 .card {
@@ -1108,7 +1110,6 @@ h4,
     .dropdown-item {
       font-size: $font-size-sm;
       padding-left: .5rem;
-      text-transform: uppercase;
       font-weight: $font-weight-bold;
 
       @include media-breakpoint-up(md) {
@@ -1186,7 +1187,6 @@ h4,
 }
 
 .badge {
-  text-transform: uppercase;
   letter-spacing: 1px;
 
   a {
