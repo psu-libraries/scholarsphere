@@ -67,4 +67,32 @@ RSpec.describe WorkDepositPathway::ContributorsFormBase, type: :model do
       expect(form.form_partial).to eq('non_instrument_work_version')
     end
   end
+
+  describe 'validations' do
+    context 'when no surname' do
+      before { wv.creators << build(:authorship, { display_name: 'Creator 1', given_name: 'John', surname: nil, email: 'abc123@email.com' }) }
+
+      it 'returns an error and asks for a surname' do
+        expect(form).not_to be_valid
+        expect(form.errors[:creators]).to include('Each creator must have a given name and a surname.')
+      end
+    end
+
+    context 'when no given name' do
+      before { wv.creators << build(:authorship, { display_name: 'Creator 1', given_name: nil, surname: 'Doe', email: 'abc123@email.com' }) }
+
+      it 'returns an error and asks for a given name' do
+        expect(form).not_to be_valid
+        expect(form.errors[:creators]).to include('Each creator must have a given name and a surname.')
+      end
+    end
+
+    context 'when valid' do
+      before { wv.creators << build(:authorship, { display_name: 'Creator 1', given_name: 'John', surname: 'Doe', email: 'abc123@email.com' }) }
+
+      it 'returns valid' do
+        expect(form).to be_valid
+      end
+    end
+  end
 end
