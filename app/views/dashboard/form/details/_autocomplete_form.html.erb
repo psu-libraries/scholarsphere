@@ -9,7 +9,7 @@
     <br>
     <%= form_for @autocomplete_work_form, url: dashboard_form_autocomplete_work_url(@resource.id) do |doi_form| %>
       <%= render 'form_fields/text', form: doi_form, attribute: :doi, required: true %>
-      <%= doi_form.submit 'Submit', class: 'btn btn-primary' %>
+      <%= doi_form.submit 'Submit DOI', class: 'btn btn-primary' %>
     <% end %>
   </div>
 </div>
