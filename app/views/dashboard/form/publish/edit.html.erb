@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row">
     <div class="col" data-controller="unsaved-changes" data-unsaved-changes-prompt="<%= t 'dashboard.form.unsaved_changes_prompt' %>">
-      <h4 class="text-center mb-4"><%= t("dashboard.form.heading.#{param_key}.edit") %></h4>
+      <h1 class="text-center mb-4 h4"><%= t("dashboard.form.heading.#{param_key}.edit")%></h1>
 
       <%= render FormTabsComponent.new(resource: @resource, current_controller: controller_name) %>
 
