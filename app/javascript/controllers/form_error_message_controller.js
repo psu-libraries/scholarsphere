@@ -5,7 +5,7 @@ import { Controller } from 'stimulus'
 export default class extends Controller {
   connect () {
     setTimeout(() => {
-      this.element.focus();
-    }, 100);
+      this.element.focus()
+    }, 100)
   }
 }
