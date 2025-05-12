@@ -281,6 +281,10 @@ h4,
     }
   }
 
+  li:last-child{
+    margin-left: auto;
+  }
+
   a.nav-link.dropdown-toggle::after {
     display: block !important;
     border-top: .3em solid;
@@ -546,6 +550,10 @@ h4,
   > .row {
     position: relative;
   }
+}
+
+.has-float-label .form-control:placeholder-shown:not(:focus) + * {
+  opacity: .75;
 }
 
 .action-bar {
@@ -1536,4 +1544,8 @@ dialog {
   border-radius: $border-radius;
   max-width: 50%;
   font-family: $slab-font-family;
+}
+
+code {
+  color: $dark-green;
 }
