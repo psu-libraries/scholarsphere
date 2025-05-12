@@ -84,7 +84,7 @@ export default class extends Controller {
     if (file.type.startsWith('image/')) {
       this.uppy.pauseResume(file.id)
       setTimeout(() => {
-        this.simulateEditAndUpload()
+        simulateEditAndUpload()
       }, 100)
     } else {
       this.uppy.upload()
