@@ -513,6 +513,7 @@ en:
           creator: Creator
           remove_creator: Remove Creator
           empty_result: No results found. Choose this option to create a new creator.
+          incomplete_name: Each creator must have a given name and a surname.
           creators_heading: Creators
           instrument_contributors_heading: Ownership and Manufacturer Details
           contributors_heading: Additional Acknowledgments
