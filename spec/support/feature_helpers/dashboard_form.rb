@@ -112,6 +112,33 @@ module FeatureHelpers
       end
     end
 
+    def self.upload_image(file_path = Rails.root.join('spec', 'fixtures', 'image.png'))
+      # Wait for Uppy to load
+      while page.has_no_selector?('.uppy-Dashboard-AddFiles')
+        sleep 0.1
+      end
+
+      # @note For some reason there are two 'files[]' hidden inputs, but it's only happens in the test environment.
+      page
+        .all('.uppy-Dashboard-input', visible: false)
+        .first
+        .attach_file(file_path)
+
+     # Wait for alt text form
+      while page.has_no_selector?('#uppy-Dashboard-FileCard-input-alt_text')
+        sleep 0.1
+      end 
+
+      fill_in 'uppy-Dashboard-FileCard-input-alt_text', with: 'Test alt text'
+
+      click_on 'Save changes'
+
+      # Wait for file to finish uploading
+      while page.has_no_selector?('.uppy-DashboardContent-title', text: 'Upload complete')
+        sleep 0.1
+      end
+    end
+
     def self.upload_file(file_path)
       # Wait for Uppy to load
       while page.has_no_selector?('.uppy-Dashboard-AddFiles')
