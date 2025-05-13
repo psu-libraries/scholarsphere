@@ -25,6 +25,7 @@ class FileResource < ApplicationRecord
           required: false,
           dependent: :destroy
 
+  before_destroy :cannot_be_deleted_if_linked_to_thumbnail_upload
   after_commit :perform_update_index, on: [:create, :update]
 
   scope :needs_accessibility_check, -> {
@@ -104,5 +105,12 @@ class FileResource < ApplicationRecord
 
     def perform_update_index
       indexing_source.call(self)
+    end
+
+    def cannot_be_deleted_if_linked_to_thumbnail_upload
+      if thumbnail_upload.present?
+        errors.add(:base, 'FileResource cannot be deleted while associated with a ThumbnailUpload')
+        throw(:abort)
+      end
     end
 end
