@@ -59,8 +59,14 @@ RSpec.describe EditorsForm, type: :model do
     end
 
     context 'when the user has additional groups' do
-      let(:current_user) { build(:user, groups: User.default_groups + [group]) }
       let(:group) { build(:group) }
+      let(:current_user) do
+        build(:user).tap do |user|
+          user.groups.concat(User.default_groups,
+                             create(:group, name: Scholarsphere::Application.config.psu_affiliated_group),
+                             [group])
+        end
+      end
 
       its(:group_options) { is_expected.to contain_exactly(group.name) }
     end
@@ -213,6 +219,20 @@ RSpec.describe EditorsForm, type: :model do
         form.save
         resource.reload
         expect(resource.edit_groups).to be_empty
+      end
+    end
+
+    context 'when the group is not allowed' do
+      let(:params) { { 'edit_groups' => [group.name] } }
+      let(:group) { create(:group, name: Scholarsphere::Application.config.psu_affiliated_group) }
+
+      it 'raises and error' do
+        expect(resource.edit_groups).to be_empty
+        form.save
+        expect(resource.edit_groups).to be_empty
+        expect(form.errors.full_messages).to contain_exactly(
+          "Edit groups #{I18n.t!('activemodel.errors.models.editors_form.attributes.edit_groups.not_allowed')}"
+        )
       end
     end
   end
