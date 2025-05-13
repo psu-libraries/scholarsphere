@@ -2,6 +2,7 @@
   <thead>
     <tr>
       <th><%= t('dashboard.file_list.edit.name') %></th>
+      <%= '<th>Alt text</th>'.html_safe if current_user.admin? %>
       <th><%= t('dashboard.file_list.edit.accessibility_score') %></th>
       <th><%= t('dashboard.file_list.edit.accessibility_report') %></th>
     </tr>
@@ -19,6 +20,11 @@
         <td>
           <span class="filename"><%= membership.title %></span>
         </td>
+        <% if current_user.admin? %>
+        <td>
+          <%= render partial: 'dashboard/form/files/inline_alt_text_editor', locals: { membership: membership } %>
+        </td>
+        <% end %>
          <td>
           <span data-target="accessibility-result.score"></span>
         </td>
