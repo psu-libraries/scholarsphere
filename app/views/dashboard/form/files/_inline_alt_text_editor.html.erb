@@ -1,0 +1,10 @@
+<%= form_for AltTextForm.new(membership),
+      url: dashboard_file_path(membership),
+      method: :patch,
+      remote: false,
+      html: {id: membership.id, class: 'form-inline'} do |f| %>
+
+  <%= f.label :alt_text, class: 'sr-only' %>
+  <%= f.text_field :alt_text, class: 'form-control', data: { target: 'filename-editor.titleField' } %>
+  <%= f.submit 'Update Alt text', class: 'btn btn-primary ml-1', data: { disable_with: 'Saving...' } %>
+<% end %>
