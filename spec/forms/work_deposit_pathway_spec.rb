@@ -121,7 +121,7 @@ RSpec.describe WorkDepositPathway do
 
       context "when the given work version has a work type of #{t}" do
         it 'returns a WorkDepositPathway::ScholarlyWorks::DetailsForm initialized with the work type' do
-          form = pathway.publish_form
+          form = pathway.publish_form(current_user: nil)
           expect(form).to be_a WorkDepositPathway::ScholarlyWorks::PublishForm
           expect(form.id).to eq 123
         end
@@ -146,7 +146,7 @@ RSpec.describe WorkDepositPathway do
 
       context "when the given work version has a work type of #{t}" do
         it 'returns the given WorkVersion' do
-          form = pathway.publish_form
+          form = pathway.publish_form(current_user: nil)
           expect(form).to eq wv
         end
       end
@@ -162,7 +162,7 @@ RSpec.describe WorkDepositPathway do
 
       context "when the given work version has a work type of #{t}" do
         it 'returns the given WorkVersion' do
-          form = pathway.publish_form
+          form = pathway.publish_form(current_user: nil)
           expect(form).to be_a WorkDepositPathway::DataAndCode::PublishForm
           expect(form.id).to eq 123
         end
@@ -179,7 +179,7 @@ RSpec.describe WorkDepositPathway do
 
       context "when the given work version has a work type of #{t}" do
         it 'returns a WorkDepositPathway::GradCulminatingExperiences::PublishForm initialized with the work type' do
-          form = pathway.publish_form
+          form = pathway.publish_form(current_user: nil)
           expect(form).to be_a WorkDepositPathway::GradCulminatingExperiences::PublishForm
           expect(form.id).to eq 123
         end

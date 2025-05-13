@@ -29,11 +29,11 @@ class WorkDepositPathway
     end
   end
 
-  def publish_form
+  def publish_form(current_user: nil, original_work_type: nil)
     if scholarly_works?
       ScholarlyWorks::PublishForm.new(resource)
     elsif data_and_code?
-      DataAndCode::PublishForm.new(resource)
+      DataAndCode::PublishForm.new(work_version: resource, current_user: current_user, original_work_type: original_work_type)
     elsif instrument?
       Instrument::PublishForm.new(resource)
     elsif grad_culminating_experiences?
@@ -355,6 +355,12 @@ class WorkDepositPathway
       end
 
       class PublishForm < PublishFormBase
+        def initialize(work_version:, current_user:, original_work_type:)
+          super(work_version)
+          @current_user = current_user
+          @original_work_type = original_work_type
+        end
+
         def self.form_fields
           WorkVersionFormBase::COMMON_FIELDS.union(WorkVersionFormBase::COMMON_PUBLISH_FIELDS).union(
             %w{
@@ -375,7 +381,7 @@ class WorkDepositPathway
         end
 
         validate :includes_readme_file,
-                 if: :published?
+                 if: :should_validate_readme?
 
         def form_partial
           'data_and_code_work_version'
@@ -402,6 +408,19 @@ class WorkDepositPathway
                  prefix: false
 
         private
+
+          def should_validate_readme?
+            return false if @current_user&.admin? && changed_to_data_and_code?
+            published?
+          end
+
+          def changed_to_data_and_code?
+            return false if @original_work_type.nil?
+            from_non_data = !Work::Types.data_and_code.include?(@original_work_type)
+            to_data = Work::Types.data_and_code.include?(work_version.work.work_type)
+            byebug
+            from_non_data && to_data
+          end
 
           def includes_readme_file
             unless file_resources.find do |fr|

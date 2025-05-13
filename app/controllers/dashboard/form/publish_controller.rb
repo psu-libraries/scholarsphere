@@ -10,13 +10,15 @@ module Dashboard
           .includes(file_version_memberships: [:file_resource])
           .find(params[:id])
         authorize(@work_version)
-        @resource = deposit_pathway.publish_form
+        original_type = session[:original_work_type] || @work_version.work.work_type
+        @resource = deposit_pathway.publish_form(current_user: current_user, original_work_type: original_type)
         prevalidate
       end
 
       def update
         @work_version = WorkVersion.find(params[:id])
-        @resource = deposit_pathway.publish_form
+        original_type = session[:original_work_type] || @work_version.work.work_type
+        @resource = deposit_pathway.publish_form(current_user: current_user, original_work_type: original_type)
         authorize(@work_version)
 
         @resource.attributes = work_version_params
