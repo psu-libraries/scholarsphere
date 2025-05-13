@@ -298,4 +298,25 @@ RSpec.describe FileResource do
       end
     end
   end
+
+  describe 'cannot_be_deleted_if_linked_to_thumbnail_upload' do
+    let!(:file_resource) { create(:file_resource) }
+
+    context 'when the file resource has a linked thumbnail upload' do
+      before do
+        create(:thumbnail_upload, file_resource: file_resource)
+      end
+
+      it 'does not allow the file resource to be deleted' do
+        expect { file_resource.destroy }.not_to change(described_class, :count)
+        expect(file_resource.errors[:base]).to include('FileResource cannot be deleted while associated with a ThumbnailUpload')
+      end
+    end
+
+    context 'when the file resource does not have a linked thumbnail upload' do
+      it 'allows the file resource to be deleted' do
+        expect { file_resource.destroy }.to change(described_class, :count).by(-1)
+      end
+    end
+  end
 end
