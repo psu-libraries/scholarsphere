@@ -22,7 +22,7 @@ RSpec.describe 'Home page' do
         expect(page).to have_no_css('button')
       end
 
-      expect(page).to have_css('h2', text: 'Browse and search for works')
+      expect(page).to have_css('h2', text: 'Browse and Search for Works')
       expect(page).to have_css('h2', text: 'Featured Works')
 
       within('div.search') do
@@ -49,7 +49,7 @@ RSpec.describe 'Home page' do
     it 'displays the landing page without any featured resources' do
       visit(root_path)
 
-      expect(page).to have_css('h2', text: 'Browse and search for works')
+      expect(page).to have_css('h2', text: 'Browse and Search for Works')
       expect(page).to have_no_css('h2', text: 'Featured Works')
     end
   end
