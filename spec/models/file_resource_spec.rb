@@ -316,6 +316,7 @@ RSpec.describe FileResource do
     context 'when the file resource does not have a linked thumbnail upload' do
       it 'allows the file resource to be deleted' do
         expect { file_resource.destroy }.to change(described_class, :count).by(-1)
+        expect(file_resource.errors[:base]).to be_empty
       end
     end
   end
