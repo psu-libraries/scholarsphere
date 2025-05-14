@@ -29,11 +29,11 @@ class WorkDepositPathway
     end
   end
 
-  def publish_form(current_user: nil, original_work_type: nil)
+  def publish_form(current_user: nil)
     if scholarly_works?
       ScholarlyWorks::PublishForm.new(resource)
     elsif data_and_code?
-      DataAndCode::PublishForm.new(work_version: resource, current_user: current_user, original_work_type: original_work_type)
+      DataAndCode::PublishForm.new(resource, current_user: current_user)
     elsif instrument?
       Instrument::PublishForm.new(resource)
     elsif grad_culminating_experiences?
@@ -355,10 +355,9 @@ class WorkDepositPathway
       end
 
       class PublishForm < PublishFormBase
-        def initialize(work_version:, current_user:, original_work_type:)
-          super(work_version)
+        def initialize(work_version, current_user:)
+          @work_version = work_version
           @current_user = current_user
-          @original_work_type = original_work_type
         end
 
         def self.form_fields
@@ -411,15 +410,14 @@ class WorkDepositPathway
 
           def should_validate_readme?
             return false if @current_user&.admin? && changed_to_data_and_code?
+
             published?
           end
 
           def changed_to_data_and_code?
-            return false if @original_work_type.nil?
-            from_non_data = !Work::Types.data_and_code.include?(@original_work_type)
-            to_data = Work::Types.data_and_code.include?(work_version.work.work_type)
-            byebug
-            from_non_data && to_data
+            work_type_changed = Work::Types.data_and_code.include?(@work_version.work.paper_trail_versions.where("object_changes -> 'work_type' IS NOT NULL").last.object_changes["work_type"].second)
+            return false if work_type_changed == nil
+            return work_type_changed
           end
 
           def includes_readme_file

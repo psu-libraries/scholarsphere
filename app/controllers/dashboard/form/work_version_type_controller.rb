@@ -13,7 +13,6 @@ module Dashboard
 
       def edit
         @resource = WorkVersion.includes(:work).find(params[:id])
-        session[:original_work_type] = @resource.work.work_type # store original work type
         authorize(@resource)
       end
 
