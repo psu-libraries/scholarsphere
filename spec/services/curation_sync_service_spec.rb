@@ -110,21 +110,17 @@ RSpec.describe CurationSyncService do
       end
 
       context 'when the latest work version was created by an admin' do
-        let(:work_version1) { build(:work_version,
-        work: nil,
-        aasm_state: 'published',
-        draft_curation_requested: nil,
-        published_at: Time.new(2024, 2, 10, 10, 30, 0))
-        }
         let(:work_version2) { build(:work_version,
                 work: nil,
                 aasm_state: 'published',
                 draft_curation_requested: true,
                 published_at: Time.new(2024, 3, 10, 10, 30, 0))
         }
-        let(:work) { create(:work, versions: [work_version1, work_version2]) }
 
         it 'does not send current version for curation' do
+          expect(CurationTaskClient).not_to receive(:send_curation).with(work_version2.id)
+
+          described_class.new(work).sync
         end
       end
     end

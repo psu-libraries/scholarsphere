@@ -37,15 +37,14 @@ class CurationSyncService
       stale_version
     end
 
-    def admin_submitted?(work_version)
-      true
-    #   publishing_changes = wv.versions.select { |v| v.object_changes['published_at'].present? }
-    #   whodunnit = publishing_changes.last['whodunnit']
-    #   user_id = /\d+/.match(whodun).to_a.first
-    #   user = User.find(user_id)
-    #   user&.admin?
-
-    # rescue
-    #   false
+    def admin_submitted?(wv)
+      publishing_changes = wv.versions.select { |v| v.object_changes['published_at'].present? }
+      whodun = publishing_changes.last['whodunnit']
+      user_id = /\d+/.match(whodun).to_a.first
+      user = User.find(user_id)
+      byebug
+      user&.admin?
+    rescue
+      false
     end
 end
