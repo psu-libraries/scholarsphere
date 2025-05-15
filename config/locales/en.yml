@@ -266,7 +266,7 @@ en:
         model: Include the model of the instrument.
         owner: Organization or individual that manages the instrument.
         manufacturer: Organization or individual that built the instrument.
-        rights: The license you select determines how your work can be used by others. [Read More](https://docs.scholarsphere.psu.edu/guides/licenses/)
+        rights: The license you select determines how your work can be used by others. [Read more about choosing a license](https://docs.scholarsphere.psu.edu/guides/licenses/)
         contributor: If applicable, please include a brief acknowledgment of any funding sources that supported your research. This helps ensure proper attribution and increases the visibility of your funder’s contribution.
       autocomplete_work_form:
         doi: Please enter a valid DOI (e.g. https://doi.org/10.xxxx/xxxxxx or 10.xxxx/xxxxxx)
@@ -334,7 +334,7 @@ en:
           Works you have deposited or have permission to edit will appear here. 
       start:
         heading: 'Get Started'
-        subheading: Or
+        subheading: or
         browse: 'Browse & Filter All Works'
     profiles:
       edit:
@@ -669,11 +669,11 @@ en:
         We have released a new version of ScholarSphere! The new platform includes an improved interface for uploading your work and better support for large files. We've also added support for ‘draft’ works and work versions. Additional features will be released in the coming months.
       read_more: 'Read more about ScholarSphere'
     search:
-      heading: 'Browse and search for works'
+      heading: 'Browse and Search for Works'
       placeholder: 'Search for titles, keywords, resource types, creators, etc.'
       label: 'Search ScholarSphere'
       submit: 'search'
-      subheading: Or
+      subheading: or
       browse: 'Browse & Filter All Works'
     featured:
       heading: 'Featured Works'
@@ -760,11 +760,11 @@ en:
       copy_icon: content_paste
   shared:
     search:
-      heading: 'Browse and search for works'
+      heading: 'Browse and Search for Works'
       placeholder: 'Search for titles, keywords, resource types, creators, etc.'
       label: 'Search ScholarSphere'
       submit: 'search'
-      subheading: Or
+      subheading: or
       browse: 'Browse & Filter All Works'
     thumbnail_heading: 'Thumbnail'
   visibility_badge_component:

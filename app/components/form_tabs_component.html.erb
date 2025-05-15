@@ -1,8 +1,8 @@
 <nav>
   <div class="nav nav-tabs justify-content-between" role="tablist">
     <% tabs.each do |tab| %>
-      <%= link_to_unless (!links_enabled || tab.active), tab.label, tab.url, class: tab.classes, data: { action: 'unsaved-changes#prompt' } do %>
-        <span class="<%= tab.classes.join(' ') %>"><%= tab.label %></span>
+      <%= link_to_unless (!links_enabled || tab.active), tab.label, tab.url, class: tab.classes, data: { action: 'unsaved-changes#prompt' }, role: 'tab' do %>
+        <h2 role="tab" class="<%= tab.classes.join(' ') %>"><%= tab.label %></h2>
       <% end %>
     <% end %>
   </div>

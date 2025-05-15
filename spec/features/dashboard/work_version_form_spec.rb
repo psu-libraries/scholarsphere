@@ -724,12 +724,12 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(work_version.creators).to be_empty
 
         within('#creators') do
-          expect(page).to have_content('CREATOR 1')
+          expect(page).to have_content('Creator 1')
           expect(find_field('Display Name').value).to eq("#{actor.given_name} #{actor.surname}")
           expect(page).to have_field('Given Name')
           expect(page).to have_field('Family Name')
           expect(page).to have_field('Email')
-          expect(page).to have_content("Access Account: #{actor.psu_id}".upcase)
+          expect(page).to have_content("Access Account: #{actor.psu_id}")
         end
 
         expect(page).to have_no_button('Request Curation')
@@ -755,7 +755,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(work_version.creators).to be_empty
 
         within('#creators') do
-          expect(page).to have_content('CREATOR 1')
+          expect(page).to have_content('Creator 1')
           expect(page).to have_field('Display Name', count: 1)
         end
 
@@ -772,10 +772,10 @@ RSpec.describe 'Publishing a work', with_user: :user do
         end
 
         within('#creators') do
-          expect(page).to have_content('CREATOR 1')
-          expect(page).to have_content('CREATOR 2')
+          expect(page).to have_content('Creator 1')
+          expect(page).to have_content('Creator 2')
           expect(page).to have_field('Display Name', count: 2)
-          expect(page).to have_content('Access Account: agw13'.upcase)
+          expect(page).to have_content('Access Account: agw13')
         end
 
         FeatureHelpers::DashboardForm.save_and_continue
@@ -798,7 +798,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(work_version.creators).to be_empty
 
         within('#creators') do
-          expect(page).to have_content('CREATOR 1')
+          expect(page).to have_content('Creator 1')
           expect(page).to have_field('Display Name', count: 1)
         end
 
@@ -811,10 +811,10 @@ RSpec.describe 'Publishing a work', with_user: :user do
         find_all('.aa-suggestion').first.click
 
         within('#creators') do
-          expect(page).to have_content('CREATOR 1')
-          expect(page).to have_content('CREATOR 2')
+          expect(page).to have_content('Creator 1')
+          expect(page).to have_content('Creator 2')
           expect(page).to have_field('Display Name', count: 2)
-          expect(page).to have_content('ORCID: 0000-0001-8485-6532')
+          expect(page).to have_content('ORCiD: 0000-0001-8485-6532')
         end
 
         FeatureHelpers::DashboardForm.save_and_continue
@@ -839,7 +839,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         expect(work_version.creators).to be_empty
         within('#creators') do
-          expect(page).to have_content('CREATOR 1')
+          expect(page).to have_content('Creator 1')
           expect(page).to have_field('Display Name', count: 1)
         end
 
@@ -852,10 +852,10 @@ RSpec.describe 'Publishing a work', with_user: :user do
         find_all('.aa-suggestion').first.click
 
         within('#creators') do
-          expect(page).to have_content('CREATOR 1')
-          expect(page).to have_content('CREATOR 2')
+          expect(page).to have_content('Creator 1')
+          expect(page).to have_content('Creator 2')
           expect(page).to have_field('Display Name', count: 2)
-          expect(page).to have_content("Access Account: #{existing_actor.psu_id}".upcase)
+          expect(page).to have_content("Access Account: #{existing_actor.psu_id}")
         end
 
         FeatureHelpers::DashboardForm.save_and_continue
@@ -879,7 +879,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         expect(work_version.creators).to be_empty
         within('#creators') do
-          expect(page).to have_content('CREATOR 1')
+          expect(page).to have_content('Creator 1')
           expect(page).to have_field('Display Name', count: 1)
         end
 
@@ -892,11 +892,11 @@ RSpec.describe 'Publishing a work', with_user: :user do
         find_all('.aa-suggestion').first.click
 
         within('#creators') do
-          expect(page).to have_content('CREATOR 1')
-          expect(page).to have_content('CREATOR 2')
+          expect(page).to have_content('Creator 1')
+          expect(page).to have_content('Creator 2')
           expect(page).to have_field('Display Name', count: 2)
           expect(page).to have_field('Display Name', with: 'nobody')
-          expect(page).to have_content('UNIDENTIFIED')
+          expect(page).to have_content('Unidentified')
         end
 
         within(page.find_all('.nested-fields').last) do
@@ -929,15 +929,15 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         expect(work_version.creators.map(&:surname)).to eq(creators.map(&:surname))
         within('#creators') do
-          expect(page).to have_content('CREATOR 1')
-          expect(page).to have_content('CREATOR 2')
+          expect(page).to have_content('Creator 1')
+          expect(page).to have_content('Creator 2')
           expect(page).to have_field('Display Name', count: 2)
         end
 
         page.find_all('.remove_fields').first.click
         within('#creators') do
-          expect(page).to have_content('CREATOR 1')
-          expect(page).to have_no_content('CREATOR 2')
+          expect(page).to have_content('Creator 1')
+          expect(page).to have_no_content('Creator 2')
           expect(page).to have_field('Display Name', count: 1)
         end
 
@@ -1340,12 +1340,12 @@ RSpec.describe 'Publishing a work', with_user: :user do
       # Ensure one creator is pre-filled with the User's Actor
       actor = user.reload.actor
       within('#creators') do
-        expect(page).to have_content('CREATOR 1')
+        expect(page).to have_content('Creator 1')
         expect(find_field('Display Name').value).to eq("#{actor.given_name} #{actor.surname}")
         expect(page).to have_field('Given Name')
         expect(page).to have_field('Family Name')
         expect(page).to have_field('Email')
-        expect(page).to have_content("Access Account: #{actor.psu_id}".upcase)
+        expect(page).to have_content("Access Account: #{actor.psu_id}")
       end
 
       FeatureHelpers::DashboardForm.save_and_continue

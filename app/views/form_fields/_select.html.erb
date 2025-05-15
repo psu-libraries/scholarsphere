@@ -5,12 +5,12 @@
 <div class="mt-1 form-group has-float-label mb-3">
   <%= form.select attribute,
                   options_for_select,
-                  { include_blank: local_assigns.fetch(:include_blank, false) },
+                  { include_blank: local_assigns[:include_blank].presence },
                   {
                     class: 'form-control custom-select',
                     required: local_assigns[:required].presence,
                     multiple: local_assigns.fetch(:multiple, false),
-                    aria: { describedby: hint.dom_id },
+                    aria: { describedby: hint.dom_id, required: local_assigns[:aria_required].presence },
                     disabled: local_assigns[:disabled].presence,
                     data: local_assigns[:data].presence
                   } %>
