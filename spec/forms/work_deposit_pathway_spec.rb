@@ -180,34 +180,31 @@ RSpec.describe WorkDepositPathway do
         let(:guest_user) { UserDecorator.new(User.guest) }
         let!(:work) { create(:work, :article) }
 
-        before do
-          PaperTrail.request(enabled: true) do
-            work.update!(work_type: new_type) # dataset or software_or_program_code
-            allow_any_instance_of(WorkVersion).to receive(:work).and_return(work) # makes sure the specific work created is returned
+        with_versioning do
+          before do
+            PaperTrail.request(enabled: true) do
+              work.update!(work_type: new_type) # dataset or software_or_program_code
+              allow_any_instance_of(WorkVersion).to receive(:work).and_return(work) # makes sure the specific work created is returned
+            end
           end
-        end
 
-        let!(:work_version) do
-          work.draft_version.tap do |wv_change|
-            allow(wv_change).to receive(:published?).and_return(true) # needed from original validation where published was the only condition
-            allow(wv_change).to receive(:file_resources).and_return([]) # no README
-
-            # simulate change from article to dataset or software_or_program_code
-            allow(wv.work).to receive_message_chain(:paper_trail_versions, :where, :last)
-              .and_return(instance_double(PaperTrail::Version, object_changes: { "work_type" => ["article", new_type] }))
+          let!(:work_version) do
+            work.draft_version.tap do |wv_change|
+              allow(wv_change).to receive_messages(published?: true, file_resources: [])
+            end
           end
-        end
 
-        it 'does not raise a README error for admins' do
-          form = described_class.new(work_version).publish_form(current_user: admin_user)
-          form.valid?
-          expect(form.errors[:file_resources]).not_to include("must include a separate README file labeled as “README” in addition to other files") 
-        end
+          it 'does not raise a README error for admins' do
+            form = described_class.new(work_version).publish_form(current_user: admin_user)
+            form.valid?
+            expect(form.errors[:file_resources]).not_to include('must include a separate README file labeled as “README” in addition to other files')
+          end
 
-        it 'adds a README error for guests' do
-          form = described_class.new(work_version).publish_form(current_user: guest_user)
-          form.valid?
-          expect(form.errors[:file_resources]).to include("must include a separate README file labeled as “README” in addition to other files")
+          it 'adds a README error for guests' do
+            form = described_class.new(work_version).publish_form(current_user: guest_user)
+            form.valid?
+            expect(form.errors[:file_resources]).to include('must include a separate README file labeled as “README” in addition to other files')
+          end
         end
       end
     end
