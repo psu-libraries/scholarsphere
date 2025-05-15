@@ -10,10 +10,8 @@ class CurationSyncService
     tasks = CurationTaskClient.find_all(@work.id)
     task_uuids = tasks.pluck('ID')
 
-    if task_uuids.exclude?(current_version_for_curation.uuid)
-      unless admin_submitted?(current_version_for_curation)
-        CurationTaskClient.send_curation(current_version_for_curation.id, updated_version: updated_version(tasks))
-      end
+    if task_uuids.exclude?(current_version_for_curation.uuid) && !admin_submitted?(current_version_for_curation)
+      CurationTaskClient.send_curation(current_version_for_curation.id, updated_version: updated_version(tasks))
     end
   rescue CurationTaskClient::CurationError => e
     retry if (retries += 1) < 3 && e.message.match(/5[0-9][0-9]/)
@@ -45,7 +43,7 @@ class CurationSyncService
       user_id = /\d+/.match(whodunnit).to_a.last
       user = User.find(user_id)
       user&.admin?
-    rescue
+    rescue StandardError
       false
     end
 end

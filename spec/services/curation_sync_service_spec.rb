@@ -71,7 +71,7 @@ RSpec.describe CurationSyncService do
       end
     end
 
-    context 'when the latest work version for curation is not found in tasks table', versioning: true do
+    context 'when the latest work version for curation is not found in tasks table', :versioning do
       let(:work_version1) { build(:work_version,
                                   work: nil,
                                   aasm_state: 'published',
