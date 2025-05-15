@@ -11,7 +11,9 @@ class CurationSyncService
     task_uuids = tasks.pluck('ID')
 
     if task_uuids.exclude?(current_version_for_curation.uuid)
-      CurationTaskClient.send_curation(current_version_for_curation.id, updated_version: updated_version(tasks)) unless admin_submitted?(current_version_for_curation)
+      unless admin_submitted?(current_version_for_curation)
+        CurationTaskClient.send_curation(current_version_for_curation.id, updated_version: updated_version(tasks))
+      end
     end
   rescue CurationTaskClient::CurationError => e
     retry if (retries += 1) < 3 && e.message.match(/5[0-9][0-9]/)
@@ -37,12 +39,11 @@ class CurationSyncService
       stale_version
     end
 
-    def admin_submitted?(wv)
-      publishing_changes = wv.versions.select { |v| v.object_changes['published_at'].present? }
-      whodun = publishing_changes.last['whodunnit']
-      user_id = /\d+/.match(whodun).to_a.first
+    def admin_submitted?(work_version)
+      publishing_changes = work_version.versions.select { |v| v.object_changes['published_at'].present? }
+      whodunnit = publishing_changes.last['whodunnit']
+      user_id = /\d+/.match(whodunnit).to_a.last
       user = User.find(user_id)
-      byebug
       user&.admin?
     rescue
       false
