@@ -564,6 +564,9 @@ en:
           request_note: "Note: It may take a few moments for the DOI to be minted after publication. Please refresh the page if it does not appear right away and do not request an additional one."
           label: I would like to mint a DOI upon publish.
           error: There was an error minting your doi. Please try again later from Work Settings or contact us if the problem persists.
+        auto_doi:
+          header: DOI
+          message: Upon publication, a DOI will be minted for the work.
       members:
         heading: Works
         badge: Work 

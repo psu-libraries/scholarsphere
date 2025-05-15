@@ -111,6 +111,8 @@ FactoryBot.define do
       with_readme_file
       description { Faker::Lorem.paragraph }
       published_date { Faker::Date.between(from: 2.years.ago, to: Date.today).iso8601 }
+      owner { 'Test Owner' }
+      manufacturer { 'Test Manufacturer' }
     end
 
     # A draft masters_culminating_experience that has everything needed to pass validations and be published
