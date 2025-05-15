@@ -170,6 +170,49 @@ RSpec.describe WorkDepositPathway do
     end
   end
 
+  describe '#publish_form when switching from non-DataAndCode to DataAndCode work type' do
+    %w[
+      dataset
+      software_or_program_code
+    ].each do |new_type|
+      context "when switching to data and code type '#{new_type}'" do
+        let(:admin_user) { UserDecorator.new(create(:user, :admin)) }
+        let(:guest_user) { UserDecorator.new(User.guest) }
+        let!(:work) { create(:work, :article) }
+
+        before do
+          PaperTrail.request(enabled: true) do
+            work.update!(work_type: new_type) # dataset or software_or_program_code
+            allow_any_instance_of(WorkVersion).to receive(:work).and_return(work) # makes sure the specific work created is returned
+          end
+        end
+
+        let!(:work_version) do
+          work.draft_version.tap do |wv_change|
+            allow(wv_change).to receive(:published?).and_return(true) # needed from original validation where published was the only condition
+            allow(wv_change).to receive(:file_resources).and_return([]) # no README
+
+            # simulate change from article to dataset or software_or_program_code
+            allow(wv.work).to receive_message_chain(:paper_trail_versions, :where, :last)
+              .and_return(instance_double(PaperTrail::Version, object_changes: { "work_type" => ["article", new_type] }))
+          end
+        end
+
+        it 'does not raise a README error for admins' do
+          form = described_class.new(work_version).publish_form(current_user: admin_user)
+          form.valid?
+          expect(form.errors[:file_resources]).not_to include("must include a separate README file labeled as “README” in addition to other files") 
+        end
+
+        it 'adds a README error for guests' do
+          form = described_class.new(work_version).publish_form(current_user: guest_user)
+          form.valid?
+          expect(form.errors[:file_resources]).to include("must include a separate README file labeled as “README” in addition to other files")
+        end
+      end
+    end
+  end
+
   describe '#publish_form when the given work version has a grad culminating experiences type' do
     %w[
       masters_culminating_experience
