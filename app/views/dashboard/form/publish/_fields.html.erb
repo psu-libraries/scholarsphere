@@ -36,8 +36,13 @@
     <% end %>
   -->
 
-    <% if allow_mint_doi? %>
+    <% if has_mint_doi_option? %>
       <%= render 'doi', form: form %>
+    <% elsif deposit_pathway.instrument? %>
+      <div class="keyline keyline--left">
+        <h4><%= t 'dashboard.form.publish.auto_doi.header' %></h4>
+      </div>
+      <p><%= t 'dashboard.form.publish.auto_doi.message' %></p>
     <% end %>
   </div>
 <% end %>

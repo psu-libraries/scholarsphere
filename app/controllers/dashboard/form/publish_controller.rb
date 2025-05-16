@@ -50,7 +50,7 @@ module Dashboard
         validation_context = current_user.admin? ? nil : :user_publish
         process_response(on_error: :edit, validation_context: validation_context) do
           if @resource.mint_doi_requested
-            allow_mint_doi? ? MintDoiAsync.call(@resource.work) : flash[:error] = t('dashboard.form.publish.doi.error')
+            deposit_pathway.allows_mint_doi_request? ? MintDoiAsync.call(@resource.work) : flash[:error] = t('dashboard.form.publish.doi.error')
           end
         end
       end
