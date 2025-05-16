@@ -5,7 +5,7 @@ require_relative '../_shared_examples_for_work_deposit_pathway_form'
 
 RSpec::Support::ObjectFormatter.default_instance.max_formatted_output_length = nil
 RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
-  subject(:form) { described_class.new(wv, current_user: nil) }
+  subject(:form) { described_class.new(wv, current_user: UserDecorator.new(create(:user))) }
 
   let(:wv) {
     build(

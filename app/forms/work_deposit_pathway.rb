@@ -356,7 +356,7 @@ class WorkDepositPathway
 
       class PublishForm < PublishFormBase
         def initialize(work_version, current_user:)
-          @work_version = work_version
+          super(work_version)
           @current_user = current_user
         end
 
@@ -409,9 +409,10 @@ class WorkDepositPathway
         private
 
           def should_validate_readme?
-            return false if @current_user&.admin? && changed_to_data_and_code?
+            return false if !published?
+            return false if @current_user.admin? && changed_to_data_and_code?
 
-            published?
+            true
           end
 
           def changed_to_data_and_code?
