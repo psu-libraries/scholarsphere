@@ -210,6 +210,33 @@ RSpec.describe WorkDepositPathway do
     end
   end
 
+  describe '#publish_form when no work types have been changed in history' do
+    context 'when work type has not been changed in history of work' do
+      let(:admin_user) { UserDecorator.new(create(:user, :admin)) }
+      let!(:work) { create(:work, :article) }
+
+      with_versioning do
+        before do
+          PaperTrail.request(enabled: true) do
+            allow_any_instance_of(WorkVersion).to receive(:work).and_return(work) # makes sure the specific work created is returned
+          end
+        end
+
+        let!(:work_version) do
+          work.draft_version.tap do |wv_change|
+            allow(wv_change).to receive_messages(published?: true, file_resources: [])
+          end
+        end
+
+        it 'has no work type history changes in the paper trail' do
+          expect(work.paper_trail_versions.where("object_changes -> 'work_type' IS NOT NULL")).to be_empty
+          form = described_class.new(work_version).publish_form(current_user: admin_user)
+          expect { form.valid? }.not_to raise_error(NoMethodError)
+        end
+      end
+    end
+  end
+
   describe '#publish_form when the given work version has a grad culminating experiences type' do
     %w[
       masters_culminating_experience
