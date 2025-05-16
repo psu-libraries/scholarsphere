@@ -415,16 +415,13 @@ class WorkDepositPathway
           end
 
           def changed_to_data_and_code?
-            change = @work_version.work
+            object_change = @work_version.work
               .paper_trail_versions
               .where("object_changes -> 'work_type' IS NOT NULL")
-              .last
-              .object_changes['work_type']
-              .second
-            work_type_changed = Work::Types.data_and_code.include?(change)
-            return false if work_type_changed == nil
+            return false if object_change.empty?
 
-            work_type_changed
+            change = object_change.last.object_changes['work_type'].second
+            Work::Types.data_and_code.include?(change)
           end
 
           def includes_readme_file
