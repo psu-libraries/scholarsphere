@@ -9,7 +9,7 @@ class LibanswersApiService
 
   def admin_create_curation_ticket(work_id)
     @work = Work.find(work_id)
-    return unless user_active?(@work)
+    raise LibanswersApiError, I18n.t('resources.contact_depositor_button.error_message') unless user_active?(@work)
 
     admin_subject = "ScholarSphere Deposit Curation: #{work.latest_version.title}"
     conn = create_connection
@@ -24,7 +24,7 @@ class LibanswersApiService
 
   def admin_create_accessibility_ticket(work_id, base_url)
     @work = Work.find(work_id)
-    return unless user_active?(@work)
+    raise LibanswersApiError, I18n.t('resources.contact_accessibility_team_button.error_message') unless user_active?(@work)
 
     admin_subject = "ScholarSphere Deposit Accessibility Curation: #{work.latest_version.title}"
     accessibility_check_results = get_accessibility_result_links(work, base_url)

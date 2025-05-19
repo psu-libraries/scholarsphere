@@ -66,9 +66,10 @@ RSpec.describe LibanswersApiService, :vcr do
           allow(mock_identity_search).to receive(:userid).and_return(inactive_member)
         end
 
-        it 'does not make a call to create a new ticket' do
-          described_class.new.admin_create_curation_ticket(work.id)
-          expect(mock_faraday_connection).not_to have_received(:post)
+        it 'raises an error' do
+          expect { described_class.new.admin_create_curation_ticket(work.id) }.to raise_error(
+            LibanswersApiService::LibanswersApiError, I18n.t('resources.contact_depositor_button.error_message')
+          )
         end
       end
     end
@@ -169,9 +170,10 @@ RSpec.describe LibanswersApiService, :vcr do
           allow(mock_identity_search).to receive(:userid).and_return(inactive_member)
         end
 
-        it 'does not make a call to create a new ticket' do
-          described_class.new.admin_create_curation_ticket(work.id)
-          expect(mock_faraday_connection).not_to have_received(:post)
+        it 'raises an error' do
+          expect { described_class.new.admin_create_curation_ticket(work.id) }.to raise_error(
+            LibanswersApiService::LibanswersApiError, I18n.t('resources.contact_accessibility_team_button.error_message')
+          )
         end
       end
     end
