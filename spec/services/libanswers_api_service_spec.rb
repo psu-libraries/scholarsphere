@@ -4,6 +4,14 @@ require 'rails_helper'
 require 'support/vcr'
 
 RSpec.describe LibanswersApiService, :vcr do
+  let(:active_member) { object_double(PsuIdentity::SearchService::Person.new, affiliation: ['FACULTY', 'MEMBER']) }
+  let(:mock_identity_search) { instance_spy('PsuIdentity::SearchService::Client') }
+
+  before do
+    allow(PsuIdentity::SearchService::Client).to receive(:new).and_return(mock_identity_search)
+    allow(mock_identity_search).to receive(:userid).and_return(active_member)
+  end
+
   describe '#admin_create_curation_ticket' do
     let!(:user) { create(:user, access_id: 'test', email: 'test@psu.edu') }
     let!(:work) { create(:work, depositor: user.actor) }
@@ -49,6 +57,19 @@ RSpec.describe LibanswersApiService, :vcr do
           "quid=#{curation_quid}&pquestion=ScholarSphere Deposit Curation: #{
           work.latest_version.title}&pname=#{work.display_name}&pemail=#{work.email}"
         )
+      end
+
+      context 'when the user is not an active member' do
+        let!(:inactive_member) { object_double(PsuIdentity::SearchService::Person.new, affiliation: ['MEMBER']) }
+
+        before do
+          allow(mock_identity_search).to receive(:userid).and_return(inactive_member)
+        end
+
+        it 'does not make a call to create a new ticket' do
+          described_class.new.admin_create_curation_ticket(work.id)
+          expect(mock_faraday_connection).not_to have_received(:post)
+        end
       end
     end
   end
@@ -138,6 +159,19 @@ RSpec.describe LibanswersApiService, :vcr do
             "quid=#{accessibility_quid}&pquestion=ScholarSphere Deposit Accessibility Curation: #{
             work_2.latest_version.title}&pname=#{work_2.display_name}&pemail=#{work.email}"
           )
+        end
+      end
+
+      context 'when the user is not an active member' do
+        let!(:inactive_member) { object_double(PsuIdentity::SearchService::Person.new, affiliation: ['MEMBER']) }
+
+        before do
+          allow(mock_identity_search).to receive(:userid).and_return(inactive_member)
+        end
+
+        it 'does not make a call to create a new ticket' do
+          described_class.new.admin_create_curation_ticket(work.id)
+          expect(mock_faraday_connection).not_to have_received(:post)
         end
       end
     end
