@@ -8,7 +8,6 @@
                   { include_blank: local_assigns[:include_blank].presence },
                   {
                     class: 'form-control custom-select',
-                    required: local_assigns[:required].presence,
                     multiple: local_assigns.fetch(:multiple, false),
                     aria: { describedby: hint.dom_id, required: local_assigns[:aria_required].presence },
                     disabled: local_assigns[:disabled].presence,
