@@ -1,0 +1,24 @@
+.alt-text-icon-wrapper {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  height: 38px;
+}
+
+.alt-text-success-icon,
+.alt-text-error-icon {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  margin-left: 8px;
+  vertical-align: middle;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-50%);
+  transition: opacity 0.3s;
+
+  &.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}

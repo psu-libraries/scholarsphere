@@ -32,7 +32,8 @@ class FileUploader < Shrine
   # metadata-listener service.
   add_metadata do
     {
-      virus: { status: nil, scanned_at: nil }
+      virus: { status: nil, scanned_at: nil },
+      alt_text: nil
     }
   end
 
