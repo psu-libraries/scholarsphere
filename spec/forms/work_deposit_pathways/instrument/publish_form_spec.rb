@@ -662,4 +662,10 @@ RSpec.describe WorkDepositPathway::Instrument::PublishForm, type: :model do
       end
     end
   end
+
+  describe '#mint_doi_requested' do
+    it 'returns true' do
+      expect(form.mint_doi_requested).to eq true
+    end
+  end
 end

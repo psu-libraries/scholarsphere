@@ -1,4 +1,4 @@
-<%= content_for :navbar_items do %>
+<%= content_for :top_section_items do %>
   <li class="nav-item">
     <%= render BackToWorkButtonComponent.new(work: @work) %>
   </li>
@@ -59,7 +59,7 @@
         <div class="row no-gutters">
         <%= button_to I18n.t('resources.contact_depositor_button.text'),
                       admin_create_curation_ticket_url(id: @work.id, ticket_type: 'curation'),
-                      class: 'btn btn-primary mr-2',
+                      class: 'btn btn-primary mr-2 mb-2',
                       form: {
                         target: '_blank',
                         data: {

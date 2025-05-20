@@ -61,7 +61,11 @@ class WorkDepositPathway
   end
 
   def allows_mint_doi_request?
-    (data_and_code? || instrument? || grad_culminating_experiences?) && @resource.doi_blank? && DoiMintingStatus.new(@resource.work).blank?
+    (data_and_code? || instrument? || grad_culminating_experiences?) && resource_has_no_doi?
+  end
+
+  def has_mint_doi_option?
+    (data_and_code? || grad_culminating_experiences?) && resource_has_no_doi?
   end
 
   def work?
@@ -109,6 +113,10 @@ class WorkDepositPathway
       else
         General::DetailsForm.form_fields.union(WorkVersionFormBase::COMMON_PUBLISH_FIELDS)
       end
+    end
+
+    def resource_has_no_doi?
+      @resource.doi_blank? && DoiMintingStatus.new(@resource.work).blank?
     end
 
     class WorkVersionFormBase
@@ -228,9 +236,21 @@ class WorkDepositPathway
                :contributor=,
                to: :work_version, prefix: false
 
+      validate :validate_creator_names
+
       def form_partial
         'non_instrument_work_version'
       end
+
+      private
+
+        def validate_creator_names
+          creators.each do |creator|
+            if creator.given_name.blank? || creator.surname.blank?
+              errors.add(:creators, I18n.t('dashboard.form.contributors.edit.incomplete_name'))
+            end
+          end
+        end
     end
 
     class PublishFormBase < WorkVersionFormBase
@@ -520,11 +540,14 @@ class WorkDepositPathway
                  :aasm,
                  :update_column,
                  :draft_curation_requested=,
-                 :mint_doi_requested=,
                  :set_thumbnail_selection,
                  :set_publisher_as_scholarsphere,
                  to: :work_version,
                  prefix: false
+
+        def mint_doi_requested
+          true
+        end
 
         private
 

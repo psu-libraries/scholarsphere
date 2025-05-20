@@ -4,8 +4,7 @@ class ThumbnailUpload < ApplicationRecord
   belongs_to :resource,
              polymorphic: true
 
-  belongs_to :file_resource,
-             dependent: :destroy
+  belongs_to :file_resource
 
   validates :resource_id,
             :resource_type,

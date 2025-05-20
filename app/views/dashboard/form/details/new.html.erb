@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row">
     <div class="col">
-      <h4 class="text-center mb-4"><%= t("dashboard.form.heading.#{param_key}.new") %></h4>
+      <h1 class="text-center mb-4 h4"><%= t("dashboard.form.heading.#{param_key}.new") %></h1>
       <%= render FormTabsComponent.new(resource: @resource, current_controller: controller_name) %>
 
       <div class="tab-content">

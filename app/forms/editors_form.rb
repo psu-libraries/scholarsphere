@@ -33,11 +33,13 @@ class EditorsForm
   end
 
   def group_options
-    (user.groups - User.default_groups).map(&:name)
+    user.groups.reject { |g| excluded_groups.include?(g) }.map(&:name)
   end
 
   def save
     user_list = build_users
+
+    errors.add(:edit_groups, :not_allowed) if group_list.any? { |g| excluded_groups.include?(g) }
     return false if errors.present?
 
     new_users = user_list - resource.edit_users
@@ -67,6 +69,11 @@ class EditorsForm
       edit_groups.map do |name|
         Group.find_by(name: name)
       end.compact
+    end
+
+    def excluded_groups
+      psu_affiliated_group = Group.find_by(name: Scholarsphere::Application.config.psu_affiliated_group)
+      [User.default_groups, psu_affiliated_group].flatten
     end
 
     # @note There are four outcomes from calling this wrapper:

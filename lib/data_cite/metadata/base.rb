@@ -19,6 +19,12 @@ module DataCite
       def attributes
         {
           titles: [{ title: resource.title }],
+          descriptions: [
+            {
+              descriptionType: 'Abstract',
+              description: resource.description
+            }
+          ],
           creators: creators,
           publicationYear: publication_year,
           types: {
@@ -32,12 +38,8 @@ module DataCite
         raise ValidationError.new("title can't be blank") if attributes[:titles].map { |t| t[:title] }.all?(&:blank?)
 
         raise ValidationError.new("publicationYear can't be blank") if attributes[:publicationYear].blank?
-      end
 
-      def valid?
-        validate! && true
-      rescue Error
-        false
+        raise ValidationError.new("description can't be blank") if attributes[:descriptions].map { |d| d[:description] }.all?(&:blank?)
       end
 
       def public_url_source

@@ -17,12 +17,12 @@ RSpec.describe 'Home page' do
         expect(page).to have_link('ScholarSphere')
       end
 
-      within('nav.main-nav') do
+      within('#top-section') do
         expect(page).to have_content('Welcome to ScholarSphere')
         expect(page).to have_no_css('button')
       end
 
-      expect(page).to have_css('h2', text: 'Browse and search for works')
+      expect(page).to have_css('h2', text: 'Browse and Search for Works')
       expect(page).to have_css('h2', text: 'Featured Works')
 
       within('div.search') do
@@ -35,7 +35,7 @@ RSpec.describe 'Home page' do
       expect(page).to have_css('h3', text: featured_collection.resource.title)
 
       within('footer') do
-        expect(page).to have_css('h3', text: 'ScholarSphere')
+        expect(page).to have_css('p', text: 'ScholarSphere')
         expect(page).to have_content(I18n.t!('footer.description'))
         expect(page).to have_content('Copyright')
         expect(page).to have_link('Penn State')
@@ -49,7 +49,7 @@ RSpec.describe 'Home page' do
     it 'displays the landing page without any featured resources' do
       visit(root_path)
 
-      expect(page).to have_css('h2', text: 'Browse and search for works')
+      expect(page).to have_css('h2', text: 'Browse and Search for Works')
       expect(page).to have_no_css('h2', text: 'Featured Works')
     end
   end

@@ -185,6 +185,7 @@ Rails.application.routes.draw do
   # lead to an extraordinarily unlikely false positive, but it would never lead to a false negative.
   get '/concern/generic_works/:id', to: 'legacy_urls#v3'
   get '/collections/:id', to: 'legacy_urls#v3'
+  get '/downloads/:id', to: 'legacy_urls#v3'
 
   # Bot challenge page
   post '/challenge', to: 'bot_challenge_page/bot_challenge_page#verify_challenge', as: :bot_detect_challenge
