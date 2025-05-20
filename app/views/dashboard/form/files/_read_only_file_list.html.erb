@@ -2,13 +2,13 @@
   <thead>
     <tr>
       <th><%= t('dashboard.file_list.edit.name') %></th>
-      <%= '<th>Alt text</th>'.html_safe if current_user.admin? %>
+      <%= '<th>Alt text</th>'.html_safe if current_user.admin? && work.has_image_file_resource? %>
       <th><%= t('dashboard.file_list.edit.accessibility_score') %></th>
       <th><%= t('dashboard.file_list.edit.accessibility_report') %></th>
     </tr>
   </thead>
   <tbody class="work-files__file">
-    <% file_version_memberships.each do |membership| %>
+    <% work.latest_version.file_version_memberships.each do |membership| %>
        <tr data-controller="accessibility-result"
             data-accessibility-result-id="<%= membership.id %>"
             data-accessibility-result-mime-type="<%= membership.mime_type %>"
@@ -20,10 +20,10 @@
         <td>
           <span class="filename"><%= membership.title %></span>
         </td>
-        <% if current_user.admin? %>
-        <td>
-          <%= render partial: 'dashboard/form/files/inline_alt_text_editor', locals: { membership: membership } %>
-        </td>
+        <% if current_user.admin? && membership.file_resource.image? %>
+          <td>
+            <%= render partial: 'dashboard/form/files/inline_alt_text_editor', locals: { file_resource: membership.file_resource } %>
+          </td>
         <% end %>
          <td>
           <span data-target="accessibility-result.score"></span>

@@ -124,10 +124,10 @@ module FeatureHelpers
         .first
         .attach_file(file_path)
 
-     # Wait for alt text form
+      # Wait for alt text form
       while page.has_no_selector?('#uppy-Dashboard-FileCard-input-alt_text')
         sleep 0.1
-      end 
+      end
 
       fill_in 'uppy-Dashboard-FileCard-input-alt_text', with: 'Test alt text'
 

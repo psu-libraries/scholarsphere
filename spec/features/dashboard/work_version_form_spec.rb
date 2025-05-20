@@ -1003,7 +1003,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
           expect(page).to have_content('image/png')
           expect(page).to have_content('Needs manual review')
         end
-        
+
         # Try to re-upload the same file again
         page
           .all('.uppy-Dashboard-input', visible: false)
@@ -1042,7 +1042,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
           expect(page).to have_content('ipsum.pdf')
           expect(page).to have_content('16.4 KB')
           expect(page).to have_content('application/pdf')
-          expect(page).not_to have_content('Needs manual review')
+          expect(page).to have_no_content('Needs manual review')
         end
 
         # Try to re-upload the same file again

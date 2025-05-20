@@ -1,6 +1,6 @@
 <%= form_with(
-      model: membership.file_resource,
-      url: admin_update_alt_text_path(membership.file_resource),
+      model: file_resource,
+      url: admin_update_alt_text_path(file_resource),
       local: false,
       class: 'form-inline',
       html: {
@@ -16,7 +16,7 @@
 
   <%= f.label :alt_text, class: 'sr-only' %>
   <%= f.text_field :alt_text, 
-                   value: membership.file_resource.file_data['metadata']['alt_text'], 
+                   value: file_resource.file_data['metadata']['alt_text'], 
                    class: 'form-control', data: { target: 'alt-text-editor.altTextField' } %>
   <%= f.submit 'Update Alt text', class: 'btn btn-primary ml-1', data: { disable_with: 'Saving...' } %>
   <%= render 'dashboard/form/files/alt_text_icons' %>
