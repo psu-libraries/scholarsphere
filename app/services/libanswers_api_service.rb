@@ -9,6 +9,8 @@ class LibanswersApiService
 
   def admin_create_curation_ticket(work_id)
     @work = Work.find(work_id)
+    raise LibanswersApiError, I18n.t('resources.contact_depositor_button.error_message') unless user_active?(@work)
+
     admin_subject = "ScholarSphere Deposit Curation: #{work.latest_version.title}"
     conn = create_connection
     response = conn.post(create_ticket_path, "quid=#{SCHOLARSPHERE_QUEUE_ID}&" +
@@ -22,6 +24,8 @@ class LibanswersApiService
 
   def admin_create_accessibility_ticket(work_id, base_url)
     @work = Work.find(work_id)
+    raise LibanswersApiError, I18n.t('resources.contact_accessibility_team_button.error_message') unless user_active?(@work)
+
     admin_subject = "ScholarSphere Deposit Accessibility Curation: #{work.latest_version.title}"
     accessibility_check_results = get_accessibility_result_links(work, base_url)
     conn = create_connection
@@ -93,5 +97,13 @@ class LibanswersApiService
 
     def host
       'https://psu.libanswers.com'
+    end
+
+    def user_active?(work)
+      access_id = work.depositor.psu_id
+      identity = PsuIdentity::SearchService::Client.new.userid(access_id)
+      identity.affiliation != ['MEMBER']
+    rescue PsuIdentity::SearchService::NotFound
+      false
     end
 end

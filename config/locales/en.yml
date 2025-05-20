@@ -730,9 +730,11 @@ en:
     contact_depositor_button:
       text: 'Contact Depositor via LibAnswers >>'
       confirm_message: 'This will create a ticket in LibAnswers and direct you to it.  An email will not be sent to the depositor until the form is completed in LibAnswers.'
+      error_message: 'Depositor access no longer active'
     contact_accessibility_team_button:
       text: 'Contact Accessibility Team via LibAnswers >>'
       confirm_message: 'This will create a ticket in LibAnswers and direct you to it.  An email will not be sent to the accessibility team until the form is completed in LibAnswers.'
+      error_message: 'Depositor access no longer active'
     request_alternate_format_button:
       text: 'Request Alternate Format'
       header: "Request alternate format for %{title}"
