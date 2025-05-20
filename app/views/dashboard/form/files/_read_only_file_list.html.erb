@@ -1,8 +1,8 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th><%= t('dashboard.file_list.edit.name') %></th>
-      <%= '<th>Alt text</th>'.html_safe if current_user.admin? && work.has_image_file_resource? %>
+      <th class="col-sm-4"><%= t('dashboard.file_list.edit.name') %></th>
+      <%= '<th class="col-sm-4">Alt text</th>'.html_safe if current_user.admin? && work.latest_has_image_file_resource? %>
       <th><%= t('dashboard.file_list.edit.accessibility_score') %></th>
       <th><%= t('dashboard.file_list.edit.accessibility_report') %></th>
     </tr>
@@ -20,12 +20,17 @@
         <td>
           <span class="filename"><%= membership.title %></span>
         </td>
-        <% if current_user.admin? && membership.file_resource.image? %>
-          <td>
-            <%= render partial: 'dashboard/form/files/inline_alt_text_editor', locals: { file_resource: membership.file_resource } %>
-          </td>
+        <% if current_user.admin? %>
+          <% if membership.file_resource.image? %>
+            <td>
+              <%= render partial: 'dashboard/form/files/inline_alt_text_editor', 
+                         locals: { file_resource: membership.file_resource } %>
+            </td>
+          <% elsif work.latest_has_image_file_resource? %>
+            <td></td>
+          <% end %>
         <% end %>
-         <td>
+        <td>
           <span data-target="accessibility-result.score"></span>
         </td>
         <td>

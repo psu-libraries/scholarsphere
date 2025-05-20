@@ -18,6 +18,6 @@
   <%= f.text_field :alt_text, 
                    value: file_resource.file_data['metadata']['alt_text'], 
                    class: 'form-control', data: { target: 'alt-text-editor.altTextField' } %>
-  <%= f.submit 'Update Alt text', class: 'btn btn-primary ml-1', data: { disable_with: 'Saving...' } %>
+  <%= f.submit 'Update Alt Text', class: 'btn btn-primary ml-1', data: { disable_with: 'Saving...' } %>
   <%= render 'dashboard/form/files/alt_text_icons' %>
 <% end %>
