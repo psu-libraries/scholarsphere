@@ -11,7 +11,8 @@
                         title: t('resources.download', name: file.title),
                         class: 'matomo_download',
                         rel: 'nofollow' do %>
-              Download <%= work_version.title %>
+              Download <%= file.title %>
+              <span class="visually-hidden">Download image of '<%= file.file_resource.file.metadata["alt_text"] %>'</span>
             <% end %>
           </h3>
           <p class="meta mb-0">
