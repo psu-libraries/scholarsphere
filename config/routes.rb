@@ -52,7 +52,8 @@ Rails.application.routes.draw do
   resources :resources, only: [:show] do
     get 'alternate_format_request/:id', to: 'resources#new_alternate_format_request', as: :alternate_format_request
     post 'alternate_format_request/:id', to: 'resources#create_alternate_format_request', as: :create_alternate_format_request
-    get 'downloads/:id', to: 'downloads#content', as: :download
+    get 'open/:id', to: 'downloads#content', as: :open
+    get 'downloads/:id', to: 'downloads#download', as: :download
     get 'analytics', to: 'analytics#show', as: :analytics
 
     resource :doi, only: %i[create]
