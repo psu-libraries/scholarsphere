@@ -1,21 +1,21 @@
 .alt-text-icon-wrapper {
-  position: relative;
   display: inline-block;
-  vertical-align: middle;
   height: 38px;
+  position: relative;
+  vertical-align: middle;
 }
 
 .alt-text-success-icon,
 .alt-text-error-icon {
-  position: absolute;
   left: 0;
-  top: 50%;
   margin-left: 8px;
-  vertical-align: middle;
   opacity: 0;
   pointer-events: none;
+  position: absolute;
+  top: 50%;
   transform: translateY(-50%);
-  transition: opacity 0.3s;
+  transition: opacity .3s;
+  vertical-align: middle;
 
   &.show {
     opacity: 1;

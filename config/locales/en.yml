@@ -422,6 +422,9 @@ en:
               for the work. Withdrawing the only published version of a work will remove this work from public search
               results.
         submit_button: Withdraw Version
+      show:
+        aria_download_image: ", an image of %{alt_text}"
+        aria_download_file: "Download file: %{file_name}"
     form:
       unsaved_changes_prompt: You have unsaved changes on this page. Are you sure you want to leave and discard these changes? 
       heading:

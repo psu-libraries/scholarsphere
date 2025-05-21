@@ -11,6 +11,7 @@ class Admin::AltTextController < ApplicationController
                      alt_text: @file_resource.file_data['metadata']['alt_text'] },
              status: :ok
     else
+      logger.error(@file_resource.errors.full_messages)
       render json: { success: false,
                      errors: @file_resource.errors.full_messages,
                      alt_text: @file_resource.reload.file_data['metadata']['alt_text'] },

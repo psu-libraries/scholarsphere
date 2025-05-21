@@ -15,8 +15,8 @@
     ) do |f| %>
 
   <%= f.label :alt_text, class: 'sr-only' %>
-  <%= f.text_field :alt_text, 
-                   value: file_resource.file_data['metadata']['alt_text'], 
+  <%= f.text_field :alt_text,
+                   value: file_resource.file_data['metadata']['alt_text'],
                    size: 10,
                    class: 'form-control', data: { target: 'alt-text-editor.altTextField' } %>
   <%= f.submit 'Update Alt Text', class: 'btn btn-sm btn-primary ml-1', data: { disable_with: 'Saving...' } %>

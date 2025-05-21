@@ -23,7 +23,7 @@
         <% if current_user.admin? %>
           <% if membership.file_resource.image? %>
             <td>
-              <%= render partial: 'dashboard/form/files/inline_alt_text_editor', 
+              <%= render partial: 'dashboard/form/files/inline_alt_text_editor',
                          locals: { file_resource: membership.file_resource } %>
             </td>
           <% elsif work.latest_has_image_file_resource? %>

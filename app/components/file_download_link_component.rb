@@ -1,0 +1,40 @@
+# frozen_string_literal: true
+
+class FileDownloadLinkComponent < ViewComponent::Base
+  def initialize(file:, resource_id:)
+    @file = file
+    @resource_id = resource_id
+  end
+
+  def image?
+    @file.file_resource.image?
+  end
+
+  def alt_text
+    @file.file_resource.file.metadata['alt_text']
+  end
+
+  def aria_label
+    download_text = t('dashboard.works.show.aria_download_file', file_name: file_name)
+
+    return download_text unless image?
+
+    download_text + t('dashboard.works.show.aria_download_image', alt_text: alt_text)
+  end
+
+  def file_name
+    @file.file_resource.file.original_filename
+  end
+
+  def extension
+    @file.file_resource.file.extension
+  end
+
+  def download_path
+    Rails.application.routes.url_helpers.resource_download_path(@file.id, resource_id: @resource_id)
+  end
+
+  def download_title
+    I18n.t('resources.download', name: @file.title)
+  end
+end
