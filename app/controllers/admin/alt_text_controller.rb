@@ -3,7 +3,7 @@
 class Admin::AltTextController < ApplicationController
   before_action :set_file_resource
 
-  # PATCH /dashboard/alt_text/:id
+  # PATCH /admin/alt_text/:id
   def update
     @file_resource.file_attacher.add_metadata(alt_text: file_resource_params[:alt_text])
     if @file_resource.save
