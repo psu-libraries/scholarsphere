@@ -18,8 +18,6 @@ class MonthlyUserWorksReport < MonthlyWorksReport
     %w[
       work_id
       title
-      month
-      year
       downloads
       views
     ]
@@ -44,8 +42,6 @@ class MonthlyUserWorksReport < MonthlyWorksReport
       [
         work.uuid,
         title,
-        month_number,
-        year,
         downloads,
         views
       ]

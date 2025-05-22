@@ -24,8 +24,6 @@ RSpec.describe MonthlyUserWorksReport do
     specify { expect(report.headers).to eq %w[
       work_id
       title
-      month
-      year
       downloads
       views
     ] }
@@ -113,20 +111,18 @@ RSpec.describe MonthlyUserWorksReport do
 
       # Test row for without draft
       expect(work_published_row[1]).to eq work_published.latest_published_version.title
-      expect(work_published_row[2]).to eq '2'
-      expect(work_published_row[3]).to eq '2022'
-      expect(work_published_row[4]).to eq 103 # downloads
-      expect(work_published_row[5]).to eq 6
+      expect(work_published_row[2]).to eq 103 # downloads
+      expect(work_published_row[3]).to eq 6
 
       # Test withdrawn only row
       expect(work_withdrawn_only_row[1]).to be_blank # title should be blank
 
       # Spot check downloads
-      expect(work_published_row[4]).to eq 103
-      expect(work_published_and_draft_row[4]).to eq 5
+      expect(work_published_row[2]).to eq 103
+      expect(work_published_and_draft_row[2]).to eq 5
 
       # Spot check views
-      expect(work_published_and_draft_row[5]).to eq 0
+      expect(work_published_and_draft_row[3]).to eq 0
     end
   end
 end
