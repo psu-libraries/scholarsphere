@@ -348,7 +348,14 @@ en:
       all_works_report: 'All Works Report'
       all_work_versions_report: 'All Work Versions Report'
       monthly_report: 'Monthly Report (All Users)'
-      monthly_user_report: "Monthly Report for %{user}"
+      user_report: 
+        heading: "Report for %{user}"
+        start_date: Report Start Date
+        end_date: Report End Date
+        errors:
+          invalid_date: You entered an invalid date.
+          end_before_start: You entered an end date that is before the start date.
+          future_date: You entered a date that is in the future.
     shared:
       thumbnail_form:
         submit_button: Save Thumbnail Settings

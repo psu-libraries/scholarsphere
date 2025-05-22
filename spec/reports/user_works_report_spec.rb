@@ -2,8 +2,14 @@
 
 require 'rails_helper'
 
-RSpec.describe MonthlyUserWorksReport do
-  subject(:report) { described_class.new(actor: depositor, date: Date.parse('2022-02-16')) }
+RSpec.describe UserWorksReport do
+  subject(:report) {
+    described_class.new(
+      actor: depositor,
+      start_date: Date.parse('2022-02-01'),
+      end_date: Date.parse('2022-02-28')
+    )
+  }
 
   let(:depositor) { create(:actor) }
 
@@ -14,7 +20,7 @@ RSpec.describe MonthlyUserWorksReport do
   describe '#new' do
     context 'when given an actor that is not actually an Actor' do
       specify do
-        expect { described_class.new(actor: build(:user), date: Date.today) }
+        expect { described_class.new(actor: build(:user), start_date: Date.today, end_date: Date.today) }
           .to raise_error(ArgumentError)
       end
     end
@@ -24,8 +30,6 @@ RSpec.describe MonthlyUserWorksReport do
     specify { expect(report.headers).to eq %w[
       work_id
       title
-      month
-      year
       downloads
       views
     ] }
@@ -33,7 +37,7 @@ RSpec.describe MonthlyUserWorksReport do
 
   describe '#name' do
     it 'includes the depositor, year, and month in question' do
-      expect(report.name).to eq "monthly_works_#{depositor.psu_id}_2022-02"
+      expect(report.name).to eq "works_#{depositor.psu_id}_2022-02-01_to_2022-02-28"
     end
   end
 
@@ -113,20 +117,18 @@ RSpec.describe MonthlyUserWorksReport do
 
       # Test row for without draft
       expect(work_published_row[1]).to eq work_published.latest_published_version.title
-      expect(work_published_row[2]).to eq '2'
-      expect(work_published_row[3]).to eq '2022'
-      expect(work_published_row[4]).to eq 103 # downloads
-      expect(work_published_row[5]).to eq 6
+      expect(work_published_row[2]).to eq 103 # downloads
+      expect(work_published_row[3]).to eq 6
 
       # Test withdrawn only row
       expect(work_withdrawn_only_row[1]).to be_blank # title should be blank
 
       # Spot check downloads
-      expect(work_published_row[4]).to eq 103
-      expect(work_published_and_draft_row[4]).to eq 5
+      expect(work_published_row[2]).to eq 103
+      expect(work_published_and_draft_row[2]).to eq 5
 
       # Spot check views
-      expect(work_published_and_draft_row[5]).to eq 0
+      expect(work_published_and_draft_row[3]).to eq 0
     end
   end
 end
