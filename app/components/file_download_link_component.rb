@@ -15,19 +15,11 @@ class FileDownloadLinkComponent < ViewComponent::Base
   end
 
   def aria_label
-    download_text = t('dashboard.works.show.aria_download_file', file_name: file_name)
+    download_text = t('dashboard.works.show.aria_download_file', file_name: @file.title)
 
     return download_text unless image?
 
     download_text + t('dashboard.works.show.aria_download_image', alt_text: alt_text)
-  end
-
-  def file_name
-    @file.file_resource.file.original_filename
-  end
-
-  def extension
-    @file.file_resource.file.extension
   end
 
   def download_path
