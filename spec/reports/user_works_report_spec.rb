@@ -2,8 +2,14 @@
 
 require 'rails_helper'
 
-RSpec.describe MonthlyUserWorksReport do
-  subject(:report) { described_class.new(actor: depositor, date: Date.parse('2022-02-16')) }
+RSpec.describe UserWorksReport do
+  subject(:report) {
+    described_class.new(
+      actor: depositor,
+      start_date: Date.parse('2022-02-01'),
+      end_date: Date.parse('2022-02-28')
+    )
+  }
 
   let(:depositor) { create(:actor) }
 
@@ -14,7 +20,7 @@ RSpec.describe MonthlyUserWorksReport do
   describe '#new' do
     context 'when given an actor that is not actually an Actor' do
       specify do
-        expect { described_class.new(actor: build(:user), date: Date.today) }
+        expect { described_class.new(actor: build(:user), start_date: Date.today, end_date: Date.today) }
           .to raise_error(ArgumentError)
       end
     end
@@ -31,7 +37,7 @@ RSpec.describe MonthlyUserWorksReport do
 
   describe '#name' do
     it 'includes the depositor, year, and month in question' do
-      expect(report.name).to eq "monthly_works_#{depositor.psu_id}_2022-02"
+      expect(report.name).to eq "works_#{depositor.psu_id}_2022-02-01_to_2022-02-28"
     end
   end
 

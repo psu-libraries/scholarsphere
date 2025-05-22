@@ -15,7 +15,7 @@ RSpec.describe 'Reports', with_user: :user do
       expect(page).to have_no_css('h3 a', text: I18n.t('dashboard.reports.all_works_report'))
       expect(page).to have_no_css('h3 a', text: I18n.t('dashboard.reports.all_work_versions_report'))
       expect(page).to have_no_css('h3', text: I18n.t('dashboard.reports.monthly_report'))
-      expect(page).to have_css('h3', text: I18n.t('dashboard.reports.monthly_user_report', user: display_name))
+      expect(page).to have_css('h3', text: I18n.t('dashboard.reports.user_report.heading', user: display_name))
     end
   end
 
@@ -29,7 +29,7 @@ RSpec.describe 'Reports', with_user: :user do
       expect(page).to have_css('h3 a', text: I18n.t('dashboard.reports.all_works_report'))
       expect(page).to have_css('h3 a', text: I18n.t('dashboard.reports.all_work_versions_report'))
       expect(page).to have_css('h3', text: I18n.t('dashboard.reports.monthly_report'))
-      expect(page).to have_css('h3', text: I18n.t('dashboard.reports.monthly_user_report', user: 'Administrator'))
+      expect(page).to have_css('h3', text: I18n.t('dashboard.reports.user_report.heading', user: 'Administrator'))
     end
   end
 end
