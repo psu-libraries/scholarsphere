@@ -980,11 +980,38 @@ RSpec.describe 'Publishing a work', with_user: :user do
     let(:user) { work_version.work.depositor.user }
 
     describe 'uploading an image' do
-      it 'works' do
+      it 'requires alt text to be submitted and works' do
         visit dashboard_form_files_path(work_version)
 
-        # Upload a file
-        FeatureHelpers::DashboardForm.upload_image(Rails.root.join('spec', 'fixtures', 'image.png'))
+        # Wait for Uppy to load
+        while page.has_no_selector?('.uppy-Dashboard-AddFiles')
+          sleep 0.1
+        end
+
+        # @note For some reason there are two 'files[]' hidden inputs, but it's only happens in the test environment.
+        page
+          .all('.uppy-Dashboard-input', visible: false)
+          .first
+          .attach_file(Rails.root.join('spec', 'fixtures', 'image.png'))
+
+        # Wait for alt text form
+        while page.has_no_selector?('#uppy-Dashboard-FileCard-input-alt_text')
+          sleep 0.1
+        end
+
+        click_on 'Save changes'
+
+        expect(page).to have_content('Please provide alt text for the image')
+
+        fill_in 'uppy-Dashboard-FileCard-input-alt_text', with: 'Test alt text'
+
+        click_on 'Save changes'
+
+        # Wait for file to finish uploading
+        while page.has_no_selector?('.uppy-DashboardContent-title', text: 'Upload complete')
+          sleep 0.1
+        end
+
         within('.uppy-Dashboard-files') do
           expect(page).to have_content('image.png')
         end
@@ -994,6 +1021,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         # Once for the work version, twice for the file. The second call for the file is most likely the promotion job.
         expect(SolrIndexingJob).to have_received(:perform_later).thrice
+
+        expect(FileResource.last.file.metadata["alt_text"]).to eq('Test alt text')
 
         visit dashboard_form_files_path(work_version)
 
