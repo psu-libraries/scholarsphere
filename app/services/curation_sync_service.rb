@@ -10,6 +10,7 @@ class CurationSyncService
     tasks = CurationTaskClient.find_all(@work.id)
     task_uuids = tasks.pluck('ID')
 
+    byebug
     if task_uuids.exclude?(current_version_for_curation.uuid) && !admin_submitted?(current_version_for_curation)
       CurationTaskClient.send_curation(current_version_for_curation.id, updated_version: updated_version(tasks))
     end
