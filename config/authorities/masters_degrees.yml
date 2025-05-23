@@ -5,3 +5,6 @@ terms:
   - id: MS
     term: Master of Science
     active: true
+  - id: PMD
+    term: Professional Master's Degree
+    active: true

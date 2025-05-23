@@ -16,7 +16,7 @@ class GradCulminatingExperiencesDropdownsComponent < ApplicationComponent
         'Culminating Research Project',
         'Doctor of Nursing Practice Project',
         'Integrative Doctoral Research Project',
-        'Praxis Project',
+        'Praxis',
         'Public Performance'
       ].freeze
     elsif work.masters_culminating_experience?
