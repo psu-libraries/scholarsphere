@@ -1022,7 +1022,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         # Once for the work version, twice for the file. The second call for the file is most likely the promotion job.
         expect(SolrIndexingJob).to have_received(:perform_later).thrice
 
-        expect(FileResource.last.file.metadata["alt_text"]).to eq('Test alt text')
+        expect(FileResource.last.file.metadata['alt_text']).to eq('Test alt text')
 
         visit dashboard_form_files_path(work_version)
 
