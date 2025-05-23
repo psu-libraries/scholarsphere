@@ -41,7 +41,7 @@ class CurationSyncService
       publishing_changes = work_version.versions.select { |v| v.object_changes['published_at'].present? }
       whodunnit = publishing_changes.last['whodunnit']
       user = GlobalID::Locator.locate(whodunnit)
-      user.is_a?(User) && user&.admin?
+      user.is_a?(User) && user.admin?
     rescue StandardError
       false
     end

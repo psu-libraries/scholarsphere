@@ -115,7 +115,7 @@ RSpec.describe CurationSyncService do
         let(:admin)  { create(:user, :admin) }
 
         it 'does not send current version for curation' do
-          PaperTrail.request.whodunnit = admin.id
+          PaperTrail.request.whodunnit = admin.to_gid.to_s
           work_version2.update(published_at: Time.new(2024, 5, 10, 10, 30, 0))
           expect(CurationTaskClient).not_to receive(:send_curation).with(work_version2.id, updated_version: true)
           described_class.new(work).sync
@@ -128,7 +128,7 @@ RSpec.describe CurationSyncService do
         let(:external_app)  { create(:external_app) }
 
         it 'sends current version for curation' do
-          PaperTrail.request.whodunnit = external_app.id
+          PaperTrail.request.whodunnit = external_app.to_gid.to_s
           work_version2.update(published_at: Time.new(2024, 5, 10, 10, 30, 0))
           expect(CurationTaskClient).to receive(:send_curation).with(work_version2.id, updated_version: true)
           described_class.new(work).sync
