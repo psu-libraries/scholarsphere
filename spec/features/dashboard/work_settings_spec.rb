@@ -291,6 +291,43 @@ RSpec.describe 'Work Settings Page', with_user: :user do
         end
       end
     end
+
+    describe 'updating alt text', :js do
+      let(:files) { work.latest_version.file_resources }
+
+      before do
+        files << file
+        work.save!
+        visit edit_dashboard_work_path(work)
+      end
+
+      context 'when the file is an image' do
+        let(:file) { create(:file_resource) }
+
+        context 'when the update is successful' do
+          it 'updates the alt text and indicates success' do
+            fill_in 'file_resource_alt_text', with: 'Test alt text'
+            click_on I18n.t!('dashboard.works.edit.alt_text.save_button')
+          end
+        end
+
+        context 'when the update fails' do
+          it 'does not update alt text and indicates error' do
+            fill_in 'file_resource_alt_text', with: 'Test alt text'
+            click_on I18n.t!('dashboard.works.edit.alt_text.save_button')
+          end
+        end
+      end
+
+      context 'when the file is not an image' do
+        let(:file) { create(:file_resource, :pdf) }
+
+        it 'does not show the alt text form' do
+          expect(page).to have_no_selector('th', text: 'Alt Text')
+          expect(page).to have_no_selector('input#file_resource_alt_text')
+        end
+      end
+    end
   end
 
   describe 'Deleting a work' do

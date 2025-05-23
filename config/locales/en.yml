@@ -403,6 +403,9 @@ en:
           not_allowed: >
             A DOI may only be created on published works that do not already have a publisher DOI. If this work does not have a DOI from the publisher and is still a draft, you'll need to wait until it's
             published to create a DOI for it.
+        alt_text:
+          heading: Alt Text
+          save_button: Update Alt Text
         danger:
           heading: Danger
           delete_draft:

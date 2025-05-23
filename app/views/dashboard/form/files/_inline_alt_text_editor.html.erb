@@ -19,6 +19,6 @@
                    value: file_resource.file_data['metadata']['alt_text'],
                    size: 10,
                    class: 'form-control', data: { target: 'alt-text-editor.altTextField' } %>
-  <%= f.submit 'Update Alt Text', class: 'btn btn-sm btn-primary ml-1', data: { disable_with: 'Saving...' } %>
+  <%= f.submit t('dashboard.works.edit.alt_text.save_button'), class: 'btn btn-sm btn-primary ml-1', data: { disable_with: 'Saving...' } %>
   <%= render 'dashboard/form/files/alt_text_icons' %>
 <% end %>
