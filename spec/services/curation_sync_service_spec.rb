@@ -109,13 +109,26 @@ RSpec.describe CurationSyncService do
         described_class.new(work).sync
       end
 
-      context 'when the latest work version was created by an admin' do
+      context 'when the latest work version was created by an admin user' do
         # The latest published work_version must be saved, so that PaperTrail can track the changes
         let(:work_version2) { create(:work_version, :published, title: 'Title with-dash') }
         let(:admin)  { create(:user, :admin) }
 
         it 'does not send current version for curation' do
           PaperTrail.request.whodunnit = admin.id
+          work_version2.update(published_at: Time.new(2024, 5, 10, 10, 30, 0))
+          expect(CurationTaskClient).not_to receive(:send_curation).with(work_version2.id, updated_version: true)
+          described_class.new(work).sync
+        end
+      end
+
+      context 'when the latest work version was created by an external app' do
+        # The latest published work_version must be saved, so that PaperTrail can track the changes
+        let(:work_version2) { create(:work_version, :published, title: 'Title with-dash') }
+        let(:external_app)  { create(:external_app) }
+
+        it 'sends current version for curation' do
+          PaperTrail.request.whodunnit = external_app.id
           work_version2.update(published_at: Time.new(2024, 5, 10, 10, 30, 0))
           expect(CurationTaskClient).not_to receive(:send_curation).with(work_version2.id, updated_version: true)
           described_class.new(work).sync
