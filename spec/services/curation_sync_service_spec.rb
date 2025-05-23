@@ -120,7 +120,7 @@ RSpec.describe CurationSyncService do
       end
 
       context 'when the latest work version was created by something other than a user' do
-        let(:external_app)  { create(:external_app) }
+        let(:external_app) { create(:external_app) }
 
         it 'sends current version for curation' do
           work_version2.versions.last.update whodunnit: external_app.to_gid.to_s
