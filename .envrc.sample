@@ -36,6 +36,7 @@ export ADOBE_CLIENT_SECRET=
 export SECRET_KEY_BASE=
 export AZURE_GRAPH_GROUPS=
 export PSU_AFFILIATED_GROUP=
+export ADMIN_GROUP=
 
 # If using minio in dev and test env:
 export AWS_SDK_CONFIG_OPT_OUT=true
