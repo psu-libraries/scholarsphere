@@ -48,7 +48,7 @@ RSpec.describe Admin::AltTextController, type: :request do
           expect(response).to have_http_status(:unprocessable_entity)
           json = JSON.parse(response.body)
           expect(json['success']).to eq(false)
-          expect(json['errors']).to eq('Something went wrong')
+          expect(json['errors']).to eq(['Something went wrong'])
           expect(json['alt_text']).to eq(alt_text)
         end
       end

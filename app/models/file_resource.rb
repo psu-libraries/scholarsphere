@@ -92,7 +92,7 @@ class FileResource < ApplicationRecord
   end
 
   def image?
-    file.mime_type.starts_with?('image/')
+    file.mime_type&.starts_with?('image/')
   end
 
   private
