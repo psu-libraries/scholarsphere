@@ -296,7 +296,7 @@ RSpec.describe 'Work Settings Page', with_user: :user do
       let(:files) { work.latest_version.file_resources }
 
       before do
-        files = [file]
+        [file]
         work.save!
         visit edit_dashboard_work_path(work)
       end
@@ -309,7 +309,7 @@ RSpec.describe 'Work Settings Page', with_user: :user do
             accessibility_rows = page.all('tr[id^="file_version_membership_"]')
             expect(accessibility_rows.count).to eq 1
             expect(page).to have_no_selector('th', text: 'Alt Text')
-            expect(page).to have_no_selector('input#file_resource_alt_text')
+            expect(page).to have_no_field('input#file_resource_alt_text')
           end
         end
 
@@ -320,7 +320,7 @@ RSpec.describe 'Work Settings Page', with_user: :user do
             it 'updates the alt text and indicates success' do
               fill_in 'file_resource_alt_text', with: 'Test alt text'
               click_on I18n.t!('dashboard.works.edit.alt_text.save_button')
-              expect(page).to have_selector('span.alt-text-success-icon', visible: true)
+              expect(page).to have_css('span.alt-text-success-icon', visible: :visible)
               expect(find('input#file_resource_alt_text').value).to eq('Test alt text')
             end
           end
@@ -333,7 +333,7 @@ RSpec.describe 'Work Settings Page', with_user: :user do
             it 'does not update alt text and indicates error' do
               fill_in 'file_resource_alt_text', with: 'Test alt text'
               click_on I18n.t!('dashboard.works.edit.alt_text.save_button')
-              expect(page).to have_selector('span.alt-text-error-icon', visible: true)
+              expect(page).to have_css('span.alt-text-error-icon', visible: :visible)
               expect(find('input#file_resource_alt_text').value).to eq('')
             end
           end
