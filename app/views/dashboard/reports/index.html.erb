@@ -32,19 +32,38 @@
         <hr>
       <% end %>
 
-      <%= form_tag dashboard_reports_monthly_user_work_versions_path, method: :get do |f| %>
-        <h3><%= t('dashboard.reports.monthly_user_report', user: current_user.display_name) %></h3>
+      <%= form_tag dashboard_reports_user_work_versions_path, method: :get do |f| %>
+        <h3 class="mb-4"><%= t('dashboard.reports.user_report.heading', user: current_user.display_name) %></h3>
         <div class="row">
           <div class="col-4">
-            <%= select_date(
-                  Date.today,
-                  options = {
-                    prefix: 'report_date',
-                    order: [:month, :year],
-                    discard_day: true
-                  },
-                  html_options = { class: 'form-control form-control-sm mb-2' }
-                ) %>
+            <fieldset>
+              <legend><%= t('dashboard.reports.user_report.start_date') %></legend>
+              <%= select_date(
+                    1.month.ago.to_date,
+                    options = {
+                      prefix: 'report_start_date',
+                      order: [:month, :year, :day]
+                    },
+                    html_options = { class: 'form-control form-control-sm mb-2' }
+                  ) %>
+            </fieldset>
+          </div>
+          <div class="col-4">
+            <fieldset>
+              <legend><%= t('dashboard.reports.user_report.end_date') %></legend>
+              <%= select_date(
+                    Date.today,
+                    options = {
+                      prefix: 'report_end_date',
+                      order: [:month, :year, :day]
+                    },
+                    html_options = { class: 'form-control form-control-sm mb-2' }
+                  ) %>
+            </fieldset>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-4">
             <%= submit_tag 'Generate Report', class: 'btn btn-primary' %>
           </div>
         </div>

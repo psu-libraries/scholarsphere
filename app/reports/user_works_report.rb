@@ -1,25 +1,24 @@
 # frozen_string_literal: true
 
-class MonthlyUserWorksReport < MonthlyWorksReport
+class UserWorksReport < MonthlyWorksReport
   attr_reader :depositor
 
-  def initialize(actor:, date: Time.zone.today)
+  def initialize(actor:, start_date:, end_date:)
     raise ArgumentError, 'you must give me an Actor' unless actor.is_a? Actor
 
-    super(date: date)
+    @start_date = start_date
+    @end_date = end_date
     @depositor = actor
   end
 
   def name
-    "monthly_works_#{depositor.psu_id}_#{year}-#{month_number(leading_zero: true)}"
+    "works_#{depositor.psu_id}_#{start_date}_to_#{end_date}"
   end
 
   def headers
     %w[
       work_id
       title
-      month
-      year
       downloads
       views
     ]
@@ -44,8 +43,6 @@ class MonthlyUserWorksReport < MonthlyWorksReport
       [
         work.uuid,
         title,
-        month_number,
-        year,
         downloads,
         views
       ]

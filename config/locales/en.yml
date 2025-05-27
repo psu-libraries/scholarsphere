@@ -348,7 +348,14 @@ en:
       all_works_report: 'All Works Report'
       all_work_versions_report: 'All Work Versions Report'
       monthly_report: 'Monthly Report (All Users)'
-      monthly_user_report: "Monthly Report for %{user}"
+      user_report: 
+        heading: "Report for %{user}"
+        start_date: Report Start Date
+        end_date: Report End Date
+        errors:
+          invalid_date: You entered an invalid date.
+          end_before_start: You entered an end date that is before the start date.
+          future_date: You entered a date that is in the future.
     shared:
       thumbnail_form:
         submit_button: Save Thumbnail Settings
@@ -736,9 +743,11 @@ en:
     contact_depositor_button:
       text: 'Contact Depositor via LibAnswers >>'
       confirm_message: 'This will create a ticket in LibAnswers and direct you to it.  An email will not be sent to the depositor until the form is completed in LibAnswers.'
+      error_message: 'Depositor access no longer active'
     contact_accessibility_team_button:
       text: 'Contact Accessibility Team via LibAnswers >>'
       confirm_message: 'This will create a ticket in LibAnswers and direct you to it.  An email will not be sent to the accessibility team until the form is completed in LibAnswers.'
+      error_message: 'Depositor access no longer active'
     request_alternate_format_button:
       text: 'Request Alternate Format'
       header: "Request alternate format for %{title}"
