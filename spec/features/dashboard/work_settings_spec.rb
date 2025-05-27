@@ -296,35 +296,65 @@ RSpec.describe 'Work Settings Page', with_user: :user do
       let(:files) { work.latest_version.file_resources }
 
       before do
-        files << file
+        files = [file]
         work.save!
         visit edit_dashboard_work_path(work)
       end
 
-      context 'when the file is an image' do
+      context 'when the work has an image' do
         let(:file) { create(:file_resource) }
 
-        context 'when the update is successful' do
-          it 'updates the alt text and indicates success' do
-            fill_in 'file_resource_alt_text', with: 'Test alt text'
-            click_on I18n.t!('dashboard.works.edit.alt_text.save_button')
+        context 'when the user is not an admin' do
+          it 'does not show the alt text form' do
+            accessibility_rows = page.all('tr[id^="file_version_membership_"]')
+            expect(accessibility_rows.count).to eq 1
+            expect(page).to have_no_selector('th', text: 'Alt Text')
+            expect(page).to have_no_selector('input#file_resource_alt_text')
           end
         end
 
-        context 'when the update fails' do
-          it 'does not update alt text and indicates error' do
-            fill_in 'file_resource_alt_text', with: 'Test alt text'
-            click_on I18n.t!('dashboard.works.edit.alt_text.save_button')
+        context 'when the user is an admin' do
+          let(:user) { create(:user, :admin) }
+
+          context 'when the update is successful' do
+            it 'updates the alt text and indicates success' do
+              fill_in 'file_resource_alt_text', with: 'Test alt text'
+              click_on I18n.t!('dashboard.works.edit.alt_text.save_button')
+              expect(page).to have_selector('span.alt-text-success-icon', visible: true)
+              expect(find('input#file_resource_alt_text').value).to eq('Test alt text')
+            end
           end
-        end
-      end
 
-      context 'when the file is not an image' do
-        let(:file) { create(:file_resource, :pdf) }
+          context 'when the update fails' do
+            before do
+              allow_any_instance_of(FileResource).to receive(:save).and_return(false)
+            end
 
-        it 'does not show the alt text form' do
-          expect(page).to have_no_selector('th', text: 'Alt Text')
-          expect(page).to have_no_selector('input#file_resource_alt_text')
+            it 'does not update alt text and indicates error' do
+              fill_in 'file_resource_alt_text', with: 'Test alt text'
+              click_on I18n.t!('dashboard.works.edit.alt_text.save_button')
+              expect(page).to have_selector('span.alt-text-error-icon', visible: true)
+              expect(find('input#file_resource_alt_text').value).to eq('')
+            end
+          end
+
+          context 'when there is a file that is not an image' do
+            let(:file_pdf) { create(:file_resource, :pdf) }
+
+            before do
+              files << file_pdf
+              work.save!
+              visit edit_dashboard_work_path(work)
+            end
+
+            it 'does not show the alt text form for non images' do
+              accessibility_rows = page.all('tr[id^="file_version_membership_"]')
+              expect(accessibility_rows.count).to eq 2
+              alt_text_fields = page.all('input#file_resource_alt_text')
+              expect(alt_text_fields.count).to eq 1
+              expect(page).to have_content(file_pdf.file_version_memberships.first.title)
+            end
+          end
         end
       end
     end
