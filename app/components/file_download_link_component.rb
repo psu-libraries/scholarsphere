@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
 class FileDownloadLinkComponent < ViewComponent::Base
-  def initialize(file_version_membership:, resource_id:)
+  def initialize(file_version_membership:)
     @file_version_membership = file_version_membership
-    @resource_id = resource_id
   end
 
   def image?
@@ -23,10 +22,16 @@ class FileDownloadLinkComponent < ViewComponent::Base
   end
 
   def download_path
-    Rails.application.routes.url_helpers.resource_download_path(@file_version_membership.id, resource_id: @resource_id)
+    Rails.application.routes.url_helpers.resource_download_path(@file_version_membership.id, resource_id: work_version_uuid)
   end
 
   def download_title
     I18n.t('resources.download', name: @file_version_membership.title)
   end
+
+  private
+
+    def work_version_uuid
+      @file_version_membership.work_version.uuid
+    end
 end

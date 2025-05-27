@@ -19,10 +19,9 @@ RSpec.describe FileDownloadLinkComponent, type: :component do
     let(:mime_type) { 'application/pdf' }
 
     it 'renders a download link with correct path and title' do
-      render_inline(described_class.new(file_version_membership: file_version_membership,
-                                        resource_id: resource.id))
+      render_inline(described_class.new(file_version_membership: file_version_membership))
       expect(page).to have_link(file_version_membership.title,
-                                href: "/resources/#{resource.id}/downloads/#{file_version_membership.id}")
+                                href: "/resources/#{resource.uuid}/downloads/#{file_version_membership.id}")
       expect(page).to have_css("a[aria-label='Download file: #{file_version_membership.title}']")
     end
   end
@@ -31,10 +30,9 @@ RSpec.describe FileDownloadLinkComponent, type: :component do
     let(:mime_type) { 'image/png' }
 
     it 'renders a download link with correct path and title and alt text in the aria-label' do
-      render_inline(described_class.new(file_version_membership: file_version_membership,
-                                        resource_id: resource.id))
+      render_inline(described_class.new(file_version_membership: file_version_membership))
       expect(page).to have_link(file_version_membership.title,
-                                href: "/resources/#{resource.id}/downloads/#{file_version_membership.id}")
+                                href: "/resources/#{resource.uuid}/downloads/#{file_version_membership.id}")
       expect(page).to have_css("a[aria-label='Download file: #{file_version_membership.title}, an image of Test text']")
     end
   end
