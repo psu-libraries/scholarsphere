@@ -1,4 +1,4 @@
-<% content_for :navbar_heading do %>
+<% content_for :top_section_heading do %>
   <h1 class="navbar-brand navbar-brand--center slab-font"><%= t('dashboard.profiles.edit.heading') %></h1>
 <% end %>
 
@@ -23,11 +23,10 @@
                    readonly: true %>
         <%= render 'user_fields', form: form %>
         <%= render 'admin_fields', form: form if @actor.user.admin_available? %>
-      </div>
-
-      <div class="actions">
-        <%= form.submit 'Save', class: 'btn btn-primary' %>
-        <%= link_to 'Cancel', :back, class: 'btn btn-text' %>
+        <div class="actions">
+          <%= form.submit 'Save', class: 'btn btn-primary' %>
+          <%= link_to 'Cancel', :back, class: 'btn btn-text' %>
+        </div>
       </div>
     <% end %>
   </div>

@@ -23,7 +23,15 @@ RSpec.describe Dashboard::ReportsController do
 
   describe 'report generation' do
     let(:today) { Date.today }
-    let(:report_date_params) do
+    let(:one_month_ago) { 1.month.ago }
+    let(:report_start_date_params) do
+      {
+        year: one_month_ago.year,
+        month: one_month_ago.month,
+        day: one_month_ago.day
+      }
+    end
+    let(:report_end_date_params) do
       {
         year: today.year,
         month: today.month,
@@ -124,7 +132,7 @@ RSpec.describe Dashboard::ReportsController do
       before do
         sign_in user
         get :monthly_work_versions, params: {
-          report_date: report_date_params
+          report_date: report_start_date_params
         }
       end
 
@@ -139,7 +147,7 @@ RSpec.describe Dashboard::ReportsController do
         let(:user) { create(:user, :admin) }
 
         it 'returns the correct content type and filename' do
-          report_month = today.strftime('%Y-%m')
+          report_month = one_month_ago.strftime('%Y-%m')
           filename = "monthly_works_#{report_month}_#{today}.csv"
           expect(response.headers['Content-Type']).to eq 'text/csv'
           expect(response.headers['Content-Disposition']).to include filename
@@ -154,11 +162,12 @@ RSpec.describe Dashboard::ReportsController do
       end
     end
 
-    describe 'GET #monthly_user_work_versions' do
+    describe 'GET #user_work_versions' do
       context 'when the user is not signed in' do
         before do
-          get :monthly_user_work_versions, params: {
-            report_date: report_date_params
+          get :user_work_versions, params: {
+            report_start_date: report_start_date_params,
+            report_end_date: report_end_date_params
           }
         end
 
@@ -171,14 +180,14 @@ RSpec.describe Dashboard::ReportsController do
       context 'when the user is signed in' do
         before do
           sign_in user
-          get :monthly_user_work_versions, params: {
-            report_date: report_date_params
+          get :user_work_versions, params: {
+            report_start_date: report_start_date_params,
+            report_end_date: report_end_date_params
           }
         end
 
         it 'returns the correct content type and filename' do
-          report_month = today.strftime('%Y-%m')
-          filename = "monthly_works_#{user.actor.psu_id}_#{report_month}_#{today}.csv"
+          filename = "works_#{user.actor.psu_id}_#{one_month_ago.to_date}_to_#{today.to_date}_#{today}.csv"
           expect(response.headers['Content-Type']).to eq 'text/csv'
           expect(response.headers['Content-Disposition']).to include filename
         end

@@ -513,6 +513,114 @@ RSpec.describe WorkDepositPathway do
     end
   end
 
+  describe '#has_mint_doi_option?' do
+    context 'when the given work version has a data and code type' do
+      %w[
+        dataset
+        software_or_program_code
+      ].each do |t|
+        let(:type) { t }
+
+        context 'when the associated work does not have a doi' do
+          let(:doi_blank) { true }
+
+          context 'when doi minting is not already in progress' do
+            before do
+              allow_any_instance_of(DoiMintingStatus).to receive(:blank?).and_return(true)
+            end
+
+            it 'returns true' do
+              expect(pathway.has_mint_doi_option?).to eq true
+            end
+          end
+
+          context 'when doi minting is already in progress' do
+            before do
+              allow_any_instance_of(DoiMintingStatus).to receive(:blank?).and_return(false)
+            end
+
+            it 'returns false' do
+              expect(pathway.has_mint_doi_option?).to eq false
+            end
+          end
+        end
+
+        context 'when the associated work has a doi' do
+          it 'returns false' do
+            expect(pathway.has_mint_doi_option?).to eq false
+          end
+        end
+      end
+    end
+
+    context 'when the given work version has a grad culminating experiences type' do
+      %w[
+        masters_culminating_experience
+        professional_doctoral_culminating_experience
+      ].each do |t|
+        let(:type) { t }
+
+        context 'when the associated work does not have a doi' do
+          let(:doi_blank) { true }
+
+          context 'when doi minting is not already in progress' do
+            before do
+              allow_any_instance_of(DoiMintingStatus).to receive(:blank?).and_return(true)
+            end
+
+            it 'returns true' do
+              expect(pathway.has_mint_doi_option?).to eq true
+            end
+          end
+
+          context 'when doi minting is already in progress' do
+            before do
+              allow_any_instance_of(DoiMintingStatus).to receive(:blank?).and_return(false)
+            end
+
+            it 'returns false' do
+              expect(pathway.has_mint_doi_option?).to eq false
+            end
+          end
+        end
+
+        context 'when the associated work has a doi' do
+          it 'returns false' do
+            expect(pathway.has_mint_doi_option?).to eq false
+          end
+        end
+      end
+    end
+
+    context 'when the given work version does not have a data and code or grad culminating experience type' do
+      %w[
+        article
+        book
+        conference_proceeding
+        part_of_book
+        report
+        research_paper
+        thesis
+        audio
+        image
+        instrument
+        journal
+        map_or_cartographic_material
+        other
+        poster
+        presentation
+        project
+        unspecified
+        video
+      ].each do |t|
+        let(:type) { t }
+        it 'returns false' do
+          expect(pathway.has_mint_doi_option?).to eq false
+        end
+      end
+    end
+  end
+
   describe '#allows_accessibility_remediation_request?' do
     context 'when in an allowable pathway' do
       %w[

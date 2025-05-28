@@ -143,6 +143,8 @@ en:
             edit_users:
               not_found: "User %{access_id} could not be found"
               unexpected: "%{access_id} is not a valid user"
+            edit_groups:
+              not_allowed: "Added group not allowed edit access"
         depositor_form:
           attributes:
             psu_id:
@@ -264,7 +266,7 @@ en:
         model: Include the model of the instrument.
         owner: Organization or individual that manages the instrument.
         manufacturer: Organization or individual that built the instrument.
-        rights: The license you select determines how your work can be used by others. [Read More](https://docs.scholarsphere.psu.edu/guides/licenses/)
+        rights: The license you select determines how your work can be used by others. [Read more about choosing a license](https://docs.scholarsphere.psu.edu/guides/licenses/)
         contributor: If applicable, please include a brief acknowledgment of any funding sources that supported your research. This helps ensure proper attribution and increases the visibility of your funder’s contribution.
       autocomplete_work_form:
         doi: Please enter a valid DOI (e.g. https://doi.org/10.xxxx/xxxxxx or 10.xxxx/xxxxxx)
@@ -332,7 +334,7 @@ en:
           Works you have deposited or have permission to edit will appear here. 
       start:
         heading: 'Get Started'
-        subheading: Or
+        subheading: or
         browse: 'Browse & Filter All Works'
     profiles:
       edit:
@@ -346,7 +348,14 @@ en:
       all_works_report: 'All Works Report'
       all_work_versions_report: 'All Work Versions Report'
       monthly_report: 'Monthly Report (All Users)'
-      monthly_user_report: "Monthly Report for %{user}"
+      user_report: 
+        heading: "Report for %{user}"
+        start_date: Report Start Date
+        end_date: Report End Date
+        errors:
+          invalid_date: You entered an invalid date.
+          end_before_start: You entered an end date that is before the start date.
+          future_date: You entered a date that is in the future.
     shared:
       thumbnail_form:
         submit_button: Save Thumbnail Settings
@@ -564,6 +573,9 @@ en:
           request_note: "Note: It may take a few moments for the DOI to be minted after publication. Please refresh the page if it does not appear right away and do not request an additional one."
           label: I would like to mint a DOI upon publish.
           error: There was an error minting your doi. Please try again later from Work Settings or contact us if the problem persists.
+        auto_doi:
+          header: DOI
+          message: Upon publication, a DOI will be minted for the work.
       members:
         heading: Works
         badge: Work 
@@ -667,11 +679,11 @@ en:
         We have released a new version of ScholarSphere! The new platform includes an improved interface for uploading your work and better support for large files. We've also added support for ‘draft’ works and work versions. Additional features will be released in the coming months.
       read_more: 'Read more about ScholarSphere'
     search:
-      heading: 'Browse and search for works'
+      heading: 'Browse and Search for Works'
       placeholder: 'Search for titles, keywords, resource types, creators, etc.'
       label: 'Search ScholarSphere'
       submit: 'search'
-      subheading: Or
+      subheading: or
       browse: 'Browse & Filter All Works'
     featured:
       heading: 'Featured Works'
@@ -725,9 +737,11 @@ en:
     contact_depositor_button:
       text: 'Contact Depositor via LibAnswers >>'
       confirm_message: 'This will create a ticket in LibAnswers and direct you to it.  An email will not be sent to the depositor until the form is completed in LibAnswers.'
+      error_message: 'Depositor access no longer active'
     contact_accessibility_team_button:
       text: 'Contact Accessibility Team via LibAnswers >>'
       confirm_message: 'This will create a ticket in LibAnswers and direct you to it.  An email will not be sent to the accessibility team until the form is completed in LibAnswers.'
+      error_message: 'Depositor access no longer active'
     request_alternate_format_button:
       text: 'Request Alternate Format'
       header: "Request alternate format for %{title}"
@@ -758,11 +772,11 @@ en:
       copy_icon: content_paste
   shared:
     search:
-      heading: 'Browse and search for works'
+      heading: 'Browse and Search for Works'
       placeholder: 'Search for titles, keywords, resource types, creators, etc.'
       label: 'Search ScholarSphere'
       submit: 'search'
-      subheading: Or
+      subheading: or
       browse: 'Browse & Filter All Works'
     thumbnail_heading: 'Thumbnail'
   visibility_badge_component:

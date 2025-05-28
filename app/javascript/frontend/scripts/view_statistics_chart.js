@@ -63,9 +63,12 @@ function drawChart (selection, data) {
     .attr('class', 'date')
     .text(` since ${formatDate(firstDate)}`)
 
+  const altText = `Line graph showing ${viewCounts.text() + viewDate.text()}`
+
   const svg = selection
     .append('svg')
     .attr('class', 'analytics--chart')
+    .attr('aria-label', altText)
     .attr('viewBox', [0, 0, width, height])
   // Uncomment below for fixed-size. Comment out for responsive size
   // .attr('width', width)
@@ -74,6 +77,7 @@ function drawChart (selection, data) {
   svg.append('g')
     .attr('class', 'axis axis--x')
     .attr('transform', `translate(0,${height - margin.bottom + 2})`)
+    .attr('aria-hidden', 'true')
     .call(xAxis)
     .call(g => hideOverflowingTickLabels(svg, g.selectAll('.tick text')))
 

@@ -71,7 +71,7 @@ RSpec.describe CurationSyncService do
       end
     end
 
-    context 'when the latest work version for curation is not found in tasks table' do
+    context 'when the latest work version for curation is not found in tasks table', :versioning do
       let(:work_version1) { build(:work_version,
                                   work: nil,
                                   aasm_state: 'published',
@@ -107,6 +107,26 @@ RSpec.describe CurationSyncService do
         expect(CurationTaskClient).not_to receive(:send_curation).with(work_version3.id)
 
         described_class.new(work).sync
+      end
+
+      context 'when the latest work version was created by an admin user' do
+        let(:admin)  { create(:user, :admin) }
+
+        it 'does not send current version for curation' do
+          work_version2.versions.last.update whodunnit: admin.to_gid.to_s
+          expect(CurationTaskClient).not_to receive(:send_curation).with(work_version2.id, updated_version: true)
+          described_class.new(work).sync
+        end
+      end
+
+      context 'when the latest work version was created by something other than a user' do
+        let(:external_app) { create(:external_app) }
+
+        it 'sends current version for curation' do
+          work_version2.versions.last.update whodunnit: external_app.to_gid.to_s
+          expect(CurationTaskClient).to receive(:send_curation).with(work_version2.id, updated_version: true)
+          described_class.new(work).sync
+        end
       end
     end
   end

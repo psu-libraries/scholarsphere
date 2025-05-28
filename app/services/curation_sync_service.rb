@@ -10,7 +10,7 @@ class CurationSyncService
     tasks = CurationTaskClient.find_all(@work.id)
     task_uuids = tasks.pluck('ID')
 
-    if task_uuids.exclude?(current_version_for_curation.uuid)
+    if task_uuids.exclude?(current_version_for_curation.uuid) && !admin_submitted?(current_version_for_curation)
       CurationTaskClient.send_curation(current_version_for_curation.id, updated_version: updated_version(tasks))
     end
   rescue CurationTaskClient::CurationError => e
@@ -35,5 +35,14 @@ class CurationSyncService
         stale_version = true unless task.fields['ID'] == current_version_for_curation.uuid
       end
       stale_version
+    end
+
+    def admin_submitted?(work_version)
+      publishing_changes = work_version.versions.select { |v| v.object_changes['published_at'].present? }
+      whodunnit = publishing_changes.last['whodunnit']
+      user = GlobalID::Locator.locate(whodunnit)
+      user.is_a?(User) && user.admin?
+    rescue StandardError
+      false
     end
 end

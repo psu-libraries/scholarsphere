@@ -96,9 +96,9 @@ module Dashboard
           deposit_pathway.allows_accessibility_remediation_request? && in_publish_edit_action?
         end
 
-        helper_method :allow_mint_doi?
-        def allow_mint_doi?
-          deposit_pathway.allows_mint_doi_request?
+        helper_method :has_mint_doi_option?
+        def has_mint_doi_option?
+          deposit_pathway.has_mint_doi_option?
         end
 
         def allow_publish?
