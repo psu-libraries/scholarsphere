@@ -105,6 +105,10 @@ class User < ApplicationRecord
     groups.map(&:name).include? Scholarsphere::Application.config.admin_group
   end
 
+  def viewer?
+    groups.map(&:name).include? Scholarsphere::Application.config.viewer_group
+  end
+
   def guest?
     @guest || false
   end

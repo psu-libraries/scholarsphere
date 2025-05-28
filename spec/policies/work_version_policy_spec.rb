@@ -119,6 +119,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
     let(:edit_user) { build(:user) }
     let(:other) { build(:user) }
     let(:admin) { build(:user, :admin) }
+    let(:viewer) { build(:user, :viewer) }
     let(:application) { build(:external_app) }
 
     context 'with a draft version' do
@@ -131,6 +132,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
       it { is_expected.to permit(edit_user, work_version) }
       it { is_expected.not_to permit(other, work_version) }
       it { is_expected.to permit(admin, work_version) }
+      it { is_expected.not_to permit(viewer, work_version) }
       it { is_expected.to permit(application, work_version) }
     end
 
@@ -144,6 +146,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
       it { is_expected.not_to permit(edit_user, work_version) }
       it { is_expected.not_to permit(other, work_version) }
       it { is_expected.not_to permit(admin, work_version) }
+      it { is_expected.not_to permit(viewer, work_version) }
       it { is_expected.not_to permit(application, work_version) }
     end
   end
@@ -154,6 +157,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
     let(:edit_user) { build(:user) }
     let(:other) { build(:user) }
     let(:admin) { build(:user, :admin) }
+    let(:viewer) { build(:user, :viewer) }
     let(:application) { build(:external_app) }
 
     context 'with a draft version that has NOT been persisted' do
@@ -170,6 +174,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
       it { is_expected.not_to permit(edit_user, work_version) }
       it { is_expected.not_to permit(other, work_version) }
       it { is_expected.not_to permit(admin, work_version) }
+      it { is_expected.not_to permit(viewer, work_version) }
       it { is_expected.not_to permit(application, work_version) }
     end
 
@@ -183,6 +188,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
       it { is_expected.to permit(edit_user, work_version) }
       it { is_expected.not_to permit(other, work_version) }
       it { is_expected.to permit(admin, work_version) }
+      it { is_expected.not_to permit(viewer, work_version) }
       it { is_expected.to permit(application, work_version) }
     end
 
@@ -196,6 +202,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
       it { is_expected.not_to permit(edit_user, work_version) }
       it { is_expected.not_to permit(other, work_version) }
       it { is_expected.to permit(admin, work_version) }
+      it { is_expected.not_to permit(viewer, work_version) }
       it { is_expected.to permit(application, work_version) }
     end
 
@@ -211,6 +218,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
       it { is_expected.not_to permit(edit_user, work_version) }
       it { is_expected.not_to permit(other, work_version) }
       it { is_expected.not_to permit(admin, work_version) }
+      it { is_expected.not_to permit(viewer, work_version) }
       it { is_expected.not_to permit(application, work_version) }
     end
   end
@@ -221,6 +229,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
     let(:edit_user) { build(:user) }
     let(:other) { build(:user) }
     let(:admin) { build(:user, :admin) }
+    let(:viewer) { build(:user, :viewer) }
     let(:application) { build(:external_app) }
     let(:guest) { User.guest }
 
@@ -234,6 +243,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
       it { is_expected.to permit(edit_user, work_version) }
       it { is_expected.to permit(other, work_version) }
       it { is_expected.to permit(admin, work_version) }
+      it { is_expected.to permit(viewer, work_version) }
       it { is_expected.to permit(application, work_version) }
       it { is_expected.to permit(guest, work_version) }
     end
@@ -245,6 +255,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
       it { is_expected.to permit(proxy, work_version) }
       it { is_expected.to permit(edit_user, work_version) }
       it { is_expected.to permit(admin, work_version) }
+      it { is_expected.to permit(viewer, work_version) }
       it { is_expected.to permit(application, work_version) }
       it { is_expected.not_to permit(other, work_version) }
       it { is_expected.not_to permit(guest, work_version) }
@@ -257,6 +268,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
     let(:edit_user) { build(:user) }
     let(:other) { build(:user) }
     let(:admin) { build(:user, :admin) }
+    let(:viewer) { build(:user, :viewer) }
     let(:application) { build(:external_app) }
     let(:guest) { User.guest }
 
@@ -270,6 +282,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
       it { is_expected.to permit(edit_user, work_version) }
       it { is_expected.to permit(other, work_version) }
       it { is_expected.to permit(admin, work_version) }
+      it { is_expected.to permit(viewer, work_version) }
       it { is_expected.to permit(application, work_version) }
       it { is_expected.to permit(guest, work_version) }
     end
@@ -282,6 +295,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
       it { is_expected.to permit(edit_user, work_version) }
       it { is_expected.to permit(other, work_version) }
       it { is_expected.to permit(admin, work_version) }
+      it { is_expected.to permit(viewer, work_version) }
       it { is_expected.to permit(application, work_version) }
       it { is_expected.not_to permit(guest, work_version) }
     end
@@ -294,6 +308,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
       it { is_expected.to permit(edit_user, work_version) }
       it { is_expected.to permit(other, work_version) }
       it { is_expected.to permit(admin, work_version) }
+      it { is_expected.to permit(viewer, work_version) }
       it { is_expected.to permit(application, work_version) }
       it { is_expected.not_to permit(guest, work_version) }
     end
@@ -312,6 +327,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
       it { is_expected.to permit(edit_user, work_version) }
       it { is_expected.not_to permit(other, work_version) }
       it { is_expected.to permit(admin, work_version) }
+      it { is_expected.to permit(viewer, work_version) }
       it { is_expected.to permit(application, work_version) }
       it { is_expected.not_to permit(guest, work_version) }
     end
@@ -324,6 +340,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
       it { is_expected.to permit(edit_user, work_version) }
       it { is_expected.not_to permit(other, work_version) }
       it { is_expected.to permit(admin, work_version) }
+      it { is_expected.to permit(viewer, work_version) }
       it { is_expected.to permit(application, work_version) }
       it { is_expected.not_to permit(guest, work_version) }
     end
@@ -371,6 +388,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
     let(:edit_user) { build(:user) }
     let(:other) { build(:user) }
     let(:admin) { build(:user, :admin) }
+    let(:viewer) { build(:user, :viewer) }
     let(:application) { build(:external_app) }
     let(:guest) { User.guest }
 
@@ -389,6 +407,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
       it { is_expected.to permit(edit_user, work_version) }
       it { is_expected.not_to permit(other, work_version) }
       it { is_expected.to permit(admin, work_version) }
+      it { is_expected.not_to permit(viewer, work_version) }
       it { is_expected.to permit(application, work_version) }
       it { is_expected.not_to permit(guest, work_version) }
     end
@@ -401,6 +420,7 @@ RSpec.describe WorkVersionPolicy, type: :policy do
       it { is_expected.not_to permit(edit_user, work_version) }
       it { is_expected.not_to permit(other, work_version) }
       it { is_expected.not_to permit(admin, work_version) }
+      it { is_expected.not_to permit(viewer, work_version) }
       it { is_expected.not_to permit(application, work_version) }
       it { is_expected.not_to permit(guest, work_version) }
     end
