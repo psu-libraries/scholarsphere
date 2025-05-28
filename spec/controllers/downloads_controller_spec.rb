@@ -101,4 +101,22 @@ RSpec.describe DownloadsController do
       )
     end
   end
+
+  context 'when "download" param is true' do
+    let(:work_version) { create(:work_version, :published, :with_files, file_count: 2) }
+
+    it 'uses "attachment" for the response content disposition' do
+      get :content, params: { resource_id: work_version.uuid, id: work_version.file_version_memberships[0].id, download: true }
+      expect(response.location).to include('response-content-disposition=attachment')
+    end
+  end
+
+  context 'when "download" param is not present' do
+    let(:work_version) { create(:work_version, :published, :with_files, file_count: 2) }
+
+    it 'uses "inline" for the response content disposition' do
+      get :content, params: { resource_id: work_version.uuid, id: work_version.file_version_memberships[0].id }
+      expect(response.location).to include('response-content-disposition=inline')
+    end
+  end
 end

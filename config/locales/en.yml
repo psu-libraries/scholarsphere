@@ -435,6 +435,7 @@ en:
       show:
         aria_download_image: ", an image of %{alt_text}"
         aria_download_file: "Download file: %{file_name}"
+        aria_view_file: "View file: %{file_name}"
     form:
       unsaved_changes_prompt: You have unsaved changes on this page. Are you sure you want to leave and discard these changes? 
       heading:
@@ -727,7 +728,8 @@ en:
       header: Citation
       copy: Copy Citation to Clipboard
     collections: Collections
-    download: "Download %{name}"
+    download: "Download: %{name}"
+    view: "View: %{name}"
     files: Files
     metadata: Metadata
     not_in_collections: 'This resource is currently not in any collection.'

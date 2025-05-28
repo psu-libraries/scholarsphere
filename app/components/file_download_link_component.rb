@@ -5,31 +5,48 @@ class FileDownloadLinkComponent < ViewComponent::Base
     @file_version_membership = file_version_membership
   end
 
-  def image?
-    @file_version_membership.file_resource.image?
-  end
-
   def alt_text
     @file_version_membership.file_resource.file.metadata['alt_text']
   end
 
-  def aria_label
-    download_text = t('dashboard.works.show.aria_download_file', file_name: @file_version_membership.title)
+  def aria_label(download: true)
+    text = if download == true
+             t('dashboard.works.show.aria_download_file',
+               file_name: @file_version_membership.title)
+           else
+             t('dashboard.works.show.aria_view_file',
+               file_name: @file_version_membership.title)
+           end
 
-    return download_text unless image?
+    return text unless image?
 
-    download_text + t('dashboard.works.show.aria_download_image', alt_text: alt_text)
+    text + t('dashboard.works.show.aria_download_image',
+             alt_text: alt_text)
   end
 
-  def download_path
-    Rails.application.routes.url_helpers.resource_download_path(@file_version_membership.id, resource_id: work_version_uuid)
+  def download_path(download: true)
+    Rails.application
+      .routes.url_helpers
+      .resource_download_path(@file_version_membership.id,
+                              resource_id: work_version_uuid,
+                              download: download)
+  end
+
+  def view_title
+    I18n.t('resources.view',
+           name: @file_version_membership.title)
   end
 
   def download_title
-    I18n.t('resources.download', name: @file_version_membership.title)
+    I18n.t('resources.download',
+           name: @file_version_membership.title)
   end
 
   private
+
+    def image?
+      @file_version_membership.file_resource.image?
+    end
 
     def work_version_uuid
       @file_version_membership.work_version.uuid
