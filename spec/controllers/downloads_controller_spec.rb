@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe DownloadsController do
-  let(:user) { create :user }
-  let(:admin_user) { create :user, :admin }
-  let(:viewer_user) { create :user, :viewer }
+  let(:user) { create(:user) }
+  let(:admin_user) { create(:user, :admin) }
+  let(:viewer_user) { create(:user, :viewer) }
 
   describe 'GET #content' do
     context 'when not signed in' do
@@ -103,7 +103,7 @@ RSpec.describe DownloadsController do
 
       context "when requesting a file from a published version of another user's embargoed work" do
         let(:work_version) { create(:work_version, :published, :with_files, file_count: 2, work: work) }
-        let(:work) { create :work, embargoed_until: 1.week.from_now }
+        let(:work) { create(:work, embargoed_until: 1.week.from_now) }
 
         it do
           expect {
@@ -127,7 +127,7 @@ RSpec.describe DownloadsController do
 
       context "when requesting a file from a published version of another user's embargoed work" do
         let(:work_version) { create(:work_version, :published, :with_files, file_count: 2, work: work) }
-        let(:work) { create :work, embargoed_until: 1.week.from_now }
+        let(:work) { create(:work, embargoed_until: 1.week.from_now) }
 
         it 'redirects to a presigned S3 url' do
           get :content, params: { resource_id: work_version.uuid, id: work_version.file_version_memberships[0].id }
@@ -150,7 +150,7 @@ RSpec.describe DownloadsController do
 
       context "when requesting a file from a published version of another user's embargoed work" do
         let(:work_version) { create(:work_version, :published, :with_files, file_count: 2, work: work) }
-        let(:work) { create :work, embargoed_until: 1.week.from_now }
+        let(:work) { create(:work, embargoed_until: 1.week.from_now) }
 
         it 'redirects to a presigned S3 url' do
           get :content, params: { resource_id: work_version.uuid, id: work_version.file_version_memberships[0].id }
