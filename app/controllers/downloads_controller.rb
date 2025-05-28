@@ -6,15 +6,16 @@ class DownloadsController < ApplicationController
     file_version = work_version.file_version_memberships.find(params[:id])
     authorize(file_version)
     file_version.file_resource.count_view! if count_view?(file_version.file_resource)
-    redirect_to s3_presigned_url(file_version), allow_other_host: true
+    redirect_to s3_presigned_url(file_version, download: params[:download]), allow_other_host: true
   end
 
   private
 
-    def s3_presigned_url(file)
+    def s3_presigned_url(file, download: false)
+      content_disposition = download ? ContentDisposition.attachment(file.title) : ContentDisposition.inline(file.title)
       file.file_resource.file_url(
         expires_in: ENV.fetch('DOWNLOAD_URL_TTL', 6).to_i,
-        response_content_disposition: ContentDisposition.inline(file.title)
+        response_content_disposition: content_disposition
       )
     end
 
