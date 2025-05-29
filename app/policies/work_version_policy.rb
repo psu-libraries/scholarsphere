@@ -36,7 +36,7 @@ class WorkVersionPolicy < ApplicationPolicy
   # than `#show?` because we allow the public to show draft versions if they
   # happen to know the secret uuid.
   def navigable?
-    record.published? || editable?
+    record.published? || editable? || user.viewer?
   end
 
   def publish?
@@ -46,7 +46,7 @@ class WorkVersionPolicy < ApplicationPolicy
   end
 
   def download?
-    return true if editable?
+    return true if editable? || user.viewer?
     return false if record.embargoed?
 
     record.work.read_access?(user) && record.published?

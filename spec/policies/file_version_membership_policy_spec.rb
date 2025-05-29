@@ -25,6 +25,7 @@ RSpec.describe FileVersionMembershipPolicy, type: :policy do
     let(:edit_user) { build(:user) }
     let(:proxy_user) { build(:user) }
     let(:admin) { build(:user, :admin) }
+    let(:viewer) { build(:user, :viewer) }
     let(:application) { build(:external_app) }
     let (:work) { create(:work, proxy_depositor: proxy_user.actor, edit_users: [edit_user]) }
     let(:work_version) { create(:work_version, :draft, work:) }
@@ -36,6 +37,7 @@ RSpec.describe FileVersionMembershipPolicy, type: :policy do
       it { is_expected.not_to permit(proxy_user, membership) }
       it { is_expected.not_to permit(edit_user, membership) }
       it { is_expected.not_to permit(admin, membership) }
+      it { is_expected.not_to permit(viewer, membership) }
       it { is_expected.not_to permit(application, membership) }
     end
 
@@ -46,6 +48,7 @@ RSpec.describe FileVersionMembershipPolicy, type: :policy do
       it { is_expected.to permit(proxy_user, membership) }
       it { is_expected.to permit(edit_user, membership) }
       it { is_expected.to permit(admin, membership) }
+      it { is_expected.not_to permit(viewer, membership) }
       it { is_expected.to permit(application, membership) }
     end
 
@@ -59,6 +62,7 @@ RSpec.describe FileVersionMembershipPolicy, type: :policy do
       it { is_expected.to permit(edit_user, membership) }
       it { is_expected.to permit(application, membership) }
       it { is_expected.to permit(admin, membership) }
+      it { is_expected.not_to permit(viewer, membership) }
     end
 
     context 'with a published version' do
@@ -69,6 +73,7 @@ RSpec.describe FileVersionMembershipPolicy, type: :policy do
       it { is_expected.not_to permit(edit_user, membership) }
       it { is_expected.not_to permit(proxy_user, membership) }
       it { is_expected.to permit(admin, membership) }
+      it { is_expected.not_to permit(viewer, membership) }
       it { is_expected.to permit(application, membership) }
     end
   end

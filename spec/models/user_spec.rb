@@ -307,6 +307,22 @@ RSpec.describe User do
     end
   end
 
+  describe '#viewer?' do
+    subject { user }
+
+    context 'when the user is not a viewer' do
+      let(:user) { build_stubbed(:user) }
+
+      it { is_expected.not_to be_viewer }
+    end
+
+    context 'when the user is a viewer' do
+      let(:user) { build(:user, :viewer) }
+
+      it { is_expected.to be_viewer }
+    end
+  end
+
   describe '#guest?' do
     context 'with a new user' do
       subject { described_class.new }
