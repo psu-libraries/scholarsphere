@@ -5,8 +5,9 @@ require_relative '../_shared_examples_for_work_deposit_pathway_form'
 
 RSpec::Support::ObjectFormatter.default_instance.max_formatted_output_length = nil
 RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
-  subject(:form) { described_class.new(wv, current_user: UserDecorator.new(create(:user))) }
+  subject(:form) { described_class.new(wv, current_user: current_user) }
 
+  let(:current_user) { UserDecorator.new(create(:user)) }
   let(:wv) {
     build(
       :work_version,
@@ -29,7 +30,6 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
       }
     )
   }
-
   let(:description) { 'test description' }
 
   it_behaves_like 'a work deposit pathway form'
@@ -154,8 +154,10 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
     context "when the form's work version is otherwise valid for publishing" do
       let(:wv) { build(:work_version, :with_creators, description: 'description', published_date: '2020') }
 
-      context "when the form's work version is published" do
-        before { wv.publish }
+      context "when the form's work_version is published and should_validate_readme? is true" do
+        before do
+          wv.publish
+        end
 
         context "when the form's work version has a file with a name that does not match 'readme'" do
           before { wv.file_resources << build(:file_resource, :pdf) }
@@ -256,7 +258,7 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
         end
       end
 
-      context "when the form's work version is not published" do
+      context "when the form's work version is not published (should_validate_readme? is false)" do
         context "when the form's work version has a file with a name that does not match 'readme'" do
           before { wv.file_resources << build(:file_resource, :pdf) }
 
@@ -352,8 +354,10 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
     context "when the form's work version is not otherwise valid for publishing" do
       let(:wv) { build(:work_version, :with_creators, description: nil, published_date: '2020') }
 
-      context "when the form's work version is published" do
-        before { wv.publish }
+      context "when the form's work version is published and should_validate_readme? is true" do
+        before do
+          wv.publish
+        end
 
         context "when the form's work version has a file with a name that does not match 'readme'" do
           before { wv.file_resources << build(:file_resource, :pdf) }
@@ -464,7 +468,7 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
         end
       end
 
-      context "when the form's work version is not published" do
+      context "when the form's work version is not published (should_validate_readme? is false)" do
         context "when the form's work version has a file with a name that does not match 'readme'" do
           before { wv.file_resources << build(:file_resource, :pdf) }
 
@@ -552,6 +556,68 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
                 expect(form).to be_valid
               end
             end
+          end
+        end
+      end
+    end
+
+    describe '#should_validate_readme?', :versioning do
+      let(:work) { create(:work, work_type: Work::Types.scholarly_works.last) }
+      let(:wv) { work.versions.last }
+
+      context 'when the work_version is not published' do
+        it 'does not trigger validation' do
+          expect(form.send(:should_validate_readme?)).to be false
+        end
+      end
+
+      context 'when the work_version is published' do
+        before do
+          wv.file_resources << create(:file_resource, :pdf)
+          wv.publish
+        end
+
+        context 'when the current_user is an admin' do
+          let(:current_user) { UserDecorator.new(create(:user, :admin)) }
+
+          context "when the work_version's work_type has updated from something not data_and_code to something data_and_code" do
+            before do
+              # Create some paper trails with work type updates ending on data_and_code
+              work.work_type = Work::Types.scholarly_works.sample
+              work.save!
+              work.work_type = Work::Types.data_and_code.sample
+              work.save!
+            end
+
+            it 'does not trigger validation' do
+              expect(form.send(:should_validate_readme?)).to be false
+            end
+          end
+
+          context "when the work_version's work_type has not updated to data_and_code from something else" do
+            before do
+              # Create some paper trails with work type updates
+              work.work_type = Work::Types.scholarly_works.sample
+              work.save!
+              work.work_type = Work::Types.general.sample
+              work.save!
+            end
+
+            it 'does trigger validation' do
+              expect(form.send(:should_validate_readme?)).to be true
+            end
+          end
+
+          context "when the work_version's work_type has not updated" do
+            it 'does trigger validation' do
+              expect(form.send(:should_validate_readme?)).to be true
+            end
+          end
+        end
+
+        context 'when the current_user is not an admin' do
+          it 'returns true' do
+            expect(form.send(:should_validate_readme?)).to be true
           end
         end
       end

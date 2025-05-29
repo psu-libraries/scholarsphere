@@ -424,12 +424,12 @@ class WorkDepositPathway
           end
 
           def changed_to_data_and_code?
-            object_change = @work_version.work
+            work_type_update_trails = @work_version.work
               .paper_trail_versions
-              .where("object_changes -> 'work_type' IS NOT NULL")
-            return false if object_change.empty?
+              .where("event = 'update' AND object_changes -> 'work_type' IS NOT NULL")
+            return false if work_type_update_trails.empty?
 
-            change = object_change.last.object_changes['work_type'].second
+            change = work_type_update_trails.last.object_changes['work_type'].second
             Work::Types.data_and_code.include?(change)
           end
 
