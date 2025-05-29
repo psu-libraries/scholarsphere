@@ -20,9 +20,14 @@ RSpec.describe FileDownloadLinkComponent, type: :component do
 
     it 'renders a download link with correct path and title' do
       render_inline(described_class.new(file_version_membership: file_version_membership))
-      expect(page).to have_link(file_version_membership.title,
-                                href: "/resources/#{resource.uuid}/downloads/#{file_version_membership.id}")
+      expect(page).to have_link(I18n.t!('resources.download',
+                                        name: file_version_membership.title),
+                                href: "/resources/#{resource.uuid}/downloads/#{file_version_membership.id}?download=true")
+      expect(page).to have_link(I18n.t!('resources.view',
+                                        name: file_version_membership.title),
+                                href: "/resources/#{resource.uuid}/downloads/#{file_version_membership.id}?download=false")
       expect(page).to have_css("a[aria-label='Download file: #{file_version_membership.title}']")
+      expect(page).to have_css("a[aria-label='View file: #{file_version_membership.title}']")
     end
   end
 
@@ -31,9 +36,14 @@ RSpec.describe FileDownloadLinkComponent, type: :component do
 
     it 'renders a download link with correct path and title and alt text in the aria-label' do
       render_inline(described_class.new(file_version_membership: file_version_membership))
-      expect(page).to have_link(file_version_membership.title,
-                                href: "/resources/#{resource.uuid}/downloads/#{file_version_membership.id}")
+      expect(page).to have_link(I18n.t!('resources.download',
+                                        name: file_version_membership.title),
+                                href: "/resources/#{resource.uuid}/downloads/#{file_version_membership.id}?download=true")
+      expect(page).to have_link(I18n.t!('resources.view',
+                                        name: file_version_membership.title),
+                                href: "/resources/#{resource.uuid}/downloads/#{file_version_membership.id}?download=false")
       expect(page).to have_css("a[aria-label='Download file: #{file_version_membership.title}, an image of Test text']")
+      expect(page).to have_css("a[aria-label='View file: #{file_version_membership.title}, an image of Test text']")
     end
   end
 end
