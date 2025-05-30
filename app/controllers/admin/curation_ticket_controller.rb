@@ -5,9 +5,9 @@ module Admin
     def create_work
       service = LibanswersApiService.new
       response = if params[:ticket_type] == 'curation'
-                   service.admin_create_curation_ticket(params[:id])
+                   service.admin_create_ticket(params[:id], 'work_curation')
                  else
-                   service.admin_create_accessibility_ticket(params[:id], request.base_url)
+                   service.admin_create_ticket(params[:id], 'work_accessibility', request.base_url)
                  end
       redirect_to response, allow_other_host: true
     rescue LibanswersApiService::LibanswersApiError => e
