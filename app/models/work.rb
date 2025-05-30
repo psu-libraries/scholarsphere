@@ -281,7 +281,7 @@ class Work < ApplicationRecord
   end
 
   def latest_has_image_file_resource?
-    latest_version.file_resources&.any?(&:image?)
+    latest_version.has_image_file_resource?
   end
 
   private

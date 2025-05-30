@@ -2,7 +2,7 @@
   <thead>
     <tr>
       <th class="col-sm-4"><%= t('dashboard.file_list.edit.name') %></th>
-      <%= "<th class='col-sm-4'>#{t('dashboard.works.edit.alt_text.heading')}</th>".html_safe if current_user.admin? && work.latest_has_image_file_resource? %>
+      <%= "<th class='col-sm-4'>#{t('dashboard.file_list.edit.alt_text.heading')}</th>".html_safe if current_user.admin? && work.latest_has_image_file_resource? %>
       <th><%= t('dashboard.file_list.edit.accessibility_score') %></th>
       <th><%= t('dashboard.file_list.edit.accessibility_report') %></th>
     </tr>

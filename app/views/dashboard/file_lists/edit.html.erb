@@ -18,7 +18,7 @@
     <h1><% t('dashboard.file_list.edit.heading') %></h1>
 
     <% if @file_version_memberships.any? %>
-      <%= render 'uploaded_file_list', file_version_memberships: @file_version_memberships %>
+      <%= render 'uploaded_file_list', work_version: @work_version %>
     <% end %>
 
     <%= render 'upload_form', version: @work_version %>
