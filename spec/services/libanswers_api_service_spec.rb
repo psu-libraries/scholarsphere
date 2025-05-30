@@ -15,7 +15,7 @@ RSpec.describe LibanswersApiService, :vcr do
   describe '#admin_create_ticket' do
     let!(:user) { create(:user, access_id: 'test', email: 'test@psu.edu') }
     let!(:work) { create(:work, depositor: user.actor) }
-    let!(:collection) { create(:collection, depositor: user.actor)}
+    let!(:collection) { create(:collection, depositor: user.actor) }
 
     context 'when successful response is returned from libanswers /ticket/create endpoint' do
       it 'returns the url of the ticket created' do
@@ -115,7 +115,7 @@ RSpec.describe LibanswersApiService, :vcr do
           end
 
           it 'includes "pdetails" containing an accessibility report url' do
-            described_class.new.admin_create_ticket(work_2.id, 'work_accessibility', base_url )
+            described_class.new.admin_create_ticket(work_2.id, 'work_accessibility', base_url)
             details = "#{file_resource.file_data['metadata']['filename']}: #{base_url}/accessibility_check_results/#{accessibility_check_result.id}"
             expect(mock_faraday_connection).to have_received(:post).with(
               '/api/1.1/ticket/create',
