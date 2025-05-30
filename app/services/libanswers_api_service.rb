@@ -17,7 +17,6 @@ class LibanswersApiService
 
     conn = create_connection
     response = conn.post(create_ticket_path, ticket_details)
-    byebug
     handle_response(response)
   rescue Faraday::ConnectionFailed => e
     raise LibanswersApiError, e.message
@@ -99,7 +98,7 @@ class LibanswersApiService
   def get_ticket_details(id, type, admin_subject, base_url='')
     case type
     when 'collection'
-    @collection = Collection.find(collection_id)
+    @collection = Collection.find(id)
     depositor = collection.depositor
     return "quid=#{SCHOLARSPHERE_QUEUE_ID}&" +
                                              "pquestion=#{admin_subject}&" +
