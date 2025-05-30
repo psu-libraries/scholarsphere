@@ -19,7 +19,7 @@ RSpec.describe LibanswersApiService, :vcr do
 
     context 'when successful response is returned from libanswers /ticket/create endpoint' do
       it 'returns the url of the ticket created' do
-        expect(described_class.new.admin_create_ticket(work.id)).to eq 'https://psu.libanswers.com/admin/ticket?qid=13226122'
+        expect(described_class.new.admin_create_ticket(work.id)).to eq 'https://psu.libanswers.com/admin/ticket?qid=16117497'
       end
     end
 
