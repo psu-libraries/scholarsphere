@@ -33,7 +33,7 @@ class WorkDepositPathway
     if scholarly_works?
       ScholarlyWorks::PublishForm.new(resource)
     elsif data_and_code?
-      DataAndCode::PublishForm.new(resource, current_user: current_user)
+      DataAndCode::PublishForm.new(resource, current_user:)
     elsif instrument?
       Instrument::PublishForm.new(resource)
     elsif grad_culminating_experiences?

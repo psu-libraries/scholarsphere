@@ -5,7 +5,7 @@ require_relative '../_shared_examples_for_work_deposit_pathway_form'
 
 RSpec::Support::ObjectFormatter.default_instance.max_formatted_output_length = nil
 RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
-  subject(:form) { described_class.new(wv, current_user: current_user) }
+  subject(:form) { described_class.new(wv, current_user:) }
 
   let(:current_user) { UserDecorator.new(create(:user)) }
   let(:wv) {
@@ -258,7 +258,7 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
         end
       end
 
-      context "when the form's work version is not published (should_validate_readme? is false)" do
+      context "when the form's work version is not published (making should_validate_readme? false)" do
         context "when the form's work version has a file with a name that does not match 'readme'" do
           before { wv.file_resources << build(:file_resource, :pdf) }
 
@@ -468,7 +468,7 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
         end
       end
 
-      context "when the form's work version is not published (should_validate_readme? is false)" do
+      context "when the form's work version is not published (making should_validate_readme? false)" do
         context "when the form's work version has a file with a name that does not match 'readme'" do
           before { wv.file_resources << build(:file_resource, :pdf) }
 
