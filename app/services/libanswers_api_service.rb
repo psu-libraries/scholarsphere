@@ -3,9 +3,25 @@
 class LibanswersApiService
   class LibanswersApiError < StandardError; end
   attr_reader :work
+  attr_reader :collection
 
   ACCESSIBILITY_QUEUE_ID = '2590'
   SCHOLARSPHERE_QUEUE_ID = '5477'
+
+  def admin_create_ticket(id, type='work_curation', base_url='')
+    depositor = get_depositor(id, type)
+    raise LibanswersApiError, I18n.t('resources.contact_depositor_button.error_message') unless depositor_active?(depositor)
+
+    admin_subject = get_admin_subject(id, type)
+    ticket_details = get_ticket_details(id, type, admin_subject)
+
+    conn = create_connection
+    response = conn.post(create_ticket_path, ticket_details)
+    byebug
+    handle_response(response)
+  rescue Faraday::ConnectionFailed => e
+    raise LibanswersApiError, e.message
+  end
 
   def admin_create_curation_ticket(work_id)
     @work = Work.find(work_id)
@@ -50,6 +66,58 @@ class LibanswersApiService
     handle_response(response)
   rescue Faraday::ConnectionFailed => e
     raise LibanswersApiError, e.message
+  end
+
+  def get_depositor(id, type)
+    deposit_types = {'work_curation'=> Work, 'work_accessibility'=> Work, 'collection'=> Collection}
+    deposit = deposit_types[type].find(id)
+    deposit.depositor
+  end
+
+  def depositor_active?(depositor)
+    access_id = depositor.psu_id
+    identity = PsuIdentity::SearchService::Client.new.userid(access_id)
+    identity.affiliation != ['MEMBER']
+  rescue PsuIdentity::SearchService::NotFound
+    false
+  end
+
+  def get_admin_subject(id, type)
+    case type
+    when 'collection'
+      collection = Collection.find(id)
+      return "ScholarSphere Collection Curation: #{collection.metadata['title']}"
+    when 'work_curation'
+      work = Work.find(id)
+      admin_subject = "ScholarSphere Deposit Curation: #{work.latest_version.title}"
+    when 'work_accessibility'
+      work = Work.find(id)
+      return "ScholarSphere Deposit Accessibility Curation: #{work.latest_version.title}"
+    end
+  end
+
+  def get_ticket_details(id, type, admin_subject, base_url='')
+    case type
+    when 'collection'
+    @collection = Collection.find(collection_id)
+    depositor = collection.depositor
+    return "quid=#{SCHOLARSPHERE_QUEUE_ID}&" +
+                                             "pquestion=#{admin_subject}&" +
+                                             "pname=#{depositor.display_name}&" +
+                                             "pemail=#{depositor.email}"
+    when 'work_curation'
+      work = Work.find(id)
+      return "quid=#{SCHOLARSPHERE_QUEUE_ID}&" + "pquestion=#{admin_subject}&" +
+      "pname=#{work.display_name}&" + "pemail=#{work.email}"
+    when 'work_accessibility'
+      work = Work.find(id)
+      accessibility_check_results = get_accessibility_result_links(work, base_url)
+      return "quid=#{ACCESSIBILITY_QUEUE_ID}&" +
+                                             "pquestion=#{admin_subject}&" +
+                                              (accessibility_check_results.empty? ? '' : "pdetails=#{accessibility_check_results}&") +
+                                             "pname=#{work.display_name}&" +
+                                             "pemail=#{work.email}"
+    end
   end
 
   private
