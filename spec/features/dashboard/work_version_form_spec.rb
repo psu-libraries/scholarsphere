@@ -979,43 +979,117 @@ RSpec.describe 'Publishing a work', with_user: :user do
     let(:work_version) { work.versions.first }
     let(:user) { work_version.work.depositor.user }
 
-    it 'works' do
-      visit dashboard_form_files_path(work_version)
+    describe 'uploading an image' do
+      it 'requires alt text to be submitted and works' do
+        visit dashboard_form_files_path(work_version)
 
-      # Upload a file
-      FeatureHelpers::DashboardForm.upload_file(Rails.root.join('spec', 'fixtures', 'image.png'))
-      within('.uppy-Dashboard-files') do
-        expect(page).to have_content('image.png')
-      end
-
-      # Save, reload the page, and ensure that it's now in the files table
-      FeatureHelpers::DashboardForm.save_as_draft_and_exit
-
-      # Once for the work version, twice for the file. The second call for the file is most likely the promotion job.
-      expect(SolrIndexingJob).to have_received(:perform_later).thrice
-
-      visit dashboard_form_files_path(work_version)
-
-      within('.table') do
-        expect(page).to have_content('image.png')
-        expect(page).to have_content('62.5 KB')
-        expect(page).to have_content('image/png')
-        expect(page).to have_content('Needs manual review')
-      end
-
-      # Try to re-upload the same file again
-      page
-        .all('.uppy-Dashboard-input', visible: false)
-        .first
-        .attach_file(Rails.root.join('spec', 'fixtures', 'image.png'))
-
-      within('.uppy-Informer') do
-        until page.has_content?('Error: image.png already exists in this version')
+        # Wait for Uppy to load
+        while page.has_no_selector?('.uppy-Dashboard-AddFiles')
           sleep 0.1
         end
-      end
 
-      expect(page).to have_no_button('Request Curation')
+        # @note For some reason there are two 'files[]' hidden inputs, but it's only happens in the test environment.
+        page
+          .all('.uppy-Dashboard-input', visible: false)
+          .first
+          .attach_file(Rails.root.join('spec', 'fixtures', 'image.png'))
+
+        # Wait for alt text form
+        while page.has_no_selector?('#uppy-Dashboard-FileCard-input-alt_text')
+          sleep 0.1
+        end
+
+        click_on 'Save changes'
+
+        expect(page).to have_content('Please provide alt text for the image')
+
+        fill_in 'uppy-Dashboard-FileCard-input-alt_text', with: 'Test alt text'
+
+        click_on 'Save changes'
+
+        # Wait for file to finish uploading
+        while page.has_no_selector?('.uppy-DashboardContent-title', text: 'Upload complete')
+          sleep 0.1
+        end
+
+        within('.uppy-Dashboard-files') do
+          expect(page).to have_content('image.png')
+        end
+
+        # Save, reload the page, and ensure that it's now in the files table
+        FeatureHelpers::DashboardForm.save_as_draft_and_exit
+
+        # Once for the work version, twice for the file. The second call for the file is most likely the promotion job.
+        expect(SolrIndexingJob).to have_received(:perform_later).thrice
+
+        expect(FileResource.last.file.metadata['alt_text']).to eq('Test alt text')
+
+        visit dashboard_form_files_path(work_version)
+
+        within('.table') do
+          expect(page).to have_content('image.png')
+          expect(page).to have_content('Test alt text')
+          expect(page).to have_content('62.5 KB')
+          expect(page).to have_content('image/png')
+          expect(page).to have_content('Needs manual review')
+        end
+
+        # Try to re-upload the same file again
+        page
+          .all('.uppy-Dashboard-input', visible: false)
+          .first
+          .attach_file(Rails.root.join('spec', 'fixtures', 'image.png'))
+
+        within('.uppy-Informer') do
+          until page.has_content?('Error: image.png already exists in this version')
+            sleep 0.1
+          end
+        end
+
+        expect(page).to have_no_button('Request Curation')
+      end
+    end
+
+    describe 'uploading a PDF' do
+      it 'works' do
+        visit dashboard_form_files_path(work_version)
+
+        # Upload a file
+        FeatureHelpers::DashboardForm.upload_file(Rails.root.join('spec', 'fixtures', 'ipsum.pdf'))
+        within('.uppy-Dashboard-files') do
+          expect(page).to have_content('ipsum.pdf')
+        end
+
+        # Save, reload the page, and ensure that it's now in the files table
+        FeatureHelpers::DashboardForm.save_as_draft_and_exit
+
+        # Once for the work version, twice for the file. The second call for the file is most likely the promotion job.
+        expect(SolrIndexingJob).to have_received(:perform_later).thrice
+
+        visit dashboard_form_files_path(work_version)
+
+        within('.table') do
+          expect(page).to have_no_content('Alt Text')
+          expect(page).to have_content('ipsum.pdf')
+          expect(page).to have_content('16.4 KB')
+          expect(page).to have_content('application/pdf')
+          expect(page).to have_no_content('Needs manual review')
+        end
+
+        # Try to re-upload the same file again
+        page
+          .all('.uppy-Dashboard-input', visible: false)
+          .first
+          .attach_file(Rails.root.join('spec', 'fixtures', 'ipsum.pdf'))
+
+        within('.uppy-Informer') do
+          until page.has_content?('Error: ipsum.pdf already exists in this version')
+            sleep 0.1
+          end
+        end
+
+        expect(page).to have_no_button('Request Curation')
+      end
     end
 
     describe 'queuing an accessibility check' do
@@ -1039,7 +1113,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
       context 'when saving an uploaded non-pdf (png)' do
         it 'does not kick off an AccessibilityCheckJob' do
-          FeatureHelpers::DashboardForm.upload_file(Rails.root.join('spec', 'fixtures', 'image.png'))
+          FeatureHelpers::DashboardForm.upload_image(Rails.root.join('spec', 'fixtures', 'image.png'))
 
           FeatureHelpers::DashboardForm.save_as_draft_and_exit
           while FileResource.last.nil?
@@ -1350,7 +1424,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
       FeatureHelpers::DashboardForm.save_and_continue
 
-      FeatureHelpers::DashboardForm.upload_file(Rails.root.join('spec', 'fixtures', 'image.png'))
+      FeatureHelpers::DashboardForm.upload_image(Rails.root.join('spec', 'fixtures', 'image.png'))
       within('.uppy-Dashboard-files') do
         expect(page).to have_content('image.png')
       end
@@ -1411,7 +1485,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
       FeatureHelpers::DashboardForm.save_and_continue
 
-      FeatureHelpers::DashboardForm.upload_file(Rails.root.join('spec', 'fixtures', 'image.png'))
+      FeatureHelpers::DashboardForm.upload_image(Rails.root.join('spec', 'fixtures', 'image.png'))
       within('.uppy-Dashboard-files') do
         expect(page).to have_content('image.png')
       end

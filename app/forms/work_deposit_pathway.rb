@@ -207,7 +207,9 @@ class WorkDepositPathway
         language
       }.freeze
 
-      delegate :imported_metadata_from_rmd, to: :work_version, prefix: false
+      delegate :imported_metadata_from_rmd,
+               :has_image_file_resource?,
+               to: :work_version, prefix: false
 
       def show_autocomplete_form?
         false

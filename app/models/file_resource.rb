@@ -91,6 +91,10 @@ class FileResource < ApplicationRecord
     false
   end
 
+  def image?
+    file.mime_type&.starts_with?('image/')
+  end
+
   private
 
     def client

@@ -39,7 +39,7 @@
               </div>
             </div>
             <% if form.object.file_version_memberships.any? %>
-              <%= render 'dashboard/form/files/uploaded_file_list', file_version_memberships: form.object.file_version_memberships %>
+              <%= render 'dashboard/form/files/uploaded_file_list', work_version: form.object %>
             <% end %>
 
             <div class="form-wrapper form-wrapper--wide">

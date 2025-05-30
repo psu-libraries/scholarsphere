@@ -954,4 +954,38 @@ RSpec.describe WorkVersion do
       end
     end
   end
+
+  describe '#has_image_file_resource?' do
+    let(:work_version) { create(:work_version) }
+
+    context 'when there is at least one image file resource' do
+      let!(:image_file_resource) { create(:file_resource,
+                                          :with_processed_image) }
+
+      it 'returns true' do
+        create(:file_version_membership,
+               work_version: work_version,
+               file_resource: image_file_resource)
+        expect(work_version.has_image_file_resource?).to eq true
+      end
+    end
+
+    context 'when there are only non-image file resources' do
+      let!(:pdf_file_resource) { create(:file_resource,
+                                        :pdf) }
+
+      it 'returns false' do
+        create(:file_version_membership,
+               work_version: work_version,
+               file_resource: pdf_file_resource)
+        expect(work_version.has_image_file_resource?).to eq false
+      end
+    end
+
+    context 'when there are no file resources' do
+      it 'returns false' do
+        expect(work_version.has_image_file_resource?).to eq false
+      end
+    end
+  end
 end

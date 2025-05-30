@@ -77,7 +77,7 @@ services:
     command: [
       "/bin/bash",
       "-c",
-      "solr -c && solr auth enable -credentials $$SOLR_USERNAME:$$SOLR_PASSWORD -z localhost:9983; solr stop && solr -c -f",
+      "solr -c && solr auth enable -credentials $$SOLR_USERNAME:$$SOLR_PASSWORD -z localhost:9983; solr stop && solr start -c -f",
     ]
   db:
     environment:

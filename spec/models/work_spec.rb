@@ -767,4 +767,55 @@ RSpec.describe Work do
       expect(work.current_curator_access_id).to eq 'xyz9876'
     end
   end
+
+  describe '#latest_has_image_file_resource?' do
+    let(:work) { create(:work) }
+    let(:latest_version) { create(:work_version, version_number: 3) }
+    let(:older_version) { create(:work_version, version_number: 2) }
+
+    before do
+      work.versions << older_version
+      work.versions << latest_version
+      work.save!
+    end
+
+    context 'when the latest version has an image file resource' do
+      let!(:image_file_resource) { create(:file_resource, :with_processed_image) }
+
+      it 'returns true' do
+        create(:file_version_membership,
+               work_version: latest_version,
+               file_resource: image_file_resource)
+        expect(work.latest_has_image_file_resource?).to eq true
+      end
+    end
+
+    context 'when only an older version has an image file resource' do
+      let!(:image_file_resource) { create(:file_resource, :with_processed_image) }
+
+      it 'returns false' do
+        create(:file_version_membership,
+               work_version: older_version,
+               file_resource: image_file_resource)
+        expect(work.latest_has_image_file_resource?).to eq false
+      end
+    end
+
+    context 'when the latest version has only non-image file resources' do
+      let!(:pdf_file_resource) { create(:file_resource, :pdf) }
+
+      it 'returns false' do
+        create(:file_version_membership,
+               work_version: latest_version,
+               file_resource: pdf_file_resource)
+        expect(work.latest_has_image_file_resource?).to eq false
+      end
+    end
+
+    context 'when the latest version has no file resources' do
+      it 'returns false' do
+        expect(work.latest_has_image_file_resource?).to eq false
+      end
+    end
+  end
 end

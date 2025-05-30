@@ -162,7 +162,7 @@
 
       <div class="actions mb-3">
         <% if @work.latest_version.file_version_memberships.any? %>
-          <%= render 'dashboard/form/files/read_only_file_list', file_version_memberships: @work.latest_version.file_version_memberships %>
+          <%= render 'dashboard/form/files/read_only_file_list', work: @work %>
         <% end %>
       </div>
 

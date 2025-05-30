@@ -429,6 +429,10 @@ en:
               for the work. Withdrawing the only published version of a work will remove this work from public search
               results.
         submit_button: Withdraw Version
+      show:
+        aria_download_image: ", an image of %{alt_text}"
+        aria_download_file: "Download file: %{file_name}"
+        aria_view_file: "View file: %{file_name}"
     form:
       unsaved_changes_prompt: You have unsaved changes on this page. Are you sure you want to leave and discard these changes? 
       heading:
@@ -515,7 +519,6 @@ en:
         image:
           format: Every work must include an image as either a PNG, JPEG, or TIFF file type.
           zip: If you are uploading a compressed file (e.g., .zip, .tar), ensure that the README and image files are separate files outside the zipped files.
-
       contributors:
         edit:
           badge: Creator
@@ -636,6 +639,9 @@ en:
         actions: ''
         rename: Rename
         delete: Remove
+        alt_text:
+          heading: Alt Text
+          save_button: Update Alt Text
     file_version_memberships:
       edit:
         heading: Editing %{title}
@@ -721,7 +727,8 @@ en:
       header: Citation
       copy: Copy Citation to Clipboard
     collections: Collections
-    download: "Download %{name}"
+    download: "Download: %{name}"
+    view: "View: %{name}"
     files: Files
     metadata: Metadata
     not_in_collections: 'This resource is currently not in any collection.'

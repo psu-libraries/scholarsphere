@@ -6,22 +6,7 @@
     <% work_version.file_version_memberships.includes(:file_resource).each do |file| %>
       <li class="file-card__item">
         <div class="file-card__content">
-          <h3 class="d-inline-block">
-            <%= link_to resource_download_path(file.id, resource_id: work_version.uuid),
-                        title: t('resources.download', name: file.title),
-                        class: 'matomo_download',
-                        target: '_blank',
-                        rel: 'nofollow noopener' do %>
-              View <%= file.title %>
-            <% end %>
-          </h3>
-          <h3 class="d-inline-block ml-2">
-            <%= link_to resource_download_path(file.id, resource_id: work_version.uuid, download: true),
-                        title: t('resources.download', name: file.title),
-                        class: 'matomo_download' do %>
-              Download <%= file.title %>
-            <% end %>
-          </h3>
+          <%= render(FileDownloadLinkComponent.new(file_version_membership: file)) %>
           <p class="meta mb-0">
             <span class="meta__size">size: <%= number_to_human_size file.size %></span> |
             <span class="meta__type">mime_type: <%= file.mime_type %></span> |

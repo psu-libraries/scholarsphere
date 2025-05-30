@@ -280,6 +280,10 @@ class Work < ApplicationRecord
     curatorships.order(created_at: :desc)&.first&.access_id
   end
 
+  def latest_has_image_file_resource?
+    latest_version.has_image_file_resource?
+  end
+
   private
 
     def uploaded_thumbnail_url
