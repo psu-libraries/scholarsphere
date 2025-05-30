@@ -410,7 +410,6 @@ en:
           not_allowed: >
             A DOI may only be created on published works that do not already have a publisher DOI. If this work does not have a DOI from the publisher and is still a draft, you'll need to wait until it's
             published to create a DOI for it.
-        
         danger:
           heading: Danger
           delete_draft:
@@ -520,7 +519,6 @@ en:
         image:
           format: Every work must include an image as either a PNG, JPEG, or TIFF file type.
           zip: If you are uploading a compressed file (e.g., .zip, .tar), ensure that the README and image files are separate files outside the zipped files.
-
       contributors:
         edit:
           badge: Creator
