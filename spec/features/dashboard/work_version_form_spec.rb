@@ -1028,6 +1028,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         within('.table') do
           expect(page).to have_content('image.png')
+          expect(page).to have_content('Test alt text')
           expect(page).to have_content('62.5 KB')
           expect(page).to have_content('image/png')
           expect(page).to have_content('Needs manual review')
@@ -1068,6 +1069,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         visit dashboard_form_files_path(work_version)
 
         within('.table') do
+          expect(page).to have_no_content('Alt Text')
           expect(page).to have_content('ipsum.pdf')
           expect(page).to have_content('16.4 KB')
           expect(page).to have_content('application/pdf')
