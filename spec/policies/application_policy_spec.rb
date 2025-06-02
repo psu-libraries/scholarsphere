@@ -14,6 +14,12 @@ RSpec.describe ApplicationPolicy, type: :policy do
       it { is_expected.to permit(user, record) }
     end
 
+    context 'with an viewer user' do
+      let(:user) { build(:user, :viewer) }
+
+      it { is_expected.not_to permit(user, record) }
+    end
+
     context 'with an external application' do
       let(:user) { build(:external_app) }
 

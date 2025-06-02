@@ -8,6 +8,9 @@ FactoryBot.define do
       groups { User.default_groups + [Group.new(name: Rails.application.config.admin_group)] }
       admin_enabled { true }
     end
+    trait :viewer do
+      groups { User.default_groups + [Group.new(name: Rails.application.config.viewer_group)] }
+    end
     groups { User.default_groups }
     email { "#{access_id}@psu.edu" }
     sequence(:access_id) { |n| FactoryBotHelpers.generate_access_id_from_name(Faker::Name.first_name, Faker::Name.last_name, n) }

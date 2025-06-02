@@ -29,11 +29,11 @@ class WorkDepositPathway
     end
   end
 
-  def publish_form
+  def publish_form(current_user: nil)
     if scholarly_works?
       ScholarlyWorks::PublishForm.new(resource)
     elsif data_and_code?
-      DataAndCode::PublishForm.new(resource)
+      DataAndCode::PublishForm.new(resource, current_user:)
     elsif instrument?
       Instrument::PublishForm.new(resource)
     elsif grad_culminating_experiences?
@@ -207,7 +207,9 @@ class WorkDepositPathway
         language
       }.freeze
 
-      delegate :imported_metadata_from_rmd, to: :work_version, prefix: false
+      delegate :imported_metadata_from_rmd,
+               :has_image_file_resource?,
+               to: :work_version, prefix: false
 
       def show_autocomplete_form?
         false
@@ -363,6 +365,11 @@ class WorkDepositPathway
       end
 
       class PublishForm < PublishFormBase
+        def initialize(work_version, current_user:)
+          super(work_version)
+          @current_user = current_user
+        end
+
         def self.form_fields
           WorkVersionFormBase::COMMON_FIELDS.union(WorkVersionFormBase::COMMON_PUBLISH_FIELDS).union(
             %w{
@@ -383,7 +390,7 @@ class WorkDepositPathway
         end
 
         validate :includes_readme_file,
-                 if: :published?
+                 if: :should_validate_readme?
 
         def form_partial
           'data_and_code_work_version'
@@ -410,6 +417,23 @@ class WorkDepositPathway
                  prefix: false
 
         private
+
+          def should_validate_readme?
+            return false if !published?
+            return false if @current_user.admin? && changed_to_data_and_code?
+
+            true
+          end
+
+          def changed_to_data_and_code?
+            work_type_update_trails = @work_version.work
+              .paper_trail_versions
+              .where("event = 'update' AND object_changes -> 'work_type' IS NOT NULL")
+            return false if work_type_update_trails.empty?
+
+            change = work_type_update_trails.last.object_changes['work_type'].second
+            Work::Types.data_and_code.include?(change)
+          end
 
           def includes_readme_file
             unless file_resources.find do |fr|

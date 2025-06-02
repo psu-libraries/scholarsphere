@@ -14,6 +14,7 @@ RSpec.describe WorkPolicy, type: :policy do
   let(:other_user) { build_stubbed(:user) }
   let(:public) { User.guest }
   let(:admin) { create(:user, :admin) }
+  let(:viewer) { create(:user, :viewer) }
   let(:application) { create(:external_app) }
 
   permissions :show? do
@@ -33,6 +34,7 @@ RSpec.describe WorkPolicy, type: :policy do
       it { is_expected.to permit(other_user, work) }
       it { is_expected.to permit(public, work) }
       it { is_expected.to permit(admin, work) }
+      it { is_expected.to permit(viewer, work) }
       it { is_expected.to permit(application, work) }
     end
 
@@ -52,6 +54,7 @@ RSpec.describe WorkPolicy, type: :policy do
       it { is_expected.to permit(other_user, work) }
       it { is_expected.to permit(public, work) }
       it { is_expected.to permit(admin, work) }
+      it { is_expected.to permit(viewer, work) }
       it { is_expected.to permit(application, work) }
     end
 
@@ -71,6 +74,7 @@ RSpec.describe WorkPolicy, type: :policy do
       it { is_expected.to permit(other_user, work) }
       it { is_expected.to permit(public, work) }
       it { is_expected.to permit(admin, work) }
+      it { is_expected.to permit(viewer, work) }
       it { is_expected.to permit(application, work) }
     end
   end
@@ -91,6 +95,7 @@ RSpec.describe WorkPolicy, type: :policy do
     it { is_expected.not_to permit(other_user, work) }
     it { is_expected.not_to permit(public, work) }
     it { is_expected.to permit(admin, work) }
+    it { is_expected.not_to permit(viewer, work) }
     it { is_expected.to permit(application, work) }
   end
 
@@ -111,6 +116,7 @@ RSpec.describe WorkPolicy, type: :policy do
       it { is_expected.not_to permit(other_user, work) }
       it { is_expected.not_to permit(public, work) }
       it { is_expected.not_to permit(admin, work) }
+      it { is_expected.not_to permit(viewer, work) }
       it { is_expected.not_to permit(application, work) }
     end
 
@@ -130,6 +136,7 @@ RSpec.describe WorkPolicy, type: :policy do
       it { is_expected.not_to permit(other_user, work) }
       it { is_expected.not_to permit(public, work) }
       it { is_expected.to permit(admin, work) }
+      it { is_expected.not_to permit(viewer, work) }
       it { is_expected.to permit(application, work) }
     end
 
@@ -149,6 +156,7 @@ RSpec.describe WorkPolicy, type: :policy do
       it { is_expected.not_to permit(other_user, work) }
       it { is_expected.not_to permit(public, work) }
       it { is_expected.to permit(admin, work) }
+      it { is_expected.not_to permit(viewer, work) }
       it { is_expected.to permit(application, work) }
     end
   end
@@ -174,6 +182,7 @@ RSpec.describe WorkPolicy, type: :policy do
         it { is_expected.not_to permit(other_user, work) }
         it { is_expected.not_to permit(public, work) }
         it { is_expected.not_to permit(admin, work) }
+        it { is_expected.not_to permit(viewer, work) }
         it { is_expected.not_to permit(application, work) }
       end
 
@@ -187,6 +196,7 @@ RSpec.describe WorkPolicy, type: :policy do
         it { is_expected.not_to permit(other_user, work) }
         it { is_expected.not_to permit(public, work) }
         it { is_expected.to permit(admin, work) }
+        it { is_expected.not_to permit(viewer, work) }
         it { is_expected.to permit(application, work) }
       end
     end
@@ -211,6 +221,7 @@ RSpec.describe WorkPolicy, type: :policy do
         it { is_expected.not_to permit(other_user, work) }
         it { is_expected.not_to permit(public, work) }
         it { is_expected.not_to permit(admin, work) }
+        it { is_expected.not_to permit(viewer, work) }
         it { is_expected.not_to permit(application, work) }
       end
 
@@ -224,6 +235,7 @@ RSpec.describe WorkPolicy, type: :policy do
         it { is_expected.not_to permit(other_user, work) }
         it { is_expected.not_to permit(public, work) }
         it { is_expected.not_to permit(admin, work) }
+        it { is_expected.not_to permit(viewer, work) }
         it { is_expected.not_to permit(application, work) }
       end
     end
@@ -257,6 +269,7 @@ RSpec.describe WorkPolicy, type: :policy do
           it { is_expected.not_to permit(other_user, work) }
           it { is_expected.not_to permit(public, work) }
           it { is_expected.to permit(admin, work) }
+          it { is_expected.not_to permit(viewer, work) }
           it { is_expected.to permit(application, work) }
         end
 
@@ -270,6 +283,7 @@ RSpec.describe WorkPolicy, type: :policy do
           it { is_expected.not_to permit(other_user, work) }
           it { is_expected.not_to permit(public, work) }
           it { is_expected.to permit(admin, work) }
+          it { is_expected.not_to permit(viewer, work) }
           it { is_expected.to permit(application, work) }
         end
       end
@@ -295,6 +309,7 @@ RSpec.describe WorkPolicy, type: :policy do
           it { is_expected.not_to permit(other_user, work) }
           it { is_expected.not_to permit(public, work) }
           it { is_expected.to permit(admin, work) }
+          it { is_expected.not_to permit(viewer, work) }
           it { is_expected.to permit(application, work) }
         end
 
@@ -308,6 +323,7 @@ RSpec.describe WorkPolicy, type: :policy do
           it { is_expected.not_to permit(other_user, work) }
           it { is_expected.not_to permit(public, work) }
           it { is_expected.to permit(admin, work) }
+          it { is_expected.not_to permit(viewer, work) }
           it { is_expected.to permit(application, work) }
         end
       end
@@ -337,6 +353,7 @@ RSpec.describe WorkPolicy, type: :policy do
           it { is_expected.not_to permit(other_user, work) }
           it { is_expected.not_to permit(public, work) }
           it { is_expected.to permit(admin, work) }
+          it { is_expected.not_to permit(viewer, work) }
           it { is_expected.to permit(application, work) }
         end
 
@@ -350,6 +367,7 @@ RSpec.describe WorkPolicy, type: :policy do
           it { is_expected.not_to permit(other_user, work) }
           it { is_expected.not_to permit(public, work) }
           it { is_expected.to permit(admin, work) }
+          it { is_expected.not_to permit(viewer, work) }
           it { is_expected.to permit(application, work) }
         end
       end
@@ -375,6 +393,7 @@ RSpec.describe WorkPolicy, type: :policy do
           it { is_expected.not_to permit(other_user, work) }
           it { is_expected.not_to permit(public, work) }
           it { is_expected.to permit(admin, work) }
+          it { is_expected.not_to permit(viewer, work) }
           it { is_expected.to permit(application, work) }
         end
 
@@ -388,6 +407,7 @@ RSpec.describe WorkPolicy, type: :policy do
           it { is_expected.not_to permit(other_user, work) }
           it { is_expected.not_to permit(public, work) }
           it { is_expected.to permit(admin, work) }
+          it { is_expected.not_to permit(viewer, work) }
           it { is_expected.to permit(application, work) }
         end
       end

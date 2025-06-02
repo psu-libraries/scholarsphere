@@ -41,6 +41,7 @@ module Scholarsphere
     config.load_defaults 7.0
 
     config.admin_group = ENV.fetch('ADMIN_GROUP', 'umg-up.dlt.scholarsphere-admin')
+    config.viewer_group = ENV.fetch('VIEWER_GROUP', 'umg-up.dlt.scholarsphere-viewer')
     config.psu_affiliated_group = ENV.fetch('PSU_AFFILIATED_GROUP', 'psu-affiliated-group')
 
     # Settings in config/environments/* take precedence over those specified here.

@@ -389,6 +389,10 @@ class WorkVersion < ApplicationRecord
     latest_published_version? && !accessibility_remediation_requested
   end
 
+  def has_image_file_resource?
+    file_resources&.any?(&:image?)
+  end
+
   delegate :deposited_at,
            :depositor,
            :embargoed?,

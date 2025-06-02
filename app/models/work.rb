@@ -60,7 +60,7 @@ class Work < ApplicationRecord
       .distinct
   }
   validate :embargoed_until_is_valid_date
-
+  has_paper_trail versions: :paper_trail_versions
   module Types
     extend Enumerable
 
@@ -278,6 +278,10 @@ class Work < ApplicationRecord
 
   def current_curator_access_id
     curatorships.order(created_at: :desc)&.first&.access_id
+  end
+
+  def latest_has_image_file_resource?
+    latest_version.has_image_file_resource?
   end
 
   private

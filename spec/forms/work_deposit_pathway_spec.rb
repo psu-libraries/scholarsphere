@@ -25,6 +25,7 @@ RSpec.describe WorkDepositPathway do
   let(:file_version_membership1) { instance_double(FileVersionMembership, accessibility_failures?: true) }
   let(:file_version_membership2) { instance_double(FileVersionMembership, accessibility_failures?: false) }
   let(:work) { instance_double(Work) }
+  let(:regular_user) { UserDecorator.new(create(:user)) }
 
   describe '#details_form when the given work version has a scholarly works type' do
     %w[
@@ -121,7 +122,7 @@ RSpec.describe WorkDepositPathway do
 
       context "when the given work version has a work type of #{t}" do
         it 'returns a WorkDepositPathway::ScholarlyWorks::DetailsForm initialized with the work type' do
-          form = pathway.publish_form
+          form = pathway.publish_form(current_user: regular_user)
           expect(form).to be_a WorkDepositPathway::ScholarlyWorks::PublishForm
           expect(form.id).to eq 123
         end
@@ -146,7 +147,7 @@ RSpec.describe WorkDepositPathway do
 
       context "when the given work version has a work type of #{t}" do
         it 'returns the given WorkVersion' do
-          form = pathway.publish_form
+          form = pathway.publish_form(current_user: regular_user)
           expect(form).to eq wv
         end
       end
@@ -162,7 +163,7 @@ RSpec.describe WorkDepositPathway do
 
       context "when the given work version has a work type of #{t}" do
         it 'returns the given WorkVersion' do
-          form = pathway.publish_form
+          form = pathway.publish_form(current_user: regular_user)
           expect(form).to be_a WorkDepositPathway::DataAndCode::PublishForm
           expect(form.id).to eq 123
         end
@@ -179,7 +180,7 @@ RSpec.describe WorkDepositPathway do
 
       context "when the given work version has a work type of #{t}" do
         it 'returns a WorkDepositPathway::GradCulminatingExperiences::PublishForm initialized with the work type' do
-          form = pathway.publish_form
+          form = pathway.publish_form(current_user: regular_user)
           expect(form).to be_a WorkDepositPathway::GradCulminatingExperiences::PublishForm
           expect(form.id).to eq 123
         end
