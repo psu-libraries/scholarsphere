@@ -1,0 +1,103 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://psu.libanswers.com/api/1.1/oauth/token
+    body:
+      encoding: UTF-8
+      string: client_id=abcdefg12345&client_secret=abcdef12345&grant_type=client_credentials
+    headers:
+      User-Agent:
+      - Faraday v2.12.2
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 400
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Fri, 30 May 2025 19:48:16 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Vary:
+      - Accept-Encoding
+      X-Frame-Options:
+      - deny
+      Cache-Control:
+      - no-store
+      Pragma:
+      - no-cache
+      X-Backend-Server:
+      - libanswers-us-4.springyaws.com
+      X-Content-Type-Options:
+      - nosniff
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Content-Security-Policy:
+      - upgrade-insecure-requests
+    body:
+      encoding: ASCII-8BIT
+      base64_string: |
+        eyJhY2Nlc3NfdG9rZW4iOiJkZWI2ZmRiMWM4YzZkNmU4ZjFhMmVmZThiYzI2
+        N2JhZTI5YzM5YzM5IiwiZXhwaXJlc19pbiI6ODY0MDAsInRva2VuX3R5cGUi
+        OiJCZWFyZXIiLCJzY29wZSI6ImFwcF92aWV3IGFwcF9jcmVhdGUgYXBwX3Vw
+        ZGF0ZSJ9
+  recorded_at: Fri, 30 May 2025 19:48:16 GMT
+- request:
+    method: post
+    uri: https://psu.libanswers.com/api/1.1/ticket/create
+    body:
+      encoding: UTF-8
+      string: 'quid=5477&pquestion=ScholarSphere Deposit Curation: Non odio ducimus:
+        "praesentium, rerum, perferendis; 3rd vero''s aspernatur''s quia"&pname=Edward
+        Lemke&pemail=test@psu.edu'
+    headers:
+      Authorization:
+      - Bearer deb6fdb1c8c6d6e8f1a2efe8bc267bae29c39c39
+      User-Agent:
+      - Faraday v2.12.2
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 500
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Fri, 30 May 2025 19:48:16 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Vary:
+      - Accept-Encoding
+      X-Backend-Server:
+      - libanswers-us-2.springyaws.com
+      X-Content-Type-Options:
+      - nosniff
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Content-Security-Policy:
+      - upgrade-insecure-requests
+    body:
+      encoding: UTF-8
+      string: '{"error": "Error saving ticket."}'
+  recorded_at: Fri, 30 May 2025 19:48:16 GMT
+recorded_with: VCR 6.3.1

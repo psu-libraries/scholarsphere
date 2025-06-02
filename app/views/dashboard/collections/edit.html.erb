@@ -39,6 +39,17 @@
     </div>
     <div class="col-lg-9">
       <h1 class="h2 mb-3"><%= t('.heading', title: @collection.title) %></h1>
+        <% if current_user.admin? %>
+          <%= button_to I18n.t('resources.contact_depositor_button.text'),
+                        admin_create_collection_ticket_url(id: @collection.id, type: 'collection'),
+                        class: 'btn btn-primary mr-2 mb-2',
+                        form: {
+                          target: '_blank',
+                          data: {
+                            confirm: I18n.t('resources.contact_depositor_button.confirm_message')
+                          }
+                        } %>
+      <% end %>
 
       <div class="keyline keyline--left">
         <h2 id="<%= t('.doi.heading').parameterize %>" class="h4"><%= t('.doi.heading') %></h2>
