@@ -1,5 +1,5 @@
 <div
-  class="mb-4"
+  class="mb-4 d-flex justify-content-center"
   data-controller="uppy"
   data-uppy-input-name="work_version[file_resources_attributes][][file]"
   data-uppy-blacklist="<%= form.object.file_version_memberships.map(&:title).to_json %>"
@@ -25,7 +25,7 @@
 <% end %>
 
 <% if form.object.file_version_memberships.any? %>
-  <%= render 'uploaded_file_list', file_version_memberships: form.object.file_version_memberships %>
+  <%= render 'uploaded_file_list', work_version: form.object %>
   <% if form.object.file_version_memberships.any?(&:accessibility_failures?) %>
     <%= t('accessibility_report.remediation_help').html_safe %>
   <% end %>

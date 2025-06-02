@@ -1,7 +1,10 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th><%= t('dashboard.file_list.edit.name') %></th>
+      <th class='col-sm-3'><%= t('dashboard.file_list.edit.name') %></th>
+      <% if work_version.has_image_file_resource? %>
+        <th><%= t('dashboard.file_list.edit.alt_text.heading') %></th>
+      <% end %>
       <th><%= t('dashboard.file_list.edit.mime_type') %></th>
       <th><%= t('dashboard.file_list.edit.size') %></th>
       <th><%= t('dashboard.file_list.edit.accessibility_score') %></th>
@@ -10,7 +13,7 @@
     </tr>
   </thead>
   <tbody class="work-files__file">
-    <% file_version_memberships.each do |membership| %>
+    <% work_version.file_version_memberships.each do |membership| %>
       <tr data-controller="accessibility-result"
             data-accessibility-result-id="<%= membership.id %>"
             data-accessibility-result-mime-type="<%= membership.mime_type %>"
@@ -22,6 +25,11 @@
         <td>
           <span class="filename"><%= membership.title %></span>
         </td>
+        <% if work_version.has_image_file_resource? %>
+          <td>
+            <%= membership.file_resource.file['alt_text'] if membership.file_resource.image? %>
+          </td>
+        <% end %>
         <td><%= membership.mime_type %></td>
         <td><%= number_to_human_size membership.size %></td>
         <td>
