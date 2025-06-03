@@ -1,7 +1,5 @@
 // eslint.config.js
-const { defineConfig } = require("eslint/config");
-
-module.exports = defineConfig([
+export default [
   {
     files: ['**/*.js'],
     languageOptions: {
@@ -26,4 +24,4 @@ module.exports = defineConfig([
       ]
     }
   }
-])
+]
