@@ -1,13 +1,14 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th><%= t('dashboard.file_list.edit.name') %></th>
+      <th class="col-sm-4"><%= t('dashboard.file_list.edit.name') %></th>
+      <%= "<th class='col-sm-4'>#{t('dashboard.file_list.edit.alt_text.heading')}</th>".html_safe if current_user.admin? && work.latest_has_image_file_resource? %>
       <th><%= t('dashboard.file_list.edit.accessibility_score') %></th>
       <th><%= t('dashboard.file_list.edit.accessibility_report') %></th>
     </tr>
   </thead>
   <tbody class="work-files__file">
-    <% file_version_memberships.each do |membership| %>
+    <% work.latest_version.file_version_memberships.each do |membership| %>
        <tr data-controller="accessibility-result"
             data-accessibility-result-id="<%= membership.id %>"
             data-accessibility-result-mime-type="<%= membership.mime_type %>"
@@ -19,7 +20,17 @@
         <td>
           <span class="filename"><%= membership.title %></span>
         </td>
-         <td>
+        <% if current_user.admin? %>
+          <% if membership.file_resource.image? %>
+            <td>
+              <%= render partial: 'dashboard/form/files/inline_alt_text_editor',
+                         locals: { file_resource: membership.file_resource } %>
+            </td>
+          <% elsif work.latest_has_image_file_resource? %>
+            <td></td>
+          <% end %>
+        <% end %>
+        <td>
           <span data-target="accessibility-result.score"></span>
         </td>
         <td>

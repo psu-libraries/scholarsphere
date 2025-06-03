@@ -320,4 +320,20 @@ RSpec.describe FileResource do
       end
     end
   end
+
+  describe '#image?' do
+    subject { file_resource.image? }
+
+    context 'when the file is an image' do
+      let(:file_resource) { build(:file_resource, :with_processed_image) }
+
+      it { is_expected.to be true }
+    end
+
+    context 'when the file is a PDF' do
+      let(:file_resource) { build(:file_resource, :pdf) }
+
+      it { is_expected.to be false }
+    end
+  end
 end

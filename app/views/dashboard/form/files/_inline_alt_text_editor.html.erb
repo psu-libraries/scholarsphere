@@ -1,0 +1,24 @@
+<%= form_with(
+      model: file_resource,
+      url: admin_update_alt_text_path(file_resource),
+      local: false,
+      class: 'form-inline',
+      html: {
+        data: {
+          controller: 'alt-text-editor',
+          type: 'json',
+          action: 'ajax:success->alt-text-editor#onPostSuccess ' +
+          'ajax:error->alt-text-editor#onPostError',
+          target: 'alt-text-editor.form'
+        }
+      }
+    ) do |f| %>
+
+  <%= f.label :alt_text, class: 'sr-only' %>
+  <%= f.text_field :alt_text,
+                   value: file_resource.file_data['metadata']['alt_text'],
+                   size: 10,
+                   class: 'form-control', data: { target: 'alt-text-editor.altTextField' } %>
+  <%= f.submit t('dashboard.file_list.edit.alt_text.save_button'), class: 'btn btn-sm btn-primary ml-1', data: { disable_with: 'Saving...' } %>
+  <%= render 'dashboard/form/files/alt_text_icons' %>
+<% end %>

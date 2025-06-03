@@ -2,38 +2,20 @@
 
 class LibanswersApiService
   class LibanswersApiError < StandardError; end
-  attr_reader :work
+  attr_reader :work, :collection
 
   ACCESSIBILITY_QUEUE_ID = '2590'
   SCHOLARSPHERE_QUEUE_ID = '5477'
 
-  def admin_create_curation_ticket(work_id)
-    @work = Work.find(work_id)
-    raise LibanswersApiError, I18n.t('resources.contact_depositor_button.error_message') unless user_active?(@work)
+  def admin_create_ticket(id, type = 'work_curation', base_url = '')
+    depositor = get_depositor(id, type)
+    raise LibanswersApiError, I18n.t('resources.contact_depositor_button.error_message') unless depositor_active?(depositor)
 
-    admin_subject = "ScholarSphere Deposit Curation: #{work.latest_version.title}"
+    admin_subject = get_admin_subject(id, type)
+    ticket_details = get_ticket_details(id, type, admin_subject, base_url)
+
     conn = create_connection
-    response = conn.post(create_ticket_path, "quid=#{SCHOLARSPHERE_QUEUE_ID}&" +
-                                             "pquestion=#{admin_subject}&" +
-                                             "pname=#{work.display_name}&" +
-                                             "pemail=#{work.email}")
-    handle_response(response)
-  rescue Faraday::ConnectionFailed => e
-    raise LibanswersApiError, e.message
-  end
-
-  def admin_create_accessibility_ticket(work_id, base_url)
-    @work = Work.find(work_id)
-    raise LibanswersApiError, I18n.t('resources.contact_accessibility_team_button.error_message') unless user_active?(@work)
-
-    admin_subject = "ScholarSphere Deposit Accessibility Curation: #{work.latest_version.title}"
-    accessibility_check_results = get_accessibility_result_links(work, base_url)
-    conn = create_connection
-    response = conn.post(create_ticket_path, "quid=#{ACCESSIBILITY_QUEUE_ID}&" +
-                                             "pquestion=#{admin_subject}&" +
-                                              (accessibility_check_results.empty? ? '' : "pdetails=#{accessibility_check_results}&") +
-                                             "pname=#{work.display_name}&" +
-                                             "pemail=#{work.email}")
+    response = conn.post(create_ticket_path, ticket_details)
     handle_response(response)
   rescue Faraday::ConnectionFailed => e
     raise LibanswersApiError, e.message
@@ -53,6 +35,58 @@ class LibanswersApiService
   end
 
   private
+
+    def get_depositor(id, type)
+      deposit_types = { 'work_curation' => Work, 'work_accessibility' => Work, 'collection' => Collection }
+      deposit = deposit_types[type].find(id)
+      deposit.depositor
+    end
+
+    def depositor_active?(depositor)
+      access_id = depositor.psu_id
+      identity = PsuIdentity::SearchService::Client.new.userid(access_id)
+      identity.affiliation != ['MEMBER']
+    rescue PsuIdentity::SearchService::NotFound
+      false
+    end
+
+    def get_admin_subject(id, type)
+      case type
+      when 'collection'
+        collection = Collection.find(id)
+        "ScholarSphere Collection Curation: #{collection.metadata['title']}"
+      when 'work_curation'
+        work = Work.find(id)
+        "ScholarSphere Deposit Curation: #{work.latest_version.title}"
+      when 'work_accessibility'
+        work = Work.find(id)
+        "ScholarSphere Deposit Accessibility Curation: #{work.latest_version.title}"
+      end
+    end
+
+    def get_ticket_details(id, type, admin_subject, base_url = '')
+      case type
+      when 'collection'
+        @collection = Collection.find(id)
+        depositor = collection.depositor
+        "quid=#{SCHOLARSPHERE_QUEUE_ID}&" +
+          "pquestion=#{admin_subject}&" +
+          "pname=#{depositor.display_name}&" +
+          "pemail=#{depositor.email}"
+      when 'work_curation'
+        @work = Work.find(id)
+        "quid=#{SCHOLARSPHERE_QUEUE_ID}&" + "pquestion=#{admin_subject}&" +
+          "pname=#{work.display_name}&" + "pemail=#{work.email}"
+      when 'work_accessibility'
+        @work = Work.find(id)
+        accessibility_check_results = get_accessibility_result_links(work, base_url)
+        "quid=#{ACCESSIBILITY_QUEUE_ID}&" +
+          "pquestion=#{admin_subject}&" +
+          (accessibility_check_results.empty? ? '' : "pdetails=#{accessibility_check_results}&") +
+          "pname=#{work.display_name}&" +
+          "pemail=#{work.email}"
+      end
+    end
 
     def get_accessibility_result_links(work, base_url)
       accessibility_check_results = work.latest_version.file_resources.map do |fr|
