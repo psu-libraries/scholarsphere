@@ -1,6 +1,7 @@
 import js from "@eslint/js";
 import globals from "globals";
 import { defineConfig } from "eslint/config";
+import babelParser from "@babel/eslint-parser";
 
 
 export default defineConfig([
@@ -9,6 +10,9 @@ export default defineConfig([
     plugins: { js },
     extends: ["js/recommended"],
     languageOptions: {
+      parser: babelParser,
+      ecmaVersion: 2024,
+      sourceType: "module",
       globals: {
         ...globals.browser,
         $: "readonly",
