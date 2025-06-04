@@ -40,7 +40,7 @@ export default class extends Controller {
           }
         }
       ]
-    ).on('autocomplete:selected', (event, suggestion, dataset, context) => {
+    ).on('autocomplete:selected', (event, suggestion, _dataset, _context) => {
       event.preventDefault()
       this.element.dispatchEvent(this.afterSelectedEvent(suggestion))
     })

@@ -5,7 +5,7 @@ import Dashboard from '@uppy/dashboard'
 import { generateUploadedFileData, simulateEditAndUpload } from './uppy_utils'
 
 export default class extends Controller {
-  connect () {
+  connect() {
     this.uploadSubmit = document.querySelector('.upload-submit')
     this.parentForm = document.getElementById(this.data.get('parentForm'))
     this.blacklist = JSON.parse(this.data.get('blacklist') || '[]')
@@ -13,13 +13,13 @@ export default class extends Controller {
     this.initializeUppy()
   }
 
-  initializeUppy () {
+  initializeUppy() {
     this.uppy = this.createUppyInstance()
     this.configureUppyPlugins()
     this.registerUppyEventHandlers()
   }
 
-  createUppyInstance () {
+  createUppyInstance() {
     return new Uppy({
       id: 'uppy_' + (new Date().getTime()),
       autoProceed: false,
@@ -29,7 +29,7 @@ export default class extends Controller {
     })
   }
 
-  configureUppyPlugins () {
+  configureUppyPlugins() {
     this.uppy
       .use(Dashboard, {
         id: 'dashboard',
@@ -52,13 +52,13 @@ export default class extends Controller {
       })
   }
 
-  registerUppyEventHandlers () {
+  registerUppyEventHandlers() {
     this.uppy
       .on('file-added', (file) => this.handleFileAdded(file))
       .on('complete', (result) => this.onUppyComplete(result))
   }
 
-  handleBeforeFileAdded (currentFile, files) {
+  handleBeforeFileAdded(currentFile, _files) {
     const filename = currentFile.name
     const isBlacklisted = this.blacklist.includes(filename)
 
@@ -68,7 +68,7 @@ export default class extends Controller {
     }
   }
 
-  handleBeforeUpload (files) {
+  handleBeforeUpload(files) {
     const fileCount = Object.keys(files).length
     const file = Object.values(files)[fileCount - 1]
     const missingAltText = file.type?.startsWith('image/') && !file.meta.alt_text?.trim()
@@ -80,7 +80,7 @@ export default class extends Controller {
     }
   }
 
-  handleFileAdded (file) {
+  handleFileAdded(file) {
     if (file.type.startsWith('image/')) {
       this.uppy.pauseResume(file.id)
       setTimeout(() => {
@@ -91,13 +91,13 @@ export default class extends Controller {
     }
   }
 
-  onUppyComplete (result) {
+  onUppyComplete(result) {
     result.successful.forEach(success => {
       this.parentForm.appendChild(this.createHiddenFileInput(success))
     })
   }
 
-  createHiddenFileInput (success) {
+  createHiddenFileInput(success) {
     const inputName = this.data.get('inputName')
     const uploadedFileData = generateUploadedFileData(success)
 
