@@ -3,7 +3,6 @@ import globals from "globals";
 import { defineConfig } from "eslint/config";
 import babelParser from "@babel/eslint-parser";
 
-
 export default defineConfig([
   {
     files: ["**/*.{js,mjs,cjs}"],
