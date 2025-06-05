@@ -6,7 +6,7 @@ import Mustache from 'mustache'
 export default class extends Controller {
   static targets = ['field', 'suggestionTemplate', 'emptyResultTemplate', 'lastOptionTemplate']
 
-  connect () {
+  connect() {
     // Prevent Enter key from submitting the form
     this.fieldTarget.addEventListener('keypress', function (e) {
       if (e.key === 'Enter') {
@@ -40,13 +40,13 @@ export default class extends Controller {
           }
         }
       ]
-    ).on('autocomplete:selected', (event, suggestion, dataset, context) => {
+    ).on('autocomplete:selected', (event, suggestion, _dataset, _context) => {
       event.preventDefault()
       this.element.dispatchEvent(this.afterSelectedEvent(suggestion))
     })
   }
 
-  source (url) {
+  source(url) {
     return (q, callback) => {
       axios.get(url, { params: { q } }).then((response) => {
         const results = response.data
@@ -60,7 +60,7 @@ export default class extends Controller {
     }
   }
 
-  afterSelectedEvent (suggestion) {
+  afterSelectedEvent(suggestion) {
     return new CustomEvent('autocomplete:after-selected', { bubbles: true, detail: { suggestion: suggestion } })
   }
 }

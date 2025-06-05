@@ -3,12 +3,12 @@ import * as d3 from 'd3' // @todo we don't need to import the entire d3 library,
 
 $(document).ready(loadCharts)
 
-function loadCharts () {
+function loadCharts() {
   d3.selectAll('.analytics-chart-container')
     .each(loadChart)
 }
 
-function loadChart () {
+function loadChart() {
   const url = this.dataset.url
   d3.json(url)
     .then(parseData)
@@ -16,20 +16,20 @@ function loadChart () {
     .catch(() => { })
 }
 
-function parseData (data) {
+function parseData(data) {
   const parseDate = d3.timeParse('%Y-%m-%d')
   data.forEach((row) => { row[0] = parseDate(row[0]) })
   return Promise.resolve(data)
 }
 
-function drawChart (selection, data) {
+function drawChart(selection, data) {
   const margin = { top: 2, right: 25, bottom: 20, left: 25 }
   const width = 350
   const height = 80
 
   var formatDate = d3.timeFormat('%B %d, %Y')
   const [firstDate] = data[0]
-  const [,, lastTotal] = data[data.length - 1]
+  const [, , lastTotal] = data[data.length - 1]
 
   const x = d3.scaleTime()
     .domain(d3.extent(data, d => d[0]))
@@ -109,7 +109,7 @@ function drawChart (selection, data) {
   svg.on('mousemove click touchmove', (event) => {
     const mouseCoords = d3.pointer(event)
     const mouseDate = x.invert(mouseCoords[0])
-    const [nearestDate,, nearestValue] = findNearestDataPoint(bisectDate, data, mouseDate)
+    const [nearestDate, , nearestValue] = findNearestDataPoint(bisectDate, data, mouseDate)
 
     viewCounts.text(`${nearestValue} views`)
     viewDate.text(` by ${formatDate(nearestDate)}`)
@@ -125,7 +125,7 @@ function drawChart (selection, data) {
       .attr('x2', x(nearestDate))
   })
 
-  svg.on('mouseleave', event => {
+  svg.on('mouseleave', () => {
     viewCounts.text(`${lastTotal} views`)
     viewDate.text(` since ${formatDate(firstDate)}`)
     pointMarker.attr('display', 'none')
@@ -133,14 +133,14 @@ function drawChart (selection, data) {
   })
 }
 
-function findNearestDataPoint (bisector, data, date) {
+function findNearestDataPoint(bisector, data, date) {
   const i = bisector.left(data, date, 1, data.length - 1)
   const a = data[i - 1]
   const b = data[i]
   return date - a[0] > b[0] - date ? b : a
 }
 
-function hideOverflowingTickLabels (svg, tickTextSelection) {
+function hideOverflowingTickLabels(svg, tickTextSelection) {
   const svgBounds = svg.node().getBoundingClientRect()
   const svgLeft = svgBounds.x
   const svgRight = svgBounds.x + svgBounds.width
@@ -166,7 +166,7 @@ function hideOverflowingTickLabels (svg, tickTextSelection) {
  * @param {Date} date
  * @returns {String} Formatted string representation of the date
  */
-export default function multiFormat (date) {
+export default function multiFormat(date) {
   const formatMillisecond = d3.timeFormat('.%L')
   const formatSecond = d3.timeFormat(':%S')
   const formatMinute = d3.timeFormat('%I:%M')
