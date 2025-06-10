@@ -440,7 +440,7 @@ GEM
       pry (>= 0.13, < 0.15)
     pry-rails (0.3.11)
       pry (>= 0.13.0)
-    psu_identity (0.6.2)
+    psu_identity (0.7.1)
       faraday (~> 2.0)
       json
       oauth2
@@ -766,7 +766,7 @@ DEPENDENCIES
   pg (>= 0.18, < 2.0)
   pry-byebug
   pry-rails
-  psu_identity (= 0.6.2)
+  psu_identity (= 0.7.1)
   psych (< 4)
   puma (~> 6.5)
   pundit
