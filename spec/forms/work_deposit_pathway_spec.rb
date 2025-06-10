@@ -944,4 +944,26 @@ RSpec.describe WorkDepositPathway do
       end
     end
   end
+
+  describe '#has_image_file_resource?' do
+    Work::Types.all.each do |t|
+      let(:type) { t }
+
+      context "when the given work version has a work type of #{t}" do
+        context 'when details form' do
+          it 'responds to has_image_file_resource?' do
+            form = pathway.details_form
+            expect(form).to respond_to(:has_image_file_resource?)
+          end
+        end
+
+        context 'when publish form' do
+          it 'responds to has_image_file_resource?' do
+            form = pathway.publish_form
+            expect(form).to respond_to(:has_image_file_resource?)
+          end
+        end
+      end
+    end
+  end
 end

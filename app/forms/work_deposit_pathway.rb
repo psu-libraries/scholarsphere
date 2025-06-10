@@ -188,6 +188,7 @@ class WorkDepositPathway
                :file_resources,
                :file_version_memberships,
                :mint_doi_requested,
+               :has_image_file_resource?,
                to: :work_version, prefix: false
 
       private
@@ -208,7 +209,6 @@ class WorkDepositPathway
       }.freeze
 
       delegate :imported_metadata_from_rmd,
-               :has_image_file_resource?,
                to: :work_version, prefix: false
 
       def show_autocomplete_form?
