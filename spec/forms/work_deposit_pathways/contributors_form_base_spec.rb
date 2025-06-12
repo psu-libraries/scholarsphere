@@ -94,5 +94,19 @@ RSpec.describe WorkDepositPathway::ContributorsFormBase, type: :model do
         expect(form).to be_valid
       end
     end
+
+    context 'when contributor is marked for destruction' do
+      before do
+        wv.creators << build(:authorship, { display_name: 'Creator 1',
+                                            given_name: nil,
+                                            surname: 'Doe',
+                                            email: 'abc123@email.com' })
+        wv.creators.last.mark_for_destruction
+      end
+
+      it 'skips validation and is valid' do
+        expect(form).to be_valid
+      end
+    end
   end
 end
