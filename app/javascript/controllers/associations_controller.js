@@ -7,7 +7,7 @@ import axios from 'axios'
 import { csrfToken } from './stimulus_modules'
 
 export default class extends Controller {
-  connect () {
+  connect() {
     this.wrapperClass = this.data.get('wrapper-class')
     this.badgeClass = this.data.get('badge-class')
     this.positionClass = this.data.get('position-class')
@@ -15,12 +15,18 @@ export default class extends Controller {
     document.addEventListener('autocomplete:after-selected', () => this.post(this.data.get('post')))
     document.addEventListener('actor:created', () => this.appendResponse(event.detail.response))
 
+    $(this.element).on('cocoon:before-remove', (e, removedElement) => {
+      $(removedElement)
+        .find('[required]')
+        .removeAttr('required')
+    })
+
     $(this.element).on('cocoon:after-remove', () => this.$updateChildren())
 
     this.$updateChildren()
   }
 
-  post (url) {
+  post(url) {
     axios({
       method: 'POST',
       url: url,
@@ -33,7 +39,7 @@ export default class extends Controller {
       .catch(error => this.processError(error))
   }
 
-  appendResponse (response) {
+  appendResponse(response) {
     this.element.insertAdjacentHTML('beforeend', response.data)
     this.$updateChildren()
     const lastWrapper = $(this.element).find(`.${this.wrapperClass}:visible`).last()
@@ -41,11 +47,11 @@ export default class extends Controller {
   }
 
   // @todo Something nicer should go here.
-  processError (error) {
+  processError(error) {
     console.log(error)
   }
 
-  moveUp (event) {
+  moveUp(event) {
     event.preventDefault()
     const $target = $(event.target)
     const $parentWrapper = $target.closest(`.${this.wrapperClass}`)
@@ -57,7 +63,7 @@ export default class extends Controller {
     }
   }
 
-  moveDown (event) {
+  moveDown(event) {
     event.preventDefault()
     const $target = $(event.target)
     const $parentWrapper = $target.closest(`.${this.wrapperClass}`)
@@ -70,7 +76,7 @@ export default class extends Controller {
   }
 
   // Uses jQuery
-  $updateChildren () {
+  $updateChildren() {
     const children = $(this.element)
       .find(`.${this.wrapperClass}:visible`)
 
@@ -84,7 +90,7 @@ export default class extends Controller {
   }
 
   // Uses jQuery
-  _$swapElements ($el1, $el2) {
+  _$swapElements($el1, $el2) {
     // create temporary placeholder
     const $temp = $('<div>')
 

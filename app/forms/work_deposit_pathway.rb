@@ -248,6 +248,8 @@ class WorkDepositPathway
 
         def validate_creator_names
           creators.each do |creator|
+            next if creator.respond_to?(:marked_for_destruction?) && creator.marked_for_destruction?
+
             if creator.given_name.blank? || creator.surname.blank?
               errors.add(:creators, I18n.t('dashboard.form.contributors.edit.incomplete_name'))
             end
