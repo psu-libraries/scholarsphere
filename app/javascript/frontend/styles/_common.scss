@@ -601,7 +601,7 @@ h4,
 
   h3 {
     @extend .text-primary;
-    @extend .mb-2;
+    @extend .mb-2 !optional;
   }
 
   dt {

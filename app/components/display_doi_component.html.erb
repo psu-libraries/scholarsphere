@@ -1,13 +1,13 @@
 <span class="doi text-monospace">
   <%- if status == :invalid -%>
     <span class="<%= css_class %>"
-          data-toggle="tooltip"
-          data-placement="bottom"
+          data-bs-toggle="tooltip"
+          data-bs-placement="bottom"
           title="<%= tooltip %>"><%= raw_doi %></span>
   <% else %>
     <%= t 'resources.doi.doi' %><span class="doi-prefix <%= css_class %>"
-              data-toggle="tooltip"
-              data-placement="bottom"
+              data-bs-toggle="tooltip"
+              data-bs-placement="bottom"
               title="<%= tooltip %>"><%= doi.prefix %></span>/<span class="doi-suffix"><%= doi.suffix %></span>
   <%- end -%>
 </span>
