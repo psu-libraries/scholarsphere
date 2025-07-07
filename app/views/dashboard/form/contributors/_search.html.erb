@@ -25,7 +25,7 @@
       <template data-target="autocomplete.suggestionTemplate">
         <strong>{{display_name}}</strong>
         <small class="ps-1">{{additional_metadata}}</small>
-        <span class="sr-only">
+        <span class="visually-hidden">
           Search result {{result_number}} of {{total_results}}. Press enter to add this creator to the form.
         </span>
       </template>
@@ -38,12 +38,12 @@
              placeholder="<%= t('dashboard.form.contributors.edit.placeholder') %>"
                               autocomplete='on'>
 
-             <label for="search-creators" class="sr-only">
+             <label for="search-creators" class="visually-hidden">
                <%= t('dashboard.form.contributors.edit.search_label') %>
              </label>
              <small id="search-creators-description" class="form-text text-muted">
                <%= t('dashboard.form.contributors.edit.search') %>
-               <span class="sr-only">
+               <span class="visually-hidden">
                  <%= t('dashboard.form.contributors.edit.reader_hint') %>
                </span>
              </small>

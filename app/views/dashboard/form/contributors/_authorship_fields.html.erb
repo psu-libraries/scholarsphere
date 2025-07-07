@@ -33,7 +33,7 @@
                                      class: 'remove',
                                      title: t('dashboard.form.contributors.edit.remove', name: form.object.display_name),
                                      data: { toggle: 'tooltip', placement: 'top', offset: '0,100%' } do %>
-        <span class="sr-only"><%= t('dashboard.form.contributors.edit.remove', name: form.object.display_name) %></span>
+        <span class="visually-hidden"><%= t('dashboard.form.contributors.edit.remove', name: form.object.display_name) %></span>
         <i class="material-icons" aria-hidden="true">highlight_off</i>
       <% end %>
 
@@ -44,7 +44,7 @@
                     action: 'associations#moveUp',
                     toggle: 'tooltip', placement: 'top', offset: '0,100%'
                   } do %>
-        <span class="sr-only"><%= t('dashboard.form.contributors.edit.move_up', name: form.object.display_name) %></span>
+        <span class="visually-hidden"><%= t('dashboard.form.contributors.edit.move_up', name: form.object.display_name) %></span>
         <i class="material-icons" aria-hidden="true">arrow_circle_up</i>
       <% end %>
 
@@ -55,7 +55,7 @@
                     action: 'associations#moveDown',
                     toggle: 'tooltip', placement: 'top', offset: '0,100%'
                   } do %>
-        <span class="sr-only"><%= t('dashboard.form.contributors.edit.move_down', name: form.object.display_name) %></span>
+        <span class="visually-hidden"><%= t('dashboard.form.contributors.edit.move_down', name: form.object.display_name) %></span>
         <i class="material-icons" aria-hidden="true">arrow_circle_down</i>
       <% end %>
     </div>

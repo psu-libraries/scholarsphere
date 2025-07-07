@@ -12,7 +12,7 @@
 <% end %>
 
 <div class="container-fluid">
-  <h1 class="sr-only"><%= t('blacklight.search.header') %></h1>
+  <h1 class="visually-hidden"><%= t('blacklight.search.header') %></h1>
 
   <%- if current_user.works.empty? && @response.empty? %>
     <%= render 'home' %>

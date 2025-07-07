@@ -125,7 +125,7 @@ export default class extends Controller {
   // @return [HTMLElement]
   descriptionText (text) {
     const element = document.createElement('span')
-    element.classList.add('sr-only')
+    element.classList.add('visually-hidden')
     element.appendChild(document.createTextNode(text))
     return element
   }

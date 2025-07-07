@@ -14,7 +14,7 @@
       }
     ) do |f| %>
 
-  <%= f.label :alt_text, class: 'sr-only' %>
+  <%= f.label :alt_text, class: 'visually-hidden' %>
   <%= f.text_field :alt_text,
                    value: file_resource.file_data['metadata']['alt_text'],
                    size: 10,

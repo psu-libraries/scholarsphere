@@ -13,7 +13,7 @@
       }
     ) do |f| %>
 
-  <%= f.label :title, class: 'sr-only' %>
+  <%= f.label :title, class: 'visually-hidden' %>
   <%= f.text_field :title, class: 'form-control', data: { target: 'filename-editor.titleField' } %>
   <%= f.submit t('dashboard.file_version_memberships.edit.save'), class: 'btn btn-primary', data: { disable_with: 'Saving...' } %>
   <%= link_to t('dashboard.file_version_memberships.edit.cancel'),
