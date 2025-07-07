@@ -1,9 +1,25 @@
-
 .container {
   max-width: 1140px;
+}
+
+a {
+  text-decoration: none;
+
+  &:hover,
+  &:focus {
+    text-decoration: underline;
+  }
 }
 
 .form-group {
   margin-bottom: 1rem;
   margin-top: 1rem;
+}
+
+:root,
+[data-bs-theme="light"] {
+  --bs-blue:#001e44;
+  --bs-primary:#001e44;
+  --bs-primary-text-emphasis:#000c1b;
+  --bs-heading-color:#001e44;
 }
