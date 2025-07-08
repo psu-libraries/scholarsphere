@@ -18,16 +18,12 @@ a {
 
 :root,
 [data-bs-theme="light"] {
-  --bs-blue:#001e44;
-  --bs-primary:#001e44;
-  --bs-primary-text-emphasis:#000c1b;
-  --bs-heading-color:#001e44;
+  --bs-blue: #001e44;
+  --bs-heading-color: #001e44;
+  --bs-primary: #001e44;
+  --bs-primary-text-emphasis: #000c1b;
 }
 
 .navbar-brand {
   font-size: 1.5rem;
-}
-
-#topbar {
-  width: 100% !important;
 }

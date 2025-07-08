@@ -1,25 +1,25 @@
 .border-success {
-  border-color: $success !important;
+  border-color: $success;
 }
 
 .bg-success {
-  background-color: $success !important;
+  background-color: $success;
 }
 
 .text-success {
-  color: $success !important;
+  color: $success;
 }
 
 .py-1 {
-  padding-top: 0.25rem !important;
-  padding-bottom: 0.25rem !important;
+  padding-bottom: .25rem;
+  padding-top: .25rem;
 }
 
 .px-4 {
-  padding-left: 1.5rem !important;
-  padding-right: 1.5rem !important;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
 }
 
 .text-primary {
-  color: $primary !important;
+  color: $primary;
 }
