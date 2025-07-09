@@ -36,8 +36,8 @@ class LinkDisabledByTooltipComponent < ApplicationComponent
       {
         class: classes,
         data: {
-          toggle: 'tooltip',
-          placement: 'bottom'
+          bs_toggle: 'tooltip',
+          bs_placement: 'bottom'
         },
         title: tooltip
       }

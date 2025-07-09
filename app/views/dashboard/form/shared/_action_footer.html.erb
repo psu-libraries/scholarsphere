@@ -25,19 +25,19 @@
                                  ## TODO: Unhide when ready
                                  style: 'display: none' %>
                 <% end %>
-                <%= button_tag t('dashboard.form.actions.publish.button'), type: 'button', data: { action: 'publishing-check#openDialog', dialog: 'publish', toggle: 'tooltip', placement: 'top', title: t("dashboard.form.actions.#{primary_action}.tooltip") }, class: 'btn btn-primary btn--rounded' %>
+                <%= button_tag t('dashboard.form.actions.publish.button'), type: 'button', data: { action: 'publishing-check#openDialog', dialog: 'publish', bs_bs_toggle: 'tooltip', placement: 'top', title: t("dashboard.form.actions.#{primary_action}.tooltip") }, class: 'btn btn-primary btn--rounded' %>
               </span>
             <% else %>
-              <%= form.submit t("dashboard.form.actions.#{primary_action}.button"), name: primary_action, data: { toggle: 'tooltip', placement: 'top', title: t("dashboard.form.actions.#{primary_action}.tooltip") }, class: 'btn btn-primary btn--rounded' %>
+              <%= form.submit t("dashboard.form.actions.#{primary_action}.button"), name: primary_action, data: { bs_toggle: 'tooltip', placement: 'top', title: t("dashboard.form.actions.#{primary_action}.tooltip") }, class: 'btn btn-primary btn--rounded' %>
             <% end %>
             </span>
             <span data-target="publish-status.help_text">
               <%= t('dashboard.form.actions.publish.blocked') %>
             </span>
         </span>
-    <%= link_to t('dashboard.form.actions.cancel.button'), cancel_path, data: { toggle: 'tooltip', placement: 'top', title: t('dashboard.form.actions.cancel.tooltip') }, class: 'btn btn-outline-dark btn--rounded ms-2' %>
+    <%= link_to t('dashboard.form.actions.cancel.button'), cancel_path, data: { bs_toggle: 'tooltip', placement: 'top', title: t('dashboard.form.actions.cancel.tooltip') }, class: 'btn btn-outline-dark btn--rounded ms-2' %>
   </div>
-  <%= form.button t("dashboard.form.actions.save_and_exit.#{secondary_action}"), name: 'save_and_exit', data: { toggle: 'tooltip', placement: 'top', title: t('dashboard.form.actions.save_and_exit.tooltip') }, class: 'btn btn-outline-primary btn--rounded pull-left' %>
+  <%= form.button t("dashboard.form.actions.save_and_exit.#{secondary_action}"), name: 'save_and_exit', data: { bs_toggle: 'tooltip', placement: 'top', title: t('dashboard.form.actions.save_and_exit.tooltip') }, class: 'btn btn-outline-primary btn--rounded pull-left' %>
 
   <% if form.object.persisted? && policy(form.object).destroy? %>
     <%= render DeleteResourceButtonComponent.new(

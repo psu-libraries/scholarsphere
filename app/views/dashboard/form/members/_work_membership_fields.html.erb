@@ -32,7 +32,7 @@
       <%= link_to_remove_association form,
                                      class: 'remove',
                                      title: t('dashboard.form.members.remove', name: work_version.title),
-                                     data: { toggle: 'tooltip', placement: 'top', offset: '0,100%' } do %>
+                                     data: { bs_toggle: 'tooltip', bs_placement: 'top', offset: '0,100%' } do %>
         <span class="visually-hidden"><%= t('dashboard.form.members.remove', name: work_version.title) %></span>
         <i class="material-icons" aria-hidden="true">highlight_off</i>
       <% end %>
@@ -42,7 +42,7 @@
                   title: t('dashboard.form.members.move_up', name: work_version.title),
                   data: {
                     action: 'associations#moveUp',
-                    toggle: 'tooltip', placement: 'top', offset: '0,100%'
+                    bs_toggle: 'tooltip', bs_placement: 'top', offset: '0,100%'
                   } do %>
         <span class="visually-hidden"><%= t('dashboard.form.members.move_up', name: work_version.title) %></span>
         <i class="material-icons" aria-hidden="true">arrow_circle_up</i>
@@ -53,7 +53,7 @@
                   title: t('dashboard.form.members.move_down', name: work_version.title),
                   data: {
                     action: 'associations#moveDown',
-                    toggle: 'tooltip', placement: 'top', offset: '0,100%'
+                    bs_toggle: 'tooltip', bs_placement: 'top', offset: '0,100%'
                   } do %>
         <span class="visually-hidden"><%= t('dashboard.form.members.move_down', name: work_version.title) %></span>
         <i class="material-icons" aria-hidden="true">arrow_circle_down</i>
