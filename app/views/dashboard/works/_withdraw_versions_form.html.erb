@@ -11,7 +11,7 @@
   <%= render FormErrorMessageComponent.new(form: form) %>
 
   <div class="d-flex align-items-center">
-    <div class="mr-auto flex-grow-1 ">
+    <div class="me-auto flex-grow-1 ">
     <%= render 'form_fields/select',
                form: form,
                attribute: :work_version_id,
@@ -19,7 +19,7 @@
                include_blank: true,
                multiple: false %>
     </div>
-    <div class="ml-lg-2 mb-3">
+    <div class="ms-lg-2 mb-3">
       <%= form.submit t('.submit_button'), class: 'btn btn-outline-danger' %>
     </div>
   </div>

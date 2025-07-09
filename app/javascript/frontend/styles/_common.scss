@@ -281,8 +281,16 @@ h4,
     }
   }
 
+  .navbar-nav .dropdown-menu-end.show {
+    display: block;
+    max-height: 1200px;
+    opacity: 1;
+  }
+
   li:last-child {
-    margin-left: auto;
+    @include media-breakpoint-up(md) {
+      margin-left: auto;
+    }
   }
 
   a.nav-link.dropdown-toggle::after {
@@ -297,6 +305,8 @@ h4,
     color: $black;
     font-size: 1.125rem;
   }
+
+  width: 100%;
 }
 
 .sidebar {
@@ -601,7 +611,7 @@ h4,
 
   h3 {
     @extend .text-primary;
-    @extend .mb-2;
+    @extend .mb-2 !optional;
   }
 
   dt {
@@ -1205,7 +1215,7 @@ h4,
     }
   }
 
-  &.badge-pill {
+  &.rounded-pill {
     text-transform: none;
     letter-spacing: normal;
     padding: .3rem .75rem;

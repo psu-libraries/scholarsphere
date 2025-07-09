@@ -11,7 +11,7 @@
     <div class="col-sm-4">
       <div class="row d-flex justify-content-center">
         <% if thumbnail_form.resource.thumbnail_upload.present? %>
-          <div class="mr-1">
+          <div class="me-1">
             <%= field.radio_button :thumbnail_selection, ThumbnailSelections::UPLOADED_IMAGE.to_sym %>
           </div>
           <div>
@@ -20,7 +20,7 @@
                             value: ThumbnailSelections::UPLOADED_IMAGE.to_sym %>
           </div>
         <% else %>
-          <div class="mr-1">
+          <div class="me-1">
             <%= field.radio_button :thumbnail_selection, ThumbnailSelections::UPLOADED_IMAGE.to_sym, disabled: true %>
           </div>
           <div>
@@ -41,7 +41,7 @@
     <% if thumbnail_form.resource.auto_generated_thumbnail_url.present? %>
       <div class="col-sm-4">
         <div class="d-flex justify-content-center">
-          <div class="mr-1">
+          <div class="me-1">
             <%= field.radio_button :thumbnail_selection, ThumbnailSelections::AUTO_GENERATED.to_sym %>
           </div>
           <%= field.label :thumbnail_selection,
@@ -52,7 +52,7 @@
     <% else %>
       <div class="col-sm-4">
         <div class="d-flex justify-content-center">
-          <div class="mr-1">
+          <div class="me-1">
             <%= field.radio_button :thumbnail_selection, ThumbnailSelections::AUTO_GENERATED.to_sym, disabled: true %>
           </div>
           <%= field.label :thumbnail_selection,

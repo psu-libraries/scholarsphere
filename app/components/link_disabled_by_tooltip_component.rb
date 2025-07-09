@@ -36,14 +36,14 @@ class LinkDisabledByTooltipComponent < ApplicationComponent
       {
         class: classes,
         data: {
-          toggle: 'tooltip',
-          placement: 'bottom'
+          bs_toggle: 'tooltip',
+          bs_placement: 'bottom'
         },
         title: tooltip
       }
     end
 
     def default_classes
-      %w(btn btn-outline-light btn--squish mr-lg-2)
+      %w(btn btn-outline-light btn--squish me-lg-2)
     end
 end

@@ -25,5 +25,5 @@ require.context('./img/', true)
 
 // Initialize tooltips
 $(function () {
-  $('[data-toggle="tooltip"]').tooltip()
+  $('[data-bs-toggle="tooltip"]').tooltip()
 })

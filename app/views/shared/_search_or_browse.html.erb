@@ -3,7 +3,7 @@
   <div class="surface search">
     <%= form_tag search_action_url, method: :get do %>
       <div class="input-group input-group--icon mb-2">
-        <label class="sr-only" for="q"><%= t('shared.search.label') %></label>
+        <label class="visually-hidden" for="q"><%= t('shared.search.label') %></label>
         <%= text_field_tag :q, params[:q], placeholder: t('shared.search.placeholder'),
                                            class: 'form-control',
                                            autocomplete: 'on' %>

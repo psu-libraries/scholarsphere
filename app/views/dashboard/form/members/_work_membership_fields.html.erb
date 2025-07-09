@@ -12,13 +12,13 @@
      data-work-id="<%= work_version.work.id %>">
   <div class="row">
     <div class="col-2">
-      <span class="badge badge-dark badge--outline">
+      <span class="badge bg-dark badge--outline">
         <%= t('dashboard.form.members.badge') %>
         <span class="badge--index"><%= index + 1 %></span>
       </span>
     </div>
 
-    <div class="col-8 pr-2">
+    <div class="col-8 pe-2">
       <%= form.hidden_field :work_id %>
       <%= form.hidden_field :position, class: 'js-position-index' %>
       <h3 class="h4">
@@ -28,12 +28,12 @@
       <%= render WorkVersionMetadataComponent.new(work_version: work_version, mini: true) %>
     </div>
 
-    <div class="col-2 pl-0">
+    <div class="col-2 ps-0">
       <%= link_to_remove_association form,
                                      class: 'remove',
                                      title: t('dashboard.form.members.remove', name: work_version.title),
-                                     data: { toggle: 'tooltip', placement: 'top', offset: '0,100%' } do %>
-        <span class="sr-only"><%= t('dashboard.form.members.remove', name: work_version.title) %></span>
+                                     data: { bs_toggle: 'tooltip', bs_placement: 'top', offset: '0,100%' } do %>
+        <span class="visually-hidden"><%= t('dashboard.form.members.remove', name: work_version.title) %></span>
         <i class="material-icons" aria-hidden="true">highlight_off</i>
       <% end %>
 
@@ -42,9 +42,9 @@
                   title: t('dashboard.form.members.move_up', name: work_version.title),
                   data: {
                     action: 'associations#moveUp',
-                    toggle: 'tooltip', placement: 'top', offset: '0,100%'
+                    bs_toggle: 'tooltip', bs_placement: 'top', offset: '0,100%'
                   } do %>
-        <span class="sr-only"><%= t('dashboard.form.members.move_up', name: work_version.title) %></span>
+        <span class="visually-hidden"><%= t('dashboard.form.members.move_up', name: work_version.title) %></span>
         <i class="material-icons" aria-hidden="true">arrow_circle_up</i>
       <% end %>
 
@@ -53,9 +53,9 @@
                   title: t('dashboard.form.members.move_down', name: work_version.title),
                   data: {
                     action: 'associations#moveDown',
-                    toggle: 'tooltip', placement: 'top', offset: '0,100%'
+                    bs_toggle: 'tooltip', bs_placement: 'top', offset: '0,100%'
                   } do %>
-        <span class="sr-only"><%= t('dashboard.form.members.move_down', name: work_version.title) %></span>
+        <span class="visually-hidden"><%= t('dashboard.form.members.move_down', name: work_version.title) %></span>
         <i class="material-icons" aria-hidden="true">arrow_circle_down</i>
       <% end %>
     </div>

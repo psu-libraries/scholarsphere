@@ -6,16 +6,16 @@
 
     <%= render_hash_as_hidden_fields(search_state.params_for_search.except(:q, :search_field, :qt, :page, :utf8)) %>
 
-    <label for="search_field" class="sr-only"><%= t('blacklight.search.form.search_field.label') %></label>
+    <label for="search_field" class="visually-hidden"><%= t('blacklight.search.form.search_field.label') %></label>
 
     <div class="input-group input-group--icon">
       <%= select_tag(:search_field,
                      options_for_select(search_fields, h(params[:search_field])),
                      title: t('blacklight.search.form.search_field.title'),
                      id: 'search_field',
-                     class: 'custom-select') %>
+                     class: 'form-select') %>
 
-      <label for="q" class="sr-only"><%= t('blacklight.search.form.search.label') %></label>
+      <label for="q" class="visually-hidden"><%= t('blacklight.search.form.search.label') %></label>
 
       <%= text_field_tag :q, params[:q],
                          placeholder: t('blacklight.search.form.search.placeholder'),

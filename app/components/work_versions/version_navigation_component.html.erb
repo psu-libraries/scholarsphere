@@ -9,7 +9,7 @@
           <%= render WorkVersions::StatusBadgeComponent.new(work_version: version) %>
         <% end %>
 
-        <span class="float-right"><%= version.created_at.to_fs(:long_without_time) %></span>
+        <span class="float-end"><%= version.created_at.to_fs(:long_without_time) %></span>
       </li>
     <% end %>
     </ul>
