@@ -4,7 +4,7 @@
     <% if changed_attributes.any? %>
       <span class="version-timeline__change-changed-attributes"><%= changed_attributes_truncated %></span>
 
-      <span class="badge badge-pill badge-primary badge--nudge-up"><a data-bs-toggle="collapse" href="#<%= diff_id %>"><%= t 'dashboard.work_history.show_diff' %></a></span>
+      <span class="badge rounded-pill bg-primary badge--nudge-up"><a data-bs-toggle="collapse" href="#<%= diff_id %>"><%= t 'dashboard.work_history.show_diff' %></a></span>
     <% end %>
   </div>
 
