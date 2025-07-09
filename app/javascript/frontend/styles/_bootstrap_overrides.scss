@@ -27,3 +27,16 @@ a {
 .navbar-brand {
   font-size: 1.5rem;
 }
+
+.nav-link {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.btn[href],
+.dropdown-item[href] {
+  text-decoration: none;
+}
