@@ -33,7 +33,6 @@
     "jquery": "^3.5.1",
     "mini-css-extract-plugin": "^2.7.6",
     "mustache": "^4.0.1",
-    "popper.js": "^1.16.1",
     "postcss": "^8.4.31",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-import": "^15.1.0",

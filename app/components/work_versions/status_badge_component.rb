@@ -27,7 +27,7 @@ class WorkVersions::StatusBadgeComponent < ApplicationComponent
       [
         'badge',
         'badge--nudge-up',
-        'ml-1',
+        'ms-1',
         *state_classes
       ].join(' ')
     end

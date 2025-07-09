@@ -281,8 +281,16 @@ h4,
     }
   }
 
+  .navbar-nav .dropdown-menu-end.show  {
+    display:block;
+    max-height:1200px;
+    opacity:1
+  }
+
   li:last-child {
-    margin-left: auto;
+    @include media-breakpoint-up(md) {
+      margin-left: auto;
+    }
   }
 
   a.nav-link.dropdown-toggle::after {

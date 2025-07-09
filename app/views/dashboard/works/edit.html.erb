@@ -59,7 +59,7 @@
         <div class="row no-gutters">
         <%= button_to I18n.t('resources.contact_depositor_button.text'),
                       admin_create_curation_ticket_url(id: @work.id, ticket_type: 'curation'),
-                      class: 'btn btn-primary mr-2 mb-2',
+                      class: 'btn btn-primary me-2 mb-2',
                       form: {
                         target: '_blank',
                         data: {
@@ -209,13 +209,13 @@
 
             <div class="actions">
               <div class="d-flex">
-                <div class="mr-auto">
+                <div class="me-auto">
                   <p><%= t('.danger.delete_draft.explanation') %></p>
                 </div>
                 <div>
                   <%= render DeleteResourceButtonComponent.new(
                         resource: @work.latest_version,
-                        html_class: 'btn btn-outline-danger text-nowrap ml-lg-2',
+                        html_class: 'btn btn-outline-danger text-nowrap ms-lg-2',
                         hide_if_published: false
                       ) %>
                 </div>

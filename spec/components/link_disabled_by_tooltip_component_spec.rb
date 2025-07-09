@@ -9,7 +9,7 @@ RSpec.describe LinkDisabledByTooltipComponent, type: :component do
   let(:path) { '/path/for/link' }
   let(:tooltip) { 'The tooltip' }
 
-  let(:default_classes) { %w(btn btn-outline-light btn--squish mr-lg-2) }
+  let(:default_classes) { %w(btn btn-outline-light btn--squish me-lg-2) }
 
   context 'when enabled' do
     let(:enabled) { true }

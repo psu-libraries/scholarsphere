@@ -44,6 +44,6 @@ class LinkDisabledByTooltipComponent < ApplicationComponent
     end
 
     def default_classes
-      %w(btn btn-outline-light btn--squish mr-lg-2)
+      %w(btn btn-outline-light btn--squish me-lg-2)
     end
 end
