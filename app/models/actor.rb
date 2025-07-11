@@ -96,7 +96,7 @@ class Actor < ApplicationRecord
   end
 
   # Whether an actor/depositor is still an active part of the PSU community
-  # Staff, students, etc. will have their affiliation listed in the PsuIdentity.identity array
+  # Staff, students, etc. will have their affiliation listed in the PsuIdentity.affiliation array
   # But those with only "MEMBER" are those that are not PSU affiliated.
   # This could be incoming students, outgoing staff, people with those "Friends of Penn State" accounts
   def active?
