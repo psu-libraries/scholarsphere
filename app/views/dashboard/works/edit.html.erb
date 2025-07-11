@@ -57,6 +57,9 @@
       <h1 class="h2 mb-2"><%= t('.heading', work_title: @work.latest_version.title) %></h1>
       <% if current_user.admin? %>
         <div class="row no-gutters">
+          <% unless @work.depositor.active? %>
+            <p><%= I18n.t('resources.contact_depositor_button.warning') %></p>
+          <% end %>
         <%= button_to I18n.t('resources.contact_depositor_button.text'),
                       admin_create_curation_ticket_url(id: @work.id, ticket_type: 'curation'),
                       class: 'btn btn-primary mr-2 mb-2',

@@ -9,7 +9,9 @@ class LibanswersApiService
 
   def admin_create_ticket(id, type = 'work_curation', base_url = '')
     depositor = get_depositor(id, type)
-    raise LibanswersApiError, I18n.t('resources.contact_depositor_button.error_message') unless depositor_active?(depositor)
+    if type != 'work_accessibility' && !depositor.active?
+      raise LibanswersApiError, I18n.t('resources.contact_depositor_button.error_message')
+    end
 
     admin_subject = get_admin_subject(id, type)
     ticket_details = get_ticket_details(id, type, admin_subject, base_url)
@@ -40,14 +42,6 @@ class LibanswersApiService
       deposit_types = { 'work_curation' => Work, 'work_accessibility' => Work, 'collection' => Collection }
       deposit = deposit_types[type].find(id)
       deposit.depositor
-    end
-
-    def depositor_active?(depositor)
-      access_id = depositor.psu_id
-      identity = PsuIdentity::SearchService::Client.new.userid(access_id)
-      identity.affiliation != ['MEMBER']
-    rescue PsuIdentity::SearchService::NotFound
-      false
     end
 
     def get_admin_subject(id, type)
@@ -131,13 +125,5 @@ class LibanswersApiService
 
     def host
       'https://psu.libanswers.com'
-    end
-
-    def user_active?(work)
-      access_id = work.depositor.psu_id
-      identity = PsuIdentity::SearchService::Client.new.userid(access_id)
-      identity.affiliation != ['MEMBER']
-    rescue PsuIdentity::SearchService::NotFound
-      false
     end
 end
