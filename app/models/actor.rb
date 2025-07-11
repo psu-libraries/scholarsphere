@@ -95,6 +95,17 @@ class Actor < ApplicationRecord
     Collection.reindex_all(relation: created_collections)
   end
 
+  # Whether an actor/depositor is still an active part of the PSU community
+  # Staff, students, etc. will have their affiliation listed in the PsuIdentity.identity array
+  # But those with only "MEMBER" are those that are not PSU affiliated.
+  # This could be incoming students, outgoing staff, people with those "Friends of Penn State" accounts
+  def active?
+    identity = PsuIdentity::SearchService::Client.new.userid(psu_id)
+    identity.affiliation != ['MEMBER']
+  rescue PsuIdentity::SearchService::NotFound
+    false
+  end
+
   # Fields that contain single values automatically remove blank values
   %i[
     surname

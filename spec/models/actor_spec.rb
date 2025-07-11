@@ -126,6 +126,32 @@ RSpec.describe Actor do
     end
   end
 
+  describe '#active?' do
+    let(:actor) { create(:actor) }
+    let(:mock_identity_search) { instance_spy('PsuIdentity::SearchService::Client') }
+    let!(:member_only_actor) { object_double(PsuIdentity::SearchService::Person.new, affiliation: ['MEMBER']) }
+    let!(:active_actor) { object_double(PsuIdentity::SearchService::Person.new, affiliation: ['MEMBER', 'STUDENT']) }
+
+    before do
+      allow(PsuIdentity::SearchService::Client).to receive(:new).and_return(mock_identity_search)
+    end
+
+    it 'returns false if an error is thrown' do
+      allow(mock_identity_search).to receive(:userid).and_raise(PsuIdentity::SearchService::NotFound)
+      expect(actor.active?).to eq(false)
+    end
+
+    it 'returns false if identity affiliation is only MEMBER' do
+      allow(mock_identity_search).to receive(:userid).and_return(member_only_actor)
+      expect(actor.active?).to eq(false)
+    end
+
+    it 'returns true if identity affiliation is more than just member' do
+      allow(mock_identity_search).to receive(:userid).and_return(active_actor)
+      expect(actor.active?).to eq(true)
+    end
+  end
+
   describe 'singlevalued fields' do
     it_behaves_like 'a singlevalued field', :surname
     it_behaves_like 'a singlevalued field', :given_name
