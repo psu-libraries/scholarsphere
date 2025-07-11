@@ -58,7 +58,7 @@
       <% if current_user.admin? %>
         <div class="row no-gutters">
           <% unless @work.depositor.active? %>
-            <p><%= I18n.t('resources.contact_depositor_button.warning')%></p>
+            <p><%= I18n.t('resources.contact_depositor_button.warning') %></p>
           <% end %>
         <%= button_to I18n.t('resources.contact_depositor_button.text'),
                       admin_create_curation_ticket_url(id: @work.id, ticket_type: 'curation'),

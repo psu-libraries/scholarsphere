@@ -505,7 +505,7 @@ RSpec.describe 'Work Settings Page', with_user: :user do
 
       describe 'when the depositor is active' do
         it 'does not display the inactive warning' do
-          expect(page).not_to have_content(I18n.t('resources.contact_depositor_button.warning'))
+          expect(page).to have_no_content(I18n.t('resources.contact_depositor_button.warning'))
         end
       end
 
