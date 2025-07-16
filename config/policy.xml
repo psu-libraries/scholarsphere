@@ -87,7 +87,7 @@ root@scholarsphere-thumbnails-686f5cc8bc-hzd24:/app# cat /etc/ImageMagick-6/poli
   <policy domain="resource" name="height" value="16KP"/>
   <!-- <policy domain="resource" name="list-length" value="128"/> -->
   <policy domain="resource" name="area" value="256MB"/>
-  <policy domain="resource" name="disk" value="4GiB"/>
+  <policy domain="resource" name="disk" value="2GiB"/>
   <!-- <policy domain="resource" name="file" value="768"/> -->
   <!-- <policy domain="resource" name="thread" value="4"/> -->
   <!-- <policy domain="resource" name="throttle" value="0"/> -->
