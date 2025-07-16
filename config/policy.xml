@@ -83,8 +83,8 @@ root@scholarsphere-thumbnails-686f5cc8bc-hzd24:/app# cat /etc/ImageMagick-6/poli
   <!-- <policy domain="resource" name="temporary-path" value="/tmp"/> -->
   <policy domain="resource" name="memory" value="512MiB"/>
   <policy domain="resource" name="map" value="800MiB"/>
-  <policy domain="resource" name="width" value="16KP"/>
-  <policy domain="resource" name="height" value="16KP"/>
+  <policy domain="resource" name="width" value="32KP"/>
+  <policy domain="resource" name="height" value="32KP"/>
   <!-- <policy domain="resource" name="list-length" value="128"/> -->
   <policy domain="resource" name="area" value="256MB"/>
   <policy domain="resource" name="disk" value="2GiB"/>
