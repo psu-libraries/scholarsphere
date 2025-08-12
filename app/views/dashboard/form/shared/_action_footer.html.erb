@@ -42,7 +42,7 @@
   <% if form.object.persisted? && policy(form.object).destroy? %>
     <%= render DeleteResourceButtonComponent.new(
           resource: form.object,
-          html_class: 'btn btn-outline-danger btn--rounded float-end',
+          html_class: 'btn btn-outline-danger btn--rounded pull-right',
           hide_if_published: true
         ) %>
   <% end %>
