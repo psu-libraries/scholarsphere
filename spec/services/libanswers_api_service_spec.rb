@@ -52,20 +52,6 @@ RSpec.describe LibanswersApiService, :vcr do
         allow(mock_faraday_connection).to receive(:post).and_return dummy_response
       end
 
-      context 'when the user is not an active member' do
-        let!(:inactive_member) { object_double(PsuIdentity::SearchService::Person.new, affiliation: ['MEMBER']) }
-
-        before do
-          allow(mock_identity_search).to receive(:userid).and_return(inactive_member)
-        end
-
-        it 'raises an error' do
-          expect { described_class.new.admin_create_ticket(work.id) }.to raise_error(
-            LibanswersApiService::LibanswersApiError, I18n.t('resources.contact_depositor_button.error_message')
-          )
-        end
-      end
-
       context 'when the ticket is a Work Curation Ticket' do
         it 'uses id 5477 for quid and ScholarSphere Deposit Curation for question' do
           described_class.new.admin_create_ticket(work.id, 'work_curation')
@@ -74,6 +60,20 @@ RSpec.describe LibanswersApiService, :vcr do
             "quid=#{curation_quid}&pquestion=ScholarSphere Deposit Curation: #{
             work.latest_version.title}&pname=#{work.display_name}&pemail=#{work.email}"
           )
+        end
+
+        context 'when the user is not an active member' do
+          let!(:inactive_member) { object_double(PsuIdentity::SearchService::Person.new, affiliation: ['MEMBER']) }
+
+          before do
+            allow(mock_identity_search).to receive(:userid).and_return(inactive_member)
+          end
+
+          it 'raises an error' do
+            expect { described_class.new.admin_create_ticket(work.id, 'work_curation') }.to raise_error(
+              LibanswersApiService::LibanswersApiError, I18n.t('resources.contact_depositor_button.error_message')
+            )
+          end
         end
       end
 
@@ -85,6 +85,20 @@ RSpec.describe LibanswersApiService, :vcr do
             "quid=#{curation_quid}&pquestion=ScholarSphere Collection Curation: #{
             collection.metadata['title']}&pname=#{collection.depositor.display_name}&pemail=#{work.depositor.email}"
           )
+        end
+
+        context 'when the user is not an active member' do
+          let!(:inactive_member) { object_double(PsuIdentity::SearchService::Person.new, affiliation: ['MEMBER']) }
+
+          before do
+            allow(mock_identity_search).to receive(:userid).and_return(inactive_member)
+          end
+
+          it 'raises an error' do
+            expect { described_class.new.admin_create_ticket(collection.id, 'collection') }.to raise_error(
+              LibanswersApiService::LibanswersApiError, I18n.t('resources.contact_depositor_button.error_message')
+            )
+          end
         end
       end
 
@@ -98,6 +112,23 @@ RSpec.describe LibanswersApiService, :vcr do
             "quid=#{accessibility_quid}&pquestion=ScholarSphere Deposit Accessibility Curation: #{
               work.latest_version.title}&pname=#{work.display_name}&pemail=#{work.email}"
           )
+        end
+
+        context 'when the user is not an active member' do
+          let!(:inactive_member) { object_double(PsuIdentity::SearchService::Person.new, affiliation: ['MEMBER']) }
+
+          before do
+            allow(mock_identity_search).to receive(:userid).and_return(inactive_member)
+          end
+
+          it 'creates a ticket' do
+            described_class.new.admin_create_ticket(work.id, 'work_accessibility', base_url)
+            expect(mock_faraday_connection).to have_received(:post).with(
+              '/api/1.1/ticket/create',
+              "quid=#{accessibility_quid}&pquestion=ScholarSphere Deposit Accessibility Curation: #{
+                work.latest_version.title}&pname=#{work.display_name}&pemail=#{work.email}"
+            )
+          end
         end
 
         context 'when accessibility report exists' do

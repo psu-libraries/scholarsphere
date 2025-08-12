@@ -452,7 +452,13 @@ RSpec.describe 'Work Settings Page', with_user: :user do
   end
 
   describe 'Contact depositor button' do
+    let(:active_member) { object_double(PsuIdentity::SearchService::Person.new, affiliation: ['FACULTY', 'MEMBER']) }
+    let(:inactive_member) { object_double(PsuIdentity::SearchService::Person.new, affiliation: ['MEMBER']) }
+    let(:mock_identity_search) { instance_spy('PsuIdentity::SearchService::Client') }
+
     before do
+      allow(PsuIdentity::SearchService::Client).to receive(:new).and_return(mock_identity_search)
+      allow(mock_identity_search).to receive(:userid).and_return(active_member)
       visit edit_dashboard_work_path(work)
     end
 
@@ -490,12 +496,27 @@ RSpec.describe 'Work Settings Page', with_user: :user do
       end
 
       describe 'clicking the accessibility team depositor button' do
-        context 'when there is no error' do
-          it 'directs to that ticket in libanswers', :vcr do
-            click_button I18n.t('resources.contact_accessibility_team_button.text')
-          rescue ActionController::RoutingError
-            expect(page.driver.browser.last_response['Location']).to eq 'https://psu.libanswers.com/admin/ticket?qid=14782516'
-          end
+        it 'directs to that ticket in libanswers', :vcr do
+          click_button I18n.t('resources.contact_accessibility_team_button.text')
+        rescue ActionController::RoutingError
+          expect(page.driver.browser.last_response['Location']).to eq 'https://psu.libanswers.com/admin/ticket?qid=14782516'
+        end
+      end
+
+      describe 'when the depositor is active' do
+        it 'does not display the inactive warning' do
+          expect(page).to have_no_content(I18n.t('resources.contact_depositor_button.warning'))
+        end
+      end
+
+      describe 'when the depositor is no longer active' do
+        before do
+          allow(mock_identity_search).to receive(:userid).and_return(inactive_member)
+          visit edit_dashboard_work_path(work)
+        end
+
+        it 'displays an inactive warning to the admin' do
+          expect(page).to have_content(I18n.t('resources.contact_depositor_button.warning'))
         end
       end
     end

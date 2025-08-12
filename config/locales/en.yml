@@ -745,6 +745,7 @@ en:
       text: 'Contact Depositor via LibAnswers >>'
       confirm_message: 'This will create a ticket in LibAnswers and direct you to it.  An email will not be sent to the depositor until the form is completed in LibAnswers.'
       error_message: 'Depositor access no longer active'
+      warning: 'This work no longer has an active depositor. The depositor will not respond to any request for curation.'
     contact_accessibility_team_button:
       text: 'Contact Accessibility Team via LibAnswers >>'
       confirm_message: 'This will create a ticket in LibAnswers and direct you to it.  An email will not be sent to the accessibility team until the form is completed in LibAnswers.'
