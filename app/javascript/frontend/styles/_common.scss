@@ -1257,25 +1257,25 @@ h4,
     }
   }
 
-  &-primary {
+  &.bg-primary {
     &.badge--outline {
-      background: $white;
+      background: $white !important;
       border: 1px solid $blue;
       color: $blue;
     }
   }
 
-  &-dark {
+  &.bg-dark {
     &.badge--outline {
-      background: $white;
+      background: $white !important;
       border: 1px solid $body-color;
       color: $body-color;
     }
   }
 
-  &-light {
+  &.bg-light {
     &.badge--outline {
-      background: $white;
+      background: $white !important;
       border: 1px solid $light;
       color: $light;
     }
