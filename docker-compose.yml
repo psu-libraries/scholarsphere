@@ -25,6 +25,8 @@ x-web_env: &web_env
       SOLR_HOST: solr
       SOLR_COLLECTION: scholarsphere
       POSTGRES_HOST: db
+      DIRECTORY_SERVICE_ENDPOINT: ${DIRECTORY_SERVICE_ENDPOINT}
+      IDENTITY_ENDPOINT: ${IDENTITY_ENDPOINT}
 services:
   redis:
     image: redis:6.2.6
