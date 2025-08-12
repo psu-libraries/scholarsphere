@@ -16,7 +16,7 @@
        aria-expanded="false">
       <%= current_user.display_name %>
     </a>
-    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="topbarUsername">
+    <div class="dropdown-menu dropdown-menu-end" style="padding: 0;" aria-labelledby="topbarUsername">
       <%= link_to_dropdown_item('Profile', edit_dashboard_profile_path) %>
       <%= link_to_dropdown_item('Dashboard', dashboard_root_path) %>
       <%= link_to_dropdown_item('Create New Work', dashboard_form_work_versions_path) %>

@@ -590,7 +590,14 @@ h4,
 
 .search .input-group-append .btn i {
   font-size: 30px;
-  line-height: 1.2;
+  line-height: 1.35;
+}
+
+.search-btn {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: .25rem;
+  border-top-left-radius: 0;
+  border-top-right-radius: .25rem;
 }
 
 .surface {
