@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://identity.apps.psu.edu/bad_endpoint/people?text=asdf
+    uri: https://search-service.k8s.psu.edu/bad_endpoint/people?text=asdf
     body:
       encoding: US-ASCII
       string: ''
