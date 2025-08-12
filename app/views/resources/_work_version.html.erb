@@ -9,7 +9,7 @@
 <%= content_for :top_section_items do %>
   <% if current_user.admin? %>
     <li class="nav-item py-1">
-      <a class="btn btn-outline-light btn--squish me-lg-2 qa-edit-version"
+      <a class="btn btn-outline-light btn--squish me-lg-2 mt-1 mb-1 qa-edit-version"
           href="<%= dashboard_form_work_version_details_path(work_version.id) %>">
         <%= I18n.t('resources.work_version.admin_edit_button', version: work_version.display_version_short) %>
       </a>
