@@ -14,7 +14,6 @@ module Dashboard
       initialize_forms
 
       form = select_form_model
-
       if form.save
         redirect_to edit_dashboard_collection_path(@collection), notice: t('.success')
       else

@@ -30,7 +30,7 @@
 
     <%= form_with(model: @work_version, url: dashboard_work_version_path(@work_version), local: true) do |form| %>
 
-      <div class="form-group">
+      <div class="mb-3">
         <%= label_tag :depositor_agreement %>
         <div class="form-check">
           <%= form.check_box :depositor_agreement,

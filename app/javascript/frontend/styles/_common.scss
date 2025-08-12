@@ -428,12 +428,8 @@ h4,
   position: relative;
 
   &__help {
-    position: absolute;
     font-size: 12px;
     font-style: italic;
-    left: 0;
-    bottom: -.5rem;
-    transform: translateY(100%);
     width: 150px;
 
     @include media-breakpoint-up(md) {

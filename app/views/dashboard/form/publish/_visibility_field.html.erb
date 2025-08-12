@@ -1,17 +1,11 @@
-<div class="keyline keyline--left">
-  <h2 id="<%= WorkVersion.human_attribute_name(:visibility).parameterize %>" class="h4">
-    <%= WorkVersion.human_attribute_name(:visibility) %>
-  </h2>
-</div>
-
-<div class="form-group">
+<div class="mb-3 d-flex">
   <% Permissions::Visibility.options_for_select_box.each do |lbl, val| %>
     <div class="form-check form-check-inline">
       <%= form.radio_button :visibility, val, class: 'form-check-input' %>
       <%= form.label :visibility, lbl, value: val, class: 'form-check-label' do %>
         <%= lbl %>
         <% if I18n.exists? "helpers.hint.permissions.visibility.#{val}" %>
-          <span class="label__help"><%= t "helpers.hint.permissions.visibility.#{val}" %></span>
+          <span class="label__help d-block mt-2"><%= t "helpers.hint.permissions.visibility.#{val}" %></span>
         <% end %>
       <% end %>
     </div>
