@@ -14,11 +14,9 @@
 <% end %>
 
 <% content_for(:top_section_heading) do %>
-  <span class="navbar-brand navbar-brand--center slab-font"><%= t('blacklight.search.header') %></span>
+  <h1 class="navbar-brand navbar-brand--center slab-font"><%= t('blacklight.search.header') %></h1>
 <% end %>
 
 <div class="container-fluid">
-  <h1 class="sr-only top-content-title"><%= t('blacklight.search.header') %></h1>
-
   <%= render 'search_results' %>
 </div>

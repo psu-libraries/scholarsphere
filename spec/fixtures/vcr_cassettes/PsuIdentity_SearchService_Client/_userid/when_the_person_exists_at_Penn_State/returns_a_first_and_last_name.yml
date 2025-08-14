@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://identity.apps.psu.edu/search-service/resources/people/userid/agw13
+    uri: https://search-service.k8s.psu.edu/search-service/resources/people/userid/agw13
     body:
       encoding: US-ASCII
       string: ''

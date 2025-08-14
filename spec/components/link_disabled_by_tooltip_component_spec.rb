@@ -9,7 +9,7 @@ RSpec.describe LinkDisabledByTooltipComponent, type: :component do
   let(:path) { '/path/for/link' }
   let(:tooltip) { 'The tooltip' }
 
-  let(:default_classes) { %w(btn btn-outline-light btn--squish mr-lg-2) }
+  let(:default_classes) { %w(btn btn-outline-light btn--squish me-lg-2) }
 
   context 'when enabled' do
     let(:enabled) { true }
@@ -21,7 +21,7 @@ RSpec.describe LinkDisabledByTooltipComponent, type: :component do
     end
 
     it 'does not render a tooltip' do
-      expect(element['data-toggle']).to be_blank
+      expect(element['data-bs-toggle']).to be_blank
     end
 
     it 'renders the text' do
@@ -43,7 +43,7 @@ RSpec.describe LinkDisabledByTooltipComponent, type: :component do
     end
 
     it 'renders a tooltip' do
-      expect(element['data-toggle']).to eq 'tooltip'
+      expect(element['data-bs-toggle']).to eq 'tooltip'
       expect(element['title']).to eq tooltip
     end
 

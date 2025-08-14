@@ -1,12 +1,12 @@
 <%= content_for :top_section_items do %>
-  <li class="nav-item">
+  <li class="nav-item my-1">
     <%= link_to(t('.back'),
                 resource_path(@collection.uuid),
-                class: 'btn btn-outline-light btn--squish mr-lg-2 my-1') %>
+                class: 'btn btn-outline-light btn--squish me-lg-2 mt-1 mb-1') %>
   </li>
 <% end %>
 
-<%= content_for :body_attributes, 'data-spy="scroll" data-target="#navbar-settings" data-offset="10" style="position: relative"'.html_safe %>
+<%= content_for :body_attributes, 'data-bs-spy="scroll" data-bs-target="#navbar-settings" data-bs-offset="10" style="position: relative"'.html_safe %>
 
 <div class="container-fluid">
   <article class="row">
@@ -42,7 +42,7 @@
         <% if current_user.admin? %>
           <%= button_to I18n.t('resources.contact_depositor_button.text'),
                         admin_create_collection_ticket_url(id: @collection.id, type: 'collection'),
-                        class: 'btn btn-primary mr-2 mb-2',
+                        class: 'btn btn-primary me-2 mb-2',
                         form: {
                           target: '_blank',
                           data: {
@@ -95,13 +95,13 @@
         <div class="border border-danger rounded p-2">
           <div class="actions">
             <div class="d-flex">
-              <div class="mr-auto">
+              <div class="me-auto">
                 <p><%= t('.danger.explanation') %></p>
               </div>
               <div>
                 <%= render DeleteResourceButtonComponent.new(
                       resource: @collection,
-                      html_class: 'btn btn-outline-danger text-nowrap ml-lg-2',
+                      html_class: 'btn btn-outline-danger text-nowrap ms-lg-2',
                       hide_if_published: false
                     ) %>
               </div>

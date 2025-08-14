@@ -6,7 +6,7 @@ RSpec.describe WorkVersions::StatusBadgeComponent, type: :component do
   let(:node) { render_inline(described_class.new(work_version: work_version)) }
   let(:badge) { node.css('div').first }
 
-  let(:common_expected_classes) { %w(badge badge--nudge-up ml-1) }
+  let(:common_expected_classes) { %w(badge badge--nudge-up ms-1) }
 
   context 'with a draft' do
     let(:work_version) { build_stubbed(:work_version, :draft) }

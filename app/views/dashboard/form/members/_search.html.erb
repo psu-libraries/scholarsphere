@@ -10,7 +10,7 @@
 
 <div class="row row--md-reduce">
   <div class="col-10 offset-2">
-    <div class="form-group"
+    <div class="mb-3"
          data-controller="search-works"
          data-search-works-endpoint="<%= dashboard_work_search_path %>">
 
@@ -20,12 +20,12 @@
               aria-describedby="search-works-description">
       </select>
 
-      <label for="search-works" class="sr-only">
+      <label for="search-works" class="visually-hidden">
         <%= t('dashboard.form.members.search_label') %>
       </label>
       <small id="search-works-description" class="form-text text-muted">
         <%= t('dashboard.form.members.search') %>
-        <span class="sr-only">
+        <span class="visually-hidden">
           <%= t('dashboard.form.members.reader_hint') %>
         </span>
       </small>

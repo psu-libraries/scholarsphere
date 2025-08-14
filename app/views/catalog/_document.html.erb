@@ -6,14 +6,14 @@
     <%= render ThumbnailComponent.new(resource: document) %>
   </div>
   <div class="card-body">
-    <div class="row no-gutters">
+    <div class="row">
       <div class="col-md-8">
         <h3 class="card-title">
           <%= link_to document.title, resource_path(document.id) %>
         </h3>
       </div>
       <div class="col-md-4">
-        <div class="float-md-right">
+        <div class="float-md-end">
           <%= render WorkVersions::VersionStatusBadgeComponent.new(work_version: document) %>
         </div>
       </div>

@@ -68,7 +68,7 @@ export default class extends Controller {
     }
 
     // Bind the tooltip to the dialog object, other it will not be visible.
-    $('[data-toggle="modal-tooltip"]').tooltip({ container: '#hidden-publish-dialog' })
+    $('[data-bs-toggle="modal-tooltip"]').tooltip({ container: '#hidden-publish-dialog' })
     this.dialogBoxTarget.showModal()
 
     // We only want to require the checkbox if the dialog is open.

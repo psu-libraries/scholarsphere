@@ -1,10 +1,10 @@
 <%= content_for :top_section_items do %>
-  <li class="nav-item">
+  <li class="nav-item my-1">
     <%= render BackToWorkButtonComponent.new(work: @work) %>
   </li>
 <% end %>
 
-<%= content_for :body_attributes, 'data-spy="scroll" data-target="#navbar-settings" data-offset="10" style="position: relative"'.html_safe %>
+<%= content_for :body_attributes, 'data-bs-spy="scroll" data-bs-target="#navbar-settings" data-bs-offset="10" style="position: relative"'.html_safe %>
 
 <div class="container-fluid">
   <article class="row">
@@ -56,13 +56,13 @@
     <div class="col-lg-9">
       <h1 class="h2 mb-2"><%= t('.heading', work_title: @work.latest_version.title) %></h1>
       <% if current_user.admin? %>
-        <div class="row no-gutters">
+        <div class="row mb-3 mt-3">
           <% unless @work.depositor.active? %>
             <p><%= I18n.t('resources.contact_depositor_button.warning') %></p>
           <% end %>
         <%= button_to I18n.t('resources.contact_depositor_button.text'),
                       admin_create_curation_ticket_url(id: @work.id, ticket_type: 'curation'),
-                      class: 'btn btn-primary mr-2 mb-2',
+                      class: 'btn btn-primary me-2 mb-2',
                       form: {
                         target: '_blank',
                         data: {
@@ -97,7 +97,7 @@
 
           <%= render 'dashboard/form/publish/visibility_field', form: visibility_form %>
 
-          <div class="actions mt-5 mb-3">
+          <div class="actions mt-2 mb-3">
             <%= visibility_form.submit t('.visibility.submit_button'), class: 'btn btn-primary' %>
           </div>
         <% end %>
@@ -212,13 +212,13 @@
 
             <div class="actions">
               <div class="d-flex">
-                <div class="mr-auto">
+                <div class="me-auto">
                   <p><%= t('.danger.delete_draft.explanation') %></p>
                 </div>
                 <div>
                   <%= render DeleteResourceButtonComponent.new(
                         resource: @work.latest_version,
-                        html_class: 'btn btn-outline-danger text-nowrap ml-lg-2',
+                        html_class: 'btn btn-outline-danger text-nowrap ms-lg-2',
                         hide_if_published: false
                       ) %>
                 </div>

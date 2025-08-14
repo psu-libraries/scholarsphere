@@ -3,7 +3,7 @@
 // will trigger the insertion of the buttons to manage the additional fields. Certain html elements
 // are required, such as a label and the input-group css class.
 // @example
-//   <div class="form-group" data-controller="multiple-fields">
+//   <div class="mb-3" data-controller="multiple-fields">
 //     <!-- A label is required in order for the buttons to display correctly -->
 //     <label>
 //       Identifier
@@ -125,7 +125,7 @@ export default class extends Controller {
   // @return [HTMLElement]
   descriptionText (text) {
     const element = document.createElement('span')
-    element.classList.add('sr-only')
+    element.classList.add('visually-hidden')
     element.appendChild(document.createTextNode(text))
     return element
   }

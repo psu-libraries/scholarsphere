@@ -281,8 +281,16 @@ h4,
     }
   }
 
+  .navbar-nav .dropdown-menu-end.show {
+    display: block;
+    max-height: 1200px;
+    opacity: 1;
+  }
+
   li:last-child {
-    margin-left: auto;
+    @include media-breakpoint-up(md) {
+      margin-left: auto;
+    }
   }
 
   a.nav-link.dropdown-toggle::after {
@@ -297,6 +305,8 @@ h4,
     color: $black;
     font-size: 1.125rem;
   }
+
+  width: 100%;
 }
 
 .sidebar {
@@ -418,12 +428,8 @@ h4,
   position: relative;
 
   &__help {
-    position: absolute;
     font-size: 12px;
     font-style: italic;
-    left: 0;
-    bottom: -.5rem;
-    transform: translateY(100%);
     width: 150px;
 
     @include media-breakpoint-up(md) {
@@ -584,7 +590,14 @@ h4,
 
 .search .input-group-append .btn i {
   font-size: 30px;
-  line-height: 1.2;
+  line-height: 1.35;
+}
+
+.search-btn {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: .25rem;
+  border-top-left-radius: 0;
+  border-top-right-radius: .25rem;
 }
 
 .surface {
@@ -601,7 +614,7 @@ h4,
 
   h3 {
     @extend .text-primary;
-    @extend .mb-2;
+    @extend .mb-2 !optional;
   }
 
   dt {
@@ -1205,7 +1218,7 @@ h4,
     }
   }
 
-  &.badge-pill {
+  &.rounded-pill {
     text-transform: none;
     letter-spacing: normal;
     padding: .3rem .75rem;
@@ -1244,25 +1257,25 @@ h4,
     }
   }
 
-  &-primary {
+  &.bg-primary {
     &.badge--outline {
-      background: $white;
+      background: $white !important;
       border: 1px solid $blue;
       color: $blue;
     }
   }
 
-  &-dark {
+  &.bg-dark {
     &.badge--outline {
-      background: $white;
+      background: $white !important;
       border: 1px solid $body-color;
       color: $body-color;
     }
   }
 
-  &-light {
+  &.bg-light {
     &.badge--outline {
-      background: $white;
+      background: $white !important;
       border: 1px solid $light;
       color: $light;
     }

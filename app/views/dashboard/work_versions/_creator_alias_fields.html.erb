@@ -3,12 +3,12 @@
     <%= t 'dashboard.work_versions.edit.creator' %>
     <%= link_to_remove_association t('dashboard.work_versions.edit.remove_creator'),
                                    f,
-                                   class: 'btn btn-outline-danger btn-sm float-sm-right' %>
+                                   class: 'btn btn-outline-danger btn-sm float-sm-end' %>
   </div>
   <div class="card-body">
     <%= f.hidden_field :actor_id %>
 
-    <div class="form-group required">
+    <div class="mb-3 required">
       <%= f.label :display_name %>
       <%= f.text_field :display_name, class: 'form-control', required: true %>
     </div>
@@ -16,26 +16,26 @@
     <%= f.fields_for :actor do |actor_fields| %>
       <%- readonly = actor_fields.object.psu_id.present? %>
 
-      <div class="form-group">
+      <div class="mb-3">
         <%= actor_fields.label :email %>
         <%= actor_fields.text_field :email, class: 'form-control', readonly: readonly %>
       </div>
 
       <div class="row">
         <div class="col">
-          <div class="form-group">
+          <div class="mb-3">
             <%= actor_fields.label :given_name %>
             <%= actor_fields.text_field :given_name, class: 'form-control', readonly: readonly %>
           </div>
         </div>
         <div class="col">
-          <div class="form-group required">
+          <div class="mb-3 required">
             <%= actor_fields.label :surname %>
             <%= actor_fields.text_field :surname, class: 'form-control', readonly: readonly, required: true %>
           </div>
         </div>
         <div class="col">
-          <div class="form-group">
+          <div class="mb-3">
             <%= actor_fields.label :psu_id %>
             <%= actor_fields.text_field :psu_id, class: 'form-control', readonly: readonly %>
           </div>
