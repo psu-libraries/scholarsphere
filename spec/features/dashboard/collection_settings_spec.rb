@@ -36,11 +36,11 @@ RSpec.describe 'Collection Settings Page', with_user: :user do
         visit edit_dashboard_collection_path(collection)
 
         expect(collection.edit_users).to be_empty
-        fill_in('Edit users', with: 'agw13')
+        fill_in('Edit users', with: 'ajk5603')
         click_button('Update Editors')
 
         collection.reload
-        expect(collection.edit_users.map(&:uid)).to contain_exactly('agw13')
+        expect(collection.edit_users.map(&:uid)).to contain_exactly('ajk5603')
       end
     end
 

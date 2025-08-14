@@ -149,18 +149,18 @@ RSpec.describe 'Work Settings Page', with_user: :user do
 
       it 'adds a user as an editor' do
         expect(work.edit_users).to be_empty
-        fill_in('Edit users', with: 'agw13')
+        fill_in('Edit users', with: 'ajk5603')
         click_button('Update Editors')
 
         work.reload
-        expect(work.edit_users.map(&:uid)).to contain_exactly('agw13')
+        expect(work.edit_users.map(&:uid)).to contain_exactly('ajk5603')
         expect(WorkIndexer).to have_received(:call)
       end
 
       it 'notify editors if send notification email is checked' do
         expect(work.notify_editors).to eq false
         check 'editors_form_notify_editors'
-        fill_in('Edit users', with: 'agw13')
+        fill_in('Edit users', with: 'ajk5603')
 
         click_button('Update Editors')
 
@@ -171,7 +171,7 @@ RSpec.describe 'Work Settings Page', with_user: :user do
 
       it 'does not notify editors if send notification email is not checked' do
         expect(work.notify_editors).to eq false
-        fill_in('Edit users', with: 'agw13')
+        fill_in('Edit users', with: 'ajk5603')
 
         click_button('Update Editors')
 

@@ -759,23 +759,21 @@ RSpec.describe 'Publishing a work', with_user: :user do
           expect(page).to have_field('Display Name', count: 1)
         end
 
-        FeatureHelpers::DashboardForm.search_creators('wead')
+        FeatureHelpers::DashboardForm.search_creators('kiessling')
 
         within('.algolia-autocomplete') do
-          expect(page).to have_content('Adam Wead')
-          expect(page).to have_content('Amy Weader')
-          expect(page).to have_content('Nathan Andrew Weader')
+          expect(page).to have_content('Alex Kiessling')
         end
 
         within('.aa-dataset-1') do
-          all('*', text: 'Access Account: agw13')[2].click
+          all('*', text: 'Access Account: ajk5603')[2].click
         end
 
         within('#creators') do
           expect(page).to have_content('Creator 1')
           expect(page).to have_content('Creator 2')
           expect(page).to have_field('Display Name', count: 2)
-          expect(page).to have_content('Access Account: agw13')
+          expect(page).to have_content('Access Account: ajk5603')
         end
 
         FeatureHelpers::DashboardForm.save_and_continue
@@ -784,7 +782,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(work_version.creators[0].actor).to be_present
         expect(work_version.creators[0].display_name).to eq(actor.display_name)
         expect(work_version.creators[1].actor).to be_present
-        expect(work_version.creators[1].display_name).to eq('Adam Wead')
+        expect(work_version.creators[1].display_name).to eq('Alex Kiessling')
 
         expect(page).to have_current_path(dashboard_form_files_path(work_version))
         expect(SolrIndexingJob).to have_received(:perform_later).once

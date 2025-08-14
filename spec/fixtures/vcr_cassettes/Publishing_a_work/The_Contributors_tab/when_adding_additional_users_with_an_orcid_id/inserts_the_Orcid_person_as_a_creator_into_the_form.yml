@@ -2,13 +2,13 @@
 http_interactions:
 - request:
     method: get
-    uri: https://search-service.k8s.psu.edu/search-service/resources/people?text=0000-0001-8485-6532
+    uri: https://search-service.k8s.psu.edu/people?text=0000-0001-8485-6532
     body:
       encoding: US-ASCII
-      string: ''
+      base64_string: ''
     headers:
       User-Agent:
-      - Faraday v0.17.3
+      - Faraday v2.12.2
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
@@ -19,41 +19,32 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Thu, 18 Feb 2021 16:39:40 GMT
+      - Thu, 14 Aug 2025 19:19:01 GMT
       Content-Type:
-      - application/vnd-psu.edu-v1+json
+      - application/json
       Content-Length:
-      - '2'
+      - '3'
       Connection:
       - keep-alive
-      X-Content-Security-Policy:
-      - frame-ancestors 'none'
-      Set-Cookie:
-      - JSESSIONID=x2Buz_lbmf3h6Oaxh8MC8wrGER0uQYtHTLTrceLs.search-service-86858dc69c-krgn9;
-        path=/search-service
-      X-Request-Id:
-      - 58a4ca39ca53520b082025819e105efd
-      X-Frame-Options:
-      - DENY
-      Content-Security-Policy:
-      - frame-ancestors 'none'
-      Uniqueid:
-      - c11065a0-61e2-4a36-8e4f-2c64624e6d04
+      Vary:
+      - Origin
       Strict-Transport-Security:
-      - max-age=15724800; includeSubDomains
+      - max-age=31536000; includeSubDomains
+      X-Request-Id:
+      - f8639f9443673c8105e9a523c6c5de01
     body:
       encoding: UTF-8
-      string: "[]"
-  recorded_at: Thu, 18 Feb 2021 16:39:41 GMT
+      string: "[]\n"
+  recorded_at: Thu, 14 Aug 2025 19:19:01 GMT
 - request:
     method: get
     uri: https://pub.orcid.org/v2.1/0000-0001-8485-6532/person
     body:
       encoding: US-ASCII
-      string: ''
+      base64_string: ''
     headers:
       User-Agent:
-      - Faraday v0.17.3
+      - Faraday v2.12.2
       Content-Type:
       - application/json
       Accept-Encoding:
@@ -63,50 +54,92 @@ http_interactions:
   response:
     status:
       code: 200
-      message: OK
+      message: ''
     headers:
       Date:
-      - Thu, 18 Feb 2021 16:39:41 GMT
+      - Thu, 14 Aug 2025 19:19:02 GMT
       Content-Type:
       - application/json;charset=UTF-8
       Transfer-Encoding:
       - chunked
       Connection:
       - keep-alive
-      Set-Cookie:
-      - X-Mapping-fjhppofk=4842165633BFDE68C17EFF06BB2B96E5; path=/
-      - __cfduid=d2e31f3c7ea03938558f865b4e972e8041613666381; expires=Sat, 20-Mar-21
-        16:39:41 GMT; path=/; domain=.orcid.org; HttpOnly; SameSite=Lax
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 96f2cd2d1f7903c3-CDG
+      Cf-Cache-Status:
+      - DYNAMIC
+      Access-Control-Allow-Origin:
+      - "*"
       Cache-Control:
       - no-cache, no-store, max-age=0, must-revalidate
       Expires:
       - '0'
+      Strict-Transport-Security:
+      - max-age=31536000 ; includeSubDomains
+      Vary:
+      - Accept-Encoding
       Pragma:
       - no-cache
-      X-Xss-Protection:
-      - 1; mode=block
-      Access-Control-Allow-Origin:
-      - "*"
+      Cf-Apo-Via:
+      - origin,host
       X-Content-Type-Options:
       - nosniff
       X-Frame-Options:
       - DENY
-      Cf-Cache-Status:
-      - DYNAMIC
-      Cf-Request-Id:
-      - '08579c04d900003fcdaa16c000000001'
-      Expect-Ct:
-      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
-      Server:
-      - cloudflare
-      Cf-Ray:
-      - 62392f815af23fcd-YYZ
+      X-Target:
+      - reg-prod-papi-use2-b1
+      X-Via:
+      - b1
+      X-Xss-Protection:
+      - 1; mode=block
     body:
       encoding: ASCII-8BIT
-      string: '{"last-modified-date":{"value":1612465770316},"name":{"created-date":{"value":1601473260303},"last-modified-date":{"value":1612452781871},"given-names":{"value":"Adam"},"family-name":{"value":"Wead"},"credit-name":{"value":"Dr.
-        Adam Wead"},"source":null,"visibility":"PUBLIC","path":"0000-0001-8485-6532"},"other-names":{"last-modified-date":null,"other-name":[],"path":"/0000-0001-8485-6532/other-names"},"biography":{"created-date":{"value":1612452696013},"last-modified-date":{"value":1612452696013},"content":"Developer
-        working for Penn State University Libraries.","visibility":"PUBLIC","path":"/0000-0001-8485-6532/biography"},"researcher-urls":{"last-modified-date":null,"researcher-url":[],"path":"/0000-0001-8485-6532/researcher-urls"},"emails":{"last-modified-date":{"value":1612465770316},"email":[{"created-date":{"value":1612465747618},"last-modified-date":{"value":1612465770316},"source":{"source-orcid":{"uri":"https://orcid.org/0000-0001-8485-6532","path":"0000-0001-8485-6532","host":"orcid.org"},"source-client-id":null,"source-name":{"value":"Dr.
-        Adam Wead"}},"email":"agw13@psu.edu","path":null,"visibility":"PUBLIC","verified":true,"primary":false,"put-code":null},{"created-date":{"value":1601473260293},"last-modified-date":{"value":1612465218966},"source":{"source-orcid":{"uri":"https://orcid.org/0000-0001-8485-6532","path":"0000-0001-8485-6532","host":"orcid.org"},"source-client-id":null,"source-name":{"value":"Dr.
-        Adam Wead"}},"email":"awead@psu.edu","path":null,"visibility":"PUBLIC","verified":true,"primary":false,"put-code":null}],"path":"/0000-0001-8485-6532/email"},"addresses":{"last-modified-date":null,"address":[],"path":"/0000-0001-8485-6532/address"},"keywords":{"last-modified-date":null,"keyword":[],"path":"/0000-0001-8485-6532/keywords"},"external-identifiers":{"last-modified-date":null,"external-identifier":[],"path":"/0000-0001-8485-6532/external-identifiers"},"path":"/0000-0001-8485-6532/person"}'
-  recorded_at: Thu, 18 Feb 2021 16:39:41 GMT
-recorded_with: VCR 6.0.0
+      base64_string: |
+        eyJsYXN0LW1vZGlmaWVkLWRhdGUiOnsidmFsdWUiOjE2MTM3MDA3Mjc3NjJ9
+        LCJuYW1lIjp7ImNyZWF0ZWQtZGF0ZSI6eyJ2YWx1ZSI6MTYwMTQ3MzI2MDMw
+        M30sImxhc3QtbW9kaWZpZWQtZGF0ZSI6eyJ2YWx1ZSI6MTYxMjQ1Mjc4MTg3
+        MX0sImdpdmVuLW5hbWVzIjp7InZhbHVlIjoiQWRhbSJ9LCJmYW1pbHktbmFt
+        ZSI6eyJ2YWx1ZSI6IldlYWQifSwiY3JlZGl0LW5hbWUiOnsidmFsdWUiOiJE
+        ci4gQWRhbSBXZWFkIn0sInNvdXJjZSI6bnVsbCwidmlzaWJpbGl0eSI6IlBV
+        QkxJQyIsInBhdGgiOiIwMDAwLTAwMDEtODQ4NS02NTMyIn0sIm90aGVyLW5h
+        bWVzIjp7Imxhc3QtbW9kaWZpZWQtZGF0ZSI6bnVsbCwib3RoZXItbmFtZSI6
+        W10sInBhdGgiOiIvMDAwMC0wMDAxLTg0ODUtNjUzMi9vdGhlci1uYW1lcyJ9
+        LCJiaW9ncmFwaHkiOnsiY3JlYXRlZC1kYXRlIjp7InZhbHVlIjoxNjEyNDUy
+        Njk2MDEzfSwibGFzdC1tb2RpZmllZC1kYXRlIjp7InZhbHVlIjoxNjEyNDUy
+        Njk2MDEzfSwiY29udGVudCI6IkRldmVsb3BlciB3b3JraW5nIGZvciBQZW5u
+        IFN0YXRlIFVuaXZlcnNpdHkgTGlicmFyaWVzLiIsInZpc2liaWxpdHkiOiJQ
+        VUJMSUMiLCJwYXRoIjoiLzAwMDAtMDAwMS04NDg1LTY1MzIvYmlvZ3JhcGh5
+        In0sInJlc2VhcmNoZXItdXJscyI6eyJsYXN0LW1vZGlmaWVkLWRhdGUiOm51
+        bGwsInJlc2VhcmNoZXItdXJsIjpbXSwicGF0aCI6Ii8wMDAwLTAwMDEtODQ4
+        NS02NTMyL3Jlc2VhcmNoZXItdXJscyJ9LCJlbWFpbHMiOnsibGFzdC1tb2Rp
+        ZmllZC1kYXRlIjp7InZhbHVlIjoxNjEzNzAwNzI3NzYyfSwiZW1haWwiOlt7
+        ImNyZWF0ZWQtZGF0ZSI6eyJ2YWx1ZSI6MTYwMTQ3MzI2MDI5M30sImxhc3Qt
+        bW9kaWZpZWQtZGF0ZSI6eyJ2YWx1ZSI6MTYxMjQ2NTIxODk2Nn0sInNvdXJj
+        ZSI6eyJzb3VyY2Utb3JjaWQiOnsidXJpIjoiaHR0cHM6Ly9vcmNpZC5vcmcv
+        MDAwMC0wMDAxLTg0ODUtNjUzMiIsInBhdGgiOiIwMDAwLTAwMDEtODQ4NS02
+        NTMyIiwiaG9zdCI6Im9yY2lkLm9yZyJ9LCJzb3VyY2UtY2xpZW50LWlkIjpu
+        dWxsLCJzb3VyY2UtbmFtZSI6eyJ2YWx1ZSI6IkRyLiBBZGFtIFdlYWQifX0s
+        ImVtYWlsIjoiYXdlYWRAcHN1LmVkdSIsInBhdGgiOm51bGwsInZpc2liaWxp
+        dHkiOiJQVUJMSUMiLCJ2ZXJpZmllZCI6dHJ1ZSwicHJpbWFyeSI6ZmFsc2Us
+        InB1dC1jb2RlIjpudWxsfSx7ImNyZWF0ZWQtZGF0ZSI6eyJ2YWx1ZSI6MTYx
+        MjQ2NTc0NzYxOH0sImxhc3QtbW9kaWZpZWQtZGF0ZSI6eyJ2YWx1ZSI6MTYx
+        MzcwMDcyNzc2Mn0sInNvdXJjZSI6eyJzb3VyY2Utb3JjaWQiOnsidXJpIjoi
+        aHR0cHM6Ly9vcmNpZC5vcmcvMDAwMC0wMDAxLTg0ODUtNjUzMiIsInBhdGgi
+        OiIwMDAwLTAwMDEtODQ4NS02NTMyIiwiaG9zdCI6Im9yY2lkLm9yZyJ9LCJz
+        b3VyY2UtY2xpZW50LWlkIjpudWxsLCJzb3VyY2UtbmFtZSI6eyJ2YWx1ZSI6
+        IkRyLiBBZGFtIFdlYWQifX0sImVtYWlsIjoiYWd3MTNAcHN1LmVkdSIsInBh
+        dGgiOm51bGwsInZpc2liaWxpdHkiOiJQVUJMSUMiLCJ2ZXJpZmllZCI6dHJ1
+        ZSwicHJpbWFyeSI6ZmFsc2UsInB1dC1jb2RlIjpudWxsfV0sInBhdGgiOiIv
+        MDAwMC0wMDAxLTg0ODUtNjUzMi9lbWFpbCJ9LCJhZGRyZXNzZXMiOnsibGFz
+        dC1tb2RpZmllZC1kYXRlIjpudWxsLCJhZGRyZXNzIjpbXSwicGF0aCI6Ii8w
+        MDAwLTAwMDEtODQ4NS02NTMyL2FkZHJlc3MifSwia2V5d29yZHMiOnsibGFz
+        dC1tb2RpZmllZC1kYXRlIjpudWxsLCJrZXl3b3JkIjpbXSwicGF0aCI6Ii8w
+        MDAwLTAwMDEtODQ4NS02NTMyL2tleXdvcmRzIn0sImV4dGVybmFsLWlkZW50
+        aWZpZXJzIjp7Imxhc3QtbW9kaWZpZWQtZGF0ZSI6bnVsbCwiZXh0ZXJuYWwt
+        aWRlbnRpZmllciI6W10sInBhdGgiOiIvMDAwMC0wMDAxLTg0ODUtNjUzMi9l
+        eHRlcm5hbC1pZGVudGlmaWVycyJ9LCJwYXRoIjoiLzAwMDAtMDAwMS04NDg1
+        LTY1MzIvcGVyc29uIn0=
+  recorded_at: Thu, 14 Aug 2025 19:19:02 GMT
+recorded_with: VCR 6.3.1

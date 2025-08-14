@@ -2,13 +2,13 @@
 http_interactions:
 - request:
     method: get
-    uri: https://search-service.k8s.psu.edu/search-service/resources/people?text=wead
+    uri: https://search-service.k8s.psu.edu/people?text=kiessling
     body:
       encoding: US-ASCII
-      string: ''
+      base64_string: ''
     headers:
       User-Agent:
-      - Faraday v0.17.3
+      - Faraday v2.12.2
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
@@ -19,33 +19,27 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Thu, 07 Jan 2021 18:15:07 GMT
+      - Thu, 14 Aug 2025 19:19:00 GMT
       Content-Type:
-      - application/vnd-psu.edu-v1+json
-      Content-Length:
-      - '963'
+      - application/json
+      Transfer-Encoding:
+      - chunked
       Connection:
       - keep-alive
-      X-Content-Security-Policy:
-      - frame-ancestors 'none'
-      Set-Cookie:
-      - JSESSIONID=N0SCbOAMITSonhrFUPaB11mTbhGbOkAAIwGxuSjD.search-service-767dd98f7f-8ldrm;
-        path=/search-service
-      X-Request-Id:
-      - e03ca42569a46d33487575c35d9a67ff
-      X-Frame-Options:
-      - DENY
-      Content-Security-Policy:
-      - frame-ancestors 'none'
-      Uniqueid:
-      - 1b7df8a9-0b5f-48e7-8df1-bf3ec847158f
+      Vary:
+      - Origin
       Strict-Transport-Security:
-      - max-age=15724800; includeSubDomains
+      - max-age=31536000; includeSubDomains
+      X-Request-Id:
+      - 4d5af146b56e85a81653ce593b5d6bb8
     body:
       encoding: UTF-8
-      string: '[{"userid":"agw13","cprid":"2784093","givenName":"Adam","middleName":"Garner","familyName":"Wead","preferredGivenName":"Adam","preferredFamilyName":"Wead","active":true,"confHold":false,"universityEmail":"agw13@psu.edu","serviceAccount":false,"affiliation":["STAFF"],"displayName":"Adam
-        Wead","link":{"href":"https://dev.apps.psu.edu/cpr/resources/2784093"}},{"userid":"azw166","cprid":"6559108","givenName":"Amy","familyName":"Weader","active":true,"confHold":false,"universityEmail":"azw166@psu.edu","serviceAccount":false,"affiliation":["STAFF"],"displayName":"Amy
-        Weader","link":{"href":"https://dev.apps.psu.edu/cpr/resources/6559108"}},{"userid":"naw5384","cprid":"7363729","givenName":"Nathan","middleName":"Andrew","familyName":"Weader","active":true,"confHold":false,"universityEmail":"naw5384@psu.edu","serviceAccount":false,"affiliation":["MEMBER"],"displayName":"Nathan
-        Andrew Weader","link":{"href":"https://dev.apps.psu.edu/cpr/resources/7363729"}}]'
-  recorded_at: Thu, 07 Jan 2021 18:15:07 GMT
-recorded_with: VCR 6.0.0
+      string: '[{"userid":"ajk5603","cprid":"2460424","givenName":"Alexander","middleName":"","familyName":"Kiessling","honorificPrefix":"","honorificSuffix":"","preferredGivenName":"Alex","preferredMiddleName":"","preferredFamilyName":"Kiessling","preferredHonorificPrefix":"","preferredHonorificSuffix":"","active":true,"confHold":false,"universityEmail":"ajk5603@psu.edu","otherEmail":"","serviceAccount":false,"primaryAffiliation":"STAFF","affiliation":["STAFF"],"altUserids":[],"link":{"href":"https://cpr.k8s.psu.edu/cpr/resources/2460424"},"displayName":"Alex
+        Kiessling"},{"userid":"bvk5505","cprid":"8341772","givenName":"Benjamin","middleName":"Mathew","familyName":"Kiessling","honorificPrefix":"","honorificSuffix":"","preferredGivenName":"","preferredMiddleName":"","preferredFamilyName":"","preferredHonorificPrefix":"","preferredHonorificSuffix":"","active":true,"confHold":false,"universityEmail":"bvk5505@psu.edu","otherEmail":"","serviceAccount":false,"primaryAffiliation":"STUDENT","affiliation":["STUDENT"],"altUserids":[],"link":{"href":"https://cpr.k8s.psu.edu/cpr/resources/8341772"},"displayName":"Benjamin
+        Mathew Kiessling"},{"userid":"fmk5208","cprid":"9494511","givenName":"Fletcher","middleName":"Maxwell","familyName":"Kiessling","honorificPrefix":"","honorificSuffix":"","preferredGivenName":"","preferredMiddleName":"","preferredFamilyName":"","preferredHonorificPrefix":"","preferredHonorificSuffix":"","active":true,"confHold":false,"universityEmail":"fmk5208@psu.edu","otherEmail":"","serviceAccount":false,"primaryAffiliation":"STUDENT","affiliation":["STUDENT"],"altUserids":[],"link":{"href":"https://cpr.k8s.psu.edu/cpr/resources/9494511"},"displayName":"Fletcher
+        Maxwell Kiessling"},{"userid":"jgk5161","cprid":"5537817","givenName":"Joli","middleName":"","familyName":"Kiessling","honorificPrefix":"","honorificSuffix":"","preferredGivenName":"","preferredMiddleName":"","preferredFamilyName":"","preferredHonorificPrefix":"","preferredHonorificSuffix":"","active":true,"confHold":false,"universityEmail":"jgk5161@psu.edu","otherEmail":"","serviceAccount":false,"primaryAffiliation":"STAFF","affiliation":["STAFF"],"altUserids":[],"link":{"href":"https://cpr.k8s.psu.edu/cpr/resources/5537817"},"displayName":"Joli
+        Kiessling"}]
+
+        '
+  recorded_at: Thu, 14 Aug 2025 19:19:00 GMT
+recorded_with: VCR 6.3.1

@@ -2,13 +2,13 @@
 http_interactions:
 - request:
     method: get
-    uri: https://search-service.k8s.psu.edu/search-service/resources/people?text=Doofus
+    uri: https://search-service.k8s.psu.edu/people?text=Doofus
     body:
       encoding: US-ASCII
-      string: ''
+      base64_string: ''
     headers:
       User-Agent:
-      - Faraday v0.17.3
+      - Faraday v2.12.2
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
@@ -19,30 +19,21 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Tue, 16 Feb 2021 18:37:04 GMT
+      - Thu, 14 Aug 2025 19:19:03 GMT
       Content-Type:
-      - application/vnd-psu.edu-v1+json
+      - application/json
       Content-Length:
-      - '2'
+      - '3'
       Connection:
       - keep-alive
-      X-Content-Security-Policy:
-      - frame-ancestors 'none'
-      Set-Cookie:
-      - JSESSIONID=snoXlic3bMGPFo1xIVGClQwXyOy-eweNIRh477id.search-service-86858dc69c-krgn9;
-        path=/search-service
-      X-Request-Id:
-      - e7127b029b9186b36da1829a6cf72ca6
-      X-Frame-Options:
-      - DENY
-      Content-Security-Policy:
-      - frame-ancestors 'none'
-      Uniqueid:
-      - 7d842740-7873-4ca4-bb9f-98d539371f76
+      Vary:
+      - Origin
       Strict-Transport-Security:
-      - max-age=15724800; includeSubDomains
+      - max-age=31536000; includeSubDomains
+      X-Request-Id:
+      - 62d59ac32394ffa4c191a21f27e2a4fe
     body:
       encoding: UTF-8
-      string: "[]"
-  recorded_at: Tue, 16 Feb 2021 18:37:06 GMT
-recorded_with: VCR 6.0.0
+      string: "[]\n"
+  recorded_at: Thu, 14 Aug 2025 19:19:03 GMT
+recorded_with: VCR 6.3.1
