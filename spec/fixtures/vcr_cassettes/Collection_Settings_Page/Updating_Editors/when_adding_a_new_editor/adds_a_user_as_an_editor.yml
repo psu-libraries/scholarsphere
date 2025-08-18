@@ -44,7 +44,7 @@ http_interactions:
     uri: https://oauth2-server.k8s.psu.edu/oauth/api/token
     body:
       encoding: UTF-8
-      string: client_id=3bM4h93qke2Ye7xXb8V36g23ajLE2U34&client_secret=74FMz66RVjvQZavgzVhXYDvA7838EVYm&grant_type=client_credentials
+      string: client_id=abcdefg12345&client_secret=abcdef12345&grant_type=client_credentials
     headers:
       User-Agent:
       - Faraday v2.12.2
