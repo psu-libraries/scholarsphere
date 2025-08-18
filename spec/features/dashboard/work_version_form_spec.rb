@@ -763,6 +763,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         within('.algolia-autocomplete') do
           expect(page).to have_content('Alex Kiessling')
+          expect(page).to have_content('Joli Kiessling')
+          expect(page).to have_content('Benjamin Mathew Kiessling')
         end
 
         within('.aa-dataset-1') do

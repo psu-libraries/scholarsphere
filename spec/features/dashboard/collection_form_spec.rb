@@ -111,6 +111,8 @@ RSpec.describe 'Creating and editing collections', :inline_jobs, with_user: :use
 
       within('.algolia-autocomplete') do
         expect(page).to have_content('Alex Kiessling')
+        expect(page).to have_content('Joli Kiessling')
+        expect(page).to have_content('Benjamin Mathew Kiessling')
       end
 
       find_all('.aa-suggestion').first.click
