@@ -78,11 +78,3 @@ RSpec.configure do |config|
   # config.filter_gems_from_backtrace("gem name")
   #
 end
-
-VCR.configure do |config|
-  config.filter_sensitive_data('abcdef123') { ENV['PSU_ID_OAUTH_CLIENT_ID'] }
-  config.filter_sensitive_data('abcdef123') { ENV['PSU_ID_OAUTH_CLIENT_SECRET'] }
-  config.filter_sensitive_data('abcdef123') { ENV['DATACITE_PASSWORD'] }
-  config.filter_sensitive_data('abcdef123') { ENV['RMD_API_KEY'] }
-  config.filter_sensitive_data('abcdef123') { ENV['AWS_SECRET_ACCESS_KEY'] }
-end
