@@ -107,12 +107,12 @@ RSpec.describe 'Creating and editing collections', :inline_jobs, with_user: :use
 
       fill_in 'collection_contributor', with: metadata[:contributor]
 
-      FeatureHelpers::DashboardForm.search_creators('wead')
+      FeatureHelpers::DashboardForm.search_creators('kiessling')
 
       within('.algolia-autocomplete') do
-        expect(page).to have_content('Adam Wead')
-        expect(page).to have_content('Amy Weader')
-        expect(page).to have_content('Nathan Andrew Weader')
+        expect(page).to have_content('Alex Kiessling')
+        expect(page).to have_content('Joli Kiessling')
+        expect(page).to have_content('Benjamin Mathew Kiessling')
       end
 
       find_all('.aa-suggestion').first.click
@@ -128,7 +128,7 @@ RSpec.describe 'Creating and editing collections', :inline_jobs, with_user: :use
 
       expect(SolrIndexingJob).to have_received(:perform_later).once
 
-      expect(new_collection.creators.map(&:surname)).to contain_exactly('Wead', actor.surname)
+      expect(new_collection.creators.map(&:surname)).to contain_exactly('Kiessling', actor.surname)
       expect(new_collection.works).to be_empty
 
       #

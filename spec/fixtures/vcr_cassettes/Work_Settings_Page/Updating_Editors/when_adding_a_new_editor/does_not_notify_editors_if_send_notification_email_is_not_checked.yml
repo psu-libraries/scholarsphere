@@ -2,13 +2,13 @@
 http_interactions:
 - request:
     method: get
-    uri: https://search-service.k8s.psu.edu/search-service/resources/people/userid/agw13
+    uri: https://search-service.k8s.psu.edu/people/userid/ajk5603
     body:
       encoding: US-ASCII
-      string: ''
+      base64_string: ''
     headers:
       User-Agent:
-      - Faraday v1.0.1
+      - Faraday v2.12.2
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
@@ -19,31 +19,72 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Wed, 23 Feb 2022 21:36:57 GMT
+      - Thu, 14 Aug 2025 19:18:32 GMT
       Content-Type:
-      - application/vnd-psu.edu-v1+json
+      - application/json
       Content-Length:
-      - '358'
+      - '563'
       Connection:
       - keep-alive
-      X-Content-Security-Policy:
-      - frame-ancestors 'none'
-      Set-Cookie:
-      - JSESSIONID=eM0saiLnKAIloX6MVQN17BQ1v9YTh3fXt2L_eLlH.search-service-97b86d9d6-rnk5k;
-        path=/search-service
-      X-Request-Id:
-      - 5d959d9d5f1bfd50296320851c847859
-      X-Frame-Options:
-      - DENY
-      Content-Security-Policy:
-      - frame-ancestors 'none'
-      Uniqueid:
-      - 5d959d9d5f1bfd50296320851c847859
+      Vary:
+      - Origin
       Strict-Transport-Security:
-      - max-age=15724800; includeSubDomains
+      - max-age=31536000; includeSubDomains
+      X-Request-Id:
+      - 665357a205a534b68b63a14ebdd347b8
     body:
       encoding: UTF-8
-      string: '{"userid":"agw13","cprid":"2784093","givenName":"Adam","middleName":"Garner","familyName":"Wead","preferredGivenName":"Adam","preferredFamilyName":"Wead","active":true,"confHold":false,"universityEmail":"agw13@psu.edu","serviceAccount":false,"affiliation":["MEMBER"],"link":{"href":"https://dev.apps.psu.edu/cpr/resources/2784093"},"displayName":"Adam
-        Wead"}'
-  recorded_at: Wed, 23 Feb 2022 21:36:57 GMT
-recorded_with: VCR 6.0.0
+      string: '{"userid":"ajk5603","cprid":"2460424","givenName":"Alexander","middleName":"","familyName":"Kiessling","honorificPrefix":"","honorificSuffix":"","preferredGivenName":"Alex","preferredMiddleName":"","preferredFamilyName":"Kiessling","preferredHonorificPrefix":"","preferredHonorificSuffix":"","active":true,"confHold":false,"universityEmail":"ajk5603@psu.edu","otherEmail":"","serviceAccount":false,"primaryAffiliation":"STAFF","affiliation":["STAFF"],"altUserids":[],"link":{"href":"https://cpr.k8s.psu.edu/cpr/resources/2460424"},"displayName":"Alex
+        Kiessling"}
+
+        '
+  recorded_at: Thu, 14 Aug 2025 19:18:32 GMT
+- request:
+    method: post
+    uri: https://oauth2-server.k8s.psu.edu/oauth/api/token
+    body:
+      encoding: UTF-8
+      string: client_id=abcdefg12345&client_secret=abcdef12345&grant_type=client_credentials
+    headers:
+      User-Agent:
+      - Faraday v2.12.2
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 401
+      message: Unauthorized
+    headers:
+      Date:
+      - Thu, 14 Aug 2025 19:18:33 GMT
+      Content-Type:
+      - application/json;charset=UTF-8
+      Content-Length:
+      - '412'
+      Connection:
+      - keep-alive
+      Cache-Control:
+      - no-store
+      Pragma:
+      - no-cache
+      Vary:
+      - Origin
+      - Origin
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      X-Request-Id:
+      - 86561edb385bd50cd7e49810faf5f6bb
+    body:
+      encoding: UTF-8
+      string: '{"error":"invalid_client","error_description":"Client authentication
+        failed (e.g., unknown client, no client authentication included, or unsupported
+        authentication method). The OAuth 2.0 Client supports client authentication
+        method ''client_secret_basic'', but method ''client_secret_post'' was requested.
+        You must configure the OAuth 2.0 client''s ''token_endpoint_auth_method''
+        value to accept ''client_secret_post''."}'
+  recorded_at: Thu, 14 Aug 2025 19:18:33 GMT
+recorded_with: VCR 6.3.1

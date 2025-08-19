@@ -2,13 +2,13 @@
 http_interactions:
 - request:
     method: get
-    uri: https://search-service.k8s.psu.edu/search-service/resources/people/userid/agw13
+    uri: https://search-service.k8s.psu.edu/people/userid/ajk5603
     body:
       encoding: US-ASCII
-      string: ''
+      base64_string: ''
     headers:
       User-Agent:
-      - Faraday v0.17.3
+      - Faraday v2.12.2
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
@@ -19,42 +19,35 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Tue, 16 Mar 2021 15:15:38 GMT
+      - Thu, 14 Aug 2025 19:24:44 GMT
       Content-Type:
-      - application/vnd-psu.edu-v1+json
+      - application/json
       Content-Length:
-      - '357'
+      - '563'
       Connection:
       - keep-alive
-      X-Content-Security-Policy:
-      - frame-ancestors 'none'
-      Set-Cookie:
-      - JSESSIONID=_ihDPw45iyIoekSkqliiSmIRn-St-tsr0PRHsy0o.search-service-7cbccc979b-jqf8r;
-        path=/search-service
-      X-Request-Id:
-      - 7155c061772a8d12e4c5a89919e0e1b6
-      X-Frame-Options:
-      - DENY
-      Content-Security-Policy:
-      - frame-ancestors 'none'
-      Uniqueid:
-      - ad8460eb-7cb5-4f06-b6e1-0d12888e973b
+      Vary:
+      - Origin
       Strict-Transport-Security:
-      - max-age=15724800; includeSubDomains
+      - max-age=31536000; includeSubDomains
+      X-Request-Id:
+      - 8dfd02c0e0dd4d217fa7077add40d84d
     body:
       encoding: UTF-8
-      string: '{"userid":"agw13","cprid":"2784093","givenName":"Adam","middleName":"Garner","familyName":"Wead","preferredGivenName":"Adam","preferredFamilyName":"Wead","active":true,"confHold":false,"universityEmail":"agw13@psu.edu","serviceAccount":false,"affiliation":["STAFF"],"displayName":"Adam
-        Wead","link":{"href":"https://dev.apps.psu.edu/cpr/resources/2784093"}}'
-  recorded_at: Tue, 16 Mar 2021 15:15:39 GMT
+      string: '{"userid":"ajk5603","cprid":"2460424","givenName":"Alexander","middleName":"","familyName":"Kiessling","honorificPrefix":"","honorificSuffix":"","preferredGivenName":"Alex","preferredMiddleName":"","preferredFamilyName":"Kiessling","preferredHonorificPrefix":"","preferredHonorificSuffix":"","active":true,"confHold":false,"universityEmail":"ajk5603@psu.edu","otherEmail":"","serviceAccount":false,"primaryAffiliation":"STAFF","affiliation":["STAFF"],"altUserids":[],"link":{"href":"https://cpr.k8s.psu.edu/cpr/resources/2460424"},"displayName":"Alex
+        Kiessling"}
+
+        '
+  recorded_at: Thu, 14 Aug 2025 19:24:44 GMT
 - request:
     method: get
     uri: https://pub.orcid.org/v2.1/abc123/person
     body:
       encoding: US-ASCII
-      string: ''
+      base64_string: ''
     headers:
       User-Agent:
-      - Faraday v0.17.3
+      - Faraday v2.12.2
       Content-Type:
       - application/json
       Accept-Encoding:
@@ -64,48 +57,54 @@ http_interactions:
   response:
     status:
       code: 404
-      message: Not Found
+      message: ''
     headers:
       Date:
-      - Tue, 16 Mar 2021 15:15:38 GMT
+      - Thu, 14 Aug 2025 19:24:45 GMT
       Content-Type:
       - application/json;charset=UTF-8
       Transfer-Encoding:
       - chunked
       Connection:
       - keep-alive
-      Set-Cookie:
-      - X-Mapping-fjhppofk=4842165633BFDE68C17EFF06BB2B96E5; path=/
-      - __cfduid=d2f0159ab5e411a38d0f5f5aad91736341615907738; expires=Thu, 15-Apr-21
-        15:15:38 GMT; path=/; domain=.orcid.org; HttpOnly; SameSite=Lax
+      Cf-Ray:
+      - 96f2d58c9d980843-IAD
+      Cf-Cache-Status:
+      - DYNAMIC
+      Access-Control-Allow-Origin:
+      - "*"
       Cache-Control:
       - no-cache, no-store, max-age=0, must-revalidate
       Expires:
       - '0'
+      Strict-Transport-Security:
+      - max-age=31536000 ; includeSubDomains
       Pragma:
       - no-cache
-      X-Xss-Protection:
-      - 1; mode=block
-      Access-Control-Allow-Origin:
-      - "*"
+      Cf-Apo-Via:
+      - origin,host
       X-Content-Type-Options:
       - nosniff
       X-Frame-Options:
       - DENY
-      Cf-Cache-Status:
-      - DYNAMIC
-      Cf-Request-Id:
-      - '08dd346b5a000055449506a000000001'
-      Expect-Ct:
-      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      X-Target:
+      - reg-prod-papi-use2-c1
+      X-Via:
+      - b1
+      X-Xss-Protection:
+      - 1; mode=block
+      Vary:
+      - Accept-Encoding
       Server:
       - cloudflare
-      Cf-Ray:
-      - 630ef0255db35544-ORD
     body:
       encoding: ASCII-8BIT
-      string: '{"response-code":404,"developer-message":"404 Not Found: The resource
-        was not found. Full validation error: ORCID iD abc123 not found","user-message":"The
-        resource was not found.","error-code":9016,"more-info":"https://members.orcid.org/api/resources/troubleshooting"}'
-  recorded_at: Tue, 16 Mar 2021 15:15:39 GMT
-recorded_with: VCR 6.0.0
+      base64_string: |
+        eyJyZXNwb25zZS1jb2RlIjo0MDQsImRldmVsb3Blci1tZXNzYWdlIjoiNDA0
+        IE5vdCBGb3VuZDogVGhlIHJlc291cmNlIHdhcyBub3QgZm91bmQuIEZ1bGwg
+        dmFsaWRhdGlvbiBlcnJvcjogT1JDSUQgaUQgYWJjMTIzIG5vdCBmb3VuZCIs
+        InVzZXItbWVzc2FnZSI6IlRoZSByZXNvdXJjZSB3YXMgbm90IGZvdW5kLiIs
+        ImVycm9yLWNvZGUiOjkwMTYsIm1vcmUtaW5mbyI6Imh0dHBzOi8vbWVtYmVy
+        cy5vcmNpZC5vcmcvYXBpL3Jlc291cmNlcy90cm91Ymxlc2hvb3RpbmcifQ==
+  recorded_at: Thu, 14 Aug 2025 19:24:44 GMT
+recorded_with: VCR 6.3.1

@@ -2,13 +2,13 @@
 http_interactions:
 - request:
     method: get
-    uri: https://search-service.k8s.psu.edu/search-service/resources/people/userid/agw13
+    uri: https://search-service.k8s.psu.edu/people/userid/ajk5603
     body:
       encoding: US-ASCII
-      string: ''
+      base64_string: ''
     headers:
       User-Agent:
-      - Faraday v0.17.3
+      - Faraday v2.12.2
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
@@ -19,42 +19,35 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Tue, 16 Mar 2021 15:15:48 GMT
+      - Thu, 14 Aug 2025 19:24:45 GMT
       Content-Type:
-      - application/vnd-psu.edu-v1+json
+      - application/json
       Content-Length:
-      - '357'
+      - '563'
       Connection:
       - keep-alive
-      X-Content-Security-Policy:
-      - frame-ancestors 'none'
-      Set-Cookie:
-      - JSESSIONID=KoxLM-EIgdJSeNYXeWJwHEAvgzEQdZlyvm4-ktTL.search-service-7cbccc979b-hkn8t;
-        path=/search-service
-      X-Request-Id:
-      - 8a0be6d7b234c2fbdc9b6876ca591b38
-      X-Frame-Options:
-      - DENY
-      Content-Security-Policy:
-      - frame-ancestors 'none'
-      Uniqueid:
-      - 435e119d-6303-401a-9d5a-6b7d8e2a0962
+      Vary:
+      - Origin
       Strict-Transport-Security:
-      - max-age=15724800; includeSubDomains
+      - max-age=31536000; includeSubDomains
+      X-Request-Id:
+      - c3378f5bab4ec887baa697bf47b0fc23
     body:
       encoding: UTF-8
-      string: '{"userid":"agw13","cprid":"2784093","givenName":"Adam","middleName":"Garner","familyName":"Wead","preferredGivenName":"Adam","preferredFamilyName":"Wead","active":true,"confHold":false,"universityEmail":"agw13@psu.edu","serviceAccount":false,"affiliation":["STAFF"],"displayName":"Adam
-        Wead","link":{"href":"https://dev.apps.psu.edu/cpr/resources/2784093"}}'
-  recorded_at: Tue, 16 Mar 2021 15:15:49 GMT
+      string: '{"userid":"ajk5603","cprid":"2460424","givenName":"Alexander","middleName":"","familyName":"Kiessling","honorificPrefix":"","honorificSuffix":"","preferredGivenName":"Alex","preferredMiddleName":"","preferredFamilyName":"Kiessling","preferredHonorificPrefix":"","preferredHonorificSuffix":"","active":true,"confHold":false,"universityEmail":"ajk5603@psu.edu","otherEmail":"","serviceAccount":false,"primaryAffiliation":"STAFF","affiliation":["STAFF"],"altUserids":[],"link":{"href":"https://cpr.k8s.psu.edu/cpr/resources/2460424"},"displayName":"Alex
+        Kiessling"}
+
+        '
+  recorded_at: Thu, 14 Aug 2025 19:24:45 GMT
 - request:
     method: get
-    uri: https://pub.orcid.org/v2.1/0000-0001-9500-0828/person
+    uri: https://pub.orcid.org/v2.1/0009-0005-3583-0260/person
     body:
       encoding: US-ASCII
-      string: ''
+      base64_string: ''
     headers:
       User-Agent:
-      - Faraday v0.17.3
+      - Faraday v2.12.2
       Content-Type:
       - application/json
       Accept-Encoding:
@@ -64,46 +57,69 @@ http_interactions:
   response:
     status:
       code: 200
-      message: OK
+      message: ''
     headers:
       Date:
-      - Tue, 16 Mar 2021 15:15:48 GMT
+      - Thu, 14 Aug 2025 19:24:45 GMT
       Content-Type:
       - application/json;charset=UTF-8
       Transfer-Encoding:
       - chunked
       Connection:
       - keep-alive
-      Set-Cookie:
-      - X-Mapping-fjhppofk=C9CF0771B896904864254CD659E1CE8B; path=/
-      - __cfduid=dea4bd1d79c3fcb92f0bb2b2c16ed0d6d1615907748; expires=Thu, 15-Apr-21
-        15:15:48 GMT; path=/; domain=.orcid.org; HttpOnly; SameSite=Lax
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 96f2d58edd76d670-IAD
+      Cf-Cache-Status:
+      - DYNAMIC
+      Access-Control-Allow-Origin:
+      - "*"
       Cache-Control:
       - no-cache, no-store, max-age=0, must-revalidate
       Expires:
       - '0'
+      Strict-Transport-Security:
+      - max-age=31536000 ; includeSubDomains
+      Vary:
+      - Accept-Encoding
       Pragma:
       - no-cache
-      X-Xss-Protection:
-      - 1; mode=block
-      Access-Control-Allow-Origin:
-      - "*"
+      Cf-Apo-Via:
+      - origin,host
       X-Content-Type-Options:
       - nosniff
       X-Frame-Options:
       - DENY
-      Cf-Cache-Status:
-      - DYNAMIC
-      Cf-Request-Id:
-      - '08dd3493c200003f6d9da5a000000001'
-      Expect-Ct:
-      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
-      Server:
-      - cloudflare
-      Cf-Ray:
-      - 630ef0660b3d3f6d-ORD
+      X-Target:
+      - reg-prod-papi-use2-c1
+      X-Via:
+      - b1
+      X-Xss-Protection:
+      - 1; mode=block
     body:
       encoding: ASCII-8BIT
-      string: '{"last-modified-date":null,"name":{"created-date":{"value":1460756163930},"last-modified-date":{"value":1460756163930},"given-names":{"value":"Adam"},"family-name":{"value":"Coughlin"},"credit-name":null,"source":null,"visibility":"PUBLIC","path":"0000-0001-9500-0828"},"other-names":{"last-modified-date":null,"other-name":[],"path":"/0000-0001-9500-0828/other-names"},"biography":null,"researcher-urls":{"last-modified-date":null,"researcher-url":[],"path":"/0000-0001-9500-0828/researcher-urls"},"emails":{"last-modified-date":null,"email":[],"path":"/0000-0001-9500-0828/email"},"addresses":{"last-modified-date":null,"address":[],"path":"/0000-0001-9500-0828/address"},"keywords":{"last-modified-date":null,"keyword":[],"path":"/0000-0001-9500-0828/keywords"},"external-identifiers":{"last-modified-date":null,"external-identifier":[],"path":"/0000-0001-9500-0828/external-identifiers"},"path":"/0000-0001-9500-0828/person"}'
-  recorded_at: Tue, 16 Mar 2021 15:15:49 GMT
-recorded_with: VCR 6.0.0
+      base64_string: |
+        eyJsYXN0LW1vZGlmaWVkLWRhdGUiOm51bGwsIm5hbWUiOnsiY3JlYXRlZC1k
+        YXRlIjp7InZhbHVlIjoxNjk1MjIzMjIxMDE2fSwibGFzdC1tb2RpZmllZC1k
+        YXRlIjp7InZhbHVlIjoxNjk1MjIzMjIxMDE2fSwiZ2l2ZW4tbmFtZXMiOnsi
+        dmFsdWUiOiJBbGV4In0sImZhbWlseS1uYW1lIjp7InZhbHVlIjoiS2llc3Ns
+        aW5nIn0sImNyZWRpdC1uYW1lIjpudWxsLCJzb3VyY2UiOm51bGwsInZpc2li
+        aWxpdHkiOiJQVUJMSUMiLCJwYXRoIjoiMDAwOS0wMDA1LTM1ODMtMDI2MCJ9
+        LCJvdGhlci1uYW1lcyI6eyJsYXN0LW1vZGlmaWVkLWRhdGUiOm51bGwsIm90
+        aGVyLW5hbWUiOltdLCJwYXRoIjoiLzAwMDktMDAwNS0zNTgzLTAyNjAvb3Ro
+        ZXItbmFtZXMifSwiYmlvZ3JhcGh5IjpudWxsLCJyZXNlYXJjaGVyLXVybHMi
+        OnsibGFzdC1tb2RpZmllZC1kYXRlIjpudWxsLCJyZXNlYXJjaGVyLXVybCI6
+        W10sInBhdGgiOiIvMDAwOS0wMDA1LTM1ODMtMDI2MC9yZXNlYXJjaGVyLXVy
+        bHMifSwiZW1haWxzIjp7Imxhc3QtbW9kaWZpZWQtZGF0ZSI6bnVsbCwiZW1h
+        aWwiOltdLCJwYXRoIjoiLzAwMDktMDAwNS0zNTgzLTAyNjAvZW1haWwifSwi
+        YWRkcmVzc2VzIjp7Imxhc3QtbW9kaWZpZWQtZGF0ZSI6bnVsbCwiYWRkcmVz
+        cyI6W10sInBhdGgiOiIvMDAwOS0wMDA1LTM1ODMtMDI2MC9hZGRyZXNzIn0s
+        ImtleXdvcmRzIjp7Imxhc3QtbW9kaWZpZWQtZGF0ZSI6bnVsbCwia2V5d29y
+        ZCI6W10sInBhdGgiOiIvMDAwOS0wMDA1LTM1ODMtMDI2MC9rZXl3b3JkcyJ9
+        LCJleHRlcm5hbC1pZGVudGlmaWVycyI6eyJsYXN0LW1vZGlmaWVkLWRhdGUi
+        Om51bGwsImV4dGVybmFsLWlkZW50aWZpZXIiOltdLCJwYXRoIjoiLzAwMDkt
+        MDAwNS0zNTgzLTAyNjAvZXh0ZXJuYWwtaWRlbnRpZmllcnMifSwicGF0aCI6
+        Ii8wMDA5LTAwMDUtMzU4My0wMjYwL3BlcnNvbiJ9
+  recorded_at: Thu, 14 Aug 2025 19:24:45 GMT
+recorded_with: VCR 6.3.1

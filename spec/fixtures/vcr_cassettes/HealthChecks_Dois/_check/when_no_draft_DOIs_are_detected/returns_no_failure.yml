@@ -5,12 +5,12 @@ http_interactions:
     uri: https://api.test.datacite.org/dois?client-id=psu.ss-dev&state=draft
     body:
       encoding: US-ASCII
-      string: ''
+      base64_string: ''
     headers:
       User-Agent:
-      - Faraday v0.17.3
+      - Faraday v2.12.2
       Authorization:
-      - Basic cHN1LnNzLWRldjoyRDlENUZGMC1CQTE3LTRCMUYtQTc2Mi1CMTFBOUIwOEIzQUY=
+      - "<AUTH>"
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
@@ -21,7 +21,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Mon, 10 May 2021 18:36:53 GMT
+      - Tue, 19 Aug 2025 14:50:05 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -33,23 +33,39 @@ http_interactions:
       Cache-Control:
       - max-age=0, private, must-revalidate
       Vary:
-      - Accept-Encoding, Origin
+      - Accept,Accept-Encoding
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-Xss-Protection:
+      - '0'
       X-Credential-Username:
-      - psu.ss-dev
+      - "<REDACTED>"
       X-Request-Id:
-      - 1eb19da8-a5e4-4168-abeb-54b51ac4b0c0
+      - 32738377-3a29-4cda-95da-8e14c2e3a25a
       Etag:
-      - W/"3a0e32d2bb5f99c4672b1e955a2b16c5"
+      - W/"951631e166d9f00f70a6b8969827a132"
+      X-Frame-Options:
+      - SAMEORIGIN
       X-Runtime:
-      - '0.110894'
-      X-Rack-Cors:
-      - miss; no-origin
+      - '0.826451'
+      X-Content-Type-Options:
+      - nosniff
       X-Powered-By:
-      - Phusion Passenger(R) 6.0.8
+      - Phusion Passenger(R) 6.0.27
       Server:
-      - nginx/1.14.0 + Phusion Passenger(R) 6.0.8
+      - nginx/1.18.0 + Phusion Passenger(R) 6.0.27
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, PATCH, DELETE, OPTIONS
+      Access-Control-Allow-Headers:
+      - Accept,Access-Control-Allow-Origin,Access-Control-Expose-Headers,Access-Control-Allow-Methods,Access-Control-Allow-Headers,Authorization,Cache-Control,Content-Type,DNT,If-Modified-Since,Keep-Alive,Origin,User-Agent,X-Mx-ReqToken,X-Requested-With
+      Access-Control-Expose-Headers:
+      - Authorization
     body:
       encoding: ASCII-8BIT
       string: '{"data":[],"meta":{"total":0,"totalPages":0,"page":1},"links":{"self":"https://api.test.datacite.org/dois?client-id=psu.ss-dev&state=draft"}}'
-  recorded_at: Mon, 10 May 2021 18:36:54 GMT
-recorded_with: VCR 6.0.0
+  recorded_at: Tue, 19 Aug 2025 14:50:05 GMT
+recorded_with: VCR 6.3.1

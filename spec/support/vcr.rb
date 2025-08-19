@@ -23,4 +23,12 @@ VCR.configure do |c|
   c.preserve_exact_body_bytes do |http_message|
     http_message.body.encoding.name != 'UTF-8' || !http_message.body.valid_encoding?
   end
+
+  regex = /(SECRET|TOKEN|KEY|PASSWORD|ID|USER)/i
+  ENV.each_key do |key|
+    c.filter_sensitive_data('<REDACTED>') { ENV[key] if key.match(regex) }
+  end
+
+  c.filter_sensitive_data('<AUTH>') { |interaction|
+    interaction.request.headers['Authorization']&.first }
 end

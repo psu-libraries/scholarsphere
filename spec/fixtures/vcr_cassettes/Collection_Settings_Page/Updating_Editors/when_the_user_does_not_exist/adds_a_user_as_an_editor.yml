@@ -2,13 +2,13 @@
 http_interactions:
 - request:
     method: get
-    uri: https://search-service.k8s.psu.edu/search-service/resources/people/userid/iamnotpennstate
+    uri: https://search-service.k8s.psu.edu/people/userid/iamnotpennstate
     body:
       encoding: US-ASCII
-      string: ''
+      base64_string: ''
     headers:
       User-Agent:
-      - Faraday v0.17.3
+      - Faraday v2.12.2
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
@@ -19,31 +19,24 @@ http_interactions:
       message: Not Found
     headers:
       Date:
-      - Thu, 25 Feb 2021 19:37:23 GMT
+      - Thu, 14 Aug 2025 19:18:20 GMT
       Content-Type:
-      - application/vnd-psu.edu-v1+json
+      - application/json
       Content-Length:
-      - '128'
+      - '126'
       Connection:
       - keep-alive
-      X-Content-Security-Policy:
-      - frame-ancestors 'none'
-      Set-Cookie:
-      - JSESSIONID=O5sgGMG18bGlXl4iTP4SX_wLLPDthM8y5gRE2Mm6.search-service-7cbccc979b-59cww;
-        path=/search-service
-      X-Request-Id:
-      - eb769b025af047d2e2e1412894b26e78
-      X-Frame-Options:
-      - DENY
-      Content-Security-Policy:
-      - frame-ancestors 'none'
-      Uniqueid:
-      - 527323bc-f6ce-4a10-8ee4-921a675ccc2c
+      Vary:
+      - Origin
       Strict-Transport-Security:
-      - max-age=15724800; includeSubDomains
+      - max-age=31536000; includeSubDomains
+      X-Request-Id:
+      - e294a83dc22ae0a0fb5ba3c47a628d20
     body:
       encoding: UTF-8
-      string: '{"status":{"code":404,"message":"NOT_FOUND"},"errorMessage":["No person
-        matched the input userid: iamnotpennstate"],"link":null}'
-  recorded_at: Thu, 25 Feb 2021 19:37:23 GMT
-  recorded_with: VCR 6.0.0
+      string: '{"status":{"code":404,"message":""},"errorMessage":["Response Error
+        [404]: user not found:  User iamnotpennstate not found"]}
+
+        '
+  recorded_at: Thu, 14 Aug 2025 19:18:20 GMT
+recorded_with: VCR 6.3.1

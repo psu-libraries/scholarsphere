@@ -13,23 +13,23 @@ RSpec.describe BuildNewActor, type: :model do
 
   describe 'building with a Penn State access id', :vcr do
     context 'with no existing Actor' do
-      subject(:actor) { described_class.call(psu_id: 'agw13') }
+      subject(:actor) { described_class.call(psu_id: 'ajk5603') }
 
       it 'returns a new record' do
         expect(actor).not_to be_persisted
-        expect(actor.given_name).to eq('Adam')
-        expect(actor.surname).to eq('Wead')
-        expect(actor.display_name).to eq('Adam Wead')
-        expect(actor.email).to eq('agw13@psu.edu')
-        expect(actor.psu_id).to eq('agw13')
+        expect(actor.given_name).to eq('Alex')
+        expect(actor.surname).to eq('Kiessling')
+        expect(actor.display_name).to eq('Alex Kiessling')
+        expect(actor.email).to eq('ajk5603@psu.edu')
+        expect(actor.psu_id).to eq('ajk5603')
         expect(actor.orcid).to be_nil
       end
     end
 
     context 'with an existing Actor' do
-      subject(:actor) { described_class.call(psu_id: 'agw13') }
+      subject(:actor) { described_class.call(psu_id: 'ajk5603') }
 
-      let!(:existing_actor) { create(:actor, psu_id: 'agw13') }
+      let!(:existing_actor) { create(:actor, psu_id: 'ajk5603') }
 
       it 'returns the existing record' do
         expect(actor).to be_persisted
@@ -93,22 +93,22 @@ RSpec.describe BuildNewActor, type: :model do
     context 'when only the access id exists' do
       it 'raises an error' do
         expect {
-          described_class.call(orcid: 'abc123', psu_id: 'agw13')
+          described_class.call(orcid: 'abc123', psu_id: 'ajk5603')
         }.to raise_error(Orcid::NotFound)
       end
     end
 
     context 'when both ids exist' do
-      let(:actor) { described_class.call(orcid: '0000000195000828', psu_id: 'agw13') }
+      let(:actor) { described_class.call(orcid: '0009000535830260', psu_id: 'ajk5603') }
 
       it 'prefers the access id' do
         expect(actor).not_to be_persisted
-        expect(actor.given_name).to eq('Adam')
-        expect(actor.surname).to eq('Wead')
-        expect(actor.display_name).to eq('Adam Wead')
-        expect(actor.email).to eq('agw13@psu.edu')
-        expect(actor.psu_id).to eq('agw13')
-        expect(actor.orcid).to eq('0000000195000828')
+        expect(actor.given_name).to eq('Alex')
+        expect(actor.surname).to eq('Kiessling')
+        expect(actor.display_name).to eq('Alex Kiessling')
+        expect(actor.email).to eq('ajk5603@psu.edu')
+        expect(actor.psu_id).to eq('ajk5603')
+        expect(actor.orcid).to eq('0009000535830260')
       end
     end
   end
