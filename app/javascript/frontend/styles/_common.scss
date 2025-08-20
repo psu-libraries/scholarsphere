@@ -634,6 +634,7 @@ h4,
 
     .multiple-member {
       display: inline;
+      color: $black;
 
       &:not(:last-child)::after {
         content: '; ';

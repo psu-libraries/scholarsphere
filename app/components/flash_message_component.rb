@@ -24,7 +24,7 @@ class FlashMessageComponent < ApplicationComponent
     end
 
     def html_classes
-      "alert #{alert_class.fetch(type, default_class)}"
+      "alert #{alert_class.fetch(type, default_class)} d-flex align-items-center justify-content-between"
     end
 
     def alert_class
