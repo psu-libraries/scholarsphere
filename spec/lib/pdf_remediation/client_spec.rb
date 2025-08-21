@@ -3,7 +3,7 @@
 require 'spec_helper'
 require 'pdf_remediation/client'
 
-RSpec.describe PDFRemediation::Client do
+RSpec.describe PdfRemediation::Client do
   let(:client) { described_class.new('test url') }
   let(:connection) { instance_double Faraday::Connection }
   let(:request) { instance_spy Faraday::Request }
@@ -27,7 +27,7 @@ RSpec.describe PDFRemediation::Client do
       after { ENV['PDF_REMEDIATION_ENDPOINT'] = endpoint }
 
       it 'raises an error' do
-        expect { client.request_remediation }.to raise_error PDFRemediation::Client::MissingConfiguration
+        expect { client.request_remediation }.to raise_error PdfRemediation::Client::MissingConfiguration
       end
     end
 
@@ -36,7 +36,7 @@ RSpec.describe PDFRemediation::Client do
       after { ENV['PDF_REMEDIATION_API_KEY'] = api_key }
 
       it 'raises an error' do
-        expect { client.request_remediation }.to raise_error PDFRemediation::Client::MissingConfiguration
+        expect { client.request_remediation }.to raise_error PdfRemediation::Client::MissingConfiguration
       end
     end
 
@@ -44,7 +44,7 @@ RSpec.describe PDFRemediation::Client do
       before { allow(connection).to receive(:post).and_raise Faraday::Error }
 
       it 'raises an error' do
-        expect { client.request_remediation }.to raise_error PDFRemediation::Client::ConnectionError
+        expect { client.request_remediation }.to raise_error PdfRemediation::Client::ConnectionError
       end
     end
 
@@ -63,7 +63,7 @@ RSpec.describe PDFRemediation::Client do
       before { allow(response).to receive(:status).and_return 401 }
 
       it 'raises an error' do
-        expect { client.request_remediation }.to raise_error PDFRemediation::Client::InvalidAPIKey
+        expect { client.request_remediation }.to raise_error PdfRemediation::Client::InvalidAPIKey
       end
     end
 
@@ -71,7 +71,7 @@ RSpec.describe PDFRemediation::Client do
       before { allow(response).to receive(:status).and_return 422 }
 
       it 'raises an error' do
-        expect { client.request_remediation }.to raise_error PDFRemediation::Client::InvalidFileURL
+        expect { client.request_remediation }.to raise_error PdfRemediation::Client::InvalidFileURL
       end
     end
   end

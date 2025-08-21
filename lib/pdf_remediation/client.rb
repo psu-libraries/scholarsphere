@@ -2,7 +2,7 @@
 
 require 'faraday'
 
-module PDFRemediation
+module PdfRemediation
   class Client
     class MissingConfiguration < RuntimeError; end
     class InvalidAPIKey < RuntimeError; end
