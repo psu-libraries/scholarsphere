@@ -94,6 +94,8 @@ jobs:
       POSTGRES_DB: scholarsphere
       POSTGRES_HOST: 127.0.0.1
       RMD_HOST: https://metadata.libraries.psu.edu
+      PDF_REMEDIATION_ENDPOINT: endpoint
+      PDF_REMEDIATION_API_KEY: api-key
     steps:
     - browser-tools/install-browser-tools
     - checkout
