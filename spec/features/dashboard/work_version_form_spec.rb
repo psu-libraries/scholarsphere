@@ -1600,6 +1600,30 @@ RSpec.describe 'Publishing a work', with_user: :user do
       expect(work_version.rights).to eq(incorrect_rights)
       expect(work_version.visibility).to eq(Permissions::Visibility::OPEN)
     end
+
+    it 'allows an administrator to update the given name, surname, email and display name of a creator' do
+      visit dashboard_form_publish_path(work_version)
+
+      # Make sure that the old information should be random Faker values
+      expect(find_by_id('work_version_creators_attributes_0_display_name').value).not_to eq('Grant Allen')
+      expect(find_by_id('work_version_creators_attributes_0_given_name').value).not_to eq('Grant')
+      expect(find_by_id('work_version_creators_attributes_0_surname').value).not_to eq('Allen')
+      expect(find_by_id('work_version_creators_attributes_0_email').value).not_to eq('grant@test.com')
+
+      # Fill in new information
+      fill_in id: 'work_version_creators_attributes_0_display_name', with: 'Grant Allen'
+      fill_in id: 'work_version_creators_attributes_0_given_name', with: 'Grant'
+      fill_in id: 'work_version_creators_attributes_0_surname', with: 'Allen'
+      fill_in id: 'work_version_creators_attributes_0_email', with: 'grant@test.com'
+      FeatureHelpers::DashboardForm.finish
+
+      # Go back to see if changes saved
+      visit dashboard_form_publish_path(work_version)
+      expect(find_by_id('work_version_creators_attributes_0_display_name').value).to eq('Grant Allen')
+      expect(find_by_id('work_version_creators_attributes_0_given_name').value).to eq('Grant')
+      expect(find_by_id('work_version_creators_attributes_0_surname').value).to eq('Allen')
+      expect(find_by_id('work_version_creators_attributes_0_email').value).to eq('grant@test.com')
+    end
   end
 
   describe 'Deleting a version' do
