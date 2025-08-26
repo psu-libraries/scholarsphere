@@ -45,7 +45,7 @@ RSpec.describe 'Autocompleting WorkVersion metadata with data from RMD', :vcr, w
               expect(find_by_id('work_version_publisher').value).to eq 'An Academic Journal'
               expect(find_by_id('work_version_identifier').value).to eq 'https://doi.org/10.1038/abcdefg1234567'
               expect(find_by_id('work_version_identifier').readonly?).to eq true
-              expect(find_by_id('work_version_identifier').find(:xpath, './../..').native.attribute_nodes.first.value).to eq 'mb-1'
+              expect(find_by_id('work_version_identifier').find(:xpath, './../..').native.attribute_nodes.first.value).to eq 'mb-2'
               keywords = find_all('#work_version_keyword')
               expect(keywords[0].value).to eq 'A Topic'
               expect(keywords[1].value).to eq 'Another Topic'
