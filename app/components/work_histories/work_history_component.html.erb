@@ -1,6 +1,6 @@
 <div class="version-timeline">
   <% changes_by_work_version.each do |work_version, changes| %>
-    <div class="col-md-6 col-lg-4 col-xxl-3 version-timeline__version" style="padding-left: 30px;padding-right: 30px;">
+    <div class="col-md-6 col-lg-4 col-xxl-3 version-timeline__version">
       <h3 class="h4">
         <%= work_version.display_version_long %>
         <%= render WorkVersions::StatusBadgeComponent.new(work_version: work_version) %>

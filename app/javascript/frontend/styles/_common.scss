@@ -1540,6 +1540,35 @@ h4,
   background-color: $white;
 }
 
+.border {
+  &.border-danger {
+    &.rounded {
+      &.p-3 {
+        border-radius: .3rem !important;
+        border-width: 1px !important;
+      }
+    }
+  }
+}
+
+.col-md-6 {
+  &.col-lg-4 {
+    &.col-xxl-3 {
+      &.version-timeline__version {
+        padding-left: 30px;
+        padding-right: 30px;
+      }
+    }
+  }
+}
+
+.btn-close {
+  &.float-end {
+    width: .25rem;
+    height: .25rem;
+  }
+}
+
 form.edit-work-visibility .label {
   display: none;
 }
