@@ -2,7 +2,7 @@
   <div class="surface ft-work">
     <h3 class="ellipsis"><%= link_to work_version.title, resource_path(work_version.uuid) %></h3>
     <div class="row">
-      <div class="thumbnail-card-index ms-3">
+      <div class="thumbnail-card-index ms-4">
         <%= render ThumbnailComponent.new(resource: work_version, featured: true) %>
       </div>
       <%= render FeaturedWorkMetadataComponent.new(work_version: work_version) %>
