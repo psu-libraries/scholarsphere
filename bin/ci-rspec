@@ -40,15 +40,15 @@ if [ ! -d ".git" ]; then
   export GIT_BRANCH
 fi
 
-if [ ! -f ${REPORTER_BIN} ]; then
-  echo "Downloading Code Climate reporting tool"
-  if [[ `uname` == *"Darwin"* ]]; then
-    wget -q https://codeclimate.com/downloads/test-reporter/test-reporter-latest-darwin-amd64 -O ${REPORTER_BIN}
-  else
-    wget -q https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 -O ${REPORTER_BIN}
-  fi
-  chmod 755 ${REPORTER_BIN}
-fi
+#if [ ! -f ${REPORTER_BIN} ]; then
+#  echo "Downloading Code Climate reporting tool"
+#  if [[ `uname` == *"Darwin"* ]]; then
+#    wget -q https://codeclimate.com/downloads/test-reporter/test-reporter-latest-darwin-amd64 -O ${REPORTER_BIN}
+#  else
+#    wget -q https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 -O ${REPORTER_BIN}
+#  fi
+#  chmod 755 ${REPORTER_BIN}
+#fi
 
 echo "Running RSpec with coverage reporting"
 ./${REPORTER_BIN} before-build
