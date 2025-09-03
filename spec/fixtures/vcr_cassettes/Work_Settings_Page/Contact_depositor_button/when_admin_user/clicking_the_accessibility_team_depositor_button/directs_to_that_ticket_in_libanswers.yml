@@ -5,10 +5,10 @@ http_interactions:
     uri: https://psu.libanswers.com/api/1.1/oauth/token
     body:
       encoding: UTF-8
-      string: client_id=779APP-001&client_secret=abcdefg12345&grant_type=client_credentials
+      string: client_id=<REDACTED>&client_secret=<REDACTED>&grant_type=client_credentials
     headers:
       User-Agent:
-      - Faraday v1.10.3
+      - Faraday v2.12.2
       Content-Type:
       - application/x-www-form-urlencoded
       Accept-Encoding:
@@ -23,7 +23,7 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Thu, 24 Oct 2024 19:42:43 GMT
+      - Tue, 02 Sep 2025 14:12:06 GMT
       Content-Type:
       - application/json
       Transfer-Encoding:
@@ -39,7 +39,7 @@ http_interactions:
       Pragma:
       - no-cache
       X-Backend-Server:
-      - libanswers-us-3.springyaws.com
+      - libanswers-us-5.springyaws.com
       X-Content-Type-Options:
       - nosniff
       Strict-Transport-Security:
@@ -48,21 +48,22 @@ http_interactions:
       - upgrade-insecure-requests
     body:
       encoding: ASCII-8BIT
-      string: '{"access_token":"f16f0ab5ac6e8edc9ef244fa807a9ceee10ec538","expires_in":86400,"token_type":"Bearer","scope":"app_view
-        app_create app_update"}'
-  recorded_at: Thu, 24 Oct 2024 19:42:43 GMT
+      base64_string: |
+        
+  recorded_at: Tue, 02 Sep 2025 14:12:06 GMT
 - request:
     method: post
     uri: https://psu.libanswers.com/api/1.1/ticket/create
     body:
       encoding: UTF-8
-      string: 'quid=2590&pquestion=ScholarSphere Deposit Accessibility Curation: Eius:
-        "culpa, nobis, quia; 36th beatae''s error''s consequatur"&pname=Mae Lowe&pemail=WkK034@psu.edu'
+      string: 'quid=2590&pquestion=ScholarSphere Deposit Accessibility Curation: Et
+        iste dolore enim: "libero, ut, quam; 41st eveniet''s quis''s sed"&pname=Sharan
+        Franecki&pemail=GxM039@psu.edu'
     headers:
       Authorization:
-      - Bearer f16f0ab5ac6e8edc9ef244fa807a9ceee10ec538
+      - "<AUTH>"
       User-Agent:
-      - Faraday v1.10.3
+      - Faraday v2.12.2
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
@@ -75,7 +76,7 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Thu, 24 Oct 2024 19:42:43 GMT
+      - Tue, 02 Sep 2025 14:12:07 GMT
       Content-Type:
       - application/json
       Transfer-Encoding:
@@ -85,7 +86,7 @@ http_interactions:
       Vary:
       - Accept-Encoding
       X-Backend-Server:
-      - libanswers-us-4.springyaws.com
+      - libanswers-us-1.springyaws.com
       X-Content-Type-Options:
       - nosniff
       Strict-Transport-Security:
@@ -94,6 +95,8 @@ http_interactions:
       - upgrade-insecure-requests
     body:
       encoding: ASCII-8BIT
-      string: '{"isShared":false,"ticketUrl":"\/admin\/ticket?qid=14782516","claimed":0}'
-  recorded_at: Thu, 24 Oct 2024 19:42:43 GMT
-recorded_with: VCR 6.1.0
+      base64_string: |
+        eyJpc1NoYXJlZCI6ZmFsc2UsInRpY2tldFVybCI6IlwvYWRtaW5cL3RpY2tl
+        dD9xaWQ9MTY2NzMwMzAiLCJjbGFpbWVkIjowfQ==
+  recorded_at: Tue, 02 Sep 2025 14:12:07 GMT
+recorded_with: VCR 6.3.1
