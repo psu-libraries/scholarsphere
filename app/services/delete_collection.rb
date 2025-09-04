@@ -40,6 +40,8 @@ class DeleteCollection
   private
 
     def collection
-      @collection ||= Collection.find_by(uuid: uuid)
+      return @collection if defined?(@collection)
+
+      @collection = Collection.find_by(uuid: uuid)
     end
 end

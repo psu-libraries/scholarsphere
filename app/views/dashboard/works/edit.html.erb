@@ -182,7 +182,7 @@
           <div>
             <p>
               <%= t('dashboard.shared.curator_form.audit_heading') %>
-              <% curators = @work.curatorships.order('created_at DESC') %>
+              <% curators = @work.curatorships.order(created_at: :desc) %>
               <% curators&.each do |curator| %>
                 <li>
                   <%= curator.access_id %> - <%= curator.created_at.strftime('%m/%d/%Y %H:%M') %>

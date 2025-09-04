@@ -8,6 +8,7 @@ RSpec.describe EdtfDateValidator do
   before do
     stub_const('EdtfTestModel', Struct.new(:date_field) {
       include ActiveModel::Validations
+
       validates :date_field, edtf_date: true
     })
   end

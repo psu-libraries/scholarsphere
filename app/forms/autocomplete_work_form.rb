@@ -2,6 +2,7 @@
 
 class AutocompleteWorkForm
   include ActiveModel::Model
+
   attr_accessor :doi
 
   validate :doi, :valid_doi?

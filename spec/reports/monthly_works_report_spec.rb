@@ -88,7 +88,7 @@ RSpec.describe MonthlyWorksReport do
 
       # Test that it generates one row for each work
       # Note that order is not guaranteed with `find_each` or `find_in_batches`
-      expect(yielded_rows.map { |r| r[0] })
+      expect(yielded_rows.pluck(0))
         .to contain_exactly(work_published.uuid, work_published_and_draft.uuid, work_draft_only.uuid)
 
       work_published_row = yielded_rows.find { |r| r[0] == work_published.uuid }
