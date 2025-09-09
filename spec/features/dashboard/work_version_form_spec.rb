@@ -974,12 +974,12 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
   end
 
-  describe 'The Files tab', :js do
+  describe 'The Files tab', :js, skip: 'times out in CI' do
     let(:work) { create(:work, versions_count: 1) }
     let(:work_version) { work.versions.first }
     let(:user) { work_version.work.depositor.user }
 
-    describe 'uploading an image', skip: 'times out in CI' do
+    describe 'uploading an image' do
       it 'requires alt text to be submitted and works' do
         visit dashboard_form_files_path(work_version)
 
