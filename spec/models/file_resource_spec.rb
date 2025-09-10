@@ -229,6 +229,7 @@ RSpec.describe FileResource do
         updated_at_dtsi
         uuid_ssi
         thumbnail_url_ssi
+        remediation_job_uuid_tesim
       )
     end
 
