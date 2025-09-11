@@ -45,6 +45,7 @@ Metrics/CyclomaticComplexity:
 Metrics/ClassLength:
   Exclude:
     - 'app/models/work_version.rb'
+    - 'app/services/merge_collection.rb'
 
 Rails/DynamicFindBy:
   Exclude:
@@ -161,3 +162,9 @@ Layout/LineLength:
 RSpec/ReceiveMessages:
   Exclude:
     - 'spec/decorators/resource_decorator_spec.rb'
+
+Naming/PredicateMethod:
+  Enabled: false
+
+Capybara/NegationMatcherAfterVisit:
+  Enabled: false
