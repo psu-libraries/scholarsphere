@@ -553,6 +553,7 @@ RSpec.describe Work do
           doi_tesim
           draft_curation_requested_tesim
           accessibility_remediation_requested_tesim
+          auto_remediated_version_tesim
           edit_groups_ssim
           edit_users_ssim
           embargoed_until_dtsi

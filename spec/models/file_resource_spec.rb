@@ -15,6 +15,7 @@ RSpec.describe FileResource do
 
   describe 'table' do
     it { is_expected.to have_db_column(:file_data).of_type(:jsonb) }
+    it { is_expected.to have_db_column(:remediation_job_uuid).of_type(:string) }
   end
 
   describe 'factories' do
@@ -228,6 +229,7 @@ RSpec.describe FileResource do
         updated_at_dtsi
         uuid_ssi
         thumbnail_url_ssi
+        remediation_job_uuid_tesim
       )
     end
 
