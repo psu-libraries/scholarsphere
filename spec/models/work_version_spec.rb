@@ -756,7 +756,7 @@ RSpec.describe WorkVersion do
       let(:work) { create(:work, has_draft: true) }
 
       before do
-        work.versions.last.file_resources << (create(:file_resource))
+        work.versions.last.file_resources << create(:file_resource)
         work.versions.last.save
       end
 
@@ -780,7 +780,7 @@ RSpec.describe WorkVersion do
       let(:work) { create(:work, versions_count: 1, has_draft: false) }
 
       before do
-        work.versions.last.file_resources << (create(:file_resource))
+        work.versions.last.file_resources << create(:file_resource)
         work.versions.last.save
       end
 

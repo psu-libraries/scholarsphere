@@ -13,6 +13,7 @@ RSpec.describe AllDois do
       end
 
       include AllDois
+
       fields_with_dois :doi, :identifier, :other
 
       def doi

@@ -53,7 +53,7 @@ RSpec.describe 'Searching discoverable resources', :inline_jobs do
       visit search_catalog_path(format: :json)
 
       expect(
-        results['data'].map { |record| record['id'] }
+        results['data'].pluck('id')
       ).to contain_exactly(
         public_work.uuid,
         previous_embargoed_work.uuid,

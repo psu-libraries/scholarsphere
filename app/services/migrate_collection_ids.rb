@@ -50,11 +50,15 @@ class MigrateCollectionIds
   private
 
     def collection
-      @collection ||= Collection.find_by(uuid: collection_uuid)
+      return @collection if defined?(@collection)
+
+      @collection = Collection.find_by(uuid: collection_uuid)
     end
 
     def work
-      @work ||= Work.find_by(uuid: work_uuid)
+      return @work if defined?(@work)
+
+      @work = Work.find_by(uuid: work_uuid)
     end
 
     def migrate_legacy_identifiers(legacy_ids)

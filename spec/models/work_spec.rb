@@ -719,7 +719,7 @@ RSpec.describe Work do
 
     context "when work's latest_published_version has multiple file_resources with thumbnail urls" do
       before do
-        work.latest_published_version.file_resources << (create(:file_resource))
+        work.latest_published_version.file_resources << create(:file_resource)
         work.save
         allow(mock_attacher).to receive(:url).with(:thumbnail).and_return 'url.com/path/file'
       end

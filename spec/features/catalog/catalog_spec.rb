@@ -50,9 +50,7 @@ RSpec.describe 'Blacklight catalog page', :inline_jobs do
           sort: 'deposited_at_dtsi desc',
           fl: ['title_tesim']
         }
-      )['response']['docs'].map do |doc|
-      doc['title_tesim']
-    end.flatten
+      )['response']['docs'].pluck('title_tesim').flatten
   end
 
   before do

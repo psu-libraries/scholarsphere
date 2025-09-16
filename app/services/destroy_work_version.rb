@@ -5,7 +5,7 @@ class DestroyWorkVersion
     work_version.force_destroy = force
     parent_work = work_version.work
 
-    if parent_work.versions.count == 1
+    if parent_work.versions.one?
       WorkVersion.transaction do
         work_version.destroy!
         parent_work.destroy!
