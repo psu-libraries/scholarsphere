@@ -121,8 +121,7 @@ module FeatureHelpers
 
       # @note For some reason there are two 'files[]' hidden inputs, but it's only happens in the test environment.
       page
-        .all('.uppy-Dashboard-input', visible: false)
-        .first
+        .first('.uppy-Dashboard-input', visible: false)
         .attach_file(file_path)
 
       # Wait for alt text form
@@ -148,8 +147,7 @@ module FeatureHelpers
 
       # @note For some reason there are two 'files[]' hidden inputs, but it's only happens in the test environment.
       page
-        .all('.uppy-Dashboard-input', visible: false)
-        .first
+        .first('.uppy-Dashboard-input', visible: false)
         .attach_file(file_path)
 
       # Wait for file to finish uploading

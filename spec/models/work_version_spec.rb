@@ -24,6 +24,7 @@ RSpec.describe WorkVersion do
     it { is_expected.to have_db_column(:published_at).of_type(:datetime) }
     it { is_expected.to have_db_column(:withdrawn_at).of_type(:datetime) }
     it { is_expected.to have_db_column(:removed_at).of_type(:datetime) }
+    it { is_expected.to have_db_column(:auto_remediated_version).of_type(:boolean) }
     it { is_expected.to have_jsonb_accessor(:title).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:subtitle).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:version_name).of_type(:string) }
@@ -755,7 +756,7 @@ RSpec.describe WorkVersion do
       let(:work) { create(:work, has_draft: true) }
 
       before do
-        work.versions.last.file_resources << (create(:file_resource))
+        work.versions.last.file_resources << create(:file_resource)
         work.versions.last.save
       end
 
@@ -779,7 +780,7 @@ RSpec.describe WorkVersion do
       let(:work) { create(:work, versions_count: 1, has_draft: false) }
 
       before do
-        work.versions.last.file_resources << (create(:file_resource))
+        work.versions.last.file_resources << create(:file_resource)
         work.versions.last.save
       end
 

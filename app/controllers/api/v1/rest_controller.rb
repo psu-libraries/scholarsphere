@@ -41,7 +41,9 @@ module Api
         end
 
         def api_token
-          @api_token ||= ApiToken.find_by(token: api_key_header)
+          return @api_token if defined?(@api_token)
+
+          @api_token = ApiToken.find_by(token: api_key_header)
         end
 
         def api_key_header

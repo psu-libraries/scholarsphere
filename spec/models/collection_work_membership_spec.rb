@@ -77,7 +77,7 @@ RSpec.describe CollectionWorkMembership do
       let(:work) { create(:work) }
 
       before do
-        collection.works << (create(:work))
+        collection.works << create(:work)
         collection.save
       end
 

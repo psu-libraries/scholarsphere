@@ -103,7 +103,7 @@ class AllWorkVersionsReport
     def work_versions
       WorkVersion
         .includes(:work)
-        .order('work_id, id asc')
+        .order(:work_id, :id)
     end
 
     # Returns a hash of { work_version_id => num_views }

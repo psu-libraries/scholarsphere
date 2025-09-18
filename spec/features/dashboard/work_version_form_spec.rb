@@ -990,8 +990,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         # @note For some reason there are two 'files[]' hidden inputs, but it's only happens in the test environment.
         page
-          .all('.uppy-Dashboard-input', visible: false)
-          .first
+          .first('.uppy-Dashboard-input', visible: false)
           .attach_file(Rails.root.join('spec', 'fixtures', 'image.png'))
 
         # Wait for alt text form
@@ -1036,8 +1035,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         # Try to re-upload the same file again
         page
-          .all('.uppy-Dashboard-input', visible: false)
-          .first
+          .first('.uppy-Dashboard-input', visible: false)
           .attach_file(Rails.root.join('spec', 'fixtures', 'image.png'))
 
         within('.uppy-Informer') do
@@ -1078,8 +1076,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         # Try to re-upload the same file again
         page
-          .all('.uppy-Dashboard-input', visible: false)
-          .first
+          .first('.uppy-Dashboard-input', visible: false)
           .attach_file(Rails.root.join('spec', 'fixtures', 'ipsum.pdf'))
 
         within('.uppy-Informer') do

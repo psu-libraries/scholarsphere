@@ -8,6 +8,7 @@ RSpec.describe DataciteDoiValidator do
   before do
     stub_const('DataciteDoiTestModel', Struct.new(:doi_field) {
       include ActiveModel::Validations
+
       validates :doi_field, datacite_doi: true
     })
   end

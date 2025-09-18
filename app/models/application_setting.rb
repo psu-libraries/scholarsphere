@@ -10,7 +10,7 @@ class ApplicationSetting < ApplicationRecord
   private
 
     def enforce_singleton
-      return if self.class.count.zero?
+      return if self.class.none?
 
       raise ArgumentError, "#{self.class} is a singleton"
     end
