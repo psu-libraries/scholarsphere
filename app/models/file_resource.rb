@@ -95,6 +95,10 @@ class FileResource < ApplicationRecord
     file.mime_type&.starts_with?('image/')
   end
 
+  def pdf?
+    file.mime_type == PDF_MIME_TYPE
+  end
+
   private
 
     def client
