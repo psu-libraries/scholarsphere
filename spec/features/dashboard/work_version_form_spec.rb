@@ -974,7 +974,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
   end
 
-  describe 'The Files tab', :js, skip: 'times out in CI' do
+  describe 'The Files tab', :js do
     let(:work) { create(:work, versions_count: 1) }
     let(:work_version) { work.versions.first }
     let(:user) { work_version.work.depositor.user }
