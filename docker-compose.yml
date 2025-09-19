@@ -25,6 +25,10 @@ x-web_env: &web_env
       SOLR_HOST: solr
       SOLR_COLLECTION: scholarsphere
       POSTGRES_HOST: db
+      AZURE_GRAPH_GROUPS: ${AZURE_GRAPH_GROUPS}
+      PSU_AFFILIATED_GROUP: ${PSU_AFFILIATED_GROUP}
+      PDF_REMEDIATION_ENDPOINT: ${PDF_REMEDIATION_ENDPOINT}
+      PDF_REMEDIATION_API_KEY: ${PDF_REMEDIATION_API_KEY}
 services:
   redis:
     image: redis:6.2.6
