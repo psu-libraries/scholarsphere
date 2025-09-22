@@ -102,9 +102,9 @@ jobs:
     - restore_cache:
         keys:
           - bundle1-{{ checksum "Gemfile.lock" }}
-    # - restore_cache:
-    #     keys:
-    #       - yarn1-{{ checksum "yarn.lock" }}
+    - restore_cache:
+        keys:
+          - yarn1-{{ checksum "yarn.lock" }}
     - run:
         name: "Update Node.js and yarn"
         command: |
