@@ -111,6 +111,8 @@ jobs:
           node -v
           yarn -v
           curl -sSL "https://nodejs.org/dist/v22.9.0/node-v22.9.0-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v22.9.0-linux-x64/bin/node
+          sudo corepack enable
+          sudo corepack prepare yarn@1.22.22 --activate
           node -v
           yarn -v
     - run:
