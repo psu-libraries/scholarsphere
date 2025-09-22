@@ -106,10 +106,11 @@ jobs:
         keys:
           - yarn1-{{ checksum "yarn.lock" }}
     - run:
-        name: "Update Node.js and npm"
+        name: "Update Node.js and yarn"
         command: |
           curl -sSL "https://nodejs.org/dist/v22.9.0/node-v22.9.0-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v22.9.0-linux-x64/bin/node
-          curl -L https://npmjs.com/install.sh | sudo bash
+          sudo corepack enable
+          sudo corepack prepare yarn@1.22.22 --activate
     - run:
         name: "Install dependencies for thumbnails"
         command: |
