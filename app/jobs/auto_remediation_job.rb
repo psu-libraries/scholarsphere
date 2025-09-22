@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'pdf_remediation/client'
+
 class AutoRemediationJob < ApplicationJob
   queue_as :auto_remediation
 
