@@ -29,7 +29,7 @@ RSpec.describe AutoRemediationJob do
         allow(client).to receive(:request_remediation).and_raise(StandardError, error_message)
       end
 
-      it 'creates or updates the AccessibilityCheckResult with the error message and raises the error' do
+      it 'raises the error and does not assign remediation_job_uuid' do
         expect {
           described_class.perform_now(resource.id)
         }.to raise_error(StandardError, error_message)
