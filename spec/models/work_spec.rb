@@ -554,7 +554,7 @@ RSpec.describe Work do
           draft_curation_requested_tesim
           accessibility_remediation_requested_tesim
           auto_remediated_version_tesim
-          remediation_started_at_dtsi
+          auto_remediation_started_at_dtsi
           edit_groups_ssim
           edit_users_ssim
           embargoed_until_dtsi

@@ -275,7 +275,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_16_154921) do
     t.boolean "mint_doi_requested"
     t.boolean "accessibility_remediation_requested"
     t.boolean "auto_remediated_version"
-    t.datetime "remediation_started_at"
+    t.datetime "auto_remediation_started_at"
     t.index ["external_app_id"], name: "index_work_versions_on_external_app_id"
     t.index ["work_id", "version_number"], name: "index_work_versions_on_work_id_and_version_number", unique: true
     t.index ["work_id"], name: "index_work_versions_on_work_id"

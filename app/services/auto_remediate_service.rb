@@ -10,7 +10,7 @@ class AutoRemediateService
   end
 
   def call
-    work_version.update(remediation_started_at: Time.current)
+    work_version.update(auto_remediation_started_at: Time.current)
     pdfs = work_version.file_resources.where("file_resources.file_data->'metadata'->>'mime_type' = ?", 'application/pdf')
     pdfs.each do |pdf|
       AutoRemediationJob.perform_later(pdf.id) if pdf.remediation_job_uuid.blank?
@@ -19,7 +19,7 @@ class AutoRemediateService
 
   def able_to_auto_remediate?
     work_version.latest_published_version? &&
-      work_version.remediation_started_at.nil? &&
+      work_version.auto_remediation_started_at.nil? &&
       !work_version.auto_remediated_version &&
       download_is_pdf &&
       !admin

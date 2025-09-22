@@ -58,7 +58,7 @@ RSpec.describe AutoRemediateService do
       end
 
       context 'when remediation has been started' do
-        let(:work_version) { create(:work_version, :published, remediation_started_at: 1.hour.ago) }
+        let(:work_version) { create(:work_version, :published, auto_remediation_started_at: 1.hour.ago) }
 
         it 'returns false' do
           expect(described_class.new(work_version.id, false, true).able_to_auto_remediate?).to be false
