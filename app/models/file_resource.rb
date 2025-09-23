@@ -28,9 +28,13 @@ class FileResource < ApplicationRecord
   before_destroy :cannot_be_deleted_if_linked_to_thumbnail_upload
   after_commit :perform_update_index, on: [:create, :update]
 
+  scope :is_pdf, -> {
+    where("file_data->'metadata'->>'mime_type' = ?", PDF_MIME_TYPE)
+  }
+
   scope :needs_accessibility_check, -> {
-    left_joins(:accessibility_check_result)
-      .where("file_data->'metadata'->>'mime_type' = ? AND accessibility_check_results.id IS NULL", PDF_MIME_TYPE)
+    where.missing(:accessibility_check_result)
+      .is_pdf
   }
 
   def self.reindex_all(relation: all, async: false)
@@ -93,6 +97,10 @@ class FileResource < ApplicationRecord
 
   def image?
     file.mime_type&.starts_with?('image/')
+  end
+
+  def pdf?
+    file.mime_type == PDF_MIME_TYPE
   end
 
   private

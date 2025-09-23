@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_09_10_131342) do
+ActiveRecord::Schema[7.2].define(version: 2025_09_16_154921) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -275,6 +275,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_10_131342) do
     t.boolean "mint_doi_requested"
     t.boolean "accessibility_remediation_requested"
     t.boolean "auto_remediated_version"
+    t.datetime "auto_remediation_started_at"
     t.index ["external_app_id"], name: "index_work_versions_on_external_app_id"
     t.index ["work_id", "version_number"], name: "index_work_versions_on_work_id_and_version_number", unique: true
     t.index ["work_id"], name: "index_work_versions_on_work_id"
