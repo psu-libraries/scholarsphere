@@ -177,6 +177,8 @@ Rails.application.routes.draw do
     end
   end
 
+  post 'auto_remediation_webhooks', to: 'auto_remediation_webhooks#create'
+
   get '/404', to: 'errors#not_found'
   get '/401', to: 'errors#not_found'
   get '/500', to: 'errors#server_error'
