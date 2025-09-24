@@ -28,7 +28,7 @@ class AutoRemediationWebhooksController < ApplicationController
   private
 
     def handle_success(record)
-      AutoRemediatedWorkVersionBuilder.new(record, replacement_url).call
+      AutoRemediationWorkVersionBuilder.new(record, replacement_url).call
       render json: { message: 'Update successful' }, status: :ok
     rescue => e
       render json: { error: e.message }, status: :internal_server_error
@@ -47,8 +47,8 @@ class AutoRemediationWebhooksController < ApplicationController
     end
 
     def authenticate_request
-      raise 'PDF Accessibility API webhook secret not configured.' if ENV['PDF_ACCESSIBILITY_WEBHOOK_SECRET'].blank?
+      raise 'PDF_REMEDIATION_WEBHOOK_SECRET not configured.' if ENV['PDF_REMEDIATION_WEBHOOK_SECRET'].blank?
 
-      head(:unauthorized) unless request.headers['X-API-KEY'] == ENV['PDF_ACCESSIBILITY_WEBHOOK_SECRET']
+      head(:unauthorized) unless request.headers['X-API-KEY'] == ENV['PDF_REMEDIATION_WEBHOOK_SECRET']
     end
 end
