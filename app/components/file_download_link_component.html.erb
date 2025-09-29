@@ -13,7 +13,12 @@
   <%= link_to download_path(download: true),
               title: download_title,
               class: 'matomo_download',
-              'aria-label' => aria_label(download: true) do %>
+              'aria-label' => aria_label(download: true),
+              data: {
+                controller: "popup",
+                action: "click->popup#show",
+                popup_show_alert: remediation_alert?
+              } do %>
     <%= download_title %>
   <% end %>
 </h3>
