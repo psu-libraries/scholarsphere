@@ -108,7 +108,7 @@ class FileResource < ApplicationRecord
   end
 
   def latest_auto_remediated_work_version_after(version)
-    work_versions.where("id > ? AND auto_remediated_version = ?", version.id, true).last
+    work_versions.where('id > ? AND auto_remediated_version = ?', version.id, true).last
   end
 
   private

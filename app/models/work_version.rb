@@ -394,7 +394,7 @@ class WorkVersion < ApplicationRecord
   end
 
   def has_remaining_auto_remediation_jobs?
-    file_resources.where('remediation_job_uuid IS NOT NULL AND auto_remediated_version = ?', false).exists?
+    file_resources.exists?(['remediation_job_uuid IS NOT NULL AND auto_remediated_version = ?', false])
   end
 
   delegate :deposited_at,

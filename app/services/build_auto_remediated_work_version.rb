@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'down'
 
 class BuildAutoRemediatedWorkVersion
@@ -6,16 +8,16 @@ class BuildAutoRemediatedWorkVersion
 
     ActiveRecord::Base.transaction do
       new_work_version = file_resource.latest_auto_remediated_work_version_after(wv_being_remediated) ||
-                    begin
-                      v = BuildNewWorkVersion.call(wv_being_remediated)
-                      v.update(auto_remediated_version: true)
-                      v
-                    end
+        begin
+          v = BuildNewWorkVersion.call(wv_being_remediated)
+          v.update(auto_remediated_version: true)
+          v
+        end
 
       replacement_tempfile = Down.download(remediated_file_url)
       fvm_to_destroy = new_work_version.file_version_memberships
-                                       .find_by(file_resource: file_resource)
-      fvm_to_destroy.destroy! if fvm_to_destroy
+        .find_by(file_resource: file_resource)
+      fvm_to_destroy&.destroy!
 
       new_work_version.file_resources.create!(
         file: replacement_tempfile,
@@ -27,6 +29,7 @@ class BuildAutoRemediatedWorkVersion
       else
         new_work_version.publish!
       end
+
       new_work_version
     end
   end

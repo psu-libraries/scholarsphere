@@ -10,8 +10,8 @@ class AutoRemediationWebhooksController < ApplicationController
 
     record = FileResource.find_by(remediation_job_uuid: job_data[:uuid])
 
-    # In the extremely rare case that multiple remediation jobs are kicked off 
-    # for the same file, the older jobs should fail here since the 
+    # In the extremely rare case that multiple remediation jobs are kicked off
+    # for the same file, the older jobs should fail here since the
     # remediation_job_uuid will no longer be associated with the file.
     unless record
       return render json: { error: 'Record not found' }, status: :not_found
@@ -33,7 +33,7 @@ class AutoRemediationWebhooksController < ApplicationController
     def handle_success(record)
       BuildAutoRemediatedWorkVersion.call(record, replacement_url)
       render json: { message: 'Update successful' }, status: :ok
-    rescue => e
+    rescue StandardError => e
       render json: { error: e.message }, status: :internal_server_error
     end
 
