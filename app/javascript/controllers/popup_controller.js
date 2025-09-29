@@ -1,19 +1,25 @@
 import { Controller } from "stimulus"
 
 export default class extends Controller {
-  connect() {
-    console.log("popup controller connected", this.element.dataset)
-  }
-
   show(event) {
     event.preventDefault()
 
     const showAlert = this.data.get("showAlert") === "true"
 
     if (showAlert) {
-      alert("Auto-remediation is starting — click OK to continue download")
-    }
+      const modalEl = document.getElementById('remediationPopup')
+      const modal = new window.bootstrap.Modal(modalEl)
 
-    window.location.href = this.element.href
+      modal.show()
+
+      modalEl.querySelector("#modalOkBtn").addEventListener("click", () => {
+        modal.hide()
+        window.location.href = this.element.href
+      }, { once: true })
+
+      modalEl.addEventListener("hidden.bs.modal", () => modalEl.remove())
+    } else {
+      window.location.href = this.element.href
+    }
   }
 }
