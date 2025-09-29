@@ -42,7 +42,6 @@ class FileDownloadLinkComponent < ViewComponent::Base
            name: @file_version_membership.title)
   end
 
-  #add method for whether popup should be triggered
   def remediation_alert?
     remediation_service = AutoRemediateService.new(work_version_id, helpers.current_user.admin?, pdf?)
     remediation_service.able_to_auto_remediate?
@@ -62,7 +61,7 @@ class FileDownloadLinkComponent < ViewComponent::Base
       @file_version_membership.work_version.uuid
     end
 
-    def work_version_id 
+    def work_version_id
       @file_version_membership.work_version.id
     end
 end

@@ -31,6 +31,7 @@ linters:
       - '*app/views/resources/_work_version.html.erb'
       - '*app/views/resources/_collection.html.erb'
       - '*app/views/shared/_work_version_files.html.erb'
+      - '*app/views/shared/_remediation_popup.html.erb'
       - '*test/*'
   RightTrim:
     enabled: true
