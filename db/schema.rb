@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_09_16_154921) do
+ActiveRecord::Schema[7.2].define(version: 2025_09_29_182658) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -154,6 +154,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_16_154921) do
     t.datetime "deposited_at", precision: nil
     t.uuid "uuid", default: -> { "uuid_generate_v4()" }
     t.string "remediation_job_uuid"
+    t.boolean "auto_remediated_version", default: false, null: false
   end
 
   create_table "file_version_memberships", force: :cascade do |t|
