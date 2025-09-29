@@ -14,11 +14,11 @@ class BuildAutoRemediatedWorkVersion
           v
         end
 
-      replacement_tempfile = Down.download(remediated_file_url)
       fvm_to_destroy = new_work_version.file_version_memberships
         .find_by(file_resource: file_resource)
       fvm_to_destroy&.destroy!
 
+      replacement_tempfile = Down.download(remediated_file_url)
       new_work_version.file_resources.create!(
         file: replacement_tempfile,
         auto_remediated_version: true
