@@ -1,0 +1,20 @@
+#remediationPopup {
+  .modal-dialog {
+    max-width: 80%;
+    width: 80%;
+    margin: 10% auto;
+  }
+
+  @media (min-width: 1200px) {
+    .modal-dialog {
+      max-width: 900px;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .modal-dialog {
+      margin: 5% auto;
+      width: 95%;
+    }
+  }
+}
