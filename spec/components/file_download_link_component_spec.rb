@@ -10,9 +10,16 @@ RSpec.describe FileDownloadLinkComponent, type: :component do
   let!(:file_version_membership) { create(:file_version_membership,
                                           file_resource: file_resource,
                                           work_version: resource) }
+  let(:user) { build(:user) }
+  let(:mock_controller) do
+    instance_double('ApplicationController', current_user: user, controller_name: 'application')
+  end
+  let(:mock_helpers) { double('helpers', current_user: user) }
 
   before do
     allow(file_resource).to receive(:file).and_return(file_double)
+    allow_any_instance_of(described_class).to receive(:controller).and_return(mock_controller)
+    allow_any_instance_of(described_class).to receive(:helpers).and_return(mock_helpers)
   end
 
   describe 'when the file is not an image' do
