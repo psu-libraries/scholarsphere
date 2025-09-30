@@ -53,4 +53,22 @@ RSpec.describe FileDownloadLinkComponent, type: :component do
       expect(page).to have_css("a[aria-label='View file: #{file_version_membership.title}, an image of Test text']")
     end
   end
+
+  context 'when the file is able to auto remediate' do
+    it 'shows the remediation alert' do
+      allow_any_instance_of(AutoRemediateService).to receive(:able_to_auto_remediate?).and_return(true)
+      render_inline(described_class.new(file_version_membership: file_version_membership))
+      expect(page).to have_css('[data-popup-show-alert="true"]')
+      expect(page).to have_css('#remediationPopup')
+    end
+  end
+
+  context 'when the file is not able to auto remediate' do
+    it 'does not show the remediation alert' do
+      allow_any_instance_of(AutoRemediateService).to receive(:able_to_auto_remediate?).and_return(false)
+      render_inline(described_class.new(file_version_membership: file_version_membership))
+      expect(page).to have_css('[data-popup-show-alert="false"]')
+      expect(page).to have_css('#remediationPopup')
+    end
+  end
 end
