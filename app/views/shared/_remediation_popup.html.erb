@@ -2,17 +2,16 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-body">
-        <p><strong>Accessible Version in Progress</strong></p>
-        <p>We’re generating an accessible version of this file to meet ADA Title II requirements. This process may take up to one hour. Please return later to access the accessible copy once it’s ready.</p>
+        <p><strong><%= t('remediation_popup.title') %></strong></p>
+        <p><%= t('remediation_popup.description') %></p>
         <ul>
-          <li><strong>What’s happening:</strong> An accessible PDF is generated using Adobe with AI used to generate alternative text (alt text) for images in the PDF.</li>
-          <li><strong>Quality check:</strong> The Libraries’ Adaptive Technology and Services team will review and correct the accessible version manually, but that review may occur after the file becomes available.</li>
+          <li><strong><%= t('remediation_popup.whats_happening_label') %></strong> <%= t('remediation_popup.whats_happening_text') %></li>
+          <li><strong><%= t('remediation_popup.quality_check_label') %></strong> <%= t('remediation_popup.quality_check_text') %></li>
         </ul>
         <br>
-        <p>For questions or to request a different format, contact the Adaptive Technology and Services team at <a href="mailto:ul-adaptive-tech-svcs@lists.psu.edu">ul-adaptive-tech-svcs@lists.psu.edu</a>.</p>
-      </div>
+        <p><%= t('remediation_popup.contact_info').html_safe %></p>
       <div class="modal-footer justify-content-center">
-        <button type="button" class="btn btn-primary" id="modalOkBtn">OK</button>
+        <button type="button" class="btn btn-primary" id="modalOkBtn"><%= t('remediation_popup.ok_button') %></button>
       </div>
     </div>
   </div>
