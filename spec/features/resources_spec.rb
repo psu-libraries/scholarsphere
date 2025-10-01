@@ -114,6 +114,59 @@ RSpec.describe 'Public Resources' do
           expect(page).to have_no_button('Copy Citation to Clipboard')
         end
       end
+
+      context 'when a file resource of the work is able to be remediated', :js do
+        before do
+          allow_any_instance_of(AutoRemediateService).to receive(:able_to_auto_remediate?).and_return(true)
+        end
+
+        let(:file) { work.latest_published_version.file_version_memberships.first }
+
+        it 'shows the remediation alert and then allows download' do
+          visit resource_path(work.uuid)
+
+          expect {
+            click_on 'Download'
+
+            expect(page).to have_css('[data-popup-show-alert="true"]')
+            expect(page).to have_css('#remediationPopup')
+
+            click_on 'OK'
+
+            sleep(1)
+          }.to change {
+                 ViewStatistic.where(
+                   resource_type: 'FileResource',
+                   resource_id: file.id
+                 ).sum(:count)
+               }.by(1)
+        end
+      end
+
+      context 'when a file resource of the work is not able to be remediated', :js do
+        before do
+          allow_any_instance_of(AutoRemediateService).to receive(:able_to_auto_remediate?).and_return(false)
+        end
+
+        let(:file) { work.latest_published_version.file_version_memberships.first }
+
+        it 'does not show the remediation alert and allows direct download' do
+          visit resource_path(work.uuid)
+          expect {
+            click_on 'Download'
+
+            expect(page).to have_no_css('[data-popup-show-alert="true"]')
+            expect(page).to have_no_css('#remediationPopup')
+
+            sleep(1)
+          }.to change {
+            ViewStatistic.where(
+              resource_type: 'FileResource',
+              resource_id: file.id
+            ).sum(:count)
+          }.by(1)
+        end
+      end
     end
 
     context 'when logged in as the resource owner', with_user: :user do
