@@ -124,22 +124,34 @@ RSpec.describe 'Public Resources' do
 
         it 'shows the remediation alert and then allows download' do
           visit resource_path(work.uuid)
-
-          expect {
-            click_on 'Download'
-
-            expect(page).to have_css('[data-popup-show-alert="true"]')
-            expect(page).to have_css('#remediationPopup')
-
-            click_on 'OK'
-
-            sleep(10)
-          }.to change {
-                 ViewStatistic.where(
-                   resource_type: 'FileResource',
-                   resource_id: file.id
-                 ).count
-               }.by(1)
+          
+          click_on 'Download'
+          expect(page).to have_css('[data-popup-show-alert="true"]')
+          expect(page).to have_css('#remediationPopup')
+          
+          initial_count = ViewStatistic.where(
+            resource_type: 'FileResource',
+            resource_id: file.file_resource.id
+          ).count
+          
+          click_on 'OK'
+          
+          Timeout.timeout(10) do
+            loop do
+              current_count = ViewStatistic.where(
+                resource_type: 'FileResource',
+                resource_id: file.file_resource.id
+              ).count
+              
+              break if current_count == initial_count + 1
+              sleep(0.1)
+            end
+          end
+          
+          expect(ViewStatistic.where(
+            resource_type: 'FileResource',
+            resource_id: file.file_resource.id
+          ).count).to eq(initial_count + 1)
         end
       end
 
@@ -152,19 +164,33 @@ RSpec.describe 'Public Resources' do
 
         it 'does not show the remediation alert and allows direct download' do
           visit resource_path(work.uuid)
-          expect {
-            click_on 'Download'
-
-            expect(page).to have_no_css('[data-popup-show-alert="true"]')
-            expect(page).to have_no_css('#remediationPopup')
-
-            sleep(10)
-          }.to change {
-            ViewStatistic.where(
-              resource_type: 'FileResource',
-              resource_id: file.id
-            ).count
-          }.by(1)
+          
+          initial_count = ViewStatistic.where(
+            resource_type: 'FileResource',
+            resource_id: file.file_resource.id
+          ).count
+          
+          click_on 'Download'
+          
+          expect(page).to have_no_css('[data-popup-show-alert="true"]')
+          expect(page).to have_no_css('#remediationPopup')
+          
+          Timeout.timeout(10) do
+            loop do
+              current_count = ViewStatistic.where(
+                resource_type: 'FileResource',
+                resource_id: file.file_resource.id
+              ).count
+              
+              break if current_count == initial_count + 1
+              sleep(0.1)
+            end
+          end
+          
+          expect(ViewStatistic.where(
+            resource_type: 'FileResource',
+            resource_id: file.file_resource.id
+          ).count).to eq(initial_count + 1)
         end
       end
     end
