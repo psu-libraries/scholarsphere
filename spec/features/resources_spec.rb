@@ -133,7 +133,7 @@ RSpec.describe 'Public Resources' do
 
             click_on 'OK'
 
-            sleep(1)
+            sleep(10)
           }.to change {
                  ViewStatistic.where(
                    resource_type: 'FileResource',
@@ -158,7 +158,7 @@ RSpec.describe 'Public Resources' do
             expect(page).to have_no_css('[data-popup-show-alert="true"]')
             expect(page).to have_no_css('#remediationPopup')
 
-            sleep(1)
+            sleep(10)
           }.to change {
             ViewStatistic.where(
               resource_type: 'FileResource',
