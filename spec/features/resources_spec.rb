@@ -138,7 +138,7 @@ RSpec.describe 'Public Resources' do
                  ViewStatistic.where(
                    resource_type: 'FileResource',
                    resource_id: file.id
-                 ).sum(:count)
+                 ).count
                }.by(1)
         end
       end
@@ -163,7 +163,7 @@ RSpec.describe 'Public Resources' do
             ViewStatistic.where(
               resource_type: 'FileResource',
               resource_id: file.id
-            ).sum(:count)
+            ).count
           }.by(1)
         end
       end
