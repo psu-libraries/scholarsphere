@@ -384,6 +384,11 @@ en:
         audit_heading: "Previous Curators:"
         explanation: "Changes the curator of the work. Currently, only existing Penn State users are allowed."
         submit_button: Update Curator
+      manual_review_form:
+        heading: Manual Accessibility Review
+        explanation: If checked, sets the work under manual review for accessibility. If a work is under manual review, it will be blocked from the automated remediation process.
+        under_manual_review: Work is under manual accessibility review
+        submit_button: Update Manual Accessibility Review Status
       files:
         heading: Accessibility Review
     works:
@@ -442,6 +447,7 @@ en:
         aria_download_image: ", an image of %{alt_text}"
         aria_download_file: "Download file: %{file_name}"
         aria_view_file: "View file: %{file_name}"
+        under_review_notice: This work is currently under manual accessibility review and may not be fully accessible at this time. An accessible version is being generated and will be available soon.
     form:
       unsaved_changes_prompt: You have unsaved changes on this page. Are you sure you want to leave and discard these changes? 
       heading:

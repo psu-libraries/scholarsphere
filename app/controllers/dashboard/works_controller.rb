@@ -44,6 +44,7 @@ module Dashboard
         @editors_form = EditorsForm.new(resource: @undecorated_work, user: current_user, params: editors_params)
         @depositor_form = DepositorForm.new(resource: @undecorated_work, params: depositor_params) if current_user.admin?
         @curator_form = CuratorForm.new(resource: @undecorated_work, params: curator_params) if current_user.admin?
+        @manual_review_form = ManualReviewForm.new(resource: @undecorated_work, params: manual_review_params) if current_user.admin?
         @withdraw_versions_form = WithdrawVersionsForm.new(work: @undecorated_work, params: withdraw_versions_params)
         @thumbnail_form = ThumbnailForm.new(resource: @undecorated_work, params: thumbnail_params)
       end
@@ -57,6 +58,8 @@ module Dashboard
           @depositor_form
         elsif params[:curator_form].present?
           @curator_form
+        elsif params[:manual_review_form].present?
+          @manual_review_form
         elsif params[:withdraw_versions_form].present?
           @withdraw_versions_form
         elsif params[:thumbnail_form].present?
@@ -111,6 +114,14 @@ module Dashboard
           .fetch(:curator_form, {})
           .permit(
             :access_id
+          )
+      end
+
+      def manual_review_params
+        params
+          .fetch(:manual_review_form, {})
+          .permit(
+            :under_manual_review
           )
       end
 

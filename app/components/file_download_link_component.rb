@@ -47,6 +47,12 @@ class FileDownloadLinkComponent < ViewComponent::Base
     remediation_service.able_to_auto_remediate?
   end
 
+  def under_review_notice
+    if work.under_manual_review
+      I18n.t('dashboard.works.show.under_review_notice')
+    end
+  end
+
   private
 
     def image?
@@ -63,5 +69,9 @@ class FileDownloadLinkComponent < ViewComponent::Base
 
     def work_version_id
       @file_version_membership.work_version.id
+    end
+
+    def work
+      @file_version_membership.work_version.work
     end
 end

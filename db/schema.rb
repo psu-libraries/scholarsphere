@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_09_16_154921) do
+ActiveRecord::Schema[7.2].define(version: 2025_10_07_200037) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -295,6 +295,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_16_154921) do
     t.datetime "deposit_agreed_at", precision: nil
     t.boolean "notify_editors", default: false
     t.string "thumbnail_selection", default: "default_icon"
+    t.boolean "under_manual_review"
     t.index ["depositor_id"], name: "index_works_on_depositor_id"
     t.index ["proxy_id"], name: "index_works_on_proxy_id"
   end

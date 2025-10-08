@@ -75,4 +75,32 @@ RSpec.describe FileDownloadLinkComponent, type: :component do
       expect(page).to have_css('#remediationPopup')
     end
   end
+
+  context 'when the work is under manual review' do
+    let(:mime_type) { 'application/pdf' }
+    let(:work) { resource.work }
+
+    before do
+      work.update(under_manual_review: true)
+    end
+
+    it 'shows the under review notice' do
+      render_inline(described_class.new(file_version_membership: file_version_membership))
+      expect(page).to have_text(I18n.t('dashboard.works.show.under_review_notice'))
+    end
+  end
+
+  context 'when the work is not under manual review' do
+    let(:mime_type) { 'application/pdf' }
+    let(:work) { resource.work }
+
+    before do
+      work.update(under_manual_review: false)
+    end
+
+    it 'does not show the under review notice' do
+      render_inline(described_class.new(file_version_membership: file_version_membership))
+      expect(page).to have_no_text(I18n.t('dashboard.works.show.under_review_notice'))
+    end
+  end
 end

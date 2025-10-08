@@ -22,6 +22,7 @@ class AutoRemediateService
       work_version.auto_remediation_started_at.nil? &&
       !work_version.auto_remediated_version &&
       download_is_pdf &&
-      !admin
+      !admin &&
+      !work_version.work.under_manual_review
   end
 end
