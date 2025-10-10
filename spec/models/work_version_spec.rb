@@ -995,10 +995,14 @@ RSpec.describe WorkVersion do
     let(:work_version) { create(:work_version) }
 
     context 'when at least one file resource has a remediation job and is not auto remediated' do
-      let!(:file_resource) { create(:file_resource, remediation_job_uuid: 'job-123', auto_remediated_version: false) }
+      let!(:file_resource) { create(:file_resource,
+                                    remediation_job_uuid: 'job-123',
+                                    auto_remediated_version: false) }
 
       before do
-        create(:file_version_membership, file_resource: file_resource, work_version: work_version)
+        create(:file_version_membership,
+               file_resource: file_resource,
+               work_version: work_version)
       end
 
       it 'returns true' do
@@ -1006,13 +1010,21 @@ RSpec.describe WorkVersion do
       end
     end
 
-    context 'when file resources either have no remediation job or are already auto remediated' do
-      let!(:no_job) { create(:file_resource, remediation_job_uuid: nil, auto_remediated_version: false) }
-      let!(:already_auto) { create(:file_resource, remediation_job_uuid: 'job-456', auto_remediated_version: true) }
+    context 'when file resources either have no remediation job uuid or are already auto remediated' do
+      let!(:no_job) { create(:file_resource,
+                             remediation_job_uuid: nil,
+                             auto_remediated_version: false) }
+      let!(:already_auto) { create(:file_resource,
+                                   remediation_job_uuid: 'job-456',
+                                   auto_remediated_version: true) }
 
       before do
-        create(:file_version_membership, file_resource: no_job, work_version: work_version)
-        create(:file_version_membership, file_resource: already_auto, work_version: work_version)
+        create(:file_version_membership,
+               file_resource: no_job,
+               work_version: work_version)
+        create(:file_version_membership,
+               file_resource: already_auto,
+               work_version: work_version)
       end
 
       it 'returns false' do
