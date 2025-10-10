@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AutoRemediationWebhooksController < ApplicationController
+class AutoRemediationWebhookController < ApplicationController
   skip_before_action :verify_authenticity_token
   before_action :authenticate_request
 
