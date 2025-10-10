@@ -177,7 +177,9 @@ Rails.application.routes.draw do
     end
   end
 
-  post 'auto_remediation_webhook', to: 'auto_remediation_webhook#create'
+  namespace :webhooks do
+    post 'pdf_accessibility_api', to: 'pdf_accessibility_api#create'
+  end
 
   get '/404', to: 'errors#not_found'
   get '/401', to: 'errors#not_found'
