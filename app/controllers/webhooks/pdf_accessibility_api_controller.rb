@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PdfAccessibilityApiController < ApplicationController
+class Webhooks::PdfAccessibilityApiController < ApplicationController
   skip_before_action :verify_authenticity_token
   before_action :authenticate_request
 
@@ -19,7 +19,7 @@ class PdfAccessibilityApiController < ApplicationController
 
     case event_type
     when 'job.succeeded'
-      handle_success(record)
+      handle_success(record, job_data)
     when 'job.failed'
       handle_failure(job_data)
     else
@@ -30,8 +30,8 @@ class PdfAccessibilityApiController < ApplicationController
 
   private
 
-    def handle_success(record)
-      BuildAutoRemediatedWorkVersion.call(record, replacement_url)
+    def handle_success(record, job_data)
+      BuildAutoRemediatedWorkVersionJob.perform_later(record.id, job_data[:output_url])
       render json: { message: 'Update successful' }, status: :ok
     rescue StandardError => e
       render json: { error: e.message }, status: :internal_server_error
