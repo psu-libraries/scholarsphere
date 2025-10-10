@@ -104,11 +104,16 @@ class FileResource < ApplicationRecord
   end
 
   def latest_remediation_work_version_candidate
-    work_versions.where.not(auto_remediation_started_at: nil).last
+    work_versions.where
+      .not(auto_remediation_started_at: nil)
+      .order(:id)
+      .last
   end
 
   def latest_auto_remediated_work_version_after(version)
-    work_versions.where('work_versions.id > ? AND auto_remediated_version = ?', version.id, true).last
+    work_versions.where('work_versions.id > ? AND auto_remediated_version = ?', version.id, true)
+      .order(:id)
+      .last
   end
 
   private
