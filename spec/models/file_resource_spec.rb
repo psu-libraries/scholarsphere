@@ -16,6 +16,7 @@ RSpec.describe FileResource do
   describe 'table' do
     it { is_expected.to have_db_column(:file_data).of_type(:jsonb) }
     it { is_expected.to have_db_column(:remediation_job_uuid).of_type(:string) }
+    it { is_expected.to have_db_column(:auto_remediated_version).of_type(:boolean) }
   end
 
   describe 'factories' do
