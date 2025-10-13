@@ -39,17 +39,6 @@ RSpec.describe Webhooks::PdfAccessibilityApiController do
         request.headers['X-API-KEY'] = secret
       end
 
-      describe 'when file resource cannot be found from job uuid' do
-        let(:event_type) { 'job.succeeded' }
-        let(:job_uuid) { 'no-such-uuid' }
-
-        it 'returns 404 with json error' do
-          post :create, params: params, as: :json
-          expect(response).to have_http_status(:not_found)
-          expect(response.parsed_body).to include('error' => 'Record not found')
-        end
-      end
-
       describe 'when event_type is unknown' do
         let(:file) { create(:file_resource, remediation_job_uuid: 'uuid-1') }
         let(:event_type) { 'something_else' }
@@ -79,7 +68,7 @@ RSpec.describe Webhooks::PdfAccessibilityApiController do
           expect(response).to have_http_status(:ok)
           expect(response.parsed_body).to include('message' => 'Update successful')
           expect(BuildAutoRemediatedWorkVersionJob).to have_received(:perform_later)
-            .with(file.id, 'https://example.com/out.pdf')
+            .with(file.remediation_job_uuid, 'https://example.com/out.pdf')
         end
       end
 

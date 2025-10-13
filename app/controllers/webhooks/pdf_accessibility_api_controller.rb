@@ -8,18 +8,9 @@ class Webhooks::PdfAccessibilityApiController < ApplicationController
     event_type = params[:event_type]
     job_data   = params[:job] || {}
 
-    record = FileResource.find_by(remediation_job_uuid: job_data[:uuid])
-
-    # In the extremely rare case that multiple remediation jobs are kicked off
-    # for the same file, the older jobs should fail here since the
-    # remediation_job_uuid will no longer be associated with the file.
-    unless record
-      return render json: { error: 'Record not found' }, status: :not_found
-    end
-
     case event_type
     when 'job.succeeded'
-      handle_success(record, job_data)
+      handle_success(job_data)
     when 'job.failed'
       handle_failure(job_data)
     else
@@ -30,8 +21,8 @@ class Webhooks::PdfAccessibilityApiController < ApplicationController
 
   private
 
-    def handle_success(record, job_data)
-      BuildAutoRemediatedWorkVersionJob.perform_later(record.id, job_data[:output_url])
+    def handle_success(job_data)
+      BuildAutoRemediatedWorkVersionJob.perform_later(job_data[:uuid], job_data[:output_url])
       render json: { message: 'Update successful' }, status: :ok
     rescue StandardError => e
       render json: { error: e.message }, status: :internal_server_error
