@@ -29,8 +29,18 @@ RSpec.describe AutoRemediateService do
 
           context 'when the download is a PDF' do
             context 'when the user is not an admin' do
-              it 'returns true' do
-                expect(described_class.new(work_version.id, false, true).able_to_auto_remediate?).to be true
+              context 'when the work is not under manual review' do
+                it 'returns true' do
+                  expect(described_class.new(work_version.id, false, true).able_to_auto_remediate?).to be true
+                end
+              end
+
+              context 'when the work is under manual review' do
+                before { work_version.work.update(under_manual_review: true) }
+
+                it 'returns false' do
+                  expect(described_class.new(work_version.id, false, true).able_to_auto_remediate?).to be false
+                end
               end
             end
 

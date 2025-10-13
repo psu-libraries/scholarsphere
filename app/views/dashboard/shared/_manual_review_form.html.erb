@@ -1,0 +1,23 @@
+<p><%= t('.explanation') %></p>
+
+<%- manual_review_form_id = "edit_manual_review_#{dom_id manual_review_form.resource}" %>
+<%= form_for manual_review_form,
+             url: url,
+             method: :patch,
+             remote: false,
+             html: { id: manual_review_form_id, class: 'edit-resource-manual-review' } do |form| %>
+
+  <%= hidden_field_tag 'form_id', manual_review_form_id %>
+  <%= render FormErrorMessageComponent.new(form: form) %>
+
+  <div class="mb-3">
+    <div class="form-check">
+      <%= form.check_box :under_manual_review, { class: 'form-check-input' } %>
+      <%= form.label :under_manual_review, t('.under_manual_review'), class: 'form-check-label' %>
+    </div>
+  </div>
+
+  <div class="actions mt-1 mb-3">
+    <%= form.submit t('.submit_button'), class: 'btn btn-primary' %>
+  </div>
+<% end %>

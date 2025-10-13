@@ -430,6 +430,37 @@ RSpec.describe 'Work Settings Page', with_user: :user do
     end
   end
 
+  describe 'Changing the manual review status' do
+    context 'with a standard user' do
+      it 'does not allow the change' do
+        visit edit_dashboard_work_path(work)
+        expect(page).to have_no_content(I18n.t!('dashboard.shared.manual_review_form.heading'))
+        expect(page).to have_no_link(I18n.t!('dashboard.shared.manual_review_form.submit_button'))
+      end
+    end
+
+    context 'with an admin user' do
+      let(:user) { create(:user, :admin) }
+      let(:checkbox_label) { I18n.t!('dashboard.shared.manual_review_form.under_manual_review') }
+      let(:explanation_text) { I18n.t!('dashboard.shared.manual_review_form.explanation') }
+      let(:submit_button) { I18n.t!('dashboard.shared.manual_review_form.submit_button') }
+      let(:heading_text) { I18n.t!('dashboard.shared.manual_review_form.heading') }
+
+      it 'allows the change and updates the work under_manual_review value' do
+        visit edit_dashboard_work_path(work)
+        expect(page).to have_content(heading_text)
+        expect(page).to have_content(explanation_text)
+        expect(page).to have_unchecked_field(checkbox_label)
+        check checkbox_label
+        click_on(submit_button)
+        expect(page).to have_content(I18n.t!('dashboard.works.update.success'))
+        expect(page).to have_checked_field(checkbox_label)
+        work.reload
+        expect(work.under_manual_review).to be true
+      end
+    end
+  end
+
   describe 'Withdrawing a version' do
     context 'with a standard user' do
       it 'does not allow the change' do
