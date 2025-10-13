@@ -412,7 +412,7 @@ RSpec.describe FileResource do
                work_version: first_auto_remediated)
       end
 
-      it 'returns the latest auto_remediated_version with id greater than the given version' do
+      it 'returns the first auto_remediated_version with id greater than the given version' do
         expect(file_resource
                 .first_auto_remediated_work_version_after(version_being_remediated)).to eq(first_auto_remediated)
       end
