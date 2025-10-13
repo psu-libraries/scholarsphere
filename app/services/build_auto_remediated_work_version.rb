@@ -17,31 +17,31 @@ class BuildAutoRemediatedWorkVersion
 
     PaperTrail.request(whodunnit: ExternalApp.pdf_accessibility_api.to_global_id.to_s) do
       ActiveRecord::Base.transaction do
-        new_work_version = file_resource.first_auto_remediated_work_version_after(wv_being_remediated) ||
+        built_work_version = file_resource.first_auto_remediated_work_version_after(wv_being_remediated) ||
           begin
             v = BuildNewWorkVersion.call(wv_being_remediated)
             v.update(auto_remediated_version: true)
             v
           end
 
-        fvm_to_destroy = new_work_version.file_version_memberships
+        fvm_to_destroy = built_work_version.file_version_memberships
           .find_by(file_resource: file_resource)
         fvm_to_destroy&.destroy!
 
         replacement_tempfile = Down.download(remediated_file_url)
-        new_work_version.file_resources.create!(
+        built_work_version.file_resources.create!(
           file: replacement_tempfile,
           auto_remediated_version: true
         )
 
-        if new_work_version.has_remaining_auto_remediation_jobs?
-          new_work_version.save!
+        if built_work_version.has_remaining_auto_remediation_jobs?
+          built_work_version.save!
         else
-          new_work_version.publish!
+          built_work_version.publish!
         end
+
+        return built_work_version
       end
     end
-
-    new_work_version
   end
 end
