@@ -74,5 +74,15 @@ RSpec.describe PdfRemediation::Client do
         expect { client.request_remediation }.to raise_error PdfRemediation::Client::InvalidFileURL
       end
     end
+
+    context 'when the request to the endpoint returns an unexpected response' do
+      before do
+        allow(response).to receive_messages(status: 302, body: 'Redirecting')
+      end
+
+      it 'raises an error' do
+        expect { client.request_remediation }.to raise_error RuntimeError, /Unexpected response: 302 - Redirecting/
+      end
+    end
   end
 end
