@@ -1,0 +1,18 @@
+<div class="modal fade" id="remediationPopup" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <p><strong><%= t('remediation_popup.title') %></strong></p>
+        <p><%= t('remediation_popup.description') %></p>
+        <ul>
+          <li><strong><%= t('remediation_popup.whats_happening_label') %></strong> <%= t('remediation_popup.whats_happening_text') %></li>
+          <li><strong><%= t('remediation_popup.quality_check_label') %></strong> <%= t('remediation_popup.quality_check_text') %></li>
+        </ul>
+        <br>
+        <p><%= t('remediation_popup.contact_info').html_safe %></p>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-primary" id="modalOkBtn"><%= t('remediation_popup.ok_button') %></button>
+      </div>
+    </div>
+  </div>
+</div>
