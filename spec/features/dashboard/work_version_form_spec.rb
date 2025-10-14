@@ -979,6 +979,25 @@ RSpec.describe 'Publishing a work', with_user: :user do
     let(:work_version) { work.versions.first }
     let(:user) { work_version.work.depositor.user }
 
+    describe 'accessibility privacy notice' do
+      it 'expands to display full privacy notice' do
+        visit dashboard_form_files_path(work_version)
+
+        expect(page).to have_content(I18n.t!('dashboard.form.details.privacy_notice.header'))
+        expect(page).to have_no_content(I18n.t!('dashboard.form.details.privacy_notice.description'))
+        expect(page).to have_no_content(I18n.t!('dashboard.form.details.privacy_notice.adobe'))
+        expect(page).to have_no_content(I18n.t!('dashboard.form.details.privacy_notice.aws'))
+        expect(page).to have_no_content(I18n.t!('dashboard.form.details.privacy_notice.manual_review'))
+
+        find('summary', text: I18n.t!('dashboard.form.details.privacy_notice.header')).click
+
+        expect(page).to have_content(I18n.t!('dashboard.form.details.privacy_notice.description'))
+        expect(page).to have_content(I18n.t!('dashboard.form.details.privacy_notice.adobe'))
+        expect(page).to have_content(I18n.t!('dashboard.form.details.privacy_notice.aws'))
+        expect(page).to have_content(I18n.t!('dashboard.form.details.privacy_notice.manual_review'))
+      end
+    end
+
     describe 'uploading an image' do
       it 'requires alt text to be submitted and works' do
         visit dashboard_form_files_path(work_version)

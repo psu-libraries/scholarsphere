@@ -1592,3 +1592,18 @@ dialog {
 code {
   color: $dark-green;
 }
+
+details {
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+details[open] {
+  background: transparent;
+}
+
+summary:focus {
+  outline: none;
+}
+
