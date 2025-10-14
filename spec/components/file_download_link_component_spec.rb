@@ -10,9 +10,16 @@ RSpec.describe FileDownloadLinkComponent, type: :component do
   let!(:file_version_membership) { create(:file_version_membership,
                                           file_resource: file_resource,
                                           work_version: resource) }
+  let(:user) { build(:user) }
+  let(:mock_controller) do
+    instance_double('ApplicationController', current_user: user, controller_name: 'application')
+  end
+  let(:mock_helpers) { double('helpers', current_user: user) }
 
   before do
     allow(file_resource).to receive(:file).and_return(file_double)
+    allow_any_instance_of(described_class).to receive(:controller).and_return(mock_controller)
+    allow_any_instance_of(described_class).to receive(:helpers).and_return(mock_helpers)
   end
 
   describe 'when the file is not an image' do
@@ -44,6 +51,56 @@ RSpec.describe FileDownloadLinkComponent, type: :component do
                                 href: "/resources/#{resource.uuid}/downloads/#{file_version_membership.id}?download=false")
       expect(page).to have_css("a[aria-label='Download file: #{file_version_membership.title}, an image of Test text']")
       expect(page).to have_css("a[aria-label='View file: #{file_version_membership.title}, an image of Test text']")
+    end
+  end
+
+  context 'when the file is able to auto remediate' do
+    let(:mime_type) { 'application/pdf' }
+
+    it 'shows the remediation alert' do
+      allow_any_instance_of(AutoRemediateService).to receive(:able_to_auto_remediate?).and_return(true)
+      render_inline(described_class.new(file_version_membership: file_version_membership))
+      expect(page).to have_css('[data-popup-show-alert="true"]')
+      expect(page).to have_css('#remediationPopup')
+    end
+  end
+
+  context 'when the file is not able to auto remediate' do
+    let(:mime_type) { 'application/pdf' }
+
+    it 'does not show the remediation alert' do
+      allow_any_instance_of(AutoRemediateService).to receive(:able_to_auto_remediate?).and_return(false)
+      render_inline(described_class.new(file_version_membership: file_version_membership))
+      expect(page).to have_css('[data-popup-show-alert="false"]')
+      expect(page).to have_css('#remediationPopup')
+    end
+  end
+
+  context 'when the work is under manual review' do
+    let(:mime_type) { 'application/pdf' }
+    let(:work) { resource.work }
+
+    before do
+      work.update(under_manual_review: true)
+    end
+
+    it 'shows the under review notice' do
+      render_inline(described_class.new(file_version_membership: file_version_membership))
+      expect(page).to have_text(I18n.t('dashboard.works.show.under_review_notice'))
+    end
+  end
+
+  context 'when the work is not under manual review' do
+    let(:mime_type) { 'application/pdf' }
+    let(:work) { resource.work }
+
+    before do
+      work.update(under_manual_review: false)
+    end
+
+    it 'does not show the under review notice' do
+      render_inline(described_class.new(file_version_membership: file_version_membership))
+      expect(page).to have_no_text(I18n.t('dashboard.works.show.under_review_notice'))
     end
   end
 end

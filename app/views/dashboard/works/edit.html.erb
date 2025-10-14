@@ -37,6 +37,12 @@
                           class: 'nav-link' %>
             </li>
 
+            <li class="nav-item">
+              <%= link_to t('dashboard.shared.manual_review_form.heading'),
+                          "##{t('dashboard.shared.manual_review_form.heading').parameterize}",
+                          class: 'nav-link' %>
+            </li>
+
             <% if policy(@work.latest_version).destroy? %>
               <li class="nav-item">
                 <%= link_to t('dashboard.shared.depositor_form.heading'),
@@ -191,6 +197,14 @@
             </p>
           </div>
         <% end %>
+
+        <div class="keyline keyline--left">
+          <h2 id="<%= t('dashboard.shared.manual_review_form.heading').parameterize %>" class="h4"><%= t('dashboard.shared.manual_review_form.heading') %></h2>
+        </div>
+
+        <div class="actions mb-3">
+          <%= render 'dashboard/shared/manual_review_form', manual_review_form: @manual_review_form, url: dashboard_work_path(@work) %>
+        </div>
 
         <% if policy(@work.latest_version).destroy? %>
           <div class="keyline keyline--left">

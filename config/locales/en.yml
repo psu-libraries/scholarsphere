@@ -14,6 +14,15 @@ en:
     tips: Tips for %{rule} Remediation
     intro: Below are the results of the accessibility check of the pdf you recently uploaded. <a href="https://www.ada.gov/resources/2024-03-08-web-rule" target="_blank">Title II of the ADA</a> requires that all digital content be made accessible. More information can be found in <a href=https://policy.psu.edu/policies/ad69>Penn State’s AD69 Accessibility Policy</a>.
     remediation_help: For remediation assistance or any questions, please contact <a href=mailto:digitalaccessibility@psu.libanswers.com>digitalaccessibility@psu.libanswers.com</a> or visit the <a href=https://smealonline.psu.edu/browse/accessibility-learning-path/courses/pdf-accessibility-overview-and-introduction>PDF Accessibility Training</a> on the <a href=https://accessibility.psu.edu/training/learningpath/>Penn State Accessibility Learning Path</a>.
+  remediation_popup:
+    title: Accessible Version in Progress
+    description: We're generating an accessible version of this file to meet ADA Title II requirements. This process may take up to one hour. Please return later to access the accessible copy once it's ready.
+    whats_happening_label: "What's happening:"
+    whats_happening_text: An accessible PDF is generated using Adobe with AI used to generate alternative text (alt text) for images in the PDF.
+    quality_check_label: "Quality check:"
+    quality_check_text: The Libraries' Adaptive Technology and Services team will review and correct the accessible version manually, but that review may occur after the file becomes available.
+    contact_info: For questions or to request a different format, contact the Adaptive Technology and Services team at <a href="mailto:ul-adaptive-tech-svcs@lists.psu.edu">ul-adaptive-tech-svcs@lists.psu.edu</a>.
+    ok_button: OK
   activerecord:
     attributes:
       actor:
@@ -375,6 +384,11 @@ en:
         audit_heading: "Previous Curators:"
         explanation: "Changes the curator of the work. Currently, only existing Penn State users are allowed."
         submit_button: Update Curator
+      manual_review_form:
+        heading: Manual Accessibility Review
+        explanation: If checked, sets the work under manual review for accessibility. If a work is under manual review, it will be blocked from the automated remediation process.
+        under_manual_review: Work is under manual accessibility review
+        submit_button: Update Manual Accessibility Review Status
       files:
         heading: Accessibility Review
     works:
@@ -433,6 +447,7 @@ en:
         aria_download_image: ", an image of %{alt_text}"
         aria_download_file: "Download file: %{file_name}"
         aria_view_file: "View file: %{file_name}"
+        under_review_notice: This work is currently under manual accessibility review and may not be fully accessible at this time. An accessible version is being generated and will be available soon.
     form:
       unsaved_changes_prompt: You have unsaved changes on this page. Are you sure you want to leave and discard these changes? 
       heading:
@@ -511,6 +526,12 @@ en:
         required_to_publish_metadata: Needed to Publish
         additional_metadata: Optional Metadata
         instrument_title: Use the instrument name as the work title
+        privacy_notice:
+          header: Accessible Version Generation Privacy Notice
+          description: When your PDF is downloaded for the first time, an accessible version will be created to meet ADA Title II requirements
+          adobe: Your file will be temporarily processed by Adobe to generate an accessible format.
+          aws: Images will be temporarily sent to AWS Bedrock for AI-generated alt-text.
+          manual_review: The accessible PDF will be added as a new version in ScholarSphere and reviewed manually by the Libraries’ Adaptive Technology and Services team.
         readme:
           header: 'Please note:'
           format: Every work must include a README file labeled as “README” (e.g., README.txt, readme.md, etc.). This README file should contain essential information about your uploaded files, such as a brief description, instructions, or any other pertinent details. If you need assistance or guidance, please refer to the

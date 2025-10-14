@@ -524,6 +524,7 @@ RSpec.describe Work do
           thumbnail_url_ssi
           thumbnail_selection_tesim
           notify_editors_tesim
+          under_manual_review_tesim
         )
       end
 
@@ -593,6 +594,7 @@ RSpec.describe Work do
           thumbnail_url_ssi
           thumbnail_selection_tesim
           notify_editors_tesim
+          under_manual_review_tesim
           external_app_id_isi
           published_at_dtsi
           removed_at_dtsi

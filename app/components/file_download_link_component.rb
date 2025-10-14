@@ -42,13 +42,36 @@ class FileDownloadLinkComponent < ViewComponent::Base
            name: @file_version_membership.title)
   end
 
+  def remediation_alert?
+    remediation_service = AutoRemediateService.new(work_version_id, helpers.current_user.admin?, pdf?)
+    remediation_service.able_to_auto_remediate?
+  end
+
+  def under_review_notice
+    if work.under_manual_review
+      I18n.t('dashboard.works.show.under_review_notice')
+    end
+  end
+
   private
 
     def image?
       @file_version_membership.file_resource.image?
     end
 
+    def pdf?
+      @file_version_membership.file_resource.pdf?
+    end
+
     def work_version_uuid
       @file_version_membership.work_version.uuid
+    end
+
+    def work_version_id
+      @file_version_membership.work_version.id
+    end
+
+    def work
+      @file_version_membership.work_version.work
     end
 end

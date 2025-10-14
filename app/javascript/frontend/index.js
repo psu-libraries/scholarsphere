@@ -10,7 +10,8 @@ import './scripts/thumbnail_selection_init'
 
 // Load dependencies
 require('jquery/src/jquery')
-require('bootstrap/dist/js/bootstrap')
+const bootstrap = require('bootstrap/dist/js/bootstrap')
+window.bootstrap = bootstrap
 require('select2/dist/js/select2')
 
 // Load Blacklight dependencies
