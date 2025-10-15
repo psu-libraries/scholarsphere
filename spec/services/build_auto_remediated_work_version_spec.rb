@@ -47,6 +47,7 @@ RSpec.describe BuildAutoRemediatedWorkVersion do
             expect(FileResource).to exist(file_resource.id)
             expect(FileVersionMembership.find_by(work_version: result, file_resource: file_resource)).to be_nil
             expect(WorkVersion.find(result.id).file_resources.where(auto_remediated_version: true).count).to eq(1)
+            expect(result.external_app).to eq(ExternalApp.pdf_accessibility_api)
             expect(result).to be_published
           end
         end
@@ -69,6 +70,7 @@ RSpec.describe BuildAutoRemediatedWorkVersion do
             expect(FileResource).to exist(file_resource.id)
             expect(FileVersionMembership.find_by(work_version: result, file_resource: file_resource)).to be_nil
             expect(WorkVersion.find(result.id).file_resources.where(auto_remediated_version: true).count).to eq(1)
+            expect(result.external_app).to eq(ExternalApp.pdf_accessibility_api)
             expect(result).to be_draft
           end
         end
@@ -79,6 +81,7 @@ RSpec.describe BuildAutoRemediatedWorkVersion do
 
         before do
           existing_auto_wv.auto_remediated_version = true
+          existing_auto_wv.external_app = ExternalApp.pdf_accessibility_api
           existing_auto_wv.save!
         end
 
@@ -93,6 +96,7 @@ RSpec.describe BuildAutoRemediatedWorkVersion do
             expect(FileResource).to exist(file_resource.id)
             expect(FileVersionMembership.find_by(work_version: result, file_resource: file_resource)).to be_nil
             expect(WorkVersion.find(result.id).file_resources.where(auto_remediated_version: true).count).to eq(1)
+            expect(result.external_app).to eq(ExternalApp.pdf_accessibility_api)
             expect(result).to be_published
           end
         end
@@ -115,6 +119,7 @@ RSpec.describe BuildAutoRemediatedWorkVersion do
             expect(FileResource).to exist(file_resource.id)
             expect(FileVersionMembership.find_by(work_version: result, file_resource: file_resource)).to be_nil
             expect(WorkVersion.find(result.id).file_resources.where(auto_remediated_version: true).count).to eq(1)
+            expect(result.external_app).to eq(ExternalApp.pdf_accessibility_api)
             expect(result).to be_draft
           end
         end

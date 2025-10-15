@@ -20,7 +20,8 @@ class BuildAutoRemediatedWorkVersion
         built_work_version = file_resource.first_auto_remediated_work_version_after(wv_being_remediated) ||
           begin
             v = BuildNewWorkVersion.call(wv_being_remediated)
-            v.update(auto_remediated_version: true)
+            v.update({ auto_remediated_version: true,
+                       external_app: ExternalApp.pdf_accessibility_api })
             v
           end
 
