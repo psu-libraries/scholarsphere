@@ -40,5 +40,6 @@ export ADMIN_GROUP=
 export VIEWER_GROUP=
 export PDF_REMEDIATION_ENDPOINT=
 export PDF_REMEDIATION_API_KEY=
+export PDF_REMEDIATION_WEBHOOK_SECRET=
 # If using minio in dev and test env:
 export AWS_SDK_CONFIG_OPT_OUT=true

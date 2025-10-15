@@ -16,6 +16,7 @@ RSpec.describe FileResource do
   describe 'table' do
     it { is_expected.to have_db_column(:file_data).of_type(:jsonb) }
     it { is_expected.to have_db_column(:remediation_job_uuid).of_type(:string) }
+    it { is_expected.to have_db_column(:auto_remediated_version).of_type(:boolean) }
   end
 
   describe 'factories' do
@@ -230,6 +231,7 @@ RSpec.describe FileResource do
         uuid_ssi
         thumbnail_url_ssi
         remediation_job_uuid_tesim
+        auto_remediated_version_tesim
       )
     end
 
@@ -352,6 +354,103 @@ RSpec.describe FileResource do
       let(:file_resource) { build(:file_resource, :with_processed_image) }
 
       it { is_expected.to be false }
+    end
+  end
+
+  describe '#latest_remediation_work_version_candidate' do
+    let(:file_resource) { create(:file_resource) }
+
+    context 'when multiple work_versions have auto_remediation_started_at set' do
+      let!(:older_version) { create(:work_version,
+                                    auto_remediation_started_at: 2.hours.ago) }
+      let!(:candidate_version) { create(:work_version,
+                                        auto_remediation_started_at: 1.hour.ago) }
+
+      before do
+        create(:file_version_membership,
+               file_resource: file_resource,
+               work_version: older_version)
+        create(:file_version_membership,
+               file_resource: file_resource,
+               work_version: candidate_version)
+      end
+
+      it 'returns the most recent work_version with auto_remediation_started_at set' do
+        expect(file_resource.latest_remediation_work_version_candidate).to eq(candidate_version)
+      end
+    end
+
+    context 'when no work_versions have auto_remediation_started_at' do
+      let!(:only_version) { create(:work_version) }
+
+      before do
+        create(:file_version_membership,
+               file_resource: file_resource,
+               work_version: only_version)
+      end
+
+      it 'returns nil' do
+        expect(file_resource.latest_remediation_work_version_candidate).to be_nil
+      end
+    end
+  end
+
+  describe '#first_auto_remediated_work_version_after' do
+    let(:file_resource) { create(:file_resource) }
+    let!(:version_being_remediated) { create(:work_version) }
+
+    context 'when there are auto_remediated work_versions after the given version' do
+      let!(:first_auto_remediated) { create(:work_version,
+                                            auto_remediated_version: true) }
+
+      before do
+        create(:file_version_membership,
+               file_resource: file_resource,
+               work_version: version_being_remediated)
+        create(:file_version_membership,
+               file_resource: file_resource,
+               work_version: first_auto_remediated)
+      end
+
+      it 'returns the first auto_remediated_version with id greater than the given version' do
+        expect(file_resource
+                .first_auto_remediated_work_version_after(version_being_remediated)).to eq(first_auto_remediated)
+      end
+    end
+
+    context 'when multiple auto remediated versions exist after the given version' do
+      let!(:first_auto_remediated) { create(:work_version,
+                                            auto_remediated_version: true) }
+      let!(:later_auto_remediated) { create(:work_version,
+                                            auto_remediated_version: true) }
+
+      before do
+        create(:file_version_membership,
+               file_resource: file_resource,
+               work_version: later_auto_remediated)
+        create(:file_version_membership,
+               file_resource: file_resource,
+               work_version: first_auto_remediated)
+      end
+
+      it 'returns the first auto remediated version after the given version' do
+        expect(file_resource
+                .first_auto_remediated_work_version_after(version_being_remediated)).to eq(first_auto_remediated)
+      end
+    end
+
+    context 'when no auto remediated versions exist after the given version' do
+      let!(:only_version) { create(:work_version) }
+
+      before do
+        create(:file_version_membership,
+               file_resource: file_resource,
+               work_version: only_version)
+      end
+
+      it 'returns nil' do
+        expect(file_resource.first_auto_remediated_work_version_after(only_version)).to be_nil
+      end
     end
   end
 end
