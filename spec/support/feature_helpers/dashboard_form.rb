@@ -158,7 +158,8 @@ module FeatureHelpers
 
     def self.fill_in_publishing_details(metadata, visibility: Permissions::Visibility::OPEN)
       choose "work_version_work_attributes_visibility_#{visibility}"
-      find_by_id('work_version_rights', visible: true, wait: 3)
+      dropdown = find('#work_version_rights', visible: true)
+      dropdown.click
       select WorkVersion::Licenses.label(metadata[:rights]), from: 'work_version_rights'
     end
 
