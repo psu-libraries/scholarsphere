@@ -59,8 +59,8 @@ class FileDownloadLinkComponent < ViewComponent::Base
       @file_version_membership.file_resource.image?
     end
 
-    def pdf?
-      @file_version_membership.file_resource.pdf?
+    def can_remediate?
+      @file_version_membership.file_resource.can_remediate?
     end
 
     def work_version_uuid
