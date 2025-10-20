@@ -341,19 +341,51 @@ RSpec.describe FileResource do
     end
   end
 
-  describe '#pdf?' do
-    subject { file_resource.pdf? }
+  describe '#can_remediate?' do
+    subject { file_resource.can_remediate? }
 
     context 'when the file is a pdf' do
       let(:file_resource) { build(:file_resource, :pdf) }
 
-      it { is_expected.to be true }
+      context 'when auto_remediated_version is false' do
+        before { file_resource.auto_remediated_version = false }
+
+        it { is_expected.to be true }
+      end
+
+      context 'when auto_remediated_version is nil' do
+        before { file_resource.auto_remediated_version = nil }
+
+        it { is_expected.to be true }
+      end
+
+      context 'when auto_remediated_version is true' do
+        before { file_resource.auto_remediated_version = true }
+
+        it { is_expected.to be false }
+      end
     end
 
     context 'when the file is not a PDF' do
       let(:file_resource) { build(:file_resource, :with_processed_image) }
 
-      it { is_expected.to be false }
+      context 'when auto_remediated_version is false' do
+        before { file_resource.auto_remediated_version = false }
+
+        it { is_expected.to be false }
+      end
+
+      context 'when auto_remediated_version is nil' do
+        before { file_resource.auto_remediated_version = nil }
+
+        it { is_expected.to be false }
+      end
+
+      context 'when auto_remediated_version is true' do
+        before { file_resource.auto_remediated_version = true }
+
+        it { is_expected.to be false }
+      end
     end
   end
 

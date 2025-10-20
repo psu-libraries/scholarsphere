@@ -7,7 +7,7 @@ class DownloadsController < ApplicationController
     authorize(file_version)
     file_version.file_resource.count_view! if count_view?(file_version.file_resource)
 
-    remediation_service = AutoRemediateService.new(work_version.id, current_user.admin?, file_version.file_resource.pdf?)
+    remediation_service = AutoRemediateService.new(work_version.id, current_user.admin?, file_version.file_resource.can_remediate?)
     remediation_service.call if remediation_service.able_to_auto_remediate? && download_params[:download]
 
     redirect_to s3_presigned_url(file_version, download: download_params[:download]), allow_other_host: true

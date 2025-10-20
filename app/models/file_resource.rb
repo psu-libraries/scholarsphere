@@ -33,7 +33,7 @@ class FileResource < ApplicationRecord
   }
 
   scope :can_remediate?, -> {
-    is_pdf.where("auto_remediated_version IS NULL OR auto_remediated_version = ?", false)
+    is_pdf.where('auto_remediated_version IS NULL OR auto_remediated_version = ?', false)
   }
 
   scope :needs_accessibility_check, -> {
