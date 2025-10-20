@@ -1465,6 +1465,60 @@ RSpec.describe 'Publishing a work', with_user: :user do
       expect(version.creators.length).to eq 1
       expect(version.creators.first.display_name).to eq user.actor.display_name
     end
+
+    context 'when the work has a large pdf file resource' do
+      it 'updates under_manual_review to true upon publish' do
+        visit dashboard_form_work_versions_path
+
+        FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_draft(metadata)
+        FeatureHelpers::DashboardForm.save_and_continue
+        FeatureHelpers::DashboardForm.fill_in_work_details(metadata)
+        FeatureHelpers::DashboardForm.save_and_continue
+
+        FeatureHelpers::DashboardForm.save_and_continue
+
+        FeatureHelpers::DashboardForm.upload_file(Rails.root.join('spec', 'fixtures', 'one_hundred_pages.pdf'))
+        within('.uppy-Dashboard-files') do
+          expect(page).to have_content('one_hundred_pages.pdf')
+        end
+        FeatureHelpers::DashboardForm.save_and_continue
+
+        FeatureHelpers::DashboardForm.fill_in_publishing_details(metadata)
+        FeatureHelpers::DashboardForm.publish
+
+        work_version = Work.last.versions.first
+        file_resource = work_version.file_resources.first
+
+        expect(file_resource.file.metadata['under_manual_review']).to be true
+      end
+    end
+
+    context 'when the work has a pdf file resource under the page limit' do
+      it 'updates under_manual_review to true upon publish' do
+        visit dashboard_form_work_versions_path
+
+        FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_draft(metadata)
+        FeatureHelpers::DashboardForm.save_and_continue
+        FeatureHelpers::DashboardForm.fill_in_work_details(metadata)
+        FeatureHelpers::DashboardForm.save_and_continue
+
+        FeatureHelpers::DashboardForm.save_and_continue
+
+        FeatureHelpers::DashboardForm.upload_file(Rails.root.join('spec', 'fixtures', 'ipsum.pdf'))
+        within('.uppy-Dashboard-files') do
+          expect(page).to have_content('ipsum.pdf')
+        end
+        FeatureHelpers::DashboardForm.save_and_continue
+
+        FeatureHelpers::DashboardForm.fill_in_publishing_details(metadata)
+        FeatureHelpers::DashboardForm.publish
+
+        work_version = Work.last.versions.first
+        file_resource = work_version.file_resources.first
+
+        expect(file_resource.file.metadata['under_manual_review']).to be_nil
+      end
+    end
   end
 
   describe 'Publishing a Penn State only work', :js do

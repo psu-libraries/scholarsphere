@@ -103,6 +103,10 @@ class FileResource < ApplicationRecord
     file.mime_type == PDF_MIME_TYPE
   end
 
+  def large_pdf?
+    pdf? && page_count >= 100
+  end
+
   private
 
     def client
@@ -124,5 +128,9 @@ class FileResource < ApplicationRecord
         errors.add(:base, 'FileResource cannot be deleted while associated with a ThumbnailUpload')
         throw(:abort)
       end
+    end
+
+    def page_count
+      file_data.dig('metadata', 'page_count') || 0
     end
 end

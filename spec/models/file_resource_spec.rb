@@ -121,6 +121,22 @@ RSpec.describe FileResource do
         services: [:virus, :extracted_text]
       )
     end
+
+    context 'when the file is a pdf' do
+      let(:file) { File.open(File.join(fixture_paths.first, 'ipsum.pdf')) }
+
+      it 'adds page count metadata' do
+        file_resource.save
+        expect(file_resource.file_data['metadata']['page_count']).to eq 1
+      end
+    end
+
+    context 'when the file is not a pdf' do
+      it 'does not add page count metadata' do
+        file_resource.save
+        expect(file_resource.file_data['metadata']['page_count']).to be_nil
+      end
+    end
   end
 
   describe 'after save' do
@@ -349,6 +365,37 @@ RSpec.describe FileResource do
     end
 
     context 'when the file is not a PDF' do
+      let(:file_resource) { build(:file_resource, :with_processed_image) }
+
+      it { is_expected.to be false }
+    end
+  end
+
+  describe '#large_pdf?' do
+    subject { file_resource.large_pdf? }
+
+    context 'when the file resource is a pdf' do
+      let!(:file_resource) { create(:file_resource, :pdf) }
+      let(:file_data) { { 'metadata' => { 'mime_type' => 'application/pdf', 'page_count' => page_count } } }
+
+      before do
+        allow(file_resource).to receive(:file_data).and_return file_data
+      end
+
+      context 'when the file is a large pdf' do
+        let(:page_count) { 150 }
+
+        it { is_expected.to be true }
+      end
+
+      context 'when the file is a small pdf' do
+        let(:page_count) { 50 }
+
+        it { is_expected.to be false }
+      end
+    end
+
+    context 'when the file is not a pdf' do
       let(:file_resource) { build(:file_resource, :with_processed_image) }
 
       it { is_expected.to be false }
