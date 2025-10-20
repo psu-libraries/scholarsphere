@@ -11,7 +11,7 @@ class AutoRemediateService
 
   def call
     work_version.update(auto_remediation_started_at: Time.current)
-    pdfs = work_version.file_resources.can_remediate?
+    pdfs = work_version.file_resources.can_remediate
     pdfs.each do |pdf|
       AutoRemediationJob.perform_later(pdf.id) if pdf.remediation_job_uuid.blank?
     end

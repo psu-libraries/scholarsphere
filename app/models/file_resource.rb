@@ -32,7 +32,7 @@ class FileResource < ApplicationRecord
     where("file_data->'metadata'->>'mime_type' = ?", PDF_MIME_TYPE)
   }
 
-  scope :can_remediate?, -> {
+  scope :can_remediate, -> {
     is_pdf.where('auto_remediated_version IS NULL OR auto_remediated_version = ?', false)
   }
 
