@@ -46,6 +46,16 @@ RSpec.describe FileResource do
   end
 
   describe 'scopes' do
+    describe '.can_remediate' do
+      let(:remediable_pdf) { create(:file_resource, :pdf) }
+      let(:non_remediable_pdf) { create(:file_resource, :pdf, auto_remediated_version: true) }
+      let(:non_pdf_file_resource) { create(:file_resource, :with_processed_image) }
+
+      it 'returns only PDF files that are not auto-remediated' do
+        expect(described_class.can_remediate).to contain_exactly(remediable_pdf)
+      end
+    end
+
     describe '.needs_accessibility_check' do
       let(:file_resource_with_check) { create(:file_resource, :pdf, work_versions: [create(:work_version)]) }
       let(:file_resource_without_check) { create(:file_resource, :pdf, work_versions: [create(:work_version)]) }
