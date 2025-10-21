@@ -27,7 +27,7 @@ RSpec.describe AutoRemediateService do
         context 'when there is no remediated version' do
           let(:work_version) { create(:work_version, :published) }
 
-          context 'when the download is a PDF' do
+          context 'when the download can remediate' do
             context 'when the user is not an admin' do
               context 'when the work is not under manual review' do
                 it 'returns true' do
@@ -51,7 +51,7 @@ RSpec.describe AutoRemediateService do
             end
           end
 
-          context 'when the download is not a PDF' do
+          context 'when the download cannot remediate' do
             it 'returns false' do
               expect(described_class.new(work_version.id, false, false).able_to_auto_remediate?).to be false
             end
