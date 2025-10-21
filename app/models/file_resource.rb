@@ -104,7 +104,7 @@ class FileResource < ApplicationRecord
   end
 
   def large_pdf?
-    pdf? && page_count >= 100
+    file.mime_type == PDF_MIME_TYPE && page_count >= 100
   end
 
   private
