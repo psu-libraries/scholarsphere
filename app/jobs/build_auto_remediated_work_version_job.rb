@@ -11,8 +11,7 @@ class BuildAutoRemediatedWorkVersionJob < ApplicationJob
 
     result = BuildAutoRemediatedWorkVersion.call(file_resource, remediated_file_url)
 
-      # & result.published? or not necessary
-    if (result.instance_of?(WorkVersion))
+    if (result.instance_of?(WorkVersion) && result.published?)
       lib_answers = LibanswersApiService.new
       lib_answers.admin_create_ticket(result.work.id, type = 'work_remediation')
     end
