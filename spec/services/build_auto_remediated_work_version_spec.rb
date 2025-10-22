@@ -42,7 +42,6 @@ RSpec.describe BuildAutoRemediatedWorkVersion do
             wv_count_before = WorkVersion.count
 
             result = described_class.call(file_resource, remediated_url)
-
             expect(WorkVersion.count).to eq(wv_count_before + 1)
             expect(FileResource).to exist(file_resource.id)
             expect(FileVersionMembership.find_by(work_version: result, file_resource: file_resource)).to be_nil

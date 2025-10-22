@@ -106,7 +106,7 @@ RSpec.describe LibanswersApiService, :vcr do
         let!(:base_url) { 'www.example.com' }
 
         it 'uses id 2590 for quid and ScholarSphere Deposit Accessibility Curation for question' do
-          described_class.new.admin_create_ticket(work.id, 'work_accessibility', base_url)
+          described_class.new.admin_create_ticket(work.id, 'work_accessibility_check', base_url)
           expect(mock_faraday_connection).to have_received(:post).with(
             '/api/1.1/ticket/create',
             "quid=#{accessibility_quid}&pquestion=ScholarSphere Deposit Accessibility Curation: #{
@@ -122,7 +122,7 @@ RSpec.describe LibanswersApiService, :vcr do
           end
 
           it 'creates a ticket' do
-            described_class.new.admin_create_ticket(work.id, 'work_accessibility', base_url)
+            described_class.new.admin_create_ticket(work.id, 'work_accessibility_check', base_url)
             expect(mock_faraday_connection).to have_received(:post).with(
               '/api/1.1/ticket/create',
               "quid=#{accessibility_quid}&pquestion=ScholarSphere Deposit Accessibility Curation: #{
@@ -146,7 +146,7 @@ RSpec.describe LibanswersApiService, :vcr do
           end
 
           it 'includes "pdetails" containing an accessibility report url' do
-            described_class.new.admin_create_ticket(work_2.id, 'work_accessibility', base_url)
+            described_class.new.admin_create_ticket(work_2.id, 'work_accessibility_check', base_url)
             details = "#{file_resource.file_data['metadata']['filename']}: #{base_url}/accessibility_check_results/#{accessibility_check_result.id}"
             expect(mock_faraday_connection).to have_received(:post).with(
               '/api/1.1/ticket/create',
