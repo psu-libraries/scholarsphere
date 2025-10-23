@@ -3,7 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe BuildAutoRemediatedWorkVersion do
-  let!(:work) { create(:work) }
+  let!(:user) { create(:user, access_id: 'test', email: 'test@psu.edu') }
+  let!(:work) { create(:work, depositor: user.actor) }
   let!(:file_resource) { create(:file_resource, remediation_job_uuid: SecureRandom.uuid) }
   let!(:wv_being_remediated) { create(:work_version,
                                       :published,
@@ -11,8 +12,14 @@ RSpec.describe BuildAutoRemediatedWorkVersion do
                                       work: work,
                                       file_resources: [file_resource]) }
   let(:remediated_url) { 'https://example.com/remediated.pdf' }
+  let(:lib_answers) { LibanswersApiService.new }
 
   describe '.call' do
+    before do
+      allow(lib_answers).to receive(:admin_create_ticket)
+      allow(LibanswersApiService).to receive(:new).and_return(lib_answers)
+    end
+
     context 'when a newer published version exists' do
       let!(:existing_auto) { create(:work_version,
                                     :draft, auto_remediated_version: true,
@@ -49,6 +56,12 @@ RSpec.describe BuildAutoRemediatedWorkVersion do
             expect(result.external_app).to eq(ExternalApp.pdf_accessibility_api)
             expect(result).to be_published
           end
+
+          it 'calls the Libanswers service with an admin curation ticket' do
+            allow(Down).to receive(:download).with(remediated_url).and_return(Tempfile.new('remediated'))
+            result = described_class.call(file_resource, remediated_url)
+            expect(lib_answers).to have_received(:admin_create_ticket).with(result.work.id, 'work_remediation')
+          end
         end
 
         context 'when there are remaining remediation jobs' do
@@ -71,6 +84,12 @@ RSpec.describe BuildAutoRemediatedWorkVersion do
             expect(WorkVersion.find(result.id).file_resources.where(auto_remediated_version: true).count).to eq(1)
             expect(result.external_app).to eq(ExternalApp.pdf_accessibility_api)
             expect(result).to be_draft
+          end
+
+          it 'does not call the Libanswers service' do
+            allow(Down).to receive(:download).with(remediated_url).and_return(Tempfile.new('remediated'))
+            result = described_class.call(file_resource, remediated_url)
+            expect(lib_answers).not_to have_received(:admin_create_ticket).with(result.work.id, 'work_remediation')
           end
         end
       end
@@ -98,6 +117,12 @@ RSpec.describe BuildAutoRemediatedWorkVersion do
             expect(result.external_app).to eq(ExternalApp.pdf_accessibility_api)
             expect(result).to be_published
           end
+
+          it 'calls the Libanswers service with an admin curation ticket' do
+            allow(Down).to receive(:download).with(remediated_url).and_return(Tempfile.new('remediated'))
+            result = described_class.call(file_resource, remediated_url)
+            expect(lib_answers).to have_received(:admin_create_ticket).with(result.work.id, 'work_remediation')
+          end
         end
 
         context 'when there are remaining remediation jobs' do
@@ -120,6 +145,12 @@ RSpec.describe BuildAutoRemediatedWorkVersion do
             expect(WorkVersion.find(result.id).file_resources.where(auto_remediated_version: true).count).to eq(1)
             expect(result.external_app).to eq(ExternalApp.pdf_accessibility_api)
             expect(result).to be_draft
+          end
+
+          it 'does not call the Libanswers service' do
+            allow(Down).to receive(:download).with(remediated_url).and_return(Tempfile.new('remediated'))
+            result = described_class.call(file_resource, remediated_url)
+            expect(lib_answers).not_to have_received(:admin_create_ticket).with(result.work.id, 'work_remediation')
           end
         end
       end

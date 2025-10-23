@@ -6,7 +6,7 @@ RSpec.describe BuildAutoRemediatedWorkVersionJob do
   let(:file_resource) { create(:file_resource, remediation_job_uuid: existing_job_uuid) }
   let(:existing_job_uuid) { SecureRandom.uuid }
   let(:remediated_file_url) { 'https://example.com/remediated.pdf' }
-  let(:unpublished_work_version) {create(:work_version) }
+  let(:unpublished_work_version) { create(:work_version) }
   let(:published_work_version) { create(:work_version, :published) }
   let(:lib_answers) { LibanswersApiService.new }
 
@@ -29,36 +29,6 @@ RSpec.describe BuildAutoRemediatedWorkVersionJob do
       it 'calls the service when perform_now is used' do
         described_class.perform_now(file_resource.remediation_job_uuid, remediated_file_url)
         expect(BuildAutoRemediatedWorkVersion).to have_received(:call).with(file_resource, remediated_file_url)
-      end
-    end
-
-    context 'when the service returns a published new work version' do
-      before do
-        allow(BuildAutoRemediatedWorkVersion).to receive(:call).and_return(published_work_version)
-      end
-      it 'calls the LibanswersApiService with a remediation ticket' do
-        described_class.perform_now(file_resource.remediation_job_uuid, remediated_file_url)
-        expect(lib_answers).to have_received(:admin_create_ticket).with(published_work_version.work.id, 'work_remediation')
-      end
-    end
-
-    context 'when the service returns an unpublished new work version' do
-      before do
-        allow(BuildAutoRemediatedWorkVersion).to receive(:call).and_return(unpublished_work_version)
-      end
-      it 'does not call the LibanswersApiService' do
-        described_class.perform_now(file_resource.remediation_job_uuid, remediated_file_url)
-        expect(lib_answers).not_to have_received(:admin_create_ticket)
-      end
-    end
-
-    context 'when the service does not return anew work version' do
-      before do
-        allow(BuildAutoRemediatedWorkVersion).to receive(:call).and_return(nil)
-      end
-      it 'does not call the LibanswersApiService' do
-        described_class.perform_now(file_resource.remediation_job_uuid, remediated_file_url)
-        expect(lib_answers).not_to have_received(:admin_create_ticket)
       end
     end
   end

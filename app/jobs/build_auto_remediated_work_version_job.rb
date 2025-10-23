@@ -9,11 +9,6 @@ class BuildAutoRemediatedWorkVersionJob < ApplicationJob
     # remediation_job_uuid will no longer be associated with the file.
     file_resource = FileResource.find_by!(remediation_job_uuid: remediation_job_uuid)
 
-    result = BuildAutoRemediatedWorkVersion.call(file_resource, remediated_file_url)
-
-    if (result.instance_of?(WorkVersion) && result.published?)
-      lib_answers = LibanswersApiService.new
-      lib_answers.admin_create_ticket(result.work.id, type = 'work_remediation')
-    end
+    BuildAutoRemediatedWorkVersion.call(file_resource, remediated_file_url)
   end
 end
