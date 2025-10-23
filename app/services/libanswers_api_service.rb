@@ -9,7 +9,7 @@ class LibanswersApiService
 
   def admin_create_ticket(id, type = 'work_curation', base_url = '')
     depositor = get_depositor(id, type)
-    if type == 'work_curation' || (type == 'collection' && !depositor.active?)
+    if (type == 'work_curation' || type == 'collection') && !depositor.active?
       raise LibanswersApiError, I18n.t('resources.contact_depositor_button.error_message')
     end
 
@@ -62,7 +62,7 @@ class LibanswersApiService
         "ScholarSphere Deposit Accessibility Curation: #{work.latest_version.title}"
       when 'work_remediation'
         work = Work.find(id)
-        "ScholarSphere Deposit Autoremediation Check: #{work.latest_version.title}"
+        "ScholarSphere PDF Auto-remediation Result: #{work.latest_version.title}"
       end
     end
 
