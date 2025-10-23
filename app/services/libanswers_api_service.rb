@@ -9,7 +9,7 @@ class LibanswersApiService
 
   def admin_create_ticket(id, type = 'work_curation', base_url = '')
     depositor = get_depositor(id, type)
-    if (type == 'work_curation' || type == 'collection') && !depositor.active?
+    if ['work_curation', 'collection'].include?(type) && !depositor.active?
       raise LibanswersApiError, I18n.t('resources.contact_depositor_button.error_message')
     end
 
