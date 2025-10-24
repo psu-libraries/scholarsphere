@@ -35,6 +35,11 @@ RSpec.describe BuildAutoRemediatedWorkVersion do
     end
 
     context 'when the work version being remediated is the latest published version' do
+      before do
+        allow(AutoRemediationNotifications)
+          .to receive(:new).and_return(instance_double(AutoRemediationNotifications, send_notifications: true))
+      end
+
       context 'when no auto-remediated work version exists after the one being remediated' do
         context 'when no remaining remediation jobs' do
           it 'builds a new work version, attaches the remediated file, and publishes' do
@@ -49,6 +54,8 @@ RSpec.describe BuildAutoRemediatedWorkVersion do
             expect(WorkVersion.find(result.id).file_resources.where(auto_remediated_version: true).count).to eq(1)
             expect(result.external_app).to eq(ExternalApp.pdf_accessibility_api)
             expect(result).to be_published
+            expect(AutoRemediationNotifications)
+              .to have_received(:new).with(result)
           end
         end
 
@@ -72,6 +79,8 @@ RSpec.describe BuildAutoRemediatedWorkVersion do
             expect(WorkVersion.find(result.id).file_resources.where(auto_remediated_version: true).count).to eq(1)
             expect(result.external_app).to eq(ExternalApp.pdf_accessibility_api)
             expect(result).to be_draft
+            expect(AutoRemediationNotifications)
+              .not_to have_received(:new).with(result)
           end
         end
       end
@@ -98,6 +107,8 @@ RSpec.describe BuildAutoRemediatedWorkVersion do
             expect(WorkVersion.find(result.id).file_resources.where(auto_remediated_version: true).count).to eq(1)
             expect(result.external_app).to eq(ExternalApp.pdf_accessibility_api)
             expect(result).to be_published
+            expect(AutoRemediationNotifications)
+              .to have_received(:new).with(result)
           end
         end
 
@@ -121,6 +132,8 @@ RSpec.describe BuildAutoRemediatedWorkVersion do
             expect(WorkVersion.find(result.id).file_resources.where(auto_remediated_version: true).count).to eq(1)
             expect(result.external_app).to eq(ExternalApp.pdf_accessibility_api)
             expect(result).to be_draft
+            expect(AutoRemediationNotifications)
+              .not_to have_received(:new).with(result)
           end
         end
       end
