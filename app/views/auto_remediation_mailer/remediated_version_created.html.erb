@@ -1,0 +1,30 @@
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  </head>
+  <body>
+    <p>
+      Hello,
+    </p>
+    <p>
+      An accessible version of your work, <%= link_to @work_title, resource_url(@work_version_uuid) %>,
+      has been generated and is now the most recent published version in ScholarSphere.  As part of this
+      process, an accessible PDF was generated using Adobe with AI used to generate alternative text
+      (alt text) for images in the PDF.
+    </p>
+    <p>
+      The Libraries’ Adaptive Technology and Services team will manually review this accessible version
+      to ensure accuracy and may make further corrections as needed.
+    </p>
+    <p>
+      If you have questions, please contact the ScholarSphere Curation team via our
+      <a href="<%= new_incident_url %>">help form</a> or the Libraries’ Adaptive Technologies team at
+      <a href="mailto:ul-adaptive-tech-svcs@lists.psu.edu">ul-adaptive-tech-svcs@lists.psu.edu</a>.
+    </p>
+    <p>
+      Thank you,
+      <br>
+      ScholarSphere Curation Team
+    </p>
+  </body>
+</html>

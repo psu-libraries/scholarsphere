@@ -39,6 +39,7 @@ class BuildAutoRemediatedWorkVersion
           built_work_version.save!
         else
           built_work_version.publish!
+          AutoRemediationNotifications.new(built_work_version).send_notifications
         end
 
         return built_work_version

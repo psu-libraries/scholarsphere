@@ -721,6 +721,9 @@ en:
         heading: "Latest Report for the Month of %{date}"
       added_as_editor:
         subject: Edit Access for %{title}
+    auto_remediation:
+      remediated_version_created:
+        subject: 'Accessible Version of Your Work Now Available on ScholarSphere'
   modal:
     close:
       icon: "\u00D7"
