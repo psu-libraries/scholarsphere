@@ -10,7 +10,7 @@ class AutoRemediationMailer < ApplicationMailer
     mail(
       to: contributor_email,
       from: Rails.configuration.no_reply_email,
-      subject: I18n.t('mailers.auto_remediation.subject')
+      subject: I18n.t('mailers.auto_remediation.remediated_version_created.subject')
     )
   end
 end

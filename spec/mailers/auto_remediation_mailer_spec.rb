@@ -14,7 +14,7 @@ RSpec.describe AutoRemediationMailer do
       expect(mail.subject).to eq('Accessible Version of Your Work Now Available on ScholarSphere')
       expect(mail.to).to contain_exactly('contributor@example.com')
       expect(mail.body.encoded).to include(
-        '<a href="http://web/resources/123e4567-e89b-12d3-a456-426614174000">Title of Work</a>'
+        "<a href=\"#{Rails.application.routes.url_helpers.root_url}resources/123e4567-e89b-12d3-a456-426614174000\">Title of Work</a>"
       )
       expect(mail.body.encoded).to include(
         'The Libraries’ Adaptive Technology and Services team will manually '
