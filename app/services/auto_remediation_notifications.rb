@@ -10,7 +10,7 @@ class AutoRemediationNotifications
       AutoRemediationMailer
         .with(work_version_title: @remediated_work_version.title,
               work_version_uuid: @remediated_work_version.uuid,
-              user_email: email)
+              contributor_email: email)
         .remediated_version_created
         .deliver_later
     end
