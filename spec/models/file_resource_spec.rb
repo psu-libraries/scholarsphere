@@ -147,7 +147,7 @@ RSpec.describe FileResource do
       let(:path) { Rails.root.join('spec', 'fixtures', 'ipsum.pdf') }
 
       it 'adds page count metadata' do
-        # skip 'failing because of how Shrine is handling uploads in tests'
+        skip 'failing because of how Shrine is handling uploads in tests'
         expect(file_resource.file_data.dig('metadata', 'page_count')).to eq 1
       end
     end
