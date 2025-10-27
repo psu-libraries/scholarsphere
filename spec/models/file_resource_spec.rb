@@ -121,19 +121,31 @@ RSpec.describe FileResource do
         services: [:virus, :extracted_text]
       )
     end
+  end
+
+  describe 'page count' do
+    let(:file_resource) { described_class.new }
+    let(:file) { File.open(path, binmode: true) }
+    let(:uploaded_file) {  }
+
+    before do
+      file_resource.file = Shrine.upload(file, :store, metadata: { 'mime_type' => 'application/pdf'})
+      file_resource.save
+    end
 
     context 'when the file is a pdf' do
-      let(:file) { File.open(File.join(fixture_paths.first, 'ipsum.pdf')) }
+      let(:path) { Rails.root.join('spec', 'fixtures', 'ipsum.pdf') }
 
       it 'adds page count metadata' do
-        file_resource.save
-        expect(file_resource.file_data['metadata']['page_count']).to eq 1
+        # skip 'failing because of how Shrine is handling uploads in tests'
+        expect(file_resource.file_data.dig('metadata', 'page_count')).to eq 1
       end
     end
 
     context 'when the file is not a pdf' do
+      let(:path) { Rails.root.join('spec', 'fixtures', 'image.png') }
+
       it 'does not add page count metadata' do
-        file_resource.save
         expect(file_resource.file_data['metadata']['page_count']).to be_nil
       end
     end
