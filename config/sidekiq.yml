@@ -9,3 +9,5 @@
   - thumbnails
   - signature
   - accessibility_check
+  - auto_remediation_out
+  - auto_remediation_in
