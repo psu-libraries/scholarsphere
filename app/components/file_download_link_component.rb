@@ -43,7 +43,7 @@ class FileDownloadLinkComponent < ViewComponent::Base
   end
 
   def remediation_alert?
-    remediation_service = AutoRemediateService.new(work_version_id, helpers.current_user.admin?, pdf?)
+    remediation_service = AutoRemediateService.new(work_version_id, helpers.current_user.admin?, can_remediate?)
     remediation_service.able_to_auto_remediate?
   end
 
@@ -59,8 +59,8 @@ class FileDownloadLinkComponent < ViewComponent::Base
       @file_version_membership.file_resource.image?
     end
 
-    def pdf?
-      @file_version_membership.file_resource.pdf?
+    def can_remediate?
+      @file_version_membership.file_resource.can_remediate?
     end
 
     def work_version_uuid

@@ -25,6 +25,8 @@ module PdfRemediation
         raise InvalidAPIKey
       when 422
         raise InvalidFileURL
+      else
+        raise "Unexpected response: #{response.status} - #{response.body}"
       end
     rescue Faraday::Error => e
       raise ConnectionError.new(e)

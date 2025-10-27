@@ -18,6 +18,7 @@ linters:
       - '*app/components/edit_resource_button.html.erb'
       - '*app/components/flash_message_component.html.erb'
       - '*app/views/actor_mailer/*'
+      - '*app/views/auto_remediation_mailer/*'
       - '*app/views/catalog/_search_form.html.erb'
       - '*app/views/catalog/facet.html.erb'
       - '*app/views/dashboard/catalog/_index_work_version.html.erb'

@@ -33,6 +33,13 @@ RSpec.describe ExternalApp do
     its(:contact_email) { is_expected.to eq(Rails.configuration.no_reply_email) }
   end
 
+  describe '::pdf_accessibility_api' do
+    subject(:app) { described_class.pdf_accessibility_api }
+
+    it { is_expected.to be_a(described_class) }
+    its(:contact_email) { is_expected.to eq(Rails.configuration.no_reply_email) }
+  end
+
   describe '#access_id' do
     subject(:application) { build(:external_app) }
 

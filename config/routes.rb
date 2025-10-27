@@ -177,6 +177,10 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :webhooks do
+    post 'pdf_accessibility_api', to: 'pdf_accessibility_api#create'
+  end
+
   get '/404', to: 'errors#not_found'
   get '/401', to: 'errors#not_found'
   get '/500', to: 'errors#server_error'
