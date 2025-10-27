@@ -46,12 +46,10 @@ class BuildAutoRemediatedWorkVersion
     end
   end
 
-  private
-
-    def self.on_publish(built_work_version)
-      built_work_version.publish!
-      lib_answers = LibanswersApiService.new
-      lib_answers.admin_create_ticket(built_work_version.work.id, 'work_remediation')
-      AutoRemediationNotifications.new(built_work_version).send_notifications
-    end
+  def self.on_publish(built_work_version)
+    built_work_version.publish!
+    lib_answers = LibanswersApiService.new
+    lib_answers.admin_create_ticket(built_work_version.work.id, 'work_remediation')
+    AutoRemediationNotifications.new(built_work_version).send_notifications
+  end
 end
