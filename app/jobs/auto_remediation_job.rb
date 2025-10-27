@@ -3,7 +3,7 @@
 require 'pdf_remediation/client'
 
 class AutoRemediationJob < ApplicationJob
-  queue_as :auto_remediation
+  queue_as :auto_remediation_out
 
   def perform(file_resource_id)
     file_resource = FileResource.find(file_resource_id)
