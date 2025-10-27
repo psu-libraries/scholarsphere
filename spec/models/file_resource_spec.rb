@@ -126,10 +126,9 @@ RSpec.describe FileResource do
   describe 'page count' do
     let(:file_resource) { described_class.new }
     let(:file) { File.open(path, binmode: true) }
-    let(:uploaded_file) {  }
 
     before do
-      file_resource.file = Shrine.upload(file, :store, metadata: { 'mime_type' => 'application/pdf'})
+      file_resource.file = Shrine.upload(file, :store, metadata: { 'mime_type' => 'application/pdf' })
       file_resource.save
     end
 
