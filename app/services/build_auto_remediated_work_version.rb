@@ -38,14 +38,20 @@ class BuildAutoRemediatedWorkVersion
         if built_work_version.has_remaining_auto_remediation_jobs?
           built_work_version.save!
         else
-          built_work_version.publish!
-          lib_answers = LibanswersApiService.new
-          lib_answers.admin_create_ticket(built_work_version.work.id, 'work_remediation')
-          AutoRemediationNotifications.new(built_work_version).send_notifications
+          on_publish(built_work_version)
         end
 
         return built_work_version
       end
     end
   end
+
+  private
+
+    def on_publish(built_work_version)
+      built_work_version.publish!
+      lib_answers = LibanswersApiService.new
+      lib_answers.admin_create_ticket(built_work_version.work.id, 'work_remediation')
+      AutoRemediationNotifications.new(built_work_version).send_notifications
+    end
 end
