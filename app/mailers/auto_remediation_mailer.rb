@@ -2,10 +2,10 @@
 
 class AutoRemediationMailer < ApplicationMailer
   def remediated_version_created
-    contributor_email = params[:contributor_email]
+    contributor_email = params.fetch(:contributor_email)
 
-    @work_title = params[:work_title]
-    @work_version_uuid = params[:work_version_uuid]
+    @work_title = params.fetch(:work_title)
+    @work_version_uuid = params.fetch(:work_version_uuid)
 
     mail(
       to: contributor_email,

@@ -36,6 +36,20 @@ class FileUploader < Shrine
     }
   end
 
+  # Add page count metadata for PDFs
+  add_metadata :page_count do |io, context|
+    mime_type = context.dig(:metadata, 'mime_type')
+    next unless mime_type == FileResource::PDF_MIME_TYPE
+
+    begin
+      tempfile = io.download
+      reader = PDF::Reader.new(tempfile.path)
+      reader.page_count
+    ensure
+      tempfile&.close!
+    end
+  end
+
   Attacher.promote_block do
     Shrine::PromotionJob.perform_later(
       record: record,

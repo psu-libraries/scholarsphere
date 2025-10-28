@@ -14,6 +14,10 @@ FactoryBot.define do
       file_data { |n| FileHelpers.pdf_data "pdf-#{n}.pdf" }
     end
 
+    trait :large_pdf do
+      file_data { |n| FileHelpers.large_pdf_data "large_pdf-#{n}.pdf" }
+    end
+
     trait :doc do
       file_data { |n| FileHelpers.doc_data "doc-#{n}.docx" }
     end

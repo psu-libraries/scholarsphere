@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class BuildAutoRemediatedWorkVersionJob < ApplicationJob
-  queue_as :auto_remediation
+  queue_as :auto_remediation_in
 
   def perform(remediation_job_uuid, remediated_file_url)
     # In the extremely rare case that multiple remediation jobs are kicked off
