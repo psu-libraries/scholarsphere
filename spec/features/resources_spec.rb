@@ -313,7 +313,8 @@ RSpec.describe 'Public Resources' do
         it 'displays the thumbnail' do
           expect(page).to have_css("img[src='url.com/path/file']")
           expect(page).to have_css('.thumbnail-card')
-          expect(page).to have_css("img[alt='Thumbnail image for #{work.title}']")
+          thumbnail_img = page.find("img[src='url.com/path/file']")
+          expect(thumbnail_img['alt']).to eq("Thumbnail image for #{work.latest_published_version.title}")
         end
       end
     end
@@ -440,7 +441,8 @@ RSpec.describe 'Public Resources' do
         it 'displays the thumbnail' do
           expect(page).to have_css("img[src='url.com/path/file']")
           expect(page).to have_css('.thumbnail-card')
-          expect(page).to have_css("img[alt='Thumbnail image for #{collection.title}']")
+          thumbnail_img = page.find("img[src='url.com/path/file']")
+          expect(thumbnail_img['alt']).to eq("Thumbnail image for #{collection.title}")
         end
       end
     end
