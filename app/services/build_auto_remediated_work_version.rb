@@ -7,7 +7,7 @@ class BuildAutoRemediatedWorkVersion
 
   def self.call(file_resource, remediated_file_url)
     wv_being_remediated = file_resource.latest_remediation_work_version_candidate
-
+    original_filename = file_resource.file_data['metadata']['filename']
     # In the rare case a new work version is published after the remediation
     # job started, we stop the creation of a new remediated version here.
     unless wv_being_remediated.latest_published_version?
@@ -30,11 +30,13 @@ class BuildAutoRemediatedWorkVersion
         fvm_to_destroy&.destroy!
 
         replacement_tempfile = Down.download(remediated_file_url)
-        built_work_version.file_resources.create!(
+        new_resource = built_work_version.file_resources.create!(
           file: replacement_tempfile,
           auto_remediated_version: true
         )
 
+        new_resource.file_data['metadata']['filename'] = "ACCESSIBLE_VERSION_#{original_filename}"
+        new_resource.save!
         if built_work_version.has_remaining_auto_remediation_jobs?
           built_work_version.save!
         else

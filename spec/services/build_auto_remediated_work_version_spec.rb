@@ -43,7 +43,7 @@ RSpec.describe BuildAutoRemediatedWorkVersion do
       context 'when no auto-remediated work version exists after the one being remediated' do
         context 'when no remaining remediation jobs' do
           it 'builds a new work version, attaches the remediated file, and publishes' do
-            allow(Down).to receive(:download).with(remediated_url).and_return(Tempfile.new('remediated'))
+            allow(Down).to receive(:download).with(remediated_url).and_return(Tempfile.new('COMPLIANT'))
             wv_count_before = WorkVersion.count
 
             result = described_class.call(file_resource, remediated_url)
@@ -51,7 +51,11 @@ RSpec.describe BuildAutoRemediatedWorkVersion do
             expect(WorkVersion.count).to eq(wv_count_before + 1)
             expect(FileResource).to exist(file_resource.id)
             expect(FileVersionMembership.find_by(work_version: result, file_resource: file_resource)).to be_nil
-            expect(WorkVersion.find(result.id).file_resources.where(auto_remediated_version: true).count).to eq(1)
+            remediated_file_resource = WorkVersion.find(result.id).file_resources.where(auto_remediated_version: true)
+            expect(remediated_file_resource.count).to eq(1)
+            expect(remediated_file_resource.first.file_data['metadata']['filename']).to eq(
+              "ACCESSIBLE_VERSION_#{FileResource.find(file_resource.id).file_data['metadata']['filename']}"
+            )
             expect(result.external_app).to eq(ExternalApp.pdf_accessibility_api)
             expect(result).to be_published
             expect(AutoRemediationNotifications)
@@ -76,7 +80,11 @@ RSpec.describe BuildAutoRemediatedWorkVersion do
             expect(WorkVersion.count).to eq(wv_count_before + 1)
             expect(FileResource).to exist(file_resource.id)
             expect(FileVersionMembership.find_by(work_version: result, file_resource: file_resource)).to be_nil
-            expect(WorkVersion.find(result.id).file_resources.where(auto_remediated_version: true).count).to eq(1)
+            remediated_file_resource = WorkVersion.find(result.id).file_resources.where(auto_remediated_version: true)
+            expect(remediated_file_resource.count).to eq(1)
+            expect(remediated_file_resource.first.file_data['metadata']['filename']).to eq(
+              "ACCESSIBLE_VERSION_#{FileResource.find(file_resource.id).file_data['metadata']['filename']}"
+            )
             expect(result.external_app).to eq(ExternalApp.pdf_accessibility_api)
             expect(result).to be_draft
             expect(AutoRemediationNotifications)
@@ -104,7 +112,11 @@ RSpec.describe BuildAutoRemediatedWorkVersion do
             expect(WorkVersion.count).to eq(wv_count_before)
             expect(FileResource).to exist(file_resource.id)
             expect(FileVersionMembership.find_by(work_version: result, file_resource: file_resource)).to be_nil
-            expect(WorkVersion.find(result.id).file_resources.where(auto_remediated_version: true).count).to eq(1)
+            remediated_file_resource = WorkVersion.find(result.id).file_resources.where(auto_remediated_version: true)
+            expect(remediated_file_resource.count).to eq(1)
+            expect(remediated_file_resource.first.file_data['metadata']['filename']).to eq(
+              "ACCESSIBLE_VERSION_#{FileResource.find(file_resource.id).file_data['metadata']['filename']}"
+            )
             expect(result.external_app).to eq(ExternalApp.pdf_accessibility_api)
             expect(result).to be_published
             expect(AutoRemediationNotifications)
@@ -129,7 +141,11 @@ RSpec.describe BuildAutoRemediatedWorkVersion do
             expect(WorkVersion.count).to eq(wv_count_before)
             expect(FileResource).to exist(file_resource.id)
             expect(FileVersionMembership.find_by(work_version: result, file_resource: file_resource)).to be_nil
-            expect(WorkVersion.find(result.id).file_resources.where(auto_remediated_version: true).count).to eq(1)
+            remediated_file_resource = WorkVersion.find(result.id).file_resources.where(auto_remediated_version: true)
+            expect(remediated_file_resource.count).to eq(1)
+            expect(remediated_file_resource.first.file_data['metadata']['filename']).to eq(
+              "ACCESSIBLE_VERSION_#{FileResource.find(file_resource.id).file_data['metadata']['filename']}"
+            )
             expect(result.external_app).to eq(ExternalApp.pdf_accessibility_api)
             expect(result).to be_draft
             expect(AutoRemediationNotifications)
