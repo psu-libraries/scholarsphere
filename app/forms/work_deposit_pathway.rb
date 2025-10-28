@@ -186,6 +186,7 @@ class WorkDepositPathway
                :draft_curation_requested,
                :accessibility_remediation_requested,
                :file_resources,
+               :has_large_pdf_file_resource?,
                :file_version_memberships,
                :mint_doi_requested,
                :has_image_file_resource?,

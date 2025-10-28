@@ -991,6 +991,46 @@ RSpec.describe WorkVersion do
     end
   end
 
+  describe '#has_large_pdf_file_resource?' do
+    let(:work_version) { create(:work_version) }
+    let!(:large_pdf_file_resource) { create(:file_resource, :pdf) }
+    let!(:small_pdf_file_resource) { create(:file_resource, :pdf) }
+
+    before do
+      large_pdf_file_resource.file_data['metadata']['page_count'] = 100
+      large_pdf_file_resource.save!
+      small_pdf_file_resource.file_data['metadata']['page_count'] = 10
+      small_pdf_file_resource.save!
+    end
+
+    context 'when there is at least one large PDF file resource' do
+      it 'returns true' do
+        create(:file_version_membership,
+               work_version: work_version,
+               file_resource: large_pdf_file_resource)
+        create(:file_version_membership,
+               work_version: work_version,
+               file_resource: small_pdf_file_resource)
+        expect(work_version.has_large_pdf_file_resource?).to eq true
+      end
+    end
+
+    context 'when there are only non-large-PDF file resources' do
+      it 'returns false' do
+        create(:file_version_membership,
+               work_version: work_version,
+               file_resource: small_pdf_file_resource)
+        expect(work_version.has_large_pdf_file_resource?).to eq false
+      end
+    end
+
+    context 'when there are no file resources' do
+      it 'returns false' do
+        expect(work_version.has_large_pdf_file_resource?).to eq false
+      end
+    end
+  end
+
   describe '#has_remaining_auto_remediation_jobs?' do
     let(:work_version) { create(:work_version) }
 

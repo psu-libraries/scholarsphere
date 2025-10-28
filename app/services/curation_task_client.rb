@@ -13,6 +13,7 @@ class CurationTaskClient
     labels << 'Updated Version' if updated_version
     labels << 'Accessibility Remediation Requested' if remediation_requested
     labels << 'Needs Accessibility Review' if work_version.needs_accessibility_review
+    labels << 'Large PDF' if work_version.has_large_pdf_file_resource?
 
     record =
       {

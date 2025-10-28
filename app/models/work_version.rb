@@ -393,6 +393,10 @@ class WorkVersion < ApplicationRecord
     file_resources&.any?(&:image?)
   end
 
+  def has_large_pdf_file_resource?
+    file_resources&.any?(&:large_pdf?)
+  end
+
   def has_remaining_auto_remediation_jobs?
     file_resources.exists?(['remediation_job_uuid IS NOT NULL AND auto_remediated_version = ?', false])
   end

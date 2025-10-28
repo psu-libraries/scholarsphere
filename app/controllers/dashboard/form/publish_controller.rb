@@ -33,6 +33,7 @@ module Dashboard
           # WorkVersion#set_thumbnail_selection may be unreliable if the Shrine::ThumbnailJob is delayed
           @resource.set_thumbnail_selection
           @resource.indexing_source = Proc.new { nil }
+          @resource.work.under_manual_review = true if @resource.has_large_pdf_file_resource?
           @resource.save
           @resource.publish
         elsif curator_action_requested?
