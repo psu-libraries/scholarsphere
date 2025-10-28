@@ -30,13 +30,7 @@ class BuildAutoRemediatedWorkVersion
         fvm_to_destroy&.destroy!
 
         replacement_tempfile = Down.download(remediated_file_url)
-        new_resource = built_work_version.file_resources.create!(
-          file: replacement_tempfile,
-          auto_remediated_version: true
-        )
-
-        new_resource.file_data['metadata']['filename'] = "ACCESSIBLE_VERSION_#{original_filename}"
-        new_resource.save!
+        build_file_resource(built_work_version, replacement_tempfile, original_filename)
         if built_work_version.has_remaining_auto_remediation_jobs?
           built_work_version.save!
         else
@@ -47,5 +41,15 @@ class BuildAutoRemediatedWorkVersion
         return built_work_version
       end
     end
+  end
+
+  def self.build_file_resource(work_version, replacement_tempfile, original_filename)
+    new_resource = work_version.file_resources.create!(
+      file: replacement_tempfile,
+      auto_remediated_version: true
+    )
+
+    new_resource.file_data['metadata']['filename'] = "ACCESSIBLE_VERSION_#{original_filename}"
+    new_resource.save!
   end
 end
