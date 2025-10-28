@@ -43,7 +43,7 @@ class BuildAutoRemediatedWorkVersion
     end
   end
 
-  def self.build_file_resource(work_version, replacement_tempfile, original_filename)
+  private_class_method def self.build_file_resource(work_version, replacement_tempfile, original_filename)
     new_resource = work_version.file_resources.create!(
       file: replacement_tempfile,
       auto_remediated_version: true
