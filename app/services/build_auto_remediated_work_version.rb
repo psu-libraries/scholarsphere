@@ -50,6 +50,7 @@ class BuildAutoRemediatedWorkVersion
 
     new_resource.file_data['metadata']['filename'] = "ACCESSIBLE_VERSION_#{original_filename}"
     new_resource.save!
+  end
 
   private_class_method def self.on_publish(built_work_version)
     built_work_version.publish!
