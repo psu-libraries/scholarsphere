@@ -72,9 +72,9 @@ RSpec.describe Webhooks::PdfAccessibilityApiController do
             .with(file.remediation_job_uuid, 'https://example.com/out.pdf')
         end
 
-        context 'when an error occurs during processing' do
+        context 'when an error occurs enqueuing the job' do
           before do
-            allow(BuildAutoRemediatedWorkVersionJob).to receive(:perform_later).and_raise(StandardError.new('Processing error'))
+            allow(BuildAutoRemediatedWorkVersionJob).to receive(:perform_later).and_raise(StandardError.new('Redis error'))
             allow(Rails.logger).to receive(:error)
           end
 
@@ -82,7 +82,7 @@ RSpec.describe Webhooks::PdfAccessibilityApiController do
             post :create, params: params, as: :json
 
             expect(response).to have_http_status(:internal_server_error)
-            expect(response.parsed_body).to include('error' => 'Processing error')
+            expect(response.parsed_body).to include('error' => 'Redis error')
             expect(file.reload.auto_remediation_failed_at).not_to be_nil
           end
         end
