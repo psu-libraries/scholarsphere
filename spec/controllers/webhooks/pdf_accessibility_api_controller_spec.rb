@@ -17,6 +17,7 @@ RSpec.describe Webhooks::PdfAccessibilityApiController do
     @original_secret = ENV['PDF_REMEDIATION_WEBHOOK_SECRET']
     ENV['PDF_REMEDIATION_WEBHOOK_SECRET'] = secret
     allow(BuildAutoRemediatedWorkVersionJob).to receive(:perform_later).and_return(nil)
+    allow(AutoRemediationFailedJob).to receive(:perform_later).and_return(nil)
   end
 
   after do
@@ -82,13 +83,14 @@ RSpec.describe Webhooks::PdfAccessibilityApiController do
           allow(Rails.logger).to receive(:error)
         end
 
-        it 'logs the failure and returns 200 with the processing message' do
+        it 'logs the failure, enqueues the failed job, and returns 200 with the processing message' do
           post :create, params: params, as: :json
 
           expect(response).to have_http_status(:ok)
           expect(response.parsed_body).to include('message' => error_message)
           expect(Rails.logger).to have_received(:error)
             .with("Auto-remediation job failed: #{error_message}")
+          expect(AutoRemediationFailedJob).to have_received(:perform_later).with(file.remediation_job_uuid)
         end
       end
     end
