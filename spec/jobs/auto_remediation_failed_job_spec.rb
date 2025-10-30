@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe AutoRemediationFailedJob do
   describe '#perform' do
     let(:existing_job_uuid) { SecureRandom.uuid }
-    let(:file_resource) do
+    let!(:file_resource) do
       create(:file_resource,
              remediation_job_uuid: existing_job_uuid,
              work_versions: [create(:work_version)])
@@ -21,12 +21,8 @@ RSpec.describe AutoRemediationFailedJob do
     end
 
     context 'when the file resource with the given remediation_job_uuid exists' do
-      it 'marks the resource as failed and creates a LibAnswers ticket' do
-        expect {
-          described_class.perform_now(existing_job_uuid)
-        }.to change {
-          file_resource.reload.auto_remediation_failed_at
-        }.from(nil)
+      it 'creates a LibAnswers ticket' do
+        described_class.perform_now(existing_job_uuid)
 
         expect(LibanswersApiService).to have_received(:new)
         expect(service).to have_received(:admin_create_ticket).with(work.id, 'work_remediation_failed')

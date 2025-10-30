@@ -25,12 +25,14 @@ class Webhooks::PdfAccessibilityApiController < ApplicationController
       BuildAutoRemediatedWorkVersionJob.perform_later(job_data[:uuid], job_data[:output_url])
       render json: { message: 'Update successful' }, status: :ok
     rescue StandardError => e
+      store_failure(job_data[:uuid])
       render json: { error: e.message }, status: :internal_server_error
     end
 
     def handle_failure(job_data)
       Rails.logger.error("Auto-remediation job failed: #{job_data[:processing_error_message]}")
       AutoRemediationFailedJob.perform_later(job_data[:uuid])
+      store_failure(job_data[:uuid])
       render json: { message: job_data[:processing_error_message] }, status: :ok
     end
 
@@ -45,5 +47,10 @@ class Webhooks::PdfAccessibilityApiController < ApplicationController
       raise 'PDF_REMEDIATION_WEBHOOK_SECRET not configured.' if ENV['PDF_REMEDIATION_WEBHOOK_SECRET'].blank?
 
       head(:unauthorized) unless request.headers['X-API-KEY'] == ENV['PDF_REMEDIATION_WEBHOOK_SECRET']
+    end
+
+    def store_failure(job_uuid)
+      file_resource = FileResource.find_by(remediation_job_uuid: job_uuid)
+      file_resource.update(auto_remediation_failed_at: Time.current)
     end
 end
