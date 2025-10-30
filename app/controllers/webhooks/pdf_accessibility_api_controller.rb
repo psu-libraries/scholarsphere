@@ -30,6 +30,7 @@ class Webhooks::PdfAccessibilityApiController < ApplicationController
 
     def handle_failure(job_data)
       Rails.logger.error("Auto-remediation job failed: #{job_data[:processing_error_message]}")
+      AutoRemediationFailedJob.perform_later(job_data[:uuid])
       render json: { message: job_data[:processing_error_message] }, status: :ok
     end
 
