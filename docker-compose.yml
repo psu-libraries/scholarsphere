@@ -7,7 +7,7 @@ x-web_env: &web_env
       REDIS_PASSWORD: redispassword
       OAUTH_APP_ID: ${OAUTH_APP_ID}
       OAUTH_APP_SECRET: ${OAUTH_APP_SECRET}
-      DEFAULT_URL_HOST: web
+      DEFAULT_URL_HOST: ${DEFAULT_URL_HOST:-web}
       SELENIUM_URL: http://selenium:4444/wd/hub
       APP_HOST: web
       OAUTH_APP_URL: ${OAUTH_APP_URL}
