@@ -17,6 +17,7 @@ RSpec.describe FileResource do
     it { is_expected.to have_db_column(:file_data).of_type(:jsonb) }
     it { is_expected.to have_db_column(:remediation_job_uuid).of_type(:string) }
     it { is_expected.to have_db_column(:auto_remediated_version).of_type(:boolean) }
+    it { is_expected.to have_db_column(:auto_remediation_failed_at).of_type(:datetime) }
   end
 
   describe 'factories' do
@@ -269,6 +270,7 @@ RSpec.describe FileResource do
         thumbnail_url_ssi
         remediation_job_uuid_tesim
         auto_remediated_version_tesim
+        auto_remediation_failed_at_dtsi
       )
     end
 

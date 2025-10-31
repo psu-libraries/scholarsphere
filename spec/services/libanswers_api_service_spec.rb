@@ -184,6 +184,36 @@ RSpec.describe LibanswersApiService, :vcr do
           end
         end
       end
+
+      context 'when the ticket is a Work Remediation failed ticket' do
+        it 'uses id 2590 for quid and ScholarSphere PDF Auto-remediation Result for question but includes details' do
+          described_class.new.admin_create_ticket(work.id, 'work_remediation_failed')
+          expect(mock_faraday_connection).to have_received(:post).with(
+            '/api/1.1/ticket/create',
+            "quid=#{accessibility_quid}&pquestion=ScholarSphere PDF Auto-remediation Result: #{
+              work.latest_version.title}&pname=#{work.display_name}&pemail=#{work.email}" \
+            '&pdetails=A PDF associated with this work failed to auto-remediate and requires manual review.'
+          )
+        end
+
+        context 'when the user is not an active member' do
+          let!(:inactive_member) { object_double(PsuIdentity::SearchService::Person.new, affiliation: ['MEMBER']) }
+
+          before do
+            allow(mock_identity_search).to receive(:userid).and_return(inactive_member)
+          end
+
+          it 'still creates a ticket' do
+            described_class.new.admin_create_ticket(work.id, 'work_remediation_failed')
+            expect(mock_faraday_connection).to have_received(:post).with(
+              '/api/1.1/ticket/create',
+              "quid=#{accessibility_quid}&pquestion=ScholarSphere PDF Auto-remediation Result: #{
+                work.latest_version.title}&pname=#{work.display_name}&pemail=#{work.email}" \
+                '&pdetails=A PDF associated with this work failed to auto-remediate and requires manual review.'
+            )
+          end
+        end
+      end
     end
   end
 

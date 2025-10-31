@@ -43,6 +43,7 @@ class LibanswersApiService
         'work_curation' => Work,
         'work_accessibility_check' => Work,
         'work_remediation' => Work,
+        'work_remediation_failed' => Work,
         'collection' => Collection
       }
       deposit = deposit_types[type].find(id)
@@ -60,7 +61,7 @@ class LibanswersApiService
       when 'work_accessibility_check'
         work = Work.find(id)
         "ScholarSphere Deposit Accessibility Curation: #{work.latest_version.title}"
-      when 'work_remediation'
+      when 'work_remediation', 'work_remediation_failed'
         work = Work.find(id)
         "ScholarSphere PDF Auto-remediation Result: #{work.latest_version.title}"
       end
@@ -87,12 +88,17 @@ class LibanswersApiService
           (accessibility_check_results.empty? ? '' : "pdetails=#{accessibility_check_results}&") +
           "pname=#{work.display_name}&" +
           "pemail=#{work.email}"
-      when 'work_remediation'
+      when 'work_remediation', 'work_remediation_failed'
         @work = Work.find(id)
         "quid=#{ACCESSIBILITY_QUEUE_ID}&" +
           "pquestion=#{admin_subject}&" +
           "pname=#{work.display_name}&" +
-          "pemail=#{work.email}"
+          "pemail=#{work.email}" +
+          (if type == 'work_remediation_failed'
+             '&pdetails=A PDF associated with this work failed to auto-remediate and requires manual review.'
+           else
+             ''
+           end)
       end
     end
 
