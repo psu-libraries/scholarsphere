@@ -2,7 +2,7 @@
 
 Rails.application.config.to_prepare do
   BotChallengePage::BotChallengePageController.bot_challenge_config.enabled = !Rails.env.test? && ActiveModel::Type::Boolean.new.cast(
-    ENV.fetch('BOT_CHALLENGE_PAGE_ENABLED', 'true')
+    ENV.fetch('CLOUDFLARE_CHALLENGE_ENABLED', 'true')
   )
 
   # Get from CloudFlare Turnstile: https://www.cloudflare.com/application-services/products/turnstile/
