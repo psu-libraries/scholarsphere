@@ -5,4 +5,5 @@ Bugsnag.configure do |config|
   config.release_stage = ENV.fetch('BUGSNAG_RELEASE_STAGE', 'development')
 
   config.discard_classes << 'ActionController::UnknownFormat'
+  config.discard_classes << 'ActiveRecord::RecordNotFound'
 end
