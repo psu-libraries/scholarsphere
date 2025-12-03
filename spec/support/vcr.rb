@@ -9,7 +9,7 @@ require 'webmock'
 WebMock.allow_net_connect!(net_http_connect_on_start: true)
 
 # Allow connections to Docker images and webriver update urls
-allowed_hosts = %w(selenium minio solr)
+allowed_hosts = %w(selenium minio solr docker.for.mac.localhost)
 
 VCR.configure do |c|
   c.cassette_library_dir = 'spec/fixtures/vcr_cassettes'

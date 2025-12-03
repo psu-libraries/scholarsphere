@@ -85,6 +85,36 @@ RSpec.describe CurationTaskClient do
       end
     end
 
+    context 'when the work version has a large pdf file resource' do
+      let(:embargo) { nil }
+      let(:labels) { ['Large PDF'] }
+
+      before { allow(work_version).to receive(:has_large_pdf_file_resource?).and_return(true) }
+
+      it 'creates a submission record in Airtable' do
+        expect(Submission).to receive(:create).with(expected_record)
+        described_class.send_curation(work_version.id)
+        work_version.reload
+
+        expect(work_version.sent_for_curation_at).to be_within(1.minute).of(Time.zone.now)
+      end
+    end
+
+    context 'when the work version does not have a large pdf file resource' do
+      let(:embargo) { nil }
+      let(:labels) { [] }
+
+      before { allow(work_version).to receive(:has_large_pdf_file_resource?).and_return(false) }
+
+      it 'creates a submission record in Airtable' do
+        expect(Submission).to receive(:create).with(expected_record)
+        described_class.send_curation(work_version.id)
+        work_version.reload
+
+        expect(work_version.sent_for_curation_at).to be_within(1.minute).of(Time.zone.now)
+      end
+    end
+
     context 'when a previous version is found in Airtable' do
       let(:embargo) { nil }
       let(:labels) { ['Updated Version'] }

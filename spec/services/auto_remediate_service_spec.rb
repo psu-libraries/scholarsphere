@@ -22,6 +22,19 @@ RSpec.describe AutoRemediateService do
   end
 
   describe '#able_to_auto_remediate?' do
+    # The following context block can be removed when
+    # auto-remediation is enabled in production
+    context 'when production environment' do
+      before do
+        allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new('production'))
+      end
+
+      it 'returns false' do
+        work_version = create(:work_version, :published)
+        expect(described_class.new(work_version.id, false, true).able_to_auto_remediate?).to be false
+      end
+    end
+
     context 'when the work version is the latest published version' do
       context 'when remediation has not been started' do
         context 'when there is no remediated version' do

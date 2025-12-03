@@ -50,6 +50,29 @@ class FileHelpers
       JSON.parse(attacher.column_data)
     end
 
+    def large_pdf_data(file_name)
+      attacher = Shrine::Attacher.new
+      attacher.set(uploaded_large_pdf(file_name))
+
+      JSON.parse(attacher.column_data)
+    end
+
+    def uploaded_large_pdf(file_name)
+      path = Rails.root.join('spec', 'fixtures', 'one_hundred_pages.pdf')
+      file = File.open(path, binmode: true)
+      file_size = file.size
+
+      uploaded_file = Shrine.upload(file, :store, metadata: false)
+      uploaded_file.metadata.merge!(
+        'size' => file_size,
+        'mime_type' => 'application/pdf',
+        'filename' => file_name,
+        'page_count' => 100
+      )
+
+      uploaded_file
+    end
+
     def uploaded_pdf(file_name)
       path = Rails.root.join('spec', 'fixtures', 'ipsum.pdf')
       file = File.open(path, binmode: true)

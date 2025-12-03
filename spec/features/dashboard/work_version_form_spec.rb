@@ -1037,6 +1037,9 @@ RSpec.describe 'Publishing a work', with_user: :user do
         # Save, reload the page, and ensure that it's now in the files table
         FeatureHelpers::DashboardForm.save_as_draft_and_exit
 
+        # test that the page count metadata was not set since it's not a pdf
+        expect(work_version.file_resources.last.file_data.dig('metadata', 'page_count')).to be_nil
+
         # Once for the work version, twice for the file. The second call for the file is most likely the promotion job.
         expect(SolrIndexingJob).to have_received(:perform_later).thrice
 
@@ -1079,6 +1082,9 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         # Save, reload the page, and ensure that it's now in the files table
         FeatureHelpers::DashboardForm.save_as_draft_and_exit
+
+        # test that the page count metadata was extracted and saved
+        expect(work_version.file_resources.last.file_data.dig('metadata', 'page_count')).to eq 1
 
         # Once for the work version, twice for the file. The second call for the file is most likely the promotion job.
         expect(SolrIndexingJob).to have_received(:perform_later).thrice
@@ -1483,6 +1489,48 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
       expect(version.creators.length).to eq 1
       expect(version.creators.first.display_name).to eq user.actor.display_name
+    end
+
+    context 'when the work has a large pdf file resource' do
+      let(:work_version) { create(:work_version, :article, :able_to_be_published_with_large_pdf) }
+      let(:user) { work_version.work.depositor.user }
+
+      let(:accessibility_check_result) do
+        create(:accessibility_check_result, file_resource_id: work_version.file_resources.last.id)
+      end
+
+      before { accessibility_check_result.save! }
+
+      it 'updates under_manual_review to true upon publish' do
+        visit dashboard_form_publish_path(work_version)
+
+        FeatureHelpers::DashboardForm.publish
+
+        work_version = Work.last.versions.first
+
+        expect(work_version.work.under_manual_review).to be true
+      end
+    end
+
+    context 'when the work has a pdf file resource under the page limit' do
+      let(:work_version) { create(:work_version, :article, :able_to_be_published_with_pdf) }
+      let(:user) { work_version.work.depositor.user }
+
+      let(:accessibility_check_result) do
+        create(:accessibility_check_result, file_resource_id: work_version.file_resources.last.id)
+      end
+
+      before { accessibility_check_result.save! }
+
+      it 'does not update under_manual_review upon publish' do
+        visit dashboard_form_publish_path(work_version)
+
+        FeatureHelpers::DashboardForm.publish
+
+        work_version = Work.last.versions.first
+
+        expect(work_version.work.under_manual_review).to be_nil
+      end
     end
   end
 

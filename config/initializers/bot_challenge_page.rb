@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
 Rails.application.config.to_prepare do
-  BotChallengePage::BotChallengePageController.bot_challenge_config.enabled = !Rails.env.test?
+  enabled =
+    !Rails.env.test? &&
+    ActiveModel::Type::Boolean.new.cast(ENV.fetch('CLOUDFLARE_CHALLENGE_ENABLED', 'true'))
+
+  BotChallengePage::BotChallengePageController.bot_challenge_config.enabled = enabled
 
   # Get from CloudFlare Turnstile: https://www.cloudflare.com/application-services/products/turnstile/
   # Some testing keys are also available: https://developers.cloudflare.com/turnstile/troubleshooting/testing/
