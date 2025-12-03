@@ -122,7 +122,7 @@ jobs:
         name: "Bundle"
         command: |
           gem install bundler
-          bundle check --path vendor/bundle || bundle install --deployment
+          bundle config set path vendor/bundle || bundle config set deployment true
     - run:
         name: "Yarn"
         command: |
