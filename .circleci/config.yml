@@ -121,7 +121,7 @@ jobs:
     - run:
         name: "Bundle"
         command: |
-          gem install bundler
+          gem install bundler -v "$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)"
           bundle check --path vendor/bundle || bundle install --deployment
     - run:
         name: "Yarn"

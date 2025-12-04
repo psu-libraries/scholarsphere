@@ -77,12 +77,24 @@ RSpec.describe ResourcesController do
 
     context 'when requesting an unknown uuid' do
       it do
+        allow(Bugsnag).to receive(:notify)
         expect {
           get :show, params: { id: 'not-a-valid-uuid' }
         }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
 
+    context 'when requesting an unknown uuid that follows uuid pattern' do
+      it do
+        allow(Bugsnag).to receive(:notify)
+        expect {
+          get :show, params: { id: '123e4567-e89b-12d3-a456-426614174000' }
+        }.not_to raise_error(ActiveRecord::RecordNotFound)
+        expect(Bugsnag).to have_received(:notify).with(ActiveRecord::RecordNotFound, &:ignore!)
+        expect(response).to have_http_status :not_found
+      end
+    end
+      
     context 'when the resource is valid with no access' do
       let(:work) { create(:work, :with_no_access) }
 

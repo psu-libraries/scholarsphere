@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ResourcesController < ApplicationController
+  rescue_from ActiveRecord::RecordNotFound, with: :resource_not_found
+
   def show
     @resource = ResourceDecorator.decorate(find_resource(params[:id]))
     authorize @resource
@@ -48,5 +50,14 @@ class ResourcesController < ApplicationController
           :name,
           :title
         )
+    end
+
+    def resource_not_found(exception)
+      if request.get? && request.path.match?(%r{^/resources/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$})
+        Bugsnag.notify(exception, &:ignore!)
+        head :not_found
+      else
+        raise exception
+      end
     end
 end
