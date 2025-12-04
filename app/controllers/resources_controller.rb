@@ -53,7 +53,7 @@ class ResourcesController < ApplicationController
     end
 
     def resource_not_found(exception)
-      if request.get? && request.path.match?(%r{^/resources/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$})
+      if request.get? && request.path.match?(%r{^/resources/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$})
         Bugsnag.notify(exception, &:ignore!)
         head :not_found
       else
