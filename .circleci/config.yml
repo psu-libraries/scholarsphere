@@ -390,6 +390,7 @@ workflows:
             branches:
               only:
                 - main
+                - /preview\/.*/                
           requires:
             - test-application
             - push-image
