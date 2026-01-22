@@ -1,10 +1,10 @@
 GIT
   remote: https://github.com/projectblacklight/blacklight_oai_provider.git
-  revision: 7728dba9a38ceb6165335dea817b23c416d82966
-  ref: 7728dba
+  revision: 69795b06cc37150386b6d9732be027d200412598
+  ref: 69795b0
   specs:
     blacklight_oai_provider (7.0.2)
-      blacklight (~> 7.0)
+      blacklight (>= 7.0, < 9)
       oai (~> 1.2)
       rexml
 
@@ -133,16 +133,14 @@ GEM
     bindex (0.8.1)
     binding_of_caller (1.0.1)
       debug_inspector (>= 1.2.0)
-    blacklight (7.40.0)
-      deprecation
+    blacklight (8.12.3)
       globalid
-      hashdiff
       i18n (>= 1.7.0)
       jbuilder (~> 2.7)
       kaminari (>= 0.15)
       ostruct (>= 0.3.2)
-      rails (>= 6.1, < 7.3)
-      view_component (>= 2.74, < 4)
+      rails (>= 6.1, < 9)
+      view_component (>= 2.74, < 5)
       zeitwerk
     bootsnap (1.18.4)
       msgpack (~> 1.2)
@@ -737,7 +735,7 @@ DEPENDENCIES
   airrecord
   better_errors
   binding_of_caller
-  blacklight (~> 7.38)
+  blacklight (~> 8.12.3)
   blacklight_oai_provider!
   bootsnap (>= 1.4.2)
   bot_challenge_page (~> 0.3.1)
