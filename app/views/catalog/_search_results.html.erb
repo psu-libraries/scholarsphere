@@ -17,7 +17,7 @@
 <%- if @response.empty? %>
   <%= render 'zero_results' %>
 <%- else %>
-  <%= render_document_index %>
+  <%= render_document_index @response.documents %>
 <%- end %>
 
 <div class="action-bar mb-3">
