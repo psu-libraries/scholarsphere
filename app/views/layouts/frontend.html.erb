@@ -91,8 +91,10 @@
 
     <main class="main">
       <%= render FlashMessageComponent.new(flash: flash) %>
-      <% if content_for? :sidebar %>
-        <%= render '/layouts/with_sidebar' %>
+      <% if @response&.total&.positive? %>
+        <% content_for :sidebar do %>
+          <%= render '/layouts/with_sidebar' %>
+        <% end %>
       <% elsif content_for? :content %>
         <%= yield(:content) %>
       <% else %>
