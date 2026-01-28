@@ -17,6 +17,9 @@ class CatalogController < ApplicationController
       format.html { store_preferred_view }
       format.json do
         @presenter = Blacklight::JsonPresenter.new(@response, blacklight_config)
+        render json: {
+          data: @response.documents.map { |doc| { 'id' => doc.id }.merge(doc.to_h) }
+        }
       end
     end
   end
