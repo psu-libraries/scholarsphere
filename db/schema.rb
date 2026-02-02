@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_10_30_184453) do
+ActiveRecord::Schema[7.2].define(version: 2026_02_02_212420) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -272,8 +272,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_10_30_184453) do
     t.datetime "withdrawn_at", precision: nil
     t.datetime "removed_at", precision: nil
     t.boolean "draft_curation_requested"
-    t.datetime "sent_for_curation_at", precision: nil
     t.boolean "imported_metadata_from_rmd"
+    t.datetime "sent_for_curation_at", precision: nil
     t.boolean "mint_doi_requested"
     t.boolean "accessibility_remediation_requested"
     t.boolean "auto_remediated_version"
