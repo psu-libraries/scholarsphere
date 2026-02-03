@@ -18,9 +18,9 @@ class AutoRemediateService
   end
 
   def able_to_auto_remediate?
-    # The following line can be removed when
-    # auto-remediation is enabled in production
-    return false if Rails.env.production?
+    # Feature flag: enable accessibility auto-remediation in production
+    # TODO: Remove following line when we are confident in the stability of the remediation service
+    return false if Rails.env.production? && ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] != 'true'
 
     work_version.latest_published_version? &&
       work_version.auto_remediation_started_at.nil? &&
