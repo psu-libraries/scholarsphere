@@ -44,9 +44,12 @@ class Webhooks::PdfAccessibilityApiController < ApplicationController
     end
 
     def authenticate_request
-      raise 'PDF_REMEDIATION_WEBHOOK_SECRET not configured.' if ENV['PDF_REMEDIATION_WEBHOOK_SECRET'].blank?
+      token = ExternalApp.pdf_accessibility_api.token.to_s
+      provided = request.headers['X-API-KEY'].to_s
 
-      head(:unauthorized) unless request.headers['X-API-KEY'] == ENV['PDF_REMEDIATION_WEBHOOK_SECRET']
+      return head(:unauthorized) if provided.blank?
+
+      head(:unauthorized) unless ActiveSupport::SecurityUtils.secure_compare(provided, token)
     end
 
     def store_failure(job_uuid)

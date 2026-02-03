@@ -33,12 +33,12 @@ class ExternalApp < ApplicationRecord
     MetadataListener.build
   end
 
-  # PdfAccessibilityApi uses a webhook, therefore no api token
   class PdfAccessibilityApi
     NAME = 'PDF Accessibility API'
 
     def self.build
       ExternalApp.find_or_create_by(name: NAME) do |app|
+        app.api_tokens.build
         app.contact_email = Rails.configuration.no_reply_email
       end
     end

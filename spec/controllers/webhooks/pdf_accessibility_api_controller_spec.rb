@@ -14,14 +14,8 @@ RSpec.describe Webhooks::PdfAccessibilityApiController do
   end
 
   before do
-    @original_secret = ENV['PDF_REMEDIATION_WEBHOOK_SECRET']
-    ENV['PDF_REMEDIATION_WEBHOOK_SECRET'] = secret
     allow(BuildAutoRemediatedWorkVersionJob).to receive(:perform_later).and_return(nil)
     allow(AutoRemediationFailedJob).to receive(:perform_later).and_return(nil)
-  end
-
-  after do
-    ENV['PDF_REMEDIATION_WEBHOOK_SECRET'] = @original_secret
   end
 
   describe 'POST #create' do
@@ -37,7 +31,7 @@ RSpec.describe Webhooks::PdfAccessibilityApiController do
 
     context 'when authentication succeeds' do
       before do
-        request.headers['X-API-KEY'] = secret
+        request.headers['X-API-KEY'] = ExternalApp.pdf_accessibility_api.token
       end
 
       describe 'when event_type is unknown' do
