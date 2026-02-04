@@ -59,6 +59,7 @@
     "form-data": "^4.0.4"
   },
   "version": "0.1.0",
+  "packageManager": "yarn@1.22.22",
   "devDependencies": {
     "@babel/eslint-parser": "^7.27.5",
     "@eslint/js": "^9.28.0",
