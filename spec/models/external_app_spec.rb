@@ -29,7 +29,9 @@ RSpec.describe ExternalApp do
     subject(:app) { described_class.metadata_listener }
 
     it { is_expected.to be_a(described_class) }
+    # It is preferable to use `token` with ExternalApps that use the API
     its(:token) { is_expected.to eq(app.api_tokens.first.token) }
+    its(:webhook_token) { is_expected.to eq(app.api_tokens.first.token) }
     its(:contact_email) { is_expected.to eq(Rails.configuration.no_reply_email) }
   end
 
@@ -37,6 +39,9 @@ RSpec.describe ExternalApp do
     subject(:app) { described_class.pdf_accessibility_api }
 
     it { is_expected.to be_a(described_class) }
+    its(:token) { is_expected.to eq(app.api_tokens.first.token) }
+    # It is preferable to use `webhook_token` with ExternalApps that use webhooks
+    its(:webhook_token) { is_expected.to eq(app.api_tokens.first.token) }
     its(:contact_email) { is_expected.to eq(Rails.configuration.no_reply_email) }
   end
 

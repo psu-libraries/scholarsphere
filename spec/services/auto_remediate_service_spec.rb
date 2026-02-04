@@ -22,16 +22,38 @@ RSpec.describe AutoRemediateService do
   end
 
   describe '#able_to_auto_remediate?' do
-    # The following context block can be removed when
-    # auto-remediation is enabled in production
+    # TODO: Remove following context block when we are confident in the stability of the remediation service
     context 'when production environment' do
       before do
         allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new('production'))
       end
 
-      it 'returns false' do
-        work_version = create(:work_version, :published)
-        expect(described_class.new(work_version.id, false, true).able_to_auto_remediate?).to be false
+      after do
+        ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] = @original_env_value
+      end
+
+      context 'when ENABLE_ACCESSIBILITY_REMEDIATION is true' do
+        before do
+          @original_env_value = ENV['ENABLE_ACCESSIBILITY_REMEDIATION']
+          ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] = 'true'
+        end
+
+        it 'returns true' do
+          work_version = create(:work_version, :published)
+          expect(described_class.new(work_version.id, false, true).able_to_auto_remediate?).to be true
+        end
+      end
+
+      context 'when ENABLE_ACCESSIBILITY_REMEDIATION is not true' do
+        before do
+          @original_env_value = ENV['ENABLE_ACCESSIBILITY_REMEDIATION']
+          ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] = 'false'
+        end
+
+        it 'returns false' do
+          work_version = create(:work_version, :published)
+          expect(described_class.new(work_version.id, false, true).able_to_auto_remediate?).to be false
+        end
       end
     end
 
