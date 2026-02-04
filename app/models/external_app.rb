@@ -38,6 +38,7 @@ class ExternalApp < ApplicationRecord
 
     def self.build
       ExternalApp.find_or_create_by(name: NAME) do |app|
+        # API token used for webhook authentication
         app.api_tokens.build
         app.contact_email = Rails.configuration.no_reply_email
       end
@@ -50,6 +51,13 @@ class ExternalApp < ApplicationRecord
 
   def token
     api_tokens.first.token
+  end
+
+  # Programmatically, this is the same as `token`; conceptually, it applies to webhooks.
+  # This helps to clarify intent on implementation.  We should consider better naming or
+  # structure to differentiate API tokens and webhook tokens in the future.
+  def webhook_token
+    token
   end
 
   def guest?

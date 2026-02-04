@@ -31,7 +31,7 @@ RSpec.describe Webhooks::PdfAccessibilityApiController do
 
     context 'when authentication succeeds' do
       before do
-        request.headers['X-API-KEY'] = ExternalApp.pdf_accessibility_api.token
+        request.headers['X-API-KEY'] = ExternalApp.pdf_accessibility_api.webhook_token
       end
 
       describe 'when event_type is unknown' do

@@ -44,7 +44,7 @@ class Webhooks::PdfAccessibilityApiController < ApplicationController
     end
 
     def authenticate_request
-      token = ExternalApp.pdf_accessibility_api.token.to_s
+      token = ExternalApp.pdf_accessibility_api.webhook_token.to_s
       provided = request.headers['X-API-KEY'].to_s
 
       return head(:unauthorized) if provided.blank?
