@@ -8,7 +8,7 @@ class AutoRemediationNotifications
   def send_notifications
     contributors_emails.each do |email|
       AutoRemediationMailer
-        .with(work_version_title: @remediated_work_version.title,
+        .with(work_title: @remediated_work_version.title,
               work_version_uuid: @remediated_work_version.uuid,
               contributor_email: email)
         .remediated_version_created
