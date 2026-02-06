@@ -136,25 +136,28 @@ RSpec.describe FileResource do
   end
 
   describe 'page count' do
-    let(:file_resource) { described_class.new }
-    let(:file) { File.open(path, binmode: true) }
-
-    before do
-      file_resource.file = Shrine.upload(file, :store, metadata: { 'mime_type' => 'application/pdf' })
-      file_resource.save
-    end
+    let(:file_resource) { described_class.create!(file: file) }
 
     context 'when the file is a pdf' do
-      let(:path) { Rails.root.join('spec', 'fixtures', 'ipsum.pdf') }
+      context 'when file responds to #download' do
+        let(:file) { FileHelpers.shrine_upload(file: Rails.root.join('spec', 'fixtures', 'ipsum.pdf')) }
 
-      it 'adds page count metadata' do
-        skip 'failing because of how Shrine is handling uploads in tests'
-        expect(file_resource.file_data.dig('metadata', 'page_count')).to eq 1
+        it 'adds page count metadata' do
+          expect(file_resource.file_data.dig('metadata', 'page_count')).to eq 1
+        end
+      end
+
+      context 'when file does not respond to #download' do
+        let(:file) { Rails.root.join('spec', 'fixtures', 'ipsum.pdf').open }
+
+        it 'adds page count metadata' do
+          expect(file_resource.file_data.dig('metadata', 'page_count')).to eq 1
+        end
       end
     end
 
     context 'when the file is not a pdf' do
-      let(:path) { Rails.root.join('spec', 'fixtures', 'image.png') }
+      let(:file) { FileHelpers.shrine_upload(file: Rails.root.join('spec', 'fixtures', 'image.png')) }
 
       it 'does not add page count metadata' do
         expect(file_resource.file_data['metadata']['page_count']).to be_nil

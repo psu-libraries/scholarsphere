@@ -42,11 +42,16 @@ class FileUploader < Shrine
     next unless mime_type == FileResource::PDF_MIME_TYPE
 
     begin
-      tempfile = io.download
-      reader = PDF::Reader.new(tempfile.path)
-      reader.page_count
+      tempfile =
+        if io.respond_to?(:download)
+          io.download
+        else
+          io
+        end
+
+      PDF::Reader.new(tempfile.path).page_count
     ensure
-      tempfile&.close!
+      tempfile.close! if tempfile.respond_to?(:close!) && tempfile != io
     end
   end
 
