@@ -40,7 +40,7 @@ RSpec.describe AutoRemediationNotifications do
     expected_emails.each do |email|
       allow(AutoRemediationMailer)
         .to receive(:with)
-        .with(work_version_title: work_title,
+        .with(work_title: work_title,
               work_version_uuid: work_uuid,
               contributor_email: email)
         .and_return(mailer_proxy)
@@ -57,7 +57,7 @@ RSpec.describe AutoRemediationNotifications do
     expected_emails.each do |email|
       expect(AutoRemediationMailer)
         .to have_received(:with)
-        .with(work_version_title: work_title,
+        .with(work_title: work_title,
               work_version_uuid: work_uuid,
               contributor_email: email)
     end
