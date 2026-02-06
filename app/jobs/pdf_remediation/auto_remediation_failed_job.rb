@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AutoRemediationFailedJob < ApplicationJob
+class PdfRemediation::AutoRemediationFailedJob < ApplicationJob
   queue_as :default
 
   def perform(job_uuid)

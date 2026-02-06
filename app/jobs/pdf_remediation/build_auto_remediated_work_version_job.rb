@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class BuildAutoRemediatedWorkVersionJob < ApplicationJob
+class PdfRemediation::BuildAutoRemediatedWorkVersionJob < ApplicationJob
   queue_as :auto_remediation_in
 
   def perform(remediation_job_uuid, remediated_file_url)
