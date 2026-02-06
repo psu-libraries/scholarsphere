@@ -37,6 +37,7 @@ class BuildAutoRemediatedWorkVersion
           on_publish(built_work_version)
         end
 
+        replacement_tempfile&.close!
         return built_work_version
       end
     end
