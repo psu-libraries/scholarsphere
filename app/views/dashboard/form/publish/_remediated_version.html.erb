@@ -1,7 +1,7 @@
 <div class="form-wrapper">
   <div class="mb-3 mt-5">
     <div class="keyline keyline--left mb-3">
-      <h4>Remediated Version</h4>
+      <h4><%= t 'dashboard.form.publish.remediated_version.header' %></h4>
     </div>
   </div>
 
@@ -10,7 +10,7 @@
                        class: 'form-check-input' %>
 
     <%= form.label :remediated_version, class: 'form-check-label' do %>
-      This version is a remediated (accessible) version
+      <%= t 'dashboard.form.publish.remediated_version.label' %>
     <% end %>
   </div>
 </div>
