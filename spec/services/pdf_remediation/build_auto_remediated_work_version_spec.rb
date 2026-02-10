@@ -22,7 +22,7 @@ RSpec.describe PdfRemediation::BuildAutoRemediatedWorkVersion do
 
     context 'when a newer published version exists' do
       let!(:existing_auto) { create(:work_version,
-                                    :draft, auto_remediated_version: true,
+                                    :draft, remediated_version: true,
                                             work: work,
                                             file_resources: [file_resource]) }
 
@@ -58,7 +58,7 @@ RSpec.describe PdfRemediation::BuildAutoRemediatedWorkVersion do
             expect(WorkVersion.count).to eq(wv_count_before + 1)
             expect(FileResource).to exist(file_resource.id)
             expect(FileVersionMembership.find_by(work_version: result, file_resource: file_resource)).to be_nil
-            remediated_file_resource = WorkVersion.find(result.id).file_resources.where(auto_remediated_version: true)
+            remediated_file_resource = WorkVersion.find(result.id).file_resources.where(remediated_version: true)
             expect(remediated_file_resource.count).to eq(1)
             expect(remediated_file_resource.first.file_data['metadata']['filename']).to eq(
               "ACCESSIBLE_VERSION_#{FileResource.find(file_resource.id).file_data['metadata']['filename']}"
@@ -93,7 +93,7 @@ RSpec.describe PdfRemediation::BuildAutoRemediatedWorkVersion do
             expect(WorkVersion.count).to eq(wv_count_before + 1)
             expect(FileResource).to exist(file_resource.id)
             expect(FileVersionMembership.find_by(work_version: result, file_resource: file_resource)).to be_nil
-            remediated_file_resource = WorkVersion.find(result.id).file_resources.where(auto_remediated_version: true)
+            remediated_file_resource = WorkVersion.find(result.id).file_resources.where(remediated_version: true)
             expect(remediated_file_resource.count).to eq(1)
             expect(remediated_file_resource.first.file_data['metadata']['filename']).to eq(
               "ACCESSIBLE_VERSION_#{FileResource.find(file_resource.id).file_data['metadata']['filename']}"
@@ -116,7 +116,7 @@ RSpec.describe PdfRemediation::BuildAutoRemediatedWorkVersion do
         let!(:existing_auto_wv) { BuildNewWorkVersion.call(wv_being_remediated) }
 
         before do
-          existing_auto_wv.auto_remediated_version = true
+          existing_auto_wv.remediated_version = true
           existing_auto_wv.external_app = ExternalApp.pdf_accessibility_api
           existing_auto_wv.save!
         end
@@ -131,7 +131,7 @@ RSpec.describe PdfRemediation::BuildAutoRemediatedWorkVersion do
             expect(WorkVersion.count).to eq(wv_count_before)
             expect(FileResource).to exist(file_resource.id)
             expect(FileVersionMembership.find_by(work_version: result, file_resource: file_resource)).to be_nil
-            remediated_file_resource = WorkVersion.find(result.id).file_resources.where(auto_remediated_version: true)
+            remediated_file_resource = WorkVersion.find(result.id).file_resources.where(remediated_version: true)
             expect(remediated_file_resource.count).to eq(1)
             expect(remediated_file_resource.first.file_data['metadata']['filename']).to eq(
               "ACCESSIBLE_VERSION_#{FileResource.find(file_resource.id).file_data['metadata']['filename']}"
@@ -166,7 +166,7 @@ RSpec.describe PdfRemediation::BuildAutoRemediatedWorkVersion do
             expect(WorkVersion.count).to eq(wv_count_before)
             expect(FileResource).to exist(file_resource.id)
             expect(FileVersionMembership.find_by(work_version: result, file_resource: file_resource)).to be_nil
-            remediated_file_resource = WorkVersion.find(result.id).file_resources.where(auto_remediated_version: true)
+            remediated_file_resource = WorkVersion.find(result.id).file_resources.where(remediated_version: true)
             expect(remediated_file_resource.count).to eq(1)
             expect(remediated_file_resource.first.file_data['metadata']['filename']).to eq(
               "ACCESSIBLE_VERSION_#{FileResource.find(file_resource.id).file_data['metadata']['filename']}"

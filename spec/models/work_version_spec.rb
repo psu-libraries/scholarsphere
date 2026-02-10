@@ -24,7 +24,7 @@ RSpec.describe WorkVersion do
     it { is_expected.to have_db_column(:published_at).of_type(:datetime) }
     it { is_expected.to have_db_column(:withdrawn_at).of_type(:datetime) }
     it { is_expected.to have_db_column(:removed_at).of_type(:datetime) }
-    it { is_expected.to have_db_column(:auto_remediated_version).of_type(:boolean) }
+    it { is_expected.to have_db_column(:remediated_version).of_type(:boolean) }
     it { is_expected.to have_db_column(:auto_remediation_started_at).of_type(:datetime) }
     it { is_expected.to have_jsonb_accessor(:title).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:subtitle).of_type(:string) }
@@ -1037,7 +1037,7 @@ RSpec.describe WorkVersion do
     context 'when at least one file resource has a remediation job and is not auto remediated' do
       let!(:file_resource) { create(:file_resource,
                                     remediation_job_uuid: 'job-123',
-                                    auto_remediated_version: false) }
+                                    remediated_version: false) }
 
       before do
         create(:file_version_membership,
@@ -1053,10 +1053,10 @@ RSpec.describe WorkVersion do
     context 'when file resources either have no remediation job uuid or are already auto remediated' do
       let!(:no_job) { create(:file_resource,
                              remediation_job_uuid: nil,
-                             auto_remediated_version: false) }
+                             remediated_version: false) }
       let!(:already_auto) { create(:file_resource,
                                    remediation_job_uuid: 'job-456',
-                                   auto_remediated_version: true) }
+                                   remediated_version: true) }
 
       before do
         create(:file_version_membership,

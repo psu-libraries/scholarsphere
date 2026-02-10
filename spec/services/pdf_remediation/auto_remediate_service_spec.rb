@@ -94,7 +94,7 @@ RSpec.describe PdfRemediation::AutoRemediateService do
         end
 
         context 'when there is a remediated version' do
-          let(:work_version) { create(:work_version, :published, auto_remediated_version: true) }
+          let(:work_version) { create(:work_version, :published, remediated_version: true) }
 
           it 'returns false' do
             expect(described_class.new(work_version.id, false, true).able_to_auto_remediate?).to be false

@@ -20,7 +20,7 @@ class PdfRemediation::BuildAutoRemediatedWorkVersion
         built_work_version = file_resource.first_auto_remediated_work_version_after(wv_being_remediated) ||
           begin
             v = BuildNewWorkVersion.call(wv_being_remediated)
-            v.update({ auto_remediated_version: true,
+            v.update({ remediated_version: true,
                        external_app: ExternalApp.pdf_accessibility_api })
             v
           end
@@ -46,7 +46,7 @@ class PdfRemediation::BuildAutoRemediatedWorkVersion
   private_class_method def self.build_file_resource(work_version, replacement_tempfile, original_filename)
     new_resource = work_version.file_resources.create!(
       file: replacement_tempfile,
-      auto_remediated_version: true
+      remediated_version: true
     )
 
     new_resource.file_data['metadata']['filename'] = "ACCESSIBLE_VERSION_#{original_filename}"
