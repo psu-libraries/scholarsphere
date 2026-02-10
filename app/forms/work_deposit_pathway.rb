@@ -138,6 +138,7 @@ class WorkDepositPathway
         accessibility_agreement
         sensitive_info_agreement
         contributor
+        remediated_version
       }.freeze
 
       def initialize(work_version)
@@ -190,6 +191,7 @@ class WorkDepositPathway
                :file_version_memberships,
                :mint_doi_requested,
                :has_image_file_resource?,
+               :mirror_remediated_version_to_files!,
                to: :work_version, prefix: false
 
       private

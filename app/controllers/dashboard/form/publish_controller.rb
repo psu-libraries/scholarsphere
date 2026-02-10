@@ -34,6 +34,7 @@ module Dashboard
           @resource.set_thumbnail_selection
           @resource.indexing_source = Proc.new { nil }
           @resource.work.under_manual_review = true if @resource.has_large_pdf_file_resource?
+          @resource.mirror_remediated_version_to_files!
           @resource.save
           @resource.publish
         elsif curator_action_requested?
@@ -135,6 +136,7 @@ module Dashboard
               :sensitive_info_agreement,
               :accessibility_remediation_requested,
               :mint_doi_requested,
+              :remediated_version,
               keyword: [],
               contributor: [],
               publisher: [],
