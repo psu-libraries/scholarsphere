@@ -22,7 +22,7 @@ class Webhooks::PdfAccessibilityApiController < ApplicationController
   private
 
     def handle_success(job_data)
-      BuildAutoRemediatedWorkVersionJob.perform_later(job_data[:uuid], job_data[:output_url])
+      PdfRemediation::BuildAutoRemediatedWorkVersionJob.perform_later(job_data[:uuid], job_data[:output_url])
       render json: { message: 'Update successful' }, status: :ok
     rescue StandardError => e
       store_failure(job_data[:uuid])
@@ -31,7 +31,7 @@ class Webhooks::PdfAccessibilityApiController < ApplicationController
 
     def handle_failure(job_data)
       Rails.logger.error("Auto-remediation job failed: #{job_data[:processing_error_message]}")
-      AutoRemediationFailedJob.perform_later(job_data[:uuid])
+      PdfRemediation::AutoRemediationFailedJob.perform_later(job_data[:uuid])
       store_failure(job_data[:uuid])
       render json: { message: job_data[:processing_error_message] }, status: :ok
     end

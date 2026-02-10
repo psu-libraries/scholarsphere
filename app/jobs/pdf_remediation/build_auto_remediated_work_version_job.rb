@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class BuildAutoRemediatedWorkVersionJob < ApplicationJob
+class PdfRemediation::BuildAutoRemediatedWorkVersionJob < ApplicationJob
   queue_as :auto_remediation_in
 
   def perform(remediation_job_uuid, remediated_file_url)
@@ -9,6 +9,6 @@ class BuildAutoRemediatedWorkVersionJob < ApplicationJob
     # remediation_job_uuid will no longer be associated with the file.
     file_resource = FileResource.find_by!(remediation_job_uuid: remediation_job_uuid)
 
-    BuildAutoRemediatedWorkVersion.call(file_resource, remediated_file_url)
+    PdfRemediation::BuildAutoRemediatedWorkVersion.call(file_resource, remediated_file_url)
   end
 end

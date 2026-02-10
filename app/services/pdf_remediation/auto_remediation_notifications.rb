@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AutoRemediationNotifications
+class PdfRemediation::AutoRemediationNotifications
   def initialize(remediated_work_version)
     @remediated_work_version = remediated_work_version
   end

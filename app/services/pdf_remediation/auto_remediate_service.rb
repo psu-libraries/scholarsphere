@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AutoRemediateService
+class PdfRemediation::AutoRemediateService
   attr_reader :work_version, :admin, :download_can_remediate
 
   def initialize(work_version_id, is_admin, download_can_remediate)
@@ -13,7 +13,7 @@ class AutoRemediateService
     work_version.update(auto_remediation_started_at: Time.current)
     pdfs = work_version.file_resources.can_remediate
     pdfs.each do |pdf|
-      AutoRemediationJob.perform_later(pdf.id) if pdf.remediation_job_uuid.blank?
+      PdfRemediation::AutoRemediationJob.perform_later(pdf.id) if pdf.remediation_job_uuid.blank?
     end
   end
 

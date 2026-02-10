@@ -117,7 +117,8 @@ RSpec.describe 'Public Resources' do
 
       context 'when a file resource of the work is able to be remediated', :js do
         before do
-          allow_any_instance_of(AutoRemediateService).to receive(:able_to_auto_remediate?).and_return(true)
+          allow_any_instance_of(PdfRemediation::AutoRemediateService)
+            .to receive(:able_to_auto_remediate?).and_return(true)
         end
 
         let(:file) { work.latest_published_version.file_version_memberships.first }
@@ -158,7 +159,8 @@ RSpec.describe 'Public Resources' do
 
       context 'when a file resource of the work is not able to be remediated', :js do
         before do
-          allow_any_instance_of(AutoRemediateService).to receive(:able_to_auto_remediate?).and_return(false)
+          allow_any_instance_of(PdfRemediation::AutoRemediateService)
+            .to receive(:able_to_auto_remediate?).and_return(false)
         end
 
         let(:file) { work.latest_published_version.file_version_memberships.first }

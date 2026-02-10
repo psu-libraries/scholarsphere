@@ -190,9 +190,9 @@ RSpec.describe DownloadsController do
     context 'when the download is able to be auto-remediated' do
       let(:pdf) { create(:file_resource, :pdf) }
       let(:work_version) { create(:work_version, :published, file_resources: [pdf]) }
-      let(:service) { instance_double(AutoRemediateService, able_to_auto_remediate?: true, call: nil) }
+      let(:service) { instance_double(PdfRemediation::AutoRemediateService, able_to_auto_remediate?: true, call: nil) }
 
-      before { allow(AutoRemediateService).to receive(:new).and_return(service) }
+      before { allow(PdfRemediation::AutoRemediateService).to receive(:new).and_return(service) }
 
       it 'calls AutoRemediationService' do
         get :content, params: { resource_id: work_version.uuid, id: work_version.file_version_memberships[0].id, download: true }
@@ -203,9 +203,9 @@ RSpec.describe DownloadsController do
     context 'when the download is not able to be auto-remediated' do
       let(:non_pdf) { create(:file_resource) }
       let(:work_version) { create(:work_version, :published, file_resources: [non_pdf]) }
-      let(:service) { instance_double(AutoRemediateService, able_to_auto_remediate?: false, call: nil) }
+      let(:service) { instance_double(PdfRemediation::AutoRemediateService, able_to_auto_remediate?: false, call: nil) }
 
-      before { allow(AutoRemediateService).to receive(:new).and_return(service) }
+      before { allow(PdfRemediation::AutoRemediateService).to receive(:new).and_return(service) }
 
       it 'does not enqueue an AutoRemediationJob' do
         get :content, params: { resource_id: work_version.uuid, id: work_version.file_version_memberships[0].id, download: true }
@@ -216,9 +216,9 @@ RSpec.describe DownloadsController do
 
   context 'when "download" param is not present' do
     let(:work_version) { create(:work_version, :published, :with_files, file_count: 2) }
-    let(:service) { instance_double(AutoRemediateService, able_to_auto_remediate?: true, call: nil) }
+    let(:service) { instance_double(PdfRemediation::AutoRemediateService, able_to_auto_remediate?: true, call: nil) }
 
-    before { allow(AutoRemediateService).to receive(:new).and_return(service) }
+    before { allow(PdfRemediation::AutoRemediateService).to receive(:new).and_return(service) }
 
     it 'uses "inline" for the response content disposition' do
       get :content, params: { resource_id: work_version.uuid, id: work_version.file_version_memberships[0].id }

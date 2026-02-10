@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe AutoRemediationNotifications do
+RSpec.describe PdfRemediation::AutoRemediationNotifications do
   subject(:service) { described_class.new(work_version) }
 
   let(:work_title) { 'Remediated Work' }

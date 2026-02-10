@@ -2,7 +2,7 @@
 
 require 'down'
 
-class BuildAutoRemediatedWorkVersion
+class PdfRemediation::BuildAutoRemediatedWorkVersion
   class NotNewestReleaseError < StandardError; end
 
   def self.call(file_resource, remediated_file_url)
@@ -57,6 +57,6 @@ class BuildAutoRemediatedWorkVersion
     built_work_version.publish!
     lib_answers = LibanswersApiService.new
     lib_answers.admin_create_ticket(built_work_version.work.id, 'work_remediation')
-    AutoRemediationNotifications.new(built_work_version).send_notifications
+    PdfRemediation::AutoRemediationNotifications.new(built_work_version).send_notifications
   end
 end

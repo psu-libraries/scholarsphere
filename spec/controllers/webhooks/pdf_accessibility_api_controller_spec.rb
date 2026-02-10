@@ -14,8 +14,8 @@ RSpec.describe Webhooks::PdfAccessibilityApiController do
   end
 
   before do
-    allow(BuildAutoRemediatedWorkVersionJob).to receive(:perform_later).and_return(nil)
-    allow(AutoRemediationFailedJob).to receive(:perform_later).and_return(nil)
+    allow(PdfRemediation::BuildAutoRemediatedWorkVersionJob).to receive(:perform_later).and_return(nil)
+    allow(PdfRemediation::AutoRemediationFailedJob).to receive(:perform_later).and_return(nil)
   end
 
   describe 'POST #create' do
@@ -57,18 +57,19 @@ RSpec.describe Webhooks::PdfAccessibilityApiController do
         let(:job_uuid) { file.remediation_job_uuid }
         let(:output_url) { 'https://example.com/out.pdf' }
 
-        it 'enqueues BuildAutoRemediatedWorkVersionJob with record id and output_url and returns 200' do
+        it 'enqueues PdfRemediation::BuildAutoRemediatedWorkVersionJob with record id and output_url and returns 200' do
           post :create, params: params, as: :json
 
           expect(response).to have_http_status(:ok)
           expect(response.parsed_body).to include('message' => 'Update successful')
-          expect(BuildAutoRemediatedWorkVersionJob).to have_received(:perform_later)
+          expect(PdfRemediation::BuildAutoRemediatedWorkVersionJob).to have_received(:perform_later)
             .with(file.remediation_job_uuid, 'https://example.com/out.pdf')
         end
 
         context 'when an error occurs enqueuing the job' do
           before do
-            allow(BuildAutoRemediatedWorkVersionJob).to receive(:perform_later).and_raise(StandardError.new('Redis error'))
+            allow(PdfRemediation::BuildAutoRemediatedWorkVersionJob)
+              .to receive(:perform_later).and_raise(StandardError.new('Redis error'))
             allow(Rails.logger).to receive(:error)
           end
 
@@ -99,7 +100,8 @@ RSpec.describe Webhooks::PdfAccessibilityApiController do
           expect(response.parsed_body).to include('message' => error_message)
           expect(Rails.logger).to have_received(:error)
             .with("Auto-remediation job failed: #{error_message}")
-          expect(AutoRemediationFailedJob).to have_received(:perform_later).with(file.remediation_job_uuid)
+          expect(PdfRemediation::AutoRemediationFailedJob)
+            .to have_received(:perform_later).with(file.remediation_job_uuid)
           expect(file.reload.auto_remediation_failed_at).not_to be_nil
         end
       end
