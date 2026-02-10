@@ -11,13 +11,13 @@ class PdfRemediation::BuildAutoRemediatedWorkVersion
     # In the rare case a new work version is published after the remediation
     # job started, we stop the creation of a new remediated version here.
     unless wv_being_remediated.latest_published_version?
-      file_resource.first_auto_remediated_work_version_after(wv_being_remediated)&.destroy!
+      file_resource.first_remediated_work_version_after(wv_being_remediated)&.destroy!
       raise NotNewestReleaseError, 'A newer published version exists.  A remediated version will not be created.'
     end
 
     PaperTrail.request(whodunnit: ExternalApp.pdf_accessibility_api.to_global_id.to_s) do
       ActiveRecord::Base.transaction do
-        built_work_version = file_resource.first_auto_remediated_work_version_after(wv_being_remediated) ||
+        built_work_version = file_resource.first_remediated_work_version_after(wv_being_remediated) ||
           begin
             v = BuildNewWorkVersion.call(wv_being_remediated)
             v.update({ remediated_version: true,

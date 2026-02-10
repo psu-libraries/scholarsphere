@@ -469,12 +469,12 @@ RSpec.describe FileResource do
     end
   end
 
-  describe '#first_auto_remediated_work_version_after' do
+  describe '#first_remediated_work_version_after' do
     let(:file_resource) { create(:file_resource) }
     let!(:version_being_remediated) { create(:work_version) }
 
     context 'when there are auto_remediated work_versions after the given version' do
-      let!(:first_auto_remediated) { create(:work_version,
+      let!(:first_remediated) { create(:work_version,
                                             remediated_version: true) }
 
       before do
@@ -483,33 +483,33 @@ RSpec.describe FileResource do
                work_version: version_being_remediated)
         create(:file_version_membership,
                file_resource: file_resource,
-               work_version: first_auto_remediated)
+               work_version: first_remediated)
       end
 
       it 'returns the first remediated_version with id greater than the given version' do
         expect(file_resource
-                .first_auto_remediated_work_version_after(version_being_remediated)).to eq(first_auto_remediated)
+        .first_remediated_work_version_after(version_being_remediated)).to eq(first_remediated)
       end
     end
 
     context 'when multiple auto remediated versions exist after the given version' do
-      let!(:first_auto_remediated) { create(:work_version,
+      let!(:first_remediated) { create(:work_version,
                                             remediated_version: true) }
-      let!(:later_auto_remediated) { create(:work_version,
+      let!(:later_remediated) { create(:work_version,
                                             remediated_version: true) }
 
       before do
         create(:file_version_membership,
                file_resource: file_resource,
-               work_version: later_auto_remediated)
+               work_version: later_remediated)
         create(:file_version_membership,
                file_resource: file_resource,
-               work_version: first_auto_remediated)
+               work_version: first_remediated)
       end
 
       it 'returns the first auto remediated version after the given version' do
         expect(file_resource
-                .first_auto_remediated_work_version_after(version_being_remediated)).to eq(first_auto_remediated)
+        .first_remediated_work_version_after(version_being_remediated)).to eq(first_remediated)
       end
     end
 
@@ -523,7 +523,7 @@ RSpec.describe FileResource do
       end
 
       it 'returns nil' do
-        expect(file_resource.first_auto_remediated_work_version_after(only_version)).to be_nil
+        expect(file_resource.first_remediated_work_version_after(only_version)).to be_nil
       end
     end
   end

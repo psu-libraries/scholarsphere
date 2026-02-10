@@ -21,10 +21,10 @@ RSpec.describe PdfRemediation::BuildAutoRemediatedWorkVersion do
     end
 
     context 'when a newer published version exists' do
-      let!(:existing_auto) { create(:work_version,
-                                    :draft, remediated_version: true,
-                                            work: work,
-                                            file_resources: [file_resource]) }
+      let!(:existing_remed) { create(:work_version,
+                                     :draft, remediated_version: true,
+                                             work: work,
+                                             file_resources: [file_resource]) }
 
       before do
         create(:work_version,
@@ -37,7 +37,7 @@ RSpec.describe PdfRemediation::BuildAutoRemediatedWorkVersion do
         expect {
           described_class.call(file_resource, remediated_url)
         }.to raise_error(PdfRemediation::BuildAutoRemediatedWorkVersion::NotNewestReleaseError)
-        expect(WorkVersion).not_to exist(existing_auto.id)
+        expect(WorkVersion).not_to exist(existing_remed.id)
       end
     end
 
@@ -113,12 +113,12 @@ RSpec.describe PdfRemediation::BuildAutoRemediatedWorkVersion do
       end
 
       context 'when an auto-remediated work version already exists after the one being remediated' do
-        let!(:existing_auto_wv) { BuildNewWorkVersion.call(wv_being_remediated) }
+        let!(:existing_remed_wv) { BuildNewWorkVersion.call(wv_being_remediated) }
 
         before do
-          existing_auto_wv.remediated_version = true
-          existing_auto_wv.external_app = ExternalApp.pdf_accessibility_api
-          existing_auto_wv.save!
+          existing_remed_wv.remediated_version = true
+          existing_remed_wv.external_app = ExternalApp.pdf_accessibility_api
+          existing_remed_wv.save!
         end
 
         context 'when no remaining remediation jobs' do
@@ -153,8 +153,8 @@ RSpec.describe PdfRemediation::BuildAutoRemediatedWorkVersion do
           let!(:other_file_resource) { create(:file_resource, remediation_job_uuid: SecureRandom.uuid) }
 
           before do
-            existing_auto_wv.file_resources << other_file_resource
-            existing_auto_wv.save!
+            existing_remed_wv.file_resources << other_file_resource
+            existing_remed_wv.save!
           end
 
           it 'attaches the remediated file to the existing auto-remediated work version, but does not publish it' do
