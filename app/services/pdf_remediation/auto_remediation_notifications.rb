@@ -7,7 +7,7 @@ class PdfRemediation::AutoRemediationNotifications
 
   def send_notifications
     contributors_emails.each do |email|
-      PdfRemediation::AutoRemediationMailer
+      AutoRemediationMailer
         .with(work_title: @remediated_work_version.title,
               work_version_uuid: @remediated_work_version.uuid,
               contributor_email: email)

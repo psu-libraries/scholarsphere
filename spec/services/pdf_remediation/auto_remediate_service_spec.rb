@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe AutoRemediateService do
+RSpec.describe PdfRemediation::AutoRemediateService do
   describe '#call' do
     let(:work_version) { create(:work_version, :published, file_resources: [pdf1, pdf2, non_pdf, pdf3]) }
     let(:pdf1) { create(:file_resource, :pdf) }
@@ -10,14 +10,14 @@ RSpec.describe AutoRemediateService do
     let(:non_pdf) { create(:file_resource) }
     let(:pdf3) { create(:file_resource, :pdf, remediation_job_uuid: 'existing_uuid') }
 
-    before { allow(AutoRemediationJob).to receive(:perform_later) }
+    before { allow(PdfRemediation::AutoRemediationJob).to receive(:perform_later) }
 
     it 'enqueues an AutoRemediationJob for each PDF file resource without an existing remediation_job_uuid' do
       described_class.new(work_version.id, false, true).call
-      expect(AutoRemediationJob).to have_received(:perform_later).with(pdf1.id)
-      expect(AutoRemediationJob).to have_received(:perform_later).with(pdf2.id)
-      expect(AutoRemediationJob).not_to have_received(:perform_later).with(non_pdf.id)
-      expect(AutoRemediationJob).not_to have_received(:perform_later).with(pdf3.id)
+      expect(PdfRemediation::AutoRemediationJob).to have_received(:perform_later).with(pdf1.id)
+      expect(PdfRemediation::AutoRemediationJob).to have_received(:perform_later).with(pdf2.id)
+      expect(PdfRemediation::AutoRemediationJob).not_to have_received(:perform_later).with(non_pdf.id)
+      expect(PdfRemediation::AutoRemediationJob).not_to have_received(:perform_later).with(pdf3.id)
     end
   end
 

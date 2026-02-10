@@ -2,18 +2,22 @@
 
 require 'rails_helper'
 
-RSpec.describe AutoRemediationFailedJob do
+RSpec.describe PdfRemediation::AutoRemediationFailedJob do
   describe '#perform' do
     let(:existing_job_uuid) { SecureRandom.uuid }
     let!(:file_resource) do
-      create(:file_resource,
-             remediation_job_uuid: existing_job_uuid,
-             work_versions: [create(:work_version)])
+      create(
+        :file_resource,
+        remediation_job_uuid: existing_job_uuid,
+        work_versions: [create(:work_version)]
+      )
     end
     let(:work) { file_resource.work_versions.first.work }
     let(:service) do
-      instance_double(LibanswersApiService,
-                      admin_create_ticket: 'https://psu.libanswers.com/fake-ticket')
+      instance_double(
+        LibanswersApiService,
+        admin_create_ticket: 'https://psu.libanswers.com/fake-ticket'
+      )
     end
 
     before do

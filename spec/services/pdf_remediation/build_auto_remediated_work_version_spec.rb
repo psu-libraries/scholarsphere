@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe BuildAutoRemediatedWorkVersion do
+RSpec.describe PdfRemediation::BuildAutoRemediatedWorkVersion do
   let!(:user) { create(:user, access_id: 'test', email: 'test@psu.edu') }
   let!(:work) { create(:work, depositor: user.actor) }
   let!(:file_resource) { create(:file_resource, remediation_job_uuid: SecureRandom.uuid) }
@@ -36,15 +36,16 @@ RSpec.describe BuildAutoRemediatedWorkVersion do
       it 'destroys any existing auto-remediated version and raises NotNewestReleaseError' do
         expect {
           described_class.call(file_resource, remediated_url)
-        }.to raise_error(BuildAutoRemediatedWorkVersion::NotNewestReleaseError)
+        }.to raise_error(PdfRemediation::BuildAutoRemediatedWorkVersion::NotNewestReleaseError)
         expect(WorkVersion).not_to exist(existing_auto.id)
       end
     end
 
     context 'when the work version being remediated is the latest published version' do
       before do
-        allow(AutoRemediationNotifications)
-          .to receive(:new).and_return(instance_double(AutoRemediationNotifications, send_notifications: true))
+        allow(PdfRemediation::AutoRemediationNotifications)
+          .to receive(:new)
+          .and_return(instance_double(PdfRemediation::AutoRemediationNotifications, send_notifications: true))
       end
 
       context 'when no auto-remediated work version exists after the one being remediated' do
@@ -64,7 +65,7 @@ RSpec.describe BuildAutoRemediatedWorkVersion do
             )
             expect(result.external_app).to eq(ExternalApp.pdf_accessibility_api)
             expect(result).to be_published
-            expect(AutoRemediationNotifications)
+            expect(PdfRemediation::AutoRemediationNotifications)
               .to have_received(:new).with(result)
           end
 
@@ -99,7 +100,7 @@ RSpec.describe BuildAutoRemediatedWorkVersion do
             )
             expect(result.external_app).to eq(ExternalApp.pdf_accessibility_api)
             expect(result).to be_draft
-            expect(AutoRemediationNotifications)
+            expect(PdfRemediation::AutoRemediationNotifications)
               .not_to have_received(:new).with(result)
           end
 
@@ -137,7 +138,7 @@ RSpec.describe BuildAutoRemediatedWorkVersion do
             )
             expect(result.external_app).to eq(ExternalApp.pdf_accessibility_api)
             expect(result).to be_published
-            expect(AutoRemediationNotifications)
+            expect(PdfRemediation::AutoRemediationNotifications)
               .to have_received(:new).with(result)
           end
 
@@ -172,7 +173,7 @@ RSpec.describe BuildAutoRemediatedWorkVersion do
             )
             expect(result.external_app).to eq(ExternalApp.pdf_accessibility_api)
             expect(result).to be_draft
-            expect(AutoRemediationNotifications)
+            expect(PdfRemediation::AutoRemediationNotifications)
               .not_to have_received(:new).with(result)
           end
 
