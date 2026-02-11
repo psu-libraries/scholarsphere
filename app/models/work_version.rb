@@ -402,7 +402,7 @@ class WorkVersion < ApplicationRecord
   end
 
   def mirror_remediated_version_to_files!
-    file_resources.can_remediate.find_each do |file_resource|
+    file_resources.is_pdf.find_each do |file_resource|
       file_resource.update!(remediated_version: remediated_version)
     end
   end

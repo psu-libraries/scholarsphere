@@ -24,7 +24,7 @@ RSpec.describe WorkVersion do
     it { is_expected.to have_db_column(:published_at).of_type(:datetime) }
     it { is_expected.to have_db_column(:withdrawn_at).of_type(:datetime) }
     it { is_expected.to have_db_column(:removed_at).of_type(:datetime) }
-    it { is_expected.to have_db_column(:remediated_version).of_type(:boolean) }
+    it { is_expected.to have_db_column(:remediated_version).of_type(:boolean).with_default(false).with_null(false) }
     it { is_expected.to have_db_column(:auto_remediation_started_at).of_type(:datetime) }
     it { is_expected.to have_jsonb_accessor(:title).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:subtitle).of_type(:string) }
@@ -1076,6 +1076,24 @@ RSpec.describe WorkVersion do
       it 'returns false' do
         expect(work_version.has_remaining_auto_remediation_jobs?).to be false
       end
+    end
+  end
+
+  describe '#mirror_remediated_version_to_files!' do
+    let(:work_version) { create(:work_version, remediated_version: true) }
+    let!(:pdf_file) { create(:file_resource, :pdf, remediated_version: false) }
+    let!(:non_pdf_file) { create(:file_resource, :readme_md, remediated_version: false) }
+
+    before do
+      create(:file_version_membership, work_version: work_version, file_resource: pdf_file)
+      create(:file_version_membership, work_version: work_version, file_resource: non_pdf_file)
+    end
+
+    it 'updates only PDF file resources to match the work version' do
+      work_version.mirror_remediated_version_to_files!
+
+      expect(pdf_file.reload.remediated_version).to be true
+      expect(non_pdf_file.reload.remediated_version).to be false
     end
   end
 end
