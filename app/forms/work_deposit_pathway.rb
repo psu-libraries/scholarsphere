@@ -264,13 +264,6 @@ class WorkDepositPathway
 
       delegate :mirror_remediated_version_to_files!,
                to: :work_version
-
-      def save(context: nil)
-        return false unless super
-
-        mirror_remediated_version_to_files!
-        true
-      end
     end
 
     module General

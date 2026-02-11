@@ -596,14 +596,6 @@ RSpec.describe WorkDepositPathway::Instrument::PublishForm, type: :model do
           it 'returns true' do
             expect(form.save(context: context)).to eq true
           end
-
-          it 'mirrors the remediated_version flag to associated file resources' do
-            allow(wv).to receive(:mirror_remediated_version_to_files!)
-
-            form.save(context: context)
-
-            expect(wv).to have_received(:mirror_remediated_version_to_files!)
-          end
         end
       end
 
