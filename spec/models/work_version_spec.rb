@@ -24,7 +24,7 @@ RSpec.describe WorkVersion do
     it { is_expected.to have_db_column(:published_at).of_type(:datetime) }
     it { is_expected.to have_db_column(:withdrawn_at).of_type(:datetime) }
     it { is_expected.to have_db_column(:removed_at).of_type(:datetime) }
-    it { is_expected.to have_db_column(:remediated_version).of_type(:boolean).with_default(false).with_null(false) }
+    it { is_expected.to have_db_column(:remediated_version).of_type(:boolean).with_options(default: false, null: false) }
     it { is_expected.to have_db_column(:auto_remediation_started_at).of_type(:datetime) }
     it { is_expected.to have_jsonb_accessor(:title).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:subtitle).of_type(:string) }

@@ -16,7 +16,7 @@ RSpec.describe FileResource do
   describe 'table' do
     it { is_expected.to have_db_column(:file_data).of_type(:jsonb) }
     it { is_expected.to have_db_column(:remediation_job_uuid).of_type(:string) }
-    it { is_expected.to have_db_column(:remediated_version).of_type(:boolean) }
+    it { is_expected.to have_db_column(:remediated_version).of_type(:boolean).with_options(default: false, null: false) }
     it { is_expected.to have_db_column(:auto_remediation_failed_at).of_type(:datetime) }
   end
 
