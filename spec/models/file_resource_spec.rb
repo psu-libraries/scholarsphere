@@ -475,7 +475,7 @@ RSpec.describe FileResource do
 
     context 'when there are auto_remediated work_versions after the given version' do
       let!(:first_remediated) { create(:work_version,
-                                            remediated_version: true) }
+                                       remediated_version: true) }
 
       before do
         create(:file_version_membership,
@@ -494,9 +494,9 @@ RSpec.describe FileResource do
 
     context 'when multiple auto remediated versions exist after the given version' do
       let!(:first_remediated) { create(:work_version,
-                                            remediated_version: true) }
+                                       remediated_version: true) }
       let!(:later_remediated) { create(:work_version,
-                                            remediated_version: true) }
+                                       remediated_version: true) }
 
       before do
         create(:file_version_membership,

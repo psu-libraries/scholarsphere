@@ -191,7 +191,6 @@ class WorkDepositPathway
                :file_version_memberships,
                :mint_doi_requested,
                :has_image_file_resource?,
-               :mirror_remediated_version_to_files!,
                to: :work_version, prefix: false
 
       private
@@ -262,6 +261,9 @@ class WorkDepositPathway
 
     class PublishFormBase < WorkVersionFormBase
       include WorkVersionDetails
+
+      delegate :mirror_remediated_version_to_files!,
+               to: :work_version
     end
 
     module General
@@ -620,7 +622,7 @@ class WorkDepositPathway
         end
       end
 
-      class PublishForm < WorkVersionFormBase
+      class PublishForm < PublishFormBase
         REQUIRE_FIELDS.each { |f| validates f.to_sym, presence: true }
 
         def self.form_fields

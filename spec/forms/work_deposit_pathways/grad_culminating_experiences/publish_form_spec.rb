@@ -20,7 +20,8 @@ RSpec.describe WorkDepositPathway::GradCulminatingExperiences::PublishForm, type
         'related_url' => 'test related_url',
         'language' => 'test language',
         'rights' => 'https://creativecommons.org/licenses/by/4.0/',
-        'contributor' => 'test contributor'
+        'contributor' => 'test contributor',
+        'remediated_version' => false
       }
     )
   }
@@ -39,6 +40,7 @@ RSpec.describe WorkDepositPathway::GradCulminatingExperiences::PublishForm, type
   it { is_expected.to delegate_method(:aasm).to(:work_version) }
   it { is_expected.to delegate_method(:update_column).to(:work_version) }
   it { is_expected.to delegate_method(:set_thumbnail_selection).to(:work_version) }
+  it { is_expected.to delegate_method(:mirror_remediated_version_to_files!).to(:work_version) }
 
   describe '#aasm_state=' do
     before { allow(wv).to receive(:aasm_state=) }
@@ -103,6 +105,7 @@ RSpec.describe WorkDepositPathway::GradCulminatingExperiences::PublishForm, type
         psu_community_agreement
         accessibility_agreement
         sensitive_info_agreement
+        remediated_version
       }
 
       expect(described_class.form_fields).to be_frozen
@@ -122,7 +125,8 @@ RSpec.describe WorkDepositPathway::GradCulminatingExperiences::PublishForm, type
           related_url: ['test related_url'],
           language: ['test language'],
           rights: 'https://creativecommons.org/licenses/by/4.0/',
-          contributor: ['test contributor']
+          contributor: ['test contributor'],
+          remediated_version: false
         }
       )
     end

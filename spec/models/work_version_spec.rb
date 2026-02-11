@@ -1055,8 +1055,8 @@ RSpec.describe WorkVersion do
                              remediation_job_uuid: nil,
                              remediated_version: false) }
       let!(:already_remed) { create(:file_resource,
-                                   remediation_job_uuid: 'job-456',
-                                   remediated_version: true) }
+                                    remediation_job_uuid: 'job-456',
+                                    remediated_version: true) }
 
       before do
         create(:file_version_membership,
