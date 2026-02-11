@@ -43,7 +43,7 @@
     "sass": "^1.69.5",
     "sass-loader": "^16.0.5",
     "select2": "^4.0.13",
-    "shakapacker": "7.2.3",
+    "shakapacker": "9.5.0",
     "stimulus": "^1.1.1",
     "style-loader": "^3.3.3",
     "terser-webpack-plugin": "^5.3.9",
