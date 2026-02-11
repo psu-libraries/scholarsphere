@@ -53,7 +53,7 @@ module Dashboard
           if @resource.mint_doi_requested
             deposit_pathway.allows_mint_doi_request? ? MintDoiAsync.call(@resource.work) : flash[:error] = t('dashboard.form.publish.doi.error')
           end
-          mirror_remediated_version_to_files! if validation_context.nil?
+          @resource.mirror_remediated_version_to_files! if validation_context.nil?
         end
       end
 
