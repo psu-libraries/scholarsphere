@@ -22,6 +22,7 @@ public/uploads-test
 
 /public/assets
 .byebug_history
+.config/
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
