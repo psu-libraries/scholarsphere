@@ -3,7 +3,7 @@
 namespace :pdf_remediation do
   desc 'Flag existing remediated WorkVersions that have AccessibleCopy_ filename prefix'
   task flag_existing_remediated_files_and_work_versions: :environment do
-    scope = FileResource.where("file_data->'metadata'->>'filename' LIKE ?", 'AccessibleCopy_%')
+    scope = FileResource.is_pdf.where("file_data->'metadata'->>'filename' LIKE ?", 'AccessibleCopy_%')
 
     puts "Found #{scope.count} FileResource records with AccessibleCopy_ filename prefix"
 
