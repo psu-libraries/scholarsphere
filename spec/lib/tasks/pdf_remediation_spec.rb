@@ -51,6 +51,8 @@ describe 'pdf_remediation', type: :task do
     end
 
     context 'when a FileResource has multiple WorkVersions' do
+      let!(:work) { create(:work) }
+
       let!(:file_resource) do
         create(
           :file_resource,
@@ -59,13 +61,13 @@ describe 'pdf_remediation', type: :task do
       end
 
       let!(:older_version) do
-        create(:work_version, version_number: 1).tap do |version|
+        create(:work_version, work: work, version_number: 2).tap do |version|
           create(:file_version_membership, work_version: version, file_resource: file_resource)
         end
       end
 
       let!(:newer_version) do
-        create(:work_version, version_number: 2).tap do |version|
+        create(:work_version, work: work, version_number: 3).tap do |version|
           create(:file_version_membership, work_version: version, file_resource: file_resource)
         end
       end
