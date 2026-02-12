@@ -1461,6 +1461,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
       fill_in 'work_version_title', with: different_metadata[:title]
       FeatureHelpers::DashboardForm.fill_in_work_details(different_metadata)
       FeatureHelpers::DashboardForm.fill_in_publishing_details(metadata)
+      # Non-admins do not see the remediated version checkbox
+      expect(page).to have_no_field('work_version_remediated_version', type: 'checkbox', visible: :all)
       FeatureHelpers::DashboardForm.publish
 
       #
@@ -1657,6 +1659,10 @@ RSpec.describe 'Publishing a work', with_user: :user do
       FeatureHelpers::DashboardForm.fill_in_publishing_details_published(
         different_metadata.merge(rights: incorrect_rights)
       )
+
+      # This checkbox only shows for admins
+      check I18n.t('dashboard.form.publish.remediated_version.label')
+
       FeatureHelpers::DashboardForm.finish
       expect(SolrIndexingJob).to have_received(:perform_later).once
 
