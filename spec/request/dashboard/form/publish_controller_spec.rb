@@ -26,13 +26,14 @@ RSpec.describe Dashboard::Form::PublishController, type: :request do
 
       before { sign_in admin }
 
-      it 'mirrors remediated_version from the work version to associated PDF files' do
+      it 'saves work_version.remediated_version and mirrors remediated_version to associated PDF files' do
         expect(pdf_file.remediated_version).to be false
         expect(non_pdf_file.remediated_version).to be false
 
         patch dashboard_form_publish_path(work_version), params: request_params
 
         expect(response).to have_http_status(:redirect)
+        expect(work_version.reload.remediated_version).to be true
         expect(pdf_file.reload.remediated_version).to be true
         expect(non_pdf_file.reload.remediated_version).to be false
       end
