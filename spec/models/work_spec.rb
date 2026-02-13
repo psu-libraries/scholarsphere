@@ -554,7 +554,7 @@ RSpec.describe Work do
           doi_tesim
           draft_curation_requested_tesim
           accessibility_remediation_requested_tesim
-          auto_remediated_version_tesim
+          remediated_version_tesim
           auto_remediation_started_at_dtsi
           edit_groups_ssim
           edit_users_ssim

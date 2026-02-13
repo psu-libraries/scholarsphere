@@ -138,6 +138,7 @@ class WorkDepositPathway
         accessibility_agreement
         sensitive_info_agreement
         contributor
+        remediated_version
       }.freeze
 
       def initialize(work_version)
@@ -260,6 +261,9 @@ class WorkDepositPathway
 
     class PublishFormBase < WorkVersionFormBase
       include WorkVersionDetails
+
+      delegate :mirror_remediated_version_to_files!,
+               to: :work_version
     end
 
     module General
@@ -618,7 +622,7 @@ class WorkDepositPathway
         end
       end
 
-      class PublishForm < WorkVersionFormBase
+      class PublishForm < PublishFormBase
         REQUIRE_FIELDS.each { |f| validates f.to_sym, presence: true }
 
         def self.form_fields

@@ -600,6 +600,9 @@ en:
         auto_doi:
           header: DOI
           message: Upon publication, a DOI will be minted for the work.
+        remediated_version:
+          header: Remediated Version
+          label: This version is a remediated (accessible) version
       members:
         heading: Works
         badge: Work 

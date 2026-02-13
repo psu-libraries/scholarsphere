@@ -24,7 +24,7 @@ class PdfRemediation::AutoRemediateService
 
     work_version.latest_published_version? &&
       work_version.auto_remediation_started_at.nil? &&
-      !work_version.auto_remediated_version &&
+      !work_version.remediated_version &&
       download_can_remediate &&
       !admin &&
       !work_version.work.under_manual_review
