@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   docker: circleci/docker@2.8.2
-  browser-tools: circleci/browser-tools@1.5.2
+  browser-tools: circleci/browser-tools@1.5.3
 
 parameters:
 
@@ -20,7 +20,7 @@ parameters:
     default: ""
   CI_UTILS_IMAGE_TAG:
     type: string
-    default: "v4.3.0"
+    default: "v4.5.0"
   CONFIG_REPO_NAME:
     type: string
     default: "scholarsphere-config"
@@ -207,6 +207,7 @@ jobs:
       registry_host: << pipeline.parameters.REGISTRY_HOST >>
     environment:
       clusters: << parameters.clusters >>
+      CONFIG_REPO_NAME: << pipeline.parameters.CONFIG_REPO_NAME >>
       CONFIG_REPO: git@github.com:psu-libraries/scholarsphere-config.git
       REGISTRY_HOST: harbor.k8s.libraries.psu.edu
       FROM_TAG: << parameters.from_tag >>
@@ -217,19 +218,7 @@ jobs:
       - run:
           name: Tag & Release Image
           command: |
-            export TRIGGERED_BY="$CIRCLE_USERNAME"
-            export REGISTRY_REPO="$CIRCLE_PROJECT_REPONAME"
-            /usr/local/bin/image-tag
-            cd $CONFIG_REPO_NAME
-
-            # Split comma-separated clusters into array and loop
-            clusters="${clusters// /}"
-            IFS=',' read -ra CLUSTERS \<<< "$clusters"
-            for cluster in "${CLUSTERS[@]}"; do
-              export TARGET_CLUSTER="$cluster"
-              echo "Processing cluster: $TARGET_CLUSTER"
-              /usr/local/bin/image-release-pr "clusters/$TARGET_CLUSTER/manifests/$CIRCLE_PROJECT_REPONAME/prod.yaml"
-            done          
+            /usr/local/bin/image-release-for-clusters          
 
   test-application:
     resource_class: large
