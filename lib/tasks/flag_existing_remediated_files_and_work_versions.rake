@@ -8,12 +8,12 @@ namespace :pdf_remediation do
     puts "Found #{scope.count} FileResource records with AccessibleCopy_ filename prefix"
 
     scope.find_each do |file_resource|
-      file_resource.update(remediated_version: true)
+      file_resource.update_columns(remediated_version: true) # rubocop:disable Rails/SkipsModelValidations
 
       latest_work_version = file_resource.work_versions.order(:version_number).last ||
         file_resource.work_versions.order(:created_at).last
 
-      latest_work_version.update(remediated_version: true)
+      latest_work_version.update_columns(remediated_version: true) # rubocop:disable Rails/SkipsModelValidations
 
       puts "Flagged WorkVersion ##{latest_work_version.id} and FileResource ##{file_resource.id} as remediated_version"
     end
