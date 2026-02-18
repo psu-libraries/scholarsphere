@@ -20,7 +20,7 @@ parameters:
     default: ""
   CI_UTILS_IMAGE_TAG:
     type: string
-    default: "v4.5.0"
+    default: "v4.5.1"
   CONFIG_REPO_NAME:
     type: string
     default: "scholarsphere-config"
