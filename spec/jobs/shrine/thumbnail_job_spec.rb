@@ -22,5 +22,29 @@ RSpec.describe Shrine::ThumbnailJob, skip: !ci_build? do
       described_class.perform_now(image_record)
       expect(image_record.file_attacher.url(:thumbnail)).to include('thumbnails')
     end
+
+    it 'reindexes associated work versions when no thumbnail upload is present' do
+      work_version_one = instance_spy(WorkVersion)
+      work_version_two = instance_spy(WorkVersion)
+      allow(pdf_record).to receive(:work_versions).and_return([work_version_one, work_version_two])
+      allow(pdf_record).to receive(:thumbnail_upload).and_return(nil)
+
+      described_class.perform_now(pdf_record)
+
+      expect(work_version_one).to have_received(:update_index)
+      expect(work_version_two).to have_received(:update_index)
+    end
+
+    it 'reindexes associated thumbnail upload resource when present' do
+      thumbnail_upload = create(:thumbnail_upload)
+      resource = thumbnail_upload.resource
+      allow(resource).to receive(:update_index)
+      allow(pdf_record).to receive(:work_versions).and_return([])
+      allow(pdf_record).to receive(:thumbnail_upload).and_return(thumbnail_upload)
+
+      described_class.perform_now(pdf_record)
+
+      expect(resource).to have_received(:update_index)
+    end
   end
 end

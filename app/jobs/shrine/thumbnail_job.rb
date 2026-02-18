@@ -9,9 +9,16 @@ class Shrine::ThumbnailJob < ApplicationJob
       attacher.create_derivatives :thumbnail
       record.save
     end
-    # If the created record is a thumbnail uploaded by a user,
-    # then the associated resource needs to be reindexed
-    record.thumbnail_upload.resource.update_index if record.thumbnail_upload.present?
+
+    if record.thumbnail_upload.present?
+      # If the created record is a thumbnail uploaded by a user,
+      # then the associated resource needs to be reindexed
+      record.thumbnail_upload.resource.update_index if record.thumbnail_upload.present?
+    else
+      # Update WorkVersions' solr docs with thumbnail url when
+      # thumbnail is auto-generated from a WorkVersion upload
+      record.work_versions.each(&:update_index)
+    end
   rescue Shrine::AttachmentChanged, ActiveRecord::RecordNotFound
     # attachment has changed or record has been deleted, nothing to do
   end
