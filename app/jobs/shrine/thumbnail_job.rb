@@ -13,7 +13,7 @@ class Shrine::ThumbnailJob < ApplicationJob
     if record.thumbnail_upload.present?
       # If the created record is a thumbnail uploaded by a user,
       # then the associated resource needs to be reindexed
-      record.thumbnail_upload.resource.update_index if record.thumbnail_upload.present?
+      record.thumbnail_upload.resource.update_index
     else
       # Update WorkVersions' solr docs with thumbnail url when
       # thumbnail is auto-generated from a WorkVersion upload
