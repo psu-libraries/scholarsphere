@@ -1,5 +1,5 @@
 <div class="modal fade" id="remediationPopup" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-body">
         <p><strong><%= t('remediation_popup.title') %></strong></p>
@@ -10,6 +10,7 @@
         </ul>
         <br>
         <p><%= t('remediation_popup.contact_info').html_safe %></p>
+        <p><%= t('remediation_popup.final_note') %></p>
       <div class="modal-footer justify-content-center">
         <button type="button" class="btn btn-primary" id="modalOkBtn"><%= t('remediation_popup.ok_button') %></button>
       </div>
