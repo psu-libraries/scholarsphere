@@ -9,11 +9,12 @@ RSpec.describe PdfRemediation::AutoRemediateService do
     let(:pdf2) { create(:file_resource, :pdf) }
     let(:non_pdf) { create(:file_resource) }
     let(:pdf3) { create(:file_resource, :pdf, remediation_job_uuid: 'existing_uuid') }
+    let(:user) { create(:user) }
 
     before { allow(PdfRemediation::AutoRemediationJob).to receive(:perform_later) }
 
     it 'enqueues an AutoRemediationJob for each PDF file resource without an existing remediation_job_uuid' do
-      described_class.new(work_version.id, false, true).call
+      described_class.new(work_version.id, user, true).call
       expect(PdfRemediation::AutoRemediationJob).to have_received(:perform_later).with(pdf1.id)
       expect(PdfRemediation::AutoRemediationJob).to have_received(:perform_later).with(pdf2.id)
       expect(PdfRemediation::AutoRemediationJob).not_to have_received(:perform_later).with(non_pdf.id)
@@ -22,6 +23,8 @@ RSpec.describe PdfRemediation::AutoRemediateService do
   end
 
   describe '#able_to_auto_remediate?' do
+    let(:user) { create(:user) }
+
     # TODO: Remove following context block when we are confident in the stability of the remediation service
     context 'when production environment' do
       before do
@@ -40,7 +43,7 @@ RSpec.describe PdfRemediation::AutoRemediateService do
 
         it 'returns true' do
           work_version = create(:work_version, :published)
-          expect(described_class.new(work_version.id, false, true).able_to_auto_remediate?).to be true
+          expect(described_class.new(work_version.id, user, true).able_to_auto_remediate?).to be true
         end
       end
 
@@ -52,7 +55,7 @@ RSpec.describe PdfRemediation::AutoRemediateService do
 
         it 'returns false' do
           work_version = create(:work_version, :published)
-          expect(described_class.new(work_version.id, false, true).able_to_auto_remediate?).to be false
+          expect(described_class.new(work_version.id, user, true).able_to_auto_remediate?).to be false
         end
       end
     end
@@ -63,10 +66,10 @@ RSpec.describe PdfRemediation::AutoRemediateService do
           let(:work_version) { create(:work_version, :published) }
 
           context 'when the download can remediate' do
-            context 'when the user is not an admin' do
+            context 'when the user is not an admin, creator, or depositor' do
               context 'when the work is not under manual review' do
                 it 'returns true' do
-                  expect(described_class.new(work_version.id, false, true).able_to_auto_remediate?).to be true
+                  expect(described_class.new(work_version.id, user, true).able_to_auto_remediate?).to be true
                 end
               end
 
@@ -74,21 +77,39 @@ RSpec.describe PdfRemediation::AutoRemediateService do
                 before { work_version.work.update(under_manual_review: true) }
 
                 it 'returns false' do
-                  expect(described_class.new(work_version.id, false, true).able_to_auto_remediate?).to be false
+                  expect(described_class.new(work_version.id, user, true).able_to_auto_remediate?).to be false
                 end
               end
             end
 
             context 'when the user is an admin' do
               it 'returns false' do
-                expect(described_class.new(work_version.id, true, true).able_to_auto_remediate?).to be false
+                admin_user = create(:user, :admin)
+                expect(described_class.new(work_version.id, admin_user, true).able_to_auto_remediate?).to be false
+              end
+            end
+
+            context 'when the user is a creator' do
+              it 'returns false' do
+                work_version.creators << create(:authorship, actor: user.actor)
+                work_version.save!
+
+                expect(described_class.new(work_version.id, user, true).able_to_auto_remediate?).to be false
+              end
+            end
+
+            context 'when the user is the depositor' do
+              before { work_version.work.update!(depositor: user.actor) }
+
+              it 'returns false' do
+                expect(described_class.new(work_version.id, user, true).able_to_auto_remediate?).to be false
               end
             end
           end
 
           context 'when the download cannot remediate' do
             it 'returns false' do
-              expect(described_class.new(work_version.id, false, false).able_to_auto_remediate?).to be false
+              expect(described_class.new(work_version.id, user, false).able_to_auto_remediate?).to be false
             end
           end
         end
@@ -97,7 +118,7 @@ RSpec.describe PdfRemediation::AutoRemediateService do
           let(:work_version) { create(:work_version, :published, remediated_version: true) }
 
           it 'returns false' do
-            expect(described_class.new(work_version.id, false, true).able_to_auto_remediate?).to be false
+            expect(described_class.new(work_version.id, user, true).able_to_auto_remediate?).to be false
           end
         end
       end
@@ -106,7 +127,7 @@ RSpec.describe PdfRemediation::AutoRemediateService do
         let(:work_version) { create(:work_version, :published, auto_remediation_started_at: 1.hour.ago) }
 
         it 'returns false' do
-          expect(described_class.new(work_version.id, false, true).able_to_auto_remediate?).to be false
+          expect(described_class.new(work_version.id, user, true).able_to_auto_remediate?).to be false
         end
       end
     end
@@ -115,7 +136,7 @@ RSpec.describe PdfRemediation::AutoRemediateService do
       let(:work_version) { create(:work_version, :draft) }
 
       it 'returns false' do
-        expect(described_class.new(work_version.id, false, true).able_to_auto_remediate?).to be false
+        expect(described_class.new(work_version.id, user, true).able_to_auto_remediate?).to be false
       end
     end
   end

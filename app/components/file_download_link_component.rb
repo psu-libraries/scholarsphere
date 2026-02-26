@@ -45,7 +45,7 @@ class FileDownloadLinkComponent < ViewComponent::Base
   def remediation_alert?
     remediation_service = PdfRemediation::AutoRemediateService.new(
       work_version_id,
-      helpers.current_user.admin?,
+      helpers.current_user,
       can_remediate?
     )
     remediation_service.able_to_auto_remediate?
