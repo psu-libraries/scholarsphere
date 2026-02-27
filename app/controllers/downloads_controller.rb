@@ -9,7 +9,7 @@ class DownloadsController < ApplicationController
 
     remediation_service = PdfRemediation::AutoRemediateService.new(
       work_version.id,
-      current_user.admin?,
+      current_user,
       file_version.file_resource.can_remediate?
     )
     remediation_service.call if remediation_service.able_to_auto_remediate? && download_params[:download]
