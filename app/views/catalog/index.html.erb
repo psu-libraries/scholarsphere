@@ -9,10 +9,8 @@
   <%= link_to t('blacklight.skip_links.first_result'), '#documents', class: 'element-invisible element-focusable rounded-bottom py-2 px-3', data: { turbolinks: 'false' } %>
 <% end %>
 
-<% if @response.total.positive? %>
-  <% content_for(:sidebar) do -%>
-    <%= render 'facets' %>
-  <% end %>
+<% content_for(:sidebar) do -%>
+  <%= render 'facets' %>
 <% end %>
 
 <% content_for(:top_section_heading) do %>
