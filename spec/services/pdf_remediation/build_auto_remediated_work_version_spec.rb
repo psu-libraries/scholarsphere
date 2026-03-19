@@ -60,6 +60,7 @@ RSpec.describe PdfRemediation::BuildAutoRemediatedWorkVersion do
             expect(FileVersionMembership.find_by(work_version: result, file_resource: file_resource)).to be_nil
             remediated_file_resource = WorkVersion.find(result.id).file_resources.where(remediated_version: true)
             expect(remediated_file_resource.count).to eq(1)
+            expect(remediated_file_resource.first.auto_remediated_version).to be true
             expect(remediated_file_resource.first.file_data['metadata']['filename']).to eq(
               "ACCESSIBLE_VERSION_#{FileResource.find(file_resource.id).file_data['metadata']['filename']}"
             )

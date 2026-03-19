@@ -17,6 +17,7 @@ RSpec.describe FileResource do
     it { is_expected.to have_db_column(:file_data).of_type(:jsonb) }
     it { is_expected.to have_db_column(:remediation_job_uuid).of_type(:string) }
     it { is_expected.to have_db_column(:remediated_version).of_type(:boolean).with_options(default: false, null: false) }
+    it { is_expected.to have_db_column(:auto_remediated_version).of_type(:boolean).with_options(default: false, null: false) }
     it { is_expected.to have_db_column(:auto_remediation_failed_at).of_type(:datetime) }
   end
 
@@ -49,10 +50,11 @@ RSpec.describe FileResource do
   describe 'scopes' do
     describe '.can_remediate' do
       let(:remediable_pdf) { create(:file_resource, :pdf) }
-      let(:non_remediable_pdf) { create(:file_resource, :pdf, remediated_version: true) }
+      let(:auto_remediated_pdf) { create(:file_resource, :pdf, auto_remediated_version: true) }
+      let(:manual_remediated_pdf) { create(:file_resource, :pdf, remediated_version: true, auto_remediated_version: false) }
       let(:non_pdf_file_resource) { create(:file_resource, :with_processed_image) }
 
-      it 'returns only PDF files that are not auto-remediated' do
+      it 'returns only PDF files that are not remediated and not auto-remediated' do
         expect(described_class.can_remediate).to contain_exactly(remediable_pdf)
       end
     end
@@ -273,6 +275,7 @@ RSpec.describe FileResource do
         thumbnail_url_ssi
         remediation_job_uuid_tesim
         remediated_version_tesim
+        auto_remediated_version_tesim
         auto_remediation_failed_at_dtsi
       )
     end
@@ -389,20 +392,29 @@ RSpec.describe FileResource do
     context 'when the file is a pdf' do
       let(:file_resource) { build(:file_resource, :pdf) }
 
-      context 'when remediated_version is false' do
-        before { file_resource.remediated_version = false }
+      context 'when auto_remediated_version is false' do
+        before { file_resource.auto_remediated_version = false }
 
         it { is_expected.to be true }
       end
 
-      context 'when remediated_version is nil' do
-        before { file_resource.remediated_version = nil }
+      context 'when auto_remediated_version is nil' do
+        before { file_resource.auto_remediated_version = nil }
 
         it { is_expected.to be true }
       end
 
-      context 'when remediated_version is true' do
-        before { file_resource.remediated_version = true }
+      context 'when remediated_version is true but auto_remediated_version is false' do
+        before do
+          file_resource.remediated_version = true
+          file_resource.auto_remediated_version = false
+        end
+
+        it { is_expected.to be false }
+      end
+
+      context 'when auto_remediated_version is true' do
+        before { file_resource.auto_remediated_version = true }
 
         it { is_expected.to be false }
       end
@@ -411,20 +423,20 @@ RSpec.describe FileResource do
     context 'when the file is not a PDF' do
       let(:file_resource) { build(:file_resource, :with_processed_image) }
 
-      context 'when remediated_version is false' do
-        before { file_resource.remediated_version = false }
+      context 'when auto_remediated_version is false' do
+        before { file_resource.auto_remediated_version = false }
 
         it { is_expected.to be false }
       end
 
-      context 'when remediated_version is nil' do
-        before { file_resource.remediated_version = nil }
+      context 'when auto_remediated_version is nil' do
+        before { file_resource.auto_remediated_version = nil }
 
         it { is_expected.to be false }
       end
 
-      context 'when remediated_version is true' do
-        before { file_resource.remediated_version = true }
+      context 'when auto_remediated_version is true' do
+        before { file_resource.auto_remediated_version = true }
 
         it { is_expected.to be false }
       end

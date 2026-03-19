@@ -33,7 +33,7 @@ class FileResource < ApplicationRecord
   }
 
   scope :can_remediate, -> {
-    is_pdf.where('remediated_version IS NULL OR remediated_version = ?', false)
+    is_pdf.where(remediated_version: [nil, false], auto_remediated_version: [nil, false])
   }
 
   scope :needs_accessibility_check, -> {
@@ -104,7 +104,7 @@ class FileResource < ApplicationRecord
   end
 
   def can_remediate?
-    file.mime_type == PDF_MIME_TYPE && !remediated_version
+    file.mime_type == PDF_MIME_TYPE && !remediated_version && !auto_remediated_version
   end
 
   def latest_remediation_work_version_candidate

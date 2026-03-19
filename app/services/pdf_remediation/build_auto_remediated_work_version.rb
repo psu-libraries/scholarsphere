@@ -46,7 +46,8 @@ class PdfRemediation::BuildAutoRemediatedWorkVersion
   private_class_method def self.build_file_resource(work_version, replacement_tempfile, original_filename)
     new_resource = work_version.file_resources.create!(
       file: replacement_tempfile,
-      remediated_version: true
+      remediated_version: true,
+      auto_remediated_version: true
     )
 
     new_resource.file_data['metadata']['filename'] = "ACCESSIBLE_VERSION_#{original_filename}"
