@@ -392,14 +392,11 @@ RSpec.describe FileResource do
     context 'when the file is a pdf' do
       let(:file_resource) { build(:file_resource, :pdf) }
 
-      context 'when auto_remediated_version is false' do
-        before { file_resource.auto_remediated_version = false }
-
-        it { is_expected.to be true }
-      end
-
-      context 'when auto_remediated_version is nil' do
-        before { file_resource.auto_remediated_version = nil }
+      context 'when auto_remediated_version is false and remediated_version is false' do
+        before do
+          file_resource.auto_remediated_version = false
+          file_resource.remediated_version = false
+        end
 
         it { is_expected.to be true }
       end
@@ -413,30 +410,60 @@ RSpec.describe FileResource do
         it { is_expected.to be false }
       end
 
-      context 'when auto_remediated_version is true' do
-        before { file_resource.auto_remediated_version = true }
+      context 'when remediated_version is true and auto_remediated_version is true' do
+        before do
+          file_resource.remediated_version = true
+          file_resource.auto_remediated_version = true
+        end
+
+        it { is_expected.to be false }
+      end
+
+      context 'when remediated_version is false and auto_remediated_version is true' do
+        before do
+          file_resource.remediated_version = false
+          file_resource.auto_remediated_version = true
+        end
 
         it { is_expected.to be false }
       end
     end
 
-    context 'when the file is not a PDF' do
+    context 'when the file is not a pdf' do
       let(:file_resource) { build(:file_resource, :with_processed_image) }
 
-      context 'when auto_remediated_version is false' do
-        before { file_resource.auto_remediated_version = false }
+      context 'when auto_remediated_version is false and remediated_version is false' do
+        before do
+          file_resource.auto_remediated_version = false
+          file_resource.remediated_version = false
+        end
 
         it { is_expected.to be false }
       end
 
-      context 'when auto_remediated_version is nil' do
-        before { file_resource.auto_remediated_version = nil }
+      context 'when remediated_version is true but auto_remediated_version is false' do
+        before do
+          file_resource.remediated_version = true
+          file_resource.auto_remediated_version = false
+        end
 
         it { is_expected.to be false }
       end
 
-      context 'when auto_remediated_version is true' do
-        before { file_resource.auto_remediated_version = true }
+      context 'when remediated_version is true and auto_remediated_version is true' do
+        before do
+          file_resource.remediated_version = true
+          file_resource.auto_remediated_version = true
+        end
+
+        it { is_expected.to be false }
+      end
+
+      context 'when remediated_version is false and auto_remediated_version is true' do
+        before do
+          file_resource.remediated_version = false
+          file_resource.auto_remediated_version = true
+        end
 
         it { is_expected.to be false }
       end
@@ -485,7 +512,7 @@ RSpec.describe FileResource do
     let(:file_resource) { create(:file_resource) }
     let!(:version_being_remediated) { create(:work_version) }
 
-    context 'when there are auto_remediated work_versions after the given version' do
+    context 'when there are remediated work_versions after the given version' do
       let!(:first_remediated) { create(:work_version,
                                        remediated_version: true) }
 
@@ -498,13 +525,13 @@ RSpec.describe FileResource do
                work_version: first_remediated)
       end
 
-      it 'returns the first remediated_version with id greater than the given version' do
+      it 'returns the first remediated_work_version with id greater than the given version' do
         expect(file_resource
         .first_remediated_work_version_after(version_being_remediated)).to eq(first_remediated)
       end
     end
 
-    context 'when multiple auto remediated versions exist after the given version' do
+    context 'when multiple remediated versions exist after the given version' do
       let!(:first_remediated) { create(:work_version,
                                        remediated_version: true) }
       let!(:later_remediated) { create(:work_version,
@@ -519,13 +546,13 @@ RSpec.describe FileResource do
                work_version: first_remediated)
       end
 
-      it 'returns the first auto remediated version after the given version' do
+      it 'returns the first remediated version after the given version' do
         expect(file_resource
         .first_remediated_work_version_after(version_being_remediated)).to eq(first_remediated)
       end
     end
 
-    context 'when no auto remediated versions exist after the given version' do
+    context 'when no remediated versions exist after the given version' do
       let!(:only_version) { create(:work_version) }
 
       before do
