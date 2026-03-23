@@ -29,6 +29,7 @@
     "graphiql": "^1.4.7",
     "graphql": "^15.5.0",
     "graphql-ws": "^5.14.2",
+    "immutable": "5.1.5",
     "inputmask": "^5.0.5",
     "is-svg": "^4.2.2",
     "jquery": "^3.5.1",
