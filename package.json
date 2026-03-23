@@ -31,6 +31,7 @@
     "inputmask": "^5.0.5",
     "is-svg": "^4.2.2",
     "jquery": "^3.5.1",
+    "lodash": "4.17.23",
     "mini-css-extract-plugin": "^2.7.6",
     "mustache": "^4.0.1",
     "postcss": "^8.5.0",
