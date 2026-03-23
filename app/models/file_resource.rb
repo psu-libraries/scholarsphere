@@ -114,8 +114,8 @@ class FileResource < ApplicationRecord
       .last
   end
 
-  def first_auto_remediated_work_version_after(version)
-    work_versions.where('work_versions.id > ? AND auto_remediated_version = ?', version.id, true)
+  def first_remediated_work_version_after(version)
+    work_versions.where('work_versions.id > ? AND remediated_version = ?', version.id, true)
       .order(:id)
       .first
   end
