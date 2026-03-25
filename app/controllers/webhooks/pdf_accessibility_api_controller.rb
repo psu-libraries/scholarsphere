@@ -5,8 +5,8 @@ class Webhooks::PdfAccessibilityApiController < ApplicationController
   before_action :authenticate_request
 
   def create
-    event_type = params[:event_type]
-    job_data   = params[:job] || {}
+    event_type = pdf_accessibility_params[:event_type]
+    job_data   = pdf_accessibility_params[:job] || {}
 
     case event_type
     when 'job.succeeded'

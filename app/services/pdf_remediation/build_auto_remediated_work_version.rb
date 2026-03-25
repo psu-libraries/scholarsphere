@@ -8,6 +8,7 @@ class PdfRemediation::BuildAutoRemediatedWorkVersion
   def self.call(file_resource, remediated_file_url)
     wv_being_remediated = file_resource.latest_remediation_work_version_candidate
     original_filename = file_resource.file_data['metadata']['filename']
+
     # In the rare case a new work version is published after the remediation
     # job started, we stop the creation of a new remediated version here.
     unless wv_being_remediated.latest_published_version?
@@ -43,20 +44,25 @@ class PdfRemediation::BuildAutoRemediatedWorkVersion
     end
   end
 
-  private_class_method def self.build_file_resource(work_version, replacement_tempfile, original_filename)
-    new_resource = work_version.file_resources.create!(
-      file: replacement_tempfile,
-      remediated_version: true
-    )
+  class << self
+    private
 
-    new_resource.file_data['metadata']['filename'] = "ACCESSIBLE_VERSION_#{original_filename}"
-    new_resource.save!
-  end
+      def build_file_resource(work_version, replacement_tempfile, original_filename)
+        new_resource = work_version.file_resources.create!(
+          file: replacement_tempfile,
+          remediated_version: true,
+          auto_remediated_version: true
+        )
 
-  private_class_method def self.on_publish(built_work_version)
-    built_work_version.publish!
-    lib_answers = LibanswersApiService.new
-    lib_answers.admin_create_ticket(built_work_version.work.id, 'work_remediation')
-    PdfRemediation::AutoRemediationNotifications.new(built_work_version).send_notifications
+        new_resource.file_data['metadata']['filename'] = "ACCESSIBLE_VERSION_#{original_filename}"
+        new_resource.save!
+      end
+
+      def on_publish(built_work_version)
+        built_work_version.publish!
+        lib_answers = LibanswersApiService.new
+        lib_answers.admin_create_ticket(built_work_version.work.id, 'work_remediation')
+        PdfRemediation::AutoRemediationNotifications.new(built_work_version).send_notifications
+      end
   end
 end
