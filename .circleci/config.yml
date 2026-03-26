@@ -262,7 +262,6 @@ jobs:
       PDF_REMEDIATION_ENDPOINT: endpoint
       PDF_REMEDIATION_API_KEY: api-key
     steps:
-    - browser-tools/install-browser-tools
     - checkout
     - restore_cache:
         keys:
