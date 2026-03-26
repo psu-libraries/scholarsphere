@@ -1,4 +1,4 @@
-FROM harbor.k8s.libraries.psu.edu/library/ruby-3.4.1-node-22:20260202 AS base
+FROM harbor.k8s.libraries.psu.edu/library/ruby-3.4.9-node-22:20260317 AS base
 ARG UID=3000
 
 COPY bin/vaultshell /usr/local/bin/
@@ -21,7 +21,7 @@ COPY Gemfile Gemfile.lock /app/
 RUN chown -R app:app /app
 USER app
 
-# in the event that bundler runs outside of docker, we get in sync with it's bundler version 
+# in the event that bundler runs outside of docker, we get in sync with it's bundler version
 RUN gem install bundler -v "$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)"
 RUN bundle config set path 'vendor/bundle'
 RUN bundle install && \
@@ -65,8 +65,10 @@ RUN bundle config set path 'vendor/bundle'
 # Final Target
 FROM base AS production
 
+
 # Clean up Bundle
-RUN bundle install --without development test && \
+RUN bundle config set without 'development test' && \
+  bundle install && \
   bundle clean && \
   rm -rf /app/.bundle/cache && \
   rm -rf /app/vendor/bundle/ruby/*/cache
