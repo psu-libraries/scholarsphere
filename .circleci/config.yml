@@ -288,7 +288,9 @@ jobs:
         name: "Bundle"
         command: |
           gem install bundler -v "$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)"
-          bundle check --path vendor/bundle || bundle install --deployment
+          bundle config set path 'vendor/bundle'
+          bundle config set deployment true
+          bundle check || bundle install
     - run:
         name: "Yarn"
         command: |
