@@ -43,9 +43,10 @@ vendor/bundle
 coverage
 cc-test-reporter
 
-# Docker sync ignores 
+# Docker sync ignores
 .bash_history
 .cache
 .yarnrc
 doc/api/*
 .envrc
+docker-compose.yml.local
