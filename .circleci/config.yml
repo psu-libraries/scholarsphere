@@ -32,13 +32,13 @@ parameters:
     default: "uldev"
   CLUSTERS_PROD:
     type: string
-    default: "prod"    
+    default: "prod"
   REGISTRY_HOST:
     type: string
-    default: "harbor.k8s.libraries.psu.edu"    
+    default: "harbor.k8s.libraries.psu.edu"
   PIPELINE_CONFIG_VERSION:
     type: string
-    default: "1.0.1"    
+    default: "1.0.1"
 
 commands:
 
@@ -63,7 +63,7 @@ commands:
               SLUG=$(slugify-branch "$CIRCLE_BRANCH")
               TAG="${SLUG}--$CIRCLE_SHA1"
             fi
-            echo "export TAG=$TAG" >> "$BASH_ENV"    
+            echo "export TAG=$TAG" >> "$BASH_ENV"
 
 executors:
 
@@ -76,14 +76,14 @@ executors:
     docker:
       - image: << parameters.registry_host >>/library/ci-utils:<< parameters.image_tag >>
 
-jobs: 
+jobs:
   build-image:
     environment:
       REGISTRY_HOST: << pipeline.parameters.REGISTRY_HOST >>
       REGISTRY_REPO: "library/$CIRCLE_PROJECT_REPONAME"
     executor:
       name: ci-utils
-      image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>  
+      image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
       registry_host: << pipeline.parameters.REGISTRY_HOST >>
     steps:
       - setup_remote_docker:
@@ -137,8 +137,8 @@ jobs:
       - docker/push:
           image: $REGISTRY_REPO
           registry: $REGISTRY_HOST
-          tag: $TAG                     
-  
+          tag: $TAG
+
   delete-deployment:
     parameters:
       delete_branch:
@@ -159,7 +159,7 @@ jobs:
             export TRIGGERED_BY="$CIRCLE_USERNAME"
             cd $CONFIG_REPO_NAME
             ./bin/ci-delete-manifest
-  
+
   deploy-application:
     executor:
       name: ci-utils
@@ -192,7 +192,7 @@ jobs:
                 echo "Finished processing $TARGET_CLUSTER"
                 git status
             done
-  
+
   release-image:
     parameters:
       to_tag:
@@ -218,12 +218,12 @@ jobs:
       - run:
           name: Tag & Release Image
           command: |
-            /usr/local/bin/image-release-for-clusters          
+            /usr/local/bin/image-release-for-clusters
 
   test-application:
     resource_class: large
     docker:
-      - image: cimg/ruby:3.4.1-browsers
+      - image: cimg/ruby:3.4.9-browsers
       - image: redis:6.2.6
       - image: minio/minio:RELEASE.2021-03-17T02-33-02Z
         entrypoint:
@@ -240,8 +240,8 @@ jobs:
           POSTGRES_DB: scholarsphere
       - image: solr:8.11.1-slim
         command: [
-          "/bin/bash", 
-          "-c", 
+          "/bin/bash",
+          "-c",
           "solr -c && solr auth enable -credentials scholarsphere:scholarsphere -z localhost:9983; solr stop && solr -c -f",
           ]
     environment:
@@ -339,7 +339,7 @@ workflows:
   scholarsphere-ci-cd:
     unless:
       equal: [ "delete", << pipeline.parameters.GHA_Event >> ]
-    jobs:              
+    jobs:
       - test-application:
           name: test-application
           context:
@@ -363,7 +363,7 @@ workflows:
           context:
             - org-global
           filters:
-            branches:              
+            branches:
               only:
                 - main
                 - /preview\/.*/
@@ -379,12 +379,12 @@ workflows:
             branches:
               only:
                 - main
-                - /preview\/.*/                
+                - /preview\/.*/
           requires:
             - test-application
             - push-image
-      
-      - release-image: 
+
+      - release-image:
           name: release-image
           clusters: << pipeline.parameters.CLUSTERS_PROD >>
           context:
