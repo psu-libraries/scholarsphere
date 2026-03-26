@@ -65,8 +65,10 @@ RUN bundle config set path 'vendor/bundle'
 # Final Target
 FROM base AS production
 
+
 # Clean up Bundle
-RUN bundle install --without development test && \
+RUN bundle config set without 'development test' && \
+  bundle install && \
   bundle clean && \
   rm -rf /app/.bundle/cache && \
   rm -rf /app/vendor/bundle/ruby/*/cache
