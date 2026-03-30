@@ -318,7 +318,6 @@ jobs:
           yarn test
     - run:
         name: "RSpec"
-        no_output_timeout: 30m
         command: |
           ./bin/ci-rspec
 
