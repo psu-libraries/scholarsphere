@@ -1089,11 +1089,11 @@ RSpec.describe WorkVersion do
       create(:file_version_membership, work_version: work_version, file_resource: non_pdf_file)
     end
 
-    it 'updates only PDF file resources to match the work version' do
+    it 'updates all file resources to match the work version' do
       work_version.mirror_remediated_version_to_files!
 
       expect(pdf_file.reload.remediated_version).to be true
-      expect(non_pdf_file.reload.remediated_version).to be false
+      expect(non_pdf_file.reload.remediated_version).to be true
     end
   end
 end
