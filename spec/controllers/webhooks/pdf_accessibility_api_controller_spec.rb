@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe Webhooks::PdfAccessibilityApiController do
-  let(:secret) { 'test-secret' }
   let(:output_url) { nil }
   let(:error_message) { nil }
+  let(:webhook_token) { ExternalApp.pdf_accessibility_api.webhook_token }
   let(:params) do
     { event_type: event_type,
       job: { uuid: job_uuid,
@@ -19,10 +19,10 @@ RSpec.describe Webhooks::PdfAccessibilityApiController do
   end
 
   describe 'POST #create' do
-    context 'when X-API-KEY header is missing or incorrect' do
-      let(:event_type) { 'job.succeeded' }
-      let(:job_uuid) { 'x' }
+    let(:event_type) { 'job.succeeded' }
+    let(:job_uuid) { 'x' }
 
+    context 'when X-API-KEY header is missing or incorrect' do
       it 'returns 401 Unauthorized' do
         post :create, params: params
         expect(response).to have_http_status(:unauthorized)
@@ -30,8 +30,15 @@ RSpec.describe Webhooks::PdfAccessibilityApiController do
     end
 
     context 'when authentication succeeds' do
+      let(:api_token) { ExternalApp.pdf_accessibility_api.api_tokens.first }
+
       before do
-        request.headers['X-API-KEY'] = ExternalApp.pdf_accessibility_api.webhook_token
+        request.headers['X-API-KEY'] = webhook_token
+      end
+
+      it 'records usage for the webhook API token' do
+        expect { post :create, params: params, as: :json }
+          .to change { api_token.reload.last_used_at }.from(nil)
       end
 
       describe 'when event_type is unknown' do
