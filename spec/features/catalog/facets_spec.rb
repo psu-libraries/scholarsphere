@@ -11,6 +11,7 @@ RSpec.describe 'Search Facets', :inline_jobs do
     it 'updates the facet (but not the resource) when an actor changes their default display_name' do
       pending('Requires further input from stakeholders on design and metadata changes')
       visit search_catalog_path
+      expect(page).to have_button('Search', wait: 10)
       click_button('Search')
 
       # Sanity Check
@@ -26,6 +27,7 @@ RSpec.describe 'Search Facets', :inline_jobs do
       # Update my default display_name
       my_actor.update(display_name: 'Me After Rename')
 
+      expect(page).to have_button('Search', wait: 10)
       click_button('Search')
 
       # Documents retain the original display_name from when the resource was created
