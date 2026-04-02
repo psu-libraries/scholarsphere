@@ -28,25 +28,34 @@ describe 'pdf_remediation', type: :task do
         )
       end
 
-      let!(:work_version) do
+      let!(:work_version_w_pdf) do
         create(:work_version).tap do |version|
           create(:file_version_membership, work_version: version, file_resource: pdf_accessiblecopy_file_resource)
         end
       end
 
-      it 'only flags PDF FileResources with AccessibleCopy_ filenames and their latest WorkVersions' do
+      let!(:work_version_w_non_pdf) do
+        create(:work_version).tap do |version|
+          create(:file_version_membership, work_version: version, file_resource: non_pdf_accessiblecopy_file_resource)
+        end
+      end
+
+      it 'only flags FileResources with AccessibleCopy_ filenames and their latest WorkVersions' do
         expect(pdf_accessiblecopy_file_resource.remediated_version).to be(false)
         expect(pdf_non_accessiblecopy_file_resource.remediated_version).to be(false)
         expect(non_pdf_accessiblecopy_file_resource.remediated_version).to be(false)
-        expect(work_version.remediated_version).to be(false)
+        expect(work_version_w_pdf.remediated_version).to be(false)
+        expect(work_version_w_non_pdf.remediated_version).to be(false)
 
-        expect {
-          Rake::Task['pdf_remediation:flag_existing_remediated_files_and_work_versions'].invoke
-        }.to change { pdf_accessiblecopy_file_resource.reload.remediated_version }.from(false).to(true)
-          .and change { work_version.reload.remediated_version }.from(false).to(true)
+        Rake::Task['pdf_remediation:flag_existing_remediated_files_and_work_versions'].invoke
+
+        expect(pdf_accessiblecopy_file_resource.reload.remediated_version).to be(true)
+        expect(work_version_w_pdf.reload.remediated_version).to be(true)
+
+        expect(non_pdf_accessiblecopy_file_resource.reload.remediated_version).to be(true)
+        expect(work_version_w_non_pdf.reload.remediated_version).to be(true)
 
         expect(pdf_non_accessiblecopy_file_resource.reload.remediated_version).to be(false)
-        expect(non_pdf_accessiblecopy_file_resource.reload.remediated_version).to be(false)
       end
     end
 

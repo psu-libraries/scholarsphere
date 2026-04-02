@@ -1664,7 +1664,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       check I18n.t('dashboard.form.publish.remediated_version.label')
 
       FeatureHelpers::DashboardForm.finish
-      expect(SolrIndexingJob).to have_received(:perform_later).once
+      expect(SolrIndexingJob).to have_received(:perform_later).with(work_version).once
 
       work_version.reload
       expect(work_version.rights).to eq(incorrect_rights)
