@@ -47,9 +47,10 @@ class Webhooks::PdfAccessibilityApiController < ApplicationController
       token = ExternalApp.pdf_accessibility_api.webhook_token.to_s
       provided = request.headers['X-API-KEY'].to_s
 
-      return head(:unauthorized) if provided.blank?
+      return head(:unauthorized) if provided.blank? ||
+        !ActiveSupport::SecurityUtils.secure_compare(provided, token)
 
-      head(:unauthorized) unless ActiveSupport::SecurityUtils.secure_compare(provided, token)
+      ApiToken.find_by(token: token).record_usage
     end
 
     def store_failure(job_uuid)
