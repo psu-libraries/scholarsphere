@@ -78,7 +78,9 @@ export default class extends Controller {
     if (missingAltText) {
       this.uppy.info('Please provide alt text for the image.', 'error', 5000)
       const dashboard = this.uppy.getPlugin('dashboard')
-      dashboard.toggleFileCard(true, file.id)
+      setTimeout(() => {
+        dashboard.toggleFileCard(true, file.id)
+      }, 100)
       return false
     }
   }
