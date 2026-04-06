@@ -60,7 +60,7 @@ class PermissionsBuilder < Module
 
     agents.each do |agent|
       define_method :"#{level}_#{agent.to_s.pluralize.downcase}" do
-        send(:"#{level}_agents").select { |level_agent| level_agent.is_a?(agent) }
+        send(:"#{level}_agents").grep(agent)
       end
     end
 

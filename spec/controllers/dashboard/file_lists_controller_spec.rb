@@ -48,7 +48,7 @@ RSpec.describe Dashboard::FileListsController do
     let(:invalid_attributes) {
       {
         'file_resources_attributes' => [
-          'file' => { 'id' => 'bogus.jpg' }
+          { 'file' => { 'id' => 'bogus.jpg' } }
         ]
       }
     }
