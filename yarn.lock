@@ -2396,20 +2396,20 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@uppy/aws-s3-multipart@^3.3.0":
-  version "3.12.0"
-  resolved "https://registry.yarnpkg.com/@uppy/aws-s3-multipart/-/aws-s3-multipart-3.12.0.tgz#cbd7a545cd321db92565664a10a167fb5c751d3b"
-  integrity sha512-l6/TlRjde/mP4LMFWdJIRBEUUceYXtAiNAHukfyzM3VbY3/+YrEJTAchsa4DrqAiyToJJu6b+xxvL2H46cDs3Q==
+"@uppy/aws-s3@^4.0.0":
+  version "4.3.2"
+  resolved "https://registry.yarnpkg.com/@uppy/aws-s3/-/aws-s3-4.3.2.tgz#e1b8514a4b9269b21cd7711d243d38946f2b977b"
+  integrity sha512-w3LrMUEI9pXVcn5LZ5oNL92hyocMu8mxfDSVVQIAQKxR+TPi57FfusDBqBB5T33UvxJH8EUGt9a04tuU/LpKqw==
   dependencies:
-    "@uppy/companion-client" "^3.8.1"
-    "@uppy/utils" "^5.9.0"
+    "@uppy/companion-client" "^4.5.2"
+    "@uppy/utils" "^6.2.2"
 
-"@uppy/companion-client@^3.8.1":
-  version "3.8.2"
-  resolved "https://registry.yarnpkg.com/@uppy/companion-client/-/companion-client-3.8.2.tgz#8dd531ea378826db699be835442c687405e55604"
-  integrity sha512-WLjZ0Y6Fe7lzwU1YPvvQ/YqooejcgIZkT2TC39xr+QQ7Y1FwJECsyUdlKwgi1ee8TNpjoCrj3Q1Hjel/+p0VhA==
+"@uppy/companion-client@^4.5.2":
+  version "4.5.2"
+  resolved "https://registry.yarnpkg.com/@uppy/companion-client/-/companion-client-4.5.2.tgz#f29d00e426a7eb500070d699d4ced67d169504e7"
+  integrity sha512-hfUsReHM5COhn+5d7CdZgZaG8BtDvtwj7vjXzg8qmgKI901mYUm/Zh420iOKT7eHiofKVTNoa7oijeGrqUEnyg==
   dependencies:
-    "@uppy/utils" "^5.9.0"
+    "@uppy/utils" "^6.2.2"
     namespace-emitter "^2.0.1"
     p-retry "^6.1.0"
 
@@ -2485,14 +2485,6 @@
   dependencies:
     "@uppy/utils" "^6.2.2"
     exifr "^7.0.0"
-
-"@uppy/utils@^5.9.0":
-  version "5.9.0"
-  resolved "https://registry.yarnpkg.com/@uppy/utils/-/utils-5.9.0.tgz#c88827f9678a53cd13c7cd2f51e7682efd060e7d"
-  integrity sha512-9Ubddd3orCOLYjf0KobwgJ+aTrABSxk9t4X/QdM4qJHVZuMIftkaMplrViRUO+kvIBCXEZDIP2AmS060siDNGw==
-  dependencies:
-    lodash "^4.17.21"
-    preact "^10.5.13"
 
 "@uppy/utils@^6.2.2":
   version "6.2.2"
@@ -6592,15 +6584,10 @@ postcss@^8.4.24, postcss@^8.4.33, postcss@^8.5.0:
     picocolors "^1.1.1"
     source-map-js "^1.2.1"
 
-preact@10.28.2:
+preact@10.28.2, preact@^10.5.13:
   version "10.28.2"
   resolved "https://registry.yarnpkg.com/preact/-/preact-10.28.2.tgz#4b668383afa4b4a2546bbe4bd1747e02e2360138"
   integrity sha512-lbteaWGzGHdlIuiJ0l2Jq454m6kcpI1zNje6d8MlGAFlYvP2GO4ibnat7P74Esfz4sPTdM6UxtTwh/d3pwM9JA==
-
-preact@^10.5.13:
-  version "10.27.1"
-  resolved "https://registry.yarnpkg.com/preact/-/preact-10.27.1.tgz#c391dcad5813b67d9e04655d844d8fdc307d4252"
-  integrity sha512-V79raXEWch/rbqoNc7nT9E4ep7lu+mI3+sBmfRD4i1M73R3WLYcCtdI0ibxGVf4eQL8ZIz2nFacqEC+rmnOORQ==
 
 prelude-ls@^1.2.1:
   version "1.2.1"

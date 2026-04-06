@@ -1,6 +1,6 @@
 import { Controller } from 'stimulus'
 import Uppy from '@uppy/core'
-import AwsS3Multipart from '@uppy/aws-s3-multipart'
+import AwsS3 from '@uppy/aws-s3'
 import Dashboard from '@uppy/dashboard'
 import { generateUploadedFileData, simulateEditAndUpload } from './uppy_utils'
 
@@ -47,8 +47,9 @@ export default class extends Controller {
           }
         ]
       })
-      .use(AwsS3Multipart, {
-        companionUrl: '/'
+      .use(AwsS3, {
+        shouldUseMultipart: true,
+        endpoint: '/'
       })
   }
 
@@ -82,7 +83,6 @@ export default class extends Controller {
 
   handleFileAdded(file) {
     if (file.type.startsWith('image/')) {
-      this.uppy.pauseResume(file.id)
       setTimeout(() => {
         simulateEditAndUpload()
       }, 100)
