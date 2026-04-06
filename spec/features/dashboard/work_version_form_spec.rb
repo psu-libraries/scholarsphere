@@ -1002,7 +1002,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       it 'requires alt text to be submitted and works' do
         visit dashboard_form_files_path(work_version)
 
-        expect(page).to have_selector('.uppy-Dashboard-AddFiles', wait: 30)
+        expect(page).to have_css('.uppy-Dashboard-AddFiles', wait: 30)
 
         # @note For some reason there are two 'files[]' hidden inputs, but it's only happens in the test environment.
         page
@@ -1010,7 +1010,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
           .attach_file(Rails.root.join('spec', 'fixtures', 'image.png'))
 
         # Wait for alt text form
-        expect(page).to have_selector('#uppy-Dashboard-FileCard-input-alt_text', wait: 30)
+        expect(page).to have_css('#uppy-Dashboard-FileCard-input-alt_text', wait: 30)
 
         click_on 'Save changes'
 
@@ -1021,7 +1021,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         click_on 'Save changes'
 
         # Wait for file to finish uploading
-        expect(page).to have_selector('.uppy-DashboardContent-title', text: 'Upload complete', wait: 30)
+        expect(page).to have_css('.uppy-DashboardContent-title', text: 'Upload complete', wait: 30)
 
         within('.uppy-Dashboard-files') do
           expect(page).to have_content('image.png')
