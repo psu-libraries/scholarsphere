@@ -10,7 +10,8 @@ class PdfRemediation::AutoRemediateService
   end
 
   def call
-    work_version.update(auto_remediation_started_at: Time.current)
+    work_version.update_column(:auto_remediation_started_at, Time.current)
+
     pdfs = work_version.file_resources.can_remediate
     pdfs.each do |pdf|
       PdfRemediation::AutoRemediationJob.perform_later(pdf.id) if pdf.remediation_job_uuid.blank?
