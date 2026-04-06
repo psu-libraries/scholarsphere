@@ -2,7 +2,7 @@ import { Controller } from 'stimulus'
 import Uppy from '@uppy/core'
 import AwsS3 from '@uppy/aws-s3'
 import Dashboard from '@uppy/dashboard'
-import { generateUploadedFileData, simulateEditAndUpload } from './uppy_utils'
+import { generateUploadedFileData } from './uppy_utils'
 
 export default class extends Controller {
   connect() {
@@ -56,6 +56,7 @@ export default class extends Controller {
   registerUppyEventHandlers() {
     this.uppy
       .on('file-added', (file) => this.handleFileAdded(file))
+      .on('dashboard:file-edit-complete', (file) => this.handleFileEditComplete(file))
       .on('complete', (result) => this.onUppyComplete(result))
   }
 
@@ -76,19 +77,25 @@ export default class extends Controller {
 
     if (missingAltText) {
       this.uppy.info('Please provide alt text for the image.', 'error', 5000)
-      simulateEditAndUpload()
+      const dashboard = this.uppy.getPlugin('dashboard')
+      dashboard.toggleFileCard(true, file.id)
       return false
     }
   }
 
   handleFileAdded(file) {
     if (file.type.startsWith('image/')) {
+      const dashboard = this.uppy.getPlugin('dashboard')
       setTimeout(() => {
-        simulateEditAndUpload()
+        dashboard.toggleFileCard(true, file.id)
       }, 100)
     } else {
       this.uppy.upload()
     }
+  }
+
+  handleFileEditComplete(_file) {
+    this.uppy.upload()
   }
 
   onUppyComplete(result) {
