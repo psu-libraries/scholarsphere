@@ -21,8 +21,9 @@ class PdfRemediation::BuildAutoRemediatedWorkVersion
         built_work_version = file_resource.first_remediated_work_version_after(wv_being_remediated) ||
           begin
             v = BuildNewWorkVersion.call(wv_being_remediated)
-            v.update({ remediated_version: true,
-                       external_app: ExternalApp.pdf_accessibility_api })
+            v.assign_attributes({ remediated_version: true,
+                                  external_app: ExternalApp.pdf_accessibility_api })
+            v.save!(validate: false)
             v
           end
 
@@ -33,7 +34,7 @@ class PdfRemediation::BuildAutoRemediatedWorkVersion
         replacement_tempfile = Down.download(remediated_file_url)
         build_file_resource(built_work_version, replacement_tempfile, original_filename)
         if built_work_version.has_remaining_auto_remediation_jobs?
-          built_work_version.save!
+          built_work_version.save!(validate: false)
         else
           on_publish(built_work_version)
         end

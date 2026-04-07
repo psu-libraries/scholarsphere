@@ -70,6 +70,18 @@ RSpec.describe PdfRemediation::BuildAutoRemediatedWorkVersion do
               .to have_received(:new).with(result)
           end
 
+          it 'remains draft when publish is attempted with legacy incomplete metadata' do
+            allow(Down).to receive(:download).with(remediated_url).and_return(Tempfile.new('remediated'))
+            legacy_metadata = wv_being_remediated.metadata.deep_dup
+            legacy_metadata['description'] = nil
+            wv_being_remediated.update_column(:metadata, legacy_metadata) # rubocop:disable Rails/SkipsModelValidations
+
+            result = described_class.call(file_resource, remediated_url)
+
+            expect(result).to be_draft
+            expect(result.description).to be_nil
+          end
+
           it 'calls the Libanswers service with an admin curation ticket' do
             allow(Down).to receive(:download).with(remediated_url).and_return(Tempfile.new('remediated'))
             result = described_class.call(file_resource, remediated_url)
@@ -103,6 +115,20 @@ RSpec.describe PdfRemediation::BuildAutoRemediatedWorkVersion do
             expect(result).to be_draft
             expect(PdfRemediation::AutoRemediationNotifications)
               .not_to have_received(:new).with(result)
+          end
+
+          it 'builds a remediated draft from a legacy source version with incomplete metadata' do
+            allow(Down).to receive(:download).with(remediated_url).and_return(Tempfile.new('remediated'))
+            legacy_metadata = wv_being_remediated.metadata.deep_dup
+            legacy_metadata['description'] = nil
+            wv_being_remediated.update_column(:metadata, legacy_metadata) # rubocop:disable Rails/SkipsModelValidations
+
+            result = described_class.call(file_resource, remediated_url)
+
+            expect(result).to be_persisted
+            expect(result).to be_draft
+            expect(result.description).to be_nil
+            expect(result.file_resources.where(remediated_version: true, auto_remediated_version: true).count).to eq(1)
           end
 
           it 'does not call the Libanswers service' do
