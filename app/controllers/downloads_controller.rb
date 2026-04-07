@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 class DownloadsController < ApplicationController
+  before_action only: :content do |controller|
+    BotChallengePage::BotChallengePageController.bot_challenge_enforce_filter(controller, immediate: true)
+  end
+
   def content
     work_version = WorkVersion.find_by!(uuid: download_params[:resource_id])
     file_version = work_version.file_version_memberships.find(download_params[:id])
