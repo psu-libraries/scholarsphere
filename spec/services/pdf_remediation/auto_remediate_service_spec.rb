@@ -20,6 +20,12 @@ RSpec.describe PdfRemediation::AutoRemediateService do
       expect(PdfRemediation::AutoRemediationJob).not_to have_received(:perform_later).with(non_pdf.id)
       expect(PdfRemediation::AutoRemediationJob).not_to have_received(:perform_later).with(pdf3.id)
     end
+
+    it 'sets auto_remediation_started_at' do
+      expect {
+        described_class.new(work_version.id, user, true).call
+      }.to change { work_version.reload.auto_remediation_started_at }.from(nil)
+    end
   end
 
   describe '#able_to_auto_remediate?' do

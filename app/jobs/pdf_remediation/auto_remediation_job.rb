@@ -10,7 +10,7 @@ class PdfRemediation::AutoRemediationJob < ApplicationJob
 
     begin
       remediation_job_uuid = PdfRemediation::Client.new(file_resource.file_url).request_remediation
-      file_resource.update(remediation_job_uuid: remediation_job_uuid)
+      file_resource.update_column(:remediation_job_uuid, remediation_job_uuid) # rubocop:disable Rails/SkipsModelValidations
     rescue StandardError => e
       Rails.logger.error("Failed to auto remediate #{file_resource.id}: #{e.message}")
       raise e
