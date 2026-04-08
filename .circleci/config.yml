@@ -283,6 +283,9 @@ jobs:
           sudo apt-get install -y imagemagick ghostscript libreoffice
           sudo cp config/policy.xml /etc/ImageMagick-6/policy.xml
     - run:
+        name: Clear stale bundle
+        command: rm -rf vendor/bundle
+    - run:
         name: "Bundle"
         command: |
           gem install bundler -v "$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)"
