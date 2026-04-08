@@ -263,9 +263,9 @@ jobs:
       PDF_REMEDIATION_API_KEY: api-key
     steps:
     - checkout
-    - restore_cache:
-        keys:
-          - bundle1-{{ checksum "Gemfile.lock" }}
+    # - restore_cache:
+    #     keys:
+    #       - bundle1-{{ checksum "Gemfile.lock" }}
     - restore_cache:
         keys:
           - yarn1-{{ checksum "yarn.lock" }}
