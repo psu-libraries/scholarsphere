@@ -19,7 +19,13 @@ module FeatureHelpers
     end
   end
 
-  def print_html(selector); end
+  def print_html(selector)
+    # rubocop:disable RSpec/Output
+    puts "HTML for \\#{selector}:"
+    puts page.find(selector)['innerHTML']
+    puts ''
+    # rubocop:enable RSpec/Output
+  end
 
   def wait_for_modal(limit = Capybara.default_max_wait_time)
     count = 1

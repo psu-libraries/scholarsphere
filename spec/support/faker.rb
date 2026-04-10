@@ -8,7 +8,5 @@ RSpec.configure do |config|
     end
   end
 
-  config.after :suite do
-    # Intentionally left blank.
-  end
+  # after :suite block removed as requested
 end
