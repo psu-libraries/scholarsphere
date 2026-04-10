@@ -41,7 +41,7 @@ class ThumbnailForm
 
     def save_thumbnail_upload
       if thumbnail_upload.present?
-        resource.thumbnail_upload.destroy! if resource.thumbnail_upload.present?
+        resource.thumbnail_upload.presence&.destroy!
 
         tu = ThumbnailUpload.new resource: resource
         tu.attributes = { file_resource_attributes: { file: thumbnail_upload } }

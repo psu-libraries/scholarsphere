@@ -24,7 +24,9 @@
                          autocomplete: 'on' %>
 
       <div class="input-group-append">
-        <%= button_tag type: 'submit', class: 'btn btn-primary' do %>
+        <%= button_tag type: 'submit',
+                       class: 'btn btn-primary',
+                       'aria-label' => t('blacklight.search.form.submit') do %>
           <i class="material-icons">search</i>
         <% end %>
       </div>

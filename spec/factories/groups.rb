@@ -2,6 +2,6 @@
 
 FactoryBot.define do
   factory :group do
-    name { Faker::Currency.code.downcase }
+    sequence(:name) { |n| "#{Faker::Currency.code.downcase}_#{n}" }
   end
 end

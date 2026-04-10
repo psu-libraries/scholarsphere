@@ -11,22 +11,3 @@ export function generateUploadedFileData (success) {
   })
 }
 
-export function simulateEditAndUpload () {
-  const editButton = document.querySelector('.uppy-u-reset')
-
-  if (editButton) {
-    editButton.click()
-    setTimeout(() => {
-      document.addEventListener('click', (e) => {
-        if (e.target.type === 'submit') {
-          setTimeout(() => {
-            const uploadButton = document.querySelector('.uppy-StatusBar-actionBtn--upload')
-            if (uploadButton) {
-              uploadButton.click()
-            }
-          }, 100)
-        }
-      })
-    }, 100)
-  }
-}

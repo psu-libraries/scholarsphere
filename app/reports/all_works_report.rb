@@ -86,7 +86,7 @@ class AllWorksReport
 
     # Returns a hash of { work_id => num_downloads }
     def load_downloads_by_work
-      query = ActiveRecord::Base.sanitize_sql([<<-SQL.squish, resource_type: 'FileResource'])
+      query = ActiveRecord::Base.sanitize_sql([<<~SQL.squish, resource_type: 'FileResource'])
         SELECT unique_works.work_id AS work_id,
                SUM(view_statistics.count) AS sum_count
         FROM view_statistics
