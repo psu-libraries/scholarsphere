@@ -84,8 +84,8 @@ class FileDownloadLinkComponent < ViewComponent::Base
     def download_token
       download_token_verifier.generate(
         @file_version_membership.id,
-        # In seconds, default to 1 minute
-        expires_in: ENV.fetch('DOWNLOAD_TOKEN_TTL', 60).to_i,
+        # In seconds, default to 8 minutes
+        expires_in: ENV.fetch('DOWNLOAD_TOKEN_TTL', 480).to_i,
         purpose: :download_request
       )
     end
