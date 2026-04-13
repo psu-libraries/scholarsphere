@@ -12,6 +12,7 @@
 
 ActiveRecord::Schema[7.2].define(version: 2026_03_19_120000) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
 
@@ -154,8 +155,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_19_120000) do
     t.uuid "uuid", default: -> { "uuid_generate_v4()" }
     t.string "remediation_job_uuid"
     t.boolean "remediated_version", default: false, null: false
-    t.datetime "auto_remediation_failed_at"
     t.boolean "auto_remediated_version", default: false, null: false
+    t.datetime "auto_remediation_failed_at"
   end
 
   create_table "file_version_memberships", force: :cascade do |t|
@@ -231,8 +232,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_19_120000) do
   end
 
   create_table "versions", force: :cascade do |t|
-    t.string "item_type"
-    t.string "{null: false}"
+    t.string "item_type", null: false
     t.bigint "item_id", null: false
     t.string "event", null: false
     t.string "whodunnit"

@@ -19,7 +19,7 @@ RSpec.describe LibanswersApiService, :vcr do
 
     context 'when successful response is returned from libanswers /ticket/create endpoint' do
       it 'returns the url of the ticket created' do
-        expect(described_class.new.admin_create_ticket(work.id)).to eq 'https://psu.libanswers.com/admin/ticket?qid=16117497'
+        expect(described_class.new.admin_create_ticket(work.id)).to eq 'https://psu.libanswers.com/admin/ticket?qid=18099054'
       end
     end
 
@@ -221,17 +221,8 @@ RSpec.describe LibanswersApiService, :vcr do
     let! (:request) { build(:alternate_format_request) }
 
     context 'when called' do
-      let!(:mock_faraday_connection) { instance_spy('Faraday::Connection') }
-      let!(:dummy_response) { OpenStruct.new(env: OpenStruct.new(status: 200, response_body: '{"ticketUrl": "https://psu.libanswers.com/admin/ticket?qid=13226122"}')) }
-
-      before do
-        allow(Faraday).to receive(:new).and_return mock_faraday_connection
-        allow(mock_faraday_connection).to receive(:post).and_return dummy_response
-      end
-
       it 'makes a call to the LibAnswers Api' do
-        described_class.new.request_alternate_format(request)
-        expect(mock_faraday_connection).to have_received(:post)
+        expect(described_class.new.request_alternate_format(request)).to eq 'https://psu.libanswers.com/admin/ticket?qid=18099419'
       end
     end
 
