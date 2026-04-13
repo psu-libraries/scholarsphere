@@ -114,6 +114,7 @@ class LibanswersApiService
     def create_connection
       Faraday.new(url: host) do |f|
         f.headers['Authorization'] = "Bearer #{oauth_token}"
+        f.request :url_encoded
       end
     end
 
