@@ -134,4 +134,64 @@ describe 'pdf_remediation', type: :task do
       end
     end
   end
+
+  describe ':reset_failed_auto_remediation' do
+    after { Rake::Task['pdf_remediation:reset_failed_auto_remediation'].reenable }
+
+    let!(:in_range_file_resource) do
+      create(
+        :file_resource,
+        remediation_job_uuid: 'job-in-range',
+        auto_remediation_failed_at: Time.zone.parse('2026-03-10 12:00:00')
+      )
+    end
+
+    let!(:out_of_range_file_resource) do
+      create(
+        :file_resource,
+        remediation_job_uuid: 'job-out-of-range',
+        auto_remediation_failed_at: Time.zone.parse('2026-04-15 09:00:00')
+      )
+    end
+
+    let!(:older_version) do
+      create(
+        :work_version,
+        auto_remediation_started_at: Time.zone.parse('2026-03-01 09:00:00')
+      )
+    end
+
+    let!(:newer_version) do
+      create(
+        :work_version,
+        auto_remediation_started_at: Time.zone.parse('2026-03-05 09:00:00')
+      )
+    end
+
+    let!(:out_of_range_version) do
+      create(
+        :work_version,
+        auto_remediation_started_at: Time.zone.parse('2026-04-01 10:00:00')
+      )
+    end
+
+    before do
+      create(:file_version_membership, file_resource: in_range_file_resource, work_version: older_version)
+      create(:file_version_membership, file_resource: in_range_file_resource, work_version: newer_version)
+      create(:file_version_membership, file_resource: out_of_range_file_resource, work_version: out_of_range_version)
+    end
+
+    it 'resets matching FileResources and only the most recent associated WorkVersion' do
+      Rake::Task['pdf_remediation:reset_failed_auto_remediation'].invoke('2026-03-01', '2026-03-31')
+
+      expect(in_range_file_resource.reload.auto_remediation_failed_at).to be_nil
+      expect(in_range_file_resource.reload.remediation_job_uuid).to be_nil
+      expect(older_version.reload.auto_remediation_started_at).not_to be_nil
+      expect(newer_version.reload.auto_remediation_started_at).to be_nil
+
+      expect(out_of_range_file_resource.reload.auto_remediation_failed_at).not_to be_nil
+      expect(out_of_range_file_resource.reload.remediation_job_uuid).to eq('job-out-of-range')
+      expect(out_of_range_version.reload.auto_remediation_started_at).not_to be_nil
+    end
+  end
 end
