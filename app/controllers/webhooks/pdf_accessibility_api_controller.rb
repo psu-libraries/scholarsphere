@@ -30,10 +30,15 @@ class Webhooks::PdfAccessibilityApiController < ApplicationController
     end
 
     def handle_failure(job_data)
-      Rails.logger.error("Auto-remediation job failed: #{job_data[:processing_error_message]}")
-      PdfRemediation::AutoRemediationFailedJob.perform_later(job_data[:uuid])
+      error_message = job_data[:processing_error_message]
+      Rails.logger.error("Auto-remediation job failed: #{error_message}")
+      # Somewhat brittle and temporary solution for handling quota errors until
+      # we can get the PDF Accessibility API to return a quota error event type
+      unless error_message.include?('QuotaExceededError')
+        PdfRemediation::AutoRemediationFailedJob.perform_later(job_data[:uuid])
+      end
       store_failure(job_data[:uuid])
-      render json: { message: job_data[:processing_error_message] }, status: :ok
+      render json: { message: error_message }, status: :ok
     end
 
     def pdf_accessibility_params

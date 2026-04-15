@@ -111,6 +111,19 @@ RSpec.describe Webhooks::PdfAccessibilityApiController do
             .to have_received(:perform_later).with(file.remediation_job_uuid)
           expect(file.reload.auto_remediation_failed_at).not_to be_nil
         end
+
+        context 'when the error indicates quota was exceeded' do
+          let(:error_message) { "PageCountQuotaValidator::QuotaExceededError: page_count exceeds the unit's overall page limit of 5" }
+
+          it 'does not enqueue the failed job and still stores the failure timestamp' do
+            post :create, params: params, as: :json
+
+            expect(response).to have_http_status(:ok)
+            expect(response.parsed_body).to include('message' => error_message)
+            expect(PdfRemediation::AutoRemediationFailedJob).not_to have_received(:perform_later)
+            expect(file.reload.auto_remediation_failed_at).not_to be_nil
+          end
+        end
       end
     end
   end
