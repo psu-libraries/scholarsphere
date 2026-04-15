@@ -45,7 +45,7 @@ namespace :pdf_remediation do
         remediation_job_uuid: nil
       )
 
-      latest_work_version = file_resource.work_versions.order(:id).last
+      latest_work_version = file_resource.latest_remediation_work_version_candidate
       latest_work_version&.update_columns(auto_remediation_started_at: nil) # rubocop:disable Rails/SkipsModelValidations
 
       puts "Reset FileResource ##{file_resource.id} " \
