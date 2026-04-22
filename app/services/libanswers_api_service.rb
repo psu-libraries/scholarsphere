@@ -6,8 +6,10 @@ class LibanswersApiService
 
   ACCESSIBILITY_QUEUE_ID = '2590'
   SCHOLARSPHERE_QUEUE_ID = '5477'
+  @base_url=''
 
   def admin_create_ticket(id, type = 'work_curation', base_url = '')
+    @base_url = base_url
     depositor = get_depositor(id, type)
     if ['work_curation', 'collection'].include?(type) && !depositor.active?
       raise LibanswersApiError, I18n.t('resources.contact_depositor_button.error_message')
@@ -63,8 +65,12 @@ class LibanswersApiService
         "ScholarSphere Deposit Accessibility Curation: #{work.latest_version.title}"
       when 'work_remediation', 'work_remediation_failed'
         work = Work.find(id)
-        "ScholarSphere PDF Auto-remediation Result: #{work.latest_version.title}"
+        "ScholarSphere PDF Auto-remediation Result: #{work.latest_version.title} at url:#{get_remediated_link(work)}"
       end
+    end
+
+    def get_remediated_link(work)
+      "#{@base_url}/resources/#{work.uuid}"
     end
 
     def get_ticket_details(id, type, admin_subject, base_url = '')
