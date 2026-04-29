@@ -881,7 +881,7 @@ CHECKSUMS
   bigdecimal (4.1.1) sha256=1c09efab961da45203c8316b0cdaec0ff391dfadb952dd459584b63ebf8054ca
   bindex (0.8.1) sha256=7b1ecc9dc539ed8bccfc8cb4d2732046227b09d6f37582ff12e50a5047ceb17e
   binding_of_caller (2.0.0) sha256=e53eebf8428a85587aede7b43a83e7419eb85b8b690938a96aa330d03052d517
-  blacklight (7.41.0) sha256=e3d9f8dd5f2fe760cc202fdabfae3d65c3d8fffe54d1e25c0f4d791073ea35f5
+  blacklight (8.12.3) sha256=7ff56bad2ae768653d5646593c8f3e8ea903aea7084cc3c20fd51282da95230f
   blacklight_oai_provider (7.0.2)
   bootsnap (1.23.0) sha256=c1254f458d58558b58be0f8eb8f6eec2821456785b7cdd1e16248e2020d3f214
   bot_challenge_page (0.3.1) sha256=2e95e08b73bd86ca0cfcaba2710323d7566e6427dbb8f5532398e4a00cb35d19
