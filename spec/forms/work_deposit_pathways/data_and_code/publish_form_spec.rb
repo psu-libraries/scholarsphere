@@ -26,7 +26,8 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
         'source' => 'test source',
         'version_name' => '1.0.0',
         'rights' => 'https://creativecommons.org/licenses/by/4.0/',
-        'contributor' => 'test contributor'
+        'contributor' => 'test contributor',
+        'remediated_version' => false
       }
     )
   }
@@ -121,6 +122,7 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
         accessibility_agreement
         sensitive_info_agreement
         contributor
+        remediated_version
       }
 
       expect(described_class.form_fields).to be_frozen
@@ -144,7 +146,8 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
           source: ['test source'],
           version_name: '1.0.0',
           rights: 'https://creativecommons.org/licenses/by/4.0/',
-          contributor: ['test contributor']
+          contributor: ['test contributor'],
+          remediated_version: false
         }
       )
     end

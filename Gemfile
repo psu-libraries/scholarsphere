@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.4.1'
+ruby '3.4.9'
 
 gem 'aasm'
 gem 'after_commit_everywhere', '~> 0.1', '>= 0.1.5'
@@ -55,7 +55,7 @@ gem 'rexml'
 gem 'rsolr', '>= 1.0', '< 3'
 gem 'rubyzip', '~> 2.3.0'
 gem 'seedbank'
-gem 'shakapacker', '~> 7.1'
+gem 'shakapacker', '~> 9.5.0'
 gem 'shrine', '~> 3.3'
 gem 'sidekiq', '~> 6.5'
 gem 'sprockets-rails'

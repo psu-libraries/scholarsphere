@@ -23,7 +23,8 @@ RSpec.describe WorkDepositPathway::Instrument::PublishForm, type: :model do
       decommission_date: '2024',
       related_identifier: 'test related id',
       instrument_resource_type: 'test resource type',
-      funding_reference: 'test funding ref'
+      funding_reference: 'test funding ref',
+      remediated_version: false
     )
   }
 
@@ -41,7 +42,7 @@ RSpec.describe WorkDepositPathway::Instrument::PublishForm, type: :model do
   it { is_expected.to delegate_method(:aasm).to(:work_version) }
   it { is_expected.to delegate_method(:update_column).to(:work_version) }
   it { is_expected.to delegate_method(:set_thumbnail_selection).to(:work_version) }
-
+  it { is_expected.to delegate_method(:mirror_remediated_version_to_files!).to(:work_version) }
   it { is_expected.to validate_presence_of(:owner) }
   it { is_expected.to validate_presence_of(:manufacturer) }
 
@@ -106,6 +107,7 @@ RSpec.describe WorkDepositPathway::Instrument::PublishForm, type: :model do
         accessibility_agreement
         sensitive_info_agreement
         rights
+        remediated_version
       }
 
       expect(described_class.form_fields).to be_frozen
@@ -128,7 +130,8 @@ RSpec.describe WorkDepositPathway::Instrument::PublishForm, type: :model do
           decommission_date: '2024',
           related_identifier: 'test related id',
           instrument_resource_type: 'test resource type',
-          funding_reference: 'test funding ref'
+          funding_reference: 'test funding ref',
+          remediated_version: false
         }
       )
     end

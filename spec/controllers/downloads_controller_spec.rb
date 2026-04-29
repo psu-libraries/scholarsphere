@@ -6,6 +6,7 @@ RSpec.describe DownloadsController do
   let(:user) { create(:user) }
   let(:admin_user) { create(:user, :admin) }
   let(:viewer_user) { create(:user, :viewer) }
+  let(:download_token_verifier) { Rails.application.message_verifier(:download_request_token) }
 
   describe 'GET #content' do
     context 'when not signed in' do
@@ -179,23 +180,35 @@ RSpec.describe DownloadsController do
     end
   end
 
-  context 'when "download" param is true' do
+  context 'when "download_token" param is valid' do
     let(:work_version) { create(:work_version, :published, :with_files, file_count: 2) }
+    let(:file_version_membership) { work_version.file_version_memberships[0] }
+    let(:download_token) do
+      download_token_verifier.generate(file_version_membership.id, expires_in: 60, purpose: :download_request)
+    end
 
     it 'uses "attachment" for the response content disposition' do
-      get :content, params: { resource_id: work_version.uuid, id: work_version.file_version_memberships[0].id, download: true }
+      get :content, params: { resource_id: work_version.uuid, id: file_version_membership.id, download_token: download_token }
       expect(response.location).to include('response-content-disposition=attachment')
     end
 
     context 'when the download is able to be auto-remediated' do
       let(:pdf) { create(:file_resource, :pdf) }
       let(:work_version) { create(:work_version, :published, file_resources: [pdf]) }
-      let(:service) { instance_double(AutoRemediateService, able_to_auto_remediate?: true, call: nil) }
+      let(:service) { instance_double(PdfRemediation::AutoRemediateService, able_to_auto_remediate?: true, call: nil) }
 
-      before { allow(AutoRemediateService).to receive(:new).and_return(service) }
+      before { allow(PdfRemediation::AutoRemediateService).to receive(:new).and_return(service) }
 
       it 'calls AutoRemediationService' do
-        get :content, params: { resource_id: work_version.uuid, id: work_version.file_version_memberships[0].id, download: true }
+        get :content, params: {
+          resource_id: work_version.uuid,
+          id: work_version.file_version_memberships[0].id,
+          download_token: download_token_verifier.generate(
+            work_version.file_version_memberships[0].id,
+            expires_in: 60,
+            purpose: :download_request
+          )
+        }
         expect(service).to have_received(:call)
       end
     end
@@ -203,12 +216,20 @@ RSpec.describe DownloadsController do
     context 'when the download is not able to be auto-remediated' do
       let(:non_pdf) { create(:file_resource) }
       let(:work_version) { create(:work_version, :published, file_resources: [non_pdf]) }
-      let(:service) { instance_double(AutoRemediateService, able_to_auto_remediate?: false, call: nil) }
+      let(:service) { instance_double(PdfRemediation::AutoRemediateService, able_to_auto_remediate?: false, call: nil) }
 
-      before { allow(AutoRemediateService).to receive(:new).and_return(service) }
+      before { allow(PdfRemediation::AutoRemediateService).to receive(:new).and_return(service) }
 
       it 'does not enqueue an AutoRemediationJob' do
-        get :content, params: { resource_id: work_version.uuid, id: work_version.file_version_memberships[0].id, download: true }
+        get :content, params: {
+          resource_id: work_version.uuid,
+          id: work_version.file_version_memberships[0].id,
+          download_token: download_token_verifier.generate(
+            work_version.file_version_memberships[0].id,
+            expires_in: 60,
+            purpose: :download_request
+          )
+        }
         expect(service).not_to have_received(:call)
       end
     end
@@ -216,12 +237,30 @@ RSpec.describe DownloadsController do
 
   context 'when "download" param is not present' do
     let(:work_version) { create(:work_version, :published, :with_files, file_count: 2) }
-    let(:service) { instance_double(AutoRemediateService, able_to_auto_remediate?: true, call: nil) }
+    let(:service) { instance_double(PdfRemediation::AutoRemediateService, able_to_auto_remediate?: true, call: nil) }
 
-    before { allow(AutoRemediateService).to receive(:new).and_return(service) }
+    before { allow(PdfRemediation::AutoRemediateService).to receive(:new).and_return(service) }
 
     it 'uses "inline" for the response content disposition' do
       get :content, params: { resource_id: work_version.uuid, id: work_version.file_version_memberships[0].id }
+      expect(response.location).to include('response-content-disposition=inline')
+      expect(service).not_to have_received(:call)
+    end
+  end
+
+  context 'when "download_token" param is invalid' do
+    let(:work_version) { create(:work_version, :published, :with_files, file_count: 2) }
+    let(:service) { instance_double(PdfRemediation::AutoRemediateService, able_to_auto_remediate?: true, call: nil) }
+
+    before { allow(PdfRemediation::AutoRemediateService).to receive(:new).and_return(service) }
+
+    it 'uses "inline" disposition and does not call auto-remediation' do
+      get :content, params: {
+        resource_id: work_version.uuid,
+        id: work_version.file_version_memberships[0].id,
+        download_token: 'not-a-valid-token'
+      }
+
       expect(response.location).to include('response-content-disposition=inline')
       expect(service).not_to have_received(:call)
     end

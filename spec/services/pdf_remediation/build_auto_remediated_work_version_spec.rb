@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe BuildAutoRemediatedWorkVersion do
+RSpec.describe PdfRemediation::BuildAutoRemediatedWorkVersion do
   let!(:user) { create(:user, access_id: 'test', email: 'test@psu.edu') }
   let!(:work) { create(:work, depositor: user.actor) }
   let!(:file_resource) { create(:file_resource, remediation_job_uuid: SecureRandom.uuid) }
@@ -21,10 +21,10 @@ RSpec.describe BuildAutoRemediatedWorkVersion do
     end
 
     context 'when a newer published version exists' do
-      let!(:existing_auto) { create(:work_version,
-                                    :draft, auto_remediated_version: true,
-                                            work: work,
-                                            file_resources: [file_resource]) }
+      let!(:existing_remed) { create(:work_version,
+                                     :draft, remediated_version: true,
+                                             work: work,
+                                             file_resources: [file_resource]) }
 
       before do
         create(:work_version,
@@ -36,15 +36,16 @@ RSpec.describe BuildAutoRemediatedWorkVersion do
       it 'destroys any existing auto-remediated version and raises NotNewestReleaseError' do
         expect {
           described_class.call(file_resource, remediated_url)
-        }.to raise_error(BuildAutoRemediatedWorkVersion::NotNewestReleaseError)
-        expect(WorkVersion).not_to exist(existing_auto.id)
+        }.to raise_error(PdfRemediation::BuildAutoRemediatedWorkVersion::NotNewestReleaseError)
+        expect(WorkVersion).not_to exist(existing_remed.id)
       end
     end
 
     context 'when the work version being remediated is the latest published version' do
       before do
-        allow(AutoRemediationNotifications)
-          .to receive(:new).and_return(instance_double(AutoRemediationNotifications, send_notifications: true))
+        allow(PdfRemediation::AutoRemediationNotifications)
+          .to receive(:new)
+          .and_return(instance_double(PdfRemediation::AutoRemediationNotifications, send_notifications: true))
       end
 
       context 'when no auto-remediated work version exists after the one being remediated' do
@@ -57,15 +58,28 @@ RSpec.describe BuildAutoRemediatedWorkVersion do
             expect(WorkVersion.count).to eq(wv_count_before + 1)
             expect(FileResource).to exist(file_resource.id)
             expect(FileVersionMembership.find_by(work_version: result, file_resource: file_resource)).to be_nil
-            remediated_file_resource = WorkVersion.find(result.id).file_resources.where(auto_remediated_version: true)
+            remediated_file_resource = WorkVersion.find(result.id).file_resources.where(remediated_version: true)
             expect(remediated_file_resource.count).to eq(1)
+            expect(remediated_file_resource.first.auto_remediated_version).to be true
             expect(remediated_file_resource.first.file_data['metadata']['filename']).to eq(
               "ACCESSIBLE_VERSION_#{FileResource.find(file_resource.id).file_data['metadata']['filename']}"
             )
             expect(result.external_app).to eq(ExternalApp.pdf_accessibility_api)
             expect(result).to be_published
-            expect(AutoRemediationNotifications)
+            expect(PdfRemediation::AutoRemediationNotifications)
               .to have_received(:new).with(result)
+          end
+
+          it 'remains draft when publish is attempted with legacy incomplete metadata' do
+            allow(Down).to receive(:download).with(remediated_url).and_return(Tempfile.new('remediated'))
+            legacy_metadata = wv_being_remediated.metadata.deep_dup
+            legacy_metadata['description'] = nil
+            wv_being_remediated.update_column(:metadata, legacy_metadata) # rubocop:disable Rails/SkipsModelValidations
+
+            result = described_class.call(file_resource, remediated_url)
+
+            expect(result).to be_draft
+            expect(result.description).to be_nil
           end
 
           it 'calls the Libanswers service with an admin curation ticket' do
@@ -92,15 +106,29 @@ RSpec.describe BuildAutoRemediatedWorkVersion do
             expect(WorkVersion.count).to eq(wv_count_before + 1)
             expect(FileResource).to exist(file_resource.id)
             expect(FileVersionMembership.find_by(work_version: result, file_resource: file_resource)).to be_nil
-            remediated_file_resource = WorkVersion.find(result.id).file_resources.where(auto_remediated_version: true)
+            remediated_file_resource = WorkVersion.find(result.id).file_resources.where(remediated_version: true)
             expect(remediated_file_resource.count).to eq(1)
             expect(remediated_file_resource.first.file_data['metadata']['filename']).to eq(
               "ACCESSIBLE_VERSION_#{FileResource.find(file_resource.id).file_data['metadata']['filename']}"
             )
             expect(result.external_app).to eq(ExternalApp.pdf_accessibility_api)
             expect(result).to be_draft
-            expect(AutoRemediationNotifications)
+            expect(PdfRemediation::AutoRemediationNotifications)
               .not_to have_received(:new).with(result)
+          end
+
+          it 'builds a remediated draft from a legacy source version with incomplete metadata' do
+            allow(Down).to receive(:download).with(remediated_url).and_return(Tempfile.new('remediated'))
+            legacy_metadata = wv_being_remediated.metadata.deep_dup
+            legacy_metadata['description'] = nil
+            wv_being_remediated.update_column(:metadata, legacy_metadata) # rubocop:disable Rails/SkipsModelValidations
+
+            result = described_class.call(file_resource, remediated_url)
+
+            expect(result).to be_persisted
+            expect(result).to be_draft
+            expect(result.description).to be_nil
+            expect(result.file_resources.where(remediated_version: true, auto_remediated_version: true).count).to eq(1)
           end
 
           it 'does not call the Libanswers service' do
@@ -112,12 +140,12 @@ RSpec.describe BuildAutoRemediatedWorkVersion do
       end
 
       context 'when an auto-remediated work version already exists after the one being remediated' do
-        let!(:existing_auto_wv) { BuildNewWorkVersion.call(wv_being_remediated) }
+        let!(:existing_remed_wv) { BuildNewWorkVersion.call(wv_being_remediated) }
 
         before do
-          existing_auto_wv.auto_remediated_version = true
-          existing_auto_wv.external_app = ExternalApp.pdf_accessibility_api
-          existing_auto_wv.save!
+          existing_remed_wv.remediated_version = true
+          existing_remed_wv.external_app = ExternalApp.pdf_accessibility_api
+          existing_remed_wv.save!
         end
 
         context 'when no remaining remediation jobs' do
@@ -130,14 +158,14 @@ RSpec.describe BuildAutoRemediatedWorkVersion do
             expect(WorkVersion.count).to eq(wv_count_before)
             expect(FileResource).to exist(file_resource.id)
             expect(FileVersionMembership.find_by(work_version: result, file_resource: file_resource)).to be_nil
-            remediated_file_resource = WorkVersion.find(result.id).file_resources.where(auto_remediated_version: true)
+            remediated_file_resource = WorkVersion.find(result.id).file_resources.where(remediated_version: true)
             expect(remediated_file_resource.count).to eq(1)
             expect(remediated_file_resource.first.file_data['metadata']['filename']).to eq(
               "ACCESSIBLE_VERSION_#{FileResource.find(file_resource.id).file_data['metadata']['filename']}"
             )
             expect(result.external_app).to eq(ExternalApp.pdf_accessibility_api)
             expect(result).to be_published
-            expect(AutoRemediationNotifications)
+            expect(PdfRemediation::AutoRemediationNotifications)
               .to have_received(:new).with(result)
           end
 
@@ -152,8 +180,8 @@ RSpec.describe BuildAutoRemediatedWorkVersion do
           let!(:other_file_resource) { create(:file_resource, remediation_job_uuid: SecureRandom.uuid) }
 
           before do
-            existing_auto_wv.file_resources << other_file_resource
-            existing_auto_wv.save!
+            existing_remed_wv.file_resources << other_file_resource
+            existing_remed_wv.save!
           end
 
           it 'attaches the remediated file to the existing auto-remediated work version, but does not publish it' do
@@ -165,14 +193,14 @@ RSpec.describe BuildAutoRemediatedWorkVersion do
             expect(WorkVersion.count).to eq(wv_count_before)
             expect(FileResource).to exist(file_resource.id)
             expect(FileVersionMembership.find_by(work_version: result, file_resource: file_resource)).to be_nil
-            remediated_file_resource = WorkVersion.find(result.id).file_resources.where(auto_remediated_version: true)
+            remediated_file_resource = WorkVersion.find(result.id).file_resources.where(remediated_version: true)
             expect(remediated_file_resource.count).to eq(1)
             expect(remediated_file_resource.first.file_data['metadata']['filename']).to eq(
               "ACCESSIBLE_VERSION_#{FileResource.find(file_resource.id).file_data['metadata']['filename']}"
             )
             expect(result.external_app).to eq(ExternalApp.pdf_accessibility_api)
             expect(result).to be_draft
-            expect(AutoRemediationNotifications)
+            expect(PdfRemediation::AutoRemediationNotifications)
               .not_to have_received(:new).with(result)
           end
 

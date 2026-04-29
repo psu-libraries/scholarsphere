@@ -3,7 +3,7 @@
 require 'rails_helper'
 require 'pdf_remediation/client'
 
-RSpec.describe AutoRemediationJob do
+RSpec.describe PdfRemediation::AutoRemediationJob do
   let(:resource) { create(:file_resource, :pdf, work_versions: [create(:work_version)]) }
   let(:client) { instance_double(PdfRemediation::Client, request_remediation: 'test_uuid') }
 

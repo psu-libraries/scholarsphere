@@ -29,10 +29,10 @@ RSpec.describe FileDownloadLinkComponent, type: :component do
       render_inline(described_class.new(file_version_membership: file_version_membership))
       expect(page).to have_link(I18n.t!('resources.download',
                                         name: file_version_membership.title),
-                                href: "/resources/#{resource.uuid}/downloads/#{file_version_membership.id}?download=true")
+                                href: %r{/resources/#{resource.uuid}/downloads/#{file_version_membership.id}\?download_token=.+})
       expect(page).to have_link(I18n.t!('resources.view',
                                         name: file_version_membership.title),
-                                href: "/resources/#{resource.uuid}/downloads/#{file_version_membership.id}?download=false")
+                                href: "/resources/#{resource.uuid}/downloads/#{file_version_membership.id}")
       expect(page).to have_css("a[aria-label='Download file: #{file_version_membership.title}']")
       expect(page).to have_css("a[aria-label='View file: #{file_version_membership.title}']")
     end
@@ -45,10 +45,10 @@ RSpec.describe FileDownloadLinkComponent, type: :component do
       render_inline(described_class.new(file_version_membership: file_version_membership))
       expect(page).to have_link(I18n.t!('resources.download',
                                         name: file_version_membership.title),
-                                href: "/resources/#{resource.uuid}/downloads/#{file_version_membership.id}?download=true")
+                                href: %r{/resources/#{resource.uuid}/downloads/#{file_version_membership.id}\?download_token=.+})
       expect(page).to have_link(I18n.t!('resources.view',
                                         name: file_version_membership.title),
-                                href: "/resources/#{resource.uuid}/downloads/#{file_version_membership.id}?download=false")
+                                href: "/resources/#{resource.uuid}/downloads/#{file_version_membership.id}")
       expect(page).to have_css("a[aria-label='Download file: #{file_version_membership.title}, an image of Test text']")
       expect(page).to have_css("a[aria-label='View file: #{file_version_membership.title}, an image of Test text']")
     end
@@ -58,7 +58,8 @@ RSpec.describe FileDownloadLinkComponent, type: :component do
     let(:mime_type) { 'application/pdf' }
 
     it 'shows the remediation alert' do
-      allow_any_instance_of(AutoRemediateService).to receive(:able_to_auto_remediate?).and_return(true)
+      allow_any_instance_of(PdfRemediation::AutoRemediateService)
+        .to receive(:able_to_auto_remediate?).and_return(true)
       render_inline(described_class.new(file_version_membership: file_version_membership))
       expect(page).to have_css('[data-popup-show-alert="true"]')
       expect(page).to have_css('#remediationPopup')
@@ -69,7 +70,8 @@ RSpec.describe FileDownloadLinkComponent, type: :component do
     let(:mime_type) { 'application/pdf' }
 
     it 'does not show the remediation alert' do
-      allow_any_instance_of(AutoRemediateService).to receive(:able_to_auto_remediate?).and_return(false)
+      allow_any_instance_of(PdfRemediation::AutoRemediateService)
+        .to receive(:able_to_auto_remediate?).and_return(false)
       render_inline(described_class.new(file_version_membership: file_version_membership))
       expect(page).to have_css('[data-popup-show-alert="false"]')
       expect(page).to have_css('#remediationPopup')

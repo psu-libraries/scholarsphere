@@ -21,6 +21,7 @@ en:
     whats_happening_text: An accessible PDF is generated using Adobe with AI used to generate alternative text (alt text) for images in the PDF.
     quality_check_label: "Quality check:"
     quality_check_text: The Libraries' Adaptive Technology and Services team will review and correct the accessible version manually, but that review may occur after the file becomes available.
+    final_note: You can still download the current version by clicking "OK".
     contact_info: For questions or to request a different format, contact the Adaptive Technology and Services team at <a href="mailto:ul-adaptive-tech-svcs@lists.psu.edu">ul-adaptive-tech-svcs@lists.psu.edu</a>.
     ok_button: OK
   activerecord:
@@ -600,6 +601,9 @@ en:
         auto_doi:
           header: DOI
           message: Upon publication, a DOI will be minted for the work.
+        remediated_version:
+          header: Remediated Version
+          label: This version is a remediated (accessible) version
       members:
         heading: Works
         badge: Work 

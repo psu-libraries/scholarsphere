@@ -59,10 +59,12 @@ class FileHelpers
 
     def uploaded_large_pdf(file_name)
       path = Rails.root.join('spec', 'fixtures', 'one_hundred_pages.pdf')
-      file = File.open(path, binmode: true)
-      file_size = file.size
-
-      uploaded_file = Shrine.upload(file, :store, metadata: false)
+      file_size = nil
+      uploaded_file = nil
+      File.open(path, binmode: true) do |file|
+        file_size = file.size
+        uploaded_file = Shrine.upload(file, :store, metadata: false)
+      end
       uploaded_file.metadata.merge!(
         'size' => file_size,
         'mime_type' => 'application/pdf',
@@ -75,10 +77,12 @@ class FileHelpers
 
     def uploaded_pdf(file_name)
       path = Rails.root.join('spec', 'fixtures', 'ipsum.pdf')
-      file = File.open(path, binmode: true)
-      file_size = file.size
-
-      uploaded_file = Shrine.upload(file, :store, metadata: false)
+      file_size = nil
+      uploaded_file = nil
+      File.open(path, binmode: true) do |file|
+        file_size = file.size
+        uploaded_file = Shrine.upload(file, :store, metadata: false)
+      end
       uploaded_file.metadata.merge!(
         'size' => file_size,
         'mime_type' => 'application/pdf',
@@ -95,10 +99,12 @@ class FileHelpers
 
     def uploaded_doc(file_name)
       path = Rails.root.join('spec', 'fixtures', 'future.docx')
-      file = File.open(path, binmode: true)
-      file_size = file.size
-
-      uploaded_file = Shrine.upload(file, :store, metadata: false)
+      file_size = nil
+      uploaded_file = nil
+      File.open(path, binmode: true) do |file|
+        file_size = file.size
+        uploaded_file = Shrine.upload(file, :store, metadata: false)
+      end
       uploaded_file.metadata.merge!(
         'size' => file_size,
         'mime_type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -115,10 +121,12 @@ class FileHelpers
 
     def uploaded_markdown(file_name)
       path = Rails.root.join('spec', 'fixtures', 'ipsum.md')
-      file = File.open(path, binmode: true)
-      file_size = file.size
-
-      uploaded_file = Shrine.upload(file, :store, metadata: false)
+      file_size = nil
+      uploaded_file = nil
+      File.open(path, binmode: true) do |file|
+        file_size = file.size
+        uploaded_file = Shrine.upload(file, :store, metadata: false)
+      end
       uploaded_file.metadata.merge!(
         'size' => file_size,
         'mime_type' => 'text/markdown',
@@ -135,10 +143,12 @@ class FileHelpers
 
     def uploaded_text(file_name)
       path = Rails.root.join('spec', 'fixtures', 'ipsum.txt')
-      file = File.open(path, binmode: true)
-      file_size = file.size
-
-      uploaded_file = Shrine.upload(file, :store, metadata: false)
+      file_size = nil
+      uploaded_file = nil
+      File.open(path, binmode: true) do |file|
+        file_size = file.size
+        uploaded_file = Shrine.upload(file, :store, metadata: false)
+      end
       uploaded_file.metadata.merge!(
         'size' => file_size,
         'mime_type' => 'text/plain',
@@ -155,10 +165,12 @@ class FileHelpers
 
     def uploaded_empty(file_name)
       path = Rails.root.join('spec', 'fixtures', 'empty.txt')
-      file = File.open(path, binmode: true)
-      file_size = file.size
-
-      uploaded_file = Shrine.upload(file, :store, metadata: false)
+      file_size = nil
+      uploaded_file = nil
+      File.open(path, binmode: true) do |file|
+        file_size = file.size
+        uploaded_file = Shrine.upload(file, :store, metadata: false)
+      end
       uploaded_file.metadata.merge!(
         'size' => file_size,
         'mime_type' => 'text/plain',
@@ -178,12 +190,13 @@ class FileHelpers
 
     def uploaded_image(file_name)
       path = Rails.root.join('spec', 'fixtures', 'image.png')
-      file = File.open(path, binmode: true)
-      file_size = file.size
-
-      # for performance we skip metadata extraction and assign test metadata
-      Shrine.plugin :signature
-      uploaded_file = Shrine.upload(file, :store, metadata: false)
+      file_size = nil
+      uploaded_file = nil
+      File.open(path, binmode: true) do |file|
+        file_size = file.size
+        Shrine.plugin :signature
+        uploaded_file = Shrine.upload(file, :store, metadata: false)
+      end
       uploaded_file.metadata.merge!(
         'size' => file_size,
         'mime_type' => 'image/png',

@@ -26,13 +26,13 @@ x-web_env: &web_env
       SOLR_COLLECTION: scholarsphere
       POSTGRES_HOST: db
       AZURE_GRAPH_GROUPS: ${AZURE_GRAPH_GROUPS}
+      ADMIN_GROUP: ${ADMIN_GROUP}
       PSU_AFFILIATED_GROUP: ${PSU_AFFILIATED_GROUP}
       PDF_REMEDIATION_ENDPOINT: ${PDF_REMEDIATION_ENDPOINT}
       PDF_REMEDIATION_API_KEY: ${PDF_REMEDIATION_API_KEY}
-      PDF_REMEDIATION_WEBHOOK_SECRET: ${PDF_REMEDIATION_WEBHOOK_SECRET}
 services:
   redis:
-    image: redis:6.2.6
+    image: redis:8
     command: redis-server --requirepass redispassword
     volumes:
       - redis-data:/data
@@ -53,6 +53,9 @@ services:
       target: /app
     ports:
       - "3000:3000"
+    depends_on:
+      solr:
+        condition: service_healthy
   minio:
     image: minio/minio:RELEASE.2021-03-17T02-33-02Z
     restart: always
@@ -84,6 +87,15 @@ services:
       "-c",
       "solr -c && solr auth enable -credentials $$SOLR_USERNAME:$$SOLR_PASSWORD -z localhost:9983; solr stop && solr start -c -f",
     ]
+    healthcheck:
+      test: [
+        "CMD-SHELL",
+        "wget -qO- --user=$$SOLR_USERNAME --password=$$SOLR_PASSWORD http://localhost:8983/solr/admin/info/system | grep -q 'solr_home'"
+      ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
   db:
     environment:
       POSTGRES_PASSWORD: scholarsphere

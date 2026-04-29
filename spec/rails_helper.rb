@@ -11,7 +11,8 @@ end
 require File.expand_path('../config/environment', __dir__)
 
 # Prevent database truncation if the environment is production
-abort('The Rails environment is running in production mode!') if Rails.env.production?
+raise 'The Rails environment is running in production mode!' if Rails.env.production?
+
 require 'rspec/rails'
 require 'aasm/rspec'
 require 'paper_trail/frameworks/rspec'
@@ -42,7 +43,7 @@ Rails.application.load_tasks
 begin
   ActiveRecord::Migration.maintain_test_schema!
 rescue ActiveRecord::PendingMigrationError => e
-  abort e.to_s.strip
+  raise e.to_s.strip
 end
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures

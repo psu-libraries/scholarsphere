@@ -53,6 +53,7 @@ module Dashboard
           if @resource.mint_doi_requested
             deposit_pathway.allows_mint_doi_request? ? MintDoiAsync.call(@resource.work) : flash[:error] = t('dashboard.form.publish.doi.error')
           end
+          @resource.mirror_remediated_version_to_files! if validation_context.nil?
         end
       end
 
@@ -135,6 +136,7 @@ module Dashboard
               :sensitive_info_agreement,
               :accessibility_remediation_requested,
               :mint_doi_requested,
+              :remediated_version,
               keyword: [],
               contributor: [],
               publisher: [],

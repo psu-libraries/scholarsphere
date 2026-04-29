@@ -1,4 +1,4 @@
-FROM harbor.k8s.libraries.psu.edu/library/ruby-3.4.1-node-22:20250825 AS base
+FROM harbor.k8s.libraries.psu.edu/library/ruby-3.4.9-node-22:20260407 AS base
 ARG UID=3000
 
 COPY bin/vaultshell /usr/local/bin/
@@ -66,7 +66,8 @@ RUN bundle config set path 'vendor/bundle'
 FROM base AS production
 
 # Clean up Bundle
-RUN bundle install --without development test && \
+RUN bundle config set without 'development test' && \
+  bundle install && \
   bundle clean && \
   rm -rf /app/.bundle/cache && \
   rm -rf /app/vendor/bundle/ruby/*/cache

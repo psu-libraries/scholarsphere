@@ -46,3 +46,7 @@
     <% end %>
   </div>
 <% end %>
+
+<% if current_user.admin? %>
+  <%= render 'remediated_version', form: form %>
+<% end %>

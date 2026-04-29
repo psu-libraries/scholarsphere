@@ -82,7 +82,7 @@ class MonthlyWorksReport
     # @note this is almost duplicate of the one in AllWorksReport with
     # additional conditionals for start and end dates. Possible refactor
     def load_downloads_by_work(work_batch_ids)
-      raw_query = <<-SQL.squish
+      raw_query = <<~SQL.squish
         SELECT unique_works.work_id AS work_id,
                SUM(view_statistics.count) AS sum_count
         FROM view_statistics

@@ -5,8 +5,8 @@ class Webhooks::PdfAccessibilityApiController < ApplicationController
   before_action :authenticate_request
 
   def create
-    event_type = params[:event_type]
-    job_data   = params[:job] || {}
+    event_type = pdf_accessibility_params[:event_type]
+    job_data   = pdf_accessibility_params[:job] || {}
 
     case event_type
     when 'job.succeeded'
@@ -22,7 +22,7 @@ class Webhooks::PdfAccessibilityApiController < ApplicationController
   private
 
     def handle_success(job_data)
-      BuildAutoRemediatedWorkVersionJob.perform_later(job_data[:uuid], job_data[:output_url])
+      PdfRemediation::BuildAutoRemediatedWorkVersionJob.perform_later(job_data[:uuid], job_data[:output_url])
       render json: { message: 'Update successful' }, status: :ok
     rescue StandardError => e
       store_failure(job_data[:uuid])
@@ -30,10 +30,15 @@ class Webhooks::PdfAccessibilityApiController < ApplicationController
     end
 
     def handle_failure(job_data)
-      Rails.logger.error("Auto-remediation job failed: #{job_data[:processing_error_message]}")
-      AutoRemediationFailedJob.perform_later(job_data[:uuid])
+      error_message = job_data[:processing_error_message]
+      Rails.logger.error("Auto-remediation job failed: #{error_message}")
+      # Somewhat brittle and temporary solution for handling quota errors until
+      # we can get the PDF Accessibility API to return a quota error event type
+      unless error_message.include?('QuotaExceededError')
+        PdfRemediation::AutoRemediationFailedJob.perform_later(job_data[:uuid])
+      end
       store_failure(job_data[:uuid])
-      render json: { message: job_data[:processing_error_message] }, status: :ok
+      render json: { message: error_message }, status: :ok
     end
 
     def pdf_accessibility_params
@@ -44,9 +49,13 @@ class Webhooks::PdfAccessibilityApiController < ApplicationController
     end
 
     def authenticate_request
-      raise 'PDF_REMEDIATION_WEBHOOK_SECRET not configured.' if ENV['PDF_REMEDIATION_WEBHOOK_SECRET'].blank?
+      token = ExternalApp.pdf_accessibility_api.webhook_token.to_s
+      provided = request.headers['X-API-KEY'].to_s
 
-      head(:unauthorized) unless request.headers['X-API-KEY'] == ENV['PDF_REMEDIATION_WEBHOOK_SECRET']
+      return head(:unauthorized) if provided.blank? ||
+        !ActiveSupport::SecurityUtils.secure_compare(provided, token)
+
+      ApiToken.find_by(token: token).record_usage
     end
 
     def store_failure(job_uuid)

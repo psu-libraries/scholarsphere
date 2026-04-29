@@ -1,0 +1,16 @@
+<div class="form-wrapper">
+  <div class="mb-3 mt-5">
+    <div class="keyline keyline--left mb-3">
+      <h4><%= t 'dashboard.form.publish.remediated_version.header' %></h4>
+    </div>
+  </div>
+
+  <div class="form-check">
+    <%= form.check_box :remediated_version,
+                       class: 'form-check-input' %>
+
+    <%= form.label :remediated_version, class: 'form-check-label' do %>
+      <%= t 'dashboard.form.publish.remediated_version.label' %>
+    <% end %>
+  </div>
+</div>

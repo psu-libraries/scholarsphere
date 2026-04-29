@@ -25,11 +25,13 @@ class FileDownloadLinkComponent < ViewComponent::Base
   end
 
   def download_path(download: true)
+    query_params = { resource_id: work_version_uuid }
+    query_params[:download_token] = download_token if download
+
     Rails.application
       .routes.url_helpers
       .resource_download_path(@file_version_membership.id,
-                              resource_id: work_version_uuid,
-                              download: download)
+                              **query_params)
   end
 
   def view_title
@@ -43,7 +45,11 @@ class FileDownloadLinkComponent < ViewComponent::Base
   end
 
   def remediation_alert?
-    remediation_service = AutoRemediateService.new(work_version_id, helpers.current_user.admin?, can_remediate?)
+    remediation_service = PdfRemediation::AutoRemediateService.new(
+      work_version_id,
+      helpers.current_user,
+      can_remediate?
+    )
     remediation_service.able_to_auto_remediate?
   end
 
@@ -73,5 +79,18 @@ class FileDownloadLinkComponent < ViewComponent::Base
 
     def work
       @file_version_membership.work_version.work
+    end
+
+    def download_token
+      download_token_verifier.generate(
+        @file_version_membership.id,
+        # In seconds, default to 8 minutes
+        expires_in: ENV.fetch('DOWNLOAD_TOKEN_TTL', 480).to_i,
+        purpose: :download_request
+      )
+    end
+
+    def download_token_verifier
+      Rails.application.message_verifier(:download_request_token)
     end
 end

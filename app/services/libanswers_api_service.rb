@@ -26,7 +26,7 @@ class LibanswersApiService
   def request_alternate_format(request)
     conn = create_connection
     response = conn.post(create_ticket_path,
-                         "quid=#{'ACCESSIBILITY_QUEUE_ID'}&" +
+                         "quid=#{ACCESSIBILITY_QUEUE_ID}&" +
                          "pquestion=Scholarsphere Alternate Format Request: #{request.title}&" +
                          "pname=#{request.name}&" +
                          "pemail=#{request.email}&" +
@@ -114,6 +114,7 @@ class LibanswersApiService
     def create_connection
       Faraday.new(url: host) do |f|
         f.headers['Authorization'] = "Bearer #{oauth_token}"
+        f.request :url_encoded
       end
     end
 

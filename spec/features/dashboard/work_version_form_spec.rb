@@ -1002,10 +1002,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       it 'requires alt text to be submitted and works' do
         visit dashboard_form_files_path(work_version)
 
-        # Wait for Uppy to load
-        while page.has_no_selector?('.uppy-Dashboard-AddFiles')
-          sleep 0.1
-        end
+        expect(page).to have_css('.uppy-Dashboard-AddFiles', wait: 30)
 
         # @note For some reason there are two 'files[]' hidden inputs, but it's only happens in the test environment.
         page
@@ -1013,9 +1010,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
           .attach_file(Rails.root.join('spec', 'fixtures', 'image.png'))
 
         # Wait for alt text form
-        while page.has_no_selector?('#uppy-Dashboard-FileCard-input-alt_text')
-          sleep 0.1
-        end
+        expect(page).to have_css('#uppy-Dashboard-FileCard-input-alt_text', wait: 30)
 
         click_on 'Save changes'
 
@@ -1026,9 +1021,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         click_on 'Save changes'
 
         # Wait for file to finish uploading
-        while page.has_no_selector?('.uppy-DashboardContent-title', text: 'Upload complete')
-          sleep 0.1
-        end
+        expect(page).to have_css('.uppy-DashboardContent-title', text: 'Upload complete', wait: 30)
 
         within('.uppy-Dashboard-files') do
           expect(page).to have_content('image.png')
@@ -1061,9 +1054,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
           .attach_file(Rails.root.join('spec', 'fixtures', 'image.png'))
 
         within('.uppy-Informer') do
-          until page.has_content?('Error: image.png already exists in this version')
-            sleep 0.1
-          end
+          expect(page).to have_content('Error: image.png already exists in this version', wait: 30)
         end
 
         expect(page).to have_no_button('Request Curation')
@@ -1461,6 +1452,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
       fill_in 'work_version_title', with: different_metadata[:title]
       FeatureHelpers::DashboardForm.fill_in_work_details(different_metadata)
       FeatureHelpers::DashboardForm.fill_in_publishing_details(metadata)
+      # Non-admins do not see the remediated version checkbox
+      expect(page).to have_no_field('work_version_remediated_version', type: 'checkbox', visible: :all)
       FeatureHelpers::DashboardForm.publish
 
       #
@@ -1657,8 +1650,12 @@ RSpec.describe 'Publishing a work', with_user: :user do
       FeatureHelpers::DashboardForm.fill_in_publishing_details_published(
         different_metadata.merge(rights: incorrect_rights)
       )
+
+      # This checkbox only shows for admins
+      check I18n.t('dashboard.form.publish.remediated_version.label')
+
       FeatureHelpers::DashboardForm.finish
-      expect(SolrIndexingJob).to have_received(:perform_later).once
+      expect(SolrIndexingJob).to have_received(:perform_later).with(work_version).once
 
       work_version.reload
       expect(work_version.rights).to eq(incorrect_rights)
