@@ -62,7 +62,7 @@ class PdfRemediation::BuildAutoRemediatedWorkVersion
       def on_publish(built_work_version)
         built_work_version.publish!
         lib_answers = LibanswersApiService.new
-        lib_answers.admin_create_ticket(built_work_version.work.id, 'work_remediation')
+        lib_answers.work_remediation_ticket(built_work_version.work.id)
         PdfRemediation::AutoRemediationNotifications.new(built_work_version).send_notifications
       end
   end

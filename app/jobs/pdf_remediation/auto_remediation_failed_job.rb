@@ -10,7 +10,6 @@ class PdfRemediation::AutoRemediationFailedJob < ApplicationJob
       &.work
 
     LibanswersApiService.new
-      .admin_create_ticket(work.id,
-                           'work_remediation_failed')
+      .work_remediation_ticket(work.id, succeeded: false)
   end
 end

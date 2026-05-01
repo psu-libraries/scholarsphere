@@ -16,7 +16,7 @@ RSpec.describe PdfRemediation::AutoRemediationFailedJob do
     let(:service) do
       instance_double(
         LibanswersApiService,
-        admin_create_ticket: 'https://psu.libanswers.com/fake-ticket'
+        work_remediation_ticket: 'https://psu.libanswers.com/fake-ticket'
       )
     end
 
@@ -29,7 +29,7 @@ RSpec.describe PdfRemediation::AutoRemediationFailedJob do
         described_class.perform_now(existing_job_uuid)
 
         expect(LibanswersApiService).to have_received(:new)
-        expect(service).to have_received(:admin_create_ticket).with(work.id, 'work_remediation_failed')
+        expect(service).to have_received(:work_remediation_ticket).with(work.id, succeeded: false)
       end
     end
 
