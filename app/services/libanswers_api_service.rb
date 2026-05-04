@@ -84,7 +84,7 @@ class LibanswersApiService
   private
 
     def get_work_link(work)
-      "#{base_url}/resources/#{work.uuid}"
+      base_url + Rails.application.routes.url_helpers.resource_path(work.uuid)
     end
 
     def get_accessibility_result_links(work)
