@@ -5,9 +5,9 @@ module Admin
     def create_work
       service = LibanswersApiService.new
       response = if params[:ticket_type] == 'curation'
-                   service.admin_create_ticket(params[:id], 'work_curation')
+                   service.curate_work_ticket(params[:id])
                  else
-                   service.admin_create_ticket(params[:id], 'work_accessibility_check', request.base_url)
+                   service.accessibility_check_ticket(params[:id])
                  end
       redirect_to response, allow_other_host: true
     rescue LibanswersApiService::LibanswersApiError => e
@@ -17,7 +17,7 @@ module Admin
 
     def create_collection
       service = LibanswersApiService.new
-      response = service.admin_create_ticket(params[:id], 'collection')
+      response = service.curate_collection_ticket(params[:id])
       redirect_to response, allow_other_host: true
     rescue LibanswersApiService::LibanswersApiError => e
       flash[:error] = e.message

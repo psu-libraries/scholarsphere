@@ -16,7 +16,7 @@ RSpec.describe PdfRemediation::BuildAutoRemediatedWorkVersion do
 
   describe '.call' do
     before do
-      allow(lib_answers).to receive(:admin_create_ticket)
+      allow(lib_answers).to receive(:work_remediation_ticket)
       allow(LibanswersApiService).to receive(:new).and_return(lib_answers)
     end
 
@@ -85,7 +85,7 @@ RSpec.describe PdfRemediation::BuildAutoRemediatedWorkVersion do
           it 'calls the Libanswers service with an admin curation ticket' do
             allow(Down).to receive(:download).with(remediated_url).and_return(Tempfile.new('remediated'))
             result = described_class.call(file_resource, remediated_url)
-            expect(lib_answers).to have_received(:admin_create_ticket).with(result.work.id, 'work_remediation')
+            expect(lib_answers).to have_received(:work_remediation_ticket).with(result.work.id)
           end
         end
 
@@ -134,7 +134,7 @@ RSpec.describe PdfRemediation::BuildAutoRemediatedWorkVersion do
           it 'does not call the Libanswers service' do
             allow(Down).to receive(:download).with(remediated_url).and_return(Tempfile.new('remediated'))
             result = described_class.call(file_resource, remediated_url)
-            expect(lib_answers).not_to have_received(:admin_create_ticket).with(result.work.id, 'work_remediation')
+            expect(lib_answers).not_to have_received(:work_remediation_ticket).with(result.work.id)
           end
         end
       end
@@ -172,7 +172,7 @@ RSpec.describe PdfRemediation::BuildAutoRemediatedWorkVersion do
           it 'calls the Libanswers service with an admin curation ticket' do
             allow(Down).to receive(:download).with(remediated_url).and_return(Tempfile.new('remediated'))
             result = described_class.call(file_resource, remediated_url)
-            expect(lib_answers).to have_received(:admin_create_ticket).with(result.work.id, 'work_remediation')
+            expect(lib_answers).to have_received(:work_remediation_ticket).with(result.work.id)
           end
         end
 
@@ -207,7 +207,7 @@ RSpec.describe PdfRemediation::BuildAutoRemediatedWorkVersion do
           it 'does not call the Libanswers service' do
             allow(Down).to receive(:download).with(remediated_url).and_return(Tempfile.new('remediated'))
             result = described_class.call(file_resource, remediated_url)
-            expect(lib_answers).not_to have_received(:admin_create_ticket).with(result.work.id, 'work_remediation')
+            expect(lib_answers).not_to have_received(:work_remediation_ticket).with(result.work.id)
           end
         end
       end

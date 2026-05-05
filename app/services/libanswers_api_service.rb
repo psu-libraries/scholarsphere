@@ -7,18 +7,63 @@ class LibanswersApiService
   ACCESSIBILITY_QUEUE_ID = '2590'
   SCHOLARSPHERE_QUEUE_ID = '5477'
 
-  def admin_create_ticket(id, type = 'work_curation', base_url = '')
-    depositor = get_depositor(id, type)
-    if ['work_curation', 'collection'].include?(type) && !depositor.active?
-      raise LibanswersApiError, I18n.t('resources.contact_depositor_button.error_message')
-    end
+  def curate_work_ticket(id)
+    work = Work.find(id)
+    depositor = work.depositor
+    raise LibanswersApiError, I18n.t('resources.contact_depositor_button.error_message') unless depositor.active?
 
-    admin_subject = get_admin_subject(id, type)
-    ticket_details = get_ticket_details(id, type, admin_subject, base_url)
+    subject = "ScholarSphere Deposit Curation: #{work.latest_version.title}"
+    details = "quid=#{SCHOLARSPHERE_QUEUE_ID}&" +
+      "pquestion=#{subject}&" +
+      "pname=#{work.display_name}&" +
+      "pemail=#{work.email}"
+    create_ticket(create_ticket_path, details)
+  rescue Faraday::ConnectionFailed => e
+    raise LibanswersApiError, e.message
+  end
 
-    conn = create_connection
-    response = conn.post(create_ticket_path, ticket_details)
-    handle_response(response)
+  def curate_collection_ticket(id)
+    collection = Collection.find(id)
+    depositor = collection.depositor
+    raise LibanswersApiError, I18n.t('resources.contact_depositor_button.error_message') unless depositor.active?
+
+    subject = "ScholarSphere Collection Curation: #{collection.metadata['title']}"
+    details = "quid=#{SCHOLARSPHERE_QUEUE_ID}&" +
+      "pquestion=#{subject}&" +
+      "pname=#{depositor.display_name}&" +
+      "pemail=#{depositor.email}"
+    create_ticket(create_ticket_path, details)
+  rescue Faraday::ConnectionFailed => e
+    raise LibanswersApiError, e.message
+  end
+
+  def accessibility_check_ticket(id)
+    work = Work.find(id)
+    subject = "ScholarSphere Deposit Accessibility Curation: #{work.latest_version.title}"
+    accessibility_check_results = get_accessibility_result_links(work)
+    details = "quid=#{ACCESSIBILITY_QUEUE_ID}&" +
+      "pquestion=#{subject}&" +
+      (accessibility_check_results.empty? ? '' : "pdetails=#{accessibility_check_results}&") +
+      "pname=#{work.display_name}&" +
+      "pemail=#{work.email}"
+    create_ticket(create_ticket_path, details)
+  rescue Faraday::ConnectionFailed => e
+    raise LibanswersApiError, e.message
+  end
+
+  def work_remediation_ticket(id, succeeded: true)
+    work = Work.find(id)
+    subject = "ScholarSphere PDF Auto-remediation Result: #{work.latest_version.title} at url: #{get_work_link(work)}"
+    details = "quid=#{ACCESSIBILITY_QUEUE_ID}&" +
+      "pquestion=#{subject}&" +
+      "pname=#{work.display_name}&" +
+      "pemail=#{work.email}" +
+      (if succeeded
+         ''
+       else
+         '&pdetails=A PDF associated with this work failed to auto-remediate and requires manual review.'
+       end)
+    create_ticket(create_ticket_path, details)
   rescue Faraday::ConnectionFailed => e
     raise LibanswersApiError, e.message
   end
@@ -38,77 +83,23 @@ class LibanswersApiService
 
   private
 
-    def get_depositor(id, type)
-      deposit_types = {
-        'work_curation' => Work,
-        'work_accessibility_check' => Work,
-        'work_remediation' => Work,
-        'work_remediation_failed' => Work,
-        'collection' => Collection
-      }
-      deposit = deposit_types[type].find(id)
-      deposit.depositor
+    def get_work_link(work)
+      base_url + Rails.application.routes.url_helpers.resource_path(work.uuid)
     end
 
-    def get_admin_subject(id, type)
-      case type
-      when 'collection'
-        collection = Collection.find(id)
-        "ScholarSphere Collection Curation: #{collection.metadata['title']}"
-      when 'work_curation'
-        work = Work.find(id)
-        "ScholarSphere Deposit Curation: #{work.latest_version.title}"
-      when 'work_accessibility_check'
-        work = Work.find(id)
-        "ScholarSphere Deposit Accessibility Curation: #{work.latest_version.title}"
-      when 'work_remediation', 'work_remediation_failed'
-        work = Work.find(id)
-        "ScholarSphere PDF Auto-remediation Result: #{work.latest_version.title}"
-      end
-    end
-
-    def get_ticket_details(id, type, admin_subject, base_url = '')
-      case type
-      when 'collection'
-        @collection = Collection.find(id)
-        depositor = collection.depositor
-        "quid=#{SCHOLARSPHERE_QUEUE_ID}&" +
-          "pquestion=#{admin_subject}&" +
-          "pname=#{depositor.display_name}&" +
-          "pemail=#{depositor.email}"
-      when 'work_curation'
-        @work = Work.find(id)
-        "quid=#{SCHOLARSPHERE_QUEUE_ID}&" + "pquestion=#{admin_subject}&" +
-          "pname=#{work.display_name}&" + "pemail=#{work.email}"
-      when 'work_accessibility_check'
-        @work = Work.find(id)
-        accessibility_check_results = get_accessibility_result_links(work, base_url)
-        "quid=#{ACCESSIBILITY_QUEUE_ID}&" +
-          "pquestion=#{admin_subject}&" +
-          (accessibility_check_results.empty? ? '' : "pdetails=#{accessibility_check_results}&") +
-          "pname=#{work.display_name}&" +
-          "pemail=#{work.email}"
-      when 'work_remediation', 'work_remediation_failed'
-        @work = Work.find(id)
-        "quid=#{ACCESSIBILITY_QUEUE_ID}&" +
-          "pquestion=#{admin_subject}&" +
-          "pname=#{work.display_name}&" +
-          "pemail=#{work.email}" +
-          (if type == 'work_remediation_failed'
-             '&pdetails=A PDF associated with this work failed to auto-remediate and requires manual review.'
-           else
-             ''
-           end)
-      end
-    end
-
-    def get_accessibility_result_links(work, base_url)
+    def get_accessibility_result_links(work)
       accessibility_check_results = work.latest_version.file_resources.map do |fr|
         report = fr.file_version_memberships&.first&.accessibility_report_download_url
 
         "#{fr.file_data['metadata']['filename']}: #{base_url + report}" if report.present?
       end
       accessibility_check_results.compact.join("\n")
+    end
+
+    def create_ticket(path, details)
+      conn = create_connection
+      response = conn.post(path, details)
+      handle_response(response)
     end
 
     def create_connection
@@ -134,6 +125,10 @@ class LibanswersApiService
       Faraday.new(url: host).post(oauth_token_path, { client_id: ENV.fetch('LIBANSWERS_CLIENT_ID', 'asdf'),
                                                       client_secret: ENV.fetch('LIBANSWERS_CLIENT_SECRET', 'asdfasdf'),
                                                       grant_type: 'client_credentials' }).env.response_body
+    end
+
+    def base_url
+      Rails.application.routes.default_url_options[:host] || ''
     end
 
     def create_ticket_path

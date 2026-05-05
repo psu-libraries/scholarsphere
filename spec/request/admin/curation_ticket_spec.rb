@@ -27,7 +27,7 @@ RSpec.describe 'Create Curation Ticket', type: :request do
 
       context 'when the ticket type is curation' do
         before do
-          allow(libanswer_service).to receive(:admin_create_ticket).with(work.id.to_s, 'work_curation').and_return('Redirect Path')
+          allow(libanswer_service).to receive(:curate_work_ticket).with(work.id.to_s).and_return('Redirect Path')
           post admin_create_curation_ticket_url(work), params: { ticket_type: 'curation' }
         end
 
@@ -35,15 +35,16 @@ RSpec.describe 'Create Curation Ticket', type: :request do
           expect(response).to redirect_to('Redirect Path')
         end
 
-        it 'calls the LibanswerApiService #admin_create_ticket with work_curation argument' do
-          expect(libanswer_service).to have_received(:admin_create_ticket).with(work.id.to_s, 'work_curation')
+        it 'calls the LibanswerApiService #curate_work_ticket' do
+          expect(libanswer_service).to have_received(:curate_work_ticket).with(work.id.to_s)
         end
       end
 
       context 'when the ticket type is accessibility' do
         before do
-          allow(libanswer_service).to receive(:admin_create_ticket).with(work.id.to_s, 'work_accessibility_check',
-                                                                         'http://localhost:3000').and_return('Another Redirect Path')
+          allow(libanswer_service).to receive(:accessibility_check_ticket).with(
+            work.id.to_s
+          ).and_return('Another Redirect Path')
           post admin_create_curation_ticket_url(work), params: { ticket_type: 'accessibility' }
         end
 
@@ -51,8 +52,8 @@ RSpec.describe 'Create Curation Ticket', type: :request do
           expect(response).to redirect_to('Another Redirect Path')
         end
 
-        it 'calls the LibanswerApiService #admin_create_ticket with work_accessibility_check argument' do
-          expect(libanswer_service).to have_received(:admin_create_ticket).with(work.id.to_s, 'work_accessibility_check', request.base_url)
+        it 'calls the LibanswerApiService #admin' do
+          expect(libanswer_service).to have_received(:accessibility_check_ticket).with(work.id.to_s)
         end
       end
     end
@@ -76,7 +77,7 @@ RSpec.describe 'Create Curation Ticket', type: :request do
 
       before do
         allow(LibanswersApiService).to receive(:new).and_return libanswer_service
-        allow(libanswer_service).to receive(:admin_create_ticket).with(collection.id.to_s, 'collection').and_return('Yet Another Redirect Path')
+        allow(libanswer_service).to receive(:curate_collection_ticket).with(collection.id.to_s).and_return('Yet Another Redirect Path')
         post admin_create_collection_ticket_url(collection)
       end
 
@@ -84,8 +85,8 @@ RSpec.describe 'Create Curation Ticket', type: :request do
         expect(response).to redirect_to('Yet Another Redirect Path')
       end
 
-      it 'calls the LibanswerApiService #admin_create_ticket with collection argument' do
-        expect(libanswer_service).to have_received(:admin_create_ticket).with(collection.id.to_s, 'collection')
+      it 'calls the LibanswerApiService #curate_collection_ticket' do
+        expect(libanswer_service).to have_received(:curate_collection_ticket).with(collection.id.to_s)
       end
     end
   end
