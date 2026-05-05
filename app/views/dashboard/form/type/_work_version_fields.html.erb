@@ -20,20 +20,22 @@
                                      disabled: local_assigns[:work_type_disabled] %>
   <% end %>
 
-  <div class="form-check"
-       id="open-access-help-text"
-       data-target="work-type.openAccess"
-       style="display: none;">
+  <% if ENV['OPEN_ACCESS_FEATURE'] == 'true' %>
+    <div class="form-check"
+        id="open-access-help-text"
+        data-target="work-type.openAccess"
+        style="display: none;">
 
-    <%= form.check_box :open_access,
-                       { class: 'form-check-input', id: 'open_access_checkbox', disabled: @resource.open_access && !current_user.admin? },
-                       true,
-                       false %>
+      <%= form.check_box :open_access,
+                         { class: 'form-check-input', id: 'open_access_checkbox', disabled: @resource.open_access && !current_user.admin? },
+                         true,
+                         false %>
 
-    <%= form.label :open_access,
-                   t('dashboard.form.details.open_access_prompt'),
-                   class: 'form-check-label' %>
-  </div>
+      <%= form.label :open_access,
+                     t('dashboard.form.details.open_access_prompt'),
+                     class: 'form-check-label' %>
+    </div>
+  <% end %>
   <div class="form-text text-muted" id="work-title-help-text" data-target="work-type.helpText" style="display: none;">
     <small><%= t 'dashboard.form.details.instrument_title' %></small>
   </div>
