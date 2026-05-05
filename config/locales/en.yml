@@ -527,6 +527,7 @@ en:
         required_to_publish_metadata: Needed to Publish
         additional_metadata: Optional Metadata
         instrument_title: Use the instrument name as the work title
+        open_access_prompt: Is this an Open Access submission?
         privacy_notice:
           header: Accessible Version Generation Privacy Notice
           description: When your PDF is downloaded for the first time, an accessible version will be created to meet ADA Title II requirements
@@ -578,6 +579,7 @@ en:
           contributors: Contributors
           files: Files
           publishing_details: Publishing Details
+          version: Open Access Version
         curation:
           header: Request Curation (Optional)
           request_description: "Recommended: Select ‘Request Curation’ below to have the ScholarSphere Curation Team review your work ensuring its findability, interoperability, accessibility, and reusability prior to publication. The curatorial review will focus on enhancing metadata quality, recommending improvements for deposit interoperability and reusability, and remediating files as necessary for accessibility. While under review, your work will remain saved as a draft. Once approved by the curator, the work will be published, and if applicable, a DOI will be minted."

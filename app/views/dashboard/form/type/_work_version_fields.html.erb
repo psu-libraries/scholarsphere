@@ -4,17 +4,36 @@
   </div>
 </div>
 
-<div class="form-wrapper" data-controller="work-type">
+<div class="form-wrapper"
+  data-controller="work-type"
+  data-work-type-oa-types-value="<%= Work::Types.oa_scholarly_works.to_json %>">
+
   <%= render 'form_fields/text', form: form, attribute: :title, required: true %>
 
   <%= form.fields_for :work do |work_form| %>
     <%= render 'form_fields/select', form: work_form,
                                      attribute: :work_type,
                                      options_for_select: Work::Types.options_for_select_box,
-                                     data: { target: 'work-type.workTypeSelect' },
+                                     data: {
+                                       target: 'work-type.workTypeSelect'
+                                     },
                                      disabled: local_assigns[:work_type_disabled] %>
   <% end %>
 
+  <div class="form-check"
+       id="open-access-help-text"
+       data-target="work-type.openAccess"
+       style="display: none;">
+
+    <%= form.check_box :open_access,
+                       { class: 'form-check-input', id: 'open_access_checkbox', disabled: @resource.open_access && !current_user.admin? },
+                       true,
+                       false %>
+
+    <%= form.label :open_access,
+                   t('dashboard.form.details.open_access_prompt'),
+                   class: 'form-check-label' %>
+  </div>
   <div class="form-text text-muted" id="work-title-help-text" data-target="work-type.helpText" style="display: none;">
     <small><%= t 'dashboard.form.details.instrument_title' %></small>
   </div>

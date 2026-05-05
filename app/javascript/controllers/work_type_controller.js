@@ -1,7 +1,7 @@
 import { Controller } from 'stimulus'
 
 export default class extends Controller {
-  static targets = ['workTypeSelect', 'helpText']
+  static targets = ['workTypeSelect', 'helpText', 'openAccess']
 
   connect () {
     this.toggleHelpText()
@@ -9,10 +9,17 @@ export default class extends Controller {
   }
 
   toggleHelpText () {
-    if (this.workTypeSelectTarget.value === 'instrument') {
-      this.helpTextTarget.style.display = 'block'
+    const value = this.workTypeSelectTarget.value
+
+    if (value === "instrument") {
+      this.helpTextTarget.style.display = "block"
     } else {
-      this.helpTextTarget.style.display = 'none'
+      this.helpTextTarget.style.display = "none"
+    }
+    if (JSON.parse(this.data.get('oaTypesValue')).includes(value)) {
+      this.openAccessTarget.style.display = "block"
+    } else {
+      this.openAccessTarget.style.display = "none"
     }
   }
 }

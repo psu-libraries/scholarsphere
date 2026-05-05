@@ -42,6 +42,15 @@
               <%= render 'dashboard/form/files/uploaded_file_list', work_version: form.object %>
             <% end %>
 
+            <% if @resource.open_access %>
+              <div class="form-wrapper form-wrapper--wide">
+                <div class="keyline keyline--left mb-3">
+                  <h4><%= t '.version' %></h4>
+                </div>
+              </div>
+              <%= render 'version', form: form %>
+            <% end %>
+
             <div class="form-wrapper form-wrapper--wide">
               <div class="keyline keyline--left mb-3">
                 <h4><%= t '.publishing_details' %></h4>
