@@ -35,6 +35,7 @@ module Dashboard
             .require(:work_version)
             .permit(
               :title,
+              :open_access,
               work_attributes: [
                 :id,
                 :work_type

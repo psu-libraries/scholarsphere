@@ -7,6 +7,11 @@ class WorkVersion < ApplicationRecord
   include GeneratedUuids
   include UpdatingDois
 
+  OPEN_ACCESS_VERSIONS = %w[
+    accepted
+    published
+  ].freeze
+
   after_validation :remove_duplicate_errors
   before_save :reset_irrelevant_fields_if_work_type_changed
 
@@ -47,7 +52,8 @@ class WorkVersion < ApplicationRecord
                  funding_reference: :string,
                  sub_work_type: :string,
                  program: :string,
-                 degree: :string
+                 degree: :string,
+                 open_access_version: :string
 
   belongs_to :work,
              inverse_of: :versions
@@ -160,6 +166,13 @@ class WorkVersion < ApplicationRecord
             inclusion: {
               in: [Permissions::Visibility::OPEN, Permissions::Visibility::AUTHORIZED],
               message: 'cannot be private'
+            },
+            if: :published?
+
+  validates :open_access_version,
+            allow_nil: true,
+            inclusion: {
+              in: OPEN_ACCESS_VERSIONS
             },
             if: :published?
 

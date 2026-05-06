@@ -242,6 +242,67 @@ RSpec.describe 'Publishing a work', with_user: :user do
           expect(page).to have_content metadata[:title]
         end
       end
+
+      context 'when the work type is an open access scholarly work', :js do
+        before do
+          @original_secret = ENV['ENABLE_OPEN_ACCESS_FEATURE']
+          ENV['ENABLE_OPEN_ACCESS_FEATURE'] = 'true'
+        end
+
+        after do
+          ENV['ENABLE_OPEN_ACCESS_FEATURE'] = @original_secret
+        end
+
+        it 'shows the open access checkbox' do
+          visit dashboard_form_work_versions_path
+
+          FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_scholarly_works_draft(metadata)
+          expect(page).to have_field('open_access_checkbox', type: 'checkbox')
+          check 'open_access_checkbox'
+          FeatureHelpers::DashboardForm.save_and_continue
+          expect(Work.last.versions.last.open_access).to eq true
+        end
+      end
+
+      context 'when the work type is not an open access scholarly work', :js do
+        before do
+          @original_secret = ENV['ENABLE_OPEN_ACCESS_FEATURE']
+          ENV['ENABLE_OPEN_ACCESS_FEATURE'] = 'true'
+        end
+
+        after do
+          ENV['ENABLE_OPEN_ACCESS_FEATURE'] = @original_secret
+        end
+
+        it 'does not show the open access checkbox' do
+          visit dashboard_form_work_versions_path
+
+          fill_in 'work_version_title', with: metadata[:title]
+          select Work::Types.display('research_paper'), from: 'work_version_work_attributes_work_type'
+          expect(page).to have_no_field('open_access_checkbox', type: 'checkbox')
+        end
+      end
+
+      context 'when the work is already open access', :js do
+        before do
+          @original_secret = ENV['ENABLE_OPEN_ACCESS_FEATURE']
+          ENV['ENABLE_OPEN_ACCESS_FEATURE'] = 'true'
+        end
+
+        after do
+          ENV['ENABLE_OPEN_ACCESS_FEATURE'] = @original_secret
+        end
+
+        it 'displays the open access checkbox in readonly' do
+          visit dashboard_form_work_versions_path
+
+          FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_scholarly_works_draft(metadata)
+          check 'open_access_checkbox'
+          FeatureHelpers::DashboardForm.save_and_continue
+          click_on 'Work Type'
+          expect(page).to have_field('open_access_checkbox', type: 'checkbox', disabled: true)
+        end
+      end
     end
 
     context 'when selecting a work type that uses the data and code deposit pathway' do
@@ -2170,6 +2231,66 @@ RSpec.describe 'Publishing a work', with_user: :user do
         click_on 'Confirm'
 
         expect(MintDoiAsync).not_to have_received(:call).with(work_version.work)
+      end
+    end
+  end
+
+  describe 'open access scholarly works', :js do
+    let(:work) { create(:work, work_type: 'article', versions_count: 1, has_draft: true) }
+    let(:work_version) { work.versions.first }
+    let(:user) { work_version.work.depositor.user }
+
+    before do
+      work_version.update(open_access: true)
+      @original_secret = ENV['ENABLE_OPEN_ACCESS_FEATURE']
+      ENV['ENABLE_OPEN_ACCESS_FEATURE'] = 'true'
+    end
+
+    after do
+      ENV['ENABLE_OPEN_ACCESS_FEATURE'] = @original_secret
+    end
+
+    context 'when work type is open access scholarly work' do
+      it 'disables autopopulated fields' do
+        visit dashboard_form_publish_path(work_version)
+        expect(page).to have_field('open_access_checkbox', type: 'checkbox', disabled: true)
+        expect(page).to have_field('work_version_publisher_statement', readonly: true)
+        expect(page).to have_field('work_version_rights', disabled: true)
+        expect(page).to have_field('work_version_work_attributes_embargoed_until', readonly: true)
+        expect(page).to have_field('work_version_open_access_version_accepted')
+        expect(page).to have_field('work_version_open_access_version_published')
+
+        choose 'Accepted Version'
+        click_on 'Save Draft & Exit'
+        expect(work_version.reload.open_access_version).to eq 'accepted'
+      end
+    end
+
+    context 'when user is an admin' do
+      let(:user) { create(:user, :admin) }
+
+      it 'enables autopopulated fields' do
+        visit dashboard_form_publish_path(work_version)
+        expect(page).to have_field('open_access_checkbox', type: 'checkbox')
+        expect(page).to have_field('work_version_publisher_statement')
+        expect(page).to have_field('work_version_rights')
+        expect(page).to have_field('work_version_work_attributes_embargoed_until')
+        expect(page).to have_field('work_version_open_access_version_accepted')
+        expect(page).to have_field('work_version_open_access_version_published')
+      end
+    end
+
+    context 'when the work is not open access' do
+      before { work_version.update(open_access: nil) }
+
+      it 'enables autopopulated fields and does not display open access version' do
+        visit dashboard_form_publish_path(work_version)
+        expect(page).to have_field('open_access_checkbox', type: 'checkbox')
+        expect(page).to have_field('work_version_publisher_statement')
+        expect(page).to have_field('work_version_rights')
+        expect(page).to have_field('work_version_work_attributes_embargoed_until')
+        expect(page).to have_no_field('work_version_open_access_version_accepted')
+        expect(page).to have_no_field('work_version_open_access_version_published')
       end
     end
   end

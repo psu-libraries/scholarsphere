@@ -118,6 +118,8 @@ module Dashboard
               :subtitle,
               :rights,
               :version_name,
+              :open_access,
+              :open_access_version,
               :published_date,
               :depositor_agreement,
               :psu_community_agreement,
