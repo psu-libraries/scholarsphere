@@ -124,8 +124,8 @@ RSpec.describe Work do
     end
   end
 
-  describe '.recently_published' do
-    let(:wv1) { build(:work_version, :published, work: nil, sent_for_curation_at: nil) }
+  describe '.send_for_curation_sync' do
+    let(:wv1) { build(:work_version, :published, work: nil, sent_for_curation_at: nil, created_at: 1.week.ago) }
     let(:work1) { create(:work, versions: [wv1]) }
 
     let(:wv2) { build(:work_version, :published, work: nil, sent_for_curation_at: Time.now) }
@@ -136,8 +136,11 @@ RSpec.describe Work do
 
     let(:work4) { create(:work) }
 
+    let(:wv5) { build(:work_version, :published, work: nil, sent_for_curation_at: nil, created_at: 1.year.ago) }
+    let(:work5) { create(:work, versions: [wv5]) }
+
     it 'returns works with a published WorkVersion that has not been sent for curation' do
-      expect(described_class.recently_published).to contain_exactly(work1)
+      expect(described_class.send_for_curation_sync).to contain_exactly(work1)
     end
   end
 

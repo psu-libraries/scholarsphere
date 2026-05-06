@@ -53,12 +53,14 @@ class Work < ApplicationRecord
 
   accepts_nested_attributes_for :versions
 
-  scope :recently_published, -> {
+  scope :send_for_curation_sync, -> {
     joins(:versions)
       .where(work_versions: { aasm_state: 'published' })
       .where(work_versions: { sent_for_curation_at: nil })
+      .where(work_versions: { created_at: 30.days.ago.. })
       .distinct
   }
+
   validate :embargoed_until_is_valid_date
   has_paper_trail versions: :paper_trail_versions
   module Types

@@ -101,12 +101,34 @@ RSpec.describe CurationSyncService do
         allow(task1).to receive(:[]).and_return(work_version1.uuid)
       end
 
-      it 'sends current version for curation with Updated Version label' do
-        expect(CurationTaskClient).to receive(:send_curation).with(work_version2.id, updated_version: true)
-        expect(CurationTaskClient).not_to receive(:send_curation).with(work_version1.id)
-        expect(CurationTaskClient).not_to receive(:send_curation).with(work_version3.id)
+      context 'when current version for curation has previously been sent for curation' do
+        it 'does not send for curation' do
+          work_version2.update sent_for_curation_at: Time.now
+          expect(CurationTaskClient).not_to receive(:send_curation).with(work_version2.id)
 
-        described_class.new(work).sync
+          described_class.new(work).sync
+        end
+      end
+
+      context 'when current version for curation has not been sent for curation' do
+        context 'when current version for curation has been remediated' do
+          it 'does not send for curation' do
+            work_version2.update remediated_version: true
+            expect(CurationTaskClient).not_to receive(:send_curation).with(work_version2.id)
+
+            described_class.new(work).sync
+          end
+        end
+
+        context 'when current version for curation has not been remediated' do
+          it 'sends current version for curation with Updated Version label' do
+            expect(CurationTaskClient).to receive(:send_curation).with(work_version2.id, updated_version: true)
+            expect(CurationTaskClient).not_to receive(:send_curation).with(work_version1.id)
+            expect(CurationTaskClient).not_to receive(:send_curation).with(work_version3.id)
+
+            described_class.new(work).sync
+          end
+        end
       end
 
       context 'when the latest work version was created by an admin user' do

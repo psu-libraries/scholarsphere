@@ -3,7 +3,7 @@
 namespace :curation do
   desc 'Sync curation tasks'
   task sync: :environment do
-    works = Work.recently_published
+    works = Work.send_for_curation_sync
     works.each do |work|
       CurationSyncService.new(work).sync
       sleep(0.5)
