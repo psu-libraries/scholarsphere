@@ -244,6 +244,15 @@ RSpec.describe 'Publishing a work', with_user: :user do
       end
 
       context 'when the work type is an open access scholarly work', :js do
+        before do
+          @original_secret = ENV['ENABLE_OPEN_ACCESS_FEATURE']
+          ENV['ENABLE_OPEN_ACCESS_FEATURE'] = 'true'
+        end
+
+        after do
+          ENV['ENABLE_OPEN_ACCESS_FEATURE'] = @original_secret
+        end
+
         it 'shows the open access checkbox' do
           visit dashboard_form_work_versions_path
 
@@ -256,6 +265,15 @@ RSpec.describe 'Publishing a work', with_user: :user do
       end
 
       context 'when the work type is not an open access scholarly work', :js do
+        before do
+          @original_secret = ENV['ENABLE_OPEN_ACCESS_FEATURE']
+          ENV['ENABLE_OPEN_ACCESS_FEATURE'] = 'true'
+        end
+
+        after do
+          ENV['ENABLE_OPEN_ACCESS_FEATURE'] = @original_secret
+        end
+
         it 'does not show the open access checkbox' do
           visit dashboard_form_work_versions_path
 
@@ -266,6 +284,15 @@ RSpec.describe 'Publishing a work', with_user: :user do
       end
 
       context 'when the work is already open access', :js do
+        before do
+          @original_secret = ENV['ENABLE_OPEN_ACCESS_FEATURE']
+          ENV['ENABLE_OPEN_ACCESS_FEATURE'] = 'true'
+        end
+
+        after do
+          ENV['ENABLE_OPEN_ACCESS_FEATURE'] = @original_secret
+        end
+
         it 'displays the open access checkbox in readonly' do
           visit dashboard_form_work_versions_path
 
@@ -2213,7 +2240,15 @@ RSpec.describe 'Publishing a work', with_user: :user do
     let(:work_version) { work.versions.first }
     let(:user) { work_version.work.depositor.user }
 
-    before { work_version.update(open_access: true) }
+    before do
+      work_version.update(open_access: true)
+      @original_secret = ENV['ENABLE_OPEN_ACCESS_FEATURE']
+      ENV['ENABLE_OPEN_ACCESS_FEATURE'] = 'true'
+    end
+
+    after do
+      ENV['ENABLE_OPEN_ACCESS_FEATURE'] = @original_secret
+    end
 
     context 'when work type is open access scholarly work' do
       it 'disables autopopulated fields' do

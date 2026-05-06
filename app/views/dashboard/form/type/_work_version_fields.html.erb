@@ -20,7 +20,8 @@
                                      disabled: local_assigns[:work_type_disabled] %>
   <% end %>
 
-  <% if ENV['OPEN_ACCESS_FEATURE'] == 'true' %>
+  <!-- Feature Flag: remove once open access pathway is enabled -->
+  <% if ENV['ENABLE_OPEN_ACCESS_FEATURE'] == 'true' %>
     <div class="form-check"
         id="open-access-help-text"
         data-target="work-type.openAccess"
