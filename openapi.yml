@@ -474,13 +474,19 @@ components:
             $ref: "#/components/schemas/uploadedFile"
         depositor:
           type: "string"
-          exmample: "axc123"
+          example: "axc123"
           description: >-
             The Penn State access of the person who is depositing the work. This is typically the same person who is the
             creator, but not always. There is no restriction regarding who the depositor is other than they must have an
             active account in Penn State's identity management system.
         permissions:
-          $ref: "#/components/schemas/permissions" 
+          $ref: "#/components/schemas/permissions"
+        publish:
+          type: "boolean"
+          example: "false"
+          description: >-
+            Whether the ingest call should publish the Work or simply create a draft. If left blank,
+            this will default to "true"
     uploads:
       type: "object"
       required:
