@@ -14,6 +14,7 @@ RSpec.describe Api::V1::WorkPublisher do
   let(:mock_client) { instance_spy(PsuIdentity::SearchService::Client) }
   let(:new_work) { publisher.work }
   let(:external_app) { build(:external_app) }
+  let!(:publish) { true }
 
   before do
     allow(PsuIdentity::SearchService::Client).to receive(:new).and_return(mock_client)
@@ -37,7 +38,8 @@ RSpec.describe Api::V1::WorkPublisher do
           ActiveSupport::HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_paths.first, 'image.png'))),
           ActiveSupport::HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_paths.first, 'ipsum.pdf')))
         ],
-        external_app: external_app
+        external_app: external_app,
+        publish: publish
       )
     end
 
@@ -64,6 +66,18 @@ RSpec.describe Api::V1::WorkPublisher do
     it 'links the created WorkVersion to the given ExternalApp' do
       expect(new_work.latest_version.external_app).to eq external_app
     end
+
+    context 'when publish is set to false' do
+      let!(:publish) { false }
+
+      it 'does not publish if publish: false is passed' do
+        expect(new_work).to be_open_access
+        expect(new_work).not_to be_embargoed
+        expect(new_work.versions.count).to eq(1)
+        expect(new_work.latest_version).not_to be_published
+        expect(new_work.work_type).to eq('dataset')
+      end
+    end
   end
 
   context 'when the depositor has a different display name' do
@@ -84,7 +98,8 @@ RSpec.describe Api::V1::WorkPublisher do
         content: [
           ActiveSupport::HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_paths, 'image.png'))),
           ActiveSupport::HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_paths, 'ipsum.pdf')))
-        ]
+        ],
+        publish: publish
       )
     end
 
@@ -99,6 +114,16 @@ RSpec.describe Api::V1::WorkPublisher do
 
     it 'does NOT create a User record for the depositor' do
       expect { new_work }.not_to change(User, :count)
+    end
+
+    context 'when publish is set to false' do
+      let!(:publish) { false }
+
+      it 'creates the work under the display name w/o publishing' do
+        expect { new_work }.to change(Actor, :count).by(1)
+        expect(new_work.latest_version).not_to be_published
+        expect(new_work.latest_version.creators.first.display_name).to eq(authorship[:display_name])
+      end
     end
   end
 
@@ -136,7 +161,7 @@ RSpec.describe Api::V1::WorkPublisher do
     end
   end
 
-  context 'when adding mulitple unidentified creators' do
+  context 'when adding multiple unidentified creators' do
     let(:first_creator) { attributes_for(:authorship) }
     let(:second_creator) { attributes_for(:authorship) }
     let(:third_creator) { attributes_for(:authorship) }
@@ -156,7 +181,8 @@ RSpec.describe Api::V1::WorkPublisher do
         depositor_access_id: depositor.user_id,
         content: [
           ActiveSupport::HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_paths, 'image.png')))
-        ]
+        ],
+        publish: publish
       )
     end
 
@@ -178,6 +204,21 @@ RSpec.describe Api::V1::WorkPublisher do
 
     it 'does NOT create any User records' do
       expect { new_work }.not_to change(User, :count)
+    end
+
+    context 'when publish is set to false' do
+      let!(:publish) { false }
+
+      it 'creates but does not publish the works' do
+        expect { new_work }.to change(Work, :count).by(1)
+        expect(new_work.latest_version).not_to be_published
+        expect(creators[0].display_name).to eq(first_creator[:display_name])
+        expect(creators[0].position).to eq(10)
+        expect(creators[1].display_name).to eq(second_creator[:display_name])
+        expect(creators[1].position).to eq(20)
+        expect(creators[2].display_name).to eq(third_creator[:display_name])
+        expect(creators[2].position).to eq(30)
+      end
     end
   end
 
@@ -234,7 +275,7 @@ RSpec.describe Api::V1::WorkPublisher do
 
   context 'without all the required metadata' do
     let(:publisher) do
-      described_class.call(metadata: {}, depositor_access_id: depositor.user_id, content: [])
+      described_class.call(metadata: {}, depositor_access_id: depositor.user_id, content: [], publish:)
     end
 
     it 'does NOT save the work' do
@@ -260,6 +301,29 @@ RSpec.describe Api::V1::WorkPublisher do
         "Work type can't be blank",
         'Versions rights is required to publish the work'
       )
+    end
+
+    context 'when publish is set to false' do
+      let!(:publish) { false }
+
+      it 'does NOT save the work' do
+        expect { new_work }.not_to change(Work, :count)
+      end
+
+      it 'does NOT create an Actor for the depositor' do
+        expect { new_work }.not_to change(Actor, :count)
+      end
+
+      it 'does NOT create a User record for the depositor' do
+        expect { new_work }.not_to change(User, :count)
+      end
+
+      it 'returns the work with errors' do
+        expect(new_work.errors.full_messages).to contain_exactly(
+          "Versions title can't be blank",
+          "Work type can't be blank"
+        )
+      end
     end
   end
 
@@ -315,7 +379,8 @@ RSpec.describe Api::V1::WorkPublisher do
         depositor_access_id: depositor.user_id,
         content: [
           ActiveSupport::HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_paths, 'image.png')))
-        ]
+        ],
+        publish:
       )
     end
 
@@ -327,6 +392,17 @@ RSpec.describe Api::V1::WorkPublisher do
       expect(new_work.work_type).to eq('dataset')
       expect(new_work.latest_published_version.metadata).to eq(work.metadata)
       expect(new_work.latest_published_version.file_version_memberships.map(&:title)).to contain_exactly('image.png')
+    end
+
+    context 'when publish is set to false' do
+      let!(:publish) { false }
+
+      it 'creates an unpublished, open access, embargoed work' do
+        expect(new_work).to be_open_access
+        expect(new_work).to be_embargoed
+        expect(new_work.versions.count).to eq(1)
+        expect(new_work.latest_version).not_to be_published
+      end
     end
   end
 
@@ -414,7 +490,8 @@ RSpec.describe Api::V1::WorkPublisher do
         content: [
           ActiveSupport::HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_paths, 'image.png'))),
           ActiveSupport::HashWithIndifferentAccess.new(file: fixture_file_upload(File.join(fixture_paths, 'ipsum.pdf')))
-        ]
+        ],
+        publish:
       )
     end
 
@@ -433,6 +510,17 @@ RSpec.describe Api::V1::WorkPublisher do
         'Psu access id missing-id was not found at Penn State',
         'Orcid id missing-orcid was not found in ORCiD'
       )
+    end
+
+    context 'when publish is set to false' do
+      let!(:publish) { false }
+
+      it 'returns errors as if publish were true' do
+        expect(publisher.errors.full_messages).to include(
+          'Psu access id missing-id was not found at Penn State',
+          'Orcid id missing-orcid was not found in ORCiD'
+        )
+      end
     end
   end
 

@@ -10,19 +10,20 @@ module Api
         publisher
       end
 
-      attr_reader :metadata, :depositor, :content, :permissions, :external_app
+      attr_reader :metadata, :depositor, :content, :permissions, :external_app, :publish
 
       # @param [ActionController::Parameters] metadata
       # @param [String] depositor
       # @param [Array<ActionController::Parameters>] content
       # @param [ActionController::Parameters] permissions
       # @param [ExternalApp] external_app
-      def initialize(metadata:, depositor_access_id:, content:, permissions: {}, external_app: nil)
+      def initialize(metadata:, depositor_access_id:, content:, permissions: {}, external_app: nil, publish: true)
         @metadata = metadata
         @depositor = BuildNewActor.call(psu_id: depositor_access_id)
         @external_app = external_app
         @content = content
         @permissions = permissions
+        @publish = publish
       end
 
       # @return [Work]
@@ -35,7 +36,7 @@ module Api
             work_version.file_resources.build(file: file[:file], deposited_at: file[:deposited_at])
           end
 
-          work_version.publish
+          work_version.publish if publish
           work_version.save!
           work.reload
         end
