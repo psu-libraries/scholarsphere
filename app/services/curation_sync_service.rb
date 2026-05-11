@@ -10,7 +10,7 @@ class CurationSyncService
     tasks = CurationTaskClient.find_all(@work.id)
     task_uuids = tasks.pluck('ID')
 
-    if task_uuids.exclude?(current_version_for_curation.uuid) && !admin_submitted?(current_version_for_curation)
+    if able_to_curate(task_uuids)
       CurationTaskClient.send_curation(current_version_for_curation.id, updated_version: updated_version(tasks))
     end
   rescue CurationTaskClient::CurationError => e
@@ -20,6 +20,13 @@ class CurationSyncService
   end
 
   private
+
+    def able_to_curate(task_uuids)
+      task_uuids.exclude?(current_version_for_curation.uuid) &&
+        !admin_submitted?(current_version_for_curation) &&
+        current_version_for_curation.sent_for_curation_at.nil? &&
+        !current_version_for_curation.remediated_version
+    end
 
     def current_version_for_curation
       if @work.latest_version.draft_curation_requested == true
