@@ -19,7 +19,7 @@ RSpec.describe Api::V1::IngestController do
   let(:json_response) { ActiveSupport::HashWithIndifferentAccess.new(response.parsed_body) }
 
   before do
-    allow(Api::V1::WorkPublisher).to receive(:call).and_call_original
+    allow(Api::V1::WorkCreator).to receive(:call).and_call_original
 
     request.headers[:'X-API-Key'] = api_token.token
   end
@@ -47,7 +47,7 @@ RSpec.describe Api::V1::IngestController do
         expect(response.body).to eq(
           "{\"message\":\"Work was successfully created\",\"url\":\"/resources/#{Work.last.uuid}\"}"
         )
-        expect(Api::V1::WorkPublisher).to have_received(:call).with(
+        expect(Api::V1::WorkCreator).to have_received(:call).with(
           a_hash_including(external_app: api_token.application)
         )
       end
@@ -227,7 +227,7 @@ RSpec.describe Api::V1::IngestController do
           "{\"message\":\"Work was successfully created\",\"url\":\"/resources/#{Work.last.uuid}\"," +
           "\"edit_url\":\"/dashboard/form/work_versions/#{Work.last.latest_version.id}/files\"}"
         )
-        expect(Api::V1::WorkPublisher).to have_received(:call).with(
+        expect(Api::V1::WorkCreator).to have_received(:call).with(
           a_hash_including(external_app: api_token.application)
         )
       end

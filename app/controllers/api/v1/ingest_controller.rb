@@ -51,7 +51,7 @@ module Api::V1
       end
 
       # @note Dig down into all the file version memberships and pull out any errors.
-      # ** THIS SHOULD PROBABLY BE MOVED INTO WorkPublisher **
+      # ** THIS SHOULD PROBABLY BE MOVED INTO WorkCreator **
       def file_errors
         work_creator
           .work
@@ -61,7 +61,7 @@ module Api::V1
       end
 
       def work_creator
-        @work_creator ||= WorkPublisher.call(
+        @work_creator ||= WorkCreator.call(
           metadata: metadata_params,
           depositor_access_id: depositor_params,
           content: content_params,

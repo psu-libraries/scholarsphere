@@ -374,7 +374,7 @@ Rails/DurationArithmetic:
     - 'spec/models/work_spec.rb'
     - 'spec/policies/work_version_policy_spec.rb'
     - 'spec/presenters/actor_stats_presenter_spec.rb'
-    - 'spec/services/api/v1/work_publisher_spec.rb'
+    - 'spec/services/api/v1/work_creator_spec.rb'
     - 'spec/support/shared/a_downloadable_work_version.rb'
     - 'spec/support/shared/a_resource_with_a_deposited_at_timestamp.rb'
 

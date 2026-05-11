@@ -5,7 +5,7 @@ require 'rails_helper'
 # @note When building the parameters for each test, using HashWithIndifferentAccess mimics the same behaviors as
 # ActionController::Parameters which the IngestController would be passing to the service.
 
-RSpec.describe Api::V1::WorkPublisher do
+RSpec.describe Api::V1::WorkCreator do
   include ActionDispatch::TestProcess::FixtureFile
 
   let(:user) { build(:user) }
