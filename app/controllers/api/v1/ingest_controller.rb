@@ -7,10 +7,14 @@ module Api::V1
     end
 
     def create
-      if publisher.errors.any?
+      if work_creator.errors.any?
         render json: unprocessable_entity_response, status: :unprocessable_entity
-      else
+        return
+      end
+      if publish_params
         render json: published_response, status: :ok
+      else
+        render json: draft_response, status: :created
       end
     end
 
@@ -19,14 +23,23 @@ module Api::V1
       def published_response
         {
           message: 'Work was successfully created',
-          url: resource_path(publisher.work.uuid)
+          url: resource_path(work_creator.work.uuid)
+        }
+      end
+
+      def draft_response
+        new_work = work_creator.work
+        {
+          message: 'Work was successfully created',
+          url: resource_path(new_work.uuid),
+          edit_url: dashboard_form_files_path(new_work.latest_version.id)
         }
       end
 
       def unprocessable_entity_response
         {
           message: 'Unable to complete the request',
-          errors: publisher.errors.full_messages + file_errors
+          errors: work_creator.errors.full_messages + file_errors
         }
       end
 
@@ -38,22 +51,23 @@ module Api::V1
       end
 
       # @note Dig down into all the file version memberships and pull out any errors.
-      # ** THIS SHOULD PROBABLY BE MOVED INTO WorkPublisher **
+      # ** THIS SHOULD PROBABLY BE MOVED INTO WorkCreator **
       def file_errors
-        publisher
+        work_creator
           .work
           .versions
           .flat_map { |version| version.file_version_memberships.to_a }
           .flat_map { |membership| membership.errors.full_messages }
       end
 
-      def publisher
-        @publisher ||= WorkPublisher.call(
+      def work_creator
+        @work_creator ||= WorkCreator.call(
           metadata: metadata_params,
           depositor_access_id: depositor_params,
           content: content_params,
           permissions: permission_params,
-          external_app: api_token.application
+          external_app: api_token.application,
+          publish: publish_params
         )
       end
 
@@ -119,6 +133,10 @@ module Api::V1
             discover_users: [],
             discover_group: []
           )
+      end
+
+      def publish_params
+        params.fetch(:publish, 'true') == 'true'
       end
   end
 end
