@@ -233,7 +233,7 @@ RSpec.describe Api::V1::IngestController do
       end
     end
 
-    context 'with missing false AND publish: false', vcr: VCRHelpers.depositor_cassette do
+    context 'with missing file AND publish: false', vcr: VCRHelpers.depositor_cassette do
       before do
         post :create, params: {
           metadata: {
