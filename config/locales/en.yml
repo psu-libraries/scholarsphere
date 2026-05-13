@@ -436,6 +436,11 @@ en:
               new URI.
           withdraw_versions:
             heading: Withdraw A Version
+        open_access_version:
+          permissions_not_found: >
+             We could not find sharing rules for your work. Please contact us for assistance.
+          other_version_preferred: >
+             We could not find sharing rules for the %{this_version} of this work, only the %{other_version}. To upload the %{other_version}, please return to the file upload page and upload your %{other_version} there. If you are sure you want to upload the %{this_version}, please contact us for assistance.
       update:
         success: "Work settings successfully updated."
       withdraw_versions_form:
@@ -477,7 +482,8 @@ en:
         publish: 
           button: Publish
           tooltip: Publish your work to make it publicly visible. Changes cannot be made to the published version, but you can create a new version if updates are needed.
-          blocked: Publishing blocked until Accessibility Results are finished processing
+          blocked_accessibility: Publishing blocked until Accessibility Results are finished processing
+          blocked_version: Publishing blocked due to version mismatch
         confirm:
           publish: Confirm publish
           request_curation: Confirm Request Curation

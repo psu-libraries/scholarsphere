@@ -8,8 +8,8 @@ class WorkVersion < ApplicationRecord
   include UpdatingDois
 
   OPEN_ACCESS_VERSIONS = %w[
-    accepted
-    published
+    acceptedVersion
+    publishedVersion
   ].freeze
 
   after_validation :remove_duplicate_errors
