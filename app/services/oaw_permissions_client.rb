@@ -9,13 +9,13 @@ class OawPermissionsClient
     publishedVersion
   ].freeze #will need to pull from translation
 
-  private
+      def all_permissions
+        @all_permissions ||= JSON.parse(permissions_response)['all_permissions']
+      rescue JSON::ParserError
+        nil
+      end
 
-    def all_permissions
-      @all_permissions ||= JSON.parse(permissions_response)['all_permissions']
-    rescue JSON::ParserError
-      nil
-    end
+  private
 
     def permissions_response
       Faraday.get(oaw_permissions_w_doi_url).body

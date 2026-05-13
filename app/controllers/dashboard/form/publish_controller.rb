@@ -11,6 +11,7 @@ module Dashboard
           .find(params[:id])
         authorize(@work_version)
         @resource = deposit_pathway.publish_form(current_user:)
+        @permissions = OawPermissionsService.new(@work_version.identifier.first)
         prevalidate
       end
 

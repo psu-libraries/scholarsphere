@@ -1,10 +1,21 @@
 <div class="form-wrapper">
   <div class="form-check mb-2">
-    <%= form.radio_button :open_access_version, 'accepted', class: 'form-check-input' %>
-    <%= form.label :open_access_version, 'Accepted Version', value: 'accepted', class: 'form-check-label' %>
+    <%= form.radio_button :open_access_version,
+                          'acceptedVersion',
+                          class: 'form-check-input',
+                          data: { action: 'change->open-access-version#refresh' } %>
+    <%= form.label :open_access_version, 'Accepted Version', value: 'acceptedVersion', class: 'form-check-label' %>
   </div>
+
   <div class="form-check mb-2">
-    <%= form.radio_button :open_access_version, 'published', class: 'form-check-input' %>
-    <%= form.label :open_access_version, 'Published Version', value: 'published', class: 'form-check-label' %>
+    <%= form.radio_button :open_access_version,
+                          'publishedVersion',
+                          class: 'form-check-input',
+                          data: { action: 'change->open-access-version#refresh' } %>
+    <%= form.label :open_access_version, 'Published Version', value: 'publishedVersion', class: 'form-check-label' %>
   </div>
+
+  <span data-target="open-access-version.versionMessage" class="text-danger"></span>
+</div>
+  
 </div>
