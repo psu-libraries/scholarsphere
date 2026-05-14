@@ -3,8 +3,8 @@
 require 'pdf-reader'
 
 class OpenAccessVersionGuesser
-  ACCEPTED_VERSION_VALUE = 'accepted_version'
-  PUBLISHED_VERSION_VALUE = 'published_version'
+  ACCEPTED_VERSION_VALUE = 'accepted'
+  PUBLISHED_VERSION_VALUE = 'published'
 
   def initialize(work_version:)
     @work_version = work_version
