@@ -54,9 +54,13 @@ RSpec.describe OpenAccessVersionGuesser do
     context 'when the PDF contains an arXiv watermark' do
       let(:pdf_reader) { instance_double(PDF::Reader, objects: { 8 => { A: { URI: 'https://arxiv.org/abs/1234' } } }) }
 
+      before do
+        allow(OpenAccessVersionScoreCalculator).to receive(:new)
+      end
+
       it 'returns accepted version without using the score calculator' do
-        expect(OpenAccessVersionScoreCalculator).not_to receive(:new)
         expect(guesser.version).to eq(OpenAccessVersionGuesser::ACCEPTED_VERSION_VALUE)
+        expect(OpenAccessVersionScoreCalculator).not_to have_received(:new)
       end
     end
 
@@ -104,7 +108,7 @@ RSpec.describe OpenAccessVersionGuesser do
 
     context 'when PDF::Reader raises a non-PDF error' do
       before do
-        allow(guesser).to receive(:pdf_reader).and_raise(RuntimeError)
+        allow(PDF::Reader).to receive(:new).and_raise(RuntimeError)
       end
 
       it 'raises the error' do

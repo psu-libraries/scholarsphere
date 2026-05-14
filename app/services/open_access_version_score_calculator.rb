@@ -101,7 +101,7 @@ class OpenAccessVersionScoreCalculator
       {
         year: work_version.published_date&.year,
         doi: work_version.identifier,
-        publisher: work_version.publishers.join('|')
+        publisher: work_version.publisher
       }
     end
 end
