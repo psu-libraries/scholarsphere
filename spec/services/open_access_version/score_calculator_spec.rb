@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe OpenAccessVersionScoreCalculator do
+RSpec.describe OpenAccessVersion::ScoreCalculator do
   # These tests use PDF file fixtures containing patterns/signals that indicate either
   # accepted or published versions.  The fixtures are crafted to test all the
   # permutations of logic in the OpenAccessVersionScoreCalculator class.
@@ -26,7 +26,7 @@ RSpec.describe OpenAccessVersionScoreCalculator do
   let(:pdf_reader) { instance_double(PDF::Reader, pages: pages) }
   let(:pages) { [page] }
   let(:page) { instance_double(PDF::Reader::Page, text: 'sample text body') }
-  let(:fixture_pdf_path) { Rails.root.join('spec/fixtures/pdf_check_published_versionS123456abc.pdf') }
+  let(:fixture_pdf_path) { Rails.root.join('spec/fixtures/open_access_version/pdf_check_published_versionS123456abc.pdf') }
   # Derive filename from fixture files
   let(:filename) { fixture_pdf_path.basename.to_s }
 
@@ -34,7 +34,7 @@ RSpec.describe OpenAccessVersionScoreCalculator do
     context 'when parsing real PDF fixtures' do
       context 'when pdf indicates published version' do
         # The filename contains a published version signal
-        let(:fixture_pdf_path) { Rails.root.join('spec/fixtures/open_access_version_guesser/pdf_check_published_versionS123456abc.pdf') }
+        let(:fixture_pdf_path) { Rails.root.join('spec/fixtures/open_access_version/pdf_check_published_versionS123456abc.pdf') }
         let(:pdf_reader) do
           PDF::Reader.new(fixture_pdf_path.to_s)
         end
@@ -46,7 +46,7 @@ RSpec.describe OpenAccessVersionScoreCalculator do
 
       context 'when pdf indicates accepted version' do
         # The filename contains an accepted version signal
-        let(:fixture_pdf_path) { Rails.root.join('spec/fixtures/open_access_version_guesser/pdf_check_accepted_version_postprint.pdf') }
+        let(:fixture_pdf_path) { Rails.root.join('spec/fixtures/open_access_version/pdf_check_accepted_version_postprint.pdf') }
         let(:pdf_reader) do
           PDF::Reader.new(fixture_pdf_path.to_s)
         end
@@ -57,7 +57,7 @@ RSpec.describe OpenAccessVersionScoreCalculator do
       end
 
       context 'when pdf indicates unknown version' do
-        let(:fixture_pdf_path) { Rails.root.join('spec/fixtures/open_access_version_guesser/pdf_check_unknown_version.pdf') }
+        let(:fixture_pdf_path) { Rails.root.join('spec/fixtures/open_access_version/pdf_check_unknown_version.pdf') }
         let(:pdf_reader) do
           PDF::Reader.new(fixture_pdf_path.to_s)
         end

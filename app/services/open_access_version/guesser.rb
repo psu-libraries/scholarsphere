@@ -2,7 +2,7 @@
 
 require 'pdf-reader'
 
-class OpenAccessVersionGuesser
+class OpenAccessVersion::Guesser
   ACCEPTED_VERSION_VALUE = 'accepted'
   PUBLISHED_VERSION_VALUE = 'published'
 
@@ -14,6 +14,12 @@ class OpenAccessVersionGuesser
     score = 0
 
     work_version.file_resources.each do |file_resource|
+      # exif_result = OpenAccessVersion::ExifChecker
+      #   .new(file_path: file_resource.file.path,
+      #        journal: work_version.journal).version
+
+      # return exif_result if exif_result.present?
+
       next unless pdf_file?(file_resource)
 
       filename = detected_filename(file_resource)
@@ -24,7 +30,7 @@ class OpenAccessVersionGuesser
           return ACCEPTED_VERSION_VALUE
         end
 
-        score += OpenAccessVersionScoreCalculator.new(
+        score += OpenAccessVersion::ScoreCalculator.new(
           work_version: work_version,
           pdf_reader: pdf_reader,
           filename: filename

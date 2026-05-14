@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class OpenAccessVersionScoreCalculator
+class OpenAccessVersion::ScoreCalculator
   def initialize(work_version:, pdf_reader:, filename:)
     @work_version = work_version
     @pdf_reader = pdf_reader
