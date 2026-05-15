@@ -4,13 +4,15 @@ require 'exiftool_vendored'
 
 module OpenAccessVersion
   class ExifChecker
+    PUBLISHED_VERSION_CREATORS = ['indesign', 'arbortext',
+                                  'elsevier', 'springer'].freeze
+    RIGHTS_EN_GB_TEXT = 'Not for further distribution unless allowed by the License ' \
+                        'or with the express written permission of Cambridge University Press.'
+
     def initialize(io:, publisher:)
       @io = io
       @publisher = publisher
     end
-
-    PUBLISHED_VERSION_CREATORS = ['indesign', 'arbortext', 'elsevier', 'springer'].freeze
-    RIGHTS_EN_GB_TEXT = 'Not for further distribution unless allowed by the License or with the express written permission of Cambridge University Press.'
 
     def version
       @version ||= determine_version
@@ -23,8 +25,9 @@ module OpenAccessVersion
         return VersionValues::ACCEPTED if accepted?
         return VersionValues::PUBLISHED if published?
 
-        # LaTeX formats papers like a published version, but it's often used for both accepted and published
-        # versions.  This makes it too confusing for our checker to determine, so default to nil.
+        # LaTeX formats papers like a published version, but it's often used
+        # for both accepted and published versions. This makes it too confusing
+        # for our checker to determine, so default to nil.
         nil if latex?
       end
 
@@ -76,19 +79,24 @@ module OpenAccessVersion
       end
 
       def rendition_class?
-        !exif[:rendition_class].nil? and exif[:rendition_class] == 'proof:pdf'
+        exif[:rendition_class] == 'proof:pdf'
       end
 
       def creator?
-        !exif[:creator].nil? and PUBLISHED_VERSION_CREATORS.any? { |c| exif[:creator].to_s.downcase.include? c }
+        includes_published_creator?(exif[:creator])
       end
 
       def creator_tool?
-        !exif[:creator_tool].nil? and PUBLISHED_VERSION_CREATORS.any? { |ct| exif[:creator_tool].to_s.downcase.include? ct }
+        includes_published_creator?(exif[:creator_tool])
       end
 
       def producer?
-        !exif[:producer].nil? and exif[:producer] == 'Project MUSE'
+        exif[:producer] == 'Project MUSE'
+      end
+
+      def includes_published_creator?(value)
+        normalized = value.to_s.downcase
+        PUBLISHED_VERSION_CREATORS.any? { |creator| normalized.include?(creator) }
       end
   end
 end

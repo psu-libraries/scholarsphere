@@ -6,7 +6,7 @@ module OpenAccessVersion
   class Guesser
     # The OpenAccessVersion::Guesser attempts to determine whether a WorkVersion's
     # PDF or docx file(s) indicate that the WorkVersion is an accepted or published version.
-    # It does this with three steps in preferential order:
+    # It does this with three steps in order of precedence:
     #   1. Check for version signals in the PDF's EXIF metadata
     #   2. Check for an arXiv watermark in the PDF's content which indicates an accepted version
     #   3. Check for version signals in the PDF's content and filename using the OpenAccessVersion::ScoreCalculator

@@ -105,11 +105,9 @@ module OpenAccessVersion
       def process_indication(indication, matched)
         return 0 unless matched
 
-        if ['publisher pdf', 'publishedversion'].include?(indication)
-          1
-        else
-          -1
-        end
+        return 1 if ['publisher pdf', 'publishedversion'].include?(indication)
+
+        -1
       end
 
       def wv_metadata
