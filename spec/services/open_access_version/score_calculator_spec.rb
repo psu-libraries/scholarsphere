@@ -6,7 +6,6 @@ RSpec.describe OpenAccessVersion::ScoreCalculator do
   # These tests use PDF file fixtures containing patterns/signals that indicate either
   # accepted or published versions.  The fixtures are crafted to test all the
   # permutations of logic in the OpenAccessVersionScoreCalculator class.
-
   subject(:calculator) do
     described_class.new(
       work_version: work_version,
@@ -26,14 +25,15 @@ RSpec.describe OpenAccessVersion::ScoreCalculator do
   let(:pdf_reader) { instance_double(PDF::Reader, pages: pages) }
   let(:pages) { [page] }
   let(:page) { instance_double(PDF::Reader::Page, text: 'sample text body') }
-  let(:fixture_pdf_path) { Rails.root.join('spec/fixtures/open_access_version/pdf_check_published_versionS123456abc.pdf') }
-  # Derive filename from fixture files
+  let(:fixture_pdf_path) { Rails.root.join('spec/fixtures/open_access_version/pdf_check_unknown_version.pdf') }
+  # Derive filename from fixture files since the filename is part of the scoring rules
   let(:filename) { fixture_pdf_path.basename.to_s }
 
   describe '#score' do
     context 'when parsing real PDF fixtures' do
       context 'when pdf indicates published version' do
         # The filename contains a published version signal
+        # The file text contains published version signals
         let(:fixture_pdf_path) { Rails.root.join('spec/fixtures/open_access_version/pdf_check_published_versionS123456abc.pdf') }
         let(:pdf_reader) do
           PDF::Reader.new(fixture_pdf_path.to_s)
@@ -46,6 +46,7 @@ RSpec.describe OpenAccessVersion::ScoreCalculator do
 
       context 'when pdf indicates accepted version' do
         # The filename contains an accepted version signal
+        # The file text contains accepted version signals
         let(:fixture_pdf_path) { Rails.root.join('spec/fixtures/open_access_version/pdf_check_accepted_version_postprint.pdf') }
         let(:pdf_reader) do
           PDF::Reader.new(fixture_pdf_path.to_s)
@@ -57,6 +58,8 @@ RSpec.describe OpenAccessVersion::ScoreCalculator do
       end
 
       context 'when pdf indicates unknown version' do
+        # The file text contains both accepted and published version signals
+        # which should cancel each other out
         let(:fixture_pdf_path) { Rails.root.join('spec/fixtures/open_access_version/pdf_check_unknown_version.pdf') }
         let(:pdf_reader) do
           PDF::Reader.new(fixture_pdf_path.to_s)
@@ -106,7 +109,8 @@ RSpec.describe OpenAccessVersion::ScoreCalculator do
 
     context 'when one page fails but another page succeeds' do
       let(:first_page) { instance_double(PDF::Reader::Page) }
-      let(:second_page) { instance_double(PDF::Reader::Page, text: 'found phrase') }
+      # Published version signal in second page
+      let(:second_page) { instance_double(PDF::Reader::Page, text: 'this is an open access article') }
       let(:pages) { [first_page, second_page] }
 
       before do

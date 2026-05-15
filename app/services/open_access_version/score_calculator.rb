@@ -1,6 +1,17 @@
 # frozen_string_literal: true
 
 class OpenAccessVersion::ScoreCalculator
+  # The OpenAccessVersion::ScoreCalculator attepts to determine whether
+  # a PDF's text content and filename indicate that the PDF is an
+  # accepted or published version.  It does this by applying a set of rules
+  # defined in a CSV file at config/open_access_version_guessing_rules.csv.
+  # These rules and this code are tightly coupled so both should be considered
+  # when making changes.
+
+  # A positive score indicates the PDF is a published version,
+  # a negative score indicates an accepted version, and a score
+  # of zero indicates an unknown version.
+
   def initialize(work_version:, pdf_reader:, filename:)
     @work_version = work_version
     @pdf_reader = pdf_reader
@@ -63,6 +74,9 @@ class OpenAccessVersion::ScoreCalculator
     def process_wts(what_to_search)
       return what_to_search.strip unless what_to_search.include?('<<') && what_to_search.include?('>>')
 
+      # The rules CSV will have matchers that look like <<placeholder>>
+      # to specify placeholders like <<year>> that will
+      # be replaced with metadata values from the WorkVersion.
       what_to_match = what_to_search.split('<<')[1].split('>>').first
       value = wv_metadata[what_to_match.downcase.to_sym]
       return what_to_search.strip if value.blank?
@@ -98,6 +112,7 @@ class OpenAccessVersion::ScoreCalculator
     end
 
     def wv_metadata
+      # WorkVersion metadata that can be used in the rules CSV placeholders
       {
         year: work_version.published_date&.year,
         doi: work_version.identifier,

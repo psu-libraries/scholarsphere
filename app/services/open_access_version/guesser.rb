@@ -3,6 +3,13 @@
 require 'pdf-reader'
 
 class OpenAccessVersion::Guesser
+  # The OpenAccessVersion::Guesser attempts to determine whether a WorkVersion's
+  # PDF file(s) indicate that the WorkVersion is an accepted or published version.
+  # It does this with three steps in preferential order:
+  #   1. Check for version signals in the PDF's EXIF metadata
+  #   2. Check for an arXiv watermark in the PDF's content which indicates an accepted version
+  #   3. Check for version signals in the PDF's content and filename using the OpenAccessVersion::ScoreCalculator
+
   ACCEPTED_VERSION_VALUE = 'accepted'
   PUBLISHED_VERSION_VALUE = 'published'
 
