@@ -9,7 +9,8 @@ module OpenAccessVersion
     # It does this with three steps in order of precedence:
     #   1. Check for version signals in the PDF's EXIF metadata
     #   2. Check for an arXiv watermark in the PDF's content which indicates an accepted version
-    #   3. Check for version signals in the PDF's content and filename using the OpenAccessVersion::ScoreCalculator
+    #   3. Check for version signals in the PDF's content and filename using
+    #      the OpenAccessVersion::ScoreCalculator
 
     def initialize(work_version:)
       @work_version = work_version
@@ -24,7 +25,8 @@ module OpenAccessVersion
         filename = detected_filename(file_resource)
 
         file_resource.file.open do |io|
-          exif_result = ExifChecker.new(io: io, publisher: work_version.publisher).version
+          exif_result = ExifChecker.new(io: io,
+                                        publisher: work_version.publisher).version
           return exif_result if exif_result.present?
 
           next unless file_resource.pdf?
@@ -63,9 +65,8 @@ module OpenAccessVersion
       end
 
       def contains_arxiv_watermark?(pdf_reader)
-        if !pdf_reader.nil? && !pdf_reader.objects[8].nil? && !pdf_reader.objects[8][:A].nil? && !pdf_reader.objects[8][:A][:URI].nil?
-          pdf_reader.objects[8][:A][:URI].include?('arxiv.org')
-        end
+        uri = pdf_reader&.objects&.[](8)&.[](:A)&.[](:URI)
+        uri&.include?('arxiv.org')
       end
 
       def detected_filename(file_resource)
