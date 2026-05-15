@@ -1,0 +1,76 @@
+# frozen_string_literal: true
+
+require 'pdf-reader'
+
+module OpenAccessVersion
+  class Guesser
+    # The OpenAccessVersion::Guesser attempts to determine whether a WorkVersion's
+    # PDF or docx file(s) indicate that the WorkVersion is an accepted or published version.
+    # It does this with three steps in order of precedence:
+    #   1. Check for version signals in the PDF's EXIF metadata
+    #   2. Check for an arXiv watermark in the PDF's content which indicates an accepted version
+    #   3. Check for version signals in the PDF's content and filename using
+    #      the OpenAccessVersion::ScoreCalculator
+
+    def initialize(work_version:)
+      @work_version = work_version
+    end
+
+    def version
+      score = 0
+
+      work_version.file_resources.each do |file_resource|
+        next unless file_resource.pdf? || file_resource.docx?
+
+        filename = detected_filename(file_resource)
+
+        file_resource.file.open do |io|
+          exif_result = ExifChecker.new(io: io,
+                                        publisher: work_version.publisher).version
+          return exif_result if exif_result.present?
+
+          next unless file_resource.pdf?
+
+          io.rewind
+          pdf_reader = pdf_reader(io)
+          if contains_arxiv_watermark?(pdf_reader)
+            return VersionValues::ACCEPTED
+          end
+
+          score += ScoreCalculator.new(
+            work_version: work_version,
+            pdf_reader: pdf_reader,
+            filename: filename
+          ).score
+        end
+      end
+
+      if score.positive?
+        VersionValues::PUBLISHED
+      elsif score.negative?
+        VersionValues::ACCEPTED
+      end
+    end
+
+    private
+
+      attr_reader :work_version
+
+      def pdf_reader(file)
+        PDF::Reader.new(file)
+      rescue PDF::Reader::MalformedPDFError,
+             PDF::Reader::InvalidObjectError,
+             PDF::Reader::EncryptedPDFError
+        nil
+      end
+
+      def contains_arxiv_watermark?(pdf_reader)
+        uri = pdf_reader&.objects&.[](8)&.[](:A)&.[](:URI)
+        uri&.include?('arxiv.org')
+      end
+
+      def detected_filename(file_resource)
+        file_resource.file&.original_filename.to_s
+      end
+  end
+end

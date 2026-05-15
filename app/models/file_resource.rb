@@ -7,6 +7,7 @@ class FileResource < ApplicationRecord
   include GeneratedUuids
 
   PDF_MIME_TYPE = 'application/pdf'
+  DOCX_MIME_TYPE = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 
   attr_writer :indexing_source
 
@@ -93,8 +94,8 @@ class FileResource < ApplicationRecord
   def thumbnailable?
     mime_type = file_data.dig('metadata', 'mime_type') || ''
     return true if mime_type.include?('image')
-    return true if mime_type == 'application/pdf'
-    return true if mime_type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    return true if mime_type == PDF_MIME_TYPE
+    return true if mime_type == DOCX_MIME_TYPE
 
     false
   end
@@ -103,8 +104,16 @@ class FileResource < ApplicationRecord
     file.mime_type&.starts_with?('image/')
   end
 
+  def pdf?
+    file.mime_type == PDF_MIME_TYPE
+  end
+
+  def docx?
+    file.mime_type == DOCX_MIME_TYPE
+  end
+
   def can_remediate?
-    file.mime_type == PDF_MIME_TYPE && !remediated_version && !auto_remediated_version
+    pdf? && !remediated_version && !auto_remediated_version
   end
 
   def latest_remediation_work_version_candidate
@@ -121,7 +130,7 @@ class FileResource < ApplicationRecord
   end
 
   def large_pdf?
-    file.mime_type == PDF_MIME_TYPE && page_count >= 100
+    pdf? && page_count >= 100
   end
 
   private

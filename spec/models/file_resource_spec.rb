@@ -386,6 +386,40 @@ RSpec.describe FileResource do
     end
   end
 
+  describe '#pdf?' do
+    subject { file_resource.pdf? }
+
+    context 'when the file is a PDF' do
+      let(:file_resource) { build(:file_resource, :pdf) }
+
+      it { is_expected.to be true }
+    end
+
+    context 'when the file is not a PDF' do
+      let(:file_resource) { build(:file_resource, :with_processed_image) }
+
+      it { is_expected.to be false }
+    end
+  end
+
+  describe '#docx?' do
+    subject { file_resource.docx? }
+
+    let(:file_resource) { build(:file_resource, :with_processed_image) }
+
+    context 'when the file is a DOCX' do
+      before do
+        allow(file_resource.file).to receive(:mime_type).and_return(FileResource::DOCX_MIME_TYPE)
+      end
+
+      it { is_expected.to be true }
+    end
+
+    context 'when the file is not a DOCX' do
+      it { is_expected.to be false }
+    end
+  end
+
   describe '#can_remediate?' do
     subject { file_resource.can_remediate? }
 
