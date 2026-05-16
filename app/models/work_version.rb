@@ -227,12 +227,17 @@ class WorkVersion < ApplicationRecord
     prevent_destroy = published? && !force_destroy
     raise ArgumentError, 'cannot delete published versions' if prevent_destroy
   end
-
+  # rubocop:disable Metrics/BlockLength
   aasm timestamps: true do
     state :draft, intial: true
     state :published, :withdrawn, :removed
 
     event :publish do
+      after_commit do
+        if work.open_access?
+          WorkPublishedWebhookJob.perform_later(work.uuid)
+        end
+      end
       transitions from: [:draft, :withdrawn],
                   to: :published,
                   after: Proc.new {
@@ -243,7 +248,9 @@ class WorkVersion < ApplicationRecord
                     self.reload_on_index = true
                   }
     end
+    # rubocop:enable Metrics/BlockLength
 
+    # Fields that can contain multiple values...
     event :withdraw do
       after_commit do
         if work.withdrawn?
