@@ -65,6 +65,7 @@ module OpenAccessVersion
       def subject?
         subjects = ['downloaded from', 'journal pre-proof']
         subjects << @publisher unless @publisher.nil?
+        subjects.flatten!
         if exif[:subject].present? && exif[:subject].is_a?(Array)
           subjects.any? { |s| exif[:subject]&.any? { |exs| exs.to_s.downcase.include? s } }
         elsif exif[:subject].present? && exif[:subject].is_a?(String)

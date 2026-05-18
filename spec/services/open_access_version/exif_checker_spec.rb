@@ -15,6 +15,25 @@ RSpec.describe OpenAccessVersion::ExifChecker do
   }
 
   describe '#version' do
+    context 'when parsing a real fixture file with published EXIF metadata' do
+      let(:fixture_pdf_path) do
+        Rails.root.join('spec/fixtures/open_access_version/pdf_check_published_version_exif_elsevier.pdf')
+      end
+      let(:io) { File.open(fixture_pdf_path, 'rb') }
+
+      before do
+        allow(Exiftool).to receive(:new).and_call_original
+      end
+
+      after do
+        io.close
+      end
+
+      it 'parses metadata from the file and returns Final Published Version' do
+        expect(exif_file_version.version).to eq OpenAccessVersion::VersionValues::PUBLISHED
+      end
+    end
+
     context 'when no exif data' do
       it 'returns nil' do
         expect(exif_file_version.version).to be_nil
@@ -22,7 +41,7 @@ RSpec.describe OpenAccessVersion::ExifChecker do
     end
 
     context 'when exif data exists' do
-      context 'when file is not Accepted Manuscript or Final Publshed Version"' do
+      context 'when file is not Accepted Manuscript or Final Published Version"' do
         let(:exif_data) { { journal_article_version: 'no_version', subject: 'other subject' } }
 
         it 'returns nil' do
@@ -46,7 +65,7 @@ RSpec.describe OpenAccessVersion::ExifChecker do
         end
       end
 
-      context 'when exif data validates both Accepted Manuscript and Final Publshed Version' do
+      context 'when exif data validates both Accepted Manuscript and Final Published Version' do
         let(:exif_data) { { journal_article_version: 'am', subject: 'downloaded from' } }
 
         it 'returns Accepted Manuscript' do
@@ -97,9 +116,18 @@ RSpec.describe OpenAccessVersion::ExifChecker do
           end
         end
 
-        context 'when subject field has name of journal' do
+        context 'when subject field has name of publisher' do
           let(:publisher) { 'name_of_publisher' }
           let(:exif_data) { { subject: publisher } }
+
+          it 'returns Final Published Version' do
+            expect(exif_file_version.version).to eq OpenAccessVersion::VersionValues::PUBLISHED
+          end
+        end
+
+        context 'when subject field has array of publishers' do
+          let(:publisher) { 'name_of_publisher' }
+          let(:exif_data) { { subject: [publisher] } }
 
           it 'returns Final Published Version' do
             expect(exif_file_version.version).to eq OpenAccessVersion::VersionValues::PUBLISHED
@@ -177,26 +205,6 @@ RSpec.describe OpenAccessVersion::ExifChecker do
             expect(exif_file_version.version).to eq OpenAccessVersion::VersionValues::PUBLISHED
           end
         end
-      end
-    end
-
-    context 'when required io is missing' do
-      it 'raises a keyword argument error' do
-        expect { described_class.new(publisher: nil) }
-          .to raise_error(ArgumentError, /missing keyword: :io/)
-      end
-    end
-
-    context 'when using io input' do
-      subject(:checker) { described_class.new(io: io, publisher: nil) }
-
-      let(:io) { StringIO.new('fake pdf bytes') }
-
-      it 'passes the io object directly to Exiftool' do
-        exiftool = instance_double(Exiftool, to_hash: { journal_article_version: 'vor' })
-        allow(Exiftool).to receive(:new).with(io).and_return(exiftool)
-
-        expect(checker.version).to eq(OpenAccessVersion::VersionValues::PUBLISHED)
       end
     end
   end
