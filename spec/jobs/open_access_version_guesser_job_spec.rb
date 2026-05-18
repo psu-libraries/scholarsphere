@@ -7,8 +7,8 @@ RSpec.describe OpenAccessVersionGuesserJob do
 
   let!(:work_version) { create(:work_version, open_access_version: nil) }
   let(:guessed_version) { OpenAccessVersion::VersionValues::PUBLISHED }
-  let(:guesser) { instance_double('OpenAccessVersionGuesser', version: guessed_version) }
-  let(:guesser_class) { class_double('OpenAccessVersionGuesser').as_stubbed_const }
+  let(:guesser) { instance_double('OpenAccessVersion::Guesser', version: guessed_version) }
+  let(:guesser_class) { class_double('OpenAccessVersion::Guesser').as_stubbed_const }
 
   describe '#perform' do
     before do

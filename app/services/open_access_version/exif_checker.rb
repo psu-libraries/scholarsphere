@@ -9,8 +9,8 @@ module OpenAccessVersion
     RIGHTS_EN_GB_TEXT = 'Not for further distribution unless allowed by the License ' \
                         'or with the express written permission of Cambridge University Press.'
 
-    def initialize(io:, publisher:)
-      @io = io
+    def initialize(file_path:, publisher:)
+      @file_path = file_path
       @publisher = Array(publisher)
     end
 
@@ -32,8 +32,7 @@ module OpenAccessVersion
     private
 
       def exif
-        @io.rewind if @io.respond_to?(:rewind)
-        @exif ||= Exiftool.new(@io).to_hash
+        @exif ||= Exiftool.new(@file_path).to_hash
       end
 
       def latex?

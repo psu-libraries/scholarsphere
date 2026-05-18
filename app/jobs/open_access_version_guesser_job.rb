@@ -5,7 +5,7 @@ class OpenAccessVersionGuesserJob < ApplicationJob
 
   def perform(work_version_id)
     work_version = WorkVersion.find(work_version_id)
-    version = OpenAccessVersionGuesser.new(work_version: work_version).version
+    version = OpenAccessVersion::Guesser.new(work_version: work_version).version
 
     work_version.update!(open_access_version: version)
   end

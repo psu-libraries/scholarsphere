@@ -23,27 +23,30 @@ module OpenAccessVersion
       work_version.file_resources.each do |file_resource|
         next unless file_resource.pdf? || file_resource.docx?
 
+        file_download = file_resource.file.download
+
+        exif_result = ExifChecker.new(file_path: file_download.path,
+                                      publisher: work_version.publisher).version
+
+        return exif_result if exif_result.present?
+
+        next unless file_resource.pdf?
+
+        pdf_reader = pdf_reader(file_download.path)
+
+        if contains_arxiv_watermark?(pdf_reader)
+          return VersionValues::ACCEPTED
+        end
+
         filename = detected_filename(file_resource)
 
-        file_resource.file.open do |io|
-          exif_result = ExifChecker.new(io: io,
-                                        publisher: work_version.publisher).version
-          return exif_result if exif_result.present?
+        score += ScoreCalculator.new(
+          work_version: work_version,
+          pdf_reader: pdf_reader,
+          filename: filename
+        ).score
 
-          next unless file_resource.pdf?
-
-          io.rewind
-          pdf_reader = pdf_reader(io)
-          if contains_arxiv_watermark?(pdf_reader)
-            return VersionValues::ACCEPTED
-          end
-
-          score += ScoreCalculator.new(
-            work_version: work_version,
-            pdf_reader: pdf_reader,
-            filename: filename
-          ).score
-        end
+        file_download.close!
       end
 
       if score.positive?

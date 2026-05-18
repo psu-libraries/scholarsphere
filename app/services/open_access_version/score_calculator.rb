@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'csv'
+
 module OpenAccessVersion
   class ScoreCalculator
     # The OpenAccessVersion::ScoreCalculator attempts to determine whether
@@ -113,9 +115,9 @@ module OpenAccessVersion
       def wv_metadata
         # WorkVersion metadata that can be used in the rules CSV placeholders
         {
-          year: work_version.published_date&.year,
-          doi: work_version.identifier,
-          publisher: work_version.publisher
+          year: Date.edtf(work_version.published_date).try(:year),
+          doi: work_version.identifier.join('|'),
+          publisher: work_version.publisher.join('|')
         }
       end
   end
