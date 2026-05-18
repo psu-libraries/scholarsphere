@@ -19,7 +19,7 @@ RSpec.describe Api::V1::IngestController do
   let(:json_response) { ActiveSupport::HashWithIndifferentAccess.new(response.parsed_body) }
 
   before do
-    allow(Api::V1::WorkPublisher).to receive(:call).and_call_original
+    allow(Api::V1::WorkCreator).to receive(:call).and_call_original
 
     request.headers[:'X-API-Key'] = api_token.token
   end
@@ -47,7 +47,7 @@ RSpec.describe Api::V1::IngestController do
         expect(response.body).to eq(
           "{\"message\":\"Work was successfully created\",\"url\":\"/resources/#{Work.last.uuid}\"}"
         )
-        expect(Api::V1::WorkPublisher).to have_received(:call).with(
+        expect(Api::V1::WorkCreator).to have_received(:call).with(
           a_hash_including(external_app: api_token.application)
         )
       end
@@ -199,6 +199,60 @@ RSpec.describe Api::V1::IngestController do
         expect(json_response[:message]).to eq('Unable to complete the request')
         expect(json_response[:errors]).to include(
           "Versions file resources can't be blank"
+        )
+      end
+    end
+
+    context 'with publish: false', vcr: VCRHelpers.depositor_cassette do
+      before do
+        post :create, params: {
+          metadata: {
+            title: metadata[:title],
+            work_type: Work::Types.default,
+            description: metadata[:description],
+            published_date: metadata[:published_date],
+            creators: [creator],
+            rights: metadata[:rights],
+            visibility: Permissions::Visibility::OPEN
+          },
+          depositor: depositor,
+          content: [{ file: fixture_file_upload(File.join(fixture_paths, 'image.png')) }],
+          publish: false
+        }
+      end
+
+      it 'creates a new work without publishing' do
+        expect(response).to be_created
+        expect(response.body).to eq(
+          "{\"message\":\"Work was successfully created\",\"url\":\"/resources/#{Work.last.uuid}\"," +
+          "\"edit_url\":\"/dashboard/form/work_versions/#{Work.last.latest_version.id}/files\"}"
+        )
+        expect(Api::V1::WorkCreator).to have_received(:call).with(
+          a_hash_including(external_app: api_token.application)
+        )
+      end
+    end
+
+    context 'with missing file AND publish: false', vcr: VCRHelpers.depositor_cassette do
+      before do
+        post :create, params: {
+          metadata: {
+            title: metadata[:title],
+            work_type: Work::Types.default,
+            description: metadata[:description],
+            published_date: metadata[:published_date],
+            creators: [creator]
+          },
+          depositor: depositor,
+          publish: false
+        }
+      end
+
+      it 'does not raise an error' do
+        expect(response).to be_created
+        expect(response.body).to eq(
+          "{\"message\":\"Work was successfully created\",\"url\":\"/resources/#{Work.last.uuid}\"," +
+          "\"edit_url\":\"/dashboard/form/work_versions/#{Work.last.latest_version.id}/files\"}"
         )
       end
     end
