@@ -4,21 +4,21 @@ import consumer from '../channels/consumer'
 export default class extends Controller {
   static targets = ['show_buttons', 'help_text'];
 
-connect () {
-  document.addEventListener('open-access:version-updated', this.handleVersionUpdate)
+  connect () {
+    document.addEventListener('open-access:version-updated', this.handleVersionUpdate)
 
-  consumer.subscriptions.create(
-    { channel: 'PublishStatusChannel' },
-    {
-      connected: () => {
-        this.renderPublishStatus()
-      },
-      received: (data) => {
-        this.updatePublishStatus(data)
+    consumer.subscriptions.create(
+      { channel: 'PublishStatusChannel' },
+      {
+        connected: () => {
+          this.renderPublishStatus()
+        },
+        received: (data) => {
+          this.updatePublishStatus(data)
+        }
       }
-    }
-  )
-}
+    )
+  }
 
   updatePublishStatus (data) {
     this.data.set('allowPublish', data.allow_publish)
@@ -34,7 +34,7 @@ connect () {
     const show = (allowPublish && versionAllowsPublish) || primaryAction === 'save_and_continue'
     this.show_buttonsTarget.classList.toggle('d-none', !show)
     this.help_textTarget.classList.toggle('d-none', show)
-     if (!show) {
+    if (!show) {
       const blockReason = !allowPublish ? 'accessibility' : 'version'
       this.help_textTarget.textContent =
         blockReason === 'version'
@@ -44,11 +44,11 @@ connect () {
   }
 
   disconnect() {
-  document.removeEventListener('open-access:version-updated', this.handleVersionUpdate)
-}
+    document.removeEventListener('open-access:version-updated', this.handleVersionUpdate)
+  }
 
-handleVersionUpdate = (event) => {
-  this.data.set('versionAllowed', event.detail.versionAllowed)
-  this.renderPublishStatus()
-}
+  handleVersionUpdate = (event) => {
+    this.data.set('versionAllowed', event.detail.versionAllowed)
+    this.renderPublishStatus()
+  }
 }
