@@ -7,11 +7,7 @@ class WorkVersion < ApplicationRecord
   include GeneratedUuids
   include UpdatingDois
 
-  OPEN_ACCESS_VERSIONS = %w[
-    accepted
-    published
-    unknown
-  ].freeze
+  OPEN_ACCESS_VERSIONS = OpenAccessVersion::VersionValues::ALL
 
   after_validation :remove_duplicate_errors
   before_save :reset_irrelevant_fields_if_work_type_changed

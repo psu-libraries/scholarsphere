@@ -5,5 +5,7 @@ module OpenAccessVersion
     ACCEPTED = 'accepted'
     PUBLISHED = 'published'
     UNKNOWN = 'unknown'
+
+    ALL = [ACCEPTED, PUBLISHED, UNKNOWN].freeze
   end
 end
