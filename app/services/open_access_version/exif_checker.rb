@@ -22,8 +22,8 @@ module OpenAccessVersion
       return VersionValues::PUBLISHED if published?
 
       # LaTeX formats papers like a published version, but it's often used
-      # for both accepted and published versions. This makes it too confusing
-      # for our checker to determine, so default to UNKNOWN.
+      # for both accepted and published versions. This makes it impossible to
+      # accurately determine the version from other checks, so default to UNKNOWN.
       return VersionValues::UNKNOWN if latex?
 
       nil
