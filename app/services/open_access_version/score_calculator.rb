@@ -2,7 +2,7 @@
 
 module OpenAccessVersion
   class ScoreCalculator
-    # The OpenAccessVersion::ScoreCalculator attepts to determine whether
+    # The OpenAccessVersion::ScoreCalculator attempts to determine whether
     # a PDF's text content and filename indicate that the PDF is an
     # accepted or published version.  It does this by applying a set of rules
     # defined in a CSV file at config/open_access_version_guessing_rules.csv.
