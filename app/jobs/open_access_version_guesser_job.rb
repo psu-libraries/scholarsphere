@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
-class OpenAccessVersionGuesserJob
-  include Sidekiq::Job
-
-  sidekiq_options queue: :default
+class OpenAccessVersionGuesserJob < ApplicationJob
+  queue_as :default
 
   def perform(work_version_id)
     work_version = WorkVersion.find(work_version_id)
