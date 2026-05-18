@@ -24,7 +24,6 @@ module OpenAccessVersion
         next unless file_resource.pdf? || file_resource.docx?
 
         file_download = file_resource.file.download
-
         exif_result = ExifChecker.new(file_path: file_download.path,
                                       publisher: work_version.publisher).version
 
@@ -33,19 +32,17 @@ module OpenAccessVersion
         next unless file_resource.pdf?
 
         pdf_reader = pdf_reader(file_download.path)
-
         if contains_arxiv_watermark?(pdf_reader)
           return VersionValues::ACCEPTED
         end
 
         filename = detected_filename(file_resource)
-
         score += ScoreCalculator.new(
           work_version: work_version,
           pdf_reader: pdf_reader,
           filename: filename
         ).score
-
+      ensure
         file_download.close!
       end
 
