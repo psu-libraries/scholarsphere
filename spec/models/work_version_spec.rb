@@ -48,6 +48,8 @@ RSpec.describe WorkVersion do
     it { is_expected.to have_jsonb_accessor(:degree).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:owner).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:manufacturer).of_type(:string) }
+    it { is_expected.to have_db_column(:open_access_version).of_type(:string) }
+    it { is_expected.to have_db_column(:open_access).of_type(:boolean) }
   end
 
   describe 'factory' do
@@ -274,6 +276,14 @@ RSpec.describe WorkVersion do
       it { is_expected.not_to allow_value('1').for(:version_name) }
       it { is_expected.not_to allow_value('1.0').for(:version_name) }
       it { is_expected.not_to allow_value('v1').for(:version_name) }
+    end
+
+    context 'with open_access_version' do
+      it { is_expected.to allow_value(nil).for(:open_access_version) }
+      it { is_expected.to allow_value('accepted').for(:open_access_version) }
+      it { is_expected.to allow_value('published').for(:open_access_version) }
+      it { is_expected.to allow_value('unknown').for(:open_access_version) }
+      it { is_expected.not_to allow_value('not_allowed').for(:open_access_version) }
     end
   end
 

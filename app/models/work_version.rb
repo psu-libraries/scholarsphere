@@ -174,8 +174,7 @@ class WorkVersion < ApplicationRecord
             allow_nil: true,
             inclusion: {
               in: OPEN_ACCESS_VERSIONS
-            },
-            if: :published?
+            }
 
   validates :rights,
             presence: true,
