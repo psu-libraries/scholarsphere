@@ -23,106 +23,123 @@ RSpec.describe OpenAccessVersion::Guesser do
   end
 
   describe '#version' do
-    context 'when score is positive' do
+    context 'when Exif check returns a version' do
+      let(:exif_version) { OpenAccessVersion::VersionValues::PUBLISHED }
+
       before do
-        calculator = instance_double(OpenAccessVersion::ScoreCalculator, score: 2)
-        allow(OpenAccessVersion::ScoreCalculator).to receive(:new).and_return(calculator)
+        exif_checker = instance_double(OpenAccessVersion::ExifChecker, version: exif_version)
+        allow(OpenAccessVersion::ExifChecker).to receive(:new).and_return(exif_checker)
       end
 
-      it 'returns published version' do
-        expect(guesser.version).to eq(OpenAccessVersion::VersionValues::PUBLISHED)
+      it 'returns the EXIF version' do
+        expect(guesser.version).to eq(exif_version)
       end
     end
 
-    context 'when score is negative' do
-      before do
-        calculator = instance_double(OpenAccessVersion::ScoreCalculator, score: -1)
-        allow(OpenAccessVersion::ScoreCalculator).to receive(:new).and_return(calculator)
+    context 'when EXIF check returns nil and no arXiv watermark is found' do
+      context 'when score is positive' do
+        before do
+          calculator = instance_double(OpenAccessVersion::ScoreCalculator, score: 2)
+          allow(OpenAccessVersion::ScoreCalculator).to receive(:new).and_return(calculator)
+        end
+
+        it 'returns published version' do
+          expect(guesser.version).to eq(OpenAccessVersion::VersionValues::PUBLISHED)
+        end
       end
 
-      it 'returns accepted version' do
-        expect(guesser.version).to eq(OpenAccessVersion::VersionValues::ACCEPTED)
-      end
-    end
+      context 'when score is negative' do
+        before do
+          calculator = instance_double(OpenAccessVersion::ScoreCalculator, score: -1)
+          allow(OpenAccessVersion::ScoreCalculator).to receive(:new).and_return(calculator)
+        end
 
-    context 'when score is zero' do
-      before do
-        calculator = instance_double(OpenAccessVersion::ScoreCalculator, score: 0)
-        allow(OpenAccessVersion::ScoreCalculator).to receive(:new).and_return(calculator)
-      end
-
-      it 'returns nil' do
-        expect(guesser.version).to be_nil
-      end
-    end
-
-    context 'when the PDF contains an arXiv watermark' do
-      let(:fixture_pdf_path) { Rails.root.join('spec/fixtures/open_access_version/arxiv_artifact_only.pdf') }
-      let(:pdf_reader) do
-        PDF::Reader.new(fixture_pdf_path.to_s)
+        it 'returns accepted version' do
+          expect(guesser.version).to eq(OpenAccessVersion::VersionValues::ACCEPTED)
+        end
       end
 
-      before do
-        allow(OpenAccessVersion::ScoreCalculator).to receive(:new)
+      context 'when score is zero' do
+        before do
+          calculator = instance_double(OpenAccessVersion::ScoreCalculator, score: 0)
+          allow(OpenAccessVersion::ScoreCalculator).to receive(:new).and_return(calculator)
+        end
+
+        it 'returns UNKNOWN' do
+          expect(guesser.version).to eq(OpenAccessVersion::VersionValues::UNKNOWN)
+        end
       end
 
-      it 'returns accepted version without using the score calculator' do
-        expect(guesser.version).to eq(OpenAccessVersion::VersionValues::ACCEPTED)
-        expect(OpenAccessVersion::ScoreCalculator).not_to have_received(:new)
-      end
-    end
+      context 'when multiple PDFs contribute score' do
+        let(:file_resources) { [file_resource, second_file_resource] }
+        let(:second_file_resource) { instance_double(FileResource, file: second_attached_file, pdf?: true, docx?: false) }
+        let(:second_attached_file) { instance_double(Shrine::UploadedFile, mime_type: FileResource::PDF_MIME_TYPE, original_filename: 'paper-2.pdf') }
 
-    context 'when multiple PDFs contribute score' do
-      let(:file_resources) { [file_resource, second_file_resource] }
-      let(:second_file_resource) { instance_double(FileResource, file: second_attached_file, pdf?: true, docx?: false) }
-      let(:second_attached_file) { instance_double(Shrine::UploadedFile, mime_type: FileResource::PDF_MIME_TYPE, original_filename: 'paper-2.pdf') }
+        before do
+          allow(second_attached_file).to receive(:open).and_yield(StringIO.new('fake-pdf-content-2'))
+          first_calculator = instance_double(OpenAccessVersion::ScoreCalculator, score: 2)
+          second_calculator = instance_double(OpenAccessVersion::ScoreCalculator, score: -3)
+          allow(OpenAccessVersion::ScoreCalculator).to receive(:new).and_return(first_calculator, second_calculator)
+        end
 
-      before do
-        allow(second_attached_file).to receive(:open).and_yield(StringIO.new('fake-pdf-content-2'))
-        first_calculator = instance_double(OpenAccessVersion::ScoreCalculator, score: 2)
-        second_calculator = instance_double(OpenAccessVersion::ScoreCalculator, score: -3)
-        allow(OpenAccessVersion::ScoreCalculator).to receive(:new).and_return(first_calculator, second_calculator)
-      end
-
-      it 'accumulates score across files' do
-        expect(guesser.version).to eq(OpenAccessVersion::VersionValues::ACCEPTED)
+        it 'accumulates score across files' do
+          expect(guesser.version).to eq(OpenAccessVersion::VersionValues::ACCEPTED)
+        end
       end
     end
 
-    context 'when file is not a PDF' do
-      let(:mime_type) { 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' }
-      let(:pdf) { false }
-      let(:docx) { true }
+    context 'when EXIF check returns nil' do
+      context 'when the PDF contains an arXiv watermark' do
+        let(:fixture_pdf_path) { Rails.root.join('spec/fixtures/open_access_version/arxiv_artifact_only.pdf') }
+        let(:pdf_reader) do
+          PDF::Reader.new(fixture_pdf_path.to_s)
+        end
 
-      before do
-        allow(OpenAccessVersion::ScoreCalculator).to receive(:new)
+        before do
+          allow(OpenAccessVersion::ScoreCalculator).to receive(:new)
+        end
+
+        it 'returns accepted version without using the score calculator' do
+          expect(guesser.version).to eq(OpenAccessVersion::VersionValues::ACCEPTED)
+          expect(OpenAccessVersion::ScoreCalculator).not_to have_received(:new)
+        end
       end
 
-      it 'skips score calculation for that file' do
-        expect(guesser.version).to be_nil
-        expect(OpenAccessVersion::ScoreCalculator).not_to have_received(:new)
-      end
-    end
+      context 'when the file is not a PDF' do
+        let(:mime_type) { 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' }
+        let(:pdf) { false }
+        let(:docx) { true }
 
-    context 'when PDF::Reader raises a malformed PDF error' do
-      before do
-        allow(PDF::Reader).to receive(:new).and_raise(PDF::Reader::MalformedPDFError)
-        calculator = instance_double(OpenAccessVersion::ScoreCalculator, score: 0)
-        allow(OpenAccessVersion::ScoreCalculator).to receive(:new).and_return(calculator)
-      end
+        before do
+          allow(OpenAccessVersion::ScoreCalculator).to receive(:new)
+        end
 
-      it 'returns nil when no positive or negative score is found' do
-        expect(guesser.version).to be_nil
-      end
-    end
-
-    context 'when PDF::Reader raises a non-PDF error' do
-      before do
-        allow(PDF::Reader).to receive(:new).and_raise(RuntimeError)
+        it 'skips arXiv check and score calculation for that file to return UNKNOWN' do
+          expect(guesser.version).to eq OpenAccessVersion::VersionValues::UNKNOWN
+          expect(OpenAccessVersion::ScoreCalculator).not_to have_received(:new)
+        end
       end
 
-      it 'raises the error' do
-        expect { guesser.version }.to raise_error(RuntimeError)
+      context 'when PDF::Reader raises a malformed PDF error' do
+        before do
+          allow(PDF::Reader).to receive(:new).and_raise(PDF::Reader::MalformedPDFError)
+          calculator = instance_double(OpenAccessVersion::ScoreCalculator, score: 0)
+          allow(OpenAccessVersion::ScoreCalculator).to receive(:new).and_return(calculator)
+        end
+
+        it 'returns UNKNOWN when no positive or negative score is found' do
+          expect(guesser.version).to eq OpenAccessVersion::VersionValues::UNKNOWN
+        end
+      end
+
+      context 'when PDF::Reader raises a non-PDF error' do
+        before do
+          allow(PDF::Reader).to receive(:new).and_raise(RuntimeError)
+        end
+
+        it 'raises the error' do
+          expect { guesser.version }.to raise_error(RuntimeError)
+        end
       end
     end
   end

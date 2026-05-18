@@ -174,14 +174,6 @@ RSpec.describe OpenAccessVersion::ExifChecker do
           end
         end
 
-        context 'when creator field is LaTeX' do
-          let(:exif_data) { { creator: 'LaTeX' } }
-
-          it 'returns nil' do
-            expect(exif_file_version.version).to eq nil
-          end
-        end
-
         context 'when creator_tool field is one of the PUBLISHED_VERSION_CREATORS value' do
           let(:exif_data) { { creator_tool: OpenAccessVersion::ExifChecker::PUBLISHED_VERSION_CREATORS.sample } }
 
@@ -190,19 +182,29 @@ RSpec.describe OpenAccessVersion::ExifChecker do
           end
         end
 
-        context 'when creator_tool field is LaTeX' do
-          let(:exif_data) { { creator_tool: 'LaTeX' } }
-
-          it 'returns nil' do
-            expect(exif_file_version.version).to eq nil
-          end
-        end
-
         context 'when producer field is "Project MUSE"' do
           let(:exif_data) { { producer: 'Project MUSE' } }
 
           it 'returns Final Published Version' do
             expect(exif_file_version.version).to eq OpenAccessVersion::VersionValues::PUBLISHED
+          end
+        end
+      end
+
+      context 'when LaTeX is detected' do
+        context 'when creator_tool field is LaTeX' do
+          let(:exif_data) { { creator_tool: 'LaTeX' } }
+
+          it 'returns UNKNOWN' do
+            expect(exif_file_version.version).to eq OpenAccessVersion::VersionValues::UNKNOWN
+          end
+        end
+
+        context 'when creator field is LaTeX' do
+          let(:exif_data) { { creator: 'LaTeX' } }
+
+          it 'returns UNKNOWN' do
+            expect(exif_file_version.version).to eq OpenAccessVersion::VersionValues::UNKNOWN
           end
         end
       end

@@ -49,6 +49,8 @@ module OpenAccessVersion
         VersionValues::PUBLISHED
       elsif score.negative?
         VersionValues::ACCEPTED
+      else
+        VersionValues::UNKNOWN
       end
     end
 

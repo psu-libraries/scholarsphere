@@ -10,6 +10,7 @@ class WorkVersion < ApplicationRecord
   OPEN_ACCESS_VERSIONS = %w[
     accepted
     published
+    unknown
   ].freeze
 
   after_validation :remove_duplicate_errors
