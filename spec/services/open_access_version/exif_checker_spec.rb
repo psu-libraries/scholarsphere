@@ -8,7 +8,7 @@ RSpec.describe OpenAccessVersion::ExifChecker do
   let(:io) { StringIO.new('fake pdf bytes') }
   let(:publisher) { nil }
   let(:exif_data) { nil }
-  let(:exif_tool) { double 'ExifTool', to_hash: exif_data }
+  let(:exif_tool) { instance_double 'Exiftool', to_hash: exif_data }
 
   before {
     allow(Exiftool).to receive(:new).and_return(exif_tool)

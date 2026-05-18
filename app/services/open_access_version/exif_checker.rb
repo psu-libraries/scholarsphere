@@ -15,21 +15,17 @@ module OpenAccessVersion
     end
 
     def version
-      @version ||= determine_version
+      return if exif.blank?
+      return VersionValues::ACCEPTED if accepted?
+      return VersionValues::PUBLISHED if published?
+
+      # LaTeX formats papers like a published version, but it's often used
+      # for both accepted and published versions. This makes it too confusing
+      # for our checker to determine, so default to nil.
+      nil if latex?
     end
 
     private
-
-      def determine_version
-        return if exif.blank?
-        return VersionValues::ACCEPTED if accepted?
-        return VersionValues::PUBLISHED if published?
-
-        # LaTeX formats papers like a published version, but it's often used
-        # for both accepted and published versions. This makes it too confusing
-        # for our checker to determine, so default to nil.
-        nil if latex?
-      end
 
       def exif
         @io.rewind if @io.respond_to?(:rewind)
