@@ -2,16 +2,16 @@
 <% selected_rights = @resource.open_access ? @permissions&.licence(@resource.open_access_version) : form.object.rights %>
 
 <%= render 'form_fields/select',
-             form: form,
-             attribute: :rights,
-             options_for_select: options_for_select(
-               WorkVersion::Licenses.options_for_select_box,
-               selected_rights
-             ),
-             aria_required: true,
-             disabled: @resource.open_access && !current_user.admin?,
-             include_blank: true,
-             data: { target: 'open-access-version.rights' } %>
+           form: form,
+           attribute: :rights,
+           options_for_select: options_for_select(
+             WorkVersion::Licenses.options_for_select_box,
+             selected_rights
+           ),
+           aria_required: true,
+           disabled: @resource.open_access && !current_user.admin?,
+           include_blank: true,
+           data: { target: 'open-access-version.rights' } %>
 </div>
 
 <%= form.fields_for :work do |work_form| %>
@@ -32,11 +32,11 @@
         <p><%= t('dashboard.works.edit.embargo.explanation') %></p>
 <% embargo_end_date = @resource.open_access ? @permissions&.embargo_end_date(@resource.open_access_version) : work_form.object.embargoed_until %>
 <%= render 'form_fields/date',
-                   form: work_form,
-                   attribute: :embargoed_until,
-                   value: embargo_end_date,
-                   readonly: @resource.open_access && !current_user.admin?,
-                   data: { target: 'open-access-version.embargo' } %>
+           form: work_form,
+           attribute: :embargoed_until,
+           value: embargo_end_date,
+           readonly: @resource.open_access && !current_user.admin?,
+           data: { target: 'open-access-version.embargo' } %>
       </div>
     <% end %>
 

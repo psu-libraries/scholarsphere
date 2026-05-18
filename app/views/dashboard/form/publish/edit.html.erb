@@ -11,13 +11,10 @@
      data-open-access-version-id="<%= @resource.id %>"
      data-open-access-version-accepted-version-rights="<%= @permissions.licence('acceptedVersion') %>"
      data-open-access-version-published-version-rights="<%= @permissions.licence('publishedVersion') %>"
-
-     data-open-access-version-accepted-version-statement="<%= @permissions.set_statement('acceptedVersion') %>"
-     data-open-access-version-published-version-statement="<%= @permissions.set_statement('publishedVersion') %>"
-
+     data-open-access-version-accepted-version-statement="<%= @permissions.publisher_statement('acceptedVersion') %>"
+     data-open-access-version-published-version-statement="<%= @permissions.publisher_statement('publishedVersion') %>"
      data-open-access-version-accepted-version-embargo="<%= @permissions.embargo_end_date('acceptedVersion') %>"
      data-open-access-version-published-version-embargo="<%= @permissions.embargo_end_date('publishedVersion') %>"
-     
      data-open-access-version-current-version="<%= @current_version || 'acceptedVersion' %>"
      data-open-access-version-other-version="<%= @other_version %>"
      data-open-access-version-versions-found="<%= @permissions.versions_found?.to_json %>"

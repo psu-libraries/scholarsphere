@@ -7,9 +7,9 @@ class WorkVersion < ApplicationRecord
   include GeneratedUuids
   include UpdatingDois
 
-  OPEN_ACCESS_VERSIONS = %w[
-    acceptedVersion
-    publishedVersion
+  OPEN_ACCESS_VERSIONS = [
+    I18n.t('dashboard.works.edit.open_access_version.accepted_version'),
+    I18n.t('dashboard.works.edit.open_access_version.published_version')
   ].freeze
 
   after_validation :remove_duplicate_errors

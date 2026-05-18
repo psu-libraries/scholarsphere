@@ -2,14 +2,11 @@
 
 class OawPermissionsService < OawPermissionsClient
   def initialize(doi)
-    # raise InvalidVersion if VALID_VERSIONS.exclude?(version)
-
     super()
     @doi = doi
-    # @version = version
   end
 
-  def set_statement(version)
+  def publisher_statement(version)
     this_version(version)['deposit_statement'].presence
   end
 
