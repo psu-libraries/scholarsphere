@@ -11,7 +11,7 @@ module OpenAccessVersion
 
     def initialize(io:, publisher:)
       @io = io
-      @publisher = publisher
+      @publisher = Array(publisher)
     end
 
     def version
