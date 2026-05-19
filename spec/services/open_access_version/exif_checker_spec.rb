@@ -1,14 +1,26 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require 'tempfile'
 
 RSpec.describe OpenAccessVersion::ExifChecker do
-  subject(:exif_file_version) { described_class.new(io: io, publisher: publisher) }
+  subject(:exif_file_version) { described_class.new(file_path: file_path, publisher: publisher) }
 
-  let(:io) { StringIO.new('fake pdf bytes') }
+  let(:tempfile) do
+    Tempfile.new(['exif_checker', '.pdf']).tap do |f|
+      f.binmode
+      f.write('fake pdf bytes')
+      f.flush
+    end
+  end
+  let(:file_path) { tempfile.path }
   let(:publisher) { nil }
   let(:exif_data) { nil }
   let(:exif_tool) { instance_double 'Exiftool', to_hash: exif_data }
+
+  after do
+    tempfile.close!
+  end
 
   before {
     allow(Exiftool).to receive(:new).and_return(exif_tool)
@@ -19,14 +31,10 @@ RSpec.describe OpenAccessVersion::ExifChecker do
       let(:fixture_pdf_path) do
         Rails.root.join('spec/fixtures/open_access_version/pdf_check_published_version_exif_elsevier.pdf')
       end
-      let(:io) { File.open(fixture_pdf_path, 'rb') }
+      let(:file_path) { fixture_pdf_path }
 
       before do
         allow(Exiftool).to receive(:new).and_call_original
-      end
-
-      after do
-        io.close
       end
 
       it 'parses metadata from the file and returns Final Published Version' do

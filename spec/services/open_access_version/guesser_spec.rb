@@ -13,10 +13,10 @@ RSpec.describe OpenAccessVersion::Guesser do
   let(:pdf) { true }
   let(:docx) { false }
   let(:pdf_reader) { instance_double(PDF::Reader, objects: {}) }
-  let(:file_io) { StringIO.new('fake-pdf-content') }
+  let(:file_download) { instance_double(Tempfile, path: '/tmp/fake-pdf-content.pdf', close!: nil) }
 
   before do
-    allow(attached_file).to receive(:open).and_yield(file_io)
+    allow(attached_file).to receive(:download).and_return(file_download)
     allow(PDF::Reader).to receive(:new).and_return(pdf_reader)
     exif_checker = instance_double(OpenAccessVersion::ExifChecker, version: nil)
     allow(OpenAccessVersion::ExifChecker).to receive(:new).and_return(exif_checker)
@@ -74,9 +74,10 @@ RSpec.describe OpenAccessVersion::Guesser do
         let(:file_resources) { [file_resource, second_file_resource] }
         let(:second_file_resource) { instance_double(FileResource, file: second_attached_file, pdf?: true, docx?: false) }
         let(:second_attached_file) { instance_double(Shrine::UploadedFile, mime_type: FileResource::PDF_MIME_TYPE, original_filename: 'paper-2.pdf') }
+        let(:second_file_download) { instance_double(Tempfile, path: '/tmp/fake-pdf-content-2.pdf', close!: nil) }
 
         before do
-          allow(second_attached_file).to receive(:open).and_yield(StringIO.new('fake-pdf-content-2'))
+          allow(second_attached_file).to receive(:download).and_return(second_file_download)
           first_calculator = instance_double(OpenAccessVersion::ScoreCalculator, score: 2)
           second_calculator = instance_double(OpenAccessVersion::ScoreCalculator, score: -3)
           allow(OpenAccessVersion::ScoreCalculator).to receive(:new).and_return(first_calculator, second_calculator)
@@ -91,8 +92,9 @@ RSpec.describe OpenAccessVersion::Guesser do
     context 'when EXIF check returns nil' do
       context 'when the PDF contains an arXiv watermark' do
         let(:fixture_pdf_path) { Rails.root.join('spec/fixtures/open_access_version/arxiv_artifact_only.pdf') }
+        let(:file_download) { instance_double(Tempfile, path: fixture_pdf_path.to_s, close!: nil) }
         let(:pdf_reader) do
-          PDF::Reader.new(fixture_pdf_path.to_s)
+          PDF::Reader.new(file_download.path)
         end
 
         before do

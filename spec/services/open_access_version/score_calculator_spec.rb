@@ -15,12 +15,10 @@ RSpec.describe OpenAccessVersion::ScoreCalculator do
   end
 
   let(:work_version) do
-    instance_double(
-      WorkVersion,
-      published_date: Date.new(2000, 1, 1),
-      identifier: 'https://doi.org/10.1234/1234',
-      publisher: "Jerry's Publishing Company"
-    )
+    create(:work_version,
+           published_date: Date.new(2000, 1, 1),
+           identifier: 'https://doi.org/10.1234/1234',
+           publisher: "Jerry's Publishing Company")
   end
   let(:pdf_reader) { instance_double(PDF::Reader, pages: pages) }
   let(:pages) { [page] }
