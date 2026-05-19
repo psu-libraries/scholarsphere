@@ -1,6 +1,10 @@
 <div class="form-wrapper">
 <% selected_rights = @resource.open_access ? @permissions&.licence(@resource.open_access_version) : form.object.rights %>
+<% lock_open_access_fields = @resource.open_access && !current_user.admin? %>
 
+<% if lock_open_access_fields %>
+  <%= hidden_field_tag 'work_version[rights]', selected_rights, id: 'work_version_rights_hidden' %>
+<% end %>
 <%= render 'form_fields/select',
            form: form,
            attribute: :rights,
@@ -9,7 +13,7 @@
              selected_rights
            ),
            aria_required: true,
-           disabled: @resource.open_access && !current_user.admin?,
+           disabled: lock_open_access_fields,
            include_blank: true,
            data: { target: 'open-access-version.rights' } %>
 </div>

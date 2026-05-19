@@ -43,9 +43,9 @@ export default class extends Controller {
     }
   }
 
-  disconnect() {
-    document.removeEventListener('open-access:version-updated', this.handleVersionUpdate)
-  }
+  // disconnect() {
+  //   document.removeEventListener('open-access:version-updated', this.handleVersionUpdate)
+  // }
 
   handleVersionUpdate = (event) => {
     this.data.set('versionAllowed', event.detail.versionAllowed)

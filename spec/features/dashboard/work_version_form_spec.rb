@@ -2119,7 +2119,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
             visit dashboard_form_publish_path(work_version)
 
             expect(page).to have_no_button('Publish')
-            expect(page).to have_content(I18n.t!('dashboard.form.actions.publish.blocked'))
+            expect(page).to have_content(I18n.t!('dashboard.form.actions.publish.blocked_accessibility'))
           end
         end
       end
@@ -2257,12 +2257,12 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).to have_field('work_version_publisher_statement', readonly: true)
         expect(page).to have_field('work_version_rights', disabled: true)
         expect(page).to have_field('work_version_work_attributes_embargoed_until', readonly: true)
-        expect(page).to have_field('work_version_open_access_version_accepted')
-        expect(page).to have_field('work_version_open_access_version_published')
+        expect(page).to have_field('work_version_open_access_version_acceptedversion')
+        expect(page).to have_field('work_version_open_access_version_publishedversion')
 
         choose 'Accepted Version'
         click_on 'Save Draft & Exit'
-        expect(work_version.reload.open_access_version).to eq 'accepted'
+        expect(work_version.reload.open_access_version).to eq 'acceptedVersion'
       end
     end
 
@@ -2275,8 +2275,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).to have_field('work_version_publisher_statement')
         expect(page).to have_field('work_version_rights')
         expect(page).to have_field('work_version_work_attributes_embargoed_until')
-        expect(page).to have_field('work_version_open_access_version_accepted')
-        expect(page).to have_field('work_version_open_access_version_published')
+        expect(page).to have_field('work_version_open_access_version_acceptedversion')
+        expect(page).to have_field('work_version_open_access_version_publishedversion')
       end
     end
 
@@ -2289,8 +2289,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).to have_field('work_version_publisher_statement')
         expect(page).to have_field('work_version_rights')
         expect(page).to have_field('work_version_work_attributes_embargoed_until')
-        expect(page).to have_no_field('work_version_open_access_version_accepted')
-        expect(page).to have_no_field('work_version_open_access_version_published')
+        expect(page).to have_no_field('work_version_open_access_version_acceptedversion')
+        expect(page).to have_no_field('work_version_open_access_version_publishedversion')
       end
     end
   end
