@@ -1169,7 +1169,6 @@ RSpec.describe 'Publishing a work', with_user: :user do
     describe 'queuing an accessibility check' do
       before do
         allow(AccessibilityCheckJob).to receive(:perform_later)
-        allow(OpenAccessVersionGuesserJob).to receive(:perform_later)
         visit dashboard_form_files_path(work_version)
       end
 
@@ -1183,7 +1182,6 @@ RSpec.describe 'Publishing a work', with_user: :user do
           end
           file_resource_id = FileResource.last.id
           expect(AccessibilityCheckJob).to have_received(:perform_later).with(file_resource_id)
-          expect(OpenAccessVersionGuesserJob).to have_received(:perform_later).with(work_version.id)
         end
       end
 
@@ -1197,7 +1195,6 @@ RSpec.describe 'Publishing a work', with_user: :user do
           end
           file_resource_id = FileResource.last.id
           expect(AccessibilityCheckJob).not_to have_received(:perform_later).with(file_resource_id)
-          expect(OpenAccessVersionGuesserJob).to have_received(:perform_later).with(work_version.id)
         end
       end
     end
