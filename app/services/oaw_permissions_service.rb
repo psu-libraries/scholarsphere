@@ -3,7 +3,8 @@
 class OawPermissionsService < OawPermissionsClient
   def initialize(doi)
     super()
-    @doi = doi
+
+    @doi = doi.to_s.sub(%r{^https?://doi\.org/}, '')
   end
 
   def publisher_statement(version)
