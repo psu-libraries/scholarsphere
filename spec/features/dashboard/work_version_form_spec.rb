@@ -2239,11 +2239,33 @@ RSpec.describe 'Publishing a work', with_user: :user do
     let(:work) { create(:work, work_type: 'article', versions_count: 1, has_draft: true) }
     let(:work_version) { work.versions.first }
     let(:user) { work_version.work.depositor.user }
+    let(:permissions) {
+      [{
+        'version' => 'acceptedVersion',
+        'deposit_statement' => 'Accepted version statement',
+        'embargo_end' => '2011-08-31',
+        'licence' => 'cc-by-nc-nd'
+      },
+       {
+         'version' => 'publishedVersion',
+         'deposit_statement' => 'Published version statement',
+         'embargo_end' => '2012-08-31',
+         'licence' => 'cc-by'
+       }]}
 
     before do
-      work_version.update(open_access: true)
+      work_version.update(open_access: true, identifier: ['10.1234/abc123'])
+
       @original_secret = ENV['ENABLE_OPEN_ACCESS_FEATURE']
       ENV['ENABLE_OPEN_ACCESS_FEATURE'] = 'true'
+
+      response_body = {
+        all_permissions: permissions
+      }.to_json
+
+      faraday_response = instance_double(Faraday::Response, body: response_body)
+
+      allow(Faraday).to receive(:get).and_return(faraday_response)
     end
 
     after do
@@ -2251,18 +2273,73 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
 
     context 'when work type is open access scholarly work' do
-      it 'disables autopopulated fields' do
+      it 'disables and autopopulates permissions fields' do
         visit dashboard_form_publish_path(work_version)
+
         expect(page).to have_field('open_access_checkbox', type: 'checkbox', disabled: true)
         expect(page).to have_field('work_version_publisher_statement', readonly: true)
         expect(page).to have_field('work_version_rights', disabled: true)
         expect(page).to have_field('work_version_work_attributes_embargoed_until', readonly: true)
         expect(page).to have_field('work_version_open_access_version_acceptedversion')
         expect(page).to have_field('work_version_open_access_version_publishedversion')
+        choose 'Published Version'
+
+        expect(page).to have_field('work_version_publisher_statement', with: 'Published version statement', readonly: true)
+        expect(page).to have_css("input#work_version_rights_hidden[value='https://creativecommons.org/licenses/by/4.0/']", visible: :hidden)
+        expect(page).to have_field('work_version_work_attributes_embargoed_until', with: '2012-08-31', readonly: true)
+        expect(page).to have_button('Publish')
 
         choose 'Accepted Version'
+        expect(page).to have_field('work_version_publisher_statement', with: 'Accepted version statement', readonly: true)
+        expect(page).to have_css("input#work_version_rights_hidden[value='https://creativecommons.org/licenses/by-nc-nd/4.0/']", visible: :hidden)
+        expect(page).to have_field('work_version_work_attributes_embargoed_until', with: '2011-08-31', readonly: true)
+        expect(page).to have_button('Publish')
         click_on 'Save Draft & Exit'
         expect(work_version.reload.open_access_version).to eq 'acceptedVersion'
+        expect(work_version.publisher_statement).to eq 'Accepted version statement'
+        expect(work_version.rights).to eq 'https://creativecommons.org/licenses/by-nc-nd/4.0/'
+        expect(work_version.embargoed_until).to eq Time.zone.local(2011, 8, 31)
+      end
+
+      context 'when only one version of permissions is available' do
+        let(:permissions) {
+          [{
+            'version' => 'publishedVersion',
+            'deposit_statement' => 'Published version statement',
+            'embargo_end' => '2012-08-31',
+            'licence' => 'cc-by'
+          }]
+        }
+
+        it 'displays an error message when the other version is selected and blocks publish' do
+          visit dashboard_form_publish_path(work_version)
+
+          choose 'Accepted Version'
+
+          expect(page).to have_content(I18n.t('dashboard.works.edit.open_access_version.other_version_preferred', this_version: 'accepted version', other_version: 'published version'))
+          expect(page).to have_field('work_version_publisher_statement', with: nil, readonly: true)
+          expect(page).to have_css("input#work_version_rights_hidden[value='']", visible: :hidden)
+          expect(page).to have_field('work_version_work_attributes_embargoed_until', with: nil, readonly: true)
+          expect(page).to have_no_button('Publish')
+          expect(page).to have_content(I18n.t('dashboard.form.actions.publish.blocked_version'))
+        end
+      end
+
+      context 'when no permissions are found' do
+        let(:permissions) { [] }
+
+        it 'displays an error message when a version is selected and blocks publish' do
+          visit dashboard_form_publish_path(work_version)
+
+          choose 'Accepted Version'
+
+          expect(page).to have_content(I18n.t('dashboard.works.edit.open_access_version.permissions_not_found'))
+          expect(page).to have_field('work_version_publisher_statement', with: nil, readonly: true)
+          expect(page).to have_css("input#work_version_rights_hidden[value='']", visible: :hidden)
+          expect(page).to have_field('work_version_work_attributes_embargoed_until', with: nil, readonly: true)
+          expect(page).to have_no_button('Publish')
+          expect(page).to have_content(I18n.t('dashboard.form.actions.publish.blocked_version'))
+        end
       end
     end
 
@@ -2291,6 +2368,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).to have_field('work_version_work_attributes_embargoed_until')
         expect(page).to have_no_field('work_version_open_access_version_acceptedversion')
         expect(page).to have_no_field('work_version_open_access_version_publishedversion')
+        expect(page).to have_button('Publish')
       end
     end
   end
