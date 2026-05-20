@@ -92,7 +92,7 @@ RSpec.describe OpenAccessVersion::ScoreCalculator do
         allow(File).to receive(:exist?).and_return(false)
       end
 
-      it 'raises a clear error' do
+      it 'raises an error' do
         expect { calculator.score }
           .to raise_error(RuntimeError, 'Error: config/open_access_version_guessing_rules.csv does not exist or cannot be read.')
       end

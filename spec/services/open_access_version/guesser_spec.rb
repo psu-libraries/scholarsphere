@@ -8,8 +8,7 @@ RSpec.describe OpenAccessVersion::Guesser do
   let(:work_version) { instance_double(WorkVersion, file_resources: file_resources, publisher: nil) }
   let(:file_resources) { [file_resource] }
   let(:file_resource) { instance_double(FileResource, file: attached_file, pdf?: pdf, docx?: docx) }
-  let(:attached_file) { instance_double(Shrine::UploadedFile, mime_type: mime_type, original_filename: 'paper.pdf') }
-  let(:mime_type) { FileResource::PDF_MIME_TYPE }
+  let(:attached_file) { instance_double(Shrine::UploadedFile, original_filename: 'paper.pdf') }
   let(:pdf) { true }
   let(:docx) { false }
   let(:pdf_reader) { instance_double(PDF::Reader, objects: {}) }
@@ -73,7 +72,7 @@ RSpec.describe OpenAccessVersion::Guesser do
       context 'when multiple PDFs contribute score' do
         let(:file_resources) { [file_resource, second_file_resource] }
         let(:second_file_resource) { instance_double(FileResource, file: second_attached_file, pdf?: true, docx?: false) }
-        let(:second_attached_file) { instance_double(Shrine::UploadedFile, mime_type: FileResource::PDF_MIME_TYPE, original_filename: 'paper-2.pdf') }
+        let(:second_attached_file) { instance_double(Shrine::UploadedFile, original_filename: 'paper-2.pdf') }
         let(:second_file_download) { instance_double(Tempfile, path: '/tmp/fake-pdf-content-2.pdf', close!: nil) }
 
         before do
@@ -108,7 +107,6 @@ RSpec.describe OpenAccessVersion::Guesser do
       end
 
       context 'when the file is not a PDF' do
-        let(:mime_type) { 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' }
         let(:pdf) { false }
         let(:docx) { true }
 

@@ -405,17 +405,15 @@ RSpec.describe FileResource do
   describe '#docx?' do
     subject { file_resource.docx? }
 
-    let(:file_resource) { build(:file_resource, :with_processed_image) }
-
     context 'when the file is a DOCX' do
-      before do
-        allow(file_resource.file).to receive(:mime_type).and_return(FileResource::DOCX_MIME_TYPE)
-      end
+      let(:file_resource) { build(:file_resource, :doc) }
 
       it { is_expected.to be true }
     end
 
     context 'when the file is not a DOCX' do
+      let(:file_resource) { build(:file_resource, :with_processed_image) }
+
       it { is_expected.to be false }
     end
   end

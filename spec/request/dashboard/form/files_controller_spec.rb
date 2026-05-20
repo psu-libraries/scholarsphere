@@ -7,7 +7,7 @@ RSpec.describe Dashboard::Form::FilesController, type: :request do
     let(:work_version) { create(:work_version, :draft, open_access: open_access) }
     let(:user) { work_version.depositor.user }
     let(:open_access) { true }
-    let(:request_params) { { work_version: { ignored: '1' } } }
+    let(:request_params) { { work_version: { id: work_version.id } } }
 
     before do
       allow(OpenAccessVersionGuesserJob).to receive(:perform_later)
