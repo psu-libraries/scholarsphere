@@ -8,5 +8,8 @@ class OpenAccessVersionGuesserJob < ApplicationJob
     version = OpenAccessVersion::Guesser.new(work_version: work_version).version
 
     work_version.update!(open_access_version: version)
+  rescue StandardError => e
+    work_version.update!(open_access_version: OpenAccessVersion::VersionValues::UNKNOWN)
+    raise e
   end
 end

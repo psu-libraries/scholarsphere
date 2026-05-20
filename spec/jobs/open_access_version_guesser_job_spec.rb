@@ -22,20 +22,22 @@ RSpec.describe OpenAccessVersionGuesserJob do
       expect(work_version.reload.open_access_version).to eq guessed_version
     end
 
-    context 'when the guesser returns nil' do
-      let(:guessed_version) { nil }
+    context 'when the guesser raises an error' do
+      before do
+        allow(guesser).to receive(:version).and_raise(NoMethodError, 'Undefined method')
+      end
 
-      it 'persists nil as the open access version' do
-        job.perform(work_version.id)
+      it 'updates the open access version to unknown and raises the error' do
+        expect { job.perform(work_version.id) }.to raise_error(NoMethodError, 'Undefined method')
 
-        expect(work_version.reload.open_access_version).to be_nil
+        expect(work_version.reload.open_access_version).to eq(OpenAccessVersion::VersionValues::UNKNOWN)
       end
     end
   end
 
   describe 'sidekiq options' do
     it 'uses the default queue' do
-      expect(described_class.get_sidekiq_options['queue']).to eq(:default)
+      expect(described_class.get_sidekiq_options['queue']).to eq('default')
     end
   end
 end
