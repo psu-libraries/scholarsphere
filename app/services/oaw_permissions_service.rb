@@ -21,14 +21,6 @@ class OawPermissionsService < OawPermissionsClient
     map_licence(this_version(version)['licence'].presence)
   end
 
-  def other_version_preferred?(version)
-    return false if this_version(version).present?
-
-    return true if accepted_version.present? || published_version.present?
-
-    false
-  end
-
   def versions_found?
     versions = []
     versions << 'acceptedVersion' if accepted_version.present?
@@ -40,15 +32,17 @@ class OawPermissionsService < OawPermissionsClient
     this_version(version).present?
   end
 
-  def this_version(version)
-    return accepted_version if accepted_version['version'] == version
-
-    return published_version if published_version['version'] == version
-
-    {}
-  end
-
   def permissions_found?
     all_permissions.present?
   end
+
+  private
+
+    def this_version(version)
+      return accepted_version if accepted_version['version'] == version
+
+      return published_version if published_version['version'] == version
+
+      {}
+    end
 end

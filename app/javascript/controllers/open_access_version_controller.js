@@ -20,12 +20,14 @@ export default class extends Controller {
     const statement = this.data.get(`${key}Statement`)
     const embargo = this.data.get(`${key}Embargo`)
 
-    const rightsInput = document.getElementById('work_version_rights')
     const statementInput = document.getElementById('work_version_publisher_statement')
     const embargoInput = document.getElementById('work_version_work_attributes_embargoed_until')
     // select fields don't have readonly, only disabled so to disable the rights input & 
     // prevent user changes when autopopulated, we need to use a hidden field to submit the value
     const rightsHidden = document.getElementById('work_version_rights_hidden')
+    // this is still set to control what the user sees, but it is not the value that is submitted
+    const rightsInput = document.getElementById('work_version_rights')
+
 
     if (rightsInput) rightsInput.value = rights || ''
     if (rightsHidden) rightsHidden.value = rights || ''
