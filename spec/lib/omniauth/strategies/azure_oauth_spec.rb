@@ -6,8 +6,10 @@ RSpec.describe OmniAuth::Strategies::AzureOauth do
   include Rack::Test::Methods
 
   let(:app) do
+    mock_secret =
+      'test_session_secret_key_base_for_mock_omniauth_setup_64_character_minimum'
     Rack::Builder.new do |b|
-      b.use Rack::Session::Cookie, secret: 'abc123'
+      b.use Rack::Session::Cookie, secret: mock_secret
       b.use OmniAuth::Strategies::AzureOauth
       b.run lambda { |_env| [200, {}, ['Not Found']] }
     end.to_app
