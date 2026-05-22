@@ -17,7 +17,7 @@ class SessionViewStatsCache
   end
 
   def self.ttl
-    Integer(ENV.fetch('SESSION_VIEW_STATS_CACHE_TTL', DEFAULT_TTL), exception: false) || DEFAULT_TTL
+    Integer(ENV['SESSION_VIEW_STATS_CACHE_TTL'], exception: false) || DEFAULT_TTL
   end
 
   private_class_method :ttl
