@@ -36,7 +36,7 @@ module Dashboard
                         error: 'Work version could not be created: ' +
                           @work_version.errors.full_messages.join(', ')
           end
-          format.json { render json: @work_version.errors, status: :unprocessable_entity }
+          format.json { render json: @work_version.errors, status: :unprocessable_content }
         end
       end
     end
@@ -107,7 +107,7 @@ module Dashboard
             format.json { render :show, status: :ok, location: @work_version }
           else
             format.html { render :publish }
-            format.json { render json: @work_version.errors, status: :unprocessable_entity }
+            format.json { render json: @work_version.errors, status: :unprocessable_content }
           end
         end
       end
@@ -124,7 +124,7 @@ module Dashboard
             format.json { render :show, status: :ok, location: @work_version }
           else
             format.html { render :edit }
-            format.json { render json: @work_version.errors, status: :unprocessable_entity }
+            format.json { render json: @work_version.errors, status: :unprocessable_content }
           end
         end
       end

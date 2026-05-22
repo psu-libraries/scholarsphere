@@ -3,12 +3,12 @@
 module Api::V1
   class IngestController < RestController
     rescue_from PsuIdentity::SearchService::NotFound do
-      render json: depositor_not_found, status: :unprocessable_entity
+      render json: depositor_not_found, status: :unprocessable_content
     end
 
     def create
       if work_creator.errors.any?
-        render json: unprocessable_entity_response, status: :unprocessable_entity
+        render json: unprocessable_entity_response, status: :unprocessable_content
         return
       end
       if publish_params
