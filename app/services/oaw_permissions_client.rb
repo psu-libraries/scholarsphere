@@ -5,9 +5,11 @@ class OawPermissionsClient
   attr_reader :doi, :version
 
   def all_permissions
-    @all_permissions ||= JSON.parse(permissions_response)['all_permissions']
+    return @all_permissions if defined?(@all_permissions)
+
+    @all_permissions = JSON.parse(permissions_response)['all_permissions']
   rescue JSON::ParserError
-    nil
+    @all_permissions = nil
   end
 
   private
@@ -29,7 +31,7 @@ class OawPermissionsClient
     def accepted_version
       if all_permissions.present?
         all_permissions
-          .select { |perm| perm if perm['version'] == 'acceptedVersion' } # will need to add to translation
+          .select { |perm| perm if perm['version'] == WorkVersion::OPEN_ACCESS_VERSIONS[:accepted] }
           .first
           .presence || {}
       else
@@ -40,7 +42,7 @@ class OawPermissionsClient
     def published_version
       if all_permissions.present?
         all_permissions
-          .select { |perm| perm if perm['version'] == 'publishedVersion' } # will need to add to translation
+          .select { |perm| perm if perm['version'] == WorkVersion::OPEN_ACCESS_VERSIONS[:published] }
           .first
           .presence || {}
       else
@@ -68,20 +70,6 @@ class OawPermissionsClient
     end
 
     def rights
-      rights_options.pluck(1)
-    end
-
-    def rights_options
-      [
-        ['Attribution 4.0 International (CC BY 4.0)', 'https://creativecommons.org/licenses/by/4.0/'],
-        ['Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)', 'https://creativecommons.org/licenses/by-sa/4.0/'],
-        ['Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)', 'https://creativecommons.org/licenses/by-nc/4.0/'],
-        ['Attribution-NoDerivatives 4.0 International (CC BY-ND 4.0)', 'https://creativecommons.org/licenses/by-nd/4.0/'],
-        ['Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)', 'https://creativecommons.org/licenses/by-nc-nd/4.0/'],
-        ['Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)', 'https://creativecommons.org/licenses/by-nc-sa/4.0/'],
-        ['Public Domain Mark 1.0', 'http://creativecommons.org/publicdomain/mark/1.0/'],
-        ['CC0 1.0 Universal', 'http://creativecommons.org/publicdomain/zero/1.0/'],
-        ['All rights reserved', 'https://rightsstatements.org/page/InC/1.0/']
-      ]
+      WorkVersion::Licenses.options_for_select_box.pluck(1)
     end
 end

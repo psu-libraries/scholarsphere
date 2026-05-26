@@ -437,8 +437,6 @@ en:
           withdraw_versions:
             heading: Withdraw A Version
         open_access_version:
-          accepted_version: acceptedVersion
-          published_version: publishedVersion
           permissions_not_found: >
              We could not find sharing rules for your work. Please contact us for assistance.
           other_version_preferred: >
