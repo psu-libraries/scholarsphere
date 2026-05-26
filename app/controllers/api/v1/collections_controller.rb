@@ -4,7 +4,7 @@ module Api::V1
   class CollectionsController < RestController
     def create
       if collection.errors.any?
-        render json: unprocessable_entity_response, status: :unprocessable_entity
+        render json: unprocessable_entity_response, status: :unprocessable_content
       else
         render json: success_response, status: :ok
       end

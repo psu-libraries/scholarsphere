@@ -18,10 +18,6 @@ module Scholarsphere
       ENV['REDIS_PASSWORD']
     end
 
-    def ttl
-      ENV.fetch('REDIS_TTL', 24.hours)
-    end
-
     def to_hash
       return base_config.merge(password: password) if password
 
@@ -32,8 +28,7 @@ module Scholarsphere
 
       def base_config
         {
-          url: "redis://#{host}:#{port}/#{database}",
-          ttl: ttl
+          url: "redis://#{host}:#{port}/#{database}"
         }
       end
   end

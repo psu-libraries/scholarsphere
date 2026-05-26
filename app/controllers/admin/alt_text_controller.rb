@@ -15,7 +15,7 @@ class Admin::AltTextController < ApplicationController
       render json: { success: false,
                      errors: @file_resource.errors.full_messages,
                      alt_text: @file_resource.reload.file_data['metadata']['alt_text'] },
-             status: :unprocessable_entity
+             status: :unprocessable_content
     end
   end
 

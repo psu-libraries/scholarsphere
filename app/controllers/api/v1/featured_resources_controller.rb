@@ -6,7 +6,7 @@ module Api::V1
       if update_or_create
         render json: { message: "Processed resource #{resource.uuid}" }, status: status
       else
-        render json: 'Unable to feature this resource', status: :unprocessable_entity
+        render json: 'Unable to feature this resource', status: :unprocessable_content
       end
     end
 

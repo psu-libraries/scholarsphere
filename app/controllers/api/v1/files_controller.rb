@@ -6,7 +6,7 @@ module Api::V1
       if update_metadata
         render json: updated_response, status: :ok
       else
-        render json: unprocessable_entity_response, status: :unprocessable_entity
+        render json: unprocessable_entity_response, status: :unprocessable_content
       end
     end
 
