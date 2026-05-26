@@ -129,10 +129,10 @@ RSpec.describe FileResource do
       allow(MetadataListener::Job).to receive(:perform_async)
       file_resource.save
       expect(MetadataListener::Job).to have_received(:perform_async).with(
-        path: "#{file_data['storage']}/#{file_data['id']}",
-        endpoint: "http://#{Rails.application.routes.default_url_options[:host]}/api/v1/files/#{file_resource.id}",
-        api_token: ExternalApp.metadata_listener.token,
-        services: [:virus, :extracted_text]
+        'path' => "#{file_data['storage']}/#{file_data['id']}",
+        'endpoint' => "http://#{Rails.application.routes.default_url_options[:host]}/api/v1/files/#{file_resource.id}",
+        'api_token' => ExternalApp.metadata_listener.token,
+        'services' => ['virus', 'extracted_text']
       )
     end
   end

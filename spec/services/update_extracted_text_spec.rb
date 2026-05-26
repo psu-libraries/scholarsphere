@@ -14,10 +14,10 @@ RSpec.describe UpdateExtractedText do
       expect(resource.extracted_text).not_to be_present
       described_class.call(resource: resource)
       expect(MetadataListener::Job).to have_received(:perform_async).with(
-        path: [resource.file_data['storage'], resource.file_data['id']].join('/'),
-        endpoint: FileUploader.api_endpoint(resource),
-        api_token: ExternalApp.metadata_listener.token,
-        services: [:extracted_text]
+        'path' => [resource.file_data['storage'], resource.file_data['id']].join('/'),
+        'endpoint' => FileUploader.api_endpoint(resource),
+        'api_token' => ExternalApp.metadata_listener.token,
+        'services' => ['extracted_text']
       )
     end
   end
@@ -39,10 +39,10 @@ RSpec.describe UpdateExtractedText do
       expect(resource.extracted_text).to be_present
       described_class.call(resource: resource, force: true)
       expect(MetadataListener::Job).to have_received(:perform_async).with(
-        path: [resource.file_data['storage'], resource.file_data['id']].join('/'),
-        endpoint: FileUploader.api_endpoint(resource),
-        api_token: ExternalApp.metadata_listener.token,
-        services: [:extracted_text]
+        'path' => [resource.file_data['storage'], resource.file_data['id']].join('/'),
+        'endpoint' => FileUploader.api_endpoint(resource),
+        'api_token' => ExternalApp.metadata_listener.token,
+        'services' => ['extracted_text']
       )
     end
   end
