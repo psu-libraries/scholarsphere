@@ -66,11 +66,11 @@ class FileUploader < Shrine
     # This is dependent on storage bucket policies keeping those cached files for a period of time after they've been
     # uploaded. Currently, this is 24 hours, which should be more than enough time unless the backlog of files becomes
     # large enough that they could wait longer than that.
-    MetadataListener::Job.perform_later(
-      path: [file_data['storage'], file_data['id']].join('/'),
-      endpoint: FileUploader.api_endpoint(record),
-      api_token: ExternalApp.metadata_listener.token,
-      services: [:virus, :extracted_text]
+    MetadataListener::Job.perform_async(
+      'path' => [file_data['storage'], file_data['id']].join('/').to_s,
+      'endpoint' => FileUploader.api_endpoint(record),
+      'api_token' => ExternalApp.metadata_listener.token,
+      'services' => ['virus', 'extracted_text']
     )
   end
 
