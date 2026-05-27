@@ -201,7 +201,7 @@ GEM
     diffy (3.4.4)
     docile (1.4.1)
     domain_name (0.6.20240107)
-    down (5.5.0)
+    down (5.6.0)
       addressable (~> 2.8)
       base64 (~> 0.3)
     drb (2.2.3)
@@ -219,6 +219,10 @@ GEM
       rubocop (>= 1)
       smart_properties
     erubi (1.13.1)
+    exiftool (1.4.3)
+      json
+    exiftool_vendored (13.58.0)
+      exiftool (>= 0.7.0)
     factory_bot (6.5.6)
       activesupport (>= 6.1.0)
     factory_bot_rails (6.5.1)
@@ -778,6 +782,7 @@ DEPENDENCIES
   down
   edtf
   edtf-humanize
+  exiftool_vendored (~> 13)
   factory_bot_rails
   faker
   faraday (~> 2.0)
@@ -917,12 +922,14 @@ CHECKSUMS
   diffy (3.4.4) sha256=79384ab5ca82d0e115b2771f0961e27c164c456074bd2ec46b637ebf7b6e47e3
   docile (1.4.1) sha256=96159be799bfa73cdb721b840e9802126e4e03dfc26863db73647204c727f21e
   domain_name (0.6.20240107) sha256=5f693b2215708476517479bf2b3802e49068ad82167bcd2286f899536a17d933
-  down (5.5.0) sha256=787e14fcfe7824b8cac676c608359e4083b2e4d6e1d3b1745b79f27bcf931585
+  down (5.6.0) sha256=48ec6ddb078cbf3b425d02596bb388303316f976143c6e94a7b3169d6712b593
   drb (2.2.3) sha256=0b00d6fdb50995fe4a45dea13663493c841112e4068656854646f418fda13373
   edtf (3.2.0) sha256=a15a0ee274e49c8047a3ebb5d61d793ba44f7f8ffbf0595392c467e3ea8d2447
   edtf-humanize (2.3.1) sha256=f58fa793da632620766c6a2d3deb8256fa0194e29b53452b1a0c57609d6987b1
   erb_lint (0.9.0) sha256=dfb5e40ad839e8d1f0d56ca85ec9a7ac4c9cd966ec281138282f35b323ca7c31
   erubi (1.13.1) sha256=a082103b0885dbc5ecf1172fede897f9ebdb745a4b97a5e8dc63953db1ee4ad9
+  exiftool (1.4.3) sha256=40443c25f6942831976620a784d0e8a7f4a93250a267596f2112d06dee9e9a2d
+  exiftool_vendored (13.58.0) sha256=c0d54b57aa4797bf8d34d6eefa24b5626476fd38eb784789118f4e0e21a64036
   factory_bot (6.5.6) sha256=12beb373214dccc086a7a63763d6718c49769d5606f0501e0a4442676917e077
   factory_bot_rails (6.5.1) sha256=d3cc4851eae4dea8a665ec4a4516895045e710554d2b5ac9e68b94d351bc6d68
   faker (3.6.1) sha256=c513d23c1d26b426283e913b25e0b714576011d7c1ad368a9ac6ea2113a1ccde

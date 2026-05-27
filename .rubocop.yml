@@ -170,3 +170,7 @@ Naming/PredicateMethod:
 
 Capybara/NegationMatcherAfterVisit:
   Enabled: false
+
+Style/SafeNavigationChainLength:
+  Exclude:
+    - 'app/services/open_access_version/guesser.rb'

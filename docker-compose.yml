@@ -30,6 +30,8 @@ x-web_env: &web_env
       PSU_AFFILIATED_GROUP: ${PSU_AFFILIATED_GROUP}
       PDF_REMEDIATION_ENDPOINT: ${PDF_REMEDIATION_ENDPOINT}
       PDF_REMEDIATION_API_KEY: ${PDF_REMEDIATION_API_KEY}
+      # TODO: Remove when open access feature flag is removed
+      ENABLE_OPEN_ACCESS_FEATURE: ${ENABLE_OPEN_ACCESS_FEATURE:-true}
 services:
   redis:
     image: redis:8
