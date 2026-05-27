@@ -218,6 +218,7 @@ class WorkVersion < ApplicationRecord
                  if: :published?
 
   after_commit :perform_update_index, on: [:create, :update]
+  after_commit :enqueue_published_webhook, on: [:create, :update]
 
   attr_accessor :force_destroy
 
@@ -227,30 +228,14 @@ class WorkVersion < ApplicationRecord
     prevent_destroy = published? && !force_destroy
     raise ArgumentError, 'cannot delete published versions' if prevent_destroy
   end
-  # rubocop:disable Metrics/BlockLength
   aasm timestamps: true do
     state :draft, intial: true
     state :published, :withdrawn, :removed
 
     event :publish do
-      after_commit do
-        if work.open_access?
-          WorkPublishedWebhookJob.perform_later(work.uuid)
-        end
-      end
-      transitions from: [:draft, :withdrawn],
-                  to: :published,
-                  after: Proc.new {
-                    work.try(:update_deposit_agreement)
-                    if work.professional_doctoral_culminating_experience? || work.masters_culminating_experience? || work_type == 'instrument'
-                      set_publisher_as_scholarsphere
-                    end
-                    self.reload_on_index = true
-                  }
+      transitions from: [:draft, :withdrawn], to: :published, after: :after_publish
     end
-    # rubocop:enable Metrics/BlockLength
 
-    # Fields that can contain multiple values...
     event :withdraw do
       after_commit do
         if work.withdrawn?
@@ -451,6 +436,25 @@ class WorkVersion < ApplicationRecord
 
     def perform_update_index
       indexing_source.call(self)
+    end
+
+    def after_publish
+      work.try(:update_deposit_agreement)
+      if work.professional_doctoral_culminating_experience? || work.masters_culminating_experience? || work_type == 'instrument'
+        set_publisher_as_scholarsphere
+      end
+      self.reload_on_index = true
+    end
+
+    def enqueue_published_webhook
+      # Enqueue the webhook job only after the database transaction commits and
+      # only when the `aasm_state` has changed to `published` and the parent
+      # work is Open Access. Keeping a single `after_commit` hook at the model
+      # level with this guard avoids enqueuing during non-publish updates while
+      # ensuring the job is executed outside the transaction.
+      return unless saved_change_to_aasm_state? && aasm_state == 'published' && work.open_access?
+
+      WorkPublishedWebhookJob.perform_later(work.uuid)
     end
 
     def strip_blanks_from_array(arr)

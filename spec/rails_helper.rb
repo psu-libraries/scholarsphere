@@ -14,6 +14,7 @@ require File.expand_path('../config/environment', __dir__)
 raise 'The Rails environment is running in production mode!' if Rails.env.production?
 
 require 'rspec/rails'
+require 'rspec/its'
 require 'aasm/rspec'
 require 'paper_trail/frameworks/rspec'
 require 'view_component/test_helpers'
