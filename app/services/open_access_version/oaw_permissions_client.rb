@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module OpenAccessVersion
-  class PermissionsClient
+  class OawPermissionsClient
     class InvalidVersion < StandardError; end
 
     attr_reader :doi, :version

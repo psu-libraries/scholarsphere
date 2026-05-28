@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module OpenAccessVersion
-  class PermissionsService < PermissionsClient
+  class OawPermissionsService < OawPermissionsClient
     def initialize(doi)
       super()
 
