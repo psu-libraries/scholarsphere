@@ -9,12 +9,15 @@ RSpec.describe Webhooks::WorkPublishedWebhook do
     let(:faraday_connection) { instance_spy Faraday::Connection }
 
     before do
+      ENV['RMD_HOST'] = 'https://rmd.example.com'
       allow(Faraday).to receive(:new).and_call_original
       allow(Faraday).to receive(:new).with(
         url: ENV['RMD_HOST'],
         headers: { 'X-API-KEY' => ENV['RMD_WEBHOOK_SECRET'] }
       ).and_return faraday_connection
     end
+
+    after { ENV.delete('RMD_HOST') }
 
     it 'posts the work URL path to the RMD webhook endpoint' do
       webhook.notify
