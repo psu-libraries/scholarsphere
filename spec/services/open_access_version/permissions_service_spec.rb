@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe OawPermissionsService do
+RSpec.describe OpenAccessVersion::PermissionsService do
   subject(:service) { described_class.new(doi) }
 
   let(:doi) { 'https://doi.org/10.1016/j.bmcl.2010.08.031' }
