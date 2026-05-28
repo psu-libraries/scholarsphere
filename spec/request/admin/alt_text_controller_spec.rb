@@ -45,7 +45,7 @@ RSpec.describe Admin::AltTextController, type: :request do
         it 'returns an error JSON response' do
           patch admin_update_alt_text_path(file_resource), params: params, as: :json
 
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           json = JSON.parse(response.body)
           expect(json['success']).to eq(false)
           expect(json['errors']).to eq(['Something went wrong'])

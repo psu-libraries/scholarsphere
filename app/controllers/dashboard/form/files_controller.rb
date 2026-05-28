@@ -16,6 +16,7 @@ module Dashboard
         @resource.attributes = work_version_params
         process_response(on_error: :edit) do
           send_accessibility_check_jobs
+          send_open_access_version_guesser_job if @resource.open_access
         end
       end
 
@@ -39,6 +40,10 @@ module Dashboard
           @resource.file_resources.needs_accessibility_check.each do |file_resource|
             AccessibilityCheckJob.perform_later(file_resource.id)
           end
+        end
+
+        def send_open_access_version_guesser_job
+          OpenAccessVersionGuesserJob.perform_later(@resource.id)
         end
     end
   end

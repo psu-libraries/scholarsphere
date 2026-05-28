@@ -23,8 +23,8 @@ class OawPermissionsService < OawPermissionsClient
 
   def versions_found?
     versions = []
-    versions << 'acceptedVersion' if accepted_version.present?
-    versions << 'publishedVersion' if published_version.present?
+    versions << OpenAccessVersion::VersionValues::ACCEPTED if accepted_version.present?
+    versions << OpenAccessVersion::VersionValues::PUBLISHED if published_version.present?
     versions
   end
 

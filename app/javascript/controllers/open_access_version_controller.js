@@ -36,12 +36,14 @@ export default class extends Controller {
 
     // display message when there is a version mismatch
     const versionsFound = JSON.parse(this.data.get('versionsFound'))
-    const otherVersion = version === 'acceptedVersion' ? 'publishedVersion' : 'acceptedVersion'
+    const acceptedVersion = this.data.get('acceptedVersionValue')
+    const publishedVersion = this.data.get('publishedVersionValue')
+    const otherVersion = version === acceptedVersion ? publishedVersion : acceptedVersion
     const currentVersionFound = versionsFound.includes(version)
     const otherVersionFound = versionsFound.includes(otherVersion)
     const label = {
-      acceptedVersion: 'accepted version',
-      publishedVersion: 'published version'
+      [acceptedVersion]: this.data.get('acceptedVersionLabel'),
+      [publishedVersion]: this.data.get('publishedVersionLabel')
     }
     const message = this.data.get('otherMessage')
 

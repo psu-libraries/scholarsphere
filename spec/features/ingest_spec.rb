@@ -36,7 +36,7 @@ RSpec.describe 'Publishing works from the API', :inline_jobs do
   end
 
   before do
-    Api::V1::WorkPublisher.call(metadata: metadata, depositor_access_id: VCRHelpers.depositor, content: content)
+    Api::V1::WorkCreator.call(metadata: metadata, depositor_access_id: VCRHelpers.depositor, content: content)
   end
 
   context 'when logged in as a public user', vcr: VCRHelpers.depositor_cassette do

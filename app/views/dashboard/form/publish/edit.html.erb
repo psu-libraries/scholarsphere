@@ -1,3 +1,28 @@
+<% accepted_version = OpenAccessVersion::VersionValues::ACCEPTED %>
+<% published_version = OpenAccessVersion::VersionValues::PUBLISHED %>
+<% permissions_value = lambda do |param_key, method_name, version|
+     params.dig(:oaw_permissions, param_key) || @permissions&.public_send(method_name, version)
+   end %>
+<% open_access_version_data = {
+     controller: 'open-access-version',
+     open_access_version_id: @resource.id,
+     open_access_version_accepted_version_value: accepted_version,
+     open_access_version_published_version_value: published_version,
+     open_access_version_accepted_version_label: accepted_version.underscore.humanize.downcase,
+     open_access_version_published_version_label: published_version.underscore.humanize.downcase,
+     open_access_version_accepted_version_rights: permissions_value.call(:accepted_version_rights, :licence, accepted_version),
+     open_access_version_published_version_rights: permissions_value.call(:published_version_rights, :licence, published_version),
+     open_access_version_accepted_version_statement: permissions_value.call(:accepted_version_statement, :publisher_statement, accepted_version),
+     open_access_version_published_version_statement: permissions_value.call(:published_version_statement, :publisher_statement, published_version),
+     open_access_version_accepted_version_embargo: permissions_value.call(:accepted_version_embargo, :embargo_end_date, accepted_version),
+     open_access_version_published_version_embargo: permissions_value.call(:published_version_embargo, :embargo_end_date, published_version),
+     open_access_version_current_version: @current_version || accepted_version,
+     open_access_version_other_version: @other_version,
+     open_access_version_versions_found: params.dig(:oaw_permissions, :versions_found) || @permissions&.versions_found?.to_json,
+     open_access_version_not_found_message: t('dashboard.works.edit.open_access_version.permissions_not_found'),
+     open_access_version_other_message: t('dashboard.works.edit.open_access_version.other_version_preferred', this_version: '__THIS__', other_version: '__OTHER__')
+   } %>
+
 <div class="container">
   <div class="row">
     <div class="col" data-controller="unsaved-changes" data-unsaved-changes-prompt="<%= t 'dashboard.form.unsaved_changes_prompt' %>">
@@ -6,20 +31,7 @@
       <%= render FormTabsComponent.new(resource: @resource, current_controller: controller_name) %>
 
       <div class="tab-content">
-<div class="tab-pane active show"
-     data-controller="open-access-version"
-     data-open-access-version-id="<%= @resource.id %>"
-     data-open-access-version-accepted-version-rights="<%= params.dig(:oaw_permissions, :accepted_version_rights) || @permissions&.licence('acceptedVersion') %>"
-     data-open-access-version-published-version-rights="<%= params.dig(:oaw_permissions, :published_version_rights) || @permissions&.licence('publishedVersion') %>"
-     data-open-access-version-accepted-version-statement="<%= params.dig(:oaw_permissions, :accepted_version_statement) || @permissions&.publisher_statement('acceptedVersion') %>"
-     data-open-access-version-published-version-statement="<%= params.dig(:oaw_permissions, :published_version_statement) || @permissions&.publisher_statement('publishedVersion') %>"
-     data-open-access-version-accepted-version-embargo="<%= params.dig(:oaw_permissions, :accepted_version_embargo) || @permissions&.embargo_end_date('acceptedVersion') %>"
-     data-open-access-version-published-version-embargo="<%= params.dig(:oaw_permissions, :published_version_embargo) || @permissions&.embargo_end_date('publishedVersion') %>"
-     data-open-access-version-current-version="<%= @current_version || 'acceptedVersion' %>"
-     data-open-access-version-other-version="<%= @other_version %>"
-     data-open-access-version-versions-found="<%= params.dig(:oaw_permissions, :versions_found) || @permissions&.versions_found?.to_json %>"
-     data-open-access-version-not-found-message="<%= t('dashboard.works.edit.open_access_version.permissions_not_found') %>"
-  data-open-access-version-other-message="<%= t('dashboard.works.edit.open_access_version.other_version_preferred', this_version: '__THIS__', other_version: '__OTHER__') %>">
+        <div class="tab-pane active show" <%= tag.attributes(data: open_access_version_data) %>>
 
           <%= form_with(
                 model: @resource,
@@ -31,14 +43,14 @@
                 }
               ) do |form| %>
 
-              <%= hidden_field_tag 'oaw_permissions[accepted_version_rights]', @permissions&.licence('acceptedVersion') %>
-              <%= hidden_field_tag 'oaw_permissions[published_version_rights]', @permissions&.licence('publishedVersion') %>
+              <%= hidden_field_tag 'oaw_permissions[accepted_version_rights]', @permissions&.licence(accepted_version) %>
+              <%= hidden_field_tag 'oaw_permissions[published_version_rights]', @permissions&.licence(published_version) %>
 
-              <%= hidden_field_tag 'oaw_permissions[accepted_version_statement]', @permissions&.publisher_statement('acceptedVersion') %>
-              <%= hidden_field_tag 'oaw_permissions[published_version_statement]', @permissions&.publisher_statement('publishedVersion') %>
+              <%= hidden_field_tag 'oaw_permissions[accepted_version_statement]', @permissions&.publisher_statement(accepted_version) %>
+              <%= hidden_field_tag 'oaw_permissions[published_version_statement]', @permissions&.publisher_statement(published_version) %>
 
-              <%= hidden_field_tag 'oaw_permissions[accepted_version_embargo]', @permissions&.embargo_end_date('acceptedVersion') %>
-              <%= hidden_field_tag 'oaw_permissions[published_version_embargo]', @permissions&.embargo_end_date('publishedVersion') %>
+              <%= hidden_field_tag 'oaw_permissions[accepted_version_embargo]', @permissions&.embargo_end_date(accepted_version) %>
+              <%= hidden_field_tag 'oaw_permissions[published_version_embargo]', @permissions&.embargo_end_date(published_version) %>
 
               <%= hidden_field_tag 'oaw_permissions[versions_found]', @permissions&.versions_found? %>
 

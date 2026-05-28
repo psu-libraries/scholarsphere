@@ -7,11 +7,6 @@ class WorkVersion < ApplicationRecord
   include GeneratedUuids
   include UpdatingDois
 
-  OPEN_ACCESS_VERSIONS = {
-    accepted: 'acceptedVersion',
-    published: 'publishedVersion'
-  }.freeze
-
   after_validation :remove_duplicate_errors
   before_save :reset_irrelevant_fields_if_work_type_changed
 
@@ -172,9 +167,8 @@ class WorkVersion < ApplicationRecord
   validates :open_access_version,
             allow_nil: true,
             inclusion: {
-              in: OPEN_ACCESS_VERSIONS.values
-            },
-            if: :published?
+              in: OpenAccessVersion::VersionValues::ALL
+            }
 
   validates :rights,
             presence: true,

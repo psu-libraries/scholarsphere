@@ -31,7 +31,7 @@ class OawPermissionsClient
     def accepted_version
       if all_permissions.present?
         all_permissions
-          .select { |perm| perm if perm['version'] == WorkVersion::OPEN_ACCESS_VERSIONS[:accepted] }
+          .select { |perm| perm if perm['version'] == OpenAccessVersion::VersionValues::ACCEPTED }
           .first
           .presence || {}
       else
@@ -42,7 +42,7 @@ class OawPermissionsClient
     def published_version
       if all_permissions.present?
         all_permissions
-          .select { |perm| perm if perm['version'] == WorkVersion::OPEN_ACCESS_VERSIONS[:published] }
+          .select { |perm| perm if perm['version'] == OpenAccessVersion::VersionValues::PUBLISHED }
           .first
           .presence || {}
       else

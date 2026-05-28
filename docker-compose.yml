@@ -33,6 +33,8 @@ x-web_env: &web_env
       RMD_API_KEY: ${RMD_API_KEY}
       RMD_WEBHOOK_SECRET: ${RMD_WEBHOOK_SECRET}
       RMD_HOST: ${RMD_HOST}
+      # TODO: Remove when open access feature flag is removed
+      ENABLE_OPEN_ACCESS_FEATURE: ${ENABLE_OPEN_ACCESS_FEATURE:-true}
 services:
   redis:
     image: redis:8
