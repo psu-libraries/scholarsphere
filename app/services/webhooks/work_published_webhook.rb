@@ -7,6 +7,8 @@ module Webhooks
     end
 
     def notify
+      return if ENV['RMD_HOST'].blank?
+
       conn = Faraday.new(
         url: ENV['RMD_HOST'],
         headers: { 'X-API-KEY' => ENV['RMD_WEBHOOK_SECRET'] }

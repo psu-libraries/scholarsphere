@@ -148,7 +148,7 @@ RSpec.describe WorkVersion do
     end
   end
 
-  describe 'enqueue_published_webhook' do
+  describe 'publish event webhook' do
     let(:work) { create(:work) }
     let(:work_version) { create(:work_version, work: work) }
 
@@ -177,7 +177,7 @@ RSpec.describe WorkVersion do
       end
     end
 
-    context 'when the state does not change to published' do
+    context 'when the work version is updated without publishing' do
       it 'does not enqueue the webhook job' do
         work_version.update(title: 'no state change')
 

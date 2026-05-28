@@ -233,6 +233,9 @@ class WorkVersion < ApplicationRecord
     state :published, :withdrawn, :removed
 
     event :publish do
+      before do
+        @work_just_published = true
+      end
       transitions from: [:draft, :withdrawn], to: :published, after: :after_publish
     end
 
@@ -447,13 +450,9 @@ class WorkVersion < ApplicationRecord
     end
 
     def enqueue_published_webhook
-      # Enqueue the webhook job only after the database transaction commits and
-      # only when the `aasm_state` has changed to `published` and the parent
-      # work is Open Access. Keeping a single `after_commit` hook at the model
-      # level with this guard avoids enqueuing during non-publish updates while
-      # ensuring the job is executed outside the transaction.
-      return unless saved_change_to_aasm_state? && aasm_state == 'published' && work.open_access?
+      return unless @work_just_published && work.open_access?
 
+      @work_just_published = false
       WorkPublishedWebhookJob.perform_later(work.uuid)
     end
 
