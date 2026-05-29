@@ -219,6 +219,7 @@ class WorkVersion < ApplicationRecord
 
   after_commit :perform_update_index, on: [:create, :update]
   after_commit :enqueue_published_webhook, on: [:create, :update]
+  after_rollback :clear_publish_flag
 
   attr_accessor :force_destroy
 
@@ -450,10 +451,15 @@ class WorkVersion < ApplicationRecord
     end
 
     def enqueue_published_webhook
-      return unless @work_just_published && work.open_access?
-
+      just_published = @work_just_published
       @work_just_published = false
+      return unless just_published && open_access
+
       WorkPublishedWebhookJob.perform_later(work.uuid)
+    end
+
+    def clear_publish_flag
+      @work_just_published = false
     end
 
     def strip_blanks_from_array(arr)

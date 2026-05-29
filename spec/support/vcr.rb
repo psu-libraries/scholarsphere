@@ -8,14 +8,16 @@ require 'webmock'
 #   - https://github.com/bblimke/webmock/blob/master/README.md#connecting-on-nethttpstart
 WebMock.allow_net_connect!(net_http_connect_on_start: true)
 
-# Allow connections to Docker images and webdriver update urls
 VCR.configure do |c|
   c.cassette_library_dir = 'spec/fixtures/vcr_cassettes'
   c.hook_into :webmock
   c.configure_rspec_metadata!
   c.allow_http_connections_when_no_cassette = true
   c.ignore_localhost = true
+  # Allow connections to Docker images and webdriver update urls
   c.ignore_hosts 'selenium', 'minio', 'solr', 'docker.for.mac.localhost'
+  # Ignore outgoing webhook calls so VCR doesn't try to record or replay them
+  # (they fire inline via :inline_jobs in feature specs)
   c.ignore_request { |req| req.uri.include?('/webhooks/scholarsphere/open_access_work_published') }
   c.debug_logger = File.open('log/vcr.log', 'w')
   c.default_cassette_options = { erb: true, update_content_length_header: true }
