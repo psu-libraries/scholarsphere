@@ -133,6 +133,56 @@ RSpec.describe WorkVersion do
     end
   end
 
+  describe 'publish callbacks' do
+    let(:work) { create(:work) }
+    let(:work_version) { create(:work_version, work: work) }
+
+    before { allow(work).to receive(:update_deposit_agreement) }
+
+    it 'calls update_deposit_agreement, sets publisher for culminating works, and sets reload_on_index' do
+      allow(work).to receive(:professional_doctoral_culminating_experience?).and_return(true)
+
+      work_version.publish!
+
+      expect(work).to have_received(:update_deposit_agreement)
+      expect(work_version.metadata['publisher']).to eq(['ScholarSphere'])
+      expect(work_version.reload_on_index).to be true
+    end
+  end
+
+  describe 'publish event webhook' do
+    let(:work) { create(:work) }
+    let(:work_version) { create(:work_version, work: work) }
+
+    before { allow(WorkPublishedWebhookJob).to receive(:perform_later) }
+
+    context 'when the work is open access' do
+      before { work_version.update(open_access: true) }
+
+      it 'enqueues the WorkPublishedWebhookJob when published' do
+        work_version.publish!
+
+        expect(WorkPublishedWebhookJob).to have_received(:perform_later).with(work.uuid)
+      end
+    end
+
+    context 'when the work is not open access' do
+      it 'does not enqueue the webhook job' do
+        work_version.publish!
+
+        expect(WorkPublishedWebhookJob).not_to have_received(:perform_later)
+      end
+    end
+
+    context 'when the work version is updated without publishing' do
+      it 'does not enqueue the webhook job' do
+        work_version.update(title: 'no state change')
+
+        expect(WorkPublishedWebhookJob).not_to have_received(:perform_later)
+      end
+    end
+  end
+
   describe 'validations' do
     subject(:work_version) { build(:work_version, work: work) }
 
