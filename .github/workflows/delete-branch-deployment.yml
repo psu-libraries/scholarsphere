@@ -1,0 +1,14 @@
+name: Branch Deleted
+on:
+  delete
+jobs:
+  delete-deployment:
+    if: contains(github.event.ref, 'update/') || contains(github.event.ref, 'preview/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger CircleCI Pipeline
+        uses: CircleCI-Public/trigger-circleci-pipeline-action@v1.2.0
+        with:
+          GHA_Meta: "${{ github.event.ref }}"
+        env:
+          CCI_TOKEN: ${{ secrets.CCI_TOKEN }}
