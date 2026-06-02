@@ -2,9 +2,9 @@
 
 module OpenAccessVersion
   module VersionValues
-    ACCEPTED = 'accepted'
-    PUBLISHED = 'published'
-    UNKNOWN = 'unknown'
+    ACCEPTED = 'acceptedVersion'
+    PUBLISHED = 'publishedVersion'
+    UNKNOWN = 'unknownVersion'
 
     ALL = [ACCEPTED, PUBLISHED, UNKNOWN].freeze
   end

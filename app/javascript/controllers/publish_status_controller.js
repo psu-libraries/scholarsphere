@@ -5,6 +5,8 @@ export default class extends Controller {
   static targets = ['show_buttons', 'help_text'];
 
   connect () {
+    document.addEventListener('open-access:version-updated', this.handleVersionUpdate)
+
     consumer.subscriptions.create(
       { channel: 'PublishStatusChannel' },
       {
@@ -27,9 +29,22 @@ export default class extends Controller {
   renderPublishStatus () {
     const primaryAction = this.data.get('primaryAction')
     const allowPublish = this.data.get('allowPublish') === 'true'
-    const show = allowPublish || primaryAction === 'save_and_continue'
-
+    const versionAllowed = this.data.get('versionAllowed') || 'true'
+    const versionAllowsPublish = versionAllowed === 'true'
+    const show = (allowPublish && versionAllowsPublish) || primaryAction === 'save_and_continue'
     this.show_buttonsTarget.classList.toggle('d-none', !show)
     this.help_textTarget.classList.toggle('d-none', show)
+    if (!show) {
+      const blockReason = !allowPublish ? 'accessibility' : 'version'
+      this.help_textTarget.textContent =
+        blockReason === 'version'
+          ? this.data.get('versionMessage')
+          : this.data.get('accessibilityMessage')
+    }
+  }
+
+  handleVersionUpdate = (event) => {
+    this.data.set('versionAllowed', event.detail.versionAllowed)
+    this.renderPublishStatus()
   }
 }

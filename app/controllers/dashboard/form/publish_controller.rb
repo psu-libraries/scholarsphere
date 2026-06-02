@@ -11,6 +11,7 @@ module Dashboard
           .find(params[:id])
         authorize(@work_version)
         @resource = deposit_pathway.publish_form(current_user:)
+        @permissions = OpenAccessVersion::OawPermissionsService.new(@work_version.identifier.first)
         prevalidate
       end
 
@@ -20,6 +21,7 @@ module Dashboard
         authorize(@work_version)
 
         @resource.attributes = work_version_params
+        @submitted_permissions = oaw_permissions_params
 
         # If the user clicks the "Publish" button, *and* there are validation
         # errors, we still want to persist any changes to the draft version's
@@ -103,6 +105,18 @@ module Dashboard
         def curator_action_requested?
           (request_curation? && !@resource.draft_curation_requested) ||
             (request_accessibility_remediation? && !@resource.accessibility_remediation_requested)
+        end
+
+        def oaw_permissions_params
+          params.fetch(:oaw_permissions, {}).permit(
+            :accepted_version_rights,
+            :published_version_rights,
+            :accepted_version_statement,
+            :published_version_statement,
+            :accepted_version_embargo,
+            :published_version_embargo,
+            :versions_found
+          )
         end
 
         def work_version_params

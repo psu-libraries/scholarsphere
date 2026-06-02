@@ -330,9 +330,9 @@ RSpec.describe WorkVersion do
 
     context 'with open_access_version' do
       it { is_expected.to allow_value(nil).for(:open_access_version) }
-      it { is_expected.to allow_value('accepted').for(:open_access_version) }
-      it { is_expected.to allow_value('published').for(:open_access_version) }
-      it { is_expected.to allow_value('unknown').for(:open_access_version) }
+      it { is_expected.to allow_value('acceptedVersion').for(:open_access_version) }
+      it { is_expected.to allow_value('publishedVersion').for(:open_access_version) }
+      it { is_expected.to allow_value('unknownVersion').for(:open_access_version) }
       it { is_expected.not_to allow_value('not_allowed').for(:open_access_version) }
     end
   end
