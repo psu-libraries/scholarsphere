@@ -59,7 +59,6 @@ module Dashboard
         end
       end
 
-      # Returns the current open_access_version for the work_version as JSON.
       def open_access_version
         work_version = WorkVersion.find(params[:id])
         authorize(work_version, :edit?)

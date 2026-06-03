@@ -6,51 +6,60 @@ export default class extends Controller {
 
   connect() {
     const selectedVersion = this.element.querySelector('input[name="work_version[open_access_version]"]:checked')
+
     if (selectedVersion) {
       this.refresh({ target: selectedVersion })
     }
+
     const id = this.data.get('id')
+
     if (id) {
-      fetch(`/dashboard/form/work_versions/${id}/open_access_version`, { headers: { Accept: 'application/json' } })
-        .then((response) => {
-          if (!response.ok) throw new Error('Network response was not ok')
-          return response.json()
-        })
-        .then((data) => {
-          if (!data || !data.open_access_version) return
-          const radio = this.element.querySelector(
-            `input[name="work_version[open_access_version]"][value="${data.open_access_version}"]`
-          )
-          if (radio) {
-            radio.checked = true
-            this.refresh({ target: radio })
-          }
-        })
-        .catch(() => {})
+      this.fetchOpenAccessVersion(id)
     }
+
+    this.createSubscription()
+  }
+
+  disconnect() {
+    if (this.subscription && this.subscription.unsubscribe) {
+      this.subscription.unsubscribe()
+    }
+  }
+
+  createSubscription() {
     this.subscription = consumer.subscriptions.create(
       { channel: 'OpenAccessVersionChannel' },
       {
         received: (data) => {
           const targetId = this.data.get('id')
           if (String(data.id) !== String(targetId)) return
-
-          const radio = this.element.querySelector(
-            `input[name="work_version[open_access_version]"][value="${data.open_access_version}"]`
-          )
-
-          if (radio) {
-            radio.checked = true
-            this.refresh({ target: radio })
-          }
+          this.applyOpenAccessVersion(data.open_access_version)
         }
       }
     )
   }
 
-  disconnect() {
-    if (this.subscription && this.subscription.unsubscribe) {
-      this.subscription.unsubscribe()
+  fetchOpenAccessVersion(id) {
+    fetch(`/dashboard/form/work_versions/${id}/open_access_version`, { headers: { Accept: 'application/json' } })
+      .then((response) => {
+        if (!response.ok) throw new Error('Network response was not ok')
+        return response.json()
+      })
+      .then((data) => {
+        if (!data) return
+        this.applyOpenAccessVersion(data.open_access_version)
+      })
+      .catch(() => {})
+  }
+
+  applyOpenAccessVersion(open_access_version) {
+    if (!open_access_version) return
+    const radio = this.element.querySelector(
+      `input[name="work_version[open_access_version]"][value="${open_access_version}"]`
+    )
+    if (radio) {
+      radio.checked = true
+      this.refresh({ target: radio })
     }
   }
 
