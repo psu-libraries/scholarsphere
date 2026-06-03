@@ -460,8 +460,8 @@ class WorkVersion < ApplicationRecord
     def broadcast_open_access_version_if_needed
       return unless saved_change_to_open_access_version?
 
-      ActionCable.server.broadcast(
-        'open_access_version_channel',
+      OpenAccessVersionChannel.broadcast_to(
+        self,
         {
           id: id,
           open_access_version: open_access_version

@@ -14,10 +14,9 @@ export default class extends Controller {
     const id = this.data.get('id')
 
     if (id) {
+      this.createSubscription(id)
       this.fetchOpenAccessVersion(id)
     }
-
-    this.createSubscription()
   }
 
   disconnect() {
@@ -26,9 +25,9 @@ export default class extends Controller {
     }
   }
 
-  createSubscription() {
+  createSubscription(id) {
     this.subscription = consumer.subscriptions.create(
-      { channel: 'OpenAccessVersionChannel' },
+      { channel: 'OpenAccessVersionChannel', id: id },
       {
         received: (data) => {
           const targetId = this.data.get('id')

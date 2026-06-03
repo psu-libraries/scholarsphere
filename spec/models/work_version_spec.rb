@@ -184,9 +184,7 @@ RSpec.describe WorkVersion do
   end
 
   describe 'open access version broadcast' do
-    let(:cable_server) { instance_double(ActionCable::Server::Base, broadcast: true) }
-
-    before { allow(ActionCable).to receive(:server).and_return(cable_server) }
+    before { allow(OpenAccessVersionChannel).to receive(:broadcast_to) }
 
     context 'when open_access_version is changed from nil' do
       let(:work_version) { create(:work_version, open_access_version: nil) }
@@ -194,8 +192,8 @@ RSpec.describe WorkVersion do
       it 'broadcasts when open_access_version is changed to non-nil value' do
         work_version.update!(open_access_version: OpenAccessVersion::VersionValues::PUBLISHED)
 
-        expect(cable_server).to have_received(:broadcast).with(
-          'open_access_version_channel',
+        expect(OpenAccessVersionChannel).to have_received(:broadcast_to).with(
+          work_version,
           {
             id: work_version.id,
             open_access_version: OpenAccessVersion::VersionValues::PUBLISHED
@@ -206,7 +204,7 @@ RSpec.describe WorkVersion do
       it 'does not broadcast when open_access_version is changed to nil' do
         work_version.update!(open_access_version: nil)
 
-        expect(cable_server).not_to have_received(:broadcast)
+        expect(OpenAccessVersionChannel).not_to have_received(:broadcast_to)
       end
     end
 
@@ -216,14 +214,14 @@ RSpec.describe WorkVersion do
       it 'does not broadcast when open_access_version is not changed' do
         work_version.update!(title: 'a title change that does not affect open access version')
 
-        expect(cable_server).not_to have_received(:broadcast)
+        expect(OpenAccessVersionChannel).not_to have_received(:broadcast_to)
       end
 
       it 'broadcasts when open_access_version is updated to a different non-nil value' do
         work_version.update!(open_access_version: OpenAccessVersion::VersionValues::ACCEPTED)
 
-        expect(cable_server).to have_received(:broadcast).with(
-          'open_access_version_channel',
+        expect(OpenAccessVersionChannel).to have_received(:broadcast_to).with(
+          work_version,
           {
             id: work_version.id,
             open_access_version: OpenAccessVersion::VersionValues::ACCEPTED

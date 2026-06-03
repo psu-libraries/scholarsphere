@@ -2,6 +2,9 @@
 
 class OpenAccessVersionChannel < ApplicationCable::Channel
   def subscribed
-    stream_from 'open_access_version_channel'
+    work_version = WorkVersion.find_by(id: params[:id])
+    return reject unless work_version
+
+    stream_for work_version
   end
 end
