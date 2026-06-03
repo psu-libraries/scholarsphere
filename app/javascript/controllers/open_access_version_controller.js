@@ -30,7 +30,7 @@ export default class extends Controller {
 
           // then unsubscribe from the channel
           if (this.subscription && this.subscription.unsubscribe) {
-            try { this.subscription.unsubscribe() } catch (e) {}
+            try { this.subscription.unsubscribe() } catch (e) { void e }
           }
         }
       }, 30_000)
@@ -66,7 +66,7 @@ export default class extends Controller {
         if (!data) return
         this.applyOpenAccessVersion(data.open_access_version)
       })
-      .catch(() => {})
+      .catch(() => void 0)
   }
 
   applyOpenAccessVersion(open_access_version) {
