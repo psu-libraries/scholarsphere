@@ -1,4 +1,5 @@
 import { Controller } from 'stimulus'
+import consumer from '../channels/consumer'
 
 export default class extends Controller {
   static targets = ['versionMessage']
@@ -7,6 +8,49 @@ export default class extends Controller {
     const selectedVersion = this.element.querySelector('input[name="work_version[open_access_version]"]:checked')
     if (selectedVersion) {
       this.refresh({ target: selectedVersion })
+    }
+    const id = this.data.get('id')
+    if (id) {
+      fetch(`/dashboard/form/work_versions/${id}/open_access_version`, { headers: { Accept: 'application/json' } })
+        .then((response) => {
+          if (!response.ok) throw new Error('Network response was not ok')
+          return response.json()
+        })
+        .then((data) => {
+          if (!data || !data.open_access_version) return
+          const radio = this.element.querySelector(
+            `input[name="work_version[open_access_version]"][value="${data.open_access_version}"]`
+          )
+          if (radio) {
+            radio.checked = true
+            this.refresh({ target: radio })
+          }
+        })
+        .catch(() => {})
+    }
+    this.subscription = consumer.subscriptions.create(
+      { channel: 'OpenAccessVersionChannel' },
+      {
+        received: (data) => {
+          const targetId = this.data.get('id')
+          if (String(data.id) !== String(targetId)) return
+
+          const radio = this.element.querySelector(
+            `input[name="work_version[open_access_version]"][value="${data.open_access_version}"]`
+          )
+
+          if (radio) {
+            radio.checked = true
+            this.refresh({ target: radio })
+          }
+        }
+      }
+    )
+  }
+
+  disconnect() {
+    if (this.subscription && this.subscription.unsubscribe) {
+      this.subscription.unsubscribe()
     }
   }
 
