@@ -35,7 +35,7 @@ module Dashboard
           render :edit
         end
       rescue RmdPublication::PublicationNotFound
-        work_version.update imported_metadata_from_rmd: false
+        work_version.update imported_metadata_from_rmd: false, identifier: [autocomplete_work_form_params[:doi]]
         flash[:error] = I18n.t('dashboard.form.notices.autocomplete_unsuccessful')
         render :edit
       end

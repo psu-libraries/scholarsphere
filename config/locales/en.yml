@@ -524,6 +524,7 @@ en:
                                        You cannot modify the DOI once you have completed a search. If you discover that the DOI is incorrect, please delete the draft and start a new search.
                                        <br/><br/>Please note that if you are working to make your work open per <a href="https://policy.psu.edu/policies/ac02">AC02</a>, we recommend using 
                                        the process available directly within the <a href="https://openaccess.psu.edu/deposit/rmd/">Researcher Metadata Database</a> for deposit when possible.
+        autocomplete_required: You must complete the DOI autocomplete form before continuing.
         about_collections: 
           label: About Collections
           message: >

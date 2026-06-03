@@ -77,4 +77,30 @@ RSpec.describe WorkDepositPathway::ScholarlyWorks::DetailsForm, type: :model do
       )
     end
   end
+
+  describe 'autocomplete validation' do
+    context 'when the work is an open access upload' do
+      before { wv.open_access = true }
+
+      context 'when the autocomplete form has not been submitted' do
+        it 'is not valid' do
+          expect(form).not_to be_valid
+          expect(form.errors[:base]).to include I18n.t('dashboard.form.details.autocomplete_required')
+        end
+      end
+
+      context 'when the autocomplete form has been submitted' do
+        it 'is valid' do
+          wv.imported_metadata_from_rmd = true
+          expect(form).to be_valid
+        end
+      end
+    end
+
+    context 'when the work is not an open access upload' do
+      it 'is valid' do
+        expect(form).to be_valid
+      end
+    end
+  end
 end
