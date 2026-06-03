@@ -2,7 +2,7 @@ import { Controller } from 'stimulus'
 import consumer from '../channels/consumer'
 
 export default class extends Controller {
-  static targets = ['versionMessage', 'loading', 'controls']
+  static targets = ['versionMessage', 'loading', 'controls', 'timeoutMessage']
 
   connect() {
     const selectedVersion = this.element.querySelector('input[name="work_version[open_access_version]"]:checked')
@@ -17,19 +17,23 @@ export default class extends Controller {
       this.createSubscription(id)
       this.fetchOpenAccessVersion(id)
       this.timer = setTimeout(() => {
-        // if controls still hidden, reveal them and hide the loading spinner
-        if (this.hasControlsTarget && this.controlsTarget.classList.contains('d-none')) {
-          this.controlsTarget.classList.remove('d-none')
-        }
-        if (this.hasLoadingTarget && !this.loadingTarget.classList.contains('d-none')) {
-          this.loadingTarget.classList.add('d-none')
-        }
+        // Only show timeout message if spinner is still visible and controls are hidden
+        const spinnerVisible = this.hasLoadingTarget && !this.loadingTarget.classList.contains('d-none')
+        const controlsHidden = this.hasControlsTarget && this.controlsTarget.classList.contains('d-none')
 
-        // then unsubscribe from the channel
-        if (this.subscription && this.subscription.unsubscribe) {
-          try { this.subscription.unsubscribe() } catch (e) {}
+        if (spinnerVisible && controlsHidden) {
+          if (this.hasTimeoutMessageTarget && this.timeoutMessageTarget.classList.contains('d-none')) {
+            this.timeoutMessageTarget.classList.remove('d-none')
+          }
+          if (this.hasControlsTarget) this.controlsTarget.classList.remove('d-none')
+          if (this.hasLoadingTarget) this.loadingTarget.classList.add('d-none')
+
+          // then unsubscribe from the channel
+          if (this.subscription && this.subscription.unsubscribe) {
+            try { this.subscription.unsubscribe() } catch (e) {}
+          }
         }
-      }, 60_000)
+      }, 30_000)
     }
   }
 
