@@ -2,7 +2,7 @@ import { Controller } from 'stimulus'
 import consumer from '../channels/consumer'
 
 export default class extends Controller {
-  static targets = ['versionMessage']
+  static targets = ['versionMessage', 'loading', 'controls']
 
   connect() {
     const selectedVersion = this.element.querySelector('input[name="work_version[open_access_version]"]:checked')
@@ -60,6 +60,8 @@ export default class extends Controller {
     if (radio) {
       radio.checked = true
       this.refresh({ target: radio })
+      if (this.hasLoadingTarget) this.loadingTarget.classList.add('d-none')
+      if (this.hasControlsTarget) this.controlsTarget.classList.remove('d-none')
     }
   }
 
