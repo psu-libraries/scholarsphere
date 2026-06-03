@@ -278,6 +278,9 @@ en:
         manufacturer: Organization or individual that built the instrument.
         rights: The license you select determines how your work can be used by others. [Read more about choosing a license](https://docs.scholarsphere.psu.edu/guides/licenses/)
         contributor: If applicable, please include a brief acknowledgment of any funding sources that supported your research. This helps ensure proper attribution and increases the visibility of your funder’s contribution.
+        open_access_version: >
+          The system has attempted to identify which version of the article you have uploaded. If a version could not be detected, no option will be pre-selected and you will be asked to choose manually. If you believe the detected version is incorrect, you may override it by selecting the appropriate option below. More information about the version options can be found in the <a href="https://psu.libanswers.com/faq/279953">AC02 FAQ</a>.
+          <br/><br/><strong>Please note:</strong> The version you select will be used to look up the publisher’s default sharing policy and complete the publishing details section including license and embargo. Selecting the correct version helps ensure accurate implementation of policy requirements.
       autocomplete_work_form:
         doi: Please enter a valid DOI (e.g. https://doi.org/10.xxxx/xxxxxx or 10.xxxx/xxxxxx)
       actor:
@@ -518,12 +521,7 @@ en:
         autocomplete_unsuccessful: 'We were not able to find and autocomplete the metadata for your work.  Please manually enter your metadata in the following forms to complete your submission.'
       details:
         autocomplete_form:
-          autocomplete_help_text_html: By adding the Digital Object Identifier (DOI) for the article, issued by the Publisher, to this field, we can search the Penn State Researcher Metadata 
-                                       Database and potentially enrich the following metadata fields for your deposit. If the Researcher Metadata Database contains pertinent information about 
-                                       your scholarly work, it will automatically be imported into the fields below. You can choose to retain or modify this imported information. 
-                                       You cannot modify the DOI once you have completed a search. If you discover that the DOI is incorrect, please delete the draft and start a new search.
-                                       <br/><br/>Please note that if you are working to make your work open per <a href="https://policy.psu.edu/policies/ac02">AC02</a>, we recommend using 
-                                       the process available directly within the <a href="https://openaccess.psu.edu/deposit/rmd/">Researcher Metadata Database</a> for deposit when possible.
+          autocomplete_help_text_html: You've indicated this is an open access submission with a publisher-provided DOI. Please submit that DOI here.                        
         autocomplete_required: You must complete the DOI autocomplete form before continuing.
         about_collections: 
           label: About Collections
@@ -534,7 +532,15 @@ en:
         required_to_publish_metadata: Needed to Publish
         additional_metadata: Optional Metadata
         instrument_title: Use the instrument name as the work title
-        open_access_prompt: Is this an Open Access submission?
+        open_access_prompt: I am depositing this work to comply with <a href="https://policy.psu.edu/policies/ac02">Penn State’s Open Access Policy (AC02)</a>, and this work has a publisher-provided DOI.
+        open_access_help_text_html: >
+          Selecting this check box and entering the publisher-provided DOI will initiate the following automated tools on your behalf: 
+          <ol>
+          <li> <strong>Version Check</strong> – The system will attempt to identify which version of the article you have uploaded to determine publisher sharing information.</li>
+          <li> <strong>Publisher Sharing Information</strong> – Using the identified version, the system will attempt to retrieve the publisher’s default sharing policy. It will then notify you regarding your permission to share the uploaded version as well as assign the appropriate license, embargo (if applicable), and publisher statement (if applicable).</li>
+          <li> <strong>Metadata Import</strong> – If information about this scholarly work is available in the <a href="https://researcher.psu.edu/metadata">Penn State Researcher Metadata Database</a>, it will be automatically imported into the appropriate fields. You may retain or edit imported information.</li>
+          </ol>
+          <strong>Please note:</strong> You will not be able to modify the selection of this box or the DOI after completing a search. If you find that either the selection of the DOI is incorrect, please delete the draft deposit and begin a new submission.
         privacy_notice:
           header: Accessible Version Generation Privacy Notice
           description: When your PDF is downloaded for the first time, an accessible version will be created to meet ADA Title II requirements

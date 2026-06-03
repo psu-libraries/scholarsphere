@@ -1,4 +1,6 @@
 <div class="form-wrapper">
+<%= render FieldHintComponent.new(form: form, attribute: :open_access_version) %>
+<br><br>
   <div class="form-check mb-2">
     <%= form.radio_button :open_access_version,
                           OpenAccessVersion::VersionValues::ACCEPTED,
