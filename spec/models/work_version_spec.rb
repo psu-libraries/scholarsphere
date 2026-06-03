@@ -183,6 +183,56 @@ RSpec.describe WorkVersion do
     end
   end
 
+  describe 'open access version broadcast' do
+    let(:cable_server) { instance_double(ActionCable::Server::Base, broadcast: true) }
+
+    before { allow(ActionCable).to receive(:server).and_return(cable_server) }
+
+    context 'when open_access_version is changed from nil' do
+      let(:work_version) { create(:work_version, open_access_version: nil) }
+
+      it 'broadcasts when open_access_version is changed to non-nil value' do
+        work_version.update!(open_access_version: OpenAccessVersion::VersionValues::PUBLISHED)
+
+        expect(cable_server).to have_received(:broadcast).with(
+          'open_access_version_channel',
+          {
+            id: work_version.id,
+            open_access_version: OpenAccessVersion::VersionValues::PUBLISHED
+          }
+        )
+      end
+
+      it 'does not broadcast when open_access_version is changed to nil' do
+        work_version.update!(open_access_version: nil)
+
+        expect(cable_server).not_to have_received(:broadcast)
+      end
+    end
+
+    context 'when open_access_version is changed from a non-nil value' do
+      let(:work_version) { create(:work_version, open_access_version: OpenAccessVersion::VersionValues::PUBLISHED) }
+
+      it 'does not broadcast when open_access_version is not changed' do
+        work_version.update!(title: 'a title change that does not affect open access version')
+
+        expect(cable_server).not_to have_received(:broadcast)
+      end
+
+      it 'broadcasts when open_access_version is updated to a different non-nil value' do
+        work_version.update!(open_access_version: OpenAccessVersion::VersionValues::ACCEPTED)
+
+        expect(cable_server).to have_received(:broadcast).with(
+          'open_access_version_channel',
+          {
+            id: work_version.id,
+            open_access_version: OpenAccessVersion::VersionValues::ACCEPTED
+          }
+        )
+      end
+    end
+  end
+
   describe 'validations' do
     subject(:work_version) { build(:work_version, work: work) }
 
