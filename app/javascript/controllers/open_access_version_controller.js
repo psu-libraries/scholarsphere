@@ -16,6 +16,20 @@ export default class extends Controller {
     if (id) {
       this.createSubscription(id)
       this.fetchOpenAccessVersion(id)
+      this.timer = setTimeout(() => {
+        // if controls still hidden, reveal them and hide the loading spinner
+        if (this.hasControlsTarget && this.controlsTarget.classList.contains('d-none')) {
+          this.controlsTarget.classList.remove('d-none')
+        }
+        if (this.hasLoadingTarget && !this.loadingTarget.classList.contains('d-none')) {
+          this.loadingTarget.classList.add('d-none')
+        }
+
+        // then unsubscribe from the channel
+        if (this.subscription && this.subscription.unsubscribe) {
+          try { this.subscription.unsubscribe() } catch (e) {}
+        }
+      }, 60_000)
     }
   }
 
