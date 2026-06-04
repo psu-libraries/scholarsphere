@@ -223,7 +223,6 @@ module FeatureHelpers
     end
 
     def self.simulate_open_access_version_broadcast(work_version)
-      # Spinner shows until version is updated in db and broadcasted to page
       work_version.update(open_access_version: 'acceptedVersion')
       # Wait for broadcast to update page
       page.has_no_text?(I18n.t('dashboard.form.publish.edit.determining_open_access_version'), wait: 3)
