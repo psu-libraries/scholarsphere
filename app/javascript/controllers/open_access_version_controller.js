@@ -16,21 +16,7 @@ export default class extends Controller {
     if (id) {
       this.createSubscription(id)
       this.fetchOpenAccessVersion(id)
-      this.timer = setTimeout(() => {
-        // Only show timeout message if spinner is still visible and controls are hidden
-        const spinnerVisible = this.hasLoadingTarget && !this.loadingTarget.classList.contains('d-none')
-        const controlsHidden = this.hasControlsTarget && this.controlsTarget.classList.contains('d-none')
-
-        if (spinnerVisible && controlsHidden) {
-          if (this.hasControlsTarget) this.controlsTarget.classList.remove('d-none')
-          if (this.hasLoadingTarget) this.loadingTarget.classList.add('d-none')
-
-          // then unsubscribe from the channel
-          if (this.subscription && this.subscription.unsubscribe) {
-            try { this.subscription.unsubscribe() } catch (e) { void e }
-          }
-        }
-      }, 30_000)
+      this.startTimer()
     }
   }
 
@@ -64,6 +50,23 @@ export default class extends Controller {
         this.applyOpenAccessVersion(data.open_access_version)
       })
       .catch(() => void 0)
+  }
+
+  startTimer() {
+    setTimeout(() => {
+        const spinnerVisible = this.hasLoadingTarget && !this.loadingTarget.classList.contains('d-none')
+        const controlsHidden = this.hasControlsTarget && this.controlsTarget.classList.contains('d-none')
+
+        if (spinnerVisible && controlsHidden) {
+          if (this.hasControlsTarget) this.controlsTarget.classList.remove('d-none')
+          if (this.hasLoadingTarget) this.loadingTarget.classList.add('d-none')
+        }
+
+        // then unsubscribe from the channel
+        if (this.subscription && this.subscription.unsubscribe) {
+          try { this.subscription.unsubscribe() } catch (e) { void e }
+        }
+      }, 30_000)
   }
 
   applyOpenAccessVersion(open_access_version) {
