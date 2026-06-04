@@ -2280,6 +2280,10 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).to have_field('work_version_publisher_statement', readonly: true)
         expect(page).to have_field('work_version_rights', disabled: true)
         expect(page).to have_field('work_version_work_attributes_embargoed_until', readonly: true)
+        expect(page).to have_content(I18n.t('dashboard.form.publish.edit.determining_open_access_version'))
+
+        FeatureHelpers::DashboardForm.simulate_open_access_version_broadcast(work_version)
+
         expect(page).to have_field('work_version_open_access_version_acceptedversion')
         expect(page).to have_field('work_version_open_access_version_publishedversion')
         choose 'Published Version'
@@ -2314,6 +2318,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
         it 'displays an error message when the other version is selected and blocks publish' do
           visit dashboard_form_publish_path(work_version)
 
+          FeatureHelpers::DashboardForm.simulate_open_access_version_broadcast(work_version)
+
           choose 'Accepted Version'
 
           expect(page).to have_content(I18n.t('dashboard.works.edit.open_access_version.other_version_preferred', this_version: 'accepted version', other_version: 'published version'))
@@ -2330,6 +2336,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         it 'displays an error message when a version is selected and blocks publish' do
           visit dashboard_form_publish_path(work_version)
+
+          FeatureHelpers::DashboardForm.simulate_open_access_version_broadcast(work_version)
 
           choose 'Accepted Version'
 
@@ -2348,6 +2356,9 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
       it 'enables autopopulated fields' do
         visit dashboard_form_publish_path(work_version)
+
+        FeatureHelpers::DashboardForm.simulate_open_access_version_broadcast(work_version)
+
         expect(page).to have_field('open_access_checkbox', type: 'checkbox')
         expect(page).to have_field('work_version_publisher_statement')
         expect(page).to have_field('work_version_rights')
