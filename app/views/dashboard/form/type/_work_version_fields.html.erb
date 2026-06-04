@@ -28,7 +28,7 @@
         style="display: none;">
 
       <%= form.check_box :open_access,
-                         { class: 'form-check-input', id: 'open_access_checkbox', disabled: @resource.open_access && !current_user.admin? },
+                         { class: 'form-check-input', id: 'open_access_checkbox', disabled: local_assigns[:work_type_disabled] && !current_user.admin? },
                          true,
                          false %>
 
