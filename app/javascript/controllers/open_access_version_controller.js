@@ -2,7 +2,7 @@ import { Controller } from 'stimulus'
 import consumer from '../channels/consumer'
 
 export default class extends Controller {
-  static targets = ['versionMessage', 'loading', 'controls', 'timeoutMessage']
+  static targets = ['versionMessage', 'loading', 'controls']
 
   connect() {
     const selectedVersion = this.element.querySelector('input[name="work_version[open_access_version]"]:checked')
@@ -22,9 +22,6 @@ export default class extends Controller {
         const controlsHidden = this.hasControlsTarget && this.controlsTarget.classList.contains('d-none')
 
         if (spinnerVisible && controlsHidden) {
-          if (this.hasTimeoutMessageTarget && this.timeoutMessageTarget.classList.contains('d-none')) {
-            this.timeoutMessageTarget.classList.remove('d-none')
-          }
           if (this.hasControlsTarget) this.controlsTarget.classList.remove('d-none')
           if (this.hasLoadingTarget) this.loadingTarget.classList.add('d-none')
 

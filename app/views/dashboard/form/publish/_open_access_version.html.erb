@@ -4,10 +4,6 @@
     <span><%= t('dashboard.form.publish.edit.determining_open_access_version') %></span>
   </div>
 
-  <p data-target="open-access-version.timeoutMessage" class="form-text text-muted d-none mb-4">
-    <%= I18n.t('dashboard.form.publish.edit.open_access_version_not_determined', default: 'A version could not be determined; please select a version below.') %>
-  </p>
-
   <div data-target="open-access-version.controls" class="d-none">
     <div class="form-check mb-2">
     <%= form.radio_button :open_access_version,
