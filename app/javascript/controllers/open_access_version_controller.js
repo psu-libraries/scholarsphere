@@ -61,7 +61,6 @@ export default class extends Controller {
         if (this.hasLoadingTarget) this.loadingTarget.classList.add('d-none')
       }
 
-      // then unsubscribe from the channel
       if (this.subscription && this.subscription.unsubscribe) {
         try { this.subscription.unsubscribe() } catch (e) { void e }
       }
