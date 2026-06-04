@@ -31,8 +31,7 @@ export default class extends Controller {
       { channel: 'OpenAccessVersionChannel', id: id },
       {
         received: (data) => {
-          const targetId = this.data.get('id')
-          if (String(data.id) !== String(targetId)) return
+          if (String(data.id) !== String(id)) return
           this.applyOpenAccessVersion(data.open_access_version)
         }
       }
