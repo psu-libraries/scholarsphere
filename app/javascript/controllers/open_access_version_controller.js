@@ -1,12 +1,82 @@
 import { Controller } from 'stimulus'
+import consumer from '../channels/consumer'
 
 export default class extends Controller {
-  static targets = ['versionMessage']
+  static targets = ['versionMessage', 'loading', 'controls']
 
   connect() {
     const selectedVersion = this.element.querySelector('input[name="work_version[open_access_version]"]:checked')
+
     if (selectedVersion) {
       this.refresh({ target: selectedVersion })
+    }
+
+    const id = this.data.get('id')
+
+    if (id) {
+      this.createSubscription(id)
+      this.fetchOpenAccessVersion(id)
+      this.startTimer()
+    }
+  }
+
+  disconnect() {
+    if (this.subscription && this.subscription.unsubscribe) {
+      this.subscription.unsubscribe()
+    }
+  }
+
+  createSubscription(id) {
+    this.subscription = consumer.subscriptions.create(
+      { channel: 'OpenAccessVersionChannel', id: id },
+      {
+        received: (data) => {
+          if (String(data.id) !== String(id)) return
+          this.applyOpenAccessVersion(data.open_access_version)
+        }
+      }
+    )
+  }
+
+  fetchOpenAccessVersion(id) {
+    fetch(`/dashboard/form/work_versions/${id}/open_access_version`, { headers: { Accept: 'application/json' } })
+      .then((response) => {
+        if (!response.ok) throw new Error('Network response was not ok')
+        return response.json()
+      })
+      .then((data) => {
+        if (!data) return
+        this.applyOpenAccessVersion(data.open_access_version)
+      })
+      .catch(() => void 0)
+  }
+
+  startTimer() {
+    setTimeout(() => {
+      const spinnerVisible = this.hasLoadingTarget && !this.loadingTarget.classList.contains('d-none')
+      const controlsHidden = this.hasControlsTarget && this.controlsTarget.classList.contains('d-none')
+
+      if (spinnerVisible && controlsHidden) {
+        if (this.hasControlsTarget) this.controlsTarget.classList.remove('d-none')
+        if (this.hasLoadingTarget) this.loadingTarget.classList.add('d-none')
+      }
+
+      if (this.subscription && this.subscription.unsubscribe) {
+        try { this.subscription.unsubscribe() } catch (e) { void e }
+      }
+    }, 30_000)
+  }
+
+  applyOpenAccessVersion(open_access_version) {
+    if (!open_access_version) return
+    const radio = this.element.querySelector(
+      `input[name="work_version[open_access_version]"][value="${open_access_version}"]`
+    )
+    if (radio) {
+      radio.checked = true
+      this.refresh({ target: radio })
+      if (this.hasLoadingTarget) this.loadingTarget.classList.add('d-none')
+      if (this.hasControlsTarget) this.controlsTarget.classList.remove('d-none')
     }
   }
 

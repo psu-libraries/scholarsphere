@@ -211,6 +211,7 @@ class WorkVersion < ApplicationRecord
   validates_with ChangedWorkVersionValidator,
                  if: :published?
 
+  after_update :broadcast_open_access_version_if_needed
   after_commit :perform_update_index, on: [:create, :update]
   after_commit :enqueue_published_webhook, on: [:create, :update]
   after_rollback :clear_publish_flag
@@ -454,6 +455,18 @@ class WorkVersion < ApplicationRecord
 
     def clear_publish_flag
       @work_just_published = false
+    end
+
+    def broadcast_open_access_version_if_needed
+      return unless saved_change_to_open_access_version?
+
+      OpenAccessVersionChannel.broadcast_to(
+        self,
+        {
+          id: id,
+          open_access_version: open_access_version
+        }
+      )
     end
 
     def strip_blanks_from_array(arr)

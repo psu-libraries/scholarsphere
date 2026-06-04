@@ -56,4 +56,39 @@ RSpec.describe Dashboard::Form::PublishController, type: :request do
       end
     end
   end
+
+  describe 'GET /dashboard/form/work_versions/:id/open_access_version' do
+    let(:work_version) do
+      create(:work_version, open_access_version: OpenAccessVersion::VersionValues::ACCEPTED)
+    end
+
+    context 'when the user can edit the work version' do
+      let(:user) { work_version.work.depositor.user }
+
+      before { sign_in user }
+
+      it 'returns the open access version payload' do
+        get "/dashboard/form/work_versions/#{work_version.id}/open_access_version"
+
+        expect(response).to have_http_status(:ok)
+        payload = JSON.parse(response.body)
+        expect(payload).to eq(
+          'id' => work_version.id,
+          'open_access_version' => OpenAccessVersion::VersionValues::ACCEPTED
+        )
+      end
+    end
+
+    context 'when the user cannot edit the work version' do
+      let(:user) { create(:user) }
+
+      before { sign_in user }
+
+      it 'returns not found' do
+        get "/dashboard/form/work_versions/#{work_version.id}/open_access_version"
+
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+  end
 end
