@@ -8,7 +8,7 @@ RSpec.describe Dashboard::Form::FilesController, type: :request do
       create(
         :work_version,
         :draft,
-        open_access: open_access,
+        open_access_upload: open_access,
         open_access_version: OpenAccessVersion::VersionValues::ACCEPTED
       )
     end

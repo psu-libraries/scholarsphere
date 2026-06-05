@@ -45,7 +45,7 @@ RSpec.describe WorkDepositPathway::ScholarlyWorks::DetailsForm, type: :model do
         related_url
         subject
         language
-        open_access
+        open_access_upload
       }
 
       expect(described_class.form_fields).to be_frozen
