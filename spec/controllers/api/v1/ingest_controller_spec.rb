@@ -52,8 +52,8 @@ RSpec.describe Api::V1::IngestController do
         expect(Api::V1::WorkCreator).to have_received(:call).with(
           a_hash_including(external_app: api_token.application)
         )
-        expect(work_version.last.open_access).to eq(true)
-        expect(work_version.last.imported_metadata_from_rmd).to eq(true)
+        expect(WorkVersion.last.open_access).to eq(true)
+        expect(WorkVersion.last.imported_metadata_from_rmd).to eq(true)
       end
     end
 
