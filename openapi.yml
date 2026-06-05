@@ -424,7 +424,7 @@ components:
           type: "boolean"
           description: >-
             Whether the work is an upload for open access compliance.
-        metadata_imported_from_rmd:
+        imported_metadata_from_rmd:
           type: "boolean"
           description: >-
             Whether the metadata was imported from The Researcher Metadata Database (RMD).

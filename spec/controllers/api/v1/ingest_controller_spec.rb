@@ -37,7 +37,7 @@ RSpec.describe Api::V1::IngestController do
             rights: metadata[:rights],
             visibility: Permissions::Visibility::OPEN,
             open_access: true,
-            metadata_imported_from_rmd: true
+            imported_metadata_from_rmd: true
           },
           depositor: depositor,
           content: [{ file: fixture_file_upload(File.join(fixture_paths, 'image.png')) }]
@@ -49,15 +49,9 @@ RSpec.describe Api::V1::IngestController do
         expect(response.body).to eq(
           "{\"message\":\"Work was successfully created\",\"url\":\"/resources/#{Work.last.uuid}\"}"
         )
-        expect(Api::V1::WorkCreator).to have_received(:call).with(
-          a_hash_including(
-            external_app: api_token.application,
-            metadata: a_hash_including(
-              open_access: true,
-              metadata_imported_from_rmd: true
-            )
-          )
-        )
+        a_hash_including(external_app: api_token.application)
+        expect(work_version.last.open_access).to eq(true)
+        expect(work_version.last.imported_metadata_from_rmd).to eq(true)
       end
     end
 
