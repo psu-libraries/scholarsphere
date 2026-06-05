@@ -44,7 +44,7 @@ class WorkDepositPathway
   end
 
   def allows_visibility_change?
-    !data_and_code? && !grad_culminating_experiences? && !@resource.open_access
+    !data_and_code? && !grad_culminating_experiences? && !@resource.open_access_upload
   end
 
   def allows_curation_request?
@@ -191,7 +191,7 @@ class WorkDepositPathway
                :file_version_memberships,
                :mint_doi_requested,
                :has_image_file_resource?,
-               :open_access,
+               :open_access_upload,
                :open_access_version,
                to: :work_version, prefix: false
 
@@ -213,7 +213,7 @@ class WorkDepositPathway
       }.freeze
 
       delegate :imported_metadata_from_rmd,
-               :open_access,
+               :open_access_upload,
                to: :work_version, prefix: false
 
       def show_autocomplete_form?
@@ -306,7 +306,7 @@ class WorkDepositPathway
               subject
               publisher
               subtitle
-              open_access
+              open_access_upload
             }
           ).freeze
         end
@@ -333,7 +333,7 @@ class WorkDepositPathway
               publisher
               subtitle
               open_access_version
-              open_access
+              open_access_upload
             }
           ).freeze
         end

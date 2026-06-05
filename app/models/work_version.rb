@@ -448,7 +448,7 @@ class WorkVersion < ApplicationRecord
     def enqueue_published_webhook
       just_published = @work_just_published
       @work_just_published = false
-      return unless just_published && open_access
+      return unless just_published && open_access_upload
 
       WorkPublishedWebhookJob.perform_later(work.uuid)
     end

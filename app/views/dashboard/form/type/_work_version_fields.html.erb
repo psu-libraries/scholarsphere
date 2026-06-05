@@ -27,12 +27,12 @@
         data-target="work-type.openAccess"
         style="display: none;">
 
-      <%= form.check_box :open_access,
-                         { class: 'form-check-input', id: 'open_access_checkbox', disabled: local_assigns[:work_type_disabled] && !current_user.admin? },
+      <%= form.check_box :open_access_upload,
+                         { class: 'form-check-input', id: 'open_access_upload_checkbox', disabled: local_assigns[:work_type_disabled] && !current_user.admin? },
                          true,
                          false %>
 
-      <%= form.label :open_access,
+      <%= form.label :open_access_upload,
                      t('dashboard.form.details.open_access_prompt'),
                      class: 'form-check-label' %>
     </div>

@@ -157,7 +157,7 @@ RSpec.describe WorkVersion do
     before { allow(WorkPublishedWebhookJob).to receive(:perform_later) }
 
     context 'when the work is open access' do
-      before { work_version.update(open_access: true) }
+      before { work_version.update(open_access_upload: true) }
 
       it 'enqueues the WorkPublishedWebhookJob when published' do
         work_version.publish!

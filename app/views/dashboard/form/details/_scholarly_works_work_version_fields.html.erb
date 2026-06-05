@@ -1,6 +1,6 @@
 <%= render 'dashboard/form/details/common_work_version_required_fields', form: form %>
 
-<% if @resource.open_access %>
+<% if @resource.open_access_upload %>
   <% form.object.publisher_statement = @permissions&.publisher_statement(@resource.open_access_version) %>
 <% end %>
 <div class="form-wrapper">
@@ -10,7 +10,7 @@
            form: form,
            attribute: :publisher_statement,
            data: { target: 'open-access-version.publisherStatement' },
-           readonly: @resource.open_access && !current_user.admin? %>
+           readonly: @resource.open_access_upload && !current_user.admin? %>
   <%= render 'form_fields/multi_text', form: form,
                                        attribute: :identifier,
                                        readonly: @resource.imported_metadata_from_rmd? && !current_user.admin? %>

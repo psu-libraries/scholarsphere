@@ -78,7 +78,7 @@
               <%= render 'dashboard/form/files/uploaded_file_list', work_version: form.object %>
             <% end %>
 
-            <% if @resource.open_access %>
+            <% if @resource.open_access_upload %>
               <div class="form-wrapper form-wrapper--wide">
                 <div class="keyline keyline--left mb-3">
                   <h4><%= t '.version' %></h4>
