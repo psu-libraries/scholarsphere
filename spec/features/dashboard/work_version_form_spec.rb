@@ -1227,6 +1227,21 @@ RSpec.describe 'Publishing a work', with_user: :user do
   end
 
   describe 'The Publish tab' do
+    context 'when required contributor fields are blank', :js do
+      let(:work_version) { create(:work_version, :article, :able_to_be_published) }
+      let(:user) { work_version.work.depositor.user }
+
+      it 'does not open the publish dialog and keeps focus on form validation' do
+        visit dashboard_form_publish_path(work_version)
+
+        fill_in 'work_version_creators_attributes_0_given_name', with: ''
+
+        click_on I18n.t!('dashboard.form.actions.publish.button')
+
+        expect(page).to have_no_css('dialog#hidden-publish-dialog[open]')
+      end
+    end
+
     context 'when submitting the form with publication errors' do
       let(:work) { create(:work) }
       let(:user) { work.depositor.user }
