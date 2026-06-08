@@ -35,7 +35,9 @@ RSpec.describe Api::V1::IngestController do
             published_date: metadata[:published_date],
             creators: [creator],
             rights: metadata[:rights],
-            visibility: Permissions::Visibility::OPEN
+            visibility: Permissions::Visibility::OPEN,
+            open_access: true,
+            imported_metadata_from_rmd: true
           },
           depositor: depositor,
           content: [{ file: fixture_file_upload(File.join(fixture_paths, 'image.png')) }]
@@ -50,6 +52,8 @@ RSpec.describe Api::V1::IngestController do
         expect(Api::V1::WorkCreator).to have_received(:call).with(
           a_hash_including(external_app: api_token.application)
         )
+        expect(WorkVersion.last.open_access).to eq(true)
+        expect(WorkVersion.last.imported_metadata_from_rmd).to eq(true)
       end
     end
 

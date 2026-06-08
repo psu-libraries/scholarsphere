@@ -59,6 +59,13 @@ module Dashboard
         end
       end
 
+      def open_access_version
+        work_version = WorkVersion.find(params[:id])
+        authorize(work_version, :edit?)
+
+        render json: { id: work_version.id, open_access_version: work_version.open_access_version }
+      end
+
       private
 
         # @note Validate the work like we're going to publish it, so we can inform the user ahead of time before they

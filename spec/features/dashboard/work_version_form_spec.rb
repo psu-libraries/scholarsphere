@@ -282,27 +282,6 @@ RSpec.describe 'Publishing a work', with_user: :user do
           expect(page).to have_no_field('open_access_checkbox', type: 'checkbox')
         end
       end
-
-      context 'when the work is already open access', :js do
-        before do
-          @original_secret = ENV['ENABLE_OPEN_ACCESS_FEATURE']
-          ENV['ENABLE_OPEN_ACCESS_FEATURE'] = 'true'
-        end
-
-        after do
-          ENV['ENABLE_OPEN_ACCESS_FEATURE'] = @original_secret
-        end
-
-        it 'displays the open access checkbox in readonly' do
-          visit dashboard_form_work_versions_path
-
-          FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_scholarly_works_draft(metadata)
-          check 'open_access_checkbox'
-          FeatureHelpers::DashboardForm.save_and_continue
-          click_on 'Work Type'
-          expect(page).to have_field('open_access_checkbox', type: 'checkbox', disabled: true)
-        end
-      end
     end
 
     context 'when selecting a work type that uses the data and code deposit pathway' do
@@ -697,7 +676,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
   end
 
   describe 'The Work Details tab for an existing draft work' do
-    let(:work) { create(:work, versions_count: 1) }
+    let(:work) { create(:work, work_type: 'article', versions_count: 1, has_draft: true) }
     let(:work_version) { work.versions.first }
     let(:user) { work_version.work.depositor.user }
 
@@ -769,6 +748,23 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         expect(page).to have_current_path(dashboard_form_contributors_path('work_version', work_version))
         expect(SolrIndexingJob).not_to have_received(:perform_later)
+      end
+    end
+
+    context 'when metadata has been imported', :js do
+      before do
+        @original_secret = ENV['ENABLE_OPEN_ACCESS_FEATURE']
+        ENV['ENABLE_OPEN_ACCESS_FEATURE'] = 'true'
+        work_version.update!(imported_metadata_from_rmd: true)
+      end
+
+      after do
+        ENV['ENABLE_OPEN_ACCESS_FEATURE'] = @original_secret
+      end
+
+      it 'displays the open access checkbox in readonly' do
+        visit dashboard_form_work_version_type_path(work_version)
+        expect(page).to have_field('open_access_checkbox', type: 'checkbox', disabled: true)
       end
     end
   end
@@ -2280,6 +2276,10 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).to have_field('work_version_publisher_statement', readonly: true)
         expect(page).to have_field('work_version_rights', disabled: true)
         expect(page).to have_field('work_version_work_attributes_embargoed_until', readonly: true)
+        expect(page).to have_content(I18n.t('dashboard.form.publish.edit.determining_open_access_version'))
+
+        FeatureHelpers::DashboardForm.simulate_open_access_version_broadcast(work_version)
+
         expect(page).to have_field('work_version_open_access_version_acceptedversion')
         expect(page).to have_field('work_version_open_access_version_publishedversion')
         choose 'Published Version'
@@ -2314,6 +2314,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
         it 'displays an error message when the other version is selected and blocks publish' do
           visit dashboard_form_publish_path(work_version)
 
+          FeatureHelpers::DashboardForm.simulate_open_access_version_broadcast(work_version)
+
           choose 'Accepted Version'
 
           expect(page).to have_content(I18n.t('dashboard.works.edit.open_access_version.other_version_preferred', this_version: 'accepted version', other_version: 'published version'))
@@ -2330,6 +2332,8 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         it 'displays an error message when a version is selected and blocks publish' do
           visit dashboard_form_publish_path(work_version)
+
+          FeatureHelpers::DashboardForm.simulate_open_access_version_broadcast(work_version)
 
           choose 'Accepted Version'
 
@@ -2348,6 +2352,9 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
       it 'enables autopopulated fields' do
         visit dashboard_form_publish_path(work_version)
+
+        FeatureHelpers::DashboardForm.simulate_open_access_version_broadcast(work_version)
+
         expect(page).to have_field('open_access_checkbox', type: 'checkbox')
         expect(page).to have_field('work_version_publisher_statement')
         expect(page).to have_field('work_version_rights')
@@ -2362,7 +2369,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
       it 'enables autopopulated fields and does not display open access version' do
         visit dashboard_form_publish_path(work_version)
-        expect(page).to have_field('open_access_checkbox', type: 'checkbox')
+        expect(page).to have_field('open_access_checkbox', type: 'checkbox', disabled: true)
         expect(page).to have_field('work_version_publisher_statement')
         expect(page).to have_field('work_version_rights')
         expect(page).to have_field('work_version_work_attributes_embargoed_until')

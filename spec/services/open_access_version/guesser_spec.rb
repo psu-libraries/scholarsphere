@@ -36,6 +36,33 @@ RSpec.describe OpenAccessVersion::Guesser do
     end
 
     context 'when EXIF check returns nil and no arXiv watermark is found' do
+      context 'when PDF URI metadata is missing' do
+        let(:pdf_reader) { instance_double(PDF::Reader, objects: { 8 => { A: {} } }) }
+
+        before do
+          calculator = instance_double(OpenAccessVersion::ScoreCalculator, score: 1)
+          allow(OpenAccessVersion::ScoreCalculator).to receive(:new).and_return(calculator)
+        end
+
+        it 'does not treat the file as arXiv and falls back to score calculation' do
+          expect(guesser.version).to eq(OpenAccessVersion::VersionValues::PUBLISHED)
+        end
+      end
+
+      context 'when PDF object parsing fails during arXiv watermark check' do
+        let(:pdf_reader) { instance_double(PDF::Reader) }
+
+        before do
+          allow(pdf_reader).to receive(:objects).and_raise(StandardError)
+          calculator = instance_double(OpenAccessVersion::ScoreCalculator, score: 0)
+          allow(OpenAccessVersion::ScoreCalculator).to receive(:new).and_return(calculator)
+        end
+
+        it 'rescues and continues to score-based version detection' do
+          expect(guesser.version).to eq(OpenAccessVersion::VersionValues::UNKNOWN)
+        end
+      end
+
       context 'when score is positive' do
         before do
           calculator = instance_double(OpenAccessVersion::ScoreCalculator, score: 2)

@@ -183,6 +183,54 @@ RSpec.describe WorkVersion do
     end
   end
 
+  describe 'open access version broadcast' do
+    before { allow(OpenAccessVersionChannel).to receive(:broadcast_to) }
+
+    context 'when open_access_version is changed from nil' do
+      let(:work_version) { create(:work_version, open_access_version: nil) }
+
+      it 'broadcasts when open_access_version is changed to non-nil value' do
+        work_version.update!(open_access_version: OpenAccessVersion::VersionValues::PUBLISHED)
+
+        expect(OpenAccessVersionChannel).to have_received(:broadcast_to).with(
+          work_version,
+          {
+            id: work_version.id,
+            open_access_version: OpenAccessVersion::VersionValues::PUBLISHED
+          }
+        )
+      end
+
+      it 'does not broadcast when open_access_version is changed to nil' do
+        work_version.update!(open_access_version: nil)
+
+        expect(OpenAccessVersionChannel).not_to have_received(:broadcast_to)
+      end
+    end
+
+    context 'when open_access_version is changed from a non-nil value' do
+      let(:work_version) { create(:work_version, open_access_version: OpenAccessVersion::VersionValues::PUBLISHED) }
+
+      it 'does not broadcast when open_access_version is not changed' do
+        work_version.update!(title: 'a title change that does not affect open access version')
+
+        expect(OpenAccessVersionChannel).not_to have_received(:broadcast_to)
+      end
+
+      it 'broadcasts when open_access_version is updated to a different non-nil value' do
+        work_version.update!(open_access_version: OpenAccessVersion::VersionValues::ACCEPTED)
+
+        expect(OpenAccessVersionChannel).to have_received(:broadcast_to).with(
+          work_version,
+          {
+            id: work_version.id,
+            open_access_version: OpenAccessVersion::VersionValues::ACCEPTED
+          }
+        )
+      end
+    end
+  end
+
   describe 'validations' do
     subject(:work_version) { build(:work_version, work: work) }
 

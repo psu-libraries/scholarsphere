@@ -593,6 +593,7 @@ en:
           files: Files
           publishing_details: Publishing Details
           version: Open Access Version
+          determining_open_access_version: "Determining open access version…"
         curation:
           header: Request Curation (Optional)
           request_description: "Recommended: Select ‘Request Curation’ below to have the ScholarSphere Curation Team review your work ensuring its findability, interoperability, accessibility, and reusability prior to publication. The curatorial review will focus on enhancing metadata quality, recommending improvements for deposit interoperability and reusability, and remediating files as necessary for accessibility. While under review, your work will remain saved as a draft. Once approved by the curator, the work will be published, and if applicable, a DOI will be minted."

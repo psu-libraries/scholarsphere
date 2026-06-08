@@ -43,6 +43,8 @@ module Dashboard
         end
 
         def send_open_access_version_guesser_job
+          @resource.open_access_version = nil
+          @resource.save!
           OpenAccessVersionGuesserJob.perform_later(@resource.id)
         end
     end

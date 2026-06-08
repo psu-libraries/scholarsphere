@@ -1,7 +1,13 @@
 <div class="form-wrapper">
 <%= render FieldHintComponent.new(form: form, attribute: :open_access_version) %>
 <br><br>
-  <div class="form-check mb-2">
+  <div data-target="open-access-version.loading" class="d-flex align-items-center mb-2">
+    <div class="spinner-border m-4" role="status" aria-hidden="true"></div>
+    <span><%= t('dashboard.form.publish.edit.determining_open_access_version') %></span>
+  </div>
+
+  <div data-target="open-access-version.controls" class="d-none">
+    <div class="form-check mb-2">
     <%= form.radio_button :open_access_version,
                           OpenAccessVersion::VersionValues::ACCEPTED,
                           class: 'form-check-input',
@@ -10,16 +16,16 @@
                    value: OpenAccessVersion::VersionValues::ACCEPTED,
                    class: 'form-check-label' %>
   </div>
+    <div class="form-check mb-2">
+      <%= form.radio_button :open_access_version,
+                            OpenAccessVersion::VersionValues::PUBLISHED,
+                            class: 'form-check-input',
+                            data: { action: 'change->open-access-version#refresh' } %>
+      <%= form.label :open_access_version, 'Published Version',
+                     value: OpenAccessVersion::VersionValues::PUBLISHED,
+                     class: 'form-check-label' %>
+    </div>
 
-  <div class="form-check mb-2">
-    <%= form.radio_button :open_access_version,
-                          OpenAccessVersion::VersionValues::PUBLISHED,
-                          class: 'form-check-input',
-                          data: { action: 'change->open-access-version#refresh' } %>
-    <%= form.label :open_access_version, 'Published Version',
-                   value: OpenAccessVersion::VersionValues::PUBLISHED,
-                   class: 'form-check-label' %>
+    <span data-target="open-access-version.versionMessage" class="text-danger"></span>
   </div>
-
-  <span data-target="open-access-version.versionMessage" class="text-danger"></span>
 </div>
