@@ -1239,6 +1239,13 @@ RSpec.describe 'Publishing a work', with_user: :user do
         click_on I18n.t!('dashboard.form.actions.publish.button')
 
         expect(page).to have_no_css('dialog#hidden-publish-dialog[open]')
+
+        fill_in 'work_version_creators_attributes_0_given_name', with: 'Firstname'
+        fill_in 'work_version_creators_attributes_0_surname', with: 'Lastname'
+
+        click_on I18n.t!('dashboard.form.actions.publish.button')
+
+        expect(page).to have_css('dialog#hidden-publish-dialog[open]')
       end
     end
 
