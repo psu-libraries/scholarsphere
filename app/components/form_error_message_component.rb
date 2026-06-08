@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class FormErrorMessageComponent < ApplicationComponent
   attr_reader :resource,
               :heading
@@ -18,7 +19,7 @@ class FormErrorMessageComponent < ApplicationComponent
   end
 
   def errors
-    resource.errors || form.object.errors
+    resource&.errors || @form&.object&.errors
   end
 
   def default_heading
