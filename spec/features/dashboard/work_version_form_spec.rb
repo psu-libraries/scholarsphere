@@ -1036,6 +1036,21 @@ RSpec.describe 'Publishing a work', with_user: :user do
     let(:work_version) { work.versions.first }
     let(:user) { work_version.work.depositor.user }
 
+    describe 'external entry guidance' do
+      it 'displays onboarding guidance when arriving from an external redirect' do
+        visit dashboard_form_files_path(work_version, external_entry: true)
+
+        expect(page).to have_content(I18n.t!('dashboard.form.files.edit.external_entry.heading'))
+        expect(page).to have_content(I18n.t!('dashboard.form.files.edit.external_entry.message'))
+      end
+
+      it 'does not display onboarding guidance during normal navigation' do
+        visit dashboard_form_files_path(work_version)
+
+        expect(page).to have_no_content(I18n.t!('dashboard.form.files.edit.external_entry.heading'))
+      end
+    end
+
     describe 'accessibility privacy notice' do
       it 'expands to display full privacy notice' do
         visit dashboard_form_files_path(work_version)
