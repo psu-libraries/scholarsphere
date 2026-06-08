@@ -767,6 +767,27 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).to have_field('open_access_checkbox', type: 'checkbox', disabled: true)
       end
     end
+
+    context 'when editing a non-initial draft version', :js do
+      let(:work) { create(:work, work_type: 'article', versions_count: 2, has_draft: true) }
+
+      before do
+        @original_secret = ENV['ENABLE_OPEN_ACCESS_FEATURE']
+        ENV['ENABLE_OPEN_ACCESS_FEATURE'] = 'true'
+      end
+
+      after do
+        ENV['ENABLE_OPEN_ACCESS_FEATURE'] = @original_secret
+      end
+
+      it 'does not display the open access checkbox' do
+        expect(work_version).not_to be_initial_draft
+
+        visit dashboard_form_work_version_type_path(work_version)
+
+        expect(page).to have_no_field('open_access_checkbox', type: 'checkbox')
+      end
+    end
   end
 
   describe 'The Contributors tab', :js do
