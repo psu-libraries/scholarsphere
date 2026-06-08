@@ -3,6 +3,13 @@
     <div class="col" data-controller="unsaved-changes" data-unsaved-changes-prompt="<%= t('dashboard.form.unsaved_changes_prompt') %>">
       <h1 class="text-center mb-4 h4"><%= t("dashboard.form.heading.#{param_key}.edit") %></h1>
 
+      <% if @show_external_welcome %>
+        <div class="alert alert-info mb-4" role="alert">
+          <strong><%= t('dashboard.form.files.edit.external_entry.heading') %></strong>
+          <p class="mb-0 mt-2"><%= t('dashboard.form.files.edit.external_entry.message') %></p>
+        </div>
+      <% end %>
+
       <%= render FormTabsComponent.new(resource: @resource, current_controller: controller_name) %>
 
       <div class="tab-content">
