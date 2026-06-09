@@ -483,7 +483,7 @@ GEM
       rake (>= 12.0)
     psych (3.3.4)
     public_suffix (7.0.5)
-    puma (6.6.1)
+    puma (7.2.1)
       nio4r (~> 2.0)
     pundit (2.5.2)
       activesupport (>= 3.0.0)
@@ -818,7 +818,7 @@ DEPENDENCIES
   pry-rails
   psu_identity (= 0.7.2)
   psych (< 4)
-  puma (~> 6.5)
+  puma (~> 7.2)
   pundit
   qa (>= 5.13)
   rack-mini-profiler
@@ -856,7 +856,6 @@ DEPENDENCIES
   web-console (>= 3.3.0)
   webmock
 
-CHECKSUMS
   Ascii85 (2.0.1) sha256=15cb5d941808543cbb9e7e6aea3c8ec3877f154c3461e8b3673e97f7ecedbe5a
   aasm (5.5.2) sha256=a3b874b33d9cbb3be4a2c77185c340a07fb46d7cd31911cbc49337e31d12612f
   actioncable (7.2.3) sha256=e15d17b245f1dfe7cafdda4a0c6f7ba8ebaab1af33884415e09cfef4e93ad4f9
@@ -1044,7 +1043,7 @@ CHECKSUMS
   psu_identity (0.7.2) sha256=ea9027d9df5f760ef037872d2bddf835ddd01c6228be3abeab7eb465c86854a5
   psych (3.3.4) sha256=f0aae8574d0c86b711472e6a57cc036655e2549f02390ca7266f3b6d1814d1a0
   public_suffix (7.0.5) sha256=1a8bb08f1bbea19228d3bed6e5ed908d1cb4f7c2726d18bd9cadf60bc676f623
-  puma (6.6.1) sha256=b9b56e4a4ea75d1bfa6d9e1972ee2c9f43d0883f011826d914e8e37b3694ea1e
+  puma (7.2.1) sha256=d7bf0e9cabd532e0d401e142cd94e3ac531e993610e2d80e6fbf9c26961414b0
   pundit (2.5.2) sha256=e374152baa24f90b630428293faf4b4c5468fc3cc010165f7d8fcb44ce108bbd
   qa (5.16.0) sha256=8046d15c6d9ed73a50abc7fe2481a951a9c16933bce8953a403f795f69b65268
   racc (1.8.1) sha256=4a7f6929691dbec8b5209a0b373bc2614882b55fc5d2e447a21aaa691303d62f
