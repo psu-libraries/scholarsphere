@@ -10,7 +10,9 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     raise NotAffiliatedWithPsu unless @user.psu_affiliated?
 
     sign_in_and_redirect @user, event: :authentication
-    set_flash_message(:notice, :success, kind: 'Penn State') if is_navigational_format?
+    unless !is_navigational_format? || suppress_success_notice?
+      set_flash_message(:notice, :success, kind: 'Penn State')
+    end
   rescue User::OAuthError => e
     logger.error("\n\n\n#{e.class} (#{e.message}):\n\n")
     logger.error(e.backtrace.join("\n"))
@@ -22,4 +24,10 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def failure
     redirect_to root_path, alert: t('omniauth.login_error')
   end
+
+  private
+
+    def suppress_success_notice?
+      session.delete(:suppress_omniauth_success_notice).present?
+    end
 end

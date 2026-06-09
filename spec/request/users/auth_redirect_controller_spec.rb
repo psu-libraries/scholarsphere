@@ -11,6 +11,7 @@ RSpec.describe Users::AuthRedirectController, type: :request do
 
       expect(response).to have_http_status(:ok)
       expect(session['user_return_to']).to eq(return_to)
+      expect(session[:suppress_omniauth_success_notice]).to eq(true)
     end
   end
 end

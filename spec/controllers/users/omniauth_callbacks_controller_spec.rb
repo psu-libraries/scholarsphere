@@ -36,6 +36,10 @@ RSpec.describe Users::OmniauthCallbacksController do
           expect(controller.current_user).to eq user
         end
 
+        it 'sets the success notice' do
+          expect(flash[:notice]).to be_present
+        end
+
         it { is_expected.to redirect_to root_path }
       end
 
@@ -54,6 +58,21 @@ RSpec.describe Users::OmniauthCallbacksController do
         end
 
         it { is_expected.to redirect_to about_path }
+      end
+
+      context 'when login uses auth handoff suppression flag' do
+        before do
+          session[:suppress_omniauth_success_notice] = true
+          get :azure_oauth
+        end
+
+        it 'does not set the success notice' do
+          expect(flash[:notice]).to be_nil
+        end
+
+        it 'consumes the suppression flag' do
+          expect(session[:suppress_omniauth_success_notice]).to be_nil
+        end
       end
     end
 
