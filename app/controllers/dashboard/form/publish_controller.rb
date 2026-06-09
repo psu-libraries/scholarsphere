@@ -52,6 +52,10 @@ module Dashboard
 
         validation_context = current_user.admin? ? nil : :user_publish
         process_response(on_error: :edit, validation_context: validation_context) do
+          if publish? && @resource.open_access
+            WorkPublishedWebhookJob.perform_later(@resource.work.uuid)
+          end
+
           if @resource.mint_doi_requested
             deposit_pathway.allows_mint_doi_request? ? MintDoiAsync.call(@resource.work) : flash[:error] = t('dashboard.form.publish.doi.error')
           end
