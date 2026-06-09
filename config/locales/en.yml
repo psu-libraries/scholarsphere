@@ -441,7 +441,7 @@ en:
             heading: Withdraw A Version
         open_access_version:
           permissions_not_found: >
-             We could not find sharing rules for your work. Please contact us for assistance.
+             We could not find sharing rules for your work. Please fill out any missing information.
           other_version_preferred: >
              We could not find sharing rules for the %{this_version} of this work, only the %{other_version}. To upload the %{other_version}, please return to the file upload page and upload your %{other_version} there. If you are sure you want to upload the %{this_version}, please contact us for assistance.
       update:

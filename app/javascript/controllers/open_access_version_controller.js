@@ -128,7 +128,7 @@ export default class extends Controller {
     }
 
     // block publish when there is a version mismatch
-    const versionAllowed = version == null || version === '' || currentVersionFound
+    const versionAllowed = version == null || version === '' || currentVersionFound || versionsFound.length === 0
     setTimeout(() => {
       document.dispatchEvent(new CustomEvent('open-access:version-updated', {
         detail: { versionAllowed }

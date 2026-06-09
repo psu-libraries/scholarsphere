@@ -123,6 +123,13 @@ module Dashboard
           @deposit_pathway ||= WorkDepositPathway.new(@work_version || @resource)
         end
 
+        helper_method :lock_open_access_fields?
+        def lock_open_access_fields?
+          @resource.open_access &&
+            !current_user.admin? &&
+            (@permissions&.all_permissions.present? || params.dig(:oaw_permissions, :versions_found).present?)
+        end
+
         def save_resource(validation_context: nil)
           @resource.indexing_source = nil # uses the default source
           @resource.update_doi = (publish? || finish? || save_and_exit?)
