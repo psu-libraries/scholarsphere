@@ -24,7 +24,7 @@ RSpec.describe 'Auth handoff auto submit', :js, type: :feature do
     OmniAuth.config.mock_auth[:azure_oauth] = nil
   end
 
-  it 'auto-submits login form and returns to files edit page' do
+  it 'auto-submits login form and returns to the "return_to" path' do
     files_path = dashboard_form_files_path(work_version)
 
     visit user_azure_oauth_redirect_path(return_to: files_path)
