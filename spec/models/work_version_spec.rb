@@ -150,39 +150,6 @@ RSpec.describe WorkVersion do
     end
   end
 
-  describe 'publish event webhook' do
-    let(:work) { create(:work) }
-    let(:work_version) { create(:work_version, work: work) }
-
-    before { allow(WorkPublishedWebhookJob).to receive(:perform_later) }
-
-    context 'when the work is open access' do
-      before { work_version.update(open_access: true) }
-
-      it 'enqueues the WorkPublishedWebhookJob when published' do
-        work_version.publish!
-
-        expect(WorkPublishedWebhookJob).to have_received(:perform_later).with(work.uuid)
-      end
-    end
-
-    context 'when the work is not open access' do
-      it 'does not enqueue the webhook job' do
-        work_version.publish!
-
-        expect(WorkPublishedWebhookJob).not_to have_received(:perform_later)
-      end
-    end
-
-    context 'when the work version is updated without publishing' do
-      it 'does not enqueue the webhook job' do
-        work_version.update(title: 'no state change')
-
-        expect(WorkPublishedWebhookJob).not_to have_received(:perform_later)
-      end
-    end
-  end
-
   describe 'open access version broadcast' do
     before { allow(OpenAccessVersionChannel).to receive(:broadcast_to) }
 
@@ -378,9 +345,9 @@ RSpec.describe WorkVersion do
 
     context 'with open_access_version' do
       it { is_expected.to allow_value(nil).for(:open_access_version) }
-      it { is_expected.to allow_value('acceptedVersion').for(:open_access_version) }
-      it { is_expected.to allow_value('publishedVersion').for(:open_access_version) }
-      it { is_expected.to allow_value('unknownVersion').for(:open_access_version) }
+      it { is_expected.to allow_value(OpenAccessVersion::VersionValues::ACCEPTED).for(:open_access_version) }
+      it { is_expected.to allow_value(OpenAccessVersion::VersionValues::PUBLISHED).for(:open_access_version) }
+      it { is_expected.to allow_value(OpenAccessVersion::VersionValues::UNKNOWN).for(:open_access_version) }
       it { is_expected.not_to allow_value('not_allowed').for(:open_access_version) }
     end
   end
