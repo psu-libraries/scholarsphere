@@ -170,6 +170,8 @@ class WorkVersion < ApplicationRecord
               in: OpenAccessVersion::VersionValues::ALL
             }
 
+  validate :open_access_version_required, if: :published?
+
   validates :rights,
             presence: true,
             inclusion: {
@@ -467,6 +469,12 @@ class WorkVersion < ApplicationRecord
           open_access_version: open_access_version
         }
       )
+    end
+
+    def open_access_version_required
+      if open_access && OpenAccessVersion::VersionValues::KNOWN.exclude?(open_access_version)
+        errors.add(:open_access_version, :blank)
+      end
     end
 
     def strip_blanks_from_array(arr)

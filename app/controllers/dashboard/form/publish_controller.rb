@@ -70,7 +70,7 @@ module Dashboard
 
         # @note Validate the work like we're going to publish it, so we can inform the user ahead of time before they
         # actually attempt it. However, we want to be nice and not yell at them for something they _haven't_ seen yet
-        # like rights.
+        # like rights and open access version.
         def prevalidate
           temporarily_publish @resource do
             @resource.validate
@@ -79,6 +79,7 @@ module Dashboard
               @resource.errors.delete(attribute) if attribute.to_s.include?('work.versions')
             end
             @resource.errors.delete(:rights)
+            @resource.errors.delete(:open_access_version)
           end
         end
 
