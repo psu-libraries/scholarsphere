@@ -95,6 +95,18 @@ RSpec.describe Dashboard::Form::PublishController, type: :request do
         expect(WorkPublishedWebhookJob).not_to have_received(:perform_later)
       end
     end
+
+    context 'when publish fails validation' do
+      it 'does not enqueue the webhook' do
+        invalid_params = request_params.deep_dup
+        invalid_params[:work_version][:description] = ''
+
+        patch dashboard_form_publish_path(work_version), params: invalid_params
+
+        expect(response).to have_http_status(:ok)
+        expect(WorkPublishedWebhookJob).not_to have_received(:perform_later)
+      end
+    end
   end
 
   describe 'GET /dashboard/form/work_versions/:id/open_access_version' do

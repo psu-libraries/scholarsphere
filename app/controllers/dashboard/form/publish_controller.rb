@@ -19,7 +19,6 @@ module Dashboard
         @work_version = WorkVersion.find(params[:id])
         @resource = deposit_pathway.publish_form(current_user:)
         authorize(@work_version)
-        was_published = @resource.published?
 
         @resource.attributes = work_version_params
         @submitted_permissions = oaw_permissions_params
@@ -53,7 +52,7 @@ module Dashboard
 
         validation_context = current_user.admin? ? nil : :user_publish
         process_response(on_error: :edit, validation_context: validation_context) do
-          if publish? && !was_published && @resource.published? && @resource.open_access
+          if publish? && @resource.open_access
             WorkPublishedWebhookJob.perform_later(@resource.work.uuid)
           end
 
