@@ -125,9 +125,12 @@ module Dashboard
 
         helper_method :lock_open_access_fields?
         def lock_open_access_fields?
+          param_permissions = JSON.parse(params.dig(:oaw_permissions, :versions_found) || '[]')
+          permissions_found = @permissions&.all_permissions.present? || param_permissions.present?
+
           @resource.open_access &&
             !current_user.admin? &&
-            (@permissions&.all_permissions.present? || params.dig(:oaw_permissions, :versions_found).present?)
+            permissions_found
         end
 
         def save_resource(validation_context: nil)
