@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Auth handoff auto submit', :js, type: :feature do
+RSpec.describe 'Auth handoff auto submit', :js do
   let(:oauth_response) { build(:psu_oauth_response) }
   let(:work_version) { create(:work_version, :draft) }
   let(:user) { work_version.depositor.user }
