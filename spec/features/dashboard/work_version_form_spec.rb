@@ -785,7 +785,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         visit dashboard_form_work_version_type_path(work_version)
 
-        expect(page).to have_no_field('open_access_checkbox', type: 'checkbox')
+        expect(page).to have_no_field('open_access_upload_checkbox', type: 'checkbox')
       end
     end
   end

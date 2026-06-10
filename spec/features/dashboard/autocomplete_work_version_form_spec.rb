@@ -48,7 +48,7 @@ RSpec.describe 'Autocompleting WorkVersion metadata with data from RMD', :vcr, w
             visit dashboard_form_work_versions_path
 
             FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_scholarly_works_draft(metadata)
-            check 'open_access_checkbox'
+            check 'open_access_upload_checkbox'
             FeatureHelpers::DashboardForm.save_and_continue
 
             fill_in 'autocomplete_work_form_doi', with: 'https://doi.org/10.1038/abcdefg1234567'
@@ -115,7 +115,7 @@ RSpec.describe 'Autocompleting WorkVersion metadata with data from RMD', :vcr, w
             visit dashboard_form_work_versions_path
 
             FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_scholarly_works_draft(metadata)
-            check 'open_access_checkbox'
+            check 'open_access_upload_checkbox'
             FeatureHelpers::DashboardForm.save_and_continue
 
             fill_in 'autocomplete_work_form_doi', with: 'https://doi.org/10.1038/abcdefg1234567'
@@ -134,7 +134,7 @@ RSpec.describe 'Autocompleting WorkVersion metadata with data from RMD', :vcr, w
           visit dashboard_form_work_versions_path
 
           FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_scholarly_works_draft(metadata)
-          check 'open_access_checkbox'
+          check 'open_access_upload_checkbox'
           FeatureHelpers::DashboardForm.save_and_continue
 
           fill_in 'autocomplete_work_form_doi', with: 'abcdefghi123456'
