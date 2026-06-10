@@ -767,6 +767,27 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).to have_field('open_access_upload_checkbox', type: 'checkbox', disabled: true)
       end
     end
+
+    context 'when editing a non-initial draft version', :js do
+      let(:work) { create(:work, work_type: 'article', versions_count: 2, has_draft: true) }
+
+      before do
+        @original_secret = ENV['ENABLE_OPEN_ACCESS_FEATURE']
+        ENV['ENABLE_OPEN_ACCESS_FEATURE'] = 'true'
+      end
+
+      after do
+        ENV['ENABLE_OPEN_ACCESS_FEATURE'] = @original_secret
+      end
+
+      it 'does not display the open access checkbox' do
+        expect(work_version).not_to be_initial_draft
+
+        visit dashboard_form_work_version_type_path(work_version)
+
+        expect(page).to have_no_field('open_access_checkbox', type: 'checkbox')
+      end
+    end
   end
 
   describe 'The Contributors tab', :js do
@@ -1036,6 +1057,21 @@ RSpec.describe 'Publishing a work', with_user: :user do
     let(:work_version) { work.versions.first }
     let(:user) { work_version.work.depositor.user }
 
+    describe 'external entry guidance' do
+      it 'displays onboarding guidance when arriving from an external redirect' do
+        visit dashboard_form_files_path(work_version, external_entry: true)
+
+        expect(page).to have_content(I18n.t!('dashboard.form.files.edit.external_entry.heading'))
+        expect(page).to have_content(I18n.t!('dashboard.form.files.edit.external_entry.message'))
+      end
+
+      it 'does not display onboarding guidance during normal navigation' do
+        visit dashboard_form_files_path(work_version)
+
+        expect(page).to have_no_content(I18n.t!('dashboard.form.files.edit.external_entry.heading'))
+      end
+    end
+
     describe 'accessibility privacy notice' do
       it 'expands to display full privacy notice' do
         visit dashboard_form_files_path(work_version)
@@ -1227,6 +1263,28 @@ RSpec.describe 'Publishing a work', with_user: :user do
   end
 
   describe 'The Publish tab' do
+    context 'when required contributor fields are blank', :js do
+      let(:work_version) { create(:work_version, :article, :able_to_be_published) }
+      let(:user) { work_version.work.depositor.user }
+
+      it 'does not open the publish dialog and keeps focus on form validation' do
+        visit dashboard_form_publish_path(work_version)
+
+        fill_in 'work_version_creators_attributes_0_given_name', with: ''
+
+        click_on I18n.t!('dashboard.form.actions.publish.button')
+
+        expect(page).to have_no_css('dialog#hidden-publish-dialog[open]')
+
+        fill_in 'work_version_creators_attributes_0_given_name', with: 'Firstname'
+        fill_in 'work_version_creators_attributes_0_surname', with: 'Lastname'
+
+        click_on I18n.t!('dashboard.form.actions.publish.button')
+
+        expect(page).to have_css('dialog#hidden-publish-dialog[open]')
+      end
+    end
+
     context 'when submitting the form with publication errors' do
       let(:work) { create(:work) }
       let(:user) { work.depositor.user }

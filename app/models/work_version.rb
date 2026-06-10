@@ -213,8 +213,6 @@ class WorkVersion < ApplicationRecord
 
   after_update :broadcast_open_access_version_if_needed
   after_commit :perform_update_index, on: [:create, :update]
-  after_commit :enqueue_published_webhook, on: [:create, :update]
-  after_rollback :clear_publish_flag
 
   attr_accessor :force_destroy
 
@@ -224,15 +222,21 @@ class WorkVersion < ApplicationRecord
     prevent_destroy = published? && !force_destroy
     raise ArgumentError, 'cannot delete published versions' if prevent_destroy
   end
+
   aasm timestamps: true do
     state :draft, intial: true
     state :published, :withdrawn, :removed
 
     event :publish do
-      before do
-        @work_just_published = true
-      end
-      transitions from: [:draft, :withdrawn], to: :published, after: :after_publish
+      transitions from: [:draft, :withdrawn],
+                  to: :published,
+                  after: Proc.new {
+                    work.try(:update_deposit_agreement)
+                    if work.professional_doctoral_culminating_experience? || work.masters_culminating_experience? || work_type == 'instrument'
+                      set_publisher_as_scholarsphere
+                    end
+                    self.reload_on_index = true
+                  }
     end
 
     event :withdraw do
@@ -389,6 +393,10 @@ class WorkVersion < ApplicationRecord
     !!identifier.find { |id| Doi.new(id).valid? }
   end
 
+  def open_access_upload?
+    open_access_upload == true
+  end
+
   def needs_accessibility_review
     latest_published_version? && !accessibility_remediation_requested
   end
@@ -435,26 +443,6 @@ class WorkVersion < ApplicationRecord
 
     def perform_update_index
       indexing_source.call(self)
-    end
-
-    def after_publish
-      work.try(:update_deposit_agreement)
-      if work.professional_doctoral_culminating_experience? || work.masters_culminating_experience? || work_type == 'instrument'
-        set_publisher_as_scholarsphere
-      end
-      self.reload_on_index = true
-    end
-
-    def enqueue_published_webhook
-      just_published = @work_just_published
-      @work_just_published = false
-      return unless just_published && open_access_upload
-
-      WorkPublishedWebhookJob.perform_later(work.uuid)
-    end
-
-    def clear_publish_flag
-      @work_just_published = false
     end
 
     def broadcast_open_access_version_if_needed

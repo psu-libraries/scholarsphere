@@ -87,6 +87,8 @@ module Api::V1
             :description,
             :publisher_statement,
             :doi,
+            :open_access_upload,
+            :imported_metadata_from_rmd,
             keyword: [],
             resource_type: [],
             contributor: [],

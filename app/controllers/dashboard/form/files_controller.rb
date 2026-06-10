@@ -8,6 +8,7 @@ module Dashboard
           .includes(file_version_memberships: [:file_resource])
           .find(params[:id])
         authorize(@resource)
+        @show_external_welcome = external_entry?
       end
 
       def update
@@ -34,6 +35,10 @@ module Dashboard
 
         def next_page_path
           dashboard_form_publish_path(@resource)
+        end
+
+        def external_entry?
+          ActiveModel::Type::Boolean.new.cast(params[:external_entry])
         end
 
         def send_accessibility_check_jobs

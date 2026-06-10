@@ -21,7 +21,7 @@
   <% end %>
 
   <!-- Feature Flag: remove once open access pathway is enabled -->
-  <% if ENV['ENABLE_OPEN_ACCESS_FEATURE'] == 'true' %>
+  <% if ENV['ENABLE_OPEN_ACCESS_FEATURE'] == 'true' && form.object.initial_draft? %>
     <div class="form-check"
         id="open-access-help-text"
         data-target="work-type.openAccess"
@@ -34,7 +34,8 @@
 
       <%= form.label :open_access_upload,
                      t('dashboard.form.details.open_access_prompt'),
-                     class: 'form-check-label' %>
+                     class: 'form-check-label',
+                     for: 'open_access_checkbox' %>
     </div>
   <% end %>
   <div class="form-text text-muted" id="work-title-help-text" data-target="work-type.helpText" style="display: none;">

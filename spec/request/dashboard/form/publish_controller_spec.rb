@@ -57,6 +57,58 @@ RSpec.describe Dashboard::Form::PublishController, type: :request do
     end
   end
 
+  describe 'webhook on publish' do
+    let(:work_version) { create(:work_version, :able_to_be_published, open_access_upload: open_access) }
+    let(:open_access) { true }
+    let(:user) { work_version.work.depositor.user }
+    let(:request_params) do
+      {
+        publish: '1',
+        work_version: {
+          depositor_agreement: '1',
+          psu_community_agreement: '1',
+          accessibility_agreement: '1',
+          sensitive_info_agreement: '1'
+        }
+      }
+    end
+
+    before do
+      sign_in user
+      allow(WorkPublishedWebhookJob).to receive(:perform_later)
+    end
+
+    it 'enqueues the webhook when an open access work is published' do
+      patch dashboard_form_publish_path(work_version), params: request_params
+
+      expect(response).to have_http_status(:redirect)
+      expect(WorkPublishedWebhookJob).to have_received(:perform_later).with(work_version.work.uuid)
+    end
+
+    context 'when the work is not open access' do
+      let(:open_access) { false }
+
+      it 'does not enqueue the webhook' do
+        patch dashboard_form_publish_path(work_version), params: request_params
+
+        expect(response).to have_http_status(:redirect)
+        expect(WorkPublishedWebhookJob).not_to have_received(:perform_later)
+      end
+    end
+
+    context 'when publish fails validation' do
+      it 'does not enqueue the webhook' do
+        invalid_params = request_params.deep_dup
+        invalid_params[:work_version][:description] = ''
+
+        patch dashboard_form_publish_path(work_version), params: invalid_params
+
+        expect(response).to have_http_status(:ok)
+        expect(WorkPublishedWebhookJob).not_to have_received(:perform_later)
+      end
+    end
+  end
+
   describe 'GET /dashboard/form/work_versions/:id/open_access_version' do
     let(:work_version) do
       create(:work_version, open_access_version: OpenAccessVersion::VersionValues::ACCEPTED)
