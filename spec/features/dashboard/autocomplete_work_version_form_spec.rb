@@ -80,7 +80,7 @@ RSpec.describe 'Autocompleting WorkVersion metadata with data from RMD', :vcr, w
               expect(find_by_id('work_version_creators_attributes_0_display_name').value).to eq 'Anne Example Contributor'
               expect(find_by_id('work_version_creators_attributes_0_given_name').value).to eq 'Anne'
               expect(find_by_id('work_version_creators_attributes_0_surname').value).to eq 'Contributor'
-              expect(find_by_id('work_version_creators_attributes_0_email').value).to eq nil
+              expect(find_by_id('work_version_creators_attributes_0_email').value).to be_blank
               expect(page).to have_content('Unidentified').once
               expect(find_by_id('work_version_creators_attributes_1_display_name').value).to eq 'Joe Fakeman Person'
               expect(find_by_id('work_version_creators_attributes_1_given_name').value).to eq 'Joe'
