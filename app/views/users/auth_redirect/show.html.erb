@@ -1,0 +1,12 @@
+<%= form_with url: user_azure_oauth_omniauth_authorize_path,
+              method: :post,
+              local: true,
+              id: 'azure-oauth-login-form' do |form| %>
+  <noscript>
+    <%= form.submit 'Continue to Login' %>
+  </noscript>
+<% end %>
+
+<script>
+  document.getElementById('azure-oauth-login-form').submit();
+</script>

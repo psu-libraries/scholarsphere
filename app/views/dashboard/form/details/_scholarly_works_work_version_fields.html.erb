@@ -10,7 +10,7 @@
            form: form,
            attribute: :publisher_statement,
            data: { target: 'open-access-version.publisherStatement' },
-           readonly: @resource.open_access_upload && !current_user.admin? %>
+           readonly: lock_open_access_fields? %>
   <%= render 'form_fields/multi_text', form: form,
                                        attribute: :identifier,
                                        readonly: @resource.imported_metadata_from_rmd? && !current_user.admin? %>

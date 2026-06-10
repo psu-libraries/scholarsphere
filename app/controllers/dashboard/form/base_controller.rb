@@ -123,6 +123,16 @@ module Dashboard
           @deposit_pathway ||= WorkDepositPathway.new(@work_version || @resource)
         end
 
+        helper_method :lock_open_access_fields?
+        def lock_open_access_fields?
+          param_permissions = JSON.parse(params.dig(:oaw_permissions, :versions_found) || '[]')
+          permissions_found = @permissions&.all_permissions.present? || param_permissions.present?
+
+          @resource.open_access &&
+            !current_user.admin? &&
+            permissions_found
+        end
+
         def save_resource(validation_context: nil)
           @resource.indexing_source = nil # uses the default source
           @resource.update_doi = (publish? || finish? || save_and_exit?)

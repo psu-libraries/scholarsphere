@@ -58,7 +58,7 @@ RSpec.describe Dashboard::Form::PublishController, type: :request do
   end
 
   describe 'webhook on publish' do
-    let(:work_version) { create(:work_version, :able_to_be_published, open_access_upload: open_access) }
+    let(:work_version) { create(:work_version, :able_to_be_published, open_access_upload: open_access, open_access_version: OpenAccessVersion::VersionValues::ACCEPTED) }
     let(:open_access) { true }
     let(:user) { work_version.work.depositor.user }
     let(:request_params) do

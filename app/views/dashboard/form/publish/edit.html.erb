@@ -52,7 +52,7 @@
               <%= hidden_field_tag 'oaw_permissions[accepted_version_embargo]', @permissions&.embargo_end_date(accepted_version) %>
               <%= hidden_field_tag 'oaw_permissions[published_version_embargo]', @permissions&.embargo_end_date(published_version) %>
 
-              <%= hidden_field_tag 'oaw_permissions[versions_found]', @permissions&.versions_found? %>
+              <%= hidden_field_tag 'oaw_permissions[versions_found]', @permissions&.versions_found?.to_json %>
 
             <%= render FormErrorMessageComponent.new(
                   form: form,

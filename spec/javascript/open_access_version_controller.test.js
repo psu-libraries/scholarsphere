@@ -155,17 +155,49 @@ describe('OpenAccessVersionController', () => {
     expect(published.checked).toBe(false)
   })
 
-  it('falls back to show controls and unsubscribe after 30s', () => {
+  it('falls back to show controls and unsubscribe after 15s', () => {
     const loading = document.querySelector('[data-target="open-access-version.loading"]')
     const controls = document.querySelector('[data-target="open-access-version.controls"]')
     loading.classList.remove('d-none')
     controls.classList.add('d-none')
 
-    jest.advanceTimersByTime(30_000)
+    jest.advanceTimersByTime(15_000)
 
     expect(controls.classList.contains('d-none')).toBe(false)
     expect(loading.classList.contains('d-none')).toBe(true)
     expect(mockUnsubscribe).toHaveBeenCalled()
+  })
+
+  it('fetches open access version again at timeout when still loading', () => {
+    const loading = document.querySelector('[data-target="open-access-version.loading"]')
+    const controls = document.querySelector('[data-target="open-access-version.controls"]')
+
+    loading.classList.remove('d-none')
+    controls.classList.add('d-none')
+
+    globalThis.fetch.mockClear()
+
+    jest.advanceTimersByTime(15_000)
+
+    expect(globalThis.fetch).toHaveBeenCalledTimes(1)
+    expect(globalThis.fetch).toHaveBeenCalledWith(
+      '/dashboard/form/work_versions/123/open_access_version',
+      { headers: { Accept: 'application/json' } }
+    )
+  })
+
+  it('does not fetch again at timeout when loading is already complete', () => {
+    const loading = document.querySelector('[data-target="open-access-version.loading"]')
+    const controls = document.querySelector('[data-target="open-access-version.controls"]')
+
+    loading.classList.add('d-none')
+    controls.classList.remove('d-none')
+
+    globalThis.fetch.mockClear()
+
+    jest.advanceTimersByTime(15_000)
+
+    expect(globalThis.fetch).not.toHaveBeenCalled()
   })
 
   it('fetches open access version and applies it', async () => {

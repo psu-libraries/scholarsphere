@@ -37,6 +37,7 @@ RSpec.describe Api::V1::IngestController do
             rights: metadata[:rights],
             visibility: Permissions::Visibility::OPEN,
             open_access_upload: true,
+            open_access_version: OpenAccessVersion::VersionValues::ACCEPTED,
             imported_metadata_from_rmd: true
           },
           depositor: depositor,
