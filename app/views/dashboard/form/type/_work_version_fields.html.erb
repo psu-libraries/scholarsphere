@@ -33,9 +33,12 @@
                          false %>
 
       <%= form.label :open_access,
-                     t('dashboard.form.details.open_access_prompt'),
+                     t('dashboard.form.details.open_access_prompt').html_safe,
                      class: 'form-check-label',
                      for: 'open_access_checkbox' %>
+        <div class="form-text text-muted">
+          <br><small><%= t('dashboard.form.details.open_access_help_text_html').html_safe %></small>
+        </div>
     </div>
   <% end %>
   <div class="form-text text-muted" id="work-title-help-text" data-target="work-type.helpText" style="display: none;">

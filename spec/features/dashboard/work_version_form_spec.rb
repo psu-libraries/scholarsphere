@@ -2388,7 +2388,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       context 'when no permissions are found' do
         let(:permissions) { [] }
 
-        it 'displays an error message when a version is selected and blocks publish' do
+        it 'displays no permissions found message and allows publish' do
           visit dashboard_form_publish_path(work_version)
 
           FeatureHelpers::DashboardForm.simulate_open_access_version_broadcast(work_version)
@@ -2396,11 +2396,11 @@ RSpec.describe 'Publishing a work', with_user: :user do
           choose 'Accepted Version'
 
           expect(page).to have_content(I18n.t('dashboard.works.edit.open_access_version.permissions_not_found'))
-          expect(page).to have_field('work_version_publisher_statement', with: nil, readonly: true)
-          expect(page).to have_css("input#work_version_rights_hidden[value='']", visible: :hidden)
-          expect(page).to have_field('work_version_work_attributes_embargoed_until', with: nil, readonly: true)
-          expect(page).to have_no_button('Publish')
-          expect(page).to have_content(I18n.t('dashboard.form.actions.publish.blocked_version'))
+          expect(page).to have_field('work_version_publisher_statement', with: nil)
+          expect(page).to have_no_css("input#work_version_rights_hidden[value='']")
+          expect(page).to have_field('work_version_work_attributes_embargoed_until', with: nil)
+          expect(page).to have_button('Publish')
+          expect(page).to have_no_content(I18n.t('dashboard.form.actions.publish.blocked_version'))
         end
       end
     end

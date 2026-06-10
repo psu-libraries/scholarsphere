@@ -7,5 +7,6 @@ module OpenAccessVersion
     UNKNOWN = 'unknownVersion'
 
     ALL = [ACCEPTED, PUBLISHED, UNKNOWN].freeze
+    KNOWN = [ACCEPTED, PUBLISHED].freeze
   end
 end

@@ -8,6 +8,15 @@ RSpec.describe 'Autocompleting WorkVersion metadata with data from RMD', :vcr, w
   let(:metadata) { attributes_for(:work_version, :with_complete_metadata) }
 
   describe 'Submitting the Autcomplete For Open Access Works form' do
+    before do
+      @original_secret = ENV['ENABLE_OPEN_ACCESS_FEATURE']
+      ENV['ENABLE_OPEN_ACCESS_FEATURE'] = 'true'
+    end
+
+    after do
+      ENV['ENABLE_OPEN_ACCESS_FEATURE'] = @original_secret
+    end
+
     context 'when work type is not a scholarly work' do
       it 'does not render Autocomplete For Open Access Works form' do
         visit dashboard_form_work_versions_path
@@ -20,13 +29,26 @@ RSpec.describe 'Autocompleting WorkVersion metadata with data from RMD', :vcr, w
       end
     end
 
-    context 'when work type is a scholarly work' do
+    context 'when work type is a scholarly work', :js do
+      context 'when work is not an open access upload' do
+        it 'does not render Autocomplete For Open Access Works form' do
+          visit dashboard_form_work_versions_path
+
+          FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_scholarly_works_draft(metadata)
+          FeatureHelpers::DashboardForm.save_and_continue
+
+          expect(page).to have_no_content 'Autocomplete for Open Access Works'
+          expect(page).to have_no_css '#autocomplete_work_form_doi'
+        end
+      end
+
       context 'when valid DOI is submitted' do
         context 'when metadata is found' do
           before do
             visit dashboard_form_work_versions_path
 
             FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_scholarly_works_draft(metadata)
+            check 'open_access_checkbox'
             FeatureHelpers::DashboardForm.save_and_continue
 
             fill_in 'autocomplete_work_form_doi', with: 'https://doi.org/10.1038/abcdefg1234567'
@@ -45,7 +67,7 @@ RSpec.describe 'Autocompleting WorkVersion metadata with data from RMD', :vcr, w
               expect(find_by_id('work_version_publisher').value).to eq 'An Academic Journal'
               expect(find_by_id('work_version_identifier').value).to eq 'https://doi.org/10.1038/abcdefg1234567'
               expect(find_by_id('work_version_identifier').readonly?).to eq true
-              expect(find_by_id('work_version_identifier').find(:xpath, './../..').native.attribute_nodes.first.value).to eq 'mb-2'
+              expect(find_by_id('work_version_identifier').find(:xpath, './../..')[:class]).to eq 'mb-2'
               keywords = find_all('#work_version_keyword')
               expect(keywords[0].value).to eq 'A Topic'
               expect(keywords[1].value).to eq 'Another Topic'
@@ -58,7 +80,7 @@ RSpec.describe 'Autocompleting WorkVersion metadata with data from RMD', :vcr, w
               expect(find_by_id('work_version_creators_attributes_0_display_name').value).to eq 'Anne Example Contributor'
               expect(find_by_id('work_version_creators_attributes_0_given_name').value).to eq 'Anne'
               expect(find_by_id('work_version_creators_attributes_0_surname').value).to eq 'Contributor'
-              expect(find_by_id('work_version_creators_attributes_0_email').value).to eq nil
+              expect(find_by_id('work_version_creators_attributes_0_email').value).to be_blank
               expect(page).to have_content('Unidentified').once
               expect(find_by_id('work_version_creators_attributes_1_display_name').value).to eq 'Joe Fakeman Person'
               expect(find_by_id('work_version_creators_attributes_1_given_name').value).to eq 'Joe'
@@ -93,6 +115,7 @@ RSpec.describe 'Autocompleting WorkVersion metadata with data from RMD', :vcr, w
             visit dashboard_form_work_versions_path
 
             FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_scholarly_works_draft(metadata)
+            check 'open_access_checkbox'
             FeatureHelpers::DashboardForm.save_and_continue
 
             fill_in 'autocomplete_work_form_doi', with: 'https://doi.org/10.1038/abcdefg1234567'
@@ -106,11 +129,12 @@ RSpec.describe 'Autocompleting WorkVersion metadata with data from RMD', :vcr, w
         end
       end
 
-      context 'when invalid DOI is submitted' do
+      context 'when invalid DOI is submitted', :js do
         it 'renders the Work Details page with a flash indicating the DOI is invalid' do
           visit dashboard_form_work_versions_path
 
           FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_scholarly_works_draft(metadata)
+          check 'open_access_checkbox'
           FeatureHelpers::DashboardForm.save_and_continue
 
           fill_in 'autocomplete_work_form_doi', with: 'abcdefghi123456'
