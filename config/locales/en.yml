@@ -279,7 +279,7 @@ en:
         rights: The license you select determines how your work can be used by others. [Read more about choosing a license](https://docs.scholarsphere.psu.edu/guides/licenses/)
         contributor: If applicable, please include a brief acknowledgment of any funding sources that supported your research. This helps ensure proper attribution and increases the visibility of your funder’s contribution.
         open_access_version: >
-          The system has attempted to identify which version of the article you have uploaded. If a version could not be detected, no option will be pre-selected and you will be asked to choose manually. If you believe the detected version is incorrect, you may override it by selecting the appropriate option below. More information about the version options can be found in the <a href="https://psu.libanswers.com/faq/279953">AC02 FAQ</a>.
+          ScholarSphere attempts to identify which version of the article you have uploaded. If a version could not be detected, no option will be pre-selected and you will need to choose manually. If you believe the detected version is incorrect, you may override it by selecting the appropriate option below. More information about the version options can be found in the <a href="https://psu.libanswers.com/faq/279953">AC02 FAQ</a>.
           <br/><br/><strong>Please note:</strong> The version you select will be used to look up the publisher’s default sharing policy and complete the publishing details section including license and embargo. Selecting the correct version helps ensure accurate implementation of policy requirements.
       autocomplete_work_form:
         doi: Please enter a valid DOI (e.g. https://doi.org/10.xxxx/xxxxxx or 10.xxxx/xxxxxx)
