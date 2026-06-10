@@ -321,7 +321,7 @@ class WorkDepositPathway
         end
 
         def show_autocomplete_form?
-          open_access == true && imported_metadata_from_rmd.nil?
+          open_access_upload == true && imported_metadata_from_rmd.nil?
         end
 
         validate :autocomplete_must_be_completed

@@ -456,7 +456,7 @@ class WorkVersion < ApplicationRecord
     end
 
     def open_access_version_required
-      if open_access && OpenAccessVersion::VersionValues::KNOWN.exclude?(open_access_version)
+      if open_access_upload && OpenAccessVersion::VersionValues::KNOWN.exclude?(open_access_version)
         errors.add(:open_access_version, :blank)
       end
     end

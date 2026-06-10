@@ -128,7 +128,7 @@ module Dashboard
           param_permissions = JSON.parse(params.dig(:oaw_permissions, :versions_found) || '[]')
           permissions_found = @permissions&.all_permissions.present? || param_permissions.present?
 
-          @resource.open_access &&
+          @resource.open_access_upload &&
             !current_user.admin? &&
             permissions_found
         end
