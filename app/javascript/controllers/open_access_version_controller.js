@@ -16,11 +16,16 @@ export default class extends Controller {
     if (id) {
       this.createSubscription(id)
       this.fetchOpenAccessVersion(id)
-      this.startTimer()
+      this.startTimer(id)
     }
   }
 
   disconnect() {
+    if (this.timerHandle) {
+      clearTimeout(this.timerHandle)
+      this.timerHandle = null
+    }
+
     if (this.subscription && this.subscription.unsubscribe) {
       this.subscription.unsubscribe()
     }
@@ -51,20 +56,21 @@ export default class extends Controller {
       .catch(() => void 0)
   }
 
-  startTimer() {
-    setTimeout(() => {
+  startTimer(id) {
+    this.timerHandle = setTimeout(() => {
       const spinnerVisible = this.hasLoadingTarget && !this.loadingTarget.classList.contains('d-none')
       const controlsHidden = this.hasControlsTarget && this.controlsTarget.classList.contains('d-none')
 
       if (spinnerVisible && controlsHidden) {
         if (this.hasControlsTarget) this.controlsTarget.classList.remove('d-none')
         if (this.hasLoadingTarget) this.loadingTarget.classList.add('d-none')
+        this.fetchOpenAccessVersion(id)
       }
 
       if (this.subscription && this.subscription.unsubscribe) {
         try { this.subscription.unsubscribe() } catch (e) { void e }
       }
-    }, 30_000)
+    }, 15_000)
   }
 
   applyOpenAccessVersion(open_access_version) {
