@@ -56,6 +56,14 @@ export default class extends Controller {
   }
 
   openDialog (event) {
+    // Validate the full form before opening a modal dialog. When a dialog is
+    // open, the rest of the page becomes inert and browsers cannot focus
+    // invalid controls outside of the dialog.
+    const form = event.currentTarget.form
+    if (form && !form.reportValidity()) {
+      return
+    }
+
     const dialogType = event.currentTarget.dataset.dialog
     const currentTypeTargets = this.displayTargetMap[dialogType]
     // Hide all the targets that are not part of the current dialog.

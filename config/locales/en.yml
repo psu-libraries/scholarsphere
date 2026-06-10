@@ -586,6 +586,11 @@ en:
         new:
           heading: New Creator
           cancel: Cancel
+      files:
+        edit:
+          external_entry:
+            heading: Welcome to ScholarSphere!
+            message: Please upload one or more files on this page, then click "Save and Continue" to begin reviewing required metadata and publish your submission.
       publish:
         edit:
           error_message: "There are %{error} that need to be fixed before this work can be published"
