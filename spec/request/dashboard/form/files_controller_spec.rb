@@ -3,6 +3,19 @@
 require 'rails_helper'
 
 RSpec.describe Dashboard::Form::FilesController, type: :request do
+  describe 'GET /dashboard/form/work_versions/:id/files' do
+    let(:work_version) { create(:work_version, :draft) }
+
+    it 'redirects unauthenticated files edit requests to azure auth handoff' do
+      path = dashboard_form_files_path(work_version)
+
+      get path
+
+      expect(response).to have_http_status(:redirect)
+      expect(response).to redirect_to(user_azure_oauth_redirect_path(return_to: path))
+    end
+  end
+
   describe 'PATCH /dashboard/form/work_versions/:id/files' do
     let(:work_version) do
       create(
