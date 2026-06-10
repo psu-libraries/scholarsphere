@@ -998,32 +998,6 @@ RSpec.describe WorkVersion do
     end
   end
 
-  describe '#open_access_upload?' do
-    context 'when open_access_upload is true' do
-      let(:wv) { build(:work_version, open_access_upload: true) }
-
-      it 'returns true' do
-        expect(wv.open_access_upload?).to eq true
-      end
-    end
-
-    context 'when open_access_upload is false' do
-      let(:wv) { build(:work_version, open_access_upload: false) }
-
-      it 'returns false' do
-        expect(wv.open_access_upload?).to eq false
-      end
-    end
-
-    context 'when open_access_upload is nil' do
-      let(:wv) { build(:work_version, open_access_upload: nil) }
-
-      it 'returns false' do
-        expect(wv.open_access_upload?).to eq false
-      end
-    end
-  end
-
   describe '#needs_accessibility_review' do
     context 'when version is not the latest published version' do
       let(:wv) { create(:work_version, :published, accessibility_remediation_requested: requested) }

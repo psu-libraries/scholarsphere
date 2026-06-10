@@ -393,10 +393,6 @@ class WorkVersion < ApplicationRecord
     !!identifier.find { |id| Doi.new(id).valid? }
   end
 
-  def open_access_upload?
-    open_access_upload == true
-  end
-
   def needs_accessibility_review
     latest_published_version? && !accessibility_remediation_requested
   end
