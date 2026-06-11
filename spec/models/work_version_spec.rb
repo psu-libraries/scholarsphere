@@ -49,7 +49,7 @@ RSpec.describe WorkVersion do
     it { is_expected.to have_jsonb_accessor(:owner).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:manufacturer).of_type(:string) }
     it { is_expected.to have_db_column(:open_access_version).of_type(:string) }
-    it { is_expected.to have_db_column(:open_access).of_type(:boolean) }
+    it { is_expected.to have_db_column(:open_access_upload).of_type(:boolean) }
   end
 
   describe 'factory' do

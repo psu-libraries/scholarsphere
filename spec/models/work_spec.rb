@@ -616,7 +616,7 @@ RSpec.describe Work do
           degree_tesim
           program_tesim
           sub_work_type_tesim
-          open_access_tesim
+          open_access_upload_tesim
           open_access_version_tesim
         )
       end

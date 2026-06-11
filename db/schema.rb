@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_04_28_182459) do
+ActiveRecord::Schema[7.2].define(version: 2026_06_04_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -155,8 +155,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_04_28_182459) do
     t.uuid "uuid", default: -> { "uuid_generate_v4()" }
     t.string "remediation_job_uuid"
     t.boolean "remediated_version", default: false, null: false
-    t.boolean "auto_remediated_version", default: false, null: false
     t.datetime "auto_remediation_failed_at"
+    t.boolean "auto_remediated_version", default: false, null: false
   end
 
   create_table "file_version_memberships", force: :cascade do |t|
@@ -279,7 +279,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_04_28_182459) do
     t.boolean "accessibility_remediation_requested"
     t.boolean "remediated_version", default: false, null: false
     t.datetime "auto_remediation_started_at"
-    t.boolean "open_access"
+    t.boolean "open_access_upload"
     t.string "open_access_version"
     t.index ["external_app_id"], name: "index_work_versions_on_external_app_id"
     t.index ["work_id", "version_number"], name: "index_work_versions_on_work_id_and_version_number", unique: true

@@ -16,7 +16,7 @@ RSpec.describe WorkDepositPathway do
       doi_blank?: doi_blank,
       work: work,
       file_version_memberships: [file_version_membership1, file_version_membership2],
-      open_access: open_access
+      open_access_upload: open_access
     )
   }
   let(:type) { nil }
@@ -832,7 +832,7 @@ RSpec.describe WorkDepositPathway do
 
       context 'when original type was scholarly work' do
         it 'returns the fields in scholarly work that are not in data and code' do
-          expect(pathway.fields_to_reset(scholarly_work)).to contain_exactly('publisher_statement', 'identifier', 'open_access', 'open_access_version')
+          expect(pathway.fields_to_reset(scholarly_work)).to contain_exactly('publisher_statement', 'identifier', 'open_access_upload', 'open_access_version')
         end
       end
 
@@ -871,7 +871,7 @@ RSpec.describe WorkDepositPathway do
       context 'when original type was scholarly work' do
         it 'returns the fields in scholarly work that are not in grad culminating experience' do
           expect(pathway.fields_to_reset(scholarly_work)).to contain_exactly('publisher_statement', 'identifier', 'subject', 'publisher', 'subtitle',
-                                                                             'open_access', 'open_access_version')
+                                                                             'open_access_upload', 'open_access_version')
         end
       end
 
@@ -900,7 +900,7 @@ RSpec.describe WorkDepositPathway do
 
       context 'when original type was scholarly work' do
         it 'returns the fields in scholarly work that are not in instrument' do
-          expect(pathway.fields_to_reset(scholarly_work)).to contain_exactly('identifier', 'publisher_statement', 'open_access', 'open_access_version')
+          expect(pathway.fields_to_reset(scholarly_work)).to contain_exactly('identifier', 'publisher_statement', 'open_access_upload', 'open_access_version')
         end
       end
 
@@ -930,7 +930,7 @@ RSpec.describe WorkDepositPathway do
 
       context 'when original type was scholarly work' do
         it 'returns the fields in scholarly work that are not in general' do
-          expect(pathway.fields_to_reset(scholarly_work)).to eq(['open_access', 'open_access_version'])
+          expect(pathway.fields_to_reset(scholarly_work)).to eq(['open_access_upload', 'open_access_version'])
         end
       end
 

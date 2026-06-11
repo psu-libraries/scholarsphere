@@ -36,7 +36,7 @@ RSpec.describe Api::V1::IngestController do
             creators: [creator],
             rights: metadata[:rights],
             visibility: Permissions::Visibility::OPEN,
-            open_access: true,
+            open_access_upload: true,
             open_access_version: OpenAccessVersion::VersionValues::ACCEPTED,
             imported_metadata_from_rmd: true
           },
@@ -53,7 +53,7 @@ RSpec.describe Api::V1::IngestController do
         expect(Api::V1::WorkCreator).to have_received(:call).with(
           a_hash_including(external_app: api_token.application)
         )
-        expect(WorkVersion.last.open_access).to eq(true)
+        expect(WorkVersion.last.open_access_upload).to eq(true)
         expect(WorkVersion.last.imported_metadata_from_rmd).to eq(true)
       end
     end

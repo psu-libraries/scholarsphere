@@ -257,10 +257,10 @@ RSpec.describe 'Publishing a work', with_user: :user do
           visit dashboard_form_work_versions_path
 
           FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_scholarly_works_draft(metadata)
-          expect(page).to have_field('open_access_checkbox', type: 'checkbox')
-          check 'open_access_checkbox'
+          expect(page).to have_field('open_access_upload_checkbox', type: 'checkbox')
+          check 'open_access_upload_checkbox'
           FeatureHelpers::DashboardForm.save_and_continue
-          expect(Work.last.versions.last.open_access).to eq true
+          expect(Work.last.versions.last.open_access_upload).to eq true
         end
       end
 
@@ -279,7 +279,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
           fill_in 'work_version_title', with: metadata[:title]
           select Work::Types.display('research_paper'), from: 'work_version_work_attributes_work_type'
-          expect(page).to have_no_field('open_access_checkbox', type: 'checkbox')
+          expect(page).to have_no_field('open_access_upload_checkbox', type: 'checkbox')
         end
       end
     end
@@ -764,7 +764,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
       it 'displays the open access checkbox in readonly' do
         visit dashboard_form_work_version_type_path(work_version)
-        expect(page).to have_field('open_access_checkbox', type: 'checkbox', disabled: true)
+        expect(page).to have_field('open_access_upload_checkbox', type: 'checkbox', disabled: true)
       end
     end
 
@@ -785,7 +785,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         visit dashboard_form_work_version_type_path(work_version)
 
-        expect(page).to have_no_field('open_access_checkbox', type: 'checkbox')
+        expect(page).to have_no_field('open_access_upload_checkbox', type: 'checkbox')
       end
     end
   end
@@ -2308,7 +2308,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
        }]}
 
     before do
-      work_version.update(open_access: true, identifier: ['10.1234/abc123'])
+      work_version.update(open_access_upload: true, identifier: ['10.1234/abc123'])
 
       @original_secret = ENV['ENABLE_OPEN_ACCESS_FEATURE']
       ENV['ENABLE_OPEN_ACCESS_FEATURE'] = 'true'
@@ -2330,7 +2330,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
       it 'disables and autopopulates permissions fields' do
         visit dashboard_form_publish_path(work_version)
 
-        expect(page).to have_field('open_access_checkbox', type: 'checkbox', disabled: true)
+        expect(page).to have_field('open_access_upload_checkbox', type: 'checkbox', disabled: true)
         expect(page).to have_field('work_version_publisher_statement', readonly: true)
         expect(page).to have_field('work_version_rights', disabled: true)
         expect(page).to have_field('work_version_work_attributes_embargoed_until', readonly: true)
@@ -2413,7 +2413,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         FeatureHelpers::DashboardForm.simulate_open_access_version_broadcast(work_version)
 
-        expect(page).to have_field('open_access_checkbox', type: 'checkbox')
+        expect(page).to have_field('open_access_upload_checkbox', type: 'checkbox')
         expect(page).to have_field('work_version_publisher_statement')
         expect(page).to have_field('work_version_rights')
         expect(page).to have_field('work_version_work_attributes_embargoed_until')
@@ -2423,11 +2423,11 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
 
     context 'when the work is not open access' do
-      before { work_version.update(open_access: nil) }
+      before { work_version.update(open_access_upload: nil) }
 
       it 'enables autopopulated fields and does not display open access version' do
         visit dashboard_form_publish_path(work_version)
-        expect(page).to have_field('open_access_checkbox', type: 'checkbox', disabled: true)
+        expect(page).to have_field('open_access_upload_checkbox', type: 'checkbox', disabled: true)
         expect(page).to have_field('work_version_publisher_statement')
         expect(page).to have_field('work_version_rights')
         expect(page).to have_field('work_version_work_attributes_embargoed_until')
