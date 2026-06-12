@@ -24,6 +24,8 @@ RSpec.describe 'Search Facets', :inline_jobs do
       expect(page).to have_content 'Numerical Sort'
 
       first('[data-bl-dismiss="modal"]').click
+
+      expect(page).to have_no_content 'Numerical Sort'
     end
   end
 
