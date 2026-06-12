@@ -3,8 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe 'Search Facets', :inline_jobs do
-<<<<<<< Updated upstream
-=======
   describe 'display "more" modal' do
     before do
       25.times do
@@ -29,7 +27,6 @@ RSpec.describe 'Search Facets', :inline_jobs do
     end
   end
 
->>>>>>> Stashed changes
   describe 'renaming a user updates their Creator facet' do
     let(:my_actor) { build(:actor, display_name: 'Me Before Rename') }
 
