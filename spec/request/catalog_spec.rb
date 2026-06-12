@@ -21,4 +21,12 @@ RSpec.describe CatalogController, type: :request do
       end
     end
   end
+
+  describe 'GET #facet' do
+    it 'returns success for display work type facet modal' do
+      get '/catalog/facet/display_work_type_ssi', params: { q: 'search', search_field: 'all_fields' }
+
+      expect(response).to have_http_status(:ok)
+    end
+  end
 end
