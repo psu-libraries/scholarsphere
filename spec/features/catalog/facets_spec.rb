@@ -3,6 +3,33 @@
 require 'rails_helper'
 
 RSpec.describe 'Search Facets', :inline_jobs do
+<<<<<<< Updated upstream
+=======
+  describe 'display "more" modal' do
+    before do
+      25.times do
+        create(:work, work_type: Work::Types.all.sample, versions_count: 2, has_draft: false)
+      end
+    end
+
+    it 'displays the modal and exits the modal', :js do
+      visit search_catalog_path
+      expect(page).to have_button('search', wait: 10)
+      click_button('search')
+
+      within '#facets' do
+        first('[data-target="#facet-display_work_type_ssi"]').click
+      end
+
+      click_link 'more'
+
+      expect(page).to have_content 'Numerical Sort'
+
+      first('[data-bl-dismiss="modal"]').click
+    end
+  end
+
+>>>>>>> Stashed changes
   describe 'renaming a user updates their Creator facet' do
     let(:my_actor) { build(:actor, display_name: 'Me Before Rename') }
 
