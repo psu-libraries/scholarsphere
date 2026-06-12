@@ -65,9 +65,9 @@ module OpenAccessVersion
         when 'cc-by-nc-sa'
           rights[5]
         when 'cc0'
-          rights[7]
+          rights[6]
         when 'other (non-commercial)', 'unclear', /other-closed/i, /none/i
-          rights[8]
+          rights[11]
         end
       end
 
