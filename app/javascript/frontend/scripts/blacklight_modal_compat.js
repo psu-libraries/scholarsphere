@@ -1,6 +1,4 @@
-// Bridge Blacklight 8 markup to Blacklight Frontend 7 modal behavior.
-// Blacklight 8 facet templates use data-bl-dismiss, while this app's modal
-// JS listens for Bootstrap dismiss conventions.
+// Custom script for blacklight frontend 7 modals to work with blacklight 8
 document.addEventListener('click', (event) => {
   const dismissTarget = event.target.closest('[data-bl-dismiss="modal"]')
   if (!dismissTarget) return
