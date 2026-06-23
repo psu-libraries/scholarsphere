@@ -407,6 +407,14 @@ class WorkVersion < ApplicationRecord
     file_resources&.any?(&:large_pdf?)
   end
 
+  def open_access_upload_eligible?
+    Work::Types.oa_scholarly_works.include?(work_type)
+  end
+
+  def open_access_upload_active?
+    open_access_upload? && open_access_upload_eligible?
+  end
+
   def has_remaining_auto_remediation_jobs?
     file_resources.exists?(['remediation_job_uuid IS NOT NULL AND remediated_version = ?', false])
   end
@@ -437,6 +445,11 @@ class WorkVersion < ApplicationRecord
       fields_to_reset.each do |field|
         send(:"#{field}=", nil)
       end
+
+      unless open_access_upload_eligible?
+        self.open_access_upload = nil
+        self.open_access_version = nil
+      end
     end
 
     def perform_update_index
@@ -456,7 +469,7 @@ class WorkVersion < ApplicationRecord
     end
 
     def open_access_version_required
-      if open_access_upload && OpenAccessVersion::VersionValues::KNOWN.exclude?(open_access_version)
+      if open_access_upload_active? && OpenAccessVersion::VersionValues::KNOWN.exclude?(open_access_version)
         errors.add(:open_access_version, :blank)
       end
     end

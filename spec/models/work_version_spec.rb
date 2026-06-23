@@ -521,6 +521,55 @@ RSpec.describe WorkVersion do
     it { is_expected.to be_latest_version }
   end
 
+  describe '#open_access_upload_active?' do
+    let(:work_version) { create(:work_version, work: build(:work, work_type: work_type), open_access_upload: open_access_upload) }
+    let(:open_access_upload) { true }
+
+    context 'when work type is open access eligible and upload is enabled' do
+      let(:work_type) { 'article' }
+
+      it 'returns true' do
+        expect(work_version.open_access_upload_active?).to be true
+      end
+    end
+
+    context 'when work type is not open access eligible and upload is enabled' do
+      let(:work_type) { 'research_paper' }
+
+      it 'returns false' do
+        expect(work_version.open_access_upload_active?).to be false
+      end
+    end
+
+    context 'when work type is open access eligible and upload is disabled' do
+      let(:work_type) { 'article' }
+      let(:open_access_upload) { false }
+
+      it 'returns false' do
+        expect(work_version.open_access_upload_active?).to be false
+      end
+    end
+  end
+
+  describe 'open access fields on work type change' do
+    let(:work_version) do
+      create(
+        :work_version,
+        work: create(:work, work_type: 'article'),
+        open_access_upload: true,
+        open_access_version: OpenAccessVersion::VersionValues::ACCEPTED
+      )
+    end
+
+    it 'clears open access fields when work type changes to a non-eligible scholarly type' do
+      work_version.assign_attributes(work_attributes: { id: work_version.work.id, work_type: 'research_paper' })
+      work_version.save!
+
+      expect(work_version.reload.open_access_upload).to be_nil
+      expect(work_version.open_access_version).to be_nil
+    end
+  end
+
   describe '#to_solr' do
     subject(:work_version) { create(:work_version, :with_files, published_date: '1999-uu-uu') }
 

@@ -16,7 +16,8 @@ RSpec.describe WorkDepositPathway do
       doi_blank?: doi_blank,
       work: work,
       file_version_memberships: [file_version_membership1, file_version_membership2],
-      open_access_upload: open_access
+      open_access_upload: open_access,
+      open_access_upload_active?: open_access
     )
   }
   let(:type) { nil }

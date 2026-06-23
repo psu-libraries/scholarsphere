@@ -21,12 +21,14 @@ RSpec.describe Dashboard::Form::FilesController, type: :request do
       create(
         :work_version,
         :draft,
+        work: build(:work, work_type: work_type),
         open_access_upload: open_access,
         open_access_version: OpenAccessVersion::VersionValues::ACCEPTED
       )
     end
     let(:user) { work_version.depositor.user }
     let(:open_access) { true }
+    let(:work_type) { 'article' }
     let(:request_params) { { work_version: { id: work_version.id } } }
 
     before do
@@ -49,6 +51,19 @@ RSpec.describe Dashboard::Form::FilesController, type: :request do
 
     context 'when open access is disabled' do
       let(:open_access) { false }
+
+      it 'does not enqueue open access version guessing' do
+        patch dashboard_form_files_path(work_version), params: request_params
+
+        expect(response).to have_http_status(:redirect)
+        expect(response).to redirect_to(dashboard_form_publish_path(work_version))
+        expect(OpenAccessVersionGuesserJob).not_to have_received(:perform_later)
+        expect(work_version.reload.open_access_version).to eq(OpenAccessVersion::VersionValues::ACCEPTED)
+      end
+    end
+
+    context 'when open access is enabled but the work type is not OA-eligible' do
+      let(:work_type) { 'research_paper' }
 
       it 'does not enqueue open access version guessing' do
         patch dashboard_form_files_path(work_version), params: request_params

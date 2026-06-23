@@ -44,7 +44,7 @@ class WorkDepositPathway
   end
 
   def allows_visibility_change?
-    !data_and_code? && !grad_culminating_experiences? && !@resource.open_access_upload
+    !data_and_code? && !grad_culminating_experiences? && !@resource.open_access_upload_active?
   end
 
   def allows_curation_request?
