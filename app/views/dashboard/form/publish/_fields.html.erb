@@ -1,4 +1,4 @@
-<% open_access = @resource.open_access_upload %>
+<% open_access = @resource.open_access_upload_active? %>
 <% selected_rights = open_access ? @permissions&.licence(@resource.open_access_version) : form.object.rights %>
 <% open_access_embargo_end_date = @permissions&.embargo_end_date(@resource.open_access_version) %>
 <div class="form-wrapper">
