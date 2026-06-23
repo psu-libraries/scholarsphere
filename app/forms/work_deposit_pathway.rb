@@ -44,7 +44,7 @@ class WorkDepositPathway
   end
 
   def allows_visibility_change?
-    !data_and_code? && !grad_culminating_experiences? && !@resource.open_access_upload
+    !data_and_code? && !grad_culminating_experiences? && !@resource.open_access_upload_active?
   end
 
   def allows_curation_request?
@@ -214,6 +214,7 @@ class WorkDepositPathway
 
       delegate :imported_metadata_from_rmd,
                :open_access_upload,
+               :open_access_upload_active?,
                to: :work_version, prefix: false
 
       def show_autocomplete_form?
@@ -321,7 +322,7 @@ class WorkDepositPathway
         end
 
         def show_autocomplete_form?
-          open_access_upload == true && imported_metadata_from_rmd.nil?
+          open_access_upload_active? && imported_metadata_from_rmd.nil?
         end
 
         validate :autocomplete_must_be_completed

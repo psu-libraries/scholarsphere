@@ -12,7 +12,7 @@ class Work < ApplicationRecord
   fields_with_dois :doi, :latest_published_version_dois
 
   delegate :email, :display_name, to: :depositor
-  delegate :has_publisher_doi?, :open_access_upload, to: :latest_version
+  delegate :has_publisher_doi?, :open_access_upload, :open_access_upload_active?, to: :latest_version
 
   belongs_to :depositor,
              class_name: 'Actor',

@@ -6,6 +6,8 @@ RSpec.describe Work do
   it { is_expected.to delegate_method(:email).to(:depositor) }
   it { is_expected.to delegate_method(:display_name).to(:depositor) }
   it { is_expected.to delegate_method(:has_publisher_doi?).to(:latest_version) }
+  it { is_expected.to delegate_method(:open_access_upload).to(:latest_version) }
+  it { is_expected.to delegate_method(:open_access_upload_active?).to(:latest_version) }
 
   it_behaves_like 'a resource with permissions' do
     let(:factory_name) { :work }

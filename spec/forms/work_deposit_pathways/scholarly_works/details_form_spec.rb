@@ -79,8 +79,10 @@ RSpec.describe WorkDepositPathway::ScholarlyWorks::DetailsForm, type: :model do
   end
 
   describe 'autocomplete validation' do
-    context 'when the work is an open access upload' do
-      before { wv.open_access_upload = true }
+    context 'when the work version is open_access_upload_active' do
+      before do
+        allow(wv).to receive(:open_access_upload_active?).and_return(true)
+      end
 
       context 'when the autocomplete form has not been submitted' do
         it 'is not valid' do

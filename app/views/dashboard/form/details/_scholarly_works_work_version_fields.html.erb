@@ -1,6 +1,6 @@
 <%= render 'dashboard/form/details/common_work_version_required_fields', form: form %>
 
-<% if @resource.open_access_upload %>
+<% if @resource.open_access_upload_active? %>
   <% form.object.publisher_statement = @permissions&.publisher_statement(@resource.open_access_version) %>
 <% end %>
 <div class="form-wrapper">

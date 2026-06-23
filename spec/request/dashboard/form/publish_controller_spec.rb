@@ -58,8 +58,17 @@ RSpec.describe Dashboard::Form::PublishController, type: :request do
   end
 
   describe 'webhook on publish' do
-    let(:work_version) { create(:work_version, :able_to_be_published, open_access_upload: open_access, open_access_version: OpenAccessVersion::VersionValues::ACCEPTED) }
+    let(:work_version) do
+      create(
+        :work_version,
+        :able_to_be_published,
+        work: build(:work, work_type: work_type),
+        open_access_upload: open_access,
+        open_access_version: OpenAccessVersion::VersionValues::ACCEPTED
+      )
+    end
     let(:open_access) { true }
+    let(:work_type) { 'article' }
     let(:user) { work_version.work.depositor.user }
     let(:request_params) do
       {
@@ -87,6 +96,17 @@ RSpec.describe Dashboard::Form::PublishController, type: :request do
 
     context 'when the work is not open access' do
       let(:open_access) { false }
+
+      it 'does not enqueue the webhook' do
+        patch dashboard_form_publish_path(work_version), params: request_params
+
+        expect(response).to have_http_status(:redirect)
+        expect(WorkPublishedWebhookJob).not_to have_received(:perform_later)
+      end
+    end
+
+    context 'when open access is enabled but the work type is not OA-eligible' do
+      let(:work_type) { 'research_paper' }
 
       it 'does not enqueue the webhook' do
         patch dashboard_form_publish_path(work_version), params: request_params

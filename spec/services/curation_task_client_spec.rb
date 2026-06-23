@@ -119,7 +119,7 @@ RSpec.describe CurationTaskClient do
       let(:embargo) { nil }
       let(:labels) { ['AC02'] }
 
-      before { allow(work_version).to receive(:open_access_upload).and_return(true) }
+      before { allow(work_version).to receive(:open_access_upload_active?).and_return(true) }
 
       it 'creates a submission record in Airtable' do
         expect(Submission).to receive(:create).with(expected_record)
@@ -133,7 +133,7 @@ RSpec.describe CurationTaskClient do
       let(:embargo) { nil }
       let(:labels) { [] }
 
-      before { allow(work_version).to receive(:open_access_upload).and_return(false) }
+      before { allow(work_version).to receive(:open_access_upload_active?).and_return(false) }
 
       it 'creates a submission record in Airtable' do
         expect(Submission).to receive(:create).with(expected_record)
