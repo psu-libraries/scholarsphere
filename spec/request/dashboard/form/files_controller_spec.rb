@@ -47,23 +47,23 @@ RSpec.describe Dashboard::Form::FilesController, type: :request do
         expect(OpenAccessVersionGuesserJob).to have_received(:perform_later).with(work_version.id)
         expect(work_version.reload.open_access_version).to be_nil
       end
+
+      context 'when the work type is not OA-eligible' do
+        let(:work_type) { 'research_paper' }
+
+        it 'does not enqueue open access version guessing' do
+          patch dashboard_form_files_path(work_version), params: request_params
+
+          expect(response).to have_http_status(:redirect)
+          expect(response).to redirect_to(dashboard_form_publish_path(work_version))
+          expect(OpenAccessVersionGuesserJob).not_to have_received(:perform_later)
+          expect(work_version.reload.open_access_version).to eq(OpenAccessVersion::VersionValues::ACCEPTED)
+        end
+      end
     end
 
     context 'when open access is disabled' do
       let(:open_access) { false }
-
-      it 'does not enqueue open access version guessing' do
-        patch dashboard_form_files_path(work_version), params: request_params
-
-        expect(response).to have_http_status(:redirect)
-        expect(response).to redirect_to(dashboard_form_publish_path(work_version))
-        expect(OpenAccessVersionGuesserJob).not_to have_received(:perform_later)
-        expect(work_version.reload.open_access_version).to eq(OpenAccessVersion::VersionValues::ACCEPTED)
-      end
-    end
-
-    context 'when open access is enabled but the work type is not OA-eligible' do
-      let(:work_type) { 'research_paper' }
 
       it 'does not enqueue open access version guessing' do
         patch dashboard_form_files_path(work_version), params: request_params
