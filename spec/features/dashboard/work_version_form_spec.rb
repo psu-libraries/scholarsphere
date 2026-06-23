@@ -768,6 +768,24 @@ RSpec.describe 'Publishing a work', with_user: :user do
       end
     end
 
+    context 'when open access upload is already true', :js do
+      before do
+        @original_secret = ENV['ENABLE_OPEN_ACCESS_FEATURE']
+        ENV['ENABLE_OPEN_ACCESS_FEATURE'] = 'true'
+        work_version.update!(open_access_upload: true)
+      end
+
+      after do
+        ENV['ENABLE_OPEN_ACCESS_FEATURE'] = @original_secret
+      end
+
+      it 'disables the open access checkbox' do
+        visit dashboard_form_work_version_type_path(work_version)
+
+        expect(page).to have_field('open_access_upload_checkbox', type: 'checkbox', disabled: true, checked: true)
+      end
+    end
+
     context 'when editing a non-initial draft version', :js do
       let(:work) { create(:work, work_type: 'article', versions_count: 2, has_draft: true) }
 
