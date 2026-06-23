@@ -31,7 +31,8 @@
                          {
                            class: 'form-check-input',
                            id: 'open_access_upload_checkbox',
-                           disabled: (local_assigns[:work_type_disabled] && !current_user.admin?) || form.object.open_access_upload?
+                           disabled: !current_user.admin? &&
+                             (local_assigns[:work_type_disabled] || form.object.open_access_upload?)
                          },
                          true,
                          false %>

@@ -766,6 +766,15 @@ RSpec.describe 'Publishing a work', with_user: :user do
         visit dashboard_form_work_version_type_path(work_version)
         expect(page).to have_field('open_access_upload_checkbox', type: 'checkbox', disabled: true)
       end
+
+      context 'when the user is an admin' do
+        let(:user) { create(:user, :admin) }
+
+        it 'displays the open access checkbox without disabling it' do
+          visit dashboard_form_work_version_type_path(work_version)
+          expect(page).to have_field('open_access_upload_checkbox', type: 'checkbox', disabled: false)
+        end
+      end
     end
 
     context 'when open access upload is already true', :js do
@@ -783,6 +792,16 @@ RSpec.describe 'Publishing a work', with_user: :user do
         visit dashboard_form_work_version_type_path(work_version)
 
         expect(page).to have_field('open_access_upload_checkbox', type: 'checkbox', disabled: true, checked: true)
+      end
+
+      context 'when the user is an admin' do
+        let(:user) { create(:user, :admin) }
+
+        it 'displays the open access checkbox without disabling it' do
+          visit dashboard_form_work_version_type_path(work_version)
+
+          expect(page).to have_field('open_access_upload_checkbox', type: 'checkbox', disabled: false, checked: true)
+        end
       end
     end
 
