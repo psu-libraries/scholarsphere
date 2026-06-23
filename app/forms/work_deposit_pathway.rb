@@ -214,6 +214,7 @@ class WorkDepositPathway
 
       delegate :imported_metadata_from_rmd,
                :open_access_upload,
+               :open_access_upload_active?,
                to: :work_version, prefix: false
 
       def show_autocomplete_form?
@@ -290,8 +291,6 @@ class WorkDepositPathway
           delegate attr_name, to: :work_version, prefix: false
           delegate "#{attr_name}=", to: :work_version, prefix: false
         end
-
-        delegate :open_access_upload_active?, to: :work_version
 
         delegate :form_partial, to: :work_version
       end
