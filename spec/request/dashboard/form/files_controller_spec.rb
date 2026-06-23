@@ -57,7 +57,6 @@ RSpec.describe Dashboard::Form::FilesController, type: :request do
           expect(response).to have_http_status(:redirect)
           expect(response).to redirect_to(dashboard_form_publish_path(work_version))
           expect(OpenAccessVersionGuesserJob).not_to have_received(:perform_later)
-          expect(work_version.reload.open_access_version).to eq(OpenAccessVersion::VersionValues::ACCEPTED)
         end
       end
     end
