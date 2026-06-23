@@ -291,6 +291,8 @@ class WorkDepositPathway
           delegate "#{attr_name}=", to: :work_version, prefix: false
         end
 
+        delegate :open_access_upload_active?, to: :work_version
+
         delegate :form_partial, to: :work_version
       end
     end
@@ -321,7 +323,7 @@ class WorkDepositPathway
         end
 
         def show_autocomplete_form?
-          work_version.open_access_upload_active? && imported_metadata_from_rmd.nil?
+          open_access_upload_active? && imported_metadata_from_rmd.nil?
         end
 
         validate :autocomplete_must_be_completed
