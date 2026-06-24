@@ -111,12 +111,34 @@ RSpec.describe CurationSyncService do
       end
 
       context 'when current version for curation has not been sent for curation' do
-        context 'when current version for curation has been remediated' do
+        context 'when the most recent published version for curation has been remediated' do
           it 'does not send for curation' do
             work_version2.update remediated_version: true
             expect(CurationTaskClient).not_to receive(:send_curation).with(work_version2.id)
 
             described_class.new(work).sync
+          end
+
+          context 'when a previous version has not been sent for curation' do
+            let(:work_version4) { build(:work_version,
+                                        work: nil,
+                                        aasm_state: 'published',
+                                        draft_curation_requested: nil,
+                                        remediated_version: true,
+                                        published_at: Time.new(2024, 3, 10, 11, 30, 0))
+            }
+
+            before do
+              work.versions << work_version4
+              allow(CurationTaskClient).to receive(:find_all).with(work.id).and_return([])
+            end
+
+            it 'sends the latest non-remediated published version for curation' do
+              expect(CurationTaskClient).to receive(:send_curation).with(work_version2.id, updated_version: false)
+              expect(CurationTaskClient).not_to receive(:send_curation).with(work_version4.id)
+
+              described_class.new(work).sync
+            end
           end
         end
 
