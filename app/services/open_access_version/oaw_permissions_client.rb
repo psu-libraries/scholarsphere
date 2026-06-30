@@ -6,18 +6,10 @@ module OpenAccessVersion
 
     attr_reader :doi, :version
 
-    def all_permissions
-      return @all_permissions if defined?(@all_permissions)
-
-      @all_permissions = JSON.parse(permissions_response)['all_permissions']
-    rescue JSON::ParserError
-      @all_permissions = nil
-    end
-
     private
 
       def permissions_response
-        Faraday.get(oaw_permissions_w_doi_url).body
+        @response ||= Faraday.get(oaw_permissions_w_doi_url).body
       rescue Faraday::ConnectionFailed, Faraday::TimeoutError
         ''
       end
@@ -30,8 +22,30 @@ module OpenAccessVersion
         'https://bg.api.oa.works/permissions/'
       end
 
+      def all_permissions
+        return @all_permissions if defined?(@all_permissions)
+
+        @all_permissions = JSON.parse(permissions_response)['all_permissions']
+      rescue JSON::ParserError
+        @all_permissions = nil
+      end
+
+      def best_permission
+        return @best_permission if defined?(@best_permission)
+
+        @best_permission = JSON.parse(permissions_response)['best_permission']
+      rescue JSON::ParserError
+        @best_permission = nil
+      end
+
+      def best_permission_version
+        @best_permission['version'] if best_permission.present?
+      end
+
       def accepted_version
-        if all_permissions.present?
+        if best_permission_version == VersionValues::ACCEPTED
+          best_permission
+        elsif all_permissions.present?
           all_permissions
             .select { |perm| perm if perm['version'] == VersionValues::ACCEPTED }
             .first
@@ -42,7 +56,9 @@ module OpenAccessVersion
       end
 
       def published_version
-        if all_permissions.present?
+        if best_permission_version == VersionValues::PUBLISHED
+          best_permission
+        elsif all_permissions.present?
           all_permissions
             .select { |perm| perm if perm['version'] == VersionValues::PUBLISHED }
             .first
