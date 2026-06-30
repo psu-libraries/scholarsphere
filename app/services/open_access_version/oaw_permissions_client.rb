@@ -17,7 +17,7 @@ module OpenAccessVersion
     private
 
       def permissions_response
-        Faraday.get(oaw_permissions_w_doi_url).body
+        @response ||= Faraday.get(oaw_permissions_w_doi_url).body
       rescue Faraday::ConnectionFailed, Faraday::TimeoutError
         ''
       end
