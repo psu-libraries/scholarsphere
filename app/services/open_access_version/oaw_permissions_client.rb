@@ -6,14 +6,6 @@ module OpenAccessVersion
 
     attr_reader :doi, :version
 
-    def all_permissions
-      return @all_permissions if defined?(@all_permissions)
-
-      @all_permissions = JSON.parse(permissions_response)['all_permissions']
-    rescue JSON::ParserError
-      @all_permissions = nil
-    end
-
     private
 
       def permissions_response
@@ -28,6 +20,14 @@ module OpenAccessVersion
 
       def oaw_permissions_base_url
         'https://bg.api.oa.works/permissions/'
+      end
+
+      def all_permissions
+        return @all_permissions if defined?(@all_permissions)
+
+        @all_permissions = JSON.parse(permissions_response)['all_permissions']
+      rescue JSON::ParserError
+        @all_permissions = nil
       end
 
       def best_permission
