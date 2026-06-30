@@ -24,10 +24,20 @@ RSpec.describe OpenAccessVersion::OawPermissionsService do
     ]
   end
 
+  let(:best_permission) do
+    {
+      'version' => best_permission_version,
+      'deposit_statement' => 'Best accepted version statement',
+      'embargo_end' => '2011-12-31',
+      'licence' => 'cc-by-nc'
+    }
+  end
+  let(:best_permission_version) { 'acceptedVersion' }
+
   before do
     response = instance_double(
       Faraday::Response,
-      body: { all_permissions: permissions }.to_json
+      body: { best_permission: best_permission, all_permissions: permissions }.to_json
     )
 
     allow(Faraday).to receive(:get).and_return(response)
@@ -46,18 +56,27 @@ RSpec.describe OpenAccessVersion::OawPermissionsService do
   end
 
   describe '#publisher_statement' do
-    it 'returns the deposit statement for the requested version' do
-      expect(service.publisher_statement('acceptedVersion'))
-        .to eq('Accepted version statement')
+    context 'when best permission is the requested version' do
+      it 'returns the deposit statement for the requested version' do
+        expect(service.publisher_statement('acceptedVersion'))
+          .to eq('Best accepted version statement')
+      end
+    end
+
+    context 'when best permission is not the requested version' do
+      it 'returns the deposit statement for the requested version' do
+        expect(service.publisher_statement('publishedVersion'))
+          .to eq('Published version statement')
+      end
     end
 
     context 'when no statement exists' do
-      let(:permissions) do
-        [{
+      let(:best_permission) do
+        {
           'version' => 'acceptedVersion',
           'embargo_end' => '2011-08-31',
           'licence' => 'cc-by-nc-nd'
-        }]
+        }
       end
 
       it 'returns nil' do
@@ -73,9 +92,18 @@ RSpec.describe OpenAccessVersion::OawPermissionsService do
   end
 
   describe '#embargo_end_date' do
-    it 'parses the embargo date' do
-      expect(service.embargo_end_date('acceptedVersion'))
-        .to eq(Date.new(2011, 8, 31))
+    context 'when best permission is the requested version' do
+      it 'returns the embargo end date for the best permission version' do
+        expect(service.embargo_end_date('acceptedVersion'))
+          .to eq(Date.new(2011, 12, 31))
+      end
+    end
+
+    context 'when best permission is not the requested version' do
+      it 'returns the embargo end date for the requested version' do
+        expect(service.embargo_end_date('publishedVersion'))
+          .to eq(Date.new(2012, 8, 31))
+      end
     end
 
     context 'when no embargo end date exists' do
@@ -86,6 +114,7 @@ RSpec.describe OpenAccessVersion::OawPermissionsService do
           'licence' => 'cc-by-nc-nd'
         }]
       end
+      let(:best_permission_version) { 'publishedVersion' }
 
       it 'returns nil when no embargo end exists' do
         expect(service.embargo_end_date('acceptedVersion')).to be_nil
@@ -100,18 +129,27 @@ RSpec.describe OpenAccessVersion::OawPermissionsService do
   end
 
   describe '#licence' do
-    it 'maps the licence to the corresponding rights URL' do
-      expect(service.licence('acceptedVersion'))
-        .to eq('https://creativecommons.org/licenses/by-nc-nd/4.0/')
+    context 'when best permission is the requested version' do
+      it 'maps the licence to the corresponding rights URL' do
+        expect(service.licence('acceptedVersion'))
+          .to eq('https://creativecommons.org/licenses/by-nc/4.0/')
+      end
+    end
+
+    context 'when best permission is not the requested version' do
+      it 'maps the licence to the corresponding rights URL' do
+        expect(service.licence('publishedVersion'))
+          .to eq('https://creativecommons.org/licenses/by/4.0/')
+      end
     end
 
     context 'when the licence is not found' do
-      let(:permissions) do
-        [{
+      let(:best_permission) do
+        {
           'version' => 'acceptedVersion',
           'deposit_statement' => 'Accepted version statement',
           'embargo_end' => '2011-08-31'
-        }]
+        }
       end
 
       it 'returns nil' do
@@ -120,13 +158,13 @@ RSpec.describe OpenAccessVersion::OawPermissionsService do
     end
 
     context 'when the licence is not recognized' do
-      let(:permissions) do
-        [{
+      let(:best_permission) do
+        {
           'version' => 'acceptedVersion',
           'deposit_statement' => 'Accepted version statement',
           'embargo_end' => '2011-08-31',
           'licence' => 'unknown-licence'
-        }]
+        }
       end
 
       it 'returns nil' do

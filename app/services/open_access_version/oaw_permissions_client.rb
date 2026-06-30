@@ -30,8 +30,22 @@ module OpenAccessVersion
         'https://bg.api.oa.works/permissions/'
       end
 
+      def best_permission
+        return @best_permission if defined?(@best_permission)
+
+        @best_permission = JSON.parse(permissions_response)['best_permission']
+      rescue JSON::ParserError
+        @best_permission = nil
+      end
+
+      def best_permission_version
+        @best_permission['version'] if best_permission.present?
+      end
+
       def accepted_version
-        if all_permissions.present?
+        if best_permission_version == VersionValues::ACCEPTED
+          best_permission
+        elsif all_permissions.present?
           all_permissions
             .select { |perm| perm if perm['version'] == VersionValues::ACCEPTED }
             .first
@@ -42,7 +56,9 @@ module OpenAccessVersion
       end
 
       def published_version
-        if all_permissions.present?
+        if best_permission_version == VersionValues::PUBLISHED
+          best_permission
+        elsif all_permissions.present?
           all_permissions
             .select { |perm| perm if perm['version'] == VersionValues::PUBLISHED }
             .first
