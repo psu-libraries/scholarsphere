@@ -139,7 +139,7 @@ module Api::V1
       end
 
       def publish_params
-        params.fetch(:publish, 'true') == 'true'
+        ActiveModel::Type::Boolean.new.cast(params.fetch(:publish, true))
       end
   end
 end
