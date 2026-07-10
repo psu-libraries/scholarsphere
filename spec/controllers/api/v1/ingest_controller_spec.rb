@@ -208,7 +208,16 @@ RSpec.describe Api::V1::IngestController do
       end
     end
 
-    context 'with publish: false', vcr: VCRHelpers.depositor_cassette do
+    context 'with publish:', vcr: VCRHelpers.depositor_cassette do
+      let(:publish_value) { true }
+      let(:published_response) do
+        "{\"message\":\"Work was successfully created\",\"url\":\"/resources/#{Work.last.uuid}\"}"
+      end
+      let(:draft_response) do
+        "{\"message\":\"Work was successfully created\",\"url\":\"/resources/#{Work.last.uuid}\"," +
+          "\"edit_url\":\"/dashboard/form/work_versions/#{Work.last.latest_version.id}/files\"}"
+      end
+
       before do
         post :create, params: {
           metadata: {
@@ -222,19 +231,56 @@ RSpec.describe Api::V1::IngestController do
           },
           depositor: depositor,
           content: [{ file: fixture_file_upload(File.join(fixture_paths, 'image.png')) }],
-          publish: false
+          publish: publish_value
         }
       end
 
-      it 'creates a new work without publishing' do
-        expect(response).to be_created
-        expect(response.body).to eq(
-          "{\"message\":\"Work was successfully created\",\"url\":\"/resources/#{Work.last.uuid}\"," +
-          "\"edit_url\":\"/dashboard/form/work_versions/#{Work.last.latest_version.id}/files\"}"
-        )
-        expect(Api::V1::WorkCreator).to have_received(:call).with(
-          a_hash_including(external_app: api_token.application)
-        )
+      context 'when true' do
+        let(:publish_value) { true }
+
+        it 'publishes the work' do
+          expect(response).to be_ok
+          expect(response.body).to eq(published_response)
+          expect(Api::V1::WorkCreator).to have_received(:call).with(
+            a_hash_including(external_app: api_token.application)
+          )
+        end
+      end
+
+      context "when 'true'" do
+        let(:publish_value) { 'true' }
+
+        it 'publishes the work' do
+          expect(response).to be_ok
+          expect(response.body).to eq(published_response)
+          expect(Api::V1::WorkCreator).to have_received(:call).with(
+            a_hash_including(external_app: api_token.application)
+          )
+        end
+      end
+
+      context 'when false' do
+        let(:publish_value) { false }
+
+        it 'does not publish the work' do
+          expect(response).to be_created
+          expect(response.body).to eq(draft_response)
+          expect(Api::V1::WorkCreator).to have_received(:call).with(
+            a_hash_including(external_app: api_token.application)
+          )
+        end
+      end
+
+      context "when 'false'" do
+        let(:publish_value) { 'false' }
+
+        it 'does not publish the work' do
+          expect(response).to be_created
+          expect(response.body).to eq(draft_response)
+          expect(Api::V1::WorkCreator).to have_received(:call).with(
+            a_hash_including(external_app: api_token.application)
+          )
+        end
       end
     end
 
