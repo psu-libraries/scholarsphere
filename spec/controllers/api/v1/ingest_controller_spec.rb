@@ -208,8 +208,7 @@ RSpec.describe Api::V1::IngestController do
       end
     end
 
-    context 'with publish:', vcr: VCRHelpers.depositor_cassette do
-      let(:publish_value) { true }
+    describe 'publish parameter', vcr: VCRHelpers.depositor_cassette do
       let(:published_response) do
         "{\"message\":\"Work was successfully created\",\"url\":\"/resources/#{Work.last.uuid}\"}"
       end
@@ -230,13 +229,12 @@ RSpec.describe Api::V1::IngestController do
             visibility: Permissions::Visibility::OPEN
           },
           depositor: depositor,
-          content: [{ file: fixture_file_upload(File.join(fixture_paths, 'image.png')) }],
-          publish: publish_value
-        }
+          content: [{ file: fixture_file_upload(File.join(fixture_paths, 'image.png')) }]
+        }.merge(publish_param)
       end
 
       context 'when true' do
-        let(:publish_value) { true }
+        let(:publish_param) { { publish: true } }
 
         it 'publishes the work' do
           expect(response).to be_ok
@@ -248,7 +246,7 @@ RSpec.describe Api::V1::IngestController do
       end
 
       context "when 'true'" do
-        let(:publish_value) { 'true' }
+        let(:publish_param) { { publish: 'true' } }
 
         it 'publishes the work' do
           expect(response).to be_ok
@@ -260,7 +258,7 @@ RSpec.describe Api::V1::IngestController do
       end
 
       context 'when false' do
-        let(:publish_value) { false }
+        let(:publish_param) { { publish: false } }
 
         it 'does not publish the work' do
           expect(response).to be_created
@@ -272,11 +270,23 @@ RSpec.describe Api::V1::IngestController do
       end
 
       context "when 'false'" do
-        let(:publish_value) { 'false' }
+        let(:publish_param) { { publish: 'false' } }
 
         it 'does not publish the work' do
           expect(response).to be_created
           expect(response.body).to eq(draft_response)
+          expect(Api::V1::WorkCreator).to have_received(:call).with(
+            a_hash_including(external_app: api_token.application)
+          )
+        end
+      end
+
+      context 'without publish' do
+        let(:publish_param) { {} }
+
+        it 'publishes the work' do
+          expect(response).to be_ok
+          expect(response.body).to eq(published_response)
           expect(Api::V1::WorkCreator).to have_received(:call).with(
             a_hash_including(external_app: api_token.application)
           )
