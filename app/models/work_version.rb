@@ -56,6 +56,10 @@ class WorkVersion < ApplicationRecord
   belongs_to :external_app,
              optional: true
 
+  def created_by_researcher_metadata_database?
+    external_app&.researcher_metadata_database?
+  end
+
   has_many :file_version_memberships,
            dependent: :destroy
 

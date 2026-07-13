@@ -52,7 +52,7 @@ module Dashboard
 
         validation_context = current_user.admin? ? nil : :user_publish
         process_response(on_error: :edit, validation_context: validation_context) do
-          if publish? && @resource.open_access_upload_active?
+          if publish? && @resource.created_by_researcher_metadata_database?
             WorkPublishedWebhookJob.perform_later(@resource.work.uuid)
           end
 
