@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe WorkRemovedWebhook do
+RSpec.describe Webhooks::WorkRemovedWebhook do
   let(:webhook) { described_class.new('abc123') }
 
   describe '#notify' do

@@ -24,7 +24,7 @@ RSpec.describe Webhooks::WorkPublishedWebhook do
 
       expect(faraday_connection).to have_received(:post).with(
         '/webhooks/scholarsphere/open_access_work_published',
-        scholarsphere_work_url: '/resources/abc123'
+        scholarsphere_work_url: 'https://localhost:3000/resources/abc123'
       )
     end
   end
