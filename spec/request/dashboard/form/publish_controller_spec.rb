@@ -62,13 +62,11 @@ RSpec.describe Dashboard::Form::PublishController, type: :request do
       create(
         :work_version,
         :able_to_be_published,
-        work: build(:work, work_type: work_type),
-        open_access_upload: open_access,
-        open_access_version: OpenAccessVersion::VersionValues::ACCEPTED
+        work: build(:work, work_type: 'article'),
+        external_app: external_app
       )
     end
-    let(:open_access) { true }
-    let(:work_type) { 'article' }
+    let(:external_app) { ExternalApp.researcher_metadata_database }
     let(:user) { work_version.work.depositor.user }
     let(:request_params) do
       {
@@ -87,15 +85,17 @@ RSpec.describe Dashboard::Form::PublishController, type: :request do
       allow(WorkPublishedWebhookJob).to receive(:perform_later)
     end
 
-    it 'enqueues the webhook when an open access work is published' do
-      patch dashboard_form_publish_path(work_version), params: request_params
+    context 'when external app is the researcher metadata database' do
+      it 'enqueues the webhook' do
+        patch dashboard_form_publish_path(work_version), params: request_params
 
-      expect(response).to have_http_status(:redirect)
-      expect(WorkPublishedWebhookJob).to have_received(:perform_later).with(work_version.work.uuid)
+        expect(response).to have_http_status(:redirect)
+        expect(WorkPublishedWebhookJob).to have_received(:perform_later).with(work_version.work.uuid)
+      end
     end
 
-    context 'when the work is not open access' do
-      let(:open_access) { false }
+    context 'when the external app is not the researcher metadata database' do
+      let(:external_app) { ExternalApp.pdf_accessibility_api }
 
       it 'does not enqueue the webhook' do
         patch dashboard_form_publish_path(work_version), params: request_params
@@ -105,8 +105,8 @@ RSpec.describe Dashboard::Form::PublishController, type: :request do
       end
     end
 
-    context 'when open access is enabled but the work type is not OA-eligible' do
-      let(:work_type) { 'research_paper' }
+    context 'when no external app is set' do
+      let(:external_app) { nil }
 
       it 'does not enqueue the webhook' do
         patch dashboard_form_publish_path(work_version), params: request_params
