@@ -3,10 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe WorkRemovedWebhookJob do
-  let(:webhook) { instance_double WorkRemovedWebhook, notify: nil }
+  let(:webhook) { instance_double Webhook::WorkRemovedWebhook, notify: nil }
 
   before do
-    allow(WorkRemovedWebhook).to receive(:new).with('abc123').and_return(webhook)
+    allow(Webhook::WorkRemovedWebhook).to receive(:new).with('abc123').and_return(webhook)
   end
 
   describe '#perform' do
