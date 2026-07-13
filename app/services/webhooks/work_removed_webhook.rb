@@ -1,22 +1,15 @@
 # frozen_string_literal: true
 
 module Webhooks
-  class WorkRemovedWebhook
-    def initialize(work_uuid)
-      @work_uuid = work_uuid
-    end
-
-    def notify
-      conn = Faraday.new(
-        url: ENV['RMD_HOST'],
-        headers: { 'X-API-KEY' => ENV['RMD_WEBHOOK_SECRET'] }
-      )
-
-      conn.post('/webhooks/scholarsphere_events', publication_url: "https://#{Rails.application.routes.default_url_options[:host]}/resources/#{work_uuid}")
-    end
-
+  class WorkRemovedWebhook < BaseWebhook
     private
 
-      attr_reader :work_uuid
+      def webhook_path
+        '/webhooks/scholarsphere_events'
+      end
+
+      def payload_key
+        :publication_url
+      end
   end
 end
