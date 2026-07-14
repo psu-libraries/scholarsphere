@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
 module Webhooks
-  class WorkPublishedWebhook < BaseWebhook
+  class WorkRemovedWebhook < BaseWebhook
     private
 
       def webhook_path
-        '/webhooks/scholarsphere/open_access_work_published'
+        '/webhooks/scholarsphere_events'
       end
 
       def payload_key
-        :scholarsphere_work_url
+        :publication_url
       end
   end
 end

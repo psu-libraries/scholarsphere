@@ -267,6 +267,7 @@ class WorkDepositPathway
       include WorkVersionDetails
 
       delegate :mirror_remediated_version_to_files!,
+               :created_by_researcher_metadata_database?,
                to: :work_version
     end
 

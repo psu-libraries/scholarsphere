@@ -93,6 +93,30 @@ RSpec.describe WorkVersion do
     end
   end
 
+  describe '#created_by_researcher_metadata_database?' do
+    subject(:work_version) { build(:work_version, external_app:) }
+
+    context 'when the work version was created by Researcher Metadata Database' do
+      let(:external_app) do
+        build(:external_app, name: ExternalApp::ResearcherMetadataDatabase::NAME)
+      end
+
+      it { is_expected.to be_created_by_researcher_metadata_database }
+    end
+
+    context 'when the work version was created by another external app' do
+      let(:external_app) { build(:external_app, name: 'Another External App') }
+
+      it { is_expected.not_to be_created_by_researcher_metadata_database }
+    end
+
+    context 'when the work version was not created by an external app' do
+      let(:external_app) { nil }
+
+      it { is_expected.not_to be_created_by_researcher_metadata_database }
+    end
+  end
+
   describe 'states' do
     subject(:work_version) { build(:work_version, work: work) }
 
