@@ -102,7 +102,7 @@ Rails.application.configure do
 
   if ENV['RAILS_LOG_JSON'].present?
     config.lograge.formatter = Lograge::Formatters::Json.new
-    config.log_formatter = JSONLogFormatter.new
+    config.log_formatter = JsonLogFormatter.new
   else
     config.log_formatter = Logger::Formatter.new
   end
