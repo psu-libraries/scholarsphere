@@ -31,13 +31,12 @@ class IncidentsController < ApplicationController
 
     def incident_params
       params
-        .require(:incident)
-        .permit(
-          :category,
-          :name,
-          :email,
-          :subject,
-          :message
+        .expect(
+          incident: [:category,
+                     :name,
+                     :email,
+                     :subject,
+                     :message]
         )
     end
 

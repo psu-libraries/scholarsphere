@@ -23,7 +23,7 @@ module Admin
 
       # Only allow a list of trusted parameters through.
       def application_setting_params
-        params.require(:application_setting).permit(:read_only_message, :announcement)
+        params.expect(application_setting: [:read_only_message, :announcement])
       end
   end
 end

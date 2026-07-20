@@ -47,8 +47,7 @@ module Dashboard
 
       def file_version_params
         params
-          .require(:file_version_membership)
-          .permit(:title)
+          .expect(file_version_membership: [:title])
       end
   end
 end

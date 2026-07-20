@@ -43,46 +43,44 @@ module Api::V1
 
       def metadata_params
         params
-          .require(:metadata)
-          .permit(
-            :title,
-            :subtitle,
-            :rights,
-            :published_date,
-            :deposited_at,
-            :description,
-            :doi,
-            work_ids: [],
-            keyword: [],
-            contributor: [],
-            publisher: [],
-            subject: [],
-            language: [],
-            identifier: [],
-            based_near: [],
-            related_url: [],
-            source: [],
-            creators_attributes: [
-              :display_name,
-              :position,
-              actor_attributes: [
-                :email,
-                :given_name,
-                :surname,
-                :psu_id
-              ]
-            ]
+          .expect(
+            metadata: [:title,
+                       :subtitle,
+                       :rights,
+                       :published_date,
+                       :deposited_at,
+                       :description,
+                       :doi,
+                       work_ids: [],
+                       keyword: [],
+                       contributor: [],
+                       publisher: [],
+                       subject: [],
+                       language: [],
+                       identifier: [],
+                       based_near: [],
+                       related_url: [],
+                       source: [],
+                       creators_attributes: [
+                         :display_name,
+                         :position,
+                         actor_attributes: [
+                           :email,
+                           :given_name,
+                           :surname,
+                           :psu_id
+                         ]
+                       ]]
           )
       end
 
       def depositor_params
         params
-          .require(:depositor)
-          .permit(
-            :email,
-            :given_name,
-            :surname,
-            :psu_id
+          .expect(
+            depositor: [:email,
+                        :given_name,
+                        :surname,
+                        :psu_id]
           )
       end
 

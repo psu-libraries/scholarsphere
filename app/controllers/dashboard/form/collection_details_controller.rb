@@ -45,21 +45,22 @@ module Dashboard
 
         def collection_params
           params
-            .require(:collection)
-            .permit(
-              :title,
-              :description,
-              :subtitle,
-              :published_date,
-              keyword: [],
-              contributor: [],
-              publisher: [],
-              subject: [],
-              language: [],
-              identifier: [],
-              based_near: [],
-              related_url: [],
-              source: []
+            .expect(
+              collection: [:title,
+                           :description,
+                           :subtitle,
+                           :published_date,
+                           {
+                             keyword: [],
+                             contributor: [],
+                             publisher: [],
+                             subject: [],
+                             language: [],
+                             identifier: [],
+                             based_near: [],
+                             related_url: [],
+                             source: []
+                           }]
             )
         end
 

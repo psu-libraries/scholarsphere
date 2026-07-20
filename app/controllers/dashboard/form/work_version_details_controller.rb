@@ -48,42 +48,42 @@ module Dashboard
 
         def autocomplete_work_form_params
           params
-            .require(:autocomplete_work_form)
-            .permit(
-              :doi
+            .expect(
+              autocomplete_work_form: [:doi]
             )
         end
 
         def work_version_params
           params
-            .require(:work_version)
-            .permit(
-              :description,
-              :publisher_statement,
-              :subtitle,
-              :rights,
-              :version_name,
-              :published_date,
-              :model,
-              :instrument_type,
-              :measured_variable,
-              :available_date,
-              :decommission_date,
-              :related_identifier,
-              :instrument_resource_type,
-              :funding_reference,
-              :sub_work_type,
-              :program,
-              :degree,
-              keyword: [],
-              contributor: [],
-              publisher: [],
-              subject: [],
-              language: [],
-              identifier: [],
-              based_near: [],
-              related_url: [],
-              source: []
+            .expect(
+              work_version: [:description,
+                             :publisher_statement,
+                             :subtitle,
+                             :rights,
+                             :version_name,
+                             :published_date,
+                             :model,
+                             :instrument_type,
+                             :measured_variable,
+                             :available_date,
+                             :decommission_date,
+                             :related_identifier,
+                             :instrument_resource_type,
+                             :funding_reference,
+                             :sub_work_type,
+                             :program,
+                             :degree,
+                             {
+                               keyword: [],
+                               contributor: [],
+                               publisher: [],
+                               subject: [],
+                               language: [],
+                               identifier: [],
+                               based_near: [],
+                               related_url: [],
+                               source: []
+                             }]
             )
         end
 
