@@ -62,7 +62,7 @@ class Work < ApplicationRecord
   }
 
   validate :embargoed_until_is_valid_date
-  has_paper_trail versions: :paper_trail_versions
+  has_paper_trail versions: { name: :paper_trail_versions }
   module Types
     extend Enumerable
 
