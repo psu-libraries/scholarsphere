@@ -22,29 +22,28 @@ module Dashboard
 
         def resource_params
           params
-            .expect(
-              param_key => [:owner,
-                            :manufacturer,
-                            contributor: [],
-                            creators_attributes: [
-                              :id,
-                              :actor_id,
-                              :_destroy,
-                              :display_name,
-                              :position,
-                              :given_name,
-                              :surname,
-                              :email,
-                              actor_attributes: [
-                                :id,
-                                :email,
-                                :given_name,
-                                :surname,
-                                :psu_id,
-                                :orcid
-                              ]
-                            ]]
-            )
+            .require(param_key)
+            .permit(:owner,
+                    :manufacturer,
+                    contributor: [],
+                    creators_attributes: [
+                      :id,
+                      :actor_id,
+                      :_destroy,
+                      :display_name,
+                      :position,
+                      :given_name,
+                      :surname,
+                      :email,
+                      actor_attributes: [
+                        :id,
+                        :email,
+                        :given_name,
+                        :surname,
+                        :psu_id,
+                        :orcid
+                      ]
+                    ])
         end
 
         def next_page_path
