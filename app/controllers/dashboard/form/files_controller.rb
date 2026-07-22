@@ -23,6 +23,7 @@ module Dashboard
 
       private
 
+        # rubocop:disable Rails/StrongParametersExpect
         def work_version_params
           params
             .require(:work_version)
@@ -32,6 +33,7 @@ module Dashboard
               ]
             )
         end
+        # rubocop:enable Rails/StrongParametersExpect
 
         def next_page_path
           dashboard_form_publish_path(@resource)

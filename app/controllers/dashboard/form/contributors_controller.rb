@@ -20,6 +20,7 @@ module Dashboard
 
       private
 
+        # rubocop:disable Rails/StrongParametersExpect
         def resource_params
           params
             .require(param_key)
@@ -45,6 +46,7 @@ module Dashboard
                       ]
                     ])
         end
+        # rubocop:enable Rails/StrongParametersExpect
 
         def next_page_path
           if @resource.is_a?(Collection)
