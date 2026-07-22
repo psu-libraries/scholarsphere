@@ -23,13 +23,14 @@ module Dashboard
           return {} unless params.key?(:collection)
 
           params
-            .expect(
-              collection: [{ collection_work_memberships_attributes: [
+            .require(:collection)
+            .permit(
+              collection_work_memberships_attributes: [
                 :id,
                 :work_id,
                 :_destroy,
                 :position
-              ] }]
+              ]
             )
         end
     end

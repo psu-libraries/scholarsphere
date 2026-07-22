@@ -26,10 +26,11 @@ module Dashboard
 
       def work_version_params
         params
-          .expect(
-            work_version: [{ file_resources_attributes: [
+          .require(:work_version)
+          .permit(
+            file_resources_attributes: [
               :file
-            ] }]
+            ]
           )
       end
   end

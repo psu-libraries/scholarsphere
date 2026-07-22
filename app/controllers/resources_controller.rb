@@ -42,13 +42,12 @@ class ResourcesController < ApplicationController
 
     def alternate_format_request_params
       params
-        .expect(
-          alternate_format_request: [:email,
-                                     :url,
-                                     :message,
-                                     :name,
-                                     :title]
-        )
+        .require(:alternate_format_request)
+        .permit(:email,
+                :url,
+                :message,
+                :name,
+                :title)
     end
 
     def resource_not_found(exception)

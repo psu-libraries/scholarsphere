@@ -31,13 +31,12 @@ class IncidentsController < ApplicationController
 
     def incident_params
       params
-        .expect(
-          incident: [:category,
-                     :name,
-                     :email,
-                     :subject,
-                     :message]
-        )
+        .require(:incident)
+        .permit(:category,
+                :name,
+                :email,
+                :subject,
+                :message)
     end
 
     def check_recaptcha
