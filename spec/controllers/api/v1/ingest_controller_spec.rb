@@ -164,7 +164,7 @@ RSpec.describe Api::V1::IngestController do
       it 'reports the error with the missing parameter' do
         expect(response).to be_bad_request
         expect(json_response['message']).to eq('Bad request')
-        expect(json_response['errors']).to include(/param is missing or the value is empty: depositor/)
+        expect(json_response['errors']).to include(/param is missing or the value is empty or invalid: depositor/)
       end
     end
 
