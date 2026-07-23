@@ -1,0 +1,69 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://search-service.k8s.psu.edu/people/userid/ShC1360
+    body:
+      encoding: US-ASCII
+      base64_string: ''
+    headers:
+      User-Agent:
+      - Faraday v2.14.2
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Content-Length:
+      - '118'
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 23 Jul 2026 19:02:07 GMT
+      Vary:
+      - Origin
+    body:
+      encoding: UTF-8
+      string: '{"status":{"code":404,"message":""},"errorMessage":["Response Error
+        [404]: user not found:  User ShC1360 not found"]}
+
+        '
+  recorded_at: Thu, 23 Jul 2026 19:02:07 GMT
+- request:
+    method: get
+    uri: https://search-service.k8s.psu.edu/people/userid/ShC1360
+    body:
+      encoding: US-ASCII
+      base64_string: ''
+    headers:
+      User-Agent:
+      - Faraday v2.14.2
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Content-Length:
+      - '118'
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 23 Jul 2026 19:02:08 GMT
+      Vary:
+      - Origin
+    body:
+      encoding: UTF-8
+      string: '{"status":{"code":404,"message":""},"errorMessage":["Response Error
+        [404]: user not found:  User ShC1360 not found"]}
+
+        '
+  recorded_at: Thu, 23 Jul 2026 19:02:08 GMT
+recorded_with: VCR 6.4.0
