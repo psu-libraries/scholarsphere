@@ -70,7 +70,7 @@ module Scholarsphere
     def upload_config
       resp = connection.post(SolrConfig::CONFIG_PATH) do |req|
         req.params = { "action": 'UPLOAD', "name": config.configset_name }
-        req.headers['Content-Type'] = 'octect/stream'
+        req.headers['Content-Type'] = 'application/octet-stream'
         req.body = raw_data
       end
       check_resp(resp)
@@ -92,7 +92,6 @@ module Scholarsphere
           if config.solr_username && config.solr_password
             faraday.request :authorization, :basic, config.solr_username, config.solr_password
           end
-          faraday.request :multipart
           faraday.adapter :net_http
         end
       end
