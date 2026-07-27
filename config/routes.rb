@@ -46,7 +46,7 @@ Rails.application.routes.draw do
   concern :searchable, Blacklight::Routes::Searchable.new
   concern :oai_provider, BlacklightOaiProvider::Routes.new
 
-  resource :catalog, only: [:index], as: 'catalog', path: '/catalog', controller: 'catalog' do
+  resource :catalog, only: [], as: 'catalog', path: '/catalog', controller: 'catalog' do
     concerns :searchable
     concerns :oai_provider
   end
@@ -85,7 +85,7 @@ Rails.application.routes.draw do
   namespace :dashboard do
     root to: 'catalog#index'
 
-    resource :catalog, only: [:index], as: 'catalog', path: 'catalog', controller: 'catalog' do
+    resource :catalog, only: [], as: 'catalog', path: 'catalog', controller: 'catalog' do
       concerns :searchable
     end
 

@@ -1163,8 +1163,9 @@ RSpec.describe 'Publishing a work', with_user: :user do
         # test that the page count metadata was not set since it's not a pdf
         expect(work_version.file_resources.last.file_data.dig('metadata', 'page_count')).to be_nil
 
-        # Once for the work version, twice for the file. The second call for the file is most likely the promotion job.
-        expect(SolrIndexingJob).to have_received(:perform_later).thrice
+        # The save flow should enqueue indexing once for the work and once for the file.
+        expect(SolrIndexingJob).to have_received(:perform_later).with(instance_of(WorkVersion)).once
+        expect(SolrIndexingJob).to have_received(:perform_later).with(instance_of(FileResource)).once
 
         expect(FileResource.last.file.metadata['alt_text']).to eq('Test alt text')
 
@@ -1207,8 +1208,9 @@ RSpec.describe 'Publishing a work', with_user: :user do
         # test that the page count metadata was extracted and saved
         expect(work_version.file_resources.last.file_data.dig('metadata', 'page_count')).to eq 1
 
-        # Once for the work version, twice for the file. The second call for the file is most likely the promotion job.
-        expect(SolrIndexingJob).to have_received(:perform_later).thrice
+        # The save flow should enqueue indexing once for the work and once for the file.
+        expect(SolrIndexingJob).to have_received(:perform_later).with(instance_of(WorkVersion)).once
+        expect(SolrIndexingJob).to have_received(:perform_later).with(instance_of(FileResource)).once
 
         visit dashboard_form_files_path(work_version)
 

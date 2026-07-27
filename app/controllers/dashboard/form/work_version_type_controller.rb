@@ -33,14 +33,12 @@ module Dashboard
         def work_version_params
           params
             .require(:work_version)
-            .permit(
-              :title,
-              :open_access_upload,
-              work_attributes: [
-                :id,
-                :work_type
-              ]
-            )
+            .permit(:title,
+                    :open_access_upload,
+                    work_attributes: [
+                      :id,
+                      :work_type
+                    ])
         end
 
         def next_page_path

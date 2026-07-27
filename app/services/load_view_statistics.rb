@@ -33,8 +33,8 @@ class LoadViewStatistics
       .connection
       .select_rows(sql)
       .reduce([]) do |accumulator, row|
-        date_string, count = row
-        parsed_date = Date.parse(date_string)
+        raw_date, count = row
+        parsed_date = normalize_date(raw_date)
         count ||= 0
         running_total = accumulator.last&.last || 0
 
@@ -42,9 +42,18 @@ class LoadViewStatistics
       end
   end
 
-  def query
-    relation
-      .reorder('date ASC')
-      .select([:date, :count])
-  end
+  private
+
+    # Rails/db adapters may return either a String or a Date for date columns.
+    def normalize_date(raw_date)
+      return raw_date if raw_date.is_a?(Date)
+
+      Date.parse(raw_date.to_s)
+    end
+
+    def query
+      relation
+        .reorder('date ASC')
+        .select([:date, :count])
+    end
 end
