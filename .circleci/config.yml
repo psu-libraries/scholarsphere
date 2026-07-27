@@ -237,8 +237,10 @@ jobs:
           POSTGRES_PASSWORD: scholarsphere
           POSTGRES_USER: scholarsphere
           POSTGRES_DB: scholarsphere
-          SOLR_MODULES: analysis-extras
       - image: solr:9.10.1
+        environment:
+          SOLR_MODULES: analysis-extras
+          SOLR_OPTS: "-Dsolr.config.lib.enabled=true"
         command: [
           "/bin/bash",
           "-c",
@@ -255,7 +257,7 @@ jobs:
       SOLR_COLLECTION: scholarsphere
       SOLR_PASSWORD: scholarsphere
       SOLR_USERNAME: scholarsphere
-      POSTGRES_USERNAME: scholarsphere
+      POSTGRES_USER: scholarsphere
       POSTGRES_PASSWORD: scholarsphere
       POSTGRES_DB: scholarsphere
       POSTGRES_HOST: 127.0.0.1
