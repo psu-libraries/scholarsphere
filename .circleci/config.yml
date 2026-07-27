@@ -255,6 +255,7 @@ jobs:
       AWS_REGION: us-east-1
       SOLR_HOST: 127.0.0.1
       SOLR_COLLECTION: scholarsphere
+      SOLR_PROTOCOL: http
       SOLR_PASSWORD: scholarsphere
       SOLR_USERNAME: scholarsphere
       POSTGRES_USER: scholarsphere
