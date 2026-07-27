@@ -237,7 +237,8 @@ jobs:
           POSTGRES_PASSWORD: scholarsphere
           POSTGRES_USER: scholarsphere
           POSTGRES_DB: scholarsphere
-      - image: solr:8.11.1-slim
+          SOLR_MODULES: analysis-extras
+      - image: solr:9.10.1
         command: [
           "/bin/bash",
           "-c",
