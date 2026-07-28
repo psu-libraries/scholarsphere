@@ -25,7 +25,7 @@ RSpec.describe Scholarsphere::Cleaner do
       end
 
       it 'attempts to recreate the solr collection' do
-        expect { described_class.clean_solr }.to output(/Solr cleaning failed after 3 attempts/).to_stdout
+        expect { described_class.clean_solr }.to output(/Solr cleaning failed after 5 attempts/).to_stdout
         expect(admin_spy).to have_received(:create_collection)
       end
     end

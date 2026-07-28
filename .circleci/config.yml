@@ -240,11 +240,13 @@ jobs:
       - image: solr:9.10.1
         environment:
           SOLR_MODULES: analysis-extras
-          SOLR_OPTS: "-Dsolr.config.lib.enabled=true"
+          SOLR_OPTS: "-Dsolr.config.lib.enabled=true -Xmx1g"
+          SOLR_USERNAME: scholarsphere
+          SOLR_PASSWORD: scholarsphere
         command: [
           "/bin/bash",
           "-c",
-          "solr -c && solr auth enable -credentials scholarsphere:scholarsphere -z localhost:9983; solr stop && solr -c -f",
+          "solr -c -f & PID=$!; until curl -s http://localhost:8983/solr > /dev/null; do sleep 1; done; solr auth enable -credentials ${SOLR_USERNAME}:${SOLR_PASSWORD} -z localhost:9983; wait $PID",
           ]
     environment:
       RAILS_ENV: test

@@ -21,11 +21,11 @@ module Scholarsphere
         Blacklight.default_index.connection.delete_by_query('*:*')
         Blacklight.default_index.connection.commit
       rescue StandardError => e
-        if (retries += 1) < 3
-          sleep 1
+        if (retries += 1) < 5
+          sleep 2
           retry
         end
-        puts "Solr cleaning failed after 3 attempts: #{e.message}. Attempting to recreate collection."
+        puts "Solr cleaning failed after 5 attempts: #{e.message}. Attempting to recreate collection."
         SolrAdmin.new.create_collection
       end
 
