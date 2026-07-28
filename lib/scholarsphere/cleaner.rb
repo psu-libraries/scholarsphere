@@ -17,10 +17,15 @@ module Scholarsphere
       end
 
       def clean_solr
+        retries ||= 0
         Blacklight.default_index.connection.delete_by_query('*:*')
         Blacklight.default_index.connection.commit
-      rescue RuntimeError
-        puts 'Solr endpoint not found, attempting to recreate it'
+      rescue StandardError => e
+        if (retries += 1) < 3
+          sleep 1
+          retry
+        end
+        puts "Solr cleaning failed after 3 attempts: #{e.message}. Attempting to recreate collection."
         SolrAdmin.new.create_collection
       end
 
