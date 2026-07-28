@@ -51,6 +51,8 @@ module Scholarsphere
     end
 
     def create_collection
+      return if collection_exists?
+
       resp = connection.get(SolrConfig::COLLECTION_PATH,
                             action: 'CREATE',
                             name: config.collection_name,
