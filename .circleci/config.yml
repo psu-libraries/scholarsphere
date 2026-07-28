@@ -373,6 +373,7 @@ workflows:
                 - /preview\/.*/
           requires:
             - build-image
+            - test-application
 
       - deploy-application:
           name: deploy-application
