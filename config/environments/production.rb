@@ -58,6 +58,7 @@ Rails.application.configure do
   # Replace the default in-process and non-durable queuing backend for Active Job.
   # config.active_job.queue_adapter = :resque
 
+  # Specify outgoing SMTP server.
   config.action_mailer.perform_caching = false
   config.action_mailer.logger = nil
   config.action_mailer.smtp_settings = {
