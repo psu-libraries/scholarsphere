@@ -60,7 +60,6 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
   config.action_mailer.logger = nil
-  config.action_mailer.delivery_method = ENV.fetch('MAIL_DELIVERY_METHOD', 'test').to_sym
   config.action_mailer.smtp_settings = {
     address: ENV.fetch('SMTP_ADDRESS', 'localhost'),
     port: ENV.fetch('SMTP_PORT', 25),
