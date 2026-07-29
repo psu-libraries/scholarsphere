@@ -2,7 +2,7 @@ import { Controller } from 'stimulus'
 import consumer from '../channels/consumer'
 
 export default class extends Controller {
-  static targets = ['versionMessage', 'loading', 'controls']
+  static targets = ['versionMessage', 'fieldUpdates', 'loading', 'controls']
 
   connect() {
     const selectedVersion = this.element.querySelector('input[name="work_version[open_access_version]"]:checked')
@@ -28,6 +28,11 @@ export default class extends Controller {
 
     if (this.subscription && this.subscription.unsubscribe) {
       this.subscription.unsubscribe()
+    }
+
+    if (this.clearHighlightHandle) {
+      clearTimeout(this.clearHighlightHandle)
+      this.clearHighlightHandle = null
     }
   }
 
@@ -104,11 +109,28 @@ export default class extends Controller {
     // this is still set to control what the user sees, but it is not the value that is submitted
     const rightsInput = document.getElementById('work_version_rights')
 
+    const changedFields = []
 
-    if (rightsInput) rightsInput.value = rights || ''
-    if (rightsHidden) rightsHidden.value = rights || ''
-    if (statementInput) statementInput.value = statement || ''
-    if (embargoInput) embargoInput.value = embargo || ''
+    const rightsChanged = this.updateInputValue(rightsInput, rights)
+    this.updateInputValue(rightsHidden, rights)
+    if (rightsChanged) {
+      changedFields.push(this.data.get('rightsLabel'))
+      this.markFieldAsUpdated(rightsInput)
+    }
+
+    const statementChanged = this.updateInputValue(statementInput, statement)
+    if (statementChanged) {
+      changedFields.push(this.data.get('statementLabel'))
+      this.markFieldAsUpdated(statementInput)
+    }
+
+    const embargoChanged = this.updateInputValue(embargoInput, embargo)
+    if (embargoChanged) {
+      changedFields.push(this.data.get('embargoLabel'))
+      this.markFieldAsUpdated(embargoInput)
+    }
+
+    this.showFieldUpdates(changedFields)
 
     // display message when there is a version mismatch
     const versionsFound = JSON.parse(this.data.get('versionsFound'))
@@ -140,5 +162,60 @@ export default class extends Controller {
         detail: { versionAllowed }
       }))
     }, 0)
+  }
+
+  updateInputValue(input, value) {
+    if (!input) return false
+
+    const currentValue = this.normalizeValue(input.value)
+    const nextValue = this.normalizeValue(value)
+    input.value = nextValue
+
+    return currentValue !== nextValue
+  }
+
+  normalizeValue(value) {
+    return value == null ? '' : String(value)
+  }
+
+  showFieldUpdates(changedFields) {
+    if (!this.hasFieldUpdatesTarget) return
+
+    if (changedFields.length === 0) {
+      this.fieldUpdatesTarget.textContent = ''
+      return
+    }
+
+    const messageTemplate = this.data.get('fieldsUpdatedMessage')
+    const message = messageTemplate.replace(/__FIELDS__/g, this.formatFieldList(changedFields))
+    this.fieldUpdatesTarget.textContent = message
+  }
+
+  formatFieldList(fields) {
+    if (fields.length === 1) return fields[0]
+    if (fields.length === 2) return `${fields[0]} ${this.data.get('fieldsConjunction')} ${fields[1]}`
+
+    const leadingFields = fields.slice(0, -1).join(', ')
+    const finalField = fields[fields.length - 1]
+
+    return `${leadingFields}, ${this.data.get('fieldsConjunction')} ${finalField}`
+  }
+
+  markFieldAsUpdated(input) {
+    if (!input) return
+
+    const container = input.closest('.form-wrapper, .mb-3')
+    const elementToHighlight = container || input
+
+    elementToHighlight.classList.add('border', 'border-warning', 'rounded-2')
+
+    if (this.clearHighlightHandle) clearTimeout(this.clearHighlightHandle)
+
+    this.clearHighlightHandle = setTimeout(() => {
+      document.querySelectorAll('.border-warning.rounded-2').forEach((el) => {
+        el.classList.remove('border', 'border-warning', 'rounded-2')
+      })
+      this.clearHighlightHandle = null
+    }, 3000)
   }
 }
