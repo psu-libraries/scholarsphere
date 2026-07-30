@@ -12,6 +12,7 @@ This repository is a Ruby on Rails application.
 - The project uses RSpec for testing.
 - When generating tests, follow RSpec conventions.
 - Use `context` blocks to avoid adding context to `it` blocks
+- Use Jest for JavaScript testing.
 
 ## Development Environment
 
