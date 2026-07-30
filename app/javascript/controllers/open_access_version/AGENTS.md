@@ -1,6 +1,6 @@
 # Purpose
 
-To auto-populate fields a `WorkVersion`'s open access version and open access permissions fields on the publish page.
+To auto-populate a `WorkVersion`'s open access version and open access permissions fields on the publish page.
 
 ## Responsibilities
 
@@ -33,3 +33,7 @@ These should always remain true:
 
 - Use jest.
 - Mock timeout configurations so the test suite us fast.
+
+## Additional Guidance
+
+- It should be clear to the user that when permissions data is auto-populated what fields were updated.
