@@ -77,7 +77,8 @@ export default class FormUpdater {
 
     const messageTemplate = this.data.get('fieldsUpdatedMessage')
     const message = messageTemplate.replace(/__FIELDS__/g, this.#formatFieldList(changedFields))
-    this.fieldUpdatesTarget.textContent = message
+    // This message contains HTML, so we use innerHTML instead of textContent
+    this.fieldUpdatesTarget.innerHTML = message
   }
 
   #formatFieldList(fields) {
@@ -96,13 +97,13 @@ export default class FormUpdater {
     const container = input.closest('.form-wrapper, .mb-3')
     const elementToHighlight = container || input
 
-    elementToHighlight.classList.add('border', 'border-warning', 'rounded-2')
+    elementToHighlight.classList.add('border', 'border-warning', 'rounded-3')
 
     if (this.clearHighlightHandle) clearTimeout(this.clearHighlightHandle)
 
     this.clearHighlightHandle = setTimeout(() => {
-      document.querySelectorAll('.border-warning.rounded-2').forEach((el) => {
-        el.classList.remove('border', 'border-warning', 'rounded-2')
+      document.querySelectorAll('.border-warning.rounded-3').forEach((el) => {
+        el.classList.remove('border', 'border-warning', 'rounded-3')
       })
       this.clearHighlightHandle = null
     }, 3000)
