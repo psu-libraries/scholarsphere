@@ -1,6 +1,6 @@
 # Purpose
 
-To provide functions for auto-populating a `WorkVersion`'s open access version and open access permissions fields on the publish page.
+To provide functions for auto-populating a `WorkVersion`'s open access version and open access permissions fields on the publish page via DOM manipulation.
 
 ## Responsibilities
 

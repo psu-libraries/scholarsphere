@@ -48,16 +48,23 @@
                 }
               ) do |form| %>
 
-              <%= hidden_field_tag 'oaw_permissions[accepted_version_rights]', @permissions&.licence(accepted_version) %>
-              <%= hidden_field_tag 'oaw_permissions[published_version_rights]', @permissions&.licence(published_version) %>
+              <%= hidden_field_tag 'oaw_permissions[accepted_version_rights]',
+                                   params.dig(:oaw_permissions, :accepted_version_rights) || @permissions&.licence(accepted_version) %>
+              <%= hidden_field_tag 'oaw_permissions[published_version_rights]',
+                                   params.dig(:oaw_permissions, :published_version_rights) || @permissions&.licence(published_version) %>
 
-              <%= hidden_field_tag 'oaw_permissions[accepted_version_statement]', @permissions&.publisher_statement(accepted_version) %>
-              <%= hidden_field_tag 'oaw_permissions[published_version_statement]', @permissions&.publisher_statement(published_version) %>
+              <%= hidden_field_tag 'oaw_permissions[accepted_version_statement]',
+                                   params.dig(:oaw_permissions, :accepted_version_statement) || @permissions&.publisher_statement(accepted_version) %>
+              <%= hidden_field_tag 'oaw_permissions[published_version_statement]',
+                                   params.dig(:oaw_permissions, :published_version_statement) || @permissions&.publisher_statement(published_version) %>
 
-              <%= hidden_field_tag 'oaw_permissions[accepted_version_embargo]', @permissions&.embargo_end_date(accepted_version) %>
-              <%= hidden_field_tag 'oaw_permissions[published_version_embargo]', @permissions&.embargo_end_date(published_version) %>
+              <%= hidden_field_tag 'oaw_permissions[accepted_version_embargo]',
+                                   params.dig(:oaw_permissions, :accepted_version_embargo) || @permissions&.embargo_end_date(accepted_version) %>
+              <%= hidden_field_tag 'oaw_permissions[published_version_embargo]',
+                                   params.dig(:oaw_permissions, :published_version_embargo) || @permissions&.embargo_end_date(published_version) %>
 
-              <%= hidden_field_tag 'oaw_permissions[versions_found]', @permissions&.versions_found?.to_json %>
+              <%= hidden_field_tag 'oaw_permissions[versions_found]',
+                                   params.dig(:oaw_permissions, :versions_found) || @permissions&.versions_found?.to_json %>
 
             <%= render FormErrorMessageComponent.new(
                   form: form,
