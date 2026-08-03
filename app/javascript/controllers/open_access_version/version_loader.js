@@ -1,5 +1,5 @@
 const FETCH_HEADERS = { Accept: 'application/json' }
-const FALLBACK_TIMEOUT = 15_000
+const FALLBACK_TIMEOUT = 10_000
 
 export default class VersionLoader {
   constructor({ onVersionReceived, onLoadingTimedOut, onFinished }) {
