@@ -10,7 +10,6 @@ describe('FormUpdater', () => {
 
         <input id="work_version_publisher_statement" value="Publisher statement">
         <input id="work_version_work_attributes_embargoed_until" value="2026-01-01">
-        <input id="work_version_rights_hidden" value="CC BY">
         <select id="work_version_rights">
           <option value="CC BY" selected>CC BY</option>
         </select>

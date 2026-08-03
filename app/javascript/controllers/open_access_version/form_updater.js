@@ -1,5 +1,4 @@
 const RIGHTS_INPUT_ID = 'work_version_rights'
-const RIGHTS_HIDDEN_ID = 'work_version_rights_hidden'
 const STATEMENT_INPUT_ID = 'work_version_publisher_statement'
 const EMBARGO_INPUT_ID = 'work_version_work_attributes_embargoed_until'
 
@@ -25,13 +24,11 @@ export default class FormUpdater {
 
     const statementInput = document.getElementById(STATEMENT_INPUT_ID)
     const embargoInput = document.getElementById(EMBARGO_INPUT_ID)
-    const rightsHidden = document.getElementById(RIGHTS_HIDDEN_ID)
     const rightsInput = document.getElementById(RIGHTS_INPUT_ID)
 
     const changedFields = []
 
     const rightsChanged = this.#updateInputValue(rightsInput, rights)
-    this.#updateInputValue(rightsHidden, rights)
     if (rightsChanged) {
       changedFields.push(this.data.get('rightsLabel'))
       this.#markFieldAsUpdated(rightsInput)
