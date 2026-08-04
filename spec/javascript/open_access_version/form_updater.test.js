@@ -33,7 +33,7 @@ describe('FormUpdater', () => {
         rightsLabel: 'License',
         statementLabel: "Publisher's Statement",
         embargoLabel: 'Embargo Date',
-        fieldsUpdatedMessage: 'Updated from selected version: <strong>__FIELDS__.</strong>',
+        fieldsUpdatedMessage: 'Metadata field(s) updated based on version selected: <strong>__FIELDS__.</strong>',
         fieldsConjunction: '</strong> and <strong>',
         versionsFound: '["acceptedVersion"]',
         acceptedVersionValue: 'acceptedVersion',
@@ -55,7 +55,7 @@ describe('FormUpdater', () => {
     updater.refresh('publishedVersion')
 
     const message = document.querySelector('[data-target="open-access-version.fieldUpdates"]').innerHTML
-    expect(message).toContain('Updated from selected version:')
+    expect(message).toContain('Metadata field(s) updated based on version selected:')
     expect(message).toContain('License')
     expect(message).toContain("Publisher's Statement")
     expect(message).toContain('Embargo Date')
