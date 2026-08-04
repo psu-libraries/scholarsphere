@@ -28,19 +28,19 @@ export default class FormUpdater {
 
     const changedFields = []
 
-    const rightsChanged = this.#updateInputValue(rightsInput, rights)
+    const rightsChanged = this.#checkInputValue(rightsInput, rights)
     if (rightsChanged) {
       changedFields.push(this.data.get('rightsLabel'))
       this.#markFieldAsUpdated(rightsInput)
     }
 
-    const statementChanged = this.#updateInputValue(statementInput, statement)
+    const statementChanged = this.#checkInputValue(statementInput, statement)
     if (statementChanged) {
       changedFields.push(this.data.get('statementLabel'))
       this.#markFieldAsUpdated(statementInput)
     }
 
-    const embargoChanged = this.#updateInputValue(embargoInput, embargo)
+    const embargoChanged = this.#checkInputValue(embargoInput, embargo)
     if (embargoChanged) {
       changedFields.push(this.data.get('embargoLabel'))
       this.#markFieldAsUpdated(embargoInput)
@@ -50,7 +50,7 @@ export default class FormUpdater {
     this.#updateVersionMessage(version)
   }
 
-  #updateInputValue(input, value) {
+  #checkInputValue(input, value) {
     if (!input) return false
 
     const currentValue = this.#normalizeValue(input.value)
