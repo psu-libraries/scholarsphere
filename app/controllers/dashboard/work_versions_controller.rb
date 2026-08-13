@@ -132,60 +132,56 @@ module Dashboard
       def metadata_params
         params
           .require(:work_version)
-          .permit(
-            :title,
-            :description,
-            :subtitle,
-            :rights,
-            :version_name,
-            :published_date,
-            :owner,
-            :manufacturer,
-            :model,
-            :instrument_type,
-            :measured_variable,
-            :available_date,
-            :decommission_date,
-            :related_identifier,
-            :instrument_resource_type,
-            :funding_reference,
-            :sub_work_type,
-            :program,
-            :degree,
-            keyword: [],
-            contributor: [],
-            publisher: [],
-            subject: [],
-            language: [],
-            identifier: [],
-            based_near: [],
-            related_url: [],
-            source: [],
-            creators_attributes: [
-              :id,
-              :actor_id,
-              :_destroy,
-              :display_name,
-              actor_attributes: [
-                :id,
-                :email,
-                :given_name,
-                :surname,
-                :psu_id
-              ]
-            ]
-          )
+          .permit(:title,
+                  :description,
+                  :subtitle,
+                  :rights,
+                  :version_name,
+                  :published_date,
+                  :owner,
+                  :manufacturer,
+                  :model,
+                  :instrument_type,
+                  :measured_variable,
+                  :available_date,
+                  :decommission_date,
+                  :related_identifier,
+                  :instrument_resource_type,
+                  :funding_reference,
+                  :sub_work_type,
+                  :program,
+                  :degree,
+                  keyword: [],
+                  contributor: [],
+                  publisher: [],
+                  subject: [],
+                  language: [],
+                  identifier: [],
+                  based_near: [],
+                  related_url: [],
+                  source: [],
+                  creators_attributes: [
+                    :id,
+                    :actor_id,
+                    :_destroy,
+                    :display_name,
+                    actor_attributes: [
+                      :id,
+                      :email,
+                      :given_name,
+                      :surname,
+                      :psu_id
+                    ]
+                  ])
       end
 
       def publish_params
         params
           .require(:work_version)
-          .permit(
-            :depositor_agreement,
-            :psu_community_agreement,
-            :accessibility_agreement,
-            :sensitive_info_agreement
-          )
+          .permit(:depositor_agreement,
+                  :psu_community_agreement,
+                  :accessibility_agreement,
+                  :sensitive_info_agreement)
       end
   end
 end

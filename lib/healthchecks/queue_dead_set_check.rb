@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module HealthChecks
+module Healthchecks
   class QueueDeadSetCheck < OkComputer::Check
     def check
       ds = Sidekiq::DeadSet.new

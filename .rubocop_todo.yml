@@ -432,6 +432,27 @@ Rails/RootPublicPath:
   Exclude:
     - 'spec/support/shrine.rb'
 
+# Offense count: 19
+# This cop supports safe autocorrection (--autocorrect).
+Rails/StrongParametersExpect:
+  Exclude:
+    - 'app/controllers/admin/application_settings_controller.rb'
+    - 'app/controllers/api/v1/collections_controller.rb'
+    - 'app/controllers/api/v1/ingest_controller.rb'
+    - 'app/controllers/dashboard/file_lists_controller.rb'
+    - 'app/controllers/dashboard/file_version_memberships_controller.rb'
+    - 'app/controllers/dashboard/form/collection_details_controller.rb'
+    - 'app/controllers/dashboard/form/contributors_controller.rb'
+    - 'app/controllers/dashboard/form/files_controller.rb'
+    - 'app/controllers/dashboard/form/members_controller.rb'
+    - 'app/controllers/dashboard/form/publish_controller.rb'
+    - 'app/controllers/dashboard/form/work_version_details_controller.rb'
+    - 'app/controllers/dashboard/form/work_version_type_controller.rb'
+    - 'app/controllers/dashboard/profiles_controller.rb'
+    - 'app/controllers/dashboard/work_versions_controller.rb'
+    - 'app/controllers/incidents_controller.rb'
+    - 'app/controllers/resources_controller.rb'
+
 # Offense count: 1
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: PreferredMethods, MethodsAcceptingSymbol.

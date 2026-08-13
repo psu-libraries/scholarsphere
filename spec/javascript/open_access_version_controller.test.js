@@ -78,7 +78,6 @@ describe('OpenAccessVersionController', () => {
 
       <input id="work_version_publisher_statement">
       <input id="work_version_work_attributes_embargoed_until">
-      <input id="work_version_rights_hidden">
       <select id="work_version_rights">
         <option value="CC BY">CC BY</option>
       </select>
@@ -105,7 +104,6 @@ describe('OpenAccessVersionController', () => {
     radio.dispatchEvent(new Event('change', { bubbles: true }))
 
     expect(document.getElementById('work_version_rights').value).toBe('CC BY')
-    expect(document.getElementById('work_version_rights_hidden').value).toBe('CC BY')
     expect(document.getElementById('work_version_publisher_statement').value).toBe('Publisher statement')
     expect(document.getElementById('work_version_work_attributes_embargoed_until').value).toBe('2026-01-01')
   })

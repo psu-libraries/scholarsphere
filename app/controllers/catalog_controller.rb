@@ -4,6 +4,8 @@ class CatalogController < ApplicationController
   include Blacklight::Catalog
   include BlacklightOaiProvider::Controller
 
+  bot_challenge only: :index
+
   # @note pass the current user in the @context hash of Blacklight::SearchService which allows the SearchBuilder to have
   # access to the current user in order to enforce access controls in Solr queries.
   def search_service_context
@@ -22,10 +24,6 @@ class CatalogController < ApplicationController
         }
       end
     end
-  end
-
-  before_action only: :index do |controller|
-    BotChallengePage::BotChallengePageController.bot_challenge_enforce_filter(controller, immediate: true)
   end
 
   configure_blacklight do |config|

@@ -2,7 +2,7 @@
 
 require 'data_cite'
 
-module HealthChecks
+module Healthchecks
   class Dois < OkComputer::Check
     attr_reader :threshold
 

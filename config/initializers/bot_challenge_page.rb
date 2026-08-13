@@ -1,57 +1,61 @@
 # frozen_string_literal: true
 
-Rails.application.config.to_prepare do
+BotChallengePage.configure do |config|
   enabled =
     !Rails.env.test? &&
     ActiveModel::Type::Boolean.new.cast(ENV.fetch('CLOUDFLARE_CHALLENGE_ENABLED', 'true'))
 
-  BotChallengePage::BotChallengePageController.bot_challenge_config.enabled = enabled
+  # Can globally disable in configuration if desired
+  config.enabled = enabled
 
   # Get from CloudFlare Turnstile: https://www.cloudflare.com/application-services/products/turnstile/
   # Some testing keys are also available: https://developers.cloudflare.com/turnstile/troubleshooting/testing/
   #
   # Always pass testing sitekey: "1x00000000000000000000AA"
-  BotChallengePage::BotChallengePageController.bot_challenge_config
-    .cf_turnstile_sitekey = ENV.fetch(
-      'CF_SITE_KEY',
-      '1x00000000000000000000AA'
-    )
+  config.cf_turnstile_sitekey = ENV.fetch(
+    'CF_SITE_KEY',
+    '1x00000000000000000000AA'
+  )
   # Always pass testing secret_key: "1x0000000000000000000000000000000AA"
-  BotChallengePage::BotChallengePageController.bot_challenge_config
-    .cf_turnstile_secret_key = ENV.fetch(
-      'CF_SECRET_KEY',
-      '1x0000000000000000000000000000000AA'
-    )
+  config.cf_turnstile_secret_key = ENV.fetch(
+    'CF_SECRET_KEY',
+    '1x0000000000000000000000000000000AA'
+  )
 
-  BotChallengePage::BotChallengePageController.bot_challenge_config.rate_limited_locations = [
-    '/catalog',
-    '/resources'
-  ]
-
-  BotChallengePage::BotChallengePageController.bot_challenge_config.challenge_renderer = -> {
+  config.challenge_renderer = -> {
     render 'pages/challenge', layout: 'frontend'
   }
 
-  # How long will a challenge success exempt a session from further challenges?
-  BotChallengePage::BotChallengePageController.bot_challenge_config.session_passed_good_for = 24.hours
-  BotChallengePage::BotChallengePageController.bot_challenge_config.allow_exempt = ->(controller, _config) {
+  # Filter to omit requests from bot challenge control, executed in controller instance context
+  #
+  config.skip_when = ->(_config) {
     # Skip challenge for authenticated users.
-    return true if controller.current_user.present? && !controller.current_user.guest?
+    return true if current_user.present? && !current_user.guest?
 
     # Does not challenge "Good Bots" – we have another layer of filters so Header containing "Bot" should be legit
-    !!(controller.request.headers['User-Agent'] =~ /bot|nagios-plugins/i)
+    !!(request.headers['User-Agent'] =~ /bot|nagios-plugins/i)
   }
 
-  # Exempt some requests from bot challenge protection
-  # BotChallengePage::BotChallengePageController.bot_challenge_config.allow_exempt = ->(controller) {
-  #   # controller.params
-  #   # controller.request
-  #   # controller.session
-
-  #   # Here's a way to identify browser `fetch` API requests; note
-  #   # it can be faked by an "attacker"
-  #   controller.request.headers["sec-fetch-dest"] == "empty"
+  # Hook after a bot challenge is presented, for logging or other
+  # config.after_blocked = ->(bot_challenge_controller) {
   # }
 
-  # More configuration is available
+  # How long will a challenge success exempt a session from further challenges?
+  config.session_passed_good_for = 24.hours
+
+  # Functions like to Rails rate_limit `by` parameter, as a configured default.
+  # A discriminator or identifier in which a client's requests will be bucketted
+  # by rate limit. Normally this gem buckets by IP address subnets. Switching
+  # to individual IPs would be much more generous:
+  # config.default_limit_by = ->(config) {
+  #   request.remote_ip
+  #  }
+
+  # When a "pass" cookie is saved, a fingerprint value is stored with it,
+  # and subsequent uses of the pass need to have a request that matches
+  # fingerprint. By default we insist on IP subnet match, and same user-agent
+  # and other headers. But can be customized.
+  # config.session_valid_fingerprint = ->(request) {
+  #    # whatever
+  # }
 end
