@@ -264,8 +264,6 @@ GEM
       csv (>= 3.0.0)
     globalid (1.4.0)
       activesupport (>= 6.1)
-    graphql (1.13.25)
-      base64
     hashdiff (1.2.1)
     hashery (2.1.2)
     hashie (5.1.0)
@@ -787,7 +785,6 @@ DEPENDENCIES
   faraday-multipart
   flamegraph
   flog
-  graphql (~> 1.12)
   html_tokenizer (~> 0.0.8)
   image_processing
   jbuilder (~> 2.7)
@@ -949,7 +946,6 @@ CHECKSUMS
   flog (4.9.4) sha256=12cc054fab7a2cbd2a906514397c4d7788954d530564782d6f14939dc2dfbcbb
   geocoder (1.8.6) sha256=e0ca1554b499f466de9b003f7dff70f89a5888761c2ca68ed9f86b6e5e24e74c
   globalid (1.4.0) sha256=037f12fbf1d9d7a014d501c2d5c77356fd4ddd96d7a7991d6700bba96706f427
-  graphql (1.13.25) sha256=99d685d654ea072fd2a63ee9718476516ec62dec3ea57b1a22b9548ba8887adb
   hashdiff (1.2.1) sha256=9c079dbc513dfc8833ab59c0c2d8f230fa28499cc5efb4b8dd276cf931457cd1
   hashery (2.1.2) sha256=d239cc2310401903f6b79d458c2bbef5bf74c46f3f974ae9c1061fb74a404862
   hashie (5.1.0) sha256=c266471896f323c446ea8207f8ffac985d2718df0a0ba98651a3057096ca3870

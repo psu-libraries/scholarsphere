@@ -771,7 +771,6 @@ en:
       home_subtitle: 'An institutional repository and archive sharing and preserving Penn State’s scholarly and research outputs'
       not_found: 'Page Not Found'
       server_error: 'Server Error'
-      graphql: 'GraphQL'
       reports: 'Reports'
   resources:
     analytics: Analytics
