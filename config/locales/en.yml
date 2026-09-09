@@ -13,7 +13,7 @@ en:
     manual_review: Needs Manual Review
     tips: Tips for %{rule} Remediation
     intro: Below are the results of the accessibility check of the pdf you recently uploaded. <a href="https://www.ada.gov/resources/2024-03-08-web-rule" target="_blank">Title II of the ADA</a> requires that all digital content be made accessible. More information can be found in <a href=https://policy.psu.edu/policies/ad69>Penn State’s AD69 Accessibility Policy</a>.
-    remediation_help: For remediation assistance or any questions, please contact <a href=mailto:digitalaccessibility@psu.libanswers.com>digitalaccessibility@psu.libanswers.com</a> or visit the <a href=https://smealonline.psu.edu/browse/accessibility-learning-path/courses/pdf-accessibility-overview-and-introduction>PDF Accessibility Training</a> on the <a href=https://accessibility.psu.edu/training/learningpath/>Penn State Accessibility Learning Path</a>.
+    remediation_help: For remediation assistance or any questions, please contact <a href=mailto:digitalaccessibility@psu.libanswers.com>digitalaccessibility@psu.libanswers.com</a> or visit the <a href=https://psu.csod.com/ui/lms-learning-details/app/event/1be9e277-0d44-424f-915c-bf04cad7f4c3?isOnePlayer=true>PDF Accessibility Training</a>. Note - you will need to log in to the <a href=https://lrn.psu.edu/>Learning Resource Network (LRN)</a> first to access the training.
   remediation_popup:
     title: Accessible Version in Progress
     description: We're generating an accessible version of this file to meet ADA Title II requirements. This process may take up to one hour. Please return later to access the accessible copy once it's ready.
