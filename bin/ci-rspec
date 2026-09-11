@@ -11,10 +11,13 @@ REPORTER_BIN="cc-test-reporter"
 # Make sure we have a database and migrations
 bundle exec rails db:create
 bundle exec rails db:migrate
-echo "Waiting for Solr to become available"
-if ! timeout 60 bash -c 'until printf "" 2>>/dev/null >>/dev/tcp/$0/$1; do sleep 1; done' "${SOLR_HOST:-localhost}" "${SOLR_PORT:-8983}"
+echo "Waiting for Solr to become available and authenticated"
+# We wait for a successful system info call with auth, which ensures Solr is up and auth is applied.
+if ! timeout 60 bash -c 'until curl -s -o /dev/null -w "%{http_code}" -u "${SOLR_USERNAME}:${SOLR_PASSWORD}" "http://${SOLR_HOST:-127.0.0.1}:${SOLR_PORT:-8983}/solr/admin/info/system" | grep -q "200"; do sleep 2; done'
 then
-  echo "Solr never became ready. Exiting"
+  echo "Solr never became ready or authenticated. Exiting"
+  # Attempt to show what's happening
+  curl -v "http://${SOLR_HOST:-127.0.0.1}:${SOLR_PORT:-8983}/solr/admin/info/system"
   exit 1
 fi
 

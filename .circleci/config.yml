@@ -223,7 +223,7 @@ jobs:
     resource_class: large
     docker:
       - image: cimg/ruby:3.4.9-browsers
-      - image: redis:6.2.6
+      - image: redis:7.2.2
       - image: minio/minio:RELEASE.2021-03-17T02-33-02Z
         entrypoint:
           - /bin/sh
@@ -232,16 +232,21 @@ jobs:
         environment:
           MINIO_ACCESS_KEY: scholarsphere
           MINIO_SECRET_KEY: scholarsphere
-      - image: postgres:15.2
+      - image: postgres:15.18
         environment:
           POSTGRES_PASSWORD: scholarsphere
           POSTGRES_USER: scholarsphere
           POSTGRES_DB: scholarsphere
-      - image: solr:8.11.1-slim
+      - image: solr:9.10.1
+        environment:
+          SOLR_MODULES: analysis-extras
+          SOLR_OPTS: "-Dsolr.config.lib.enabled=true -Xmx1g"
+          SOLR_USERNAME: scholarsphere
+          SOLR_PASSWORD: scholarsphere
         command: [
           "/bin/bash",
           "-c",
-          "solr -c && solr auth enable -credentials scholarsphere:scholarsphere -z localhost:9983; solr stop && solr -c -f",
+          "solr -c -f & PID=$!; until curl -s http://localhost:8983/solr > /dev/null; do sleep 1; done; solr auth enable -credentials ${SOLR_USERNAME}:${SOLR_PASSWORD} -z localhost:9983; wait $PID",
           ]
     environment:
       RAILS_ENV: test
@@ -252,9 +257,10 @@ jobs:
       AWS_REGION: us-east-1
       SOLR_HOST: 127.0.0.1
       SOLR_COLLECTION: scholarsphere
+      SOLR_PROTOCOL: http
       SOLR_PASSWORD: scholarsphere
       SOLR_USERNAME: scholarsphere
-      POSTGRES_USERNAME: scholarsphere
+      POSTGRES_USER: scholarsphere
       POSTGRES_PASSWORD: scholarsphere
       POSTGRES_DB: scholarsphere
       POSTGRES_HOST: 127.0.0.1
@@ -369,6 +375,7 @@ workflows:
                 - /preview\/.*/
           requires:
             - build-image
+            - test-application
 
       - deploy-application:
           name: deploy-application
