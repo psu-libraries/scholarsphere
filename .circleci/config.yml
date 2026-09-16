@@ -228,7 +228,14 @@ jobs:
         entrypoint:
           - /bin/sh
           - -c
-          - minio server /data --address ':9000'
+          - |
+            minio server /data --address ':9000' &
+            minio_pid=$$!
+            until mc alias set local http://localhost:9000 "$$MINIO_ROOT_USER" "$$MINIO_ROOT_PASSWORD"; do
+              sleep 1
+            done
+            mc mb --ignore-existing local/scholarsphere
+            wait "$$minio_pid"
         environment:
           MINIO_ROOT_USER: scholarsphere
           MINIO_ROOT_PASSWORD: scholarsphere
