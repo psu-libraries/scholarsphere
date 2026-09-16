@@ -5,6 +5,8 @@ class OpenAccessVersionGuesserJob < ApplicationJob
 
   def perform(work_version_id)
     work_version = WorkVersion.find(work_version_id)
+    return if work_version.open_access_version.present?
+
     version = OpenAccessVersion::Guesser.new(work_version: work_version).version
 
     work_version.update!(open_access_version: version)
