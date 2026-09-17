@@ -22,15 +22,18 @@ RSpec.describe OpenAccessVersionGuesserJob do
       expect(work_version.reload.open_access_version).to eq guessed_version
     end
 
-    context 'when the open access version has already been selected' do
-      let!(:work_version) do
-        create(:work_version, open_access_version: OpenAccessVersion::VersionValues::ACCEPTED)
+    context 'when the open access version is selected while guessing' do
+      before do
+        allow(guesser).to receive(:version) do
+          work_version.update!(open_access_version: OpenAccessVersion::VersionValues::ACCEPTED)
+          guessed_version
+        end
       end
 
-      it 'does not guess or change the open access version' do
+      it 'does not overwrite the selected open access version' do
         job.perform(work_version.id)
 
-        expect(guesser_class).not_to have_received(:new)
+        expect(guesser_class).to have_received(:new).with(work_version: work_version)
         expect(work_version.reload.open_access_version).to eq(OpenAccessVersion::VersionValues::ACCEPTED)
       end
     end
