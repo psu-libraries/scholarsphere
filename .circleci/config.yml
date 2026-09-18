@@ -20,7 +20,7 @@ parameters:
     default: ""
   CI_UTILS_IMAGE_TAG:
     type: string
-    default: "v4.5.2"
+    default: "v4.6.6"
   CONFIG_REPO_NAME:
     type: string
     default: "scholarsphere-config"
@@ -30,9 +30,9 @@ parameters:
   CLUSTERS_DEV:
     type: string
     default: "uldev"
-  CLUSTERS_PROD:
+  CLUSTERS_ULPROD:
     type: string
-    default: "prod"
+    default: "ulprod"
   REGISTRY_HOST:
     type: string
     default: "harbor.k8s.libraries.psu.edu"
@@ -207,7 +207,7 @@ jobs:
     environment:
       clusters: << parameters.clusters >>
       CONFIG_REPO_NAME: << pipeline.parameters.CONFIG_REPO_NAME >>
-      CONFIG_REPO: git@github.com:psu-libraries/scholarsphere-config.git
+      CONFIG_REPO: << pipeline.parameters.CONFIG_REPO_URL >>
       REGISTRY_HOST: harbor.k8s.libraries.psu.edu
       FROM_TAG: << parameters.from_tag >>
       TO_TAG: << parameters.to_tag >>
@@ -393,7 +393,7 @@ workflows:
 
       - release-image:
           name: release-image
-          clusters: << pipeline.parameters.CLUSTERS_PROD >>
+          clusters: << pipeline.parameters.CLUSTERS_ULPROD >>
           context:
             - org-global
           from_tag: "<< pipeline.git.revision >>"
