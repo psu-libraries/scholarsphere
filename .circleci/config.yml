@@ -243,7 +243,7 @@ jobs:
       RAILS_ENV: test
       AWS_ACCESS_KEY_ID: scholarsphere
       AWS_SECRET_ACCESS_KEY: scholarsphere
-      S3_ENDPOINT: http://localhost:9000
+      S3_ENDPOINT: http://localhost:8333
       AWS_BUCKET: scholarsphere
       AWS_REGION: us-east-1
       SOLR_HOST: 127.0.0.1
