@@ -4,12 +4,12 @@ require 'scholarsphere/cleaner'
 require 'scholarsphere/solr_admin'
 
 RSpec.describe Scholarsphere::Cleaner do
-  describe '#clean_minio' do
+  describe '#clean_seaweedfs' do
     context 'when aws is not installed' do
       before { allow(described_class).to receive(:aws?).and_return(false) }
 
       it 'writes a warnig message to the console' do
-        expect { described_class.clean_minio }.to output(/WARNING: Install aws in order to delete files from minio/).to_stdout
+        expect { described_class.clean_seaweedfs }.to output(/WARNING: Install aws in order to delete files from seaweedfs/).to_stdout
       end
     end
   end
