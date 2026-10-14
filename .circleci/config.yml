@@ -224,21 +224,10 @@ jobs:
     docker:
       - image: cimg/ruby:3.4.9-browsers
       - image: redis:6.2.6
-      - image: quay.io/minio/minio:RELEASE.2025-09-07T16-13-09Z
-        entrypoint:
-          - /bin/sh
-          - -c
-          - |
-            minio server /data --address ':9000' &
-            minio_pid=$!
-            until mc alias set local http://localhost:9000 "$MINIO_ROOT_USER" "$MINIO_ROOT_PASSWORD"; do
-              sleep 1
-            done
-            mc mb --ignore-existing local/scholarsphere
-            wait "$minio_pid"
+      - image: chrislusf/seaweedfs:latest
         environment:
-          MINIO_ROOT_USER: scholarsphere
-          MINIO_ROOT_PASSWORD: scholarsphere
+          AWS_ACCESS_KEY_ID: scholarsphere
+          AWS_SECRET_ACCESS_KEY: scholarsphere
       - image: postgres:15.2
         environment:
           POSTGRES_PASSWORD: scholarsphere
@@ -254,7 +243,7 @@ jobs:
       RAILS_ENV: test
       AWS_ACCESS_KEY_ID: scholarsphere
       AWS_SECRET_ACCESS_KEY: scholarsphere
-      S3_ENDPOINT: http://localhost:9000
+      S3_ENDPOINT: http://localhost:8333
       AWS_BUCKET: scholarsphere
       AWS_REGION: us-east-1
       SOLR_HOST: 127.0.0.1
