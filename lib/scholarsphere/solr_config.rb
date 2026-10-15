@@ -57,7 +57,7 @@ module Scholarsphere
 
     def tempfile
       tmp = Tempfile.new('configset')
-      Zip::File.open(tmp, Zip::File::CREATE) do |zipfile|
+      Zip::File.open(tmp, create: true) do |zipfile|
         Dir["#{dir}/**/**"].each do |file|
           zipfile.add(file.sub("#{dir}/", ''), file)
         end
