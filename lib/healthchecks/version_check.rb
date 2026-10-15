@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module HealthChecks
+module Healthchecks
   class VersionCheck < OkComputer::Check
     def check
       version = ENV.fetch('APP_VERSION', 'unknown')

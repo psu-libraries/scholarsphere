@@ -13,7 +13,7 @@ en:
     manual_review: Needs Manual Review
     tips: Tips for %{rule} Remediation
     intro: Below are the results of the accessibility check of the pdf you recently uploaded. <a href="https://www.ada.gov/resources/2024-03-08-web-rule" target="_blank">Title II of the ADA</a> requires that all digital content be made accessible. More information can be found in <a href=https://policy.psu.edu/policies/ad69>Penn State’s AD69 Accessibility Policy</a>.
-    remediation_help: For remediation assistance or any questions, please contact <a href=mailto:digitalaccessibility@psu.libanswers.com>digitalaccessibility@psu.libanswers.com</a> or visit the <a href=https://smealonline.psu.edu/browse/accessibility-learning-path/courses/pdf-accessibility-overview-and-introduction>PDF Accessibility Training</a> on the <a href=https://accessibility.psu.edu/training/learningpath/>Penn State Accessibility Learning Path</a>.
+    remediation_help: For remediation assistance or any questions, please contact <a href=mailto:digitalaccessibility@psu.libanswers.com>digitalaccessibility@psu.libanswers.com</a> or visit the <a href=https://psu.csod.com/ui/lms-learning-details/app/event/1be9e277-0d44-424f-915c-bf04cad7f4c3?isOnePlayer=true>PDF Accessibility Training</a>. Note - you will need to log in to the <a href=https://lrn.psu.edu/>Learning Resource Network (LRN)</a> first to access the training.
   remediation_popup:
     title: Accessible Version in Progress
     description: We're generating an accessible version of this file to meet ADA Title II requirements. This process may take up to one hour. Please return later to access the accessible copy once it's ready.
@@ -278,6 +278,9 @@ en:
         manufacturer: Organization or individual that built the instrument.
         rights: The license you select determines how your work can be used by others. [Read more about choosing a license](https://docs.scholarsphere.psu.edu/guides/licenses/)
         contributor: If applicable, please include a brief acknowledgment of any funding sources that supported your research. This helps ensure proper attribution and increases the visibility of your funder’s contribution.
+        open_access_version: >
+          ScholarSphere attempts to identify which version of the article you have uploaded. If a version could not be detected, no option will be pre-selected and you will need to choose manually. If you believe the detected version is incorrect, you may override it by selecting the appropriate option below. More information about the version options can be found in the <a href="https://psu.libanswers.com/faq/279953">AC02 FAQ</a>.
+          <br/><br/><strong>Please note:</strong> The version you select will be used to look up the publisher’s default sharing policy and complete the publishing details section including license and embargo. Selecting the correct version helps ensure accurate implementation of policy requirements.
       autocomplete_work_form:
         doi: Please enter a valid DOI (e.g. https://doi.org/10.xxxx/xxxxxx or 10.xxxx/xxxxxx)
       actor:
@@ -436,6 +439,11 @@ en:
               new URI.
           withdraw_versions:
             heading: Withdraw A Version
+        open_access_version:
+          permissions_not_found: >
+             We could not find sharing rules for your work. Please fill out any missing information.
+          other_version_preferred: >
+             We could not find sharing rules for the %{this_version} of this work, only the %{other_version}. To upload the %{other_version}, please return to the file upload page and upload your %{other_version} there. If you are sure you want to upload the %{this_version}, please contact us for assistance.
       update:
         success: "Work settings successfully updated."
       withdraw_versions_form:
@@ -477,7 +485,8 @@ en:
         publish: 
           button: Publish
           tooltip: Publish your work to make it publicly visible. Changes cannot be made to the published version, but you can create a new version if updates are needed.
-          blocked: Publishing blocked until Accessibility Results are finished processing
+          blocked_accessibility: Publishing blocked until Accessibility Results are finished processing
+          blocked_version: Publishing blocked until permissions for this version are found
         confirm:
           publish: Confirm publish
           request_curation: Confirm Request Curation
@@ -512,12 +521,8 @@ en:
         autocomplete_unsuccessful: 'We were not able to find and autocomplete the metadata for your work.  Please manually enter your metadata in the following forms to complete your submission.'
       details:
         autocomplete_form:
-          autocomplete_help_text_html: By adding the Digital Object Identifier (DOI) for the article, issued by the Publisher, to this field, we can search the Penn State Researcher Metadata 
-                                       Database and potentially enrich the following metadata fields for your deposit. If the Researcher Metadata Database contains pertinent information about 
-                                       your scholarly work, it will automatically be imported into the fields below. You can choose to retain or modify this imported information. 
-                                       You cannot modify the DOI once you have completed a search. If you discover that the DOI is incorrect, please delete the draft and start a new search.
-                                       <br/><br/>Please note that if you are working to make your work open per <a href="https://policy.psu.edu/policies/ac02">AC02</a>, we recommend using 
-                                       the process available directly within the <a href="https://openaccess.psu.edu/deposit/rmd/">Researcher Metadata Database</a> for deposit when possible.
+          autocomplete_help_text_html: You've indicated this is an open access submission with a publisher-provided DOI. Please submit that DOI here.                        
+        autocomplete_required: You must complete the DOI autocomplete form before continuing.
         about_collections: 
           label: About Collections
           message: >
@@ -527,7 +532,15 @@ en:
         required_to_publish_metadata: Needed to Publish
         additional_metadata: Optional Metadata
         instrument_title: Use the instrument name as the work title
-        open_access_prompt: Is this an Open Access submission?
+        open_access_prompt: I am depositing this work to comply with <a href="https://policy.psu.edu/policies/ac02">Penn State’s Open Access Policy (AC02)</a>, and this work has a publisher-provided DOI.
+        open_access_help_text_html: >
+          Selecting this check box and entering the publisher-provided DOI will initiate the following automated tools on your behalf: 
+          <ol>
+          <li> <strong>Version Check</strong> – The system will attempt to identify which version of the article you have uploaded to determine publisher sharing information.</li>
+          <li> <strong>Publisher Sharing Information</strong> – Using the identified version, the system will attempt to retrieve the publisher’s default sharing policy. It will then notify you regarding your permission to share the uploaded version as well as assign the appropriate license, embargo (if applicable), and publisher statement (if applicable).</li>
+          <li> <strong>Metadata Import</strong> – If information about this scholarly work is available in the <a href="https://researcher.psu.edu/metadata">Penn State Researcher Metadata Database</a>, it will be automatically imported into the appropriate fields. You may retain or edit imported information.</li>
+          </ol>
+          <strong>Please note:</strong> You will not be able to modify the selection of this box or the DOI after completing a search. If you find that either the selection of the DOI is incorrect, please delete the draft deposit and begin a new submission.
         privacy_notice:
           header: Accessible Version Generation Privacy Notice
           description: When your PDF is downloaded for the first time, an accessible version will be created to meet ADA Title II requirements
@@ -573,6 +586,11 @@ en:
         new:
           heading: New Creator
           cancel: Cancel
+      files:
+        edit:
+          external_entry:
+            heading: Welcome to ScholarSphere!
+            message: Please upload one or more files on this page, then click "Save and Continue" to begin reviewing required metadata and publish your submission.
       publish:
         edit:
           error_message: "There are %{error} that need to be fixed before this work can be published"
@@ -580,6 +598,10 @@ en:
           files: Files
           publishing_details: Publishing Details
           version: Open Access Version
+          determining_open_access_version: "Determining open access version…"
+          embargo_date_label: Embargo Date
+          open_access_fields_updated_html: "Metadata field(s) updated based on version selected: <strong>%{fields}.</strong>"
+          open_access_fields_conjunction_html: </strong> and <strong>
         curation:
           header: Request Curation (Optional)
           request_description: "Recommended: Select ‘Request Curation’ below to have the ScholarSphere Curation Team review your work ensuring its findability, interoperability, accessibility, and reusability prior to publication. The curatorial review will focus on enhancing metadata quality, recommending improvements for deposit interoperability and reusability, and remediating files as necessary for accessibility. While under review, your work will remain saved as a draft. Once approved by the curator, the work will be published, and if applicable, a DOI will be minted."
@@ -749,7 +771,6 @@ en:
       home_subtitle: 'An institutional repository and archive sharing and preserving Penn State’s scholarly and research outputs'
       not_found: 'Page Not Found'
       server_error: 'Server Error'
-      graphql: 'GraphQL'
       reports: 'Reports'
   resources:
     analytics: Analytics

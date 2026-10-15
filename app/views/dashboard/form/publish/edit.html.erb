@@ -1,3 +1,33 @@
+<% accepted_version = OpenAccessVersion::VersionValues::ACCEPTED %>
+<% published_version = OpenAccessVersion::VersionValues::PUBLISHED %>
+<% permissions_value = lambda do |param_key, method_name, version|
+     params.dig(:oaw_permissions, param_key) || @permissions&.public_send(method_name, version)
+   end %>
+<% open_access_version_data = {
+     controller: 'open-access-version',
+     open_access_version_id: @resource.id,
+     open_access_version_accepted_version_value: accepted_version,
+     open_access_version_published_version_value: published_version,
+     open_access_version_accepted_version_label: accepted_version.underscore.humanize.downcase,
+     open_access_version_published_version_label: published_version.underscore.humanize.downcase,
+     open_access_version_accepted_version_rights: permissions_value.call(:accepted_version_rights, :licence, accepted_version),
+     open_access_version_published_version_rights: permissions_value.call(:published_version_rights, :licence, published_version),
+     open_access_version_accepted_version_statement: permissions_value.call(:accepted_version_statement, :publisher_statement, accepted_version),
+     open_access_version_published_version_statement: permissions_value.call(:published_version_statement, :publisher_statement, published_version),
+     open_access_version_accepted_version_embargo: permissions_value.call(:accepted_version_embargo, :embargo_end_date, accepted_version)&.to_s,
+     open_access_version_published_version_embargo: permissions_value.call(:published_version_embargo, :embargo_end_date, published_version)&.to_s,
+     open_access_version_rights_label: t('activerecord.attributes.work_version.rights'),
+     open_access_version_statement_label: t('activerecord.attributes.work_version.publisher_statement'),
+     open_access_version_embargo_label: t('dashboard.form.publish.edit.embargo_date_label'),
+     open_access_version_fields_updated_message: t('dashboard.form.publish.edit.open_access_fields_updated_html', fields: '__FIELDS__'),
+     open_access_version_fields_conjunction: t('dashboard.form.publish.edit.open_access_fields_conjunction_html'),
+     open_access_version_current_version: @current_version || accepted_version,
+     open_access_version_other_version: @other_version,
+     open_access_version_versions_found: params.dig(:oaw_permissions, :versions_found) || @permissions&.versions_found?.to_json,
+     open_access_version_not_found_message: t('dashboard.works.edit.open_access_version.permissions_not_found'),
+     open_access_version_other_message: t('dashboard.works.edit.open_access_version.other_version_preferred', this_version: '__THIS__', other_version: '__OTHER__')
+   } %>
+
 <div class="container">
   <div class="row">
     <div class="col" data-controller="unsaved-changes" data-unsaved-changes-prompt="<%= t 'dashboard.form.unsaved_changes_prompt' %>">
@@ -6,7 +36,7 @@
       <%= render FormTabsComponent.new(resource: @resource, current_controller: controller_name) %>
 
       <div class="tab-content">
-        <div class="tab-pane active show">
+        <div class="tab-pane active show" <%= tag.attributes(data: open_access_version_data) %>>
 
           <%= form_with(
                 model: @resource,
@@ -18,13 +48,31 @@
                 }
               ) do |form| %>
 
+              <%= hidden_field_tag 'oaw_permissions[accepted_version_rights]',
+                                   permissions_value.call(:accepted_version_rights, :licence, accepted_version) %>
+              <%= hidden_field_tag 'oaw_permissions[published_version_rights]',
+                                   permissions_value.call(:published_version_rights, :licence, published_version) %>
+
+              <%= hidden_field_tag 'oaw_permissions[accepted_version_statement]',
+                                   permissions_value.call(:accepted_version_statement, :publisher_statement, accepted_version) %>
+              <%= hidden_field_tag 'oaw_permissions[published_version_statement]',
+                                   permissions_value.call(:published_version_statement, :publisher_statement, published_version) %>
+
+              <%= hidden_field_tag 'oaw_permissions[accepted_version_embargo]',
+                                   permissions_value.call(:accepted_version_embargo, :embargo_end_date, accepted_version) %>
+              <%= hidden_field_tag 'oaw_permissions[published_version_embargo]',
+                                   permissions_value.call(:published_version_embargo, :embargo_end_date, published_version) %>
+
+              <%= hidden_field_tag 'oaw_permissions[versions_found]',
+                                   params.dig(:oaw_permissions, :versions_found) || @permissions&.versions_found?.to_json %>
+
             <%= render FormErrorMessageComponent.new(
                   form: form,
                   heading: t('.error_message', error: pluralize(form.object.errors.count, 'issue'))
                 ) %>
 
             <%= render 'dashboard/form/type/work_version_fields', form: form, work_type_disabled: true %>
-            <%= render "dashboard/form/details/#{@resource.form_partial}_fields", form: form %>
+            <%= render "dashboard/form/details/#{@resource.form_partial}_fields", form: form, selected_version: @resource.open_access_version %>
 
             <% if deposit_pathway.instrument? %>
               <%= render 'dashboard/form/contributors/instrument_work_version_fields', form: form %>
@@ -42,7 +90,7 @@
               <%= render 'dashboard/form/files/uploaded_file_list', work_version: form.object %>
             <% end %>
 
-            <% if @resource.open_access %>
+            <% if @resource.open_access_upload_active? %>
               <div class="form-wrapper form-wrapper--wide">
                 <div class="keyline keyline--left mb-3">
                   <h4><%= t '.version' %></h4>

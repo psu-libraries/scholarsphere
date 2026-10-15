@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe HealthChecks::Dois do
+RSpec.describe Healthchecks::Dois do
   describe '#check' do
     context 'when no draft DOIs are detected', :vcr do
       it 'returns no failure' do

@@ -14,22 +14,22 @@ OkComputer::Registry.register(
 
 OkComputer::Registry.register(
   'sidekiq',
-  HealthChecks::QueueLatencyCheck.new(ENV.fetch('SIDEKIQ_QUEUE_LATENCY_THRESHOLD', 30).to_i)
+  Healthchecks::QueueLatencyCheck.new(ENV.fetch('SIDEKIQ_QUEUE_LATENCY_THRESHOLD', 30).to_i)
 )
 
 OkComputer::Registry.register(
   'sidekiq_deadset',
-  HealthChecks::QueueDeadSetCheck.new
+  Healthchecks::QueueDeadSetCheck.new
 )
 
 OkComputer::Registry.register(
   'version',
-  HealthChecks::VersionCheck.new
+  Healthchecks::VersionCheck.new
 )
 
 OkComputer::Registry.register(
   'dois',
-  HealthChecks::Dois.new(ENV.fetch('DRAFT_DOI_THRESHOLD', 0).to_i)
+  Healthchecks::Dois.new(ENV.fetch('DRAFT_DOI_THRESHOLD', 0).to_i)
 )
 
 # Reports as Failed, but continues to return 200 status code.

@@ -2,7 +2,7 @@
 
 require 'json'
 
-class JSONLogFormatter
+class JsonLogFormatter
   def parse_message(message)
     JSON.parse(message)
   rescue JSON::ParserError, TypeError

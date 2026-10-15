@@ -49,7 +49,7 @@ RSpec.describe WorkVersion do
     it { is_expected.to have_jsonb_accessor(:owner).of_type(:string) }
     it { is_expected.to have_jsonb_accessor(:manufacturer).of_type(:string) }
     it { is_expected.to have_db_column(:open_access_version).of_type(:string) }
-    it { is_expected.to have_db_column(:open_access).of_type(:boolean) }
+    it { is_expected.to have_db_column(:open_access_upload).of_type(:boolean) }
   end
 
   describe 'factory' do
@@ -90,6 +90,30 @@ RSpec.describe WorkVersion do
 
         expect(resource.file_version_memberships.map(&:title)).to eq(['a.png', 'z.png'])
       end
+    end
+  end
+
+  describe '#created_by_researcher_metadata_database?' do
+    subject(:work_version) { build(:work_version, external_app:) }
+
+    context 'when the work version was created by Researcher Metadata Database' do
+      let(:external_app) do
+        build(:external_app, name: ExternalApp::ResearcherMetadataDatabase::NAME)
+      end
+
+      it { is_expected.to be_created_by_researcher_metadata_database }
+    end
+
+    context 'when the work version was created by another external app' do
+      let(:external_app) { build(:external_app, name: 'Another External App') }
+
+      it { is_expected.not_to be_created_by_researcher_metadata_database }
+    end
+
+    context 'when the work version was not created by an external app' do
+      let(:external_app) { nil }
+
+      it { is_expected.not_to be_created_by_researcher_metadata_database }
     end
   end
 
@@ -150,35 +174,50 @@ RSpec.describe WorkVersion do
     end
   end
 
-  describe 'publish event webhook' do
-    let(:work) { create(:work) }
-    let(:work_version) { create(:work_version, work: work) }
+  describe 'open access version broadcast' do
+    before { allow(OpenAccessVersionChannel).to receive(:broadcast_to) }
 
-    before { allow(WorkPublishedWebhookJob).to receive(:perform_later) }
+    context 'when open_access_version is changed from nil' do
+      let(:work_version) { create(:work_version, open_access_version: nil) }
 
-    context 'when the work is open access' do
-      before { work_version.update(open_access: true) }
+      it 'broadcasts when open_access_version is changed to non-nil value' do
+        work_version.update!(open_access_version: OpenAccessVersion::VersionValues::PUBLISHED)
 
-      it 'enqueues the WorkPublishedWebhookJob when published' do
-        work_version.publish!
+        expect(OpenAccessVersionChannel).to have_received(:broadcast_to).with(
+          work_version,
+          {
+            id: work_version.id,
+            open_access_version: OpenAccessVersion::VersionValues::PUBLISHED
+          }
+        )
+      end
 
-        expect(WorkPublishedWebhookJob).to have_received(:perform_later).with(work.uuid)
+      it 'does not broadcast when open_access_version is changed to nil' do
+        work_version.update!(open_access_version: nil)
+
+        expect(OpenAccessVersionChannel).not_to have_received(:broadcast_to)
       end
     end
 
-    context 'when the work is not open access' do
-      it 'does not enqueue the webhook job' do
-        work_version.publish!
+    context 'when open_access_version is changed from a non-nil value' do
+      let(:work_version) { create(:work_version, open_access_version: OpenAccessVersion::VersionValues::PUBLISHED) }
 
-        expect(WorkPublishedWebhookJob).not_to have_received(:perform_later)
+      it 'does not broadcast when open_access_version is not changed' do
+        work_version.update!(title: 'a title change that does not affect open access version')
+
+        expect(OpenAccessVersionChannel).not_to have_received(:broadcast_to)
       end
-    end
 
-    context 'when the work version is updated without publishing' do
-      it 'does not enqueue the webhook job' do
-        work_version.update(title: 'no state change')
+      it 'broadcasts when open_access_version is updated to a different non-nil value' do
+        work_version.update!(open_access_version: OpenAccessVersion::VersionValues::ACCEPTED)
 
-        expect(WorkPublishedWebhookJob).not_to have_received(:perform_later)
+        expect(OpenAccessVersionChannel).to have_received(:broadcast_to).with(
+          work_version,
+          {
+            id: work_version.id,
+            open_access_version: OpenAccessVersion::VersionValues::ACCEPTED
+          }
+        )
       end
     end
   end
@@ -330,9 +369,9 @@ RSpec.describe WorkVersion do
 
     context 'with open_access_version' do
       it { is_expected.to allow_value(nil).for(:open_access_version) }
-      it { is_expected.to allow_value('accepted').for(:open_access_version) }
-      it { is_expected.to allow_value('published').for(:open_access_version) }
-      it { is_expected.to allow_value('unknown').for(:open_access_version) }
+      it { is_expected.to allow_value('acceptedVersion').for(:open_access_version) }
+      it { is_expected.to allow_value('publishedVersion').for(:open_access_version) }
+      it { is_expected.to allow_value('unknownVersion').for(:open_access_version) }
       it { is_expected.not_to allow_value('not_allowed').for(:open_access_version) }
     end
   end
@@ -504,6 +543,55 @@ RSpec.describe WorkVersion do
     let(:work) { create(:work) }
 
     it { is_expected.to be_latest_version }
+  end
+
+  describe '#open_access_upload_active?' do
+    let(:work_version) { create(:work_version, work: build(:work, work_type: work_type), open_access_upload: open_access_upload) }
+    let(:open_access_upload) { true }
+
+    context 'when work type is open access eligible and upload is enabled' do
+      let(:work_type) { 'article' }
+
+      it 'returns true' do
+        expect(work_version.open_access_upload_active?).to be true
+      end
+    end
+
+    context 'when work type is not open access eligible and upload is enabled' do
+      let(:work_type) { 'research_paper' }
+
+      it 'returns false' do
+        expect(work_version.open_access_upload_active?).to be false
+      end
+    end
+
+    context 'when work type is open access eligible and upload is disabled' do
+      let(:work_type) { 'article' }
+      let(:open_access_upload) { false }
+
+      it 'returns false' do
+        expect(work_version.open_access_upload_active?).to be false
+      end
+    end
+  end
+
+  describe 'open access fields on work type change' do
+    let(:work_version) do
+      create(
+        :work_version,
+        work: create(:work, work_type: 'article'),
+        open_access_upload: true,
+        open_access_version: OpenAccessVersion::VersionValues::ACCEPTED
+      )
+    end
+
+    it 'clears open access fields when work type changes to a non-eligible scholarly type' do
+      work_version.assign_attributes(work_attributes: { id: work_version.work.id, work_type: 'research_paper' })
+      work_version.save!
+
+      expect(work_version.reload.open_access_upload).to be_nil
+      expect(work_version.open_access_version).to be_nil
+    end
   end
 
   describe '#to_solr' do

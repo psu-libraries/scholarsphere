@@ -56,4 +56,111 @@ RSpec.describe Dashboard::Form::PublishController, type: :request do
       end
     end
   end
+
+  describe 'webhook on publish' do
+    let(:work_version) do
+      create(
+        :work_version,
+        :able_to_be_published,
+        work: build(:work, work_type: 'article'),
+        external_app: external_app
+      )
+    end
+    let(:external_app) { ExternalApp.researcher_metadata_database }
+    let(:user) { work_version.work.depositor.user }
+    let(:request_params) do
+      {
+        publish: '1',
+        work_version: {
+          depositor_agreement: '1',
+          psu_community_agreement: '1',
+          accessibility_agreement: '1',
+          sensitive_info_agreement: '1'
+        }
+      }
+    end
+
+    before do
+      sign_in user
+      allow(WorkPublishedWebhookJob).to receive(:perform_later)
+    end
+
+    context 'when external app is the researcher metadata database' do
+      it 'enqueues the webhook' do
+        patch dashboard_form_publish_path(work_version), params: request_params
+
+        expect(response).to have_http_status(:redirect)
+        expect(WorkPublishedWebhookJob).to have_received(:perform_later).with(work_version.work.uuid)
+      end
+    end
+
+    context 'when the external app is not the researcher metadata database' do
+      let(:external_app) { ExternalApp.pdf_accessibility_api }
+
+      it 'does not enqueue the webhook' do
+        patch dashboard_form_publish_path(work_version), params: request_params
+
+        expect(response).to have_http_status(:redirect)
+        expect(WorkPublishedWebhookJob).not_to have_received(:perform_later)
+      end
+    end
+
+    context 'when no external app is set' do
+      let(:external_app) { nil }
+
+      it 'does not enqueue the webhook' do
+        patch dashboard_form_publish_path(work_version), params: request_params
+
+        expect(response).to have_http_status(:redirect)
+        expect(WorkPublishedWebhookJob).not_to have_received(:perform_later)
+      end
+    end
+
+    context 'when publish fails validation' do
+      it 'does not enqueue the webhook' do
+        invalid_params = request_params.deep_dup
+        invalid_params[:work_version][:description] = ''
+
+        patch dashboard_form_publish_path(work_version), params: invalid_params
+
+        expect(response).to have_http_status(:ok)
+        expect(WorkPublishedWebhookJob).not_to have_received(:perform_later)
+      end
+    end
+  end
+
+  describe 'GET /dashboard/form/work_versions/:id/open_access_version' do
+    let(:work_version) do
+      create(:work_version, open_access_version: OpenAccessVersion::VersionValues::ACCEPTED)
+    end
+
+    context 'when the user can edit the work version' do
+      let(:user) { work_version.work.depositor.user }
+
+      before { sign_in user }
+
+      it 'returns the open access version payload' do
+        get "/dashboard/form/work_versions/#{work_version.id}/open_access_version"
+
+        expect(response).to have_http_status(:ok)
+        payload = JSON.parse(response.body)
+        expect(payload).to eq(
+          'id' => work_version.id,
+          'open_access_version' => OpenAccessVersion::VersionValues::ACCEPTED
+        )
+      end
+    end
+
+    context 'when the user cannot edit the work version' do
+      let(:user) { create(:user) }
+
+      before { sign_in user }
+
+      it 'returns not found' do
+        get "/dashboard/form/work_versions/#{work_version.id}/open_access_version"
+
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+  end
 end

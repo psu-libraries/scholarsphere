@@ -8,7 +8,7 @@
   <%= render 'constraints' %>
 </div>
 
-<div class="action-bar mb-3">
+<div class="action-bar action-bar--results-meta mb-3">
   <%= render 'did_you_mean' %>
   <%= render partial: 'paginate_compact', object: @response if show_pagination? %>
   <%= render_results_collection_tools wrapping_class: 'search-widgets' %>

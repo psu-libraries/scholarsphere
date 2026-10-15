@@ -1,16 +1,21 @@
+<% open_access = @resource.open_access_upload_active? %>
+<% selected_rights = open_access ? @permissions&.licence(@resource.open_access_version) : form.object.rights %>
+<% open_access_embargo_end_date = @permissions&.embargo_end_date(@resource.open_access_version) %>
 <div class="form-wrapper">
   <%= render 'form_fields/select',
              form: form,
              attribute: :rights,
-             options_for_select: WorkVersion::Licenses.options_for_select_box,
+             options_for_select: options_for_select(
+               WorkVersion::Licenses.options_for_select_box,
+               selected_rights
+             ),
              aria_required: true,
-             disabled: @resource.open_access && !current_user.admin?,
-             include_blank: true %>
+             include_blank: true,
+             data: { target: 'open-access-version.rights' } %>
 </div>
 
 <%= form.fields_for :work do |work_form| %>
   <div class="form-wrapper">
-
     <% if policy(@resource).edit_initial_draft? %>
       <% if deposit_pathway.allows_visibility_change? %>
         <%= render 'visibility_field', form: work_form %>
@@ -21,9 +26,17 @@
           <h2 id="<%= t('dashboard.work_versions.edit.embargo').parameterize %>" class="h4"><%= t('dashboard.work_versions.edit.embargo') %></h2>
         </div>
 
+        <% if open_access %>
+          <% work_form.object.embargoed_until = open_access_embargo_end_date %>
+        <% end %>
+
         <p><%= t('dashboard.works.edit.embargo.explanation') %></p>
 
-        <%= render 'form_fields/date', form: work_form, attribute: :embargoed_until, readonly: @resource.open_access && !current_user.admin? %>
+        <%= render 'form_fields/date',
+                   form: work_form,
+                   attribute: :embargoed_until,
+                   value: (open_access ? open_access_embargo_end_date : work_form.object.embargoed_until),
+                   data: { target: 'open-access-version.embargo' } %>
       </div>
     <% end %>
 
@@ -31,11 +44,11 @@
       <%= render 'curation', form: form %>
     <% end %>
 
-  <!-- Remove while remediation request is unavailable
-    <% if allow_accessibility_remediation? || @resource.accessibility_remediation_requested %>
-      <%= render 'remediation', form: form %>
-    <% end %>
-  -->
+    <%#
+      if allow_accessibility_remediation? || @resource.accessibility_remediation_requested
+        render 'remediation', form: form
+      end
+    %>
 
     <% if has_mint_doi_option? %>
       <%= render 'doi', form: form %>

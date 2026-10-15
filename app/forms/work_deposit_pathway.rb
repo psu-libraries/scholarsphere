@@ -44,7 +44,7 @@ class WorkDepositPathway
   end
 
   def allows_visibility_change?
-    !data_and_code? && !grad_culminating_experiences? && !@resource.open_access
+    !data_and_code? && !grad_culminating_experiences? && !@resource.open_access_upload_active?
   end
 
   def allows_curation_request?
@@ -191,7 +191,7 @@ class WorkDepositPathway
                :file_version_memberships,
                :mint_doi_requested,
                :has_image_file_resource?,
-               :open_access,
+               :open_access_upload,
                :open_access_version,
                to: :work_version, prefix: false
 
@@ -213,7 +213,8 @@ class WorkDepositPathway
       }.freeze
 
       delegate :imported_metadata_from_rmd,
-               :open_access,
+               :open_access_upload,
+               :open_access_upload_active?,
                to: :work_version, prefix: false
 
       def show_autocomplete_form?
@@ -266,6 +267,7 @@ class WorkDepositPathway
       include WorkVersionDetails
 
       delegate :mirror_remediated_version_to_files!,
+               :created_by_researcher_metadata_database?,
                to: :work_version
     end
 
@@ -306,7 +308,7 @@ class WorkDepositPathway
               subject
               publisher
               subtitle
-              open_access
+              open_access_upload
             }
           ).freeze
         end
@@ -321,7 +323,17 @@ class WorkDepositPathway
         end
 
         def show_autocomplete_form?
-          imported_metadata_from_rmd == nil
+          open_access_upload_active? && imported_metadata_from_rmd.nil?
+        end
+
+        validate :autocomplete_must_be_completed
+
+        def autocomplete_must_be_completed
+          return unless show_autocomplete_form?
+
+          if imported_metadata_from_rmd.nil?
+            errors.add(:base, I18n.t('dashboard.form.details.autocomplete_required'))
+          end
         end
       end
 
@@ -333,7 +345,7 @@ class WorkDepositPathway
               publisher
               subtitle
               open_access_version
-              open_access
+              open_access_upload
             }
           ).freeze
         end

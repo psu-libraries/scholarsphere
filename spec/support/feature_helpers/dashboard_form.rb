@@ -221,5 +221,13 @@ module FeatureHelpers
 
       page.assert_selector('.aa-dataset-1')
     end
+
+    def self.simulate_open_access_version_broadcast(work_version)
+      # Brief sleep to make sure page has loaded
+      sleep 0.5
+      work_version.update(open_access_version: 'acceptedVersion')
+      # Wait for broadcast to update page
+      page.has_no_text?(I18n.t('dashboard.form.publish.edit.determining_open_access_version'), wait: 3)
+    end
   end
 end

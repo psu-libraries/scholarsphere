@@ -49,6 +49,25 @@ class ExternalApp < ApplicationRecord
     PdfAccessibilityApi.build
   end
 
+  class ResearcherMetadataDatabase
+    NAME = 'Researcher Metadata Database'
+
+    def self.build
+      ExternalApp.find_or_create_by(name: NAME) do |app|
+        app.api_tokens.build
+        app.contact_email = Rails.configuration.no_reply_email
+      end
+    end
+  end
+
+  def self.researcher_metadata_database
+    ResearcherMetadataDatabase.build
+  end
+
+  def researcher_metadata_database?
+    name == ResearcherMetadataDatabase::NAME
+  end
+
   def token
     api_tokens.first.token
   end

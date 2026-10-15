@@ -9,7 +9,8 @@ export AWS_ACCESS_KEY_ID=
 export AWS_SECRET_ACCESS_KEY=
 export AWS_BUCKET=
 export AWS_REGION=
-export S3_ENDPOINT=
+export S3_ENDPOINT=http://docker.for.mac.localhost:8333 # In dev environment to connect via host port mapping to seaweedfs
+export S3_ENDPOINT=http://seaweedfs:8333 # In test environment to connect directly to seaweedfs within docker network
 export POSTGRES_HOST=
 export POSTGRES_PASSWORD=
 export REDIS_PASSWORD=
@@ -40,5 +41,3 @@ export ADMIN_GROUP=
 export VIEWER_GROUP=
 export PDF_REMEDIATION_ENDPOINT=
 export PDF_REMEDIATION_API_KEY=
-# If using minio in dev and test env:
-export AWS_SDK_CONFIG_OPT_OUT=true

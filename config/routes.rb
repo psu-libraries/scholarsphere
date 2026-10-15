@@ -46,7 +46,7 @@ Rails.application.routes.draw do
   concern :searchable, Blacklight::Routes::Searchable.new
   concern :oai_provider, BlacklightOaiProvider::Routes.new
 
-  resource :catalog, only: [:index], as: 'catalog', path: '/catalog', controller: 'catalog' do
+  resource :catalog, only: [], as: 'catalog', path: '/catalog', controller: 'catalog' do
     concerns :searchable
     concerns :oai_provider
   end
@@ -77,6 +77,7 @@ Rails.application.routes.draw do
   devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
   devise_scope :user do
     get 'sign_out', to: 'devise/sessions#destroy', as: :destroy_user_session
+    get 'users/auth/azure_oauth/redirect', to: 'users/auth_redirect#show', as: :user_azure_oauth_redirect
   end
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
@@ -84,7 +85,7 @@ Rails.application.routes.draw do
   namespace :dashboard do
     root to: 'catalog#index'
 
-    resource :catalog, only: [:index], as: 'catalog', path: 'catalog', controller: 'catalog' do
+    resource :catalog, only: [], as: 'catalog', path: 'catalog', controller: 'catalog' do
       concerns :searchable
     end
 
@@ -133,6 +134,7 @@ Rails.application.routes.draw do
         match ':id/files', to: 'files#update', via: %i[patch put], as: nil
 
         get   ':id/publish', to: 'publish#edit', as: 'publish'
+        get   ':id/open_access_version', to: 'publish#open_access_version'
         match ':id/publish', to: 'publish#update', via: %i[patch put], as: nil
 
         post ':id/autocomplete_work_forms', to: 'work_version_details#autocomplete_work_forms', as: 'autocomplete_work'
@@ -161,11 +163,7 @@ Rails.application.routes.draw do
     end
   end
 
-  # GraphQL
-  get '/graphiql', to: 'application#graphiql'
-
   namespace :api do
-    post '/public', to: 'public#execute'
     namespace :v1 do
       resources :ingest, only: [:create]
       resources :collections, only: [:create]

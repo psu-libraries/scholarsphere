@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe HealthChecks::VersionCheck do
+RSpec.describe Healthchecks::VersionCheck do
   describe '#check' do
     context 'when version' do
       before do

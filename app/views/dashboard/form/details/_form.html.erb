@@ -1,10 +1,10 @@
+<%= render FormErrorMessageComponent.new(resource: @resource) %>
+
 <% if @resource.show_autocomplete_form? %>
   <%= render 'autocomplete_form' %>
 <% end %>
 
 <%= form_with(model: @resource, url: url, local: true, data: { target: 'unsaved-changes.form' }) do |form| %>
-
-  <%= render FormErrorMessageComponent.new(form: form) %>
 
   <%= render "#{@resource.form_partial}_fields", form: form %>
 

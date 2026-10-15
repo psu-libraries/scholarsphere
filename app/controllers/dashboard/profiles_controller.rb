@@ -22,17 +22,15 @@ module Dashboard
       def creator_params
         params
           .require(:actor)
-          .permit(
-            :given_name,
-            :surname,
-            :display_name,
-            :email,
-            user_attributes: [
-              :id,
-              :admin_enabled,
-              :opt_in_stats_email
-            ]
-          )
+          .permit(:given_name,
+                  :surname,
+                  :display_name,
+                  :email,
+                  user_attributes: [
+                    :id,
+                    :admin_enabled,
+                    :opt_in_stats_email
+                  ])
       end
   end
 end

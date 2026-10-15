@@ -1,3 +1,1 @@
-User-agent: *
-Crawl-delay: 10
-Sitemap: https://scholarsphere.psu.edu/sitemap.xml
+# See https://www.robotstxt.org/robotstxt.html for documentation on how to use the robots.txt file

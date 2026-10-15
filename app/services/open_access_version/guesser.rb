@@ -70,6 +70,8 @@ module OpenAccessVersion
       def contains_arxiv_watermark?(pdf_reader)
         uri = pdf_reader&.objects&.[](8)&.[](:A)&.[](:URI)
         uri&.include?('arxiv.org')
+      rescue StandardError
+        false
       end
 
       def detected_filename(file_resource)

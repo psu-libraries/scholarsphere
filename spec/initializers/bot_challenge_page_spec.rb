@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'BotChallengePage' do
-  subject(:allow_exempt) { BotChallengePage::BotChallengePageController.bot_challenge_config.allow_exempt }
+  subject(:skip_when) { BotChallengePage::BotChallengePageController.bot_challenge_config.skip_when }
 
   let(:request) { instance_double(ActionDispatch::Request, headers: { 'User-Agent' => user_agent }) }
   let(:controller) { instance_double(ApplicationController, current_user: current_user, request: request) }
@@ -13,7 +13,7 @@ RSpec.describe 'BotChallengePage' do
     let(:user_agent) { 'Mozilla/5.0' }
 
     it 'exempts the request from challenge' do
-      expect(allow_exempt.call(controller, nil)).to be true
+      expect(controller.instance_exec(nil, &skip_when)).to be true
     end
   end
 
@@ -24,7 +24,7 @@ RSpec.describe 'BotChallengePage' do
       let(:user_agent) { 'Mozilla/5.0' }
 
       it 'does not exempt the request' do
-        expect(allow_exempt.call(controller, nil)).to be false
+        expect(controller.instance_exec(nil, &skip_when)).to be false
       end
     end
 
@@ -32,7 +32,7 @@ RSpec.describe 'BotChallengePage' do
       let(:user_agent) { 'Googlebot' }
 
       it 'exempts the request' do
-        expect(allow_exempt.call(controller, nil)).to be true
+        expect(controller.instance_exec(nil, &skip_when)).to be true
       end
     end
   end

@@ -8,6 +8,9 @@ import './scripts/view_statistics_chart'
 // Thumbnail selection settings
 import './scripts/thumbnail_selection_init'
 
+// Custom script for blacklight frontend 7 modals to work with blacklight 8
+import './scripts/blacklight_modal_compat'
+
 // Load dependencies
 require('jquery/src/jquery')
 const bootstrap = require('bootstrap/dist/js/bootstrap')

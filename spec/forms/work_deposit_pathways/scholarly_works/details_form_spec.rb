@@ -45,7 +45,7 @@ RSpec.describe WorkDepositPathway::ScholarlyWorks::DetailsForm, type: :model do
         related_url
         subject
         language
-        open_access
+        open_access_upload
       }
 
       expect(described_class.form_fields).to be_frozen
@@ -75,6 +75,34 @@ RSpec.describe WorkDepositPathway::ScholarlyWorks::DetailsForm, type: :model do
           language: ['test language']
         }
       )
+    end
+  end
+
+  describe 'autocomplete validation' do
+    context 'when the work version is open_access_upload_active' do
+      before do
+        allow(wv).to receive(:open_access_upload_active?).and_return(true)
+      end
+
+      context 'when the autocomplete form has not been submitted' do
+        it 'is not valid' do
+          expect(form).not_to be_valid
+          expect(form.errors[:base]).to include I18n.t('dashboard.form.details.autocomplete_required')
+        end
+      end
+
+      context 'when the autocomplete form has been submitted' do
+        it 'is valid' do
+          wv.imported_metadata_from_rmd = true
+          expect(form).to be_valid
+        end
+      end
+    end
+
+    context 'when the work is not an open access upload' do
+      it 'is valid' do
+        expect(form).to be_valid
+      end
     end
   end
 end

@@ -6,10 +6,10 @@ module Scholarsphere
   class Cleaner
     class << self
       def clean
-        clean_minio && clean_solr && clean_redis
+        clean_seaweedfs && clean_solr && clean_redis
       end
 
-      def clean_minio
+      def clean_seaweedfs
         return unless ENV.key?('S3_ENDPOINT') && verify_aws
 
         system("aws --endpoint-url #{ENV['S3_ENDPOINT']} s3 rb s3://#{ENV['AWS_BUCKET']} --force")
@@ -31,7 +31,7 @@ module Scholarsphere
       def verify_aws
         return true if aws?
 
-        puts 'WARNING: Install aws in order to delete files from minio'
+        puts 'WARNING: Install aws in order to delete files from seaweedfs'
         false
       end
 

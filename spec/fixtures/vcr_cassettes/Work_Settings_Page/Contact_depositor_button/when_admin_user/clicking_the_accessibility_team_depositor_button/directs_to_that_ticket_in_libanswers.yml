@@ -8,7 +8,7 @@ http_interactions:
       string: client_id=<REDACTED>&client_secret=<REDACTED>&grant_type=client_credentials
     headers:
       User-Agent:
-      - Faraday v2.12.2
+      - Faraday v2.14.2
       Content-Type:
       - application/x-www-form-urlencoded
       Accept-Encoding:
@@ -23,7 +23,7 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Tue, 02 Sep 2025 14:12:06 GMT
+      - Thu, 23 Jul 2026 18:27:25 GMT
       Content-Type:
       - application/json
       Transfer-Encoding:
@@ -39,31 +39,37 @@ http_interactions:
       Pragma:
       - no-cache
       X-Backend-Server:
-      - libanswers-us-5.springyaws.com
+      - libanswers-us-7.springyaws.com
       X-Content-Type-Options:
       - nosniff
       Strict-Transport-Security:
       - max-age=31536000; includeSubDomains; preload
       Content-Security-Policy:
       - upgrade-insecure-requests
+      Referrer-Policy:
+      - origin-when-cross-origin
     body:
       encoding: ASCII-8BIT
       base64_string: |
-        
-  recorded_at: Tue, 02 Sep 2025 14:12:06 GMT
+        eyJhY2Nlc3NfdG9rZW4iOiJjMTExZWYyYzA1MDE4OTg1ZmQwODg3ZjM5YWFh
+        YWFhYWFhYTk4OWRkIiwiZXhwaXJlc19pbiI6ODY0MDAsInRva2VuX3R5cGUi
+        OiJCZWFyZXIiLCJzY29wZSI6ImFwcF92aWV3IGFwcF9jcmVhdGUgYXBwX3Vw
+        ZGF0ZSJ9
+  recorded_at: Thu, 23 Jul 2026 18:27:25 GMT
 - request:
     method: post
     uri: https://psu.libanswers.com/api/1.1/ticket/create
     body:
       encoding: UTF-8
-      string: 'quid=2590&pquestion=ScholarSphere Deposit Accessibility Curation: Et
-        iste dolore enim: "libero, ut, quam; 41st eveniet''s quis''s sed"&pname=Sharan
-        Franecki&pemail=GxM039@psu.edu'
+      string: 'quid=2590&pquestion=ScholarSphere Deposit Accessibility Curation: Quis:
+        "voluptatem, aut, excepturi; 1st vel''s sint''s sequi"&pname=Bruno Littel&pemail=YpM001@psu.edu'
     headers:
       Authorization:
       - "<AUTH>"
       User-Agent:
-      - Faraday v2.12.2
+      - Faraday v2.14.2
+      Content-Type:
+      - application/x-www-form-urlencoded
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
@@ -76,7 +82,7 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Tue, 02 Sep 2025 14:12:07 GMT
+      - Thu, 23 Jul 2026 18:27:25 GMT
       Content-Type:
       - application/json
       Transfer-Encoding:
@@ -93,10 +99,12 @@ http_interactions:
       - max-age=31536000; includeSubDomains; preload
       Content-Security-Policy:
       - upgrade-insecure-requests
+      Referrer-Policy:
+      - origin-when-cross-origin
     body:
       encoding: ASCII-8BIT
       base64_string: |
         eyJpc1NoYXJlZCI6ZmFsc2UsInRpY2tldFVybCI6IlwvYWRtaW5cL3RpY2tl
-        dD9xaWQ9MTY2NzMwMzAiLCJjbGFpbWVkIjowfQ==
-  recorded_at: Tue, 02 Sep 2025 14:12:07 GMT
-recorded_with: VCR 6.3.1
+        dD9xaWQ9MTg3Mjc2NjAiLCJjbGFpbWVkIjowfQ==
+  recorded_at: Thu, 23 Jul 2026 18:27:25 GMT
+recorded_with: VCR 6.4.0

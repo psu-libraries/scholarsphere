@@ -3,7 +3,7 @@
 require 'rails_helper'
 require 'sidekiq/testing'
 
-RSpec.describe HealthChecks::QueueDeadSetCheck, :sidekiq do
+RSpec.describe Healthchecks::QueueDeadSetCheck, :sidekiq do
   before { Sidekiq::DeadSet.new.clear }
 
   describe '#check' do

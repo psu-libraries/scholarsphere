@@ -32,13 +32,11 @@ class IncidentsController < ApplicationController
     def incident_params
       params
         .require(:incident)
-        .permit(
-          :category,
-          :name,
-          :email,
-          :subject,
-          :message
-        )
+        .permit(:category,
+                :name,
+                :email,
+                :subject,
+                :message)
     end
 
     def check_recaptcha

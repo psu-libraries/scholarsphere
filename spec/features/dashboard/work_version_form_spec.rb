@@ -257,10 +257,10 @@ RSpec.describe 'Publishing a work', with_user: :user do
           visit dashboard_form_work_versions_path
 
           FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_scholarly_works_draft(metadata)
-          expect(page).to have_field('open_access_checkbox', type: 'checkbox')
-          check 'open_access_checkbox'
+          expect(page).to have_field('open_access_upload_checkbox', type: 'checkbox')
+          check 'open_access_upload_checkbox'
           FeatureHelpers::DashboardForm.save_and_continue
-          expect(Work.last.versions.last.open_access).to eq true
+          expect(Work.last.versions.last.open_access_upload).to eq true
         end
       end
 
@@ -279,28 +279,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
           fill_in 'work_version_title', with: metadata[:title]
           select Work::Types.display('research_paper'), from: 'work_version_work_attributes_work_type'
-          expect(page).to have_no_field('open_access_checkbox', type: 'checkbox')
-        end
-      end
-
-      context 'when the work is already open access', :js do
-        before do
-          @original_secret = ENV['ENABLE_OPEN_ACCESS_FEATURE']
-          ENV['ENABLE_OPEN_ACCESS_FEATURE'] = 'true'
-        end
-
-        after do
-          ENV['ENABLE_OPEN_ACCESS_FEATURE'] = @original_secret
-        end
-
-        it 'displays the open access checkbox in readonly' do
-          visit dashboard_form_work_versions_path
-
-          FeatureHelpers::DashboardForm.fill_in_minimal_work_details_for_scholarly_works_draft(metadata)
-          check 'open_access_checkbox'
-          FeatureHelpers::DashboardForm.save_and_continue
-          click_on 'Work Type'
-          expect(page).to have_field('open_access_checkbox', type: 'checkbox', disabled: true)
+          expect(page).to have_no_field('open_access_upload_checkbox', type: 'checkbox')
         end
       end
     end
@@ -697,7 +676,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
   end
 
   describe 'The Work Details tab for an existing draft work' do
-    let(:work) { create(:work, versions_count: 1) }
+    let(:work) { create(:work, work_type: 'article', versions_count: 1, has_draft: true) }
     let(:work_version) { work.versions.first }
     let(:user) { work_version.work.depositor.user }
 
@@ -769,6 +748,81 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
         expect(page).to have_current_path(dashboard_form_contributors_path('work_version', work_version))
         expect(SolrIndexingJob).not_to have_received(:perform_later)
+      end
+    end
+
+    context 'when metadata has been imported', :js do
+      before do
+        @original_secret = ENV['ENABLE_OPEN_ACCESS_FEATURE']
+        ENV['ENABLE_OPEN_ACCESS_FEATURE'] = 'true'
+        work_version.update!(imported_metadata_from_rmd: true)
+      end
+
+      after do
+        ENV['ENABLE_OPEN_ACCESS_FEATURE'] = @original_secret
+      end
+
+      it 'displays the open access checkbox in readonly' do
+        visit dashboard_form_work_version_type_path(work_version)
+        expect(page).to have_field('open_access_upload_checkbox', type: 'checkbox', disabled: true)
+      end
+
+      context 'when the user is an admin' do
+        let(:user) { create(:user, :admin) }
+
+        it 'displays the open access checkbox without disabling it' do
+          visit dashboard_form_work_version_type_path(work_version)
+          expect(page).to have_field('open_access_upload_checkbox', type: 'checkbox', disabled: false)
+        end
+      end
+    end
+
+    context 'when open access upload is already true', :js do
+      before do
+        @original_secret = ENV['ENABLE_OPEN_ACCESS_FEATURE']
+        ENV['ENABLE_OPEN_ACCESS_FEATURE'] = 'true'
+        work_version.update!(open_access_upload: true)
+      end
+
+      after do
+        ENV['ENABLE_OPEN_ACCESS_FEATURE'] = @original_secret
+      end
+
+      it 'disables the open access checkbox' do
+        visit dashboard_form_work_version_type_path(work_version)
+
+        expect(page).to have_field('open_access_upload_checkbox', type: 'checkbox', disabled: true, checked: true)
+      end
+
+      context 'when the user is an admin' do
+        let(:user) { create(:user, :admin) }
+
+        it 'displays the open access checkbox without disabling it' do
+          visit dashboard_form_work_version_type_path(work_version)
+
+          expect(page).to have_field('open_access_upload_checkbox', type: 'checkbox', disabled: false, checked: true)
+        end
+      end
+    end
+
+    context 'when editing a non-initial draft version', :js do
+      let(:work) { create(:work, work_type: 'article', versions_count: 2, has_draft: true) }
+
+      before do
+        @original_secret = ENV['ENABLE_OPEN_ACCESS_FEATURE']
+        ENV['ENABLE_OPEN_ACCESS_FEATURE'] = 'true'
+      end
+
+      after do
+        ENV['ENABLE_OPEN_ACCESS_FEATURE'] = @original_secret
+      end
+
+      it 'does not display the open access checkbox' do
+        expect(work_version).not_to be_initial_draft
+
+        visit dashboard_form_work_version_type_path(work_version)
+
+        expect(page).to have_no_field('open_access_upload_checkbox', type: 'checkbox')
       end
     end
   end
@@ -1040,6 +1094,21 @@ RSpec.describe 'Publishing a work', with_user: :user do
     let(:work_version) { work.versions.first }
     let(:user) { work_version.work.depositor.user }
 
+    describe 'external entry guidance' do
+      it 'displays onboarding guidance when arriving from an external redirect' do
+        visit dashboard_form_files_path(work_version, external_entry: true)
+
+        expect(page).to have_content(I18n.t!('dashboard.form.files.edit.external_entry.heading'))
+        expect(page).to have_content(I18n.t!('dashboard.form.files.edit.external_entry.message'))
+      end
+
+      it 'does not display onboarding guidance during normal navigation' do
+        visit dashboard_form_files_path(work_version)
+
+        expect(page).to have_no_content(I18n.t!('dashboard.form.files.edit.external_entry.heading'))
+      end
+    end
+
     describe 'accessibility privacy notice' do
       it 'expands to display full privacy notice' do
         visit dashboard_form_files_path(work_version)
@@ -1094,8 +1163,9 @@ RSpec.describe 'Publishing a work', with_user: :user do
         # test that the page count metadata was not set since it's not a pdf
         expect(work_version.file_resources.last.file_data.dig('metadata', 'page_count')).to be_nil
 
-        # Once for the work version, twice for the file. The second call for the file is most likely the promotion job.
-        expect(SolrIndexingJob).to have_received(:perform_later).thrice
+        # The save flow should enqueue indexing once for the work and once for the file.
+        expect(SolrIndexingJob).to have_received(:perform_later).with(instance_of(WorkVersion)).once
+        expect(SolrIndexingJob).to have_received(:perform_later).with(instance_of(FileResource)).once
 
         expect(FileResource.last.file.metadata['alt_text']).to eq('Test alt text')
 
@@ -1138,8 +1208,9 @@ RSpec.describe 'Publishing a work', with_user: :user do
         # test that the page count metadata was extracted and saved
         expect(work_version.file_resources.last.file_data.dig('metadata', 'page_count')).to eq 1
 
-        # Once for the work version, twice for the file. The second call for the file is most likely the promotion job.
-        expect(SolrIndexingJob).to have_received(:perform_later).thrice
+        # The save flow should enqueue indexing once for the work and once for the file.
+        expect(SolrIndexingJob).to have_received(:perform_later).with(instance_of(WorkVersion)).once
+        expect(SolrIndexingJob).to have_received(:perform_later).with(instance_of(FileResource)).once
 
         visit dashboard_form_files_path(work_version)
 
@@ -1231,6 +1302,28 @@ RSpec.describe 'Publishing a work', with_user: :user do
   end
 
   describe 'The Publish tab' do
+    context 'when required contributor fields are blank', :js do
+      let(:work_version) { create(:work_version, :article, :able_to_be_published) }
+      let(:user) { work_version.work.depositor.user }
+
+      it 'does not open the publish dialog and keeps focus on form validation' do
+        visit dashboard_form_publish_path(work_version)
+
+        fill_in 'work_version_creators_attributes_0_given_name', with: ''
+
+        click_on I18n.t!('dashboard.form.actions.publish.button')
+
+        expect(page).to have_no_css('dialog#hidden-publish-dialog[open]')
+
+        fill_in 'work_version_creators_attributes_0_given_name', with: 'Firstname'
+        fill_in 'work_version_creators_attributes_0_surname', with: 'Lastname'
+
+        click_on I18n.t!('dashboard.form.actions.publish.button')
+
+        expect(page).to have_css('dialog#hidden-publish-dialog[open]')
+      end
+    end
+
     context 'when submitting the form with publication errors' do
       let(:work) { create(:work) }
       let(:user) { work.depositor.user }
@@ -2119,7 +2212,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
             visit dashboard_form_publish_path(work_version)
 
             expect(page).to have_no_button('Publish')
-            expect(page).to have_content(I18n.t!('dashboard.form.actions.publish.blocked'))
+            expect(page).to have_content(I18n.t!('dashboard.form.actions.publish.blocked_accessibility'))
           end
         end
       end
@@ -2239,11 +2332,33 @@ RSpec.describe 'Publishing a work', with_user: :user do
     let(:work) { create(:work, work_type: 'article', versions_count: 1, has_draft: true) }
     let(:work_version) { work.versions.first }
     let(:user) { work_version.work.depositor.user }
+    let(:permissions) {
+      [{
+        'version' => 'acceptedVersion',
+        'deposit_statement' => 'Accepted version statement',
+        'embargo_end' => '2011-08-31',
+        'licence' => 'cc-by-nc-nd'
+      },
+       {
+         'version' => 'publishedVersion',
+         'deposit_statement' => 'Published version statement',
+         'embargo_end' => '2012-08-31',
+         'licence' => 'cc-by'
+       }]}
 
     before do
-      work_version.update(open_access: true)
+      work_version.update(open_access_upload: true, identifier: ['10.1234/abc123'])
+
       @original_secret = ENV['ENABLE_OPEN_ACCESS_FEATURE']
       ENV['ENABLE_OPEN_ACCESS_FEATURE'] = 'true'
+
+      response_body = {
+        all_permissions: permissions
+      }.to_json
+
+      faraday_response = instance_double(Faraday::Response, body: response_body)
+
+      allow(Faraday).to receive(:get).and_return(faraday_response)
     end
 
     after do
@@ -2251,18 +2366,81 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
 
     context 'when work type is open access scholarly work' do
-      it 'disables autopopulated fields' do
+      it 'autopopulates permissions fields' do
         visit dashboard_form_publish_path(work_version)
-        expect(page).to have_field('open_access_checkbox', type: 'checkbox', disabled: true)
-        expect(page).to have_field('work_version_publisher_statement', readonly: true)
-        expect(page).to have_field('work_version_rights', disabled: true)
-        expect(page).to have_field('work_version_work_attributes_embargoed_until', readonly: true)
-        expect(page).to have_field('work_version_open_access_version_accepted')
-        expect(page).to have_field('work_version_open_access_version_published')
+
+        expect(page).to have_field('open_access_upload_checkbox', type: 'checkbox', disabled: true)
+        expect(page).to have_field('work_version_publisher_statement')
+        expect(page).to have_field('work_version_rights')
+        expect(page).to have_field('work_version_work_attributes_embargoed_until')
+        expect(page).to have_content(I18n.t('dashboard.form.publish.edit.determining_open_access_version'))
+
+        FeatureHelpers::DashboardForm.simulate_open_access_version_broadcast(work_version)
+
+        expect(page).to have_field('work_version_open_access_version_acceptedversion')
+        expect(page).to have_field('work_version_open_access_version_publishedversion')
+        choose 'Published Version'
+
+        expect(page).to have_field('work_version_publisher_statement', with: 'Published version statement')
+        expect(page).to have_select('work_version_rights', selected: 'CC BY 4.0 (Attribution)')
+        expect(page).to have_field('work_version_work_attributes_embargoed_until', with: '2012-08-31')
+        expect(page).to have_button('Publish')
 
         choose 'Accepted Version'
+        expect(page).to have_field('work_version_publisher_statement', with: 'Accepted version statement')
+        expect(page).to have_select('work_version_rights', selected: 'CC BY-NC-ND 4.0 (Attribution-NonCommercial-NoDerivatives)')
+        expect(page).to have_field('work_version_work_attributes_embargoed_until', with: '2011-08-31')
+        expect(page).to have_button('Publish')
         click_on 'Save Draft & Exit'
-        expect(work_version.reload.open_access_version).to eq 'accepted'
+        expect(work_version.reload.open_access_version).to eq 'acceptedVersion'
+        expect(work_version.publisher_statement).to eq 'Accepted version statement'
+        expect(work_version.rights).to eq 'https://creativecommons.org/licenses/by-nc-nd/4.0/'
+        expect(work_version.embargoed_until).to eq Time.zone.local(2011, 8, 31)
+      end
+
+      context 'when only one version of permissions is available' do
+        let(:permissions) {
+          [{
+            'version' => 'publishedVersion',
+            'deposit_statement' => 'Published version statement',
+            'embargo_end' => '2012-08-31',
+            'licence' => 'cc-by'
+          }]
+        }
+
+        it 'displays an error message when the other version is selected and blocks publish' do
+          visit dashboard_form_publish_path(work_version)
+
+          FeatureHelpers::DashboardForm.simulate_open_access_version_broadcast(work_version)
+
+          choose 'Accepted Version'
+
+          expect(page).to have_content(I18n.t('dashboard.works.edit.open_access_version.other_version_preferred', this_version: 'accepted version', other_version: 'published version'))
+          expect(page).to have_field('work_version_publisher_statement', with: nil)
+          expect(page).to have_select('work_version_rights', selected: '')
+          expect(page).to have_field('work_version_work_attributes_embargoed_until', with: nil)
+          expect(page).to have_no_button('Publish')
+          expect(page).to have_content(I18n.t('dashboard.form.actions.publish.blocked_version'))
+        end
+      end
+
+      context 'when no permissions are found' do
+        let(:permissions) { [] }
+
+        it 'displays no permissions found message and allows publish' do
+          visit dashboard_form_publish_path(work_version)
+
+          FeatureHelpers::DashboardForm.simulate_open_access_version_broadcast(work_version)
+
+          choose 'Accepted Version'
+
+          expect(page).to have_content(I18n.t('dashboard.works.edit.open_access_version.permissions_not_found'))
+          expect(page).to have_field('work_version_publisher_statement', with: nil)
+          expect(page).to have_no_css("input#work_version_rights_hidden[value='']")
+          expect(page).to have_field('work_version_work_attributes_embargoed_until', with: nil)
+          expect(page).to have_button('Publish')
+          expect(page).to have_no_content(I18n.t('dashboard.form.actions.publish.blocked_version'))
+        end
       end
     end
 
@@ -2271,26 +2449,30 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
       it 'enables autopopulated fields' do
         visit dashboard_form_publish_path(work_version)
-        expect(page).to have_field('open_access_checkbox', type: 'checkbox')
+
+        FeatureHelpers::DashboardForm.simulate_open_access_version_broadcast(work_version)
+
+        expect(page).to have_field('open_access_upload_checkbox', type: 'checkbox')
         expect(page).to have_field('work_version_publisher_statement')
         expect(page).to have_field('work_version_rights')
         expect(page).to have_field('work_version_work_attributes_embargoed_until')
-        expect(page).to have_field('work_version_open_access_version_accepted')
-        expect(page).to have_field('work_version_open_access_version_published')
+        expect(page).to have_field('work_version_open_access_version_acceptedversion')
+        expect(page).to have_field('work_version_open_access_version_publishedversion')
       end
     end
 
     context 'when the work is not open access' do
-      before { work_version.update(open_access: nil) }
+      before { work_version.update(open_access_upload: nil) }
 
       it 'enables autopopulated fields and does not display open access version' do
         visit dashboard_form_publish_path(work_version)
-        expect(page).to have_field('open_access_checkbox', type: 'checkbox')
+        expect(page).to have_field('open_access_upload_checkbox', type: 'checkbox', disabled: true)
         expect(page).to have_field('work_version_publisher_statement')
         expect(page).to have_field('work_version_rights')
         expect(page).to have_field('work_version_work_attributes_embargoed_until')
-        expect(page).to have_no_field('work_version_open_access_version_accepted')
-        expect(page).to have_no_field('work_version_open_access_version_published')
+        expect(page).to have_no_field('work_version_open_access_version_acceptedversion')
+        expect(page).to have_no_field('work_version_open_access_version_publishedversion')
+        expect(page).to have_button('Publish')
       end
     end
   end

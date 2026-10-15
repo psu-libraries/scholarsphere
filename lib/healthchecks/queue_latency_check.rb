@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module HealthChecks
+module Healthchecks
   class QueueLatencyCheck < OkComputer::Check
     attr_reader :threshold
 

@@ -12,7 +12,7 @@ class Work < ApplicationRecord
   fields_with_dois :doi, :latest_published_version_dois
 
   delegate :email, :display_name, to: :depositor
-  delegate :has_publisher_doi?, :open_access, to: :latest_version
+  delegate :has_publisher_doi?, :open_access_upload, :open_access_upload_active?, to: :latest_version
 
   belongs_to :depositor,
              class_name: 'Actor',
@@ -62,7 +62,7 @@ class Work < ApplicationRecord
   }
 
   validate :embargoed_until_is_valid_date
-  has_paper_trail versions: :paper_trail_versions
+  has_paper_trail versions: { name: :paper_trail_versions }
   module Types
     extend Enumerable
 

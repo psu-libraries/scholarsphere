@@ -74,38 +74,39 @@ module Api::V1
       def metadata_params
         params
           .require(:metadata)
-          .permit(
-            :work_type,
-            :visibility,
-            :embargoed_until,
-            :title,
-            :subtitle,
-            :rights,
-            :version_name,
-            :published_date,
-            :deposited_at,
-            :description,
-            :publisher_statement,
-            :doi,
-            keyword: [],
-            resource_type: [],
-            contributor: [],
-            publisher: [],
-            subject: [],
-            language: [],
-            identifier: [],
-            based_near: [],
-            related_url: [],
-            source: [],
-            creators: [
-              :display_name,
-              :email,
-              :given_name,
-              :surname,
-              :psu_id,
-              :orcid
-            ]
-          )
+          .permit(:work_type,
+                  :visibility,
+                  :embargoed_until,
+                  :title,
+                  :subtitle,
+                  :rights,
+                  :version_name,
+                  :published_date,
+                  :deposited_at,
+                  :description,
+                  :publisher_statement,
+                  :doi,
+                  :open_access_upload,
+                  :open_access_version,
+                  :imported_metadata_from_rmd,
+                  keyword: [],
+                  resource_type: [],
+                  contributor: [],
+                  publisher: [],
+                  subject: [],
+                  language: [],
+                  identifier: [],
+                  based_near: [],
+                  related_url: [],
+                  source: [],
+                  creators: [
+                    :display_name,
+                    :email,
+                    :given_name,
+                    :surname,
+                    :psu_id,
+                    :orcid
+                  ])
       end
 
       def depositor_params
@@ -136,7 +137,7 @@ module Api::V1
       end
 
       def publish_params
-        params.fetch(:publish, 'true') == 'true'
+        ActiveModel::Type::Boolean.new.cast(params.fetch(:publish, true))
       end
   end
 end

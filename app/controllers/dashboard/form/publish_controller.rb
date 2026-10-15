@@ -11,6 +11,7 @@ module Dashboard
           .find(params[:id])
         authorize(@work_version)
         @resource = deposit_pathway.publish_form(current_user:)
+        @permissions = OpenAccessVersion::OawPermissionsService.new(@work_version.identifier.first)
         prevalidate
       end
 
@@ -20,6 +21,7 @@ module Dashboard
         authorize(@work_version)
 
         @resource.attributes = work_version_params
+        @submitted_permissions = oaw_permissions_params
 
         # If the user clicks the "Publish" button, *and* there are validation
         # errors, we still want to persist any changes to the draft version's
@@ -50,6 +52,10 @@ module Dashboard
 
         validation_context = current_user.admin? ? nil : :user_publish
         process_response(on_error: :edit, validation_context: validation_context) do
+          if publish? && @resource.created_by_researcher_metadata_database?
+            WorkPublishedWebhookJob.perform_later(@resource.work.uuid)
+          end
+
           if @resource.mint_doi_requested
             deposit_pathway.allows_mint_doi_request? ? MintDoiAsync.call(@resource.work) : flash[:error] = t('dashboard.form.publish.doi.error')
           end
@@ -57,11 +63,18 @@ module Dashboard
         end
       end
 
+      def open_access_version
+        work_version = WorkVersion.find(params[:id])
+        authorize(work_version, :edit?)
+
+        render json: { id: work_version.id, open_access_version: work_version.open_access_version }
+      end
+
       private
 
         # @note Validate the work like we're going to publish it, so we can inform the user ahead of time before they
         # actually attempt it. However, we want to be nice and not yell at them for something they _haven't_ seen yet
-        # like rights.
+        # like rights and open access version.
         def prevalidate
           temporarily_publish @resource do
             @resource.validate
@@ -70,6 +83,7 @@ module Dashboard
               @resource.errors.delete(attribute) if attribute.to_s.include?('work.versions')
             end
             @resource.errors.delete(:rights)
+            @resource.errors.delete(:open_access_version)
           end
         end
 
@@ -105,71 +119,81 @@ module Dashboard
             (request_accessibility_remediation? && !@resource.accessibility_remediation_requested)
         end
 
+        def oaw_permissions_params
+          params.fetch(:oaw_permissions, {}).permit(
+            :accepted_version_rights,
+            :published_version_rights,
+            :accepted_version_statement,
+            :published_version_statement,
+            :accepted_version_embargo,
+            :published_version_embargo,
+            :versions_found
+          )
+        end
+
         def work_version_params
           params
             .require(:work_version)
-            .permit(
-              :title,
-              :description,
-              :sub_work_type,
-              :program,
-              :degree,
-              :publisher_statement,
-              :subtitle,
-              :rights,
-              :version_name,
-              :open_access,
-              :open_access_version,
-              :published_date,
-              :depositor_agreement,
-              :psu_community_agreement,
-              :accessibility_agreement,
-              :draft_curation_requested,
-              :owner,
-              :manufacturer,
-              :model,
-              :instrument_type,
-              :measured_variable,
-              :available_date,
-              :decommission_date,
-              :related_identifier,
-              :instrument_resource_type,
-              :funding_reference,
-              :sensitive_info_agreement,
-              :accessibility_remediation_requested,
-              :mint_doi_requested,
-              :remediated_version,
-              keyword: [],
-              contributor: [],
-              publisher: [],
-              subject: [],
-              language: [],
-              identifier: [],
-              based_near: [],
-              related_url: [],
-              source: [],
-              creators_attributes: [
-                :id,
-                :actor_id,
-                :_destroy,
-                :display_name,
-                :given_name,
-                :surname,
-                :email,
-                actor_attributes: [
-                  :id,
-                  :email,
-                  :given_name,
-                  :surname,
-                  :psu_id
-                ]
-              ],
-              work_attributes: [
-                :id,
-                :visibility,
-                :embargoed_until
-              ]
-            )
+            .permit(:title,
+                    :description,
+                    :sub_work_type,
+                    :program,
+                    :degree,
+                    :publisher_statement,
+                    :subtitle,
+                    :rights,
+                    :version_name,
+                    :open_access_upload,
+                    :open_access_version,
+                    :published_date,
+                    :depositor_agreement,
+                    :psu_community_agreement,
+                    :accessibility_agreement,
+                    :draft_curation_requested,
+                    :owner,
+                    :manufacturer,
+                    :model,
+                    :instrument_type,
+                    :measured_variable,
+                    :available_date,
+                    :decommission_date,
+                    :related_identifier,
+                    :instrument_resource_type,
+                    :funding_reference,
+                    :sensitive_info_agreement,
+                    :accessibility_remediation_requested,
+                    :mint_doi_requested,
+                    :remediated_version,
+                    keyword: [],
+                    contributor: [],
+                    publisher: [],
+                    subject: [],
+                    language: [],
+                    identifier: [],
+                    based_near: [],
+                    related_url: [],
+                    source: [],
+                    creators_attributes: [
+                      :id,
+                      :actor_id,
+                      :_destroy,
+                      :display_name,
+                      :given_name,
+                      :surname,
+                      :email,
+                      actor_attributes: [
+                        :id,
+                        :email,
+                        :given_name,
+                        :surname,
+                        :psu_id
+                      ]
+                    ],
+                    work_attributes: [
+                      :id,
+                      :visibility,
+                      :embargoed_until
+                    ])
         end
     end
   end

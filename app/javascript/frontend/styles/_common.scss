@@ -1463,6 +1463,21 @@ h4,
   }
 }
 
+// Keep dashboard form tabs compact even if global/root sizing shifts.
+.form-tabs {
+  .nav-item {
+    padding: .875rem 2rem;
+    font-size: 1rem;
+  }
+
+  @include media-breakpoint-down(md) {
+    .nav-item {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }
+}
+
 .material-icons {
 
   &--thumbnail {
@@ -1548,6 +1563,35 @@ h4,
         border-width: 1px !important;
       }
     }
+  }
+}
+
+// Keep branding elements separated even if external theme CSS changes.
+.header--nav-branding {
+  .header-mark {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+  }
+
+  .header-mark--name-slogan {
+    padding-left: .5rem;
+  }
+}
+
+.action-bar--results-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: .75rem;
+
+  [id='spell'] .suggest,
+  .page-links {
+    margin: 0;
+  }
+
+  .search-widgets {
+    margin-left: auto;
   }
 }
 

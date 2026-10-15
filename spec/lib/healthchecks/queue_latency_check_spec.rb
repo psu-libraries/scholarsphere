@@ -3,7 +3,7 @@
 require 'rails_helper'
 require 'sidekiq/testing'
 
-RSpec.describe HealthChecks::QueueLatencyCheck, :sidekiq do
+RSpec.describe Healthchecks::QueueLatencyCheck, :sidekiq do
   let(:queue_name) { "#{Rails.configuration.active_job.queue_name_prefix}_test_queue" }
 
   before(:all) do
