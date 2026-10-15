@@ -78,7 +78,6 @@ describe('OpenAccessVersionController', () => {
 
       <input id="work_version_publisher_statement">
       <input id="work_version_work_attributes_embargoed_until">
-      <input id="work_version_rights_hidden">
       <select id="work_version_rights">
         <option value="CC BY">CC BY</option>
       </select>
@@ -105,7 +104,6 @@ describe('OpenAccessVersionController', () => {
     radio.dispatchEvent(new Event('change', { bubbles: true }))
 
     expect(document.getElementById('work_version_rights').value).toBe('CC BY')
-    expect(document.getElementById('work_version_rights_hidden').value).toBe('CC BY')
     expect(document.getElementById('work_version_publisher_statement').value).toBe('Publisher statement')
     expect(document.getElementById('work_version_work_attributes_embargoed_until').value).toBe('2026-01-01')
   })
@@ -155,13 +153,13 @@ describe('OpenAccessVersionController', () => {
     expect(published.checked).toBe(false)
   })
 
-  it('falls back to show controls and unsubscribe after 15s', () => {
+  it('falls back to show controls and unsubscribe after 35s', () => {
     const loading = document.querySelector('[data-target="open-access-version.loading"]')
     const controls = document.querySelector('[data-target="open-access-version.controls"]')
     loading.classList.remove('d-none')
     controls.classList.add('d-none')
 
-    jest.advanceTimersByTime(15_000)
+    jest.advanceTimersByTime(35_000)
 
     expect(controls.classList.contains('d-none')).toBe(false)
     expect(loading.classList.contains('d-none')).toBe(true)
@@ -177,7 +175,7 @@ describe('OpenAccessVersionController', () => {
 
     globalThis.fetch.mockClear()
 
-    jest.advanceTimersByTime(15_000)
+    jest.advanceTimersByTime(35_000)
 
     expect(globalThis.fetch).toHaveBeenCalledTimes(1)
     expect(globalThis.fetch).toHaveBeenCalledWith(
@@ -195,7 +193,7 @@ describe('OpenAccessVersionController', () => {
 
     globalThis.fetch.mockClear()
 
-    jest.advanceTimersByTime(15_000)
+    jest.advanceTimersByTime(35_000)
 
     expect(globalThis.fetch).not.toHaveBeenCalled()
   })

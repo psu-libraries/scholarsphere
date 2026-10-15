@@ -20,7 +20,7 @@ x-web_env: &web_env
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-scholarsphere}
       AWS_BUCKET: scholarsphere
       AWS_REGION: us-east-1
-      S3_ENDPOINT: ${S3_ENDPOINT:-http://docker.for.mac.localhost:9000}
+      S3_ENDPOINT: ${S3_ENDPOINT:-http://docker.for.mac.localhost:8333}
       RAILS_ENV: ${RAILS_ENV:-development}
       SOLR_HOST: solr
       SOLR_COLLECTION: scholarsphere
@@ -64,20 +64,17 @@ services:
     depends_on:
       solr:
         condition: service_healthy
-  minio:
-    image: minio/minio:RELEASE.2021-03-17T02-33-02Z
-    restart: always
-    volumes:
-    - minio-data:/data
-    environment:
-      MINIO_ACCESS_KEY: ${AWS_ACCESS_KEY_ID:-scholarsphere}
-      MINIO_SECRET_KEY: ${AWS_SECRET_ACCESS_KEY:-scholarsphere}
+  seaweedfs:
+    image: chrislusf/seaweedfs:latest
     ports:
-    - ${MINIO_PORT:-9000}:9000
-    entrypoint:
-    - /bin/sh
-    - -c
-    - mkdir -p /data/scholarsphere; minio --compat server --address ':9000' /data
+      - ${SEAWEEEDFS_S3_PORT:-8333}:8333 # S3 API
+      - 8888:8888 # File Browser GUI
+    environment:
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-scholarsphere}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-scholarsphere}
+      S3_BUCKET: scholarsphere
+    volumes:
+      - seaweedfs-data:/data
   solr:
     image: solr:9.10.1
     restart: always
@@ -134,6 +131,6 @@ volumes:
   redis-data:
   bundle-data:
   node-data:
-  minio-data:
   solr-data:
   db-data:
+  seaweedfs-data:
