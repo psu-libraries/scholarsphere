@@ -8,6 +8,7 @@ ruby '3.4.9'
 gem 'aasm'
 gem 'after_commit_everywhere', '~> 0.1', '>= 0.1.5'
 gem 'airrecord'
+gem 'benchmark'
 gem 'blacklight', '~> 8.12.3'
 gem 'blacklight_oai_provider', github: 'projectblacklight/blacklight_oai_provider', ref: '69795b0'
 gem 'bootsnap', '>= 1.4.2', require: false
