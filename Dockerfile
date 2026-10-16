@@ -1,4 +1,4 @@
-FROM harbor.k8s.libraries.psu.edu/library/ruby-3.4.9-node-22-yarn-4.16.0:20260604 AS base
+FROM harbor.libraries.psu.edu/library/ruby-3.4.11-node-22-yarn-4.18.1 AS base
 ARG UID=3000
 
 COPY bin/vaultshell /usr/local/bin/
@@ -8,7 +8,8 @@ RUN apt-get update && \
   shared-mime-info \
   imagemagick \
   ghostscript\
-  libreoffice && \
+  libreoffice \
+  libvips42 && \
   rm -rf /var/lib/apt/lists*
 
 COPY config/policy.xml /etc/ImageMagick-6/policy.xml
