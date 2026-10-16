@@ -833,7 +833,7 @@ DEPENDENCIES
   rubocop-performance
   rubocop-rails
   rubocop-rspec
-  rubyzip (~> 3.2)
+  rubyzip (~> 3.4.0)
   seedbank
   selenium-webdriver
   shakapacker (~> 9.5.0)
