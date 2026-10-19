@@ -46,7 +46,6 @@ services:
     ports:
     - "6379:6379"
   web:
-    user: root
     tty: true
     stdin_open: true
     <<: *web_env
@@ -76,31 +75,22 @@ services:
     volumes:
       - seaweedfs-data:/data
   solr:
-    image: solr:9.10.1
+    image: solr:8.11.1-slim
     restart: always
     environment:
       SOLR_STOP_WAIT: 10
       SOLR_USERNAME: scholarsphere
       SOLR_PASSWORD: scholarsphere
-      SOLR_OPTS: "-Dsolr.config.lib.enabled=true"
-      SOLR_MODULES: "analysis-extras"
+      SOLR_HOME: /var/solr/data
     volumes:
-    - solr-data:/var/solr
-    - type: bind
-      source: ./solr
-      target: /opt/solr/server/solr/configsets
+    - solr-data:/var/solr/data
     ports:
     - ${SOLR_PORT:-8983}:8983
-    command: >
-      /bin/bash -c "
-        solr -c &
-        for i in {1..60}; do
-          (echo > /dev/tcp/localhost/9983) >/dev/null 2>&1 && break || sleep 1
-        done
-        solr auth enable -u $$SOLR_USERNAME:$$SOLR_PASSWORD -z localhost:9983 || true
-        solr stop
-        solr -c -f
-      "
+    command: [
+      "/bin/bash",
+      "-c",
+      "solr -c && solr auth enable -credentials $$SOLR_USERNAME:$$SOLR_PASSWORD -z localhost:9983; solr stop && solr start -c -f",
+    ]
     healthcheck:
       test: [
         "CMD-SHELL",
