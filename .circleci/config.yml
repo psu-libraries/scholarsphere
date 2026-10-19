@@ -237,7 +237,7 @@ jobs:
           POSTGRES_PASSWORD: scholarsphere
           POSTGRES_USER: scholarsphere
           POSTGRES_DB: scholarsphere
-      - image: solr:9.10.1
+      - image: solr:9.11.1
         environment:
           SOLR_MODULES: analysis-extras
           SOLR_OPTS: "-Dsolr.config.lib.enabled=true -Xmx1g"
