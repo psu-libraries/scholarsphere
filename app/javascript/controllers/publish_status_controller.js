@@ -7,20 +7,32 @@ export default class extends Controller {
   connect () {
     document.addEventListener('open-access:version-updated', this.handleVersionUpdate)
 
-    consumer.subscriptions.create(
-      { channel: 'PublishStatusChannel' },
+    this.subscription = consumer.subscriptions.create(
+      { channel: 'PublishStatusChannel', id: this.data.get('id') },
       {
         connected: () => {
-          this.renderPublishStatus()
+          this.loadPublishStatus()
         },
-        received: (data) => {
-          this.updatePublishStatus(data)
+        received: () => {
+          this.loadPublishStatus()
         }
       }
     )
   }
 
-  updatePublishStatus (data) {
+  disconnect () {
+    document.removeEventListener('open-access:version-updated', this.handleVersionUpdate)
+    this.subscription.unsubscribe()
+  }
+
+  async loadPublishStatus () {
+    const response = await fetch(this.data.get('url'), {
+      headers: { Accept: 'application/json' }
+    })
+
+    if (!response.ok) return
+
+    const data = await response.json()
     this.data.set('allowPublish', data.allow_publish)
 
     this.renderPublishStatus()

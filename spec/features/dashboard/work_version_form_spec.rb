@@ -12,6 +12,12 @@ RSpec.describe 'Publishing a work', with_user: :user do
   end
 
   describe 'The Work Details tab for a new work' do
+    it 'does not render publish status controls' do
+      visit dashboard_form_work_versions_path
+
+      expect(page).to have_no_css('[data-controller="publish-status"]')
+    end
+
     context 'when selecting a work type that uses the general deposit pathway' do
       context 'when saving as draft and exiting' do
         it 'creates a new work with all fields provided' do
@@ -2188,6 +2194,18 @@ RSpec.describe 'Publishing a work', with_user: :user do
 
       context 'when there is a pdf file' do
         let(:work_version) { create(:work_version, :able_to_be_published_with_pdf) }
+
+        context 'when accessibility checking completes after the page loads' do
+          it 'enables publishing without reloading the page' do
+            visit dashboard_form_publish_path(work_version)
+
+            expect(page).to have_no_button('Publish')
+
+            create(:accessibility_check_result, file_resource: work_version.file_resources.last)
+
+            expect(page).to have_button('Publish')
+          end
+        end
 
         context 'when the file has an accessibility check result' do
           let(:accessibility_check_result) do
