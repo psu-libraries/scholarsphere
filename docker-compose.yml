@@ -79,7 +79,7 @@ services:
     - -c
     - mkdir -p /data/scholarsphere; minio --compat server --address ':9000' /data
   solr:
-    image: solr:9.11.1
+    image: solr:9.11.0
     restart: always
     environment:
       SOLR_STOP_WAIT: 10
