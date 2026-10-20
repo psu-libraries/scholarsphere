@@ -2400,7 +2400,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
           }]
         }
 
-        it 'displays an error message when the other version is selected' do
+        it 'displays an error message and prevents publishing when the other version is selected' do
           visit dashboard_form_publish_path(work_version)
 
           FeatureHelpers::DashboardForm.simulate_open_access_version_broadcast(work_version)
@@ -2412,6 +2412,13 @@ RSpec.describe 'Publishing a work', with_user: :user do
           expect(page).to have_select('work_version_rights', selected: '')
           expect(page).to have_field('work_version_work_attributes_embargoed_until', with: nil)
           expect(page).to have_button('Publish')
+
+          FeatureHelpers::DashboardForm.publish
+
+          within '#error_explanation' do
+            expect(page).to have_content('does not match the available permissions')
+          end
+          expect(work_version.reload).not_to be_published
         end
       end
 
