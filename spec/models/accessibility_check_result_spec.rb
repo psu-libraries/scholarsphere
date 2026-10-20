@@ -21,23 +21,16 @@ RSpec.describe AccessibilityCheckResult do
 
   describe 'When creating, updating or destroying feed sources' do
     let(:check_result) { build_stubbed(:accessibility_check_result, file_resource: file_resource) }
-    let(:user) { instance_double(User, admin?: false) }
 
     before do
       allow(check_result).to receive(:persisted?).and_return(true)
       allow(check_result).to receive(:broadcast_to_file_version_memberships)
-      allow(check_result).to receive(:broadcast_publish_status)
       check_result.instance_variable_set(:@_new_record_before_last_commit, true)
-      test_user = user
-      AllowPublishService.class_eval do
-        define_method(:current_user) { test_user }
-      end
     end
 
     it 'calls subscribe when created' do
       check_result.run_callbacks(:commit)
       expect(check_result).to have_received(:broadcast_to_file_version_memberships)
-      expect(check_result).to have_received(:broadcast_publish_status)
     end
   end
 
@@ -49,30 +42,26 @@ RSpec.describe AccessibilityCheckResult do
     before do
       accessibility_check_result.save!
       allow(accessibility_check_result).to receive(:broadcast_to_file_version_memberships)
-      allow(accessibility_check_result).to receive(:broadcast_publish_status)
     end
 
     context 'when create' do
-      it 'calls broadcast_to_file_version_memberships and broadcast_publish_status' do
+      it 'calls broadcast_to_file_version_memberships' do
         accessibility_check_result.save!
         expect(accessibility_check_result).to have_received(:broadcast_to_file_version_memberships)
-        expect(accessibility_check_result).to have_received(:broadcast_publish_status)
       end
     end
 
     context 'when update' do
-      it 'calls broadcast_to_file_version_memberships and broadcast_publish_status' do
+      it 'calls broadcast_to_file_version_memberships' do
         accessibility_check_result.update!(detailed_report: { 'Detailed Report' => {} })
         expect(accessibility_check_result).to have_received(:broadcast_to_file_version_memberships)
-        expect(accessibility_check_result).to have_received(:broadcast_publish_status)
       end
     end
 
     context 'when destroy' do
-      it 'does not call broadcast_to_file_version_memberships or broadcast_publish_status' do
+      it 'does not call broadcast_to_file_version_memberships' do
         accessibility_check_result.destroy!
         expect(accessibility_check_result).not_to have_received(:broadcast_to_file_version_memberships)
-        expect(accessibility_check_result).not_to have_received(:broadcast_publish_status)
       end
     end
   end
