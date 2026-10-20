@@ -47,12 +47,9 @@ class AccessibilityCheckResult < ApplicationRecord
     end
 
     def broadcast_publish_status
-      resource = file_resource.work_versions.last
-
-      ActionCable.server.broadcast(
-        'publish_status_channel',
-        { allow_publish: AllowPublishService.new(resource).allow? }
-      )
+      file_resource.work_versions.distinct.find_each do |work_version|
+        PublishStatusChannel.broadcast_to(work_version, { status_changed: true })
+      end
     end
 
     def format_report

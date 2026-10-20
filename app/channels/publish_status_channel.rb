@@ -2,6 +2,10 @@
 
 class PublishStatusChannel < ApplicationCable::Channel
   def subscribed
-    stream_from 'publish_status_channel'
+    work_version = WorkVersion.find(params[:id])
+
+    return reject unless Pundit.policy!(current_user, work_version).edit?
+
+    stream_for work_version
   end
 end

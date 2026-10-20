@@ -77,6 +77,21 @@ RSpec.describe AccessibilityCheckResult do
     end
   end
 
+  describe '#broadcast_publish_status' do
+    let(:work_version) { create(:work_version) }
+    let(:file_resource) { create(:file_resource, work_versions: [work_version]) }
+    let(:accessibility_check_result) { build(:accessibility_check_result, file_resource: file_resource) }
+
+    before { allow(PublishStatusChannel).to receive(:broadcast_to) }
+
+    it 'broadcasts a status change to each associated work version' do
+      accessibility_check_result.send(:broadcast_publish_status)
+
+      expect(PublishStatusChannel).to have_received(:broadcast_to)
+        .with(work_version, { status_changed: true })
+    end
+  end
+
   describe '#score' do
     let(:detailed_report) {
         { 'Detailed Report' => {
