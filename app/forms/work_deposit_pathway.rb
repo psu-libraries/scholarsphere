@@ -266,6 +266,8 @@ class WorkDepositPathway
     class PublishFormBase < WorkVersionFormBase
       include WorkVersionDetails
 
+      attr_accessor :open_access_version_mismatched
+
       delegate :mirror_remediated_version_to_files!,
                :created_by_researcher_metadata_database?,
                to: :work_version
@@ -338,8 +340,6 @@ class WorkDepositPathway
       end
 
       class PublishForm < PublishFormBase
-        attr_accessor :open_access_version_mismatched
-
         def self.form_fields
           WorkVersionFormBase::COMMON_FIELDS.union(WorkVersionFormBase::COMMON_PUBLISH_FIELDS).union(
             %w{
