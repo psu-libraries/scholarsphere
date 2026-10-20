@@ -135,6 +135,7 @@ Rails.application.routes.draw do
 
         get   ':id/publish', to: 'publish#edit', as: 'publish'
         get   ':id/open_access_version', to: 'publish#open_access_version'
+        get   ':id/publish_status', to: 'publish#publish_status', as: 'publish_status'
         match ':id/publish', to: 'publish#update', via: %i[patch put], as: nil
 
         post ':id/autocomplete_work_forms', to: 'work_version_details#autocomplete_work_forms', as: 'autocomplete_work'

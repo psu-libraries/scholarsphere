@@ -3,6 +3,42 @@
 require 'rails_helper'
 
 RSpec.describe Dashboard::Form::PublishController, type: :request do
+  describe 'GET /dashboard/form/work_versions/:id/publish_status' do
+    let(:work_version) { create(:work_version, :able_to_be_published_with_pdf) }
+
+    context 'when the user can edit the work version' do
+      let(:user) { work_version.work.depositor.user }
+
+      before { sign_in user }
+
+      it 'returns the current publish status' do
+        get "/dashboard/form/work_versions/#{work_version.id}/publish_status"
+
+        expect(response).to have_http_status(:ok)
+        expect(JSON.parse(response.body)).to eq('allow_publish' => false)
+      end
+
+      it 'returns an allowed status after accessibility checking completes' do
+        create(:accessibility_check_result, file_resource: work_version.file_resources.last)
+
+        get "/dashboard/form/work_versions/#{work_version.id}/publish_status"
+
+        expect(response).to have_http_status(:ok)
+        expect(JSON.parse(response.body)).to eq('allow_publish' => true)
+      end
+    end
+
+    context 'when the user cannot edit the work version' do
+      before { sign_in create(:user) }
+
+      it 'returns not found' do
+        get "/dashboard/form/work_versions/#{work_version.id}/publish_status"
+
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+  end
+
   describe 'PATCH /dashboard/form/work_versions/:id/publish' do
     let(:work_version) { create(:work_version, remediated_version: false) }
     let(:request_params) do
