@@ -374,7 +374,6 @@ RSpec.describe WorkVersion do
       it { is_expected.to allow_value('unknownVersion').for(:open_access_version) }
       it { is_expected.not_to allow_value('not_allowed').for(:open_access_version) }
     end
-
   end
 
   describe 'multivalued fields' do

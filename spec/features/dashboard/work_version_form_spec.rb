@@ -2206,7 +2206,6 @@ RSpec.describe 'Publishing a work', with_user: :user do
             expect(work_version.reload.aasm_state).to eq 'published'
           end
         end
-
       end
     end
   end
