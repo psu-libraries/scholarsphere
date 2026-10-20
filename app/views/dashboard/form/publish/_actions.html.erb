@@ -1,0 +1,29 @@
+<span data-controller="publish-status"
+      data-publish-status-id="<%= @resource.id %>"
+      data-publish-status-url="<%= dashboard_form_publish_status_path(@resource) %>"
+      data-publish-status-allow-publish="<%= allow_publish? %>"
+      data-publish-status-primary-action="publish"
+      data-publish-status-accessibility-message="<%= t('dashboard.form.actions.publish.blocked_accessibility') %>"
+      data-publish-status-version-message="<%= t('dashboard.form.actions.publish.blocked_version') %>">
+  <span data-target="publish-status.show_buttons">
+    <span data-controller="publishing-check">
+      <%= render 'dashboard/form/publish/publish_dialog', f: form %>
+      <% if allow_curation? %>
+        <%= button_tag t('dashboard.form.actions.request_curation.button'), type: 'button', data: { action: 'publishing-check#openDialog', dialog: 'curation', toggle: 'tooltip', placement: 'top', title: t('dashboard.form.actions.request_curation.tooltip') }, class: 'btn btn-primary btn--rounded' %>
+      <% end %>
+      <% if allow_accessibility_remediation? %>
+        <%= button_tag t('dashboard.form.actions.request_remediation.button'),
+                       type: 'button',
+                       data: { action: 'publishing-check#openDialog',
+                               dialog: 'remediation',
+                               bs_toggle: 'tooltip',
+                               bs_placement: 'top',
+                               title: t('dashboard.form.actions.request_remediation.tooltip') },
+                       class: 'btn btn-primary btn--rounded',
+                       style: 'display: none' %>
+      <% end %>
+      <%= button_tag t('dashboard.form.actions.publish.button'), type: 'button', data: { action: 'publishing-check#openDialog', dialog: 'publish', bs_bs_toggle: 'tooltip', placement: 'top', title: t('dashboard.form.actions.publish.tooltip') }, class: 'btn btn-primary btn--rounded' %>
+    </span>
+  </span>
+  <span data-target="publish-status.help_text"></span>
+</span>
