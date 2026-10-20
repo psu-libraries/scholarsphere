@@ -39,6 +39,18 @@ RSpec.describe AllowPublishService, type: :service do
           expect(service.allow?(current_user: admin_user)).to be true
         end
       end
+
+      context 'when no current_user is passed' do
+        it 'returns false when a request is pending' do
+          allow(resource).to receive(:draft_curation_requested).and_return(true)
+
+          expect(service.allow?).to be false
+        end
+
+        it 'returns true when neither request is pending' do
+          expect(service.allow?).to be true
+        end
+      end
     end
 
     context 'when the resource is not a work' do
