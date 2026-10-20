@@ -4,17 +4,17 @@ import { createOpenAccessVersionSubscription, safeUnsubscribe, unsubscribe } fro
 import VersionLoader from './open_access_version/version_loader'
 
 export default class extends Controller {
-  static targets = ['versionMessage', 'fieldUpdates', 'loading', 'controls']
+  static targets = ['versionMessage', 'fieldUpdates', 'loading', 'controls', 'versionMismatched']
 
   connect() {
     this.formUpdater = new FormUpdater({
       data: this.data,
       versionMessageTarget: this.versionMessageTarget,
       fieldUpdatesTarget: this.hasFieldUpdatesTarget ? this.fieldUpdatesTarget : null,
-      onVersionAllowed: (versionAllowed) => {
-        document.dispatchEvent(new CustomEvent('open-access:version-updated', {
-          detail: { versionAllowed }
-        }))
+      onVersionMismatched: (versionMismatched) => {
+        if (this.hasVersionMismatchedTarget) {
+          this.versionMismatchedTarget.value = versionMismatched
+        }
       }
     })
 

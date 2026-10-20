@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require_relative '../_shared_examples_for_work_deposit_pathway_form'
 
 RSpec.describe WorkDepositPathway::PublishFormBase, type: :model do
   subject(:form) { described_class.new(wv) }

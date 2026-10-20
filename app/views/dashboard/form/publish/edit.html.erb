@@ -65,6 +65,9 @@
 
               <%= hidden_field_tag 'oaw_permissions[versions_found]',
                                    params.dig(:oaw_permissions, :versions_found) || @permissions&.versions_found?.to_json %>
+              <%= form.hidden_field :open_access_version_mismatched,
+                                    value: false,
+                                    data: { target: 'open-access-version.versionMismatched' } %>
 
             <%= render FormErrorMessageComponent.new(
                   form: form,

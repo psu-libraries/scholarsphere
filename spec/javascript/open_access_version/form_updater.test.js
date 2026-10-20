@@ -44,12 +44,13 @@ describe('FormUpdater', () => {
         notFoundMessage: 'Not found'
       }[key]))
     }
+    const onVersionMismatched = jest.fn()
 
     const updater = new FormUpdater({
       data,
       versionMessageTarget: document.querySelector('[data-target="open-access-version.versionMessage"]'),
       fieldUpdatesTarget: document.querySelector('[data-target="open-access-version.fieldUpdates"]'),
-      onVersionAllowed: jest.fn()
+      onVersionMismatched
     })
 
     updater.refresh('publishedVersion')
@@ -61,5 +62,9 @@ describe('FormUpdater', () => {
     expect(message).toContain('Embargo Date')
     expect(message).toContain('<strong>')
     expect(document.querySelector('.form-wrapper').classList.contains('border-warning')).toBe(true)
+
+    jest.runOnlyPendingTimers()
+
+    expect(onVersionMismatched).toHaveBeenCalledWith(true)
   })
 })

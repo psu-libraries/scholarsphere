@@ -3,11 +3,11 @@ const STATEMENT_INPUT_ID = 'work_version_publisher_statement'
 const EMBARGO_INPUT_ID = 'work_version_work_attributes_embargoed_until'
 
 export default class FormUpdater {
-  constructor({ data, versionMessageTarget, fieldUpdatesTarget, onVersionAllowed }) {
+  constructor({ data, versionMessageTarget, fieldUpdatesTarget, onVersionMismatched }) {
     this.data = data
     this.versionMessageTarget = versionMessageTarget
     this.fieldUpdatesTarget = fieldUpdatesTarget
-    this.onVersionAllowed = onVersionAllowed
+    this.onVersionMismatched = onVersionMismatched
   }
 
   disconnect() {
@@ -129,9 +129,9 @@ export default class FormUpdater {
       this.versionMessageTarget.textContent = this.data.get('notFoundMessage')
     }
 
-    const versionAllowed = version == null || version === '' || currentVersionFound || versionsFound.length === 0
+    const versionMismatched = !(version == null || version === '' || currentVersionFound || versionsFound.length === 0)
     setTimeout(() => {
-      this.onVersionAllowed(versionAllowed)
+      this.onVersionMismatched(versionMismatched)
     }, 0)
   }
 }
