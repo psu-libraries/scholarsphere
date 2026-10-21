@@ -18,8 +18,9 @@ class ChangedWorkVersionValidator < ActiveModel::Validator
 
     def identical?
       return false if previous_version.nil?
+      return false if work_version.nil?
 
-      (work_version.file_resources == previous_version.file_resources) &&
+      (work_version.file_resources&.to_a == previous_version.file_resources&.to_a) &&
         (metadata_token == metadata_token(previous_version)) &&
         (creators_token == creators_token(previous_version))
     end
