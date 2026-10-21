@@ -276,7 +276,7 @@ jobs:
         command: |
           wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
           sudo apt-get update
-          sudo apt-get install -y imagemagick ghostscript libreoffice
+          sudo apt-get install -y imagemagick ghostscript libreoffice libvips42
           sudo cp config/policy.xml /etc/ImageMagick-6/policy.xml
     - run:
         name: "Bundle"
