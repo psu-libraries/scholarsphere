@@ -415,8 +415,9 @@
         <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-cjkMarcCompatibility.txt"/>
         <tokenizer class="solr.StandardTokenizerFactory" />
         <filter class="solr.CJKWidthFilterFactory"/>
-        <filter class="solr.ICUTransformFilterFactory" id="Traditional-Simplified"/>
-        <filter class="solr.ICUTransformFilterFactory" id="Katakana-Hiragana" />
+        <!-- ICU Transform filters disabled for Solr 9.11 compatibility (ICU module not available) -->
+        <!-- <filter class="solr.ICUTransformFilterFactory" id="Traditional-Simplified"/> -->
+        <!-- <filter class="solr.ICUTransformFilterFactory" id="Katakana-Hiragana" /> -->
         <filter class="solr.LowerCaseFilterFactory"/>
         <filter class="solr.ASCIIFoldingFilterFactory"/>
       </analyzer>
