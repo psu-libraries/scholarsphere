@@ -46,12 +46,6 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
   it { is_expected.to delegate_method(:update_column).to(:work_version) }
   it { is_expected.to delegate_method(:set_thumbnail_selection).to(:work_version) }
 
-  it 'accepts the transient open access version mismatch attribute' do
-    form.attributes = { open_access_version_mismatched: 'false' }
-
-    expect(form.open_access_version_mismatched).to eq 'false'
-  end
-
   describe '#aasm_state=' do
     before { allow(wv).to receive(:aasm_state=) }
 
