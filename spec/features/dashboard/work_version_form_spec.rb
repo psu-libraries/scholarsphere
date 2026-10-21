@@ -2206,15 +2206,6 @@ RSpec.describe 'Publishing a work', with_user: :user do
             expect(work_version.reload.aasm_state).to eq 'published'
           end
         end
-
-        context 'when the file does not have an accessibility check result' do
-          it 'blocks the user from publishing' do
-            visit dashboard_form_publish_path(work_version)
-
-            expect(page).to have_no_button('Publish')
-            expect(page).to have_content(I18n.t!('dashboard.form.actions.publish.blocked_accessibility'))
-          end
-        end
       end
     end
   end
@@ -2408,7 +2399,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
           }]
         }
 
-        it 'displays an error message when the other version is selected and blocks publish' do
+        it 'displays an error message and prevents publishing when the other version is selected' do
           visit dashboard_form_publish_path(work_version)
 
           FeatureHelpers::DashboardForm.simulate_open_access_version_broadcast(work_version)
@@ -2419,8 +2410,14 @@ RSpec.describe 'Publishing a work', with_user: :user do
           expect(page).to have_field('work_version_publisher_statement', with: nil)
           expect(page).to have_select('work_version_rights', selected: '')
           expect(page).to have_field('work_version_work_attributes_embargoed_until', with: nil)
-          expect(page).to have_no_button('Publish')
-          expect(page).to have_content(I18n.t('dashboard.form.actions.publish.blocked_version'))
+          expect(page).to have_button('Publish')
+
+          FeatureHelpers::DashboardForm.publish
+
+          within '#error_explanation' do
+            expect(page).to have_content('does not match the available permissions')
+          end
+          expect(work_version.reload).not_to be_published
         end
       end
 

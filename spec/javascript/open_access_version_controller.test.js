@@ -74,6 +74,7 @@ describe('OpenAccessVersionController', () => {
             <span data-target="open-access-version.versionMessage" class="text-danger"></span>
           </div>
         </div>
+        <input data-target="open-access-version.versionMismatched" value="false">
       </div>
 
       <input id="work_version_publisher_statement">
@@ -119,18 +120,15 @@ describe('OpenAccessVersionController', () => {
     expect(message.textContent).toBe('We found accepted version, not published version')
   })
 
-  it('dispatches open-access:version-updated with versionAllowed', () => {
-    const handler = jest.fn()
-    document.addEventListener('open-access:version-updated', handler)
-
-    const radio = document.querySelector('input[value="acceptedVersion"]')
+  it('updates the version mismatch field', () => {
+    const radio = document.querySelector('input[value="publishedVersion"]')
     radio.checked = true
     radio.dispatchEvent(new Event('change', { bubbles: true }))
 
     jest.runOnlyPendingTimers()
 
-    expect(handler).toHaveBeenCalled()
-    expect(handler.mock.calls[0][0].detail).toEqual({ versionAllowed: true })
+    const mismatchField = document.querySelector('[data-target="open-access-version.versionMismatched"]')
+    expect(mismatchField.value).toBe('true')
   })
 
   it('applies the open access version from the channel', () => {

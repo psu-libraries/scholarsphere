@@ -91,6 +91,9 @@
             <% end %>
 
             <% if @resource.open_access_upload_active? %>
+              <%= form.hidden_field :open_access_version_mismatched,
+                                    value: false,
+                                    data: { target: 'open-access-version.versionMismatched' } %>
               <div class="form-wrapper form-wrapper--wide">
                 <div class="keyline keyline--left mb-3">
                   <h4><%= t '.version' %></h4>
