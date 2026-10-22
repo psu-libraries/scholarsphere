@@ -222,7 +222,7 @@ jobs:
   test-application:
     resource_class: large
     docker:
-      - image: cimg/ruby:3.4.11-browsers
+      - image: cimg/ruby:4.0.7-browsers
       - image: redis:6.2.6
       - image: chrislusf/seaweedfs:latest
         environment:
