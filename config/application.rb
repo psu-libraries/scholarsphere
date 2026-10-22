@@ -77,10 +77,5 @@ module Scholarsphere
     config.exceptions_app = routes
 
     config.docs_url = ENV.fetch('DOCS_URL', 'https://docs.scholarsphere.psu.edu')
-
-    # Active Storage variant processor configuration
-    # We use Shrine with mini_magick, but this setting is required for
-    # Active Storage variants.  Omitting it can cause errors.
-    config.active_storage.variant_processor = :mini_magick
   end
 end
