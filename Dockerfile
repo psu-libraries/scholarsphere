@@ -8,8 +8,7 @@ RUN apt-get update && \
   shared-mime-info \
   imagemagick \
   ghostscript\
-  libreoffice \
-  libvips42 && \
+  libreoffice &&\
   rm -rf /var/lib/apt/lists*
 
 COPY config/policy.xml /etc/ImageMagick-6/policy.xml
