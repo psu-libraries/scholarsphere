@@ -75,7 +75,7 @@ services:
     volumes:
       - seaweedfs-data:/data
   solr:
-    image: solr:8.11.1-slim
+    image: solr:9.11.0-slim
     restart: always
     environment:
       SOLR_STOP_WAIT: 10
