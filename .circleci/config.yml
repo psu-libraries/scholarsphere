@@ -35,7 +35,7 @@ parameters:
     default: "ulprod"
   REGISTRY_HOST:
     type: string
-    default: "harbor.k8s.libraries.psu.edu"
+    default: "harbor.libraries.psu.edu"
   PIPELINE_CONFIG_VERSION:
     type: string
     default: "1.0.1"
@@ -208,7 +208,7 @@ jobs:
       clusters: << parameters.clusters >>
       CONFIG_REPO_NAME: << pipeline.parameters.CONFIG_REPO_NAME >>
       CONFIG_REPO: << pipeline.parameters.CONFIG_REPO_URL >>
-      REGISTRY_HOST: harbor.k8s.libraries.psu.edu
+      REGISTRY_HOST: harbor.libraries.psu.edu
       FROM_TAG: << parameters.from_tag >>
       TO_TAG: << parameters.to_tag >>
       PIPELINE_CONFIG_VERSION: << pipeline.parameters.PIPELINE_CONFIG_VERSION >>
@@ -222,7 +222,7 @@ jobs:
   test-application:
     resource_class: large
     docker:
-      - image: cimg/ruby:3.4.9-browsers
+      - image: cimg/ruby:3.4.11-browsers
       - image: redis:6.2.6
       - image: chrislusf/seaweedfs:latest
         environment:
@@ -268,7 +268,7 @@ jobs:
     - run:
         name: "Update Node.js and yarn"
         command: |
-          curl -sSL "https://nodejs.org/dist/v22.9.0/node-v22.9.0-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v22.9.0-linux-x64/bin/node
+          curl -sSL "https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v22.12.0-linux-x64/bin/node
           sudo corepack enable
           sudo corepack prepare yarn@1.22.22 --activate
     - run:
