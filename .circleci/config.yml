@@ -273,9 +273,9 @@ jobs:
             - ~/.cache/yarn
 
       - persist_to_workspace:
-        root: .
-        paths:
-          - '*'
+          root: .
+          paths:
+            - '*'
       
 
   test-application:
