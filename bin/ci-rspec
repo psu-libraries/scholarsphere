@@ -52,7 +52,7 @@ fi
 
 echo "Running RSpec with coverage reporting"
 # ./${REPORTER_BIN} before-build
-bundle exec rspec $1
+bundle exec rspec "$@"
 RSPEC_EXIT_CODE=$?
 # ./${REPORTER_BIN} after-build
 
