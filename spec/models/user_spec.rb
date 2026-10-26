@@ -174,19 +174,25 @@ RSpec.describe User do
       end
     end
 
-    context 'when OAuth response contains minimal user info' do
-      # This wouldn't pass validation in the web ui, but will pass here
+    context 'when the OAuth response shows no psu-identified groups' do
       let(:auth_params) { build(:psu_oauth_response,
-                                given_name: nil,
-                                surname: nil,
+                                given_name: 'Clark',
+                                surname: 'Kent',
                                 access_id: 'jd1',
                                 groups: [])
       }
 
-      it 'still creates the Author and User' do
+      it 'raises a NotAffiliatedWithPsu error' do
         expect { described_class.from_omniauth(auth_params) }
-          .to change(described_class, :count).by(1)
-          .and change(Actor, :count).by(1)
+          .to raise_error(described_class::NotAffiliatedWithPsu)
+          .and not_change(described_class, :count)
+      end
+
+      context 'when the user is using the API' do
+        it 'creates the User record' do
+          expect { described_class.from_omniauth(auth_params, api_user: true) }
+            .to change(described_class, :count).by(1)
+        end
       end
     end
 
@@ -212,22 +218,9 @@ RSpec.describe User do
             described_class.from_omniauth(auth_params)
           rescue described_class::OAuthError
           end
-        }.to change(described_class, :count).by(0)
-          .and change(Actor, :count).by(0)
-          .and change(Group, :count).by(0)
-      end
-    end
-
-    context 'when an unknown error occurs' do
-      before do
-        allow(LdapGroupCleaner).to receive(:call).and_raise(RuntimeError, 'ack!')
-      end
-
-      it do
-        pending('djb44 - LdapGroupCleaner I dont think is needed')
-        expect { described_class.from_omniauth(auth_params) }
-          .to raise_error(described_class::OAuthError)
-          .with_message(/ack/)
+        }.to not_change(described_class, :count)
+          .and not_change(Actor, :count)
+          .and not_change(Group, :count)
       end
     end
   end
