@@ -385,12 +385,12 @@ jobs:
     - attach_workspace:
         at: .
     - run:
-      name: "Install dependencies for thumbnails"
-      command: |
-        wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-        sudo apt-get update
-        sudo apt-get install -y imagemagick ghostscript libreoffice
-        sudo cp config/policy.xml /etc/ImageMagick-6/policy.xml
+        name: "Install dependencies for thumbnails"
+        command: |
+          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          sudo apt-get update
+          sudo apt-get install -y imagemagick ghostscript libreoffice
+          sudo cp config/policy.xml /etc/ImageMagick-6/policy.xml
     - run:
         name: "Wait for Redis"
         command: dockerize -wait tcp://localhost:6379 -timeout 1m
