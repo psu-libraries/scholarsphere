@@ -277,7 +277,6 @@ jobs:
           paths:
             - '*'
       
-
   test-application:
     resource_class: large
     docker:
@@ -322,51 +321,12 @@ jobs:
         docker_layer_caching: true
     - attach_workspace:
         at: .
-
-    # - restore_cache:
-    #     keys:
-    #       - bundle1-{{ checksum "Gemfile.lock" }}
-    # - restore_cache:
-    #     keys:
-    #       - yarn1-{{ checksum "yarn.lock" }}
-    # - run:
-    #     name: "Update Node.js and yarn"
-    #     command: |
-    #       curl -sSL "https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v22.12.0-linux-x64/bin/node
-    #       sudo corepack enable
-    #       sudo corepack prepare yarn@1.22.22 --activate
-    # - run:
-    #     name: "Install dependencies for thumbnails"
-    #     command: |
-    #       wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-    #       sudo apt-get update
-    #       sudo apt-get install -y imagemagick ghostscript libreoffice
-    #       sudo cp config/policy.xml /etc/ImageMagick-6/policy.xml
-    # - run:
-    #     name: "Bundle"
-    #     command: |
-    #       gem install bundler -v "$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)"
-    #       bundle config set path 'vendor/bundle'
-    #       bundle config set deployment true
-    #       bundle check || bundle install --jobs=1 --retry=3
-    # - run:
-    #     name: "Yarn"
-    #     command: |
-    #       yarn install --cache-folder ~/.cache/yarn --frozen-lockfile
     - run:
         name: "Wait for Redis"
         command: dockerize -wait tcp://localhost:6379 -timeout 1m
     - run:
         name: "Wait for Solr"
         command: dockerize -wait tcp://localhost:8983 -timeout 2m
-    # - save_cache:
-    #     paths:
-    #       - vendor/bundle
-    #     key: bundle1-{{ checksum "Gemfile.lock" }}
-    # - save_cache:
-    #     key: yarn1-{{ checksum "yarn.lock" }}
-    #     paths:
-    #       - ~/.cache/yarn
     - run:
         name: "Lint"
         command: |
