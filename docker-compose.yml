@@ -81,15 +81,19 @@ services:
       SOLR_STOP_WAIT: 10
       SOLR_USERNAME: scholarsphere
       SOLR_PASSWORD: scholarsphere
-      SOLR_HOME: /var/solr/data
+      SOLR_MODULES: analysis-extras
+      SOLR_OPTS: "-Dsolr.config.lib.enabled=true"
     volumes:
-    - solr-data:/var/solr/data
+    - solr-data:/var/solr
+    - type: bind
+      source: ./solr
+      target: /opt/solr/server/solr/configsets
     ports:
     - ${SOLR_PORT:-8983}:8983
     command: [
       "/bin/bash",
       "-c",
-      "solr -c && solr auth enable -credentials $$SOLR_USERNAME:$$SOLR_PASSWORD -z localhost:9983; solr stop && solr start -c -f",
+      "for i in {1..60}; do echo > /dev/tcp/localhost/9983 2>/dev/null && break; sleep 1; done; solr -c && solr auth enable -credentials $$SOLR_USERNAME:$$SOLR_PASSWORD -z localhost:9983; solr stop && solr start -c -f",
     ]
     healthcheck:
       test: [
