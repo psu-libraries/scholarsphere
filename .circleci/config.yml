@@ -339,7 +339,7 @@ jobs:
     - run:
         name: "RSpec"
         command: |
-          ./bin/ci-rspec --exclude-pattern "spec/features/"
+          ./bin/ci-rspec "--exclude-pattern \"spec/features/\""
 
   feature-tests:
     resource_class: large
