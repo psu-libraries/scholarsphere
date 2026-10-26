@@ -2,6 +2,7 @@
 
 class User < ApplicationRecord
   class NotAffiliatedWithPsu < StandardError; end
+
   class OAuthError < StandardError
     attr_accessor :auth
 
@@ -61,14 +62,11 @@ class User < ApplicationRecord
     [Group.public_agent, Group.authorized_agent]
   end
 
-  def self.from_omniauth(auth, api_user = false)
-    byebug
+  def self.from_omniauth(auth, api_user: false)
     groups = auth.info.groups.compact
 
-    unless api_user
-      unless groups.include?(Scholarsphere::Application.config.psu_affiliated_group)
-        raise NotAffiliatedWithPsu.new
-      end
+    if !api_user && groups.exclude?(Scholarsphere::Application.config.psu_affiliated_group)
+      raise NotAffiliatedWithPsu.new
     end
 
     user = find_or_initialize_by(provider: auth.provider, uid: auth.uid) do |new_user|

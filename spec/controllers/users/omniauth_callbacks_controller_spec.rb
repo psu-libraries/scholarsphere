@@ -97,10 +97,11 @@ RSpec.describe Users::OmniauthCallbacksController do
     end
 
     context 'when the user is not affiliated with PSU' do
-    let(:oauth_response) { build(:psu_oauth_response, :non_psu) }
+      let(:oauth_response) { build(:psu_oauth_response, :non_psu) }
+
       before do
         allow(User).to receive(:from_omniauth)
-        .with(oauth_response).and_raise User::NotAffiliatedWithPsu
+          .with(oauth_response).and_raise User::NotAffiliatedWithPsu
         get :azure_oauth
       end
 

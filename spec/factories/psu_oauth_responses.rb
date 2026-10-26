@@ -36,11 +36,11 @@ FactoryBot.define do
     end
 
     trait :psu_affiliated do
-      info_groups { [Scholarsphere::Application.config.psu_affiliated_group]}
+      info_groups { [Scholarsphere::Application.config.psu_affiliated_group] }
     end
 
     trait :non_psu do
-      info_groups {[]}
+      info_groups { [] }
     end
   end
 end
