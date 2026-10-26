@@ -35,7 +35,7 @@ parameters:
     default: "ulprod"
   REGISTRY_HOST:
     type: string
-    default: "harbor.k8s.libraries.psu.edu"
+    default: "harbor.libraries.psu.edu"
   PIPELINE_CONFIG_VERSION:
     type: string
     default: "1.0.1"
@@ -207,8 +207,8 @@ jobs:
     environment:
       clusters: << parameters.clusters >>
       CONFIG_REPO_NAME: << pipeline.parameters.CONFIG_REPO_NAME >>
-      CONFIG_REPO: git@github.com:psu-libraries/scholarsphere-config.git
-      REGISTRY_HOST: harbor.k8s.libraries.psu.edu
+      CONFIG_REPO: << pipeline.parameters.CONFIG_REPO_URL >>
+      REGISTRY_HOST: harbor.libraries.psu.edu
       FROM_TAG: << parameters.from_tag >>
       TO_TAG: << parameters.to_tag >>
       PIPELINE_CONFIG_VERSION: << pipeline.parameters.PIPELINE_CONFIG_VERSION >>
@@ -222,13 +222,13 @@ jobs:
   test-application:
     resource_class: large
     docker:
-      - image: cimg/ruby:3.4.9-browsers
+      - image: cimg/ruby:3.4.11-browsers
       - image: redis:6.2.6
       - image: chrislusf/seaweedfs:latest
         environment:
           AWS_ACCESS_KEY_ID: scholarsphere
           AWS_SECRET_ACCESS_KEY: scholarsphere
-      - image: postgres:15.18
+      - image: postgres:15.2
         environment:
           POSTGRES_PASSWORD: scholarsphere
           POSTGRES_USER: scholarsphere
@@ -242,7 +242,7 @@ jobs:
         command: [
           "/bin/bash",
           "-c",
-          "solr -c -f & PID=$!; until curl -s http://localhost:8983/solr > /dev/null; do sleep 1; done; solr auth enable -credentials ${SOLR_USERNAME}:${SOLR_PASSWORD} -z localhost:9983; wait $PID",
+          "solr -c && solr auth enable -credentials scholarsphere:scholarsphere -z localhost:9983; solr stop && solr -c -f",
           ]
     environment:
       RAILS_ENV: test
@@ -253,10 +253,9 @@ jobs:
       AWS_REGION: us-east-1
       SOLR_HOST: 127.0.0.1
       SOLR_COLLECTION: scholarsphere
-      SOLR_PROTOCOL: http
       SOLR_PASSWORD: scholarsphere
       SOLR_USERNAME: scholarsphere
-      POSTGRES_USER: scholarsphere
+      POSTGRES_USERNAME: scholarsphere
       POSTGRES_PASSWORD: scholarsphere
       POSTGRES_DB: scholarsphere
       POSTGRES_HOST: 127.0.0.1
@@ -274,7 +273,7 @@ jobs:
     - run:
         name: "Update Node.js and yarn"
         command: |
-          curl -sSL "https://nodejs.org/dist/v22.9.0/node-v22.9.0-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v22.9.0-linux-x64/bin/node
+          curl -sSL "https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v22.12.0-linux-x64/bin/node
           sudo corepack enable
           sudo corepack prepare yarn@1.22.22 --activate
     - run:
@@ -371,7 +370,6 @@ workflows:
                 - /preview\/.*/
           requires:
             - build-image
-            - test-application
 
       - deploy-application:
           name: deploy-application

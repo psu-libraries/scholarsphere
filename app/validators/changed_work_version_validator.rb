@@ -17,6 +17,7 @@ class ChangedWorkVersionValidator < ActiveModel::Validator
   private
 
     def identical?
+      previous_version = find_previous_version
       return false if previous_version.nil?
       return false if work_version.nil?
 
@@ -25,7 +26,7 @@ class ChangedWorkVersionValidator < ActiveModel::Validator
         (creators_token == creators_token(previous_version))
     end
 
-    def previous_version
+    def find_previous_version
       WorkVersion.find_by(
         work_id: work_version.work_id,
         version_number: work_version.version_number - 1

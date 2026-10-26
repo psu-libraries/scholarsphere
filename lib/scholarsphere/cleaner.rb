@@ -6,10 +6,10 @@ module Scholarsphere
   class Cleaner
     class << self
       def clean
-        clean_minio && clean_solr && clean_redis
+        clean_seaweedfs && clean_solr && clean_redis
       end
 
-      def clean_minio
+      def clean_seaweedfs
         return unless ENV.key?('S3_ENDPOINT') && verify_aws
 
         system("aws --endpoint-url #{ENV['S3_ENDPOINT']} s3 rb s3://#{ENV['AWS_BUCKET']} --force")
@@ -17,15 +17,10 @@ module Scholarsphere
       end
 
       def clean_solr
-        retries ||= 0
         Blacklight.default_index.connection.delete_by_query('*:*')
         Blacklight.default_index.connection.commit
-      rescue StandardError => e
-        if (retries += 1) < 5
-          sleep 2
-          retry
-        end
-        puts "Solr cleaning failed after 5 attempts: #{e.message}. Attempting to recreate collection."
+      rescue RuntimeError
+        puts 'Solr endpoint not found, attempting to recreate it'
         SolrAdmin.new.create_collection
       end
 
@@ -36,7 +31,7 @@ module Scholarsphere
       def verify_aws
         return true if aws?
 
-        puts 'WARNING: Install aws in order to delete files from minio'
+        puts 'WARNING: Install aws in order to delete files from seaweedfs'
         false
       end
 
