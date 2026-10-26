@@ -277,7 +277,7 @@ jobs:
           paths:
             - '*'
       
-  test-application:
+  lint-yarn-unit:
     resource_class: large
     docker:
       - image: cimg/ruby:3.4.11-browsers
@@ -416,8 +416,8 @@ workflows:
       equal: [ "delete", << pipeline.parameters.GHA_Event >> ]
     jobs:
       - install-test-dependencies
-      - test-application:
-          name: test-application
+      - lint-yarn-unit:
+          name: lint-yarn-unit
           requires: 
             - install-test-dependencies
           context:
@@ -469,7 +469,8 @@ workflows:
                 - main
                 - /preview\/.*/
           requires:
-            - test-application
+            - lint-yarn-unit
+            - feature-tests
             - push-image
 
       - release-image:
