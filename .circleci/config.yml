@@ -242,13 +242,6 @@ jobs:
             sudo corepack prepare yarn@1.22.22 --activate
 
       - run:
-          name: "Install dependencies for thumbnails"
-          command: |
-            wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-            sudo apt-get update
-            sudo apt-get install -y imagemagick ghostscript libreoffice
-
-      - run:
           name: "Bundle"
           command: |
             gem install bundler -v "$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)"
@@ -321,8 +314,11 @@ jobs:
     - attach_workspace:
         at: .
     - run:
-          name: "Copy Config File"
+          name: "Install dependencies for thumbnails"
           command: |
+            wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+            sudo apt-get update
+            sudo apt-get install -y imagemagick ghostscript libreoffice
             sudo cp config/policy.xml /etc/ImageMagick-6/policy.xml
     - run:
         name: "Wait for Redis"
@@ -389,9 +385,12 @@ jobs:
     - attach_workspace:
         at: .
     - run:
-          name: "Copy Config File"
-          command: |
-            sudo cp config/policy.xml /etc/ImageMagick-6/policy.xml
+        name: "Install dependencies for thumbnails"
+        command: |
+          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          sudo apt-get update
+          sudo apt-get install -y imagemagick ghostscript libreoffice
+          sudo cp config/policy.xml /etc/ImageMagick-6/policy.xml
     - run:
         name: "Wait for Redis"
         command: dockerize -wait tcp://localhost:6379 -timeout 1m
