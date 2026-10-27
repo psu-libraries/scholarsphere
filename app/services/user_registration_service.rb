@@ -22,8 +22,7 @@ class UserRegistrationService
   def register
     return if found_user.nil?
 
-    # We do not receive groups information with API request, so the PSU affiliation check will fail.
-    # But since we require an API key from the user, it feels low-risk to bypass this check
+    # We do not receive group information from the directory look up, so we must skip the psu affiliation check
     existing_user || User.from_omniauth(authorization_hash, check_psu_affiliated: false)
   end
 

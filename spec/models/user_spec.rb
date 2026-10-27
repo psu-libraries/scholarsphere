@@ -174,6 +174,25 @@ RSpec.describe User do
       end
     end
 
+    context 'when OAuth response contains minimal user info' do
+      # This wouldn't pass validation in the web ui, but will pass here
+      let(:auth_params) { build(:psu_oauth_response,
+                                given_name: nil,
+                                surname: nil,
+                                access_id: 'jd1',
+                                groups: [],
+                                info_groups: [
+                                  Scholarsphere::Application.config.psu_affiliated_group
+                                ])
+      }
+
+      it 'still creates the Author and User' do
+        expect { described_class.from_omniauth(auth_params) }
+          .to change(described_class, :count).by(1)
+          .and change(Actor, :count).by(1)
+      end
+    end
+
     context 'when the OAuth response shows no psu-identified groups' do
       let(:auth_params) { build(:psu_oauth_response,
                                 given_name: 'Clark',
@@ -188,7 +207,7 @@ RSpec.describe User do
           .and not_change(described_class, :count)
       end
 
-      context 'when the user bypasses the check (eg an API user)' do
+      context 'when the user bypasses the check' do
         it 'creates the User record' do
           expect { described_class.from_omniauth(auth_params, check_psu_affiliated: false) }
             .to change(described_class, :count).by(1)
@@ -221,6 +240,19 @@ RSpec.describe User do
         }.to not_change(described_class, :count)
           .and not_change(Actor, :count)
           .and not_change(Group, :count)
+      end
+    end
+
+    context 'when an unknown error occurs' do
+      before do
+        allow(LdapGroupCleaner).to receive(:call).and_raise(RuntimeError, 'ack!')
+      end
+
+      it do
+        pending('djb44 - LdapGroupCleaner I dont think is needed')
+        expect { described_class.from_omniauth(auth_params) }
+          .to raise_error(described_class::OAuthError)
+          .with_message(/ack/)
       end
     end
   end
