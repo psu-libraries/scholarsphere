@@ -22,7 +22,8 @@ class UserRegistrationService
   def register
     return if found_user.nil?
 
-    existing_user || User.from_omniauth(authorization_hash)
+    # We do not receive group information from the directory look up, so we must skip the psu affiliation check
+    existing_user || User.from_omniauth(authorization_hash, check_psu_affiliated: false)
   end
 
   private

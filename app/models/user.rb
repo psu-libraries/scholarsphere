@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
+  class NotAffiliatedWithPsu < StandardError; end
+
   class OAuthError < StandardError
     attr_accessor :auth
 
@@ -60,7 +62,13 @@ class User < ApplicationRecord
     [Group.public_agent, Group.authorized_agent]
   end
 
-  def self.from_omniauth(auth)
+  def self.from_omniauth(auth, check_psu_affiliated: true)
+    groups = auth.info.groups.compact
+
+    if check_psu_affiliated && groups.exclude?(Scholarsphere::Application.config.psu_affiliated_group)
+      raise NotAffiliatedWithPsu.new
+    end
+
     user = find_or_initialize_by(provider: auth.provider, uid: auth.uid) do |new_user|
       new_user.access_id = auth.uid
       new_user.actor = Actor.find_or_initialize_by(psu_id: new_user.access_id)
@@ -93,6 +101,8 @@ class User < ApplicationRecord
     end
 
     user
+  rescue NotAffiliatedWithPsu
+    raise
   rescue StandardError => e
     raise OAuthError.new(e.message, auth)
   end

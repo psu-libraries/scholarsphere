@@ -34,5 +34,13 @@ FactoryBot.define do
         name: email
       }
     end
+
+    trait :psu_affiliated do
+      info_groups { [Scholarsphere::Application.config.psu_affiliated_group] }
+    end
+
+    trait :non_psu do
+      info_groups { [] }
+    end
   end
 end
