@@ -188,9 +188,9 @@ RSpec.describe User do
           .and not_change(described_class, :count)
       end
 
-      context 'when the user is using the API' do
+      context 'when the user bypasses the check (eg an API user)' do
         it 'creates the User record' do
-          expect { described_class.from_omniauth(auth_params, api_user: true) }
+          expect { described_class.from_omniauth(auth_params, check_psu_affiliated: false) }
             .to change(described_class, :count).by(1)
         end
       end

@@ -62,10 +62,10 @@ class User < ApplicationRecord
     [Group.public_agent, Group.authorized_agent]
   end
 
-  def self.from_omniauth(auth, api_user: false)
+  def self.from_omniauth(auth, check_psu_affiliated: true)
     groups = auth.info.groups.compact
 
-    if !api_user && groups.exclude?(Scholarsphere::Application.config.psu_affiliated_group)
+    if check_psu_affiliated && groups.exclude?(Scholarsphere::Application.config.psu_affiliated_group)
       raise NotAffiliatedWithPsu.new
     end
 
@@ -101,7 +101,9 @@ class User < ApplicationRecord
     end
 
     user
-  rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotFound => e
+  rescue NotAffiliatedWithPsu
+    raise
+  rescue StandardError => e
     raise OAuthError.new(e.message, auth)
   end
 
