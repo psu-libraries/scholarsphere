@@ -314,6 +314,12 @@ jobs:
     - attach_workspace:
         at: .
     - run:
+          name: "Update Node.js and yarn"
+          command: |
+            curl -sSL "https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v22.12.0-linux-x64/bin/node
+            sudo corepack enable
+            sudo corepack prepare yarn@1.22.22 --activate
+    - run:
           name: "Install dependencies for thumbnails"
           command: |
             wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
