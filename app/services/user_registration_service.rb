@@ -22,7 +22,7 @@ class UserRegistrationService
   def register
     return if found_user.nil?
 
-    existing_user || User.from_omniauth(authorization_hash, true)
+    existing_user || User.from_omniauth(authorization_hash, api_user: true)
   end
 
   private
