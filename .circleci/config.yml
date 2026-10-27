@@ -219,7 +219,57 @@ jobs:
           command: |
             /usr/local/bin/image-release-for-clusters
 
-  test-application:
+  install-test-dependencies:
+    docker:
+      - image: cimg/ruby:3.4.11-browsers
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - restore_cache:
+          keys:
+            - bundle1-{{ checksum "Gemfile.lock" }}
+
+      - restore_cache:
+          keys:
+            - yarn1-{{ checksum "yarn.lock" }}
+
+      - run:
+          name: "Update Node.js and yarn"
+          command: |
+            curl -sSL "https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v22.12.0-linux-x64/bin/node
+            sudo corepack enable
+            sudo corepack prepare yarn@1.22.22 --activate
+
+      - run:
+          name: "Bundle"
+          command: |
+            gem install bundler -v "$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)"
+            bundle config set path 'vendor/bundle'
+            bundle config set deployment true
+            bundle check || bundle install --jobs=1 --retry=3
+
+      - run:
+          name: "Yarn"
+          command: |
+            yarn install --cache-folder ~/.cache/yarn --frozen-lockfile
+
+      - save_cache:
+          key: bundle1-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+
+      - save_cache:
+          key: yarn1-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
+
+      - persist_to_workspace:
+          root: .
+          paths:
+            - '*'
+      
+  lint-yarn-unit:
     resource_class: large
     docker:
       - image: cimg/ruby:3.4.11-browsers
@@ -259,50 +309,29 @@ jobs:
       PDF_REMEDIATION_API_KEY: api-key
     steps:
     - checkout
-    - restore_cache:
-        keys:
-          - bundle1-{{ checksum "Gemfile.lock" }}
-    - restore_cache:
-        keys:
-          - yarn1-{{ checksum "yarn.lock" }}
+    - setup_remote_docker:
+        docker_layer_caching: true
+    - attach_workspace:
+        at: .
     - run:
-        name: "Update Node.js and yarn"
-        command: |
-          curl -sSL "https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v22.12.0-linux-x64/bin/node
-          sudo corepack enable
-          sudo corepack prepare yarn@1.22.22 --activate
+          name: "Update Node.js and yarn"
+          command: |
+            curl -sSL "https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v22.12.0-linux-x64/bin/node
+            sudo corepack enable
+            sudo corepack prepare yarn@1.22.22 --activate
     - run:
-        name: "Install dependencies for thumbnails"
-        command: |
-          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-          sudo apt-get update
-          sudo apt-get install -y imagemagick ghostscript libreoffice
-          sudo cp config/policy.xml /etc/ImageMagick-6/policy.xml
-    - run:
-        name: "Bundle"
-        command: |
-          gem install bundler -v "$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)"
-          bundle config set path 'vendor/bundle'
-          bundle config set deployment true
-          bundle check || bundle install --jobs=1 --retry=3
-    - run:
-        name: "Yarn"
-        command: |
-          yarn install --cache-folder ~/.cache/yarn --frozen-lockfile
+          name: "Install dependencies for thumbnails"
+          command: |
+            wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+            sudo apt-get update
+            sudo apt-get install -y imagemagick ghostscript libreoffice
+            sudo cp config/policy.xml /etc/ImageMagick-6/policy.xml
     - run:
         name: "Wait for Redis"
         command: dockerize -wait tcp://localhost:6379 -timeout 1m
     - run:
         name: "Wait for Solr"
         command: dockerize -wait tcp://localhost:8983 -timeout 2m
-    - save_cache:
-        paths:
-          - vendor/bundle
-        key: bundle1-{{ checksum "Gemfile.lock" }}
-    - save_cache:
-        key: yarn1-{{ checksum "yarn.lock" }}
-        paths:
-          - ~/.cache/yarn
     - run:
         name: "Lint"
         command: |
@@ -315,7 +344,69 @@ jobs:
     - run:
         name: "RSpec"
         command: |
-          ./bin/ci-rspec
+          ./bin/ci-rspec --exclude-pattern "spec/features/**/*_spec.rb"
+
+  feature-tests:
+    resource_class: large
+    docker:
+      - image: cimg/ruby:3.4.11-browsers
+      - image: redis:6.2.6
+      - image: chrislusf/seaweedfs:latest
+        environment:
+          AWS_ACCESS_KEY_ID: scholarsphere
+          AWS_SECRET_ACCESS_KEY: scholarsphere
+      - image: postgres:15.2
+        environment:
+          POSTGRES_PASSWORD: scholarsphere
+          POSTGRES_USER: scholarsphere
+          POSTGRES_DB: scholarsphere
+      - image: solr:8.11.1-slim
+        command: [
+          "/bin/bash",
+          "-c",
+          "solr -c && solr auth enable -credentials scholarsphere:scholarsphere -z localhost:9983; solr stop && solr -c -f",
+          ]
+    environment:
+      RAILS_ENV: test
+      AWS_ACCESS_KEY_ID: scholarsphere
+      AWS_SECRET_ACCESS_KEY: scholarsphere
+      S3_ENDPOINT: http://localhost:8333
+      AWS_BUCKET: scholarsphere
+      AWS_REGION: us-east-1
+      SOLR_HOST: 127.0.0.1
+      SOLR_COLLECTION: scholarsphere
+      SOLR_PASSWORD: scholarsphere
+      SOLR_USERNAME: scholarsphere
+      POSTGRES_USERNAME: scholarsphere
+      POSTGRES_PASSWORD: scholarsphere
+      POSTGRES_DB: scholarsphere
+      POSTGRES_HOST: 127.0.0.1
+      RMD_HOST: https://metadata.libraries.psu.edu
+      PDF_REMEDIATION_ENDPOINT: endpoint
+      PDF_REMEDIATION_API_KEY: api-key
+    steps:
+    - checkout
+    - setup_remote_docker:
+        docker_layer_caching: true
+    - attach_workspace:
+        at: .
+    - run:
+        name: "Install dependencies for thumbnails"
+        command: |
+          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          sudo apt-get update
+          sudo apt-get install -y imagemagick ghostscript libreoffice
+          sudo cp config/policy.xml /etc/ImageMagick-6/policy.xml
+    - run:
+        name: "Wait for Redis"
+        command: dockerize -wait tcp://localhost:6379 -timeout 1m
+    - run:
+        name: "Wait for Solr"
+        command: dockerize -wait tcp://localhost:8983 -timeout 2m
+    - run:
+        name: "RSpec Feature Tests"
+        command: |
+          ./bin/ci-rspec ./spec/features
 
 workflows:
   version: 2
@@ -336,8 +427,21 @@ workflows:
     unless:
       equal: [ "delete", << pipeline.parameters.GHA_Event >> ]
     jobs:
-      - test-application:
-          name: test-application
+      - install-test-dependencies
+      - lint-yarn-unit:
+          name: lint-yarn-unit
+          requires: 
+            - install-test-dependencies
+          context:
+            - org-global
+          filters:
+            branches:
+              only: /.*/
+              
+      - feature-tests:
+          name: feature-tests
+          requires:
+            - install-test-dependencies
           context:
             - org-global
           filters:
@@ -377,7 +481,8 @@ workflows:
                 - main
                 - /preview\/.*/
           requires:
-            - test-application
+            - lint-yarn-unit
+            - feature-tests
             - push-image
 
       - release-image:
