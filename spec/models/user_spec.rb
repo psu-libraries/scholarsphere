@@ -97,6 +97,46 @@ RSpec.describe User do
             Scholarsphere::Application.config.psu_affiliated_group
           )
         end
+
+        context 'when an ORCID-only Actor already exists' do
+          let(:orcid) { '0000000184856532' }
+          let!(:orcid_actor) { create(:actor, psu_id: nil, orcid: orcid) }
+
+          before do
+            allow(described_class).to receive(:directory_orcid).with(auth_params.uid).and_return(orcid)
+          end
+
+          it 'reuses that Actor and assigns its PSU ID' do
+            expect {
+              described_class.from_omniauth(auth_params)
+            }.not_to change(Actor, :count)
+
+            user = described_class.find_by!(uid: auth_params.uid)
+            expect(user.actor).to eq(orcid_actor)
+            expect(orcid_actor.reload.psu_id).to eq(auth_params.uid)
+          end
+        end
+
+        context 'when separate PSU-ID and ORCID Actors already exist' do
+          let(:orcid) { '0000000184856532' }
+          let!(:psu_actor) { create(:actor, psu_id: auth_params.uid, orcid: nil) }
+          let!(:orcid_actor) { create(:actor, psu_id: nil, orcid: orcid) }
+
+          before do
+            allow(described_class).to receive(:directory_orcid).with(auth_params.uid).and_return(orcid)
+          end
+
+          it 'reconciles the records and associates the user with the PSU Actor' do
+            expect {
+              described_class.from_omniauth(auth_params)
+            }.to change(Actor, :count).by(-1)
+
+            user = described_class.find_by!(uid: auth_params.uid)
+            expect(user.actor).to eq(psu_actor)
+            expect(psu_actor.reload.orcid).to eq(orcid)
+            expect(Actor.exists?(orcid_actor.id)).to be(false)
+          end
+        end
       end
 
       context 'when an Actor record with the same PSU ID exists' do
