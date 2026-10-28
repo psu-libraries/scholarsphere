@@ -76,15 +76,17 @@ class User < ApplicationRecord
 
     user.email = auth.info.email
 
-    # Update Actor record's values if and only if they are blank
-    user.actor.tap do |actor|
-      actor.email = actor.email.presence || auth.info.email
-      actor.given_name = actor.given_name.presence || auth.info.given_name
-      actor.surname = actor.surname.presence || auth.info.surname || auth.info.family_name
-      actor.orcid = actor.orcid.presence || directory_orcid(auth.uid)
-    end
-
     transaction do
+      ActorReconciliationService.call(user: user)
+
+      # Update Actor record's values if and only if they are blank
+      user.actor.tap do |actor|
+        actor.email = actor.email.presence || auth.info.email
+        actor.given_name = actor.given_name.presence || auth.info.given_name
+        actor.surname = actor.surname.presence || auth.info.surname || auth.info.family_name
+        actor.orcid = actor.orcid.presence || directory_orcid(auth.uid)
+      end
+
       psu_groups = auth.info.groups
         .compact
         .select do |group_name|
