@@ -10,12 +10,14 @@ class ActorReconciliationService
   end
 
   def call
+    psu_actor = user.actor
+    return user if psu_actor.orcid.present?
+
     orcid = User.directory_orcid(user.access_id)
     return user if orcid.blank?
 
-    psu_actor = user.actor
     orcid_actor = Actor.find_by(orcid: orcid)
-    return user if orcid_actor.nil? || (psu_actor == orcid_actor)
+    return user if orcid_actor.nil?
 
     reconcile(psu_actor, orcid_actor)
     user

@@ -64,14 +64,20 @@ RSpec.describe ActorReconciliationService do
       end
     end
 
-    context 'when the ORCID resolves to the PSU Actor itself' do
+    context 'when the PSU Actor already has an ORCID' do
       let!(:psu_actor) { create(:actor, psu_id: 'jxd123', orcid: orcid) }
       let!(:orcid_actor) { psu_actor }
 
-      it 'returns the user without reconciling the Actor with itself' do
+      before do
+        allow(User).to receive(:directory_orcid).and_return(orcid)
+      end
+
+      it 'returns the user without looking up the directory ORCID' do
         expect {
           described_class.call(user: user)
         }.not_to change(Actor, :count)
+
+        expect(User).not_to have_received(:directory_orcid)
 
         expect(user.actor).to eq(psu_actor)
         expect(psu_actor.reload.orcid).to eq(orcid)
