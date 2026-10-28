@@ -49,6 +49,32 @@ RSpec.describe Actor do
     end
   end
 
+  describe 'ORCID resolution' do
+    let(:psu_id) { 'jxd123' }
+    let(:orcid) { '0000000184856532' }
+
+    it 'fills in the ORCID from the directory when creating an Actor with only a PSU ID' do
+      allow(ActorIdentityResolver).to receive(:call).with(psu_id: psu_id).and_return(orcid)
+      actor = build(:actor, psu_id: psu_id, orcid: nil)
+
+      expect(actor).to be_valid
+      expect(actor.orcid).to eq(orcid)
+      expect(ActorIdentityResolver).to have_received(:call).with(psu_id: psu_id)
+    end
+
+    context 'when the directory ORCID already belongs to another Actor' do
+      before { create(:actor, psu_id: nil, orcid: orcid) }
+
+      it 'does not create a duplicate Actor' do
+        allow(ActorIdentityResolver).to receive(:call).with(psu_id: psu_id).and_return(orcid)
+        actor = build(:actor, psu_id: psu_id, orcid: nil)
+
+        expect { actor.save }.not_to change(described_class, :count)
+        expect(actor.errors[:orcid]).to include('has already been taken')
+      end
+    end
+  end
+
   describe 'after_commit' do
     let(:actor) { create(:actor) }
 

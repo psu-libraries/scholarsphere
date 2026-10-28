@@ -43,6 +43,8 @@ class Actor < ApplicationRecord
 
   accepts_nested_attributes_for :user
 
+  before_validation :resolve_orcid, on: :create
+
   validates :surname,
             presence: true,
             unless: -> { validation_context == :from_omniauth }
@@ -120,6 +122,12 @@ class Actor < ApplicationRecord
   end
 
   private
+
+    def resolve_orcid
+      return if orcid.present? || psu_id.blank?
+
+      self.orcid = ActorIdentityResolver.call(psu_id:)
+    end
 
     def reindex_if_display_name_changed
       update_index_async if saved_changes.key?(:display_name)
