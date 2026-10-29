@@ -89,14 +89,7 @@ class User < ApplicationRecord
 
     begin
       transaction do
-        psu_groups = auth.info.groups
-          .compact
-          .select do |group_name|
-            group_name.start_with?('umg') ||
-              group_name == Scholarsphere::Application.config.psu_affiliated_group
-          end
-          .reject { |group_name| group_name.include?(' ') }
-          .map { |group_name| Group.find_or_create_by(name: group_name) }
+        psu_groups = psu_groups_for(auth.info.groups)
 
         user.groups = default_groups + psu_groups
 
@@ -119,6 +112,18 @@ class User < ApplicationRecord
   rescue StandardError => e
     raise OAuthError.new(e.message, auth)
   end
+
+  def self.psu_groups_for(group_names)
+    group_names
+      .compact
+      .select do |group_name|
+        group_name.start_with?('umg') ||
+          group_name == Scholarsphere::Application.config.psu_affiliated_group
+      end
+      .reject { |group_name| group_name.include?(' ') }
+      .map { |group_name| Group.find_or_create_by(name: group_name) }
+  end
+  private_class_method :psu_groups_for
 
   def admin?
     admin_available? && admin_enabled
