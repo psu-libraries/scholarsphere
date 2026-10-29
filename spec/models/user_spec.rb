@@ -269,7 +269,7 @@ RSpec.describe User do
       end
 
       it 'reconciles the Actor and retries the save once' do
-        # Hacky, but we need to first `save!` to raise the error and then act normally after
+        # Hacky, but we need the first `save!` to raise the error and then act normally after
         save_calls = 0
         allow(actor).to receive(:save!).with(context: :from_omniauth).and_wrap_original do |original, **kwargs|
           save_calls += 1
