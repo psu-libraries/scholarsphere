@@ -84,6 +84,9 @@ class User < ApplicationRecord
       actor.orcid = actor.orcid.presence || directory_orcid(auth.uid)
     end
 
+    retries = 0
+    save_context = :from_omniauth
+
     begin
       transaction do
         psu_groups = auth.info.groups
@@ -97,14 +100,16 @@ class User < ApplicationRecord
 
         user.groups = default_groups + psu_groups
 
-        user.actor.save!(context: :from_omniauth)
-        user.save!(context: :from_omniauth)
+        user.actor.save!(context: save_context)
+        user.save!(context: save_context)
       end
-    rescue ActiveRecord::RecordNotUnique
+    rescue ActiveRecord::RecordInvalid => e
+      raise unless e.record.is_a?(Actor)
+      raise unless e.record.errors.of_kind?(:orcid, :taken)
       raise if retries >= 1
 
       retries += 1
-      ActorReconciliationService.call(user: user, save_context: :from_omniauth)
+      ActorReconciliationService.call(user: user, save_context: save_context)
       retry
     end
 
