@@ -76,30 +76,36 @@ class User < ApplicationRecord
 
     user.email = auth.info.email
 
-    transaction do
-      ActorReconciliationService.call(user: user)
+    # Update Actor record's values if and only if they are blank
+    user.actor.tap do |actor|
+      actor.email = actor.email.presence || auth.info.email
+      actor.given_name = actor.given_name.presence || auth.info.given_name
+      actor.surname = actor.surname.presence || auth.info.surname || auth.info.family_name
+      actor.orcid = actor.orcid.presence || directory_orcid(auth.uid)
+    end
 
-      # Update Actor record's values if and only if they are blank
-      user.actor.tap do |actor|
-        actor.email = actor.email.presence || auth.info.email
-        actor.given_name = actor.given_name.presence || auth.info.given_name
-        actor.surname = actor.surname.presence || auth.info.surname || auth.info.family_name
-        actor.orcid = actor.orcid.presence || directory_orcid(auth.uid)
+    begin
+      transaction do
+        psu_groups = auth.info.groups
+          .compact
+          .select do |group_name|
+            group_name.start_with?('umg') ||
+              group_name == Scholarsphere::Application.config.psu_affiliated_group
+          end
+          .reject { |group_name| group_name.include?(' ') }
+          .map { |group_name| Group.find_or_create_by(name: group_name) }
+
+        user.groups = default_groups + psu_groups
+
+        user.actor.save!(context: :from_omniauth)
+        user.save!(context: :from_omniauth)
       end
+    rescue ActiveRecord::RecordNotUnique
+      raise if retries >= 1
 
-      psu_groups = auth.info.groups
-        .compact
-        .select do |group_name|
-          group_name.start_with?('umg') ||
-            group_name == Scholarsphere::Application.config.psu_affiliated_group
-        end
-        .reject { |group_name| group_name.include?(' ') }
-        .map { |group_name| Group.find_or_create_by(name: group_name) }
-
-      user.groups = default_groups + psu_groups
-
-      user.actor.save!(context: :from_omniauth)
-      user.save!(context: :from_omniauth)
+      retries += 1
+      ActorReconciliationService.call(user: user, save_context: :from_omniauth)
+      retry
     end
 
     user
