@@ -255,6 +255,100 @@ RSpec.describe User do
       end
     end
 
+    context 'when saving the Actor fails with a taken ORCID' do
+      let!(:actor) { create(:actor, psu_id: auth_params.uid) }
+      let(:record_invalid) do
+        actor.errors.add(:orcid, :taken)
+        ActiveRecord::RecordInvalid.new(actor)
+      end
+
+      before do
+        allow(Actor).to receive(:find_or_initialize_by)
+          .with(psu_id: auth_params.uid)
+          .and_return(actor)
+      end
+
+      it 'reconciles the Actor and retries the save once' do
+        # Hacky, but we need to first `save!` to raise the error and then act normally after
+        save_calls = 0
+        allow(actor).to receive(:save!).with(context: :from_omniauth).and_wrap_original do |original, **kwargs|
+          save_calls += 1
+          raise record_invalid if save_calls == 1
+
+          original.call(**kwargs)
+        end
+
+        allow(ActorReconciliationService).to receive(:call)
+          .with(user: an_instance_of(described_class), save_context: :from_omniauth)
+        result = described_class.from_omniauth(auth_params)
+
+        expect(ActorReconciliationService).to have_received(:call)
+          .with(user: an_instance_of(described_class), save_context: :from_omniauth)
+          .once
+
+        expect(actor).to have_received(:save!).with(context: :from_omniauth).twice
+        expect(result).to be_persisted
+        expect(result.actor).to eq(actor)
+      end
+
+      context 'when the retried save still fails' do
+        it 'does not retry more than once and raises OAuthError' do
+          allow(ActorReconciliationService).to receive(:call)
+          allow(actor).to receive(:save!).with(context: :from_omniauth).and_raise(record_invalid)
+
+          expect { described_class.from_omniauth(auth_params) }
+            .to raise_error(described_class::OAuthError)
+
+          expect(ActorReconciliationService).to have_received(:call).once
+          expect(actor).to have_received(:save!).with(context: :from_omniauth).twice
+        end
+      end
+
+      context 'when the Actor error is not an ORCID uniqueness error' do
+        let(:record_invalid) do
+          actor.errors.add(:email, :invalid)
+          ActiveRecord::RecordInvalid.new(actor)
+        end
+
+        it 'does not reconcile and raises OAuthError' do
+          allow(actor).to receive(:save!).with(context: :from_omniauth).and_raise(record_invalid)
+          allow(ActorReconciliationService).to receive(:call)
+
+          expect { described_class.from_omniauth(auth_params) }
+            .to raise_error(described_class::OAuthError)
+
+          expect(actor).to have_received(:save!).with(context: :from_omniauth).once
+          expect(ActorReconciliationService).not_to have_received(:call)
+        end
+      end
+    end
+
+    context 'when saving the User fails validation' do
+      let!(:existing_user) do
+        create(:user, provider: auth_params.provider, uid: auth_params.uid)
+      end
+      let(:record_invalid) do
+        existing_user.errors.add(:email, :invalid)
+        ActiveRecord::RecordInvalid.new(existing_user)
+      end
+
+      before do
+        allow(described_class).to receive(:find_or_initialize_by)
+          .with(provider: auth_params.provider, uid: auth_params.uid)
+          .and_return(existing_user)
+      end
+
+      it 'does not reconcile the Actor and raises OAuthError' do
+        allow(existing_user).to receive(:save!).with(context: :from_omniauth).and_raise(record_invalid)
+        allow(ActorReconciliationService).to receive(:call)
+
+        expect { described_class.from_omniauth(auth_params) }
+          .to raise_error(described_class::OAuthError)
+
+        expect(ActorReconciliationService).not_to have_received(:call)
+      end
+    end
+
     context 'when a validation error occurs' do
       before do
         auth_params.uid = nil
