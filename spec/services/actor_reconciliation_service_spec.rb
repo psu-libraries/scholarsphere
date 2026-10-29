@@ -37,6 +37,20 @@ RSpec.describe ActorReconciliationService do
       expect { orcid_actor.reload }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
+    context 'when saving with the from_omniauth context' do
+      before do
+        orcid_actor.authorships.delete_all
+        psu_actor.update_column(:surname, nil) # rubocop:disable Rails/SkipsModelValidations
+      end
+
+      it 'saves the PSU Actor without a surname' do
+        reconciled_user = described_class.call(user: user, save_context: :from_omniauth)
+
+        expect(reconciled_user).to eq(user)
+        expect(psu_actor.reload).to have_attributes(surname: nil, orcid: orcid)
+      end
+    end
+
     context 'when the directory does not return an ORCID' do
       let(:resolved_orcid) { nil }
 
