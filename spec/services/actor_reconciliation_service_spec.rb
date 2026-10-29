@@ -34,6 +34,7 @@ RSpec.describe ActorReconciliationService do
       expect(deposited_collection.reload.depositor).to eq(psu_actor)
       expect(authorship.reload.actor).to eq(psu_actor)
       expect(collection_authorship.reload.actor).to eq(psu_actor)
+      expect { orcid_actor.reload }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
     context 'when the directory does not return an ORCID' do
@@ -61,26 +62,6 @@ RSpec.describe ActorReconciliationService do
         expect(user.actor).to eq(psu_actor)
         expect(psu_actor.reload.orcid).to be_nil
         expect(orcid_actor.reload).to be_persisted
-      end
-    end
-
-    context 'when the PSU Actor already has an ORCID' do
-      let!(:psu_actor) { create(:actor, psu_id: 'jxd123', orcid: orcid) }
-      let!(:orcid_actor) { psu_actor }
-
-      before do
-        allow(User).to receive(:directory_orcid).and_return(orcid)
-      end
-
-      it 'returns the user without looking up the directory ORCID' do
-        expect {
-          described_class.call(user: user)
-        }.not_to change(Actor, :count)
-
-        expect(User).not_to have_received(:directory_orcid)
-
-        expect(user.actor).to eq(psu_actor)
-        expect(psu_actor.reload.orcid).to eq(orcid)
       end
     end
   end

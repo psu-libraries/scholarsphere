@@ -38,9 +38,10 @@ class ActorReconciliationService
         psu_id_actor.created_work_versions << orcid_actor.created_work_versions
         psu_id_actor.created_collections << orcid_actor.created_collections
         orcid_actor.deposited_collections.each { |collection| collection.update!(depositor_id: psu_id_actor.id) }
+        orcid_transfer = orcid_actor.orcid
         orcid_actor.delete
         # Assigning the ORCiD must be done after deleting the ORCiD-only actor to avoid uniqueness constraint violations.
-        psu_id_actor.orcid = orcid_actor.orcid
+        psu_id_actor.orcid = orcid_transfer
         psu_id_actor.save!(context: save_context)
       end
     end
