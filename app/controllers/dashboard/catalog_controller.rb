@@ -52,7 +52,6 @@ module Dashboard
       config.add_facet_field 'keyword_sim', label: I18n.t('catalog.facets.keyword_sim'), limit: true
       config.add_facet_field 'subject_sim', label: I18n.t('catalog.facets.subject_sim'), limit: true
       config.add_facet_field 'creators_sim', label: I18n.t('catalog.facets.creators_sim'), limit: true
-      config.add_facet_field 'migration_errors_sim', label: I18n.t('catalog.facets.migration_errors_sim'), limit: true
 
       # Reset the sort fields configuration inherited from CatalogController
       config.sort_fields = {}
