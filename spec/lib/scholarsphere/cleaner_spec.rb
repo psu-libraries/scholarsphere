@@ -26,8 +26,22 @@ RSpec.describe Scholarsphere::Cleaner do
       end
 
       it 'attempts to recreate the solr collection' do
-        expect { described_class.clean_solr }.to output(/Solr cleaning failed after 5 attempts/).to_stdout
+        expect { described_class.clean_solr }.to output(/Solr cleaning failed after 7 attempts/).to_stdout
         expect(admin_spy).to have_received(:create_collection)
+      end
+    end
+
+    context 'when recreation also fails' do
+      let(:connection_mock) { double }
+
+      before do
+        stub_const('Blacklight', double(default_index: double(connection: connection_mock)))
+        allow(connection_mock).to receive(:delete_by_query).and_raise(RuntimeError, 'Connection lost')
+        allow(Scholarsphere::SolrAdmin).to receive(:new).and_raise(RuntimeError, 'Solr unavailable')
+      end
+
+      it 'continues without raising' do
+        expect { described_class.clean_solr }.to output(/Solr cleanup recovery failed/).to_stdout
       end
     end
   end

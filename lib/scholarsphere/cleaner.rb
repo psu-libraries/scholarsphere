@@ -21,12 +21,19 @@ module Scholarsphere
         Blacklight.default_index.connection.delete_by_query('*:*')
         Blacklight.default_index.connection.commit
       rescue StandardError => e
-        if (retries += 1) < 5
-          sleep 2
+        if (retries += 1) < 7
+          # Progressive backoff: 2s, 3s, 4s, 5s, 6s, 7s = 27 seconds total
+          sleep_time = retries + 1
+          puts "Solr unavailable (attempt #{retries}/7), retrying in #{sleep_time} seconds..."
+          sleep sleep_time
           retry
         end
-        puts "Solr cleaning failed after 5 attempts: #{e.message}. Attempting to recreate collection."
-        SolrAdmin.new.create_collection
+        puts "Solr cleaning failed after 7 attempts: #{e.message}. Attempting to recreate collection."
+        begin
+          SolrAdmin.new.create_collection
+        rescue StandardError => cleanup_error
+          puts "Solr cleanup recovery failed: #{cleanup_error.message}. Continuing without cleanup."
+        end
       end
 
       def clean_redis

@@ -367,8 +367,8 @@ jobs:
           POSTGRES_DB: scholarsphere
       - image: solr:9.11.0
         environment:
-          SOLR_HEAP: 2g
-          SOLR_JAVA_MEM: "-Xms1g -Xmx2g"
+          SOLR_HEAP: 3g
+          SOLR_JAVA_MEM: "-Xms2g -Xmx3g"
         command: [
           "/bin/bash",
           "-c",
