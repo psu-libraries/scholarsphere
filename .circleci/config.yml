@@ -285,14 +285,16 @@ jobs:
           POSTGRES_DB: scholarsphere
       - image: solr:9.11.0
         environment:
+          SOLR_HEAP: 4g
+          SOLR_JAVA_MEM: "-Xms3g -Xmx4g"
           SOLR_MODULES: analysis-extras
-          SOLR_OPTS: "-Dsolr.config.lib.enabled=true -Xmx1g"
+          SOLR_OPTS: "-Dsolr.config.lib.enabled=true"
           SOLR_USERNAME: scholarsphere
           SOLR_PASSWORD: scholarsphere
         command: [
           "/bin/bash",
           "-c",
-          "solr -c && solr auth enable -credentials scholarsphere:scholarsphere -z localhost:9983; solr stop && solr -c -f",
+          "solr -c -f & PID=$!; until curl -s http://localhost:8983/solr > /dev/null; do sleep 1; done; solr auth enable -credentials ${SOLR_USERNAME}:${SOLR_PASSWORD} -z localhost:9983; wait $PID",
           ]
     environment:
       RAILS_ENV: test
@@ -369,10 +371,14 @@ jobs:
         environment:
           SOLR_HEAP: 4g
           SOLR_JAVA_MEM: "-Xms3g -Xmx4g"
+          SOLR_MODULES: analysis-extras
+          SOLR_OPTS: "-Dsolr.config.lib.enabled=true"
+          SOLR_USERNAME: scholarsphere
+          SOLR_PASSWORD: scholarsphere
         command: [
           "/bin/bash",
           "-c",
-          "solr -c && solr auth enable -credentials scholarsphere:scholarsphere -z localhost:9983; solr stop && solr start -c -f",
+          "solr -c -f & PID=$!; until curl -s http://localhost:8983/solr > /dev/null; do sleep 1; done; solr auth enable -credentials ${SOLR_USERNAME}:${SOLR_PASSWORD} -z localhost:9983; wait $PID",
           ]
     environment:
       RAILS_ENV: test
