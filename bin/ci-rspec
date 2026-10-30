@@ -1,6 +1,6 @@
 #!/bin/bash
 # ci-rspec
-# 
+#
 # Runs the rspec test suite in our CI environment using Code Climate to send coverage reporting data.
 #
 set -e
@@ -42,6 +42,39 @@ for i in {1..36}; do
     exit 1
   fi
 done
+
+# Verify Solr is actually responding to HTTP requests AND can perform operations
+echo "Waiting for Solr to respond and stabilize..."
+SOLR_READY=0
+CONSECUTIVE_SUCCESS=0
+for i in {1..120}; do
+  # Test both LIST (read) and UPDATE (write) operations
+  if curl -fsS -u scholarsphere:scholarsphere "http://${SOLR_HOST:-127.0.0.1}:${SOLR_PORT:-8983}/solr/admin/collections?action=LIST&wt=json" > /dev/null 2>&1 && \
+     curl -fsS -u scholarsphere:scholarsphere -X POST -H "Content-Type: application/json" \
+       -d '{"delete":{"query":"id:solr-health-check-*"}}' \
+       "http://${SOLR_HOST:-127.0.0.1}:${SOLR_PORT:-8983}/solr/scholarsphere/update?wt=json&commit=true" > /dev/null 2>&1; then
+    CONSECUTIVE_SUCCESS=$((CONSECUTIVE_SUCCESS + 1))
+    if [ $CONSECUTIVE_SUCCESS -ge 5 ]; then
+      echo "Solr is ready for operations (5 consecutive successful responses)"
+      SOLR_READY=1
+      break
+    fi
+    echo "  Solr responding... ($CONSECUTIVE_SUCCESS/5 consecutive successes, attempt $i/120)"
+  else
+    CONSECUTIVE_SUCCESS=0
+    echo "  Waiting for Solr to stabilize... (attempt $i/120)"
+  fi
+  sleep 1
+done
+
+if [ $SOLR_READY -eq 0 ]; then
+  echo "ERROR: Solr did not stabilize within 120 seconds"
+  exit 1
+fi
+
+# Final stabilization wait
+echo "Solr fully initialized, waiting for final stabilization..."
+sleep 10
 
 # If there's no Git repo, then assume this is DroneCI's environment
 # and link variables to the ones that Code Climate expects.
