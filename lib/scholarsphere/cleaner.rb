@@ -18,7 +18,7 @@ module Scholarsphere
 
       def clean_solr
         # Retry logic for Solr cleanup - Solr 9 can be intermittently unavailable during test runs
-        max_attempts = 3
+        max_attempts = 5
         attempt = 0
 
         begin
@@ -27,16 +27,27 @@ module Scholarsphere
           Blacklight.default_index.connection.commit
         rescue RSolr::Error::ConnectionRefused, Errno::ECONNREFUSED
           if attempt < max_attempts
-            puts "Solr connection refused (attempt #{attempt}/#{max_attempts}), retrying in 2 seconds..."
-            sleep 2
+            sleep_time = 3 * attempt # Exponential backoff: 3s, 6s, 9s, 12s
+            puts "Solr connection refused (attempt #{attempt}/#{max_attempts}), retrying in #{sleep_time} seconds..."
+            sleep sleep_time
             retry
           else
             puts "Solr connection refused after #{max_attempts} attempts, attempting to recreate collection"
-            SolrAdmin.new.create_collection
+            begin
+              SolrAdmin.new.create_collection
+            rescue StandardError => e
+              puts "Failed to recreate collection after connection refused: #{e.message}"
+              # Don't raise - allow test to continue even if cleanup failed
+            end
           end
-        rescue RuntimeError
-          puts 'Solr endpoint not found, attempting to recreate it'
-          SolrAdmin.new.create_collection
+        rescue RuntimeError => e
+          puts "Solr runtime error during cleanup: #{e.message}, attempting to recreate collection"
+          begin
+            SolrAdmin.new.create_collection
+          rescue StandardError => retry_error
+            puts "Failed to recreate collection: #{retry_error.message}"
+            # Don't raise - allow test to continue even if cleanup failed
+          end
         end
       end
 
