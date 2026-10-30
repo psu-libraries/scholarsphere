@@ -180,13 +180,38 @@ RSpec.describe User do
                                 given_name: nil,
                                 surname: nil,
                                 access_id: 'jd1',
-                                groups: [])
+                                groups: [],
+                                info_groups: [
+                                  Scholarsphere::Application.config.psu_affiliated_group
+                                ])
       }
 
       it 'still creates the Author and User' do
         expect { described_class.from_omniauth(auth_params) }
           .to change(described_class, :count).by(1)
           .and change(Actor, :count).by(1)
+      end
+    end
+
+    context 'when the OAuth response shows no psu-identified groups' do
+      let(:auth_params) { build(:psu_oauth_response,
+                                given_name: 'Clark',
+                                surname: 'Kent',
+                                access_id: 'jd1',
+                                groups: [])
+      }
+
+      it 'raises a NotAffiliatedWithPsu error' do
+        expect { described_class.from_omniauth(auth_params) }
+          .to raise_error(described_class::NotAffiliatedWithPsu)
+          .and not_change(described_class, :count)
+      end
+
+      context 'when the user bypasses the check' do
+        it 'creates the User record' do
+          expect { described_class.from_omniauth(auth_params, check_psu_affiliated: false) }
+            .to change(described_class, :count).by(1)
+        end
       end
     end
 
@@ -212,9 +237,9 @@ RSpec.describe User do
             described_class.from_omniauth(auth_params)
           rescue described_class::OAuthError
           end
-        }.to change(described_class, :count).by(0)
-          .and change(Actor, :count).by(0)
-          .and change(Group, :count).by(0)
+        }.to not_change(described_class, :count)
+          .and not_change(Actor, :count)
+          .and not_change(Group, :count)
       end
     end
 

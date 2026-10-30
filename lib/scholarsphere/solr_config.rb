@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'zip'
-require 'cgi'
 
 module Scholarsphere
   class SolrConfig
@@ -9,15 +8,11 @@ module Scholarsphere
     COLLECTION_PATH = '/solr/admin/collections'
 
     def solr_username
-      ENV.fetch('SOLR_USERNAME', nil)
+      ENV.fetch('SOLR_USERNAME', 'scholarsphere')
     end
 
     def solr_password
-      ENV.fetch('SOLR_PASSWORD', nil)
-    end
-
-    def solr_protocol
-      ENV.fetch('SOLR_PROTOCOL', 'http')
+      ENV.fetch('SOLR_PASSWORD', 'scholarsphere')
     end
 
     def solr_host
@@ -29,8 +24,7 @@ module Scholarsphere
     end
 
     def url
-      port = solr_port.to_s.empty? ? '' : ":#{solr_port}"
-      "#{solr_protocol}://#{solr_host}#{port}"
+      "http://#{solr_host}:#{solr_port}"
     end
 
     def config_url
@@ -42,12 +36,7 @@ module Scholarsphere
     end
 
     def query_url
-      base_url = "#{url}/solr/#{collection_name}"
-      if solr_username && solr_password
-        auth = "#{solr_username}:#{CGI.escape(solr_password)}"
-        return base_url.gsub('://', "://#{auth}@")
-      end
-      base_url
+      "http://#{solr_username}:#{CGI.escape(solr_password)}@#{solr_host}:#{solr_port}/solr/#{collection_name}"
     end
 
     def dir

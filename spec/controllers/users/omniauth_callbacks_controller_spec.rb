@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Users::OmniauthCallbacksController do
-  let(:oauth_response) { build(:psu_oauth_response) }
+  let(:oauth_response) { build(:psu_oauth_response, :psu_affiliated) }
   let(:user) { build_stubbed(:user) }
 
   before do
@@ -90,16 +90,26 @@ RSpec.describe Users::OmniauthCallbacksController do
       end
 
       it { is_expected.to redirect_to root_path }
+
+      it 'displays an alert' do
+        expect(flash[:alert]).to match(I18n.t('omniauth.login_error'))
+      end
     end
 
     context 'when the user is not affiliated with PSU' do
+      let(:oauth_response) { build(:psu_oauth_response, :non_psu) }
+
       before do
-        allow(user).to receive(:psu_affiliated?)
-          .and_return(false)
+        allow(User).to receive(:from_omniauth)
+          .with(oauth_response).and_raise User::NotAffiliatedWithPsu
         get :azure_oauth
       end
 
       it { is_expected.to redirect_to root_path }
+
+      it 'displays an alert' do
+        expect(flash[:alert]).to match(I18n.t('omniauth.not_affiliated_with_psu'))
+      end
     end
   end
 end

@@ -1,16 +1,15 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
 require 'scholarsphere/cleaner'
 require 'scholarsphere/solr_admin'
 
 RSpec.describe Scholarsphere::Cleaner do
-  describe '#clean_minio' do
+  describe '#clean_seaweedfs' do
     context 'when aws is not installed' do
       before { allow(described_class).to receive(:aws?).and_return(false) }
 
       it 'writes a warnig message to the console' do
-        expect { described_class.clean_minio }.to output(/WARNING: Install aws in order to delete files from minio/).to_stdout
+        expect { described_class.clean_seaweedfs }.to output(/WARNING: Install aws in order to delete files from seaweedfs/).to_stdout
       end
     end
   end
@@ -25,7 +24,7 @@ RSpec.describe Scholarsphere::Cleaner do
       end
 
       it 'attempts to recreate the solr collection' do
-        expect { described_class.clean_solr }.to output(/Solr cleaning failed after 5 attempts/).to_stdout
+        expect { described_class.clean_solr }.to output(/Solr endpoint not found, attempting to recreate it/).to_stdout
         expect(admin_spy).to have_received(:create_collection)
       end
     end
