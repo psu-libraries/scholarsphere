@@ -72,9 +72,9 @@ if [ $SOLR_READY -eq 0 ]; then
   exit 1
 fi
 
-# Extended final stabilization wait - Solr 9 needs more time to fully stabilize
-echo "Solr fully initialized, extended stabilization (30 seconds)..."
-sleep 30
+# Extended final stabilization wait - Solr 9 needs substantial time to fully stabilize before heavy test load
+echo "Solr fully initialized, extended stabilization (45 seconds for Capybara tests)..."
+sleep 45
 
 # If there's no Git repo, then assume this is DroneCI's environment
 # and link variables to the ones that Code Climate expects.
