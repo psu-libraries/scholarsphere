@@ -274,7 +274,7 @@ jobs:
     docker:
       - image: cimg/ruby:3.4.11-browsers
       - image: redis:6.2.6
-      - image: chrislusf/seaweedfs:latest
+      - image: chrislusf/seaweedfs:4.50
         environment:
           AWS_ACCESS_KEY_ID: scholarsphere
           AWS_SECRET_ACCESS_KEY: scholarsphere
@@ -358,7 +358,7 @@ jobs:
     docker:
       - image: cimg/ruby:3.4.11-browsers
       - image: redis:6.2.6
-      - image: chrislusf/seaweedfs:latest
+      - image: chrislusf/seaweedfs:4.50
         environment:
           AWS_ACCESS_KEY_ID: scholarsphere
           AWS_SECRET_ACCESS_KEY: scholarsphere
