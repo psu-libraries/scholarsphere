@@ -26,8 +26,22 @@ then
   exit 1
 fi
 
-echo "Initaizing Solr"
-bundle exec rake solr:init
+echo "Initializing Solr"
+# Retry solr:init up to 36 times (180 seconds total) because ZooKeeper needs time to initialize
+for i in {1..36}; do
+  if bundle exec rake solr:init 2>&1; then
+    echo "Solr initialized successfully"
+    sleep 10  # Give Solr time to stabilize after initialization
+    break
+  fi
+  if [ $i -lt 36 ]; then
+    echo "Solr not ready yet, retrying in 5 seconds... (attempt $i/36)"
+    sleep 5
+  else
+    echo "Failed to initialize Solr after 36 attempts"
+    exit 1
+  fi
+done
 
 # If there's no Git repo, then assume this is DroneCI's environment
 # and link variables to the ones that Code Climate expects.
