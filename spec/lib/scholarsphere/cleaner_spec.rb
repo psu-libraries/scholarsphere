@@ -17,14 +17,16 @@ RSpec.describe Scholarsphere::Cleaner do
   describe '#clean_solr' do
     context 'when there is an RSolr error' do
       let(:admin_spy) { instance_spy(Scholarsphere::SolrAdmin) }
+      let(:connection_mock) { double }
 
       before do
-        allow(Blacklight).to receive(:default_index).and_raise(RuntimeError)
+        stub_const('Blacklight', double(default_index: double(connection: connection_mock)))
+        allow(connection_mock).to receive(:delete_by_query).and_raise(RuntimeError, 'Test error')
         allow(Scholarsphere::SolrAdmin).to receive(:new).and_return(admin_spy)
       end
 
       it 'attempts to recreate the solr collection' do
-        expect { described_class.clean_solr }.to output(/Solr endpoint not found, attempting to recreate it/).to_stdout
+        expect { described_class.clean_solr }.to output(/Solr cleaning failed after 5 attempts/).to_stdout
         expect(admin_spy).to have_received(:create_collection)
       end
     end
@@ -32,7 +34,12 @@ RSpec.describe Scholarsphere::Cleaner do
 
   describe '#clean_redis' do
     it 'removes all jobs from the queues' do
-      expect(described_class.clean_redis).to be_an(Array)
+      redis_mock = instance_double('Redis')
+      allow(redis_mock).to receive(:keys).and_return(['key1', 'key2'])
+      allow(described_class).to receive(:redis).and_return(redis_mock)
+
+      result = described_class.clean_redis
+      expect(result).to be_an(Array)
     end
   end
 end
