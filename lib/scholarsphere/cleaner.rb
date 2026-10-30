@@ -20,12 +20,12 @@ module Scholarsphere
         # Retry logic for Solr cleanup - Solr 9 can be intermittently unavailable during test runs
         max_attempts = 3
         attempt = 0
-        
+
         begin
           attempt += 1
           Blacklight.default_index.connection.delete_by_query('*:*')
           Blacklight.default_index.connection.commit
-        rescue RSolr::Error::ConnectionRefused, Errno::ECONNREFUSED => e
+        rescue RSolr::Error::ConnectionRefused, Errno::ECONNREFUSED
           if attempt < max_attempts
             puts "Solr connection refused (attempt #{attempt}/#{max_attempts}), retrying in 2 seconds..."
             sleep 2

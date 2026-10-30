@@ -5,6 +5,6 @@
 # Use longer timeouts to prevent spurious "Connection refused" errors
 
 RSolr.options = {
-  timeout: 60,  # Increase from default 10s to 60s for test stability
-  open_timeout: 60  # Increase from default 10s to 60s
+  timeout: 60, # Increase from default 10s to 60s for test stability
+  open_timeout: 60 # Increase from default 10s to 60s
 }
