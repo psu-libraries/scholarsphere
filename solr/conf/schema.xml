@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema name="Hydra" version="1.5">
+<schema name="Hydra" version="1.6">
   <!-- NOTE: various comments and unused configuration possibilities have been purged
      from this file.  Please refer to http://wiki.apache.org/solr/SchemaXml,
      as well as the default schema file included with Solr -->
@@ -294,7 +294,6 @@
       <analyzer>
         <tokenizer class="solr.StandardTokenizerFactory"/>
         <filter class="solr.LowerCaseFilterFactory"/>
-        <filter class="solr.ASCIIFoldingFilterFactory"/>
         <filter class="solr.ASCIIFoldingFilterFactory"/>  <!-- ASCII folding, case folding, diacritics removed -->
         <filter class="solr.TrimFilterFactory"/>
       </analyzer>
@@ -314,7 +313,6 @@
         <tokenizer class="solr.KeywordTokenizerFactory" />
         <filter class="solr.LowerCaseFilterFactory"/>
         <filter class="solr.ASCIIFoldingFilterFactory"/>
-        <filter class="solr.ASCIIFoldingFilterFactory"/>
         <filter class="solr.TrimFilterFactory" />
       </analyzer>
     </fieldtype>
@@ -324,7 +322,6 @@
       <analyzer>
         <tokenizer class="solr.StandardTokenizerFactory"/>
         <filter class="solr.LowerCaseFilterFactory"/>
-        <filter class="solr.ASCIIFoldingFilterFactory"/>
         <filter class="solr.ASCIIFoldingFilterFactory"/>  <!-- ASCII folding, case folding, diacritics removed -->
         <filter class="solr.EnglishPossessiveFilterFactory"/>
         <!-- EnglishMinimalStemFilterFactory is less aggressive than PorterStemFilterFactory: -->
@@ -341,7 +338,6 @@
       <analyzer type="index">
         <tokenizer class="solr.StandardTokenizerFactory"/>
         <filter class="solr.LowerCaseFilterFactory"/>
-        <filter class="solr.ASCIIFoldingFilterFactory"/>
         <filter class="solr.ASCIIFoldingFilterFactory"/>  <!-- ASCII folding, case folding, diacritics removed -->
         <filter class="solr.EnglishPossessiveFilterFactory"/>
         <!-- EnglishMinimalStemFilterFactory is less aggressive than PorterStemFilterFactory: -->
@@ -353,7 +349,6 @@
       <analyzer type="query">
         <tokenizer class="solr.StandardTokenizerFactory"/>
         <filter class="solr.LowerCaseFilterFactory"/>
-        <filter class="solr.ASCIIFoldingFilterFactory"/>
         <filter class="solr.ASCIIFoldingFilterFactory"/>  <!-- ASCII folding, case folding, diacritics removed -->
         <filter class="solr.EnglishPossessiveFilterFactory"/>
         <!-- EnglishMinimalStemFilterFactory is less aggressive than PorterStemFilterFactory: -->
@@ -373,7 +368,6 @@
         <tokenizer class="solr.StandardTokenizerFactory"/>
         <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt"/>
         <filter class="solr.LowerCaseFilterFactory"/>
-        <filter class="solr.ASCIIFoldingFilterFactory"/>
         <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
       </analyzer>
     </fieldType>
@@ -382,7 +376,6 @@
        <analyzer>
           <tokenizer class="solr.KeywordTokenizerFactory"/>
           <filter class="solr.LowerCaseFilterFactory"/>
-        <filter class="solr.ASCIIFoldingFilterFactory"/>
           <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
        </analyzer>
     </fieldType>
@@ -408,20 +401,19 @@
     </fieldType>
 
     <!-- CJK text field using ICU for normalization and tokenization -->
-    <fieldType name="text_cjk" class="solr.TextField" positionIncrementGap="10000" autoGeneratePhraseQueries="false">
+    <!-- NOTE: Disabled for Solr 9.11.0 - ICU module not loaded by default -->
+    <!-- <fieldType name="text_cjk" class="solr.TextField" positionIncrementGap="10000" autoGeneratePhraseQueries="false">
       <analyzer>
         <charFilter class="solr.PatternReplaceCharFilterFactory" pattern="([\p{InHangul_Jamo}\p{InHangul_Compatibility_Jamo}\p{InHangul_Syllables}][\p{InBopomofo}\p{InBopomofo_Extended}\p{InCJK_Compatibility}\p{InCJK_Compatibility_Forms}\p{InCJK_Compatibility_Ideographs}\p{InCJK_Compatibility_Ideographs_Supplement}\p{InCJK_Radicals_Supplement}\p{InCJK_Symbols_And_Punctuation}\p{InCJK_Unified_Ideographs}\p{InCJK_Unified_Ideographs_Extension_A}\p{InCJK_Unified_Ideographs_Extension_B}\p{InKangxi_Radicals}\p{InHalfwidth_And_Fullwidth_Forms}\p{InIdeographic_Description_Characters}]*)\s+(?=[\p{InHangul_Jamo}\p{InHangul_Compatibility_Jamo}\p{InHangul_Syllables}\p{InBopomofo}\p{InBopomofo_Extended}\p{InCJK_Compatibility}\p{InCJK_Compatibility_Forms}\p{InCJK_Compatibility_Ideographs}\p{InCJK_Compatibility_Ideographs_Supplement}\p{InCJK_Radicals_Supplement}\p{InCJK_Symbols_And_Punctuation}\p{InCJK_Unified_Ideographs}\p{InCJK_Unified_Ideographs_Extension_A}\p{InCJK_Unified_Ideographs_Extension_B}\p{InKangxi_Radicals}\p{InHalfwidth_And_Fullwidth_Forms}\p{InIdeographic_Description_Characters}])" replacement="$1"/>
         <charFilter class="solr.PatternReplaceCharFilterFactory" pattern="([\p{InHangul_Jamo}\p{InHangul_Compatibility_Jamo}\p{InHangul_Syllables}\p{InBopomofo}\p{InBopomofo_Extended}\p{InCJK_Compatibility}\p{InCJK_Compatibility_Forms}\p{InCJK_Compatibility_Ideographs}\p{InCJK_Compatibility_Ideographs_Supplement}\p{InCJK_Radicals_Supplement}\p{InCJK_Symbols_And_Punctuation}\p{InCJK_Unified_Ideographs}\p{InCJK_Unified_Ideographs_Extension_A}\p{InCJK_Unified_Ideographs_Extension_B}\p{InKangxi_Radicals}\p{InHalfwidth_And_Fullwidth_Forms}\p{InIdeographic_Description_Characters}])\s+(?=[\p{InBopomofo}\p{InBopomofo_Extended}\p{InCJK_Compatibility}\p{InCJK_Compatibility_Forms}\p{InCJK_Compatibility_Ideographs}\p{InCJK_Compatibility_Ideographs_Supplement}\p{InCJK_Radicals_Supplement}\p{InCJK_Symbols_And_Punctuation}\p{InCJK_Unified_Ideographs}\p{InCJK_Unified_Ideographs_Extension_A}\p{InCJK_Unified_Ideographs_Extension_B}\p{InKangxi_Radicals}\p{InHalfwidth_And_Fullwidth_Forms}\p{InIdeographic_Description_Characters}\s]*[\p{InHangul_Jamo}\p{InHangul_Compatibility_Jamo}\p{InHangul_Syllables}])" replacement="$1"/>
         <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-cjkMarcCompatibility.txt"/>
-        <tokenizer class="solr.StandardTokenizerFactory" />
+        <tokenizer class="solr.ICUTokenizerFactory" />
         <filter class="solr.CJKWidthFilterFactory"/>
-        <!-- ICU Transform filters disabled for Solr 9.11 compatibility (ICU module not available) -->
-        <!-- <filter class="solr.ICUTransformFilterFactory" id="Traditional-Simplified"/> -->
-        <!-- <filter class="solr.ICUTransformFilterFactory" id="Katakana-Hiragana" /> -->
-        <filter class="solr.LowerCaseFilterFactory"/>
-        <filter class="solr.ASCIIFoldingFilterFactory"/>
+        <filter class="solr.ICUTransformFilterFactory" id="Traditional-Simplified"/>
+        <filter class="solr.ICUTransformFilterFactory" id="Katakana-Hiragana" />
+        <filter class="solr.ICUFoldingFilterFactory"/>
       </analyzer>
-    </fieldType>
+    </fieldType> -->
 
   </types>
 
