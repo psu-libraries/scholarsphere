@@ -21,7 +21,6 @@ require('select2/dist/js/select2')
 // This should be just enough JS to get the facet modals working.
 require('blacklight-frontend/app/javascript/blacklight/core')
 require('blacklight-frontend/app/javascript/blacklight/modal')
-require('blacklight-frontend/app/javascript/blacklight/facet_load')
 
 // Load images
 // Retrieve the path to the image via <%= image_pack_tag('image.png') %>
