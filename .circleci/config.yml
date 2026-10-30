@@ -352,7 +352,7 @@ jobs:
           ./bin/ci-rspec --exclude-pattern "spec/features/**/*_spec.rb"
 
   feature-tests:
-    resource_class: large
+    resource_class: xlarge
     docker:
       - image: cimg/ruby:3.4.11-browsers
       - image: redis:6.2.6
@@ -367,8 +367,8 @@ jobs:
           POSTGRES_DB: scholarsphere
       - image: solr:9.11.0
         environment:
-          SOLR_HEAP: 3g
-          SOLR_JAVA_MEM: "-Xms2g -Xmx3g"
+          SOLR_HEAP: 4g
+          SOLR_JAVA_MEM: "-Xms3g -Xmx4g"
         command: [
           "/bin/bash",
           "-c",
