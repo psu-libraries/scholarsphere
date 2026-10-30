@@ -392,6 +392,8 @@ jobs:
       RMD_HOST: https://metadata.libraries.psu.edu
       PDF_REMEDIATION_ENDPOINT: endpoint
       PDF_REMEDIATION_API_KEY: api-key
+      RSOLR_TIMEOUT: '60'
+      RSOLR_OPEN_TIMEOUT: '60'
     steps:
     - checkout
     - setup_remote_docker:

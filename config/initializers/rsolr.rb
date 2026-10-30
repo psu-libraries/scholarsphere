@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
-# Configure RSolr (Ruby Solr client) connection settings
-# Solr 9 can be slower than Solr 8, especially under test load
-# Use longer timeouts to prevent spurious "Connection refused" errors
+# Configure timeouts for Solr connections through environment variables
+# Solr 9 requires longer timeouts than Solr 8, especially under test load
+# These are used by RSolr when making HTTP requests via Faraday
 
-RSolr.options = {
-  timeout: 60, # Increase from default 10s to 60s for test stability
-  open_timeout: 60 # Increase from default 10s to 60s
-}
+ENV['RSOLR_TIMEOUT'] ||= '60'
+ENV['RSOLR_OPEN_TIMEOUT'] ||= '60'
