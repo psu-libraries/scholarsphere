@@ -6,7 +6,8 @@ This guide covers setting up the Scholarsphere Rails application for development
 
 1. [Prerequisites](#prerequisites)
 2. [Quick Start](#quick-start)
-3. [Understanding docker-env.sh](#understanding-docker-envsh)
+3. [Automated Setup (Alternative)](#automated-setup-alternative)
+4. [Understanding docker-env.sh](#understanding-docker-envsh)
 4. [Solr 9 Configuration](#solr-9-configuration)
 5. [Troubleshooting](#troubleshooting)
 6. [Testing](#testing)
@@ -145,6 +146,56 @@ bundle exec rails server -b 0.0.0.0
 ```
 
 Access the application at: **http://localhost:3000**
+
+---
+
+## Automated Setup (Alternative)
+
+If you prefer an automated approach instead of manual steps, use the provided setup script:
+
+```bash
+bash bin/setup-docker-fresh.sh
+```
+
+This script **automates all the steps above** in one command:
+
+1. ✅ Sources `docker-env.sh` for user permissions
+2. ✅ Stops and removes old containers (`docker-compose down -v`)
+3. ✅ Fixes Solr volume permissions on Linux (requires `sudo`)
+4. ✅ Builds and starts all containers
+5. ✅ Waits for Solr to become healthy
+6. ✅ Initializes the database with migrations
+7. ✅ Initializes Solr collections
+8. ✅ Verifies setup and shows container status
+
+**When to use:**
+- Fresh installation on a new machine
+- Complete reset/cleanup (removes all data, rebuilds from scratch)
+- Troubleshooting permission issues
+- Setting up in CI/CD environments
+
+**Example output:**
+```
+🐳 Scholarsphere Docker Fresh Setup
+====================================
+Step 1: Setting up Docker environment...
+✓ Docker user configured: 1000:1000
+
+Step 2: Stopping old containers...
+✓ Old containers removed
+
+Step 3: Fixing Solr volume permissions (Linux)...
+✓ Permissions fixed
+
+...
+
+✅ Setup complete!
+
+Ready to run tests:
+  docker-compose exec -T web bash -lc 'cd /app && RAILS_ENV=test bundle exec rspec'
+```
+
+**Note:** The script requires `sudo` for fixing Solr volume permissions on Linux. You'll be prompted for your password.
 
 ---
 
