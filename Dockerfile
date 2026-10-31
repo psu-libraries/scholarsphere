@@ -7,8 +7,8 @@ RUN apt-get update && \
   apt-get install --no-install-recommends -y \
   shared-mime-info \
   imagemagick \
-  ghostscript\
-  libreoffice &&\
+  ghostscript \
+  libreoffice && \
   rm -rf /var/lib/apt/lists/*
 
 COPY config/policy.xml /etc/ImageMagick-6/policy.xml
@@ -39,16 +39,18 @@ CMD ["/app/bin/startup"]
 FROM base AS dev
 
 USER root
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-    && echo 'deb http://dl.google.com/linux/chrome/deb/ stable main' >> /etc/apt/sources.list.d/google.list \
-    && apt-get update && apt-get install --no-install-recommends -y x11vnc \
+RUN apt-get update && apt-get install --no-install-recommends -y wget \
+    && mkdir -p /etc/apt/keyrings \
+    && wget -qO /etc/apt/keyrings/google-chrome.asc https://dl-ssl.google.com/linux/linux_signing_key.pub \
+    && echo 'deb [arch=amd64 signed-by=/etc/apt/keyrings/google-chrome.asc] http://dl.google.com/linux/chrome/deb/ stable main' > /etc/apt/sources.list.d/google.list \
+    && apt-get update && apt-get install --no-install-recommends -y \
+    x11vnc \
     xvfb \
     fluxbox \
     sqlite3 \
     rsync \
     libsqlite3-dev \
     libnss3 \
-
     libdrm2 \
     libice6 \
     libsm6 \
