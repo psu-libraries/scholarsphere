@@ -294,7 +294,7 @@ jobs:
           gem install bundler -v "$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)"
           bundle config set path 'vendor/bundle'
           bundle config set deployment true
-          bundle check || bundle install --jobs=1 --retry=3
+          bundle check || bundle install --jobs=4 --retry=3
     - run:
         name: "Yarn"
         command: |
@@ -314,14 +314,20 @@ jobs:
         paths:
           - ~/.cache/yarn
     - run:
-        name: "Lint"
+        name: "Lint and Jest (parallel)"
         command: |
-          bundle exec niftany
-          yarn lint
-    - run:
-        name: "Jest"
-        command: |
+          # Start linting in background
+          bundle exec niftany &
+          NIFTANY_PID=$!
+          yarn lint &
+          YARN_LINT_PID=$!
+          
+          # Run Jest in foreground
           yarn test
+          JEST_PID=$!
+          
+          # Wait for all background processes to complete
+          wait $NIFTANY_PID $YARN_LINT_PID $JEST_PID
     - run:
         name: "RSpec"
         command: |
