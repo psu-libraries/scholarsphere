@@ -26,7 +26,7 @@ RUN bundle install && \
   rm -rf /app/vendor/bundle/ruby/*/cache
 
 
-COPY package.json yarn.lock /app/
+COPY --chown=app:app package.json yarn.lock /app/
 RUN yarn install --frozen-lockfile && \
   rm -rf /app/.cache && \
   rm -rf /app/tmp
@@ -44,11 +44,11 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
     && apt-get update && apt-get install --no-install-recommends -y x11vnc \
     xvfb \
     fluxbox \
-    wget \
     sqlite3 \
     rsync \
     libsqlite3-dev \
     libnss3 \
+
     libdrm2 \
     libice6 \
     libsm6 \
