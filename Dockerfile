@@ -16,6 +16,7 @@ RUN useradd -u $UID app -d /app
 # adding this in attempts to see what happens with permissions
 RUN mkdir /tmp/app/ && chown app:app /tmp/app && chmod 755 /tmp/app
 COPY --chown=app:app Gemfile Gemfile.lock /app/
+RUN chown -R app:app /app
 USER app
 
 # in the event that bundler runs outside of docker, we get in sync with it's bundler version
