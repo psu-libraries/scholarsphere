@@ -55,3 +55,5 @@ docker-compose.yml.local
 AGENTS.md
 firefox/
 geckodriver/
+.env
+.vscode/settings.json
