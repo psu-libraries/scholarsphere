@@ -15,13 +15,12 @@ COPY config/policy.xml /etc/ImageMagick-6/policy.xml
 RUN useradd -u $UID app -d /app
 # adding this in attempts to see what happens with permissions
 RUN mkdir /tmp/app/ && chown app:app /tmp/app && chmod 755 /tmp/app
-COPY Gemfile Gemfile.lock /app/
-RUN chown -R app:app /app
+COPY --chown=app:app Gemfile Gemfile.lock /app/
 USER app
 
 # in the event that bundler runs outside of docker, we get in sync with it's bundler version
-RUN gem install bundler -v "$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)"
-RUN bundle config set path 'vendor/bundle'
+RUN gem install bundler -v "$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)" && \
+  bundle config set path 'vendor/bundle'
 RUN bundle install && \
   rm -rf /app/.bundle/cache && \
   rm -rf /app/vendor/bundle/ruby/*/cache
@@ -33,7 +32,7 @@ RUN yarn install --frozen-lockfile && \
   rm -rf /app/tmp
 
 
-COPY --chown=app . /app
+COPY --chown=app:app . /app
 
 CMD ["/app/bin/startup"]
 
