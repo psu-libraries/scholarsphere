@@ -9,11 +9,10 @@ RUN apt-get update && \
   imagemagick \
   ghostscript\
   libreoffice &&\
-  rm -rf /var/lib/apt/lists*
+  rm -rf /var/lib/apt/lists/*
 
 COPY config/policy.xml /etc/ImageMagick-6/policy.xml
 RUN useradd -u $UID app -d /app
-RUN mkdir /app/tmp
 # adding this in attempts to see what happens with permissions
 RUN mkdir /tmp/app/
 RUN chown app:app /tmp/app && chmod 755 /tmp/app
@@ -21,7 +20,7 @@ COPY Gemfile Gemfile.lock /app/
 RUN chown -R app:app /app
 USER app
 
-# in the event that bundler runs outside of docker, we get in sync with it's bundler version 
+# in the event that bundler runs outside of docker, we get in sync with it's bundler version
 RUN gem install bundler -v "$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)"
 RUN bundle config set path 'vendor/bundle'
 RUN bundle install && \
@@ -43,9 +42,8 @@ FROM base AS dev
 
 USER root
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-    && echo 'deb http://dl.google.com/linux/chrome/deb/ stable main' >> /etc/apt/sources.list.d/google.list
-
-RUN apt-get update && apt-get install -y x11vnc \
+    && echo 'deb http://dl.google.com/linux/chrome/deb/ stable main' >> /etc/apt/sources.list.d/google.list \
+    && apt-get update && apt-get install --no-install-recommends -y x11vnc \
     xvfb \
     fluxbox \
     wget \
