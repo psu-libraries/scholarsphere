@@ -14,8 +14,7 @@ RUN apt-get update && \
 COPY config/policy.xml /etc/ImageMagick-6/policy.xml
 RUN useradd -u $UID app -d /app
 # adding this in attempts to see what happens with permissions
-RUN mkdir /tmp/app/
-RUN chown app:app /tmp/app && chmod 755 /tmp/app
+RUN mkdir /tmp/app/ && chown app:app /tmp/app && chmod 755 /tmp/app
 COPY Gemfile Gemfile.lock /app/
 RUN chown -R app:app /app
 USER app
@@ -55,7 +54,8 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
     libice6 \
     libsm6 \
     wmctrl \
-    google-chrome-stable
+    google-chrome-stable \
+    && rm -rf /var/lib/apt/lists/*
 
 USER app
 RUN bundle config set path 'vendor/bundle'
