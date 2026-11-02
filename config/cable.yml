@@ -11,3 +11,6 @@ production:
   adapter: redis
   url: <%= Scholarsphere::RedisConfig.new.to_hash[:url] %>
   channel_prefix: scholarsphere_production
+  # Allow Action Cable to recover from temporary Redis outages
+  # during Kubernetes pod restarts.
+  reconnect_attempts: [0, 1, 2, 5, 10, 10, 10, 10, 10, 10]
