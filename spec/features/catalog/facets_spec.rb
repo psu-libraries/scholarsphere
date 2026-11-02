@@ -16,7 +16,7 @@ RSpec.describe 'Search Facets', :inline_jobs do
       click_button('search')
 
       within '#facets' do
-        first('[data-target="#facet-keyword_sim"]').click
+        first('[data-target="#facet-display_work_type_ssi"]').click
       end
 
       click_link 'more'
