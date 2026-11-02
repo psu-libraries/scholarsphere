@@ -1,4 +1,4 @@
-#blacklight-modal {
+.blacklight-modal-dialog {
   @mixin modal-open {
     opacity: 1;
     transform: $modal-show-transform;
@@ -8,17 +8,16 @@
     opacity: 0;
     transform: $modal-fade-transform;
   }
-  
-  background-color: transparent;
-  padding: 0;
-  border: 0;
-  transition: $transition-fade;
-  transition: $modal-transition;
+
   @include modal-close;
-  
+  background-color: transparent;
+  border: 0;
+  padding: 0;
+  transition: $transition-fade, $modal-transition;
+
   &[open] {
     @include modal-open;
-	  
+
     @starting-style {
       @include modal-close;
     }
