@@ -16,4 +16,15 @@ Bugsnag.configure do |config|
 
     event.ignore! if action&.start_with?('ok_computer')
   end)
+
+  config.add_on_error(proc do |event|
+    routing_error = event.errors.any? do |error|
+      error.error_class == 'ActionController::RoutingError'
+    end
+
+    url = event.request && event.request[:url]
+    facet_path = url && URI.parse(url).path.include?('/catalog/facet')
+
+    event.ignore! if routing_error && facet_path
+  end)
 end
