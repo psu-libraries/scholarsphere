@@ -1,0 +1,35 @@
+#blacklight-modal {
+  @mixin modal-open {
+    opacity: 1;
+    transform: $modal-show-transform;
+  }
+
+  @mixin modal-close {
+    opacity: 0;
+    transform: $modal-fade-transform;
+  }
+  
+  background-color: transparent;
+  padding: 0;
+  border: 0;
+  transition: $transition-fade;
+  transition: $modal-transition;
+  @include modal-close;
+  
+  &[open] {
+    @include modal-open;
+	  
+    @starting-style {
+      @include modal-close;
+    }
+  }
+
+  &::backdrop {
+    background-color: $modal-backdrop-bg;
+    opacity: $modal-backdrop-opacity;
+  }
+
+  .modal-dialog {
+    margin: 0;
+  }
+}
