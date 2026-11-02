@@ -207,7 +207,6 @@ en:
         year_10: in 10 years
         year_more: beyond 10 years
       keyword_sim: Keywords
-      migration_errors_sim: Migration Errors
       subject_sim: Subject
       visibility_ssi: Access
   files_message:
