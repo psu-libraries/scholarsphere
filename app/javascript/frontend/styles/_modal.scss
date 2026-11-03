@@ -12,7 +12,11 @@
   @include modal-close;
   background-color: transparent;
   border: 0;
+  left: 0;
+  min-width: min(95%, $modal-lg);
   padding: 0;
+  position: fixed;
+  top: 0;
   transition: $transition-fade, $modal-transition;
 
   &[open] {
