@@ -26,6 +26,7 @@
 //@import '~blacklight-frontend/app/assets/stylesheets/blacklight/search_results';
 //@import '~blacklight-frontend/app/assets/stylesheets/blacklight/group';
 //@import '~blacklight-frontend/app/assets/stylesheets/blacklight/balanced_list';
+@import '~blacklight-frontend/app/assets/stylesheets/blacklight/blacklight_defaults';
 @import '~blacklight-frontend/app/assets/stylesheets/blacklight/pagination';
 //@import '~blacklight-frontend/app/assets/stylesheets/blacklight/search_history';
 //@import '~blacklight-frontend/app/assets/stylesheets/blacklight/modal';
@@ -42,6 +43,7 @@
 @import 'contributors';
 @import 'diff';
 @import 'form_errors';
+@import 'modal';
 @import 'uppy';
 @import 'version_navigation';
 @import 'view-statistics-chart';

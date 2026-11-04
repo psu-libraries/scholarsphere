@@ -8,7 +8,7 @@ ruby '3.4.11'
 gem 'aasm'
 gem 'after_commit_everywhere', '~> 0.1', '>= 0.1.5'
 gem 'airrecord'
-gem 'blacklight', '~> 8.12.3'
+gem 'blacklight', '~> 8.13.0'
 gem 'blacklight_oai_provider', github: 'projectblacklight/blacklight_oai_provider', ref: '69795b0'
 gem 'bootsnap', '>= 1.4.2', require: false
 gem 'bot_challenge_page', '~> 1.2.0'
