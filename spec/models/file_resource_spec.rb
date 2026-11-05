@@ -278,14 +278,6 @@ RSpec.describe FileResource do
     end
   end
 
-  # describe '#extracted_text' do
-  #   let(:text_file) { StringIO.new("Jesse rulez".b) }
-
-  #   before do
-  #   end
-
-  # end
-
   describe '#to_solr' do
     subject { create(:file_resource).to_solr }
 
