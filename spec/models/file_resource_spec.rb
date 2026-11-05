@@ -135,6 +135,24 @@ RSpec.describe FileResource do
         'services' => ['virus', 'extracted_text']
       )
     end
+
+    FileUploader::EXTRACTED_TEXT_SKIP_MIME_TYPES.each do |mime_type|
+      context "when the file MIME type is #{mime_type}" do
+        before { file_resource.file.metadata['mime_type'] = mime_type }
+
+        it 'does not request extracted text' do
+          allow(MetadataListener::Job).to receive(:perform_async)
+          file_resource.save
+
+          expect(MetadataListener::Job).to have_received(:perform_async).with(
+            'path' => "#{file_data['storage']}/#{file_data['id']}",
+            'endpoint' => "http://#{Rails.application.routes.default_url_options[:host]}/api/v1/files/#{file_resource.id}",
+            'api_token' => ExternalApp.metadata_listener.token,
+            'services' => ['virus']
+          )
+        end
+      end
+    end
   end
 
   describe 'page count' do
