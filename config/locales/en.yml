@@ -177,6 +177,8 @@ en:
               blank: *required_to_publish
             file_resources:
               readme: must include a separate README file labeled as “README” in addition to other files
+              zero_byte: "must not contain file with a size of 0 Bytes"
+              extra_readme: "must have no more than one README file"
               readme_and_image: must include a PNG, JPEG, or TIFF as well as a separate README file labeled as “README”
   admin:
     application_setting:
