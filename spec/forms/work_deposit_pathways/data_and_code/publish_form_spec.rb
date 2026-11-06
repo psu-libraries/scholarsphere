@@ -157,7 +157,7 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
     context "when the form's work version is otherwise valid for publishing" do
       let(:wv) { build(:work_version, :with_creators, description: 'description', published_date: '2020') }
 
-      context "when the form's work_version is published and should_validate_readme? is true" do
+      context "when the form's work_version is published and should_validate? is true" do
         before do
           wv.publish
         end
@@ -261,7 +261,7 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
         end
       end
 
-      context "when the form's work version is not published (making should_validate_readme? false)" do
+      context "when the form's work version is not published (making should_validate? false)" do
         context "when the form's work version has a file with a name that does not match 'readme'" do
           before { wv.file_resources << build(:file_resource, :pdf) }
 
@@ -357,7 +357,7 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
     context "when the form's work version is not otherwise valid for publishing" do
       let(:wv) { build(:work_version, :with_creators, description: nil, published_date: '2020') }
 
-      context "when the form's work version is published and should_validate_readme? is true" do
+      context "when the form's work version is published and should_validate? is true" do
         before do
           wv.publish
         end
@@ -471,7 +471,7 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
         end
       end
 
-      context "when the form's work version is not published (making should_validate_readme? false)" do
+      context "when the form's work version is not published (making should_validate? false)" do
         context "when the form's work version has a file with a name that does not match 'readme'" do
           before { wv.file_resources << build(:file_resource, :pdf) }
 
@@ -564,7 +564,7 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
       end
     end
 
-    describe '#should_validate_readme?', :versioning do
+    describe '#should_validate?', :versioning do
       let(:work) { create(:work, work_type: Work::Types.scholarly_works.last) }
       let(:wv) { work.versions.last }
 
