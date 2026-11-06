@@ -447,6 +447,7 @@ class WorkDepositPathway
 
         validate :includes_readme_file,
                  :readme_is_not_zero_bytes,
+                 :no_more_than_one_readme,
                  if: :should_validate_readme?
 
         def form_partial
@@ -507,7 +508,21 @@ class WorkDepositPathway
               fr.file_data['metadata']['size'].positive? &&
                   fr.file_data['metadata']['filename'] =~ /readme/i
             end
-              errors.add(:file_resources, I18n.t('dashboard.form.publish.edit.zero_byte_error'))
+              errors.add(:file_resources, I18n.t('dashboard.form.publish.edit.errors.zero_byte'))
+            end
+          end
+
+          def no_more_than_one_readme
+            readme_count = 0
+
+            file_resources.each do |fr|
+              if fr.file_data['metadata']['filename'].match?(/readme/i)
+                readme_count += 1
+              end
+            end
+
+            if readme_count > 1
+              errors.add(:file_resources, I18n.t('dashboard.form.publish.edit.errors.extra_readme'))
             end
           end
       end
