@@ -445,8 +445,9 @@ class WorkDepositPathway
           delegate "#{attr_name}=", to: :work_version, prefix: false
         end
 
+        validate :no_files_are_empty
+
         validate :includes_readme_file,
-                 :readme_is_not_zero_bytes,
                  :no_more_than_one_readme,
                  if: :should_validate_readme?
 
@@ -493,6 +494,14 @@ class WorkDepositPathway
             Work::Types.data_and_code.include?(change)
           end
 
+          def no_files_are_empty
+            if file_resources.find do |fr|
+              fr.file_data['metadata']['size'].zero?
+            end
+              errors.add(:file_resources, I18n.t('dashboard.form.publish.edit.errors.zero_byte'))
+            end
+          end
+
           def includes_readme_file
             unless file_resources.find do |fr|
               fr.file_data['metadata']['filename'] =~ /readme/i
@@ -500,15 +509,6 @@ class WorkDepositPathway
               fr.file_data['metadata']['filename'] !~ /readme/i
             end
               errors.add(:file_resources, :readme)
-            end
-          end
-
-          def readme_is_not_zero_bytes
-            unless file_resources.find do |fr|
-              fr.file_data['metadata']['size'].positive? &&
-                  fr.file_data['metadata']['filename'] =~ /readme/i
-            end
-              errors.add(:file_resources, I18n.t('dashboard.form.publish.edit.errors.zero_byte'))
             end
           end
 
