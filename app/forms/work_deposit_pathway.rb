@@ -498,7 +498,7 @@ class WorkDepositPathway
             if file_resources.find do |fr|
               fr.file_data['metadata']['size'].zero?
             end
-              errors.add(:file_resources, I18n.t('dashboard.form.publish.edit.errors.zero_byte'))
+              errors.add(:file_resources, I18n.t('activemodel.errors.models.work_version.attributes.file_resources.zero_byte'))
             end
           end
 
@@ -522,7 +522,7 @@ class WorkDepositPathway
             end
 
             if readme_count > 1
-              errors.add(:file_resources, I18n.t('dashboard.form.publish.edit.errors.extra_readme'))
+              errors.add(:file_resources, I18n.t('activemodel.errors.models.work_version.attributes.file_resources.extra_readme'))
             end
           end
       end
