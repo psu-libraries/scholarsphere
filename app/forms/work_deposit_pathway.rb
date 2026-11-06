@@ -446,6 +446,7 @@ class WorkDepositPathway
         end
 
         validate :includes_readme_file,
+                 :readme_is_not_zero_bytes,
                  if: :should_validate_readme?
 
         def form_partial
@@ -493,12 +494,20 @@ class WorkDepositPathway
 
           def includes_readme_file
             unless file_resources.find do |fr|
-              fr.file_data['metadata']['size'].positive? &&
-                  fr.file_data['metadata']['filename'] =~ /readme/i
+              fr.file_data['metadata']['filename'] =~ /readme/i
             end && file_resources.find do |fr|
               fr.file_data['metadata']['filename'] !~ /readme/i
             end
               errors.add(:file_resources, :readme)
+            end
+          end
+
+          def readme_is_not_zero_bytes
+            unless file_resources.find do |fr|
+              fr.file_data['metadata']['size'].positive? &&
+                  fr.file_data['metadata']['filename'] =~ /readme/i
+            end
+              errors.add(:file_resources, I18n.t('dashboard.form.publish.edit.zero_byte_error'))
             end
           end
       end

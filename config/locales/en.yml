@@ -593,6 +593,7 @@ en:
       publish:
         edit:
           error_message: "There are %{error} that need to be fixed before this work can be published"
+          zero_byte_error: "must include a separate README file that is not empty"
           contributors: Contributors
           files: Files
           publishing_details: Publishing Details
