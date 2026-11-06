@@ -70,8 +70,10 @@ class FileResource < ApplicationRecord
 
   # @note Shrine is returning ASCII-8BIT encoding, but we can safely assume it is UTF-8
   def extracted_text(max_bytes: 1_000_000)
-    file_derivatives.fetch(:text, StringIO.new)
-      .read(max_bytes)
+    text_file = file_derivatives.fetch(:text, StringIO.new)
+    text_file.rewind if text_file.respond_to?(:rewind)
+
+    text_file.read(max_bytes)
       .to_s
       .dup
       .force_encoding(Encoding::UTF_8)

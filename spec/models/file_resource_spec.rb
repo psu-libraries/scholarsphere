@@ -265,6 +265,12 @@ RSpec.describe FileResource do
       expect(file_resource.extracted_text(max_bytes: 4)).to eq('caf')
       expect(file_resource.extracted_text(max_bytes: 4).encoding).to eq(Encoding::UTF_8)
     end
+
+    it 'is idempotent' do
+      expected = sample_file.read
+      expect(file_resource.extracted_text).to eq(expected)
+      expect(file_resource.extracted_text).to eq(expected)
+    end
   end
 
   describe '#etag' do
