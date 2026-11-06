@@ -379,7 +379,7 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
 
               it 'is invalid' do
                 expect(form).not_to be_valid
-                expect(form.errors[:file_resources]).to include(I18n.t('activemodel.errors.models.work_version.attributes.file_resources.readme'))
+                expect(form.errors[:file_resources]).to include(I18n.t('activemodel.errors.models.work_version.attributes.file_resources.zero_byte'))
                 expect(form.errors[:description]).to include(I18n.t('activerecord.errors.models.work_version.attributes.description.blank'))
               end
             end
@@ -400,7 +400,7 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
 
               it 'is invalid' do
                 expect(form).not_to be_valid
-                expect(form.errors[:file_resources]).to include(I18n.t('activemodel.errors.models.work_version.attributes.file_resources.readme'))
+                expect(form.errors[:file_resources]).to include(I18n.t('activemodel.errors.models.work_version.attributes.file_resources.zero_byte'))
                 expect(form.errors[:description]).to include(I18n.t('activerecord.errors.models.work_version.attributes.description.blank'))
               end
             end
@@ -570,7 +570,7 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
 
       context 'when the work_version is not published' do
         it 'does not trigger validation' do
-          expect(form.send(:should_validate_readme?)).to be false
+          expect(form.send(:should_validate?)).to be false
         end
       end
 
@@ -593,7 +593,7 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
             end
 
             it 'does not trigger validation' do
-              expect(form.send(:should_validate_readme?)).to be false
+              expect(form.send(:should_validate?)).to be false
             end
           end
 
@@ -607,20 +607,20 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
             end
 
             it 'does trigger validation' do
-              expect(form.send(:should_validate_readme?)).to be true
+              expect(form.send(:should_validate?)).to be true
             end
           end
 
           context "when the work_version's work_type has not updated" do
             it 'does trigger validation' do
-              expect(form.send(:should_validate_readme?)).to be true
+              expect(form.send(:should_validate?)).to be true
             end
           end
         end
 
         context 'when the current_user is not an admin' do
           it 'returns true' do
-            expect(form.send(:should_validate_readme?)).to be true
+            expect(form.send(:should_validate?)).to be true
           end
         end
       end
