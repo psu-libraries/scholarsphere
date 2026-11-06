@@ -518,6 +518,8 @@ class WorkDepositPathway
               if fr.file_data['metadata']['filename'].match?(/readme/i)
                 readme_count += 1
               end
+
+              break if readme_count > 1
             end
 
             if readme_count > 1
