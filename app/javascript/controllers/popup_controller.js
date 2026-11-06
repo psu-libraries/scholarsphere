@@ -8,12 +8,11 @@ export default class extends Controller {
 
     if (showAlert) {
       const modalEl = document.getElementById('remediationPopup')
-      const modal = new window.bootstrap.Modal(modalEl)
-
-      modal.show()
+      
+      modalEl.showModal()
 
       modalEl.querySelector("#modalOkBtn").addEventListener("click", () => {
-        modal.hide()
+        modalEl.close()
         window.location.href = this.element.href
       }, { once: true })
 

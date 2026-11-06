@@ -3,6 +3,14 @@
 require 'image_processing/mini_magick'
 
 class FileUploader < Shrine
+  EXTRACTED_TEXT_SKIP_MIME_TYPES = %w[
+    application/zip
+    application/x-zip-compressed
+    application/zip-compressed
+    application/gzip
+    application/x-gzip
+  ].freeze
+
   plugin :backgrounding
   plugin :add_metadata
   plugin :derivatives
@@ -62,6 +70,9 @@ class FileUploader < Shrine
       file_data: file_data
     )
 
+    services = ['virus']
+    services << 'extracted_text' unless EXTRACTED_TEXT_SKIP_MIME_TYPES.include?(file.mime_type&.downcase)
+
     # @note The metadata job is kicked off concurrently with promotion, using the same file in Shrine's cache store.
     # This is dependent on storage bucket policies keeping those cached files for a period of time after they've been
     # uploaded. Currently, this is 24 hours, which should be more than enough time unless the backlog of files becomes
@@ -70,7 +81,7 @@ class FileUploader < Shrine
       'path' => [file_data['storage'], file_data['id']].join('/').to_s,
       'endpoint' => FileUploader.api_endpoint(record),
       'api_token' => ExternalApp.metadata_listener.token,
-      'services' => ['virus', 'extracted_text']
+      'services' => services
     )
   end
 

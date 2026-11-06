@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema name="Hydra" version="1.6">
+<schema name="Hydra" version="1.5">
   <!-- NOTE: various comments and unused configuration possibilities have been purged
      from this file.  Please refer to http://wiki.apache.org/solr/SchemaXml,
      as well as the default schema file included with Solr -->
@@ -407,6 +407,7 @@
       </analyzer>
     </fieldType>
 
+<<<<<<< HEAD
     <!-- CJK text field using ICU for normalization and tokenization -->
     <fieldType name="text_cjk" class="solr.TextField" positionIncrementGap="10000" autoGeneratePhraseQueries="false">
       <analyzer>
@@ -423,6 +424,8 @@
       </analyzer>
     </fieldType>
 
+=======
+>>>>>>> main
   </types>
 
 </schema>

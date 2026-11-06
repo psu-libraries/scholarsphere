@@ -566,7 +566,6 @@ Style/SingleArgumentDig:
     - 'app/uploaders/file_uploader.rb'
     - 'lib/orcid/public/email.rb'
     - 'lib/orcid/public/person.rb'
-    - 'spec/graphql/schema_spec.rb'
     - 'spec/lib/data_cite/client_spec.rb'
 
 # Offense count: 4

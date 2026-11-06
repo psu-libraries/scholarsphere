@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
+  class NotAffiliatedWithPsu < StandardError; end
+
   class OAuthError < StandardError
     attr_accessor :auth
 
@@ -60,7 +62,13 @@ class User < ApplicationRecord
     [Group.public_agent, Group.authorized_agent]
   end
 
-  def self.from_omniauth(auth)
+  def self.from_omniauth(auth, check_psu_affiliated: true)
+    groups = auth.info.groups.compact
+
+    if check_psu_affiliated && groups.exclude?(Scholarsphere::Application.config.psu_affiliated_group)
+      raise NotAffiliatedWithPsu.new
+    end
+
     user = find_or_initialize_by(provider: auth.provider, uid: auth.uid) do |new_user|
       new_user.access_id = auth.uid
       new_user.actor = Actor.find_or_initialize_by(psu_id: new_user.access_id)
@@ -76,26 +84,46 @@ class User < ApplicationRecord
       actor.orcid = actor.orcid.presence || directory_orcid(auth.uid)
     end
 
-    transaction do
-      psu_groups = auth.info.groups
-        .compact
-        .select do |group_name|
-          group_name.start_with?('umg') ||
-            group_name == Scholarsphere::Application.config.psu_affiliated_group
-        end
-        .reject { |group_name| group_name.include?(' ') }
-        .map { |group_name| Group.find_or_create_by(name: group_name) }
+    retries = 0
+    save_context = :from_omniauth
 
-      user.groups = default_groups + psu_groups
+    begin
+      transaction do
+        psu_groups = psu_groups_for(auth.info.groups)
 
-      user.actor.save!(context: :from_omniauth)
-      user.save!(context: :from_omniauth)
+        user.groups = default_groups + psu_groups
+
+        user.actor.save!(context: save_context)
+        user.save!(context: save_context)
+      end
+    rescue ActiveRecord::RecordInvalid => e
+      raise unless e.record.is_a?(Actor)
+      raise unless e.record.errors.of_kind?(:orcid, :taken)
+      raise if retries >= 1
+
+      retries += 1
+      ActorReconciliationService.call(user: user, save_context: save_context)
+      retry
     end
 
     user
+  rescue NotAffiliatedWithPsu
+    raise
   rescue StandardError => e
     raise OAuthError.new(e.message, auth)
   end
+
+  def self.psu_groups_for(group_names)
+    group_names
+      .compact
+      .select do |group_name|
+        group_name.start_with?('umg') ||
+          group_name == Scholarsphere::Application.config.psu_affiliated_group
+      end
+      .reject { |group_name| group_name.include?(' ') }
+      .map { |group_name| Group.find_or_create_by(name: group_name) }
+  end
+  private_class_method :psu_groups_for
 
   def admin?
     admin_available? && admin_enabled

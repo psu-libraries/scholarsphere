@@ -2206,15 +2206,6 @@ RSpec.describe 'Publishing a work', with_user: :user do
             expect(work_version.reload.aasm_state).to eq 'published'
           end
         end
-
-        context 'when the file does not have an accessibility check result' do
-          it 'blocks the user from publishing' do
-            visit dashboard_form_publish_path(work_version)
-
-            expect(page).to have_no_button('Publish')
-            expect(page).to have_content(I18n.t!('dashboard.form.actions.publish.blocked_accessibility'))
-          end
-        end
       end
     end
   end
@@ -2366,13 +2357,13 @@ RSpec.describe 'Publishing a work', with_user: :user do
     end
 
     context 'when work type is open access scholarly work' do
-      it 'disables and autopopulates permissions fields' do
+      it 'autopopulates permissions fields' do
         visit dashboard_form_publish_path(work_version)
 
         expect(page).to have_field('open_access_upload_checkbox', type: 'checkbox', disabled: true)
-        expect(page).to have_field('work_version_publisher_statement', readonly: true)
-        expect(page).to have_field('work_version_rights', disabled: true)
-        expect(page).to have_field('work_version_work_attributes_embargoed_until', readonly: true)
+        expect(page).to have_field('work_version_publisher_statement')
+        expect(page).to have_field('work_version_rights')
+        expect(page).to have_field('work_version_work_attributes_embargoed_until')
         expect(page).to have_content(I18n.t('dashboard.form.publish.edit.determining_open_access_version'))
 
         FeatureHelpers::DashboardForm.simulate_open_access_version_broadcast(work_version)
@@ -2381,15 +2372,15 @@ RSpec.describe 'Publishing a work', with_user: :user do
         expect(page).to have_field('work_version_open_access_version_publishedversion')
         choose 'Published Version'
 
-        expect(page).to have_field('work_version_publisher_statement', with: 'Published version statement', readonly: true)
-        expect(page).to have_css("input#work_version_rights_hidden[value='https://creativecommons.org/licenses/by/4.0/']", visible: :hidden)
-        expect(page).to have_field('work_version_work_attributes_embargoed_until', with: '2012-08-31', readonly: true)
+        expect(page).to have_field('work_version_publisher_statement', with: 'Published version statement')
+        expect(page).to have_select('work_version_rights', selected: 'CC BY 4.0 (Attribution)')
+        expect(page).to have_field('work_version_work_attributes_embargoed_until', with: '2012-08-31')
         expect(page).to have_button('Publish')
 
         choose 'Accepted Version'
-        expect(page).to have_field('work_version_publisher_statement', with: 'Accepted version statement', readonly: true)
-        expect(page).to have_css("input#work_version_rights_hidden[value='https://creativecommons.org/licenses/by-nc-nd/4.0/']", visible: :hidden)
-        expect(page).to have_field('work_version_work_attributes_embargoed_until', with: '2011-08-31', readonly: true)
+        expect(page).to have_field('work_version_publisher_statement', with: 'Accepted version statement')
+        expect(page).to have_select('work_version_rights', selected: 'CC BY-NC-ND 4.0 (Attribution-NonCommercial-NoDerivatives)')
+        expect(page).to have_field('work_version_work_attributes_embargoed_until', with: '2011-08-31')
         expect(page).to have_button('Publish')
         click_on 'Save Draft & Exit'
         expect(work_version.reload.open_access_version).to eq 'acceptedVersion'
@@ -2408,7 +2399,7 @@ RSpec.describe 'Publishing a work', with_user: :user do
           }]
         }
 
-        it 'displays an error message when the other version is selected and blocks publish' do
+        it 'displays an error message and prevents publishing when the other version is selected' do
           visit dashboard_form_publish_path(work_version)
 
           FeatureHelpers::DashboardForm.simulate_open_access_version_broadcast(work_version)
@@ -2416,11 +2407,17 @@ RSpec.describe 'Publishing a work', with_user: :user do
           choose 'Accepted Version'
 
           expect(page).to have_content(I18n.t('dashboard.works.edit.open_access_version.other_version_preferred', this_version: 'accepted version', other_version: 'published version'))
-          expect(page).to have_field('work_version_publisher_statement', with: nil, readonly: true)
-          expect(page).to have_css("input#work_version_rights_hidden[value='']", visible: :hidden)
-          expect(page).to have_field('work_version_work_attributes_embargoed_until', with: nil, readonly: true)
-          expect(page).to have_no_button('Publish')
-          expect(page).to have_content(I18n.t('dashboard.form.actions.publish.blocked_version'))
+          expect(page).to have_field('work_version_publisher_statement', with: nil)
+          expect(page).to have_select('work_version_rights', selected: '')
+          expect(page).to have_field('work_version_work_attributes_embargoed_until', with: nil)
+          expect(page).to have_button('Publish')
+
+          FeatureHelpers::DashboardForm.publish
+
+          within '#error_explanation' do
+            expect(page).to have_content('does not match the available permissions')
+          end
+          expect(work_version.reload).not_to be_published
         end
       end
 

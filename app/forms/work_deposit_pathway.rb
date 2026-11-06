@@ -337,30 +337,61 @@ class WorkDepositPathway
         end
       end
 
-      class PublishForm < SimpleDelegator
+      class PublishForm < PublishFormBase
+        attr_accessor :open_access_version_mismatched
+
         def self.form_fields
           WorkVersionFormBase::COMMON_FIELDS.union(WorkVersionFormBase::COMMON_PUBLISH_FIELDS).union(
             %w{
               subject
               publisher
               subtitle
+              publisher_statement
+              identifier
               open_access_version
               open_access_upload
             }
           ).freeze
         end
 
-        def self.method_missing(method_name, *)
-          WorkVersion.public_send(method_name, *)
+        form_fields.each do |attr_name|
+          delegate attr_name, to: :work_version, prefix: false
+          delegate "#{attr_name}=", to: :work_version, prefix: false
         end
 
-        def self.respond_to_missing?(method_name, *)
-          WorkVersion.respond_to?(method_name)
-        end
+        validate :validate_open_access_version_mismatched, if: :published?
 
         def form_partial
           'scholarly_works_work_version'
         end
+
+        delegate :aasm_state=,
+                 :aasm_state,
+                 :publish,
+                 :file_resources,
+                 :work_attributes=,
+                 :creators_attributes=,
+                 :creators,
+                 :contributor,
+                 :file_version_memberships,
+                 :initial_draft?,
+                 :aasm,
+                 :update_column,
+                 :draft_curation_requested=,
+                 :accessibility_remediation_requested=,
+                 :mint_doi_requested,
+                 :mint_doi_requested=,
+                 :set_thumbnail_selection,
+                 to: :work_version,
+                 prefix: false
+
+        private
+
+          def validate_open_access_version_mismatched
+            return unless open_access_version_mismatched == 'true'
+
+            errors.add(:open_access_version, 'does not match the available permissions')
+          end
       end
     end
 

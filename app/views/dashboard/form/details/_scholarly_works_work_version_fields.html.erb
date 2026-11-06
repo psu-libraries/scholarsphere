@@ -9,8 +9,7 @@
 <%= render 'form_fields/text_area',
            form: form,
            attribute: :publisher_statement,
-           data: { target: 'open-access-version.publisherStatement' },
-           readonly: lock_open_access_fields? %>
+           data: { target: 'open-access-version.publisherStatement' } %>
   <%= render 'form_fields/multi_text', form: form,
                                        attribute: :identifier,
                                        readonly: @resource.imported_metadata_from_rmd? && !current_user.admin? %>

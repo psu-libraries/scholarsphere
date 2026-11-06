@@ -145,6 +145,7 @@ module Dashboard
                     :version_name,
                     :open_access_upload,
                     :open_access_version,
+                    :open_access_version_mismatched,
                     :published_date,
                     :depositor_agreement,
                     :psu_community_agreement,

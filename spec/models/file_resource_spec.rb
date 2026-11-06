@@ -135,6 +135,24 @@ RSpec.describe FileResource do
         'services' => ['virus', 'extracted_text']
       )
     end
+
+    FileUploader::EXTRACTED_TEXT_SKIP_MIME_TYPES.each do |mime_type|
+      context "when the file MIME type is #{mime_type}" do
+        before { file_resource.file.metadata['mime_type'] = mime_type }
+
+        it 'does not request extracted text' do
+          allow(MetadataListener::Job).to receive(:perform_async)
+          file_resource.save
+
+          expect(MetadataListener::Job).to have_received(:perform_async).with(
+            'path' => "#{file_data['storage']}/#{file_data['id']}",
+            'endpoint' => "http://#{Rails.application.routes.default_url_options[:host]}/api/v1/files/#{file_resource.id}",
+            'api_token' => ExternalApp.metadata_listener.token,
+            'services' => ['virus']
+          )
+        end
+      end
+    end
   end
 
   describe 'page count' do
@@ -203,7 +221,7 @@ RSpec.describe FileResource do
     its(:original_filename) { is_expected.to eq('image.png') }
   end
 
-  describe '#derivatives' do
+  describe '#extracted_text' do
     subject { file_resource.extracted_text }
 
     let(:file_resource) { build(:file_resource, :with_processed_image) }
@@ -226,6 +244,27 @@ RSpec.describe FileResource do
     end
 
     it { is_expected.to eq(sample_file.read) }
+
+    it 'uses the default byte limit of 1,000,000' do
+      text_derivative = file_resource.file_derivatives.fetch(:text)
+      allow(text_derivative).to receive(:read).and_call_original
+      file_resource.extracted_text
+
+      expect(text_derivative).to have_received(:read).with(1_000_000)
+    end
+
+    it 'returns at most max_bytes if a number is passed in', retry: 3 do
+      limited_text = file_resource.extracted_text(max_bytes: 3)
+      expect(limited_text.bytesize).to be <= 3
+    end
+
+    it 'removes an incomplete UTF-8 character at the byte limit' do
+      text_file = StringIO.new('café'.b)
+      allow(file_resource).to receive(:file_derivatives).and_return(text: text_file)
+
+      expect(file_resource.extracted_text(max_bytes: 4)).to eq('caf')
+      expect(file_resource.extracted_text(max_bytes: 4).encoding).to eq(Encoding::UTF_8)
+    end
   end
 
   describe '#etag' do

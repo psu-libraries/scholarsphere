@@ -15,7 +15,7 @@ VCR.configure do |c|
   c.allow_http_connections_when_no_cassette = true
   c.ignore_localhost = true
   # Allow connections to Docker images and webdriver update urls
-  c.ignore_hosts 'selenium', 'minio', 'solr', 'docker.for.mac.localhost'
+  c.ignore_hosts 'selenium', 'seaweedfs', 'solr', 'docker.for.mac.localhost'
   # Ignore outgoing webhook calls so VCR doesn't try to record or replay them
   # (they fire inline via :inline_jobs in feature specs)
   c.ignore_request { |req| req.uri.include?('/webhooks/scholarsphere/open_access_work_published') }

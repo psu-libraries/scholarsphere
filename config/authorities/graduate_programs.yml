@@ -1,4 +1,8 @@
+---
 terms:
+- id: MACC
+  term: Accounting
+  active: true
 - id: ACS
   term: Acoustics
   active: true
@@ -50,6 +54,9 @@ terms:
 - id: APLNG
   term: Applied Linguistics
   active: true
+- id: MAS
+  term: Applied Statistics
+  active: true
 - id: AE
   term: Architectural Engineering
   active: true
@@ -62,8 +69,14 @@ terms:
 - id: ARTH
   term: Art History
   active: true
+- id: MAI
+  term: Artificial Intelligence
+  active: true
 - id: ASTRO
   term: Astronomy and Astrophysics
+  active: true
+- id: MAT
+  term: Athletic Training
   active: true
 - id: BBH
   term: Biobehavioral Health
@@ -92,8 +105,14 @@ terms:
 - id: BIOST
   term: Biostatistics
   active: true
+- id: MBIOT
+  term: Biotechnology
+  active: true
 - id: BUSA
   term: Business Administration
+  active: true
+- id: MBAN
+  term: Business Analytics
   active: true
 - id: CHE
   term: Chemical Engineering
@@ -102,9 +121,6 @@ terms:
   term: Chemistry
   active: true
 - id: CENG
-  term: Civil Engineering
-  active: true
-- id: CE
   term: Civil Engineering
   active: true
 - id: CR
@@ -176,17 +192,23 @@ terms:
 - id: EENG
   term: Electrical Engineering
   active: true
-- id: EE
-  term: Electrical Engineering
-  active: true
 - id: EME
   term: Energy and Mineral Engineering
   active: true
 - id: EEFE
   term: Energy, Environmental, and Food Economics
   active: true
+- id: MENG
+  term: Engineering
+  active: true
+- id: NANO
+  term: Engineering at the Nano-scale
+  active: true
 - id: EDSGN
   term: Engineering Design
+  active: true
+- id: MEM
+  term: Engineering Management
   active: true
 - id: ESMCH
   term: Engineering Science and Mechanics
@@ -194,11 +216,11 @@ terms:
 - id: ENGSY
   term: Engineering Systems
   active: true
-- id: NANO
-  term: Engineering at the Nano-scale
-  active: true
 - id: ENGL
   term: English
+  active: true
+- id: MEA
+  term: Enterprise Architecture
   active: true
 - id: ENT
   term: Entomology
@@ -211,6 +233,12 @@ terms:
   active: true
 - id: EPID
   term: Epidemiology
+  active: true
+- id: MFIN
+  term: Finance
+  active: true
+- id: MFA
+  term: Fine Arts
   active: true
 - id: FDSC
   term: Food Science
@@ -227,6 +255,9 @@ terms:
 - id: GENET
   term: Genetics
   active: true
+- id: MGIS
+  term: Geographic Information Systems
+  active: true
 - id: GEOG
   term: Geography
   active: true
@@ -235,6 +266,9 @@ terms:
   active: true
 - id: GER
   term: German
+  active: true
+- id: MHA
+  term: Health Administration
   active: true
 - id: HPA
   term: Health Policy and Administration
@@ -281,6 +315,9 @@ terms:
 - id: PHSIO
   term: Integrative and Biomedical Physiology
   active: true
+- id: MIA
+  term: International Affairs
+  active: true
 - id: KINES
   term: Kinesiology
   active: true
@@ -296,6 +333,15 @@ terms:
 - id: LLAED
   term: Lifelong Learning and Adult Education
   active: true
+- id: MMGT
+  term: Management
+  active: true
+- id: MMM
+  term: Manufacturing Management
+  active: true
+- id: MMKT
+  term: Marketing
+  active: true
 - id: MASSC
   term: Mass Communications
   active: true
@@ -306,9 +352,6 @@ terms:
   term: Mathematics
   active: true
 - id: ME
-  term: Mechanical Engineering
-  active: true
-- id: MCENG
   term: Mechanical Engineering
   active: true
 - id: MEDIA
@@ -332,12 +375,6 @@ terms:
 - id: NEURS
   term: Neuroscience
   active: true
-- id: NEURO
-  term: Neuroscience
-  active: true
-- id: NERV
-  term: Neuroscience
-  active: true
 - id: NUCE
   term: Nuclear Engineering
   active: true
@@ -346,6 +383,9 @@ terms:
   active: true
 - id: NUTR
   term: Nutritional Sciences
+  active: true
+- id: MOT
+  term: Occupational Therapy
   active: true
 - id: PATHB
   term: Pathobiology
@@ -365,14 +405,32 @@ terms:
 - id: PLSC
   term: Political Science
   active: true
+- id: MPAC
+  term: Professional Accounting
+  active: true
+- id: MPS
+  term: Professional Studies
+  active: true
+- id: MPM
+  term: Project Management
+  active: true
 - id: PSY
   term: Psychology
   active: true
 - id: PADM
   term: Public Administration
   active: true
+- id: MPH
+  term: Public Health
+  active: true
 - id: PHS
   term: Public Health Sciences
+  active: true
+- id: MPP
+  term: Public Policy
+  active: true
+- id: MRE
+  term: Real Estate
   active: true
 - id: REA
   term: Real Estate Analysis and Development
@@ -389,8 +447,17 @@ terms:
 - id: SPSY
   term: School Psychology
   active: true
+- id: MSN
+  term: Science Nursing
+  active: true
+- id: MSW
+  term: Social Work
+  active: true
 - id: SOC
   term: Sociology
+  active: true
+- id: MSE
+  term: Software Engineering
   active: true
 - id: SOILS
   term: Soil Science
@@ -406,6 +473,12 @@ terms:
   active: true
 - id: STAT
   term: Statistics
+  active: true
+- id: MSCM
+  term: Supply Chain Management
+  active: true
+- id: MTAX
+  term: Taxation
   active: true
 - id: TESL
   term: Teaching English As a Second Language
