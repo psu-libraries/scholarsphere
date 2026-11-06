@@ -189,6 +189,18 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
                 expect(form).to be_valid
               end
             end
+
+            context 'when readme.md and readme.txt files exist' do
+              before {
+                wv.file_resources << build(:file_resource, :readme_md)
+                wv.file_resources << build(:file_resource, :readme_txt)
+              }
+
+              it 'is invalid' do
+                expect(form).not_to be_valid
+                expect(form.errors[:file_resources]).to include(I18n.t('activemodel.errors.models.work_version.attributes.file_resources.extra_readme'))
+              end
+            end
           end
 
           context "when the form's work version has a file named 'readme.txt" do
@@ -206,6 +218,18 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
 
               it 'is valid' do
                 expect(form).to be_valid
+              end
+            end
+
+            context 'when readme.md and readme.txt files exist' do
+              before {
+                wv.file_resources << build(:file_resource, :readme_md)
+                wv.file_resources << build(:file_resource, :readme_txt)
+              }
+
+              it 'is invalid' do
+                expect(form).not_to be_valid
+                expect(form.errors[:file_resources]).to include(I18n.t('activemodel.errors.models.work_version.attributes.file_resources.extra_readme'))
               end
             end
           end
@@ -237,6 +261,18 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
                 expect(form.errors[:file_resources]).to include(I18n.t('activemodel.errors.models.work_version.attributes.file_resources.readme'))
               end
             end
+
+            context 'when readme.md and readme.txt files exist' do
+              before {
+                wv.file_resources << build(:file_resource, :readme_md)
+                wv.file_resources << build(:file_resource, :readme_txt)
+              }
+
+              it 'is invalid' do
+                expect(form).not_to be_valid
+                expect(form.errors[:file_resources]).to include(I18n.t('activemodel.errors.models.work_version.attributes.file_resources.extra_readme'))
+              end
+            end
           end
 
           context "when the form's work version has a file named 'readme.txt" do
@@ -255,6 +291,18 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
               it 'is invalid' do
                 expect(form).not_to be_valid
                 expect(form.errors[:file_resources]).to include(I18n.t('activemodel.errors.models.work_version.attributes.file_resources.readme'))
+              end
+            end
+
+            context 'when readme.md and readme.txt files exist' do
+              before {
+                wv.file_resources << build(:file_resource, :readme_md)
+                wv.file_resources << build(:file_resource, :readme_txt)
+              }
+
+              it 'is invalid' do
+                expect(form).not_to be_valid
+                expect(form.errors[:file_resources]).to include(I18n.t('activemodel.errors.models.work_version.attributes.file_resources.extra_readme'))
               end
             end
           end
@@ -287,6 +335,17 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
                 expect(form).to be_valid
               end
             end
+
+            context 'when readme.md and readme.txt files exist' do
+              before {
+                wv.file_resources << build(:file_resource, :readme_md)
+                wv.file_resources << build(:file_resource, :readme_txt)
+              }
+
+              it 'is valid' do
+                expect(form).to be_valid
+              end
+            end
           end
 
           context "when the form's work version has a file named 'readme.txt" do
@@ -300,6 +359,17 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
 
             context 'when the file is not empty' do
               before { wv.file_resources << build(:file_resource, :readme_txt) }
+
+              it 'is valid' do
+                expect(form).to be_valid
+              end
+            end
+
+            context 'when readme.md and readme.txt files exist' do
+              before {
+                wv.file_resources << build(:file_resource, :readme_md)
+                wv.file_resources << build(:file_resource, :readme_txt)
+              }
 
               it 'is valid' do
                 expect(form).to be_valid
@@ -331,6 +401,17 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
                 expect(form).to be_valid
               end
             end
+
+            context 'when readme.md and readme.txt files exist' do
+              before {
+                wv.file_resources << build(:file_resource, :readme_md)
+                wv.file_resources << build(:file_resource, :readme_txt)
+              }
+
+              it 'is valid' do
+                expect(form).to be_valid
+              end
+            end
           end
 
           context "when the form's work version has a file named 'readme.txt" do
@@ -344,6 +425,17 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
 
             context 'when the file is not empty' do
               before { wv.file_resources << build(:file_resource, :readme_txt) }
+
+              it 'is valid' do
+                expect(form).to be_valid
+              end
+            end
+
+            context 'when readme.md and readme.txt files exist' do
+              before {
+                wv.file_resources << build(:file_resource, :readme_md)
+                wv.file_resources << build(:file_resource, :readme_txt)
+              }
 
               it 'is valid' do
                 expect(form).to be_valid
@@ -392,6 +484,19 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
                 expect(form.errors[:description]).to include(I18n.t('activerecord.errors.models.work_version.attributes.description.blank'))
               end
             end
+
+            context 'when readme.md and readme.txt files exist' do
+              before {
+                wv.file_resources << build(:file_resource, :readme_md)
+                wv.file_resources << build(:file_resource, :readme_txt)
+              }
+
+              it 'is invalid' do
+                expect(form).not_to be_valid
+                expect(form.errors[:file_resources]).to include(I18n.t('activemodel.errors.models.work_version.attributes.file_resources.extra_readme'))
+                expect(form.errors[:description]).to include(I18n.t('activerecord.errors.models.work_version.attributes.description.blank'))
+              end
+            end
           end
 
           context "when the form's work version has a file named 'readme.txt" do
@@ -410,6 +515,19 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
 
               it 'is invalid' do
                 expect(form).not_to be_valid
+                expect(form.errors[:description]).to include(I18n.t('activerecord.errors.models.work_version.attributes.description.blank'))
+              end
+            end
+
+            context 'when readme.md and readme.txt files exist' do
+              before {
+                wv.file_resources << build(:file_resource, :readme_md)
+                wv.file_resources << build(:file_resource, :readme_txt)
+              }
+
+              it 'is invalid' do
+                expect(form).not_to be_valid
+                expect(form.errors[:file_resources]).to include(I18n.t('activemodel.errors.models.work_version.attributes.file_resources.extra_readme'))
                 expect(form.errors[:description]).to include(I18n.t('activerecord.errors.models.work_version.attributes.description.blank'))
               end
             end
@@ -445,6 +563,19 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
                 expect(form.errors[:description]).to include(I18n.t('activerecord.errors.models.work_version.attributes.description.blank'))
               end
             end
+
+            context 'when readme.md and readme.txt files exist' do
+              before {
+                wv.file_resources << build(:file_resource, :readme_md)
+                wv.file_resources << build(:file_resource, :readme_txt)
+              }
+
+              it 'is invalid' do
+                expect(form).not_to be_valid
+                expect(form.errors[:file_resources]).to include(I18n.t('activemodel.errors.models.work_version.attributes.file_resources.extra_readme'))
+                expect(form.errors[:description]).to include(I18n.t('activerecord.errors.models.work_version.attributes.description.blank'))
+              end
+            end
           end
 
           context "when the form's work version has a file named 'readme.txt" do
@@ -464,6 +595,19 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
               it 'is invalid' do
                 expect(form).not_to be_valid
                 expect(form.errors[:file_resources]).to include(I18n.t('activemodel.errors.models.work_version.attributes.file_resources.readme'))
+                expect(form.errors[:description]).to include(I18n.t('activerecord.errors.models.work_version.attributes.description.blank'))
+              end
+            end
+
+            context 'when readme.md and readme.txt files exist' do
+              before {
+                wv.file_resources << build(:file_resource, :readme_md)
+                wv.file_resources << build(:file_resource, :readme_txt)
+              }
+
+              it 'is invalid' do
+                expect(form).not_to be_valid
+                expect(form.errors[:file_resources]).to include(I18n.t('activemodel.errors.models.work_version.attributes.file_resources.extra_readme'))
                 expect(form.errors[:description]).to include(I18n.t('activerecord.errors.models.work_version.attributes.description.blank'))
               end
             end
@@ -497,6 +641,17 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
                 expect(form).to be_valid
               end
             end
+
+            context 'when readme.md and readme.txt files exist' do
+              before {
+                wv.file_resources << build(:file_resource, :readme_md)
+                wv.file_resources << build(:file_resource, :readme_txt)
+              }
+
+              it 'is valid' do
+                expect(form).to be_valid
+              end
+            end
           end
 
           context "when the form's work version has a file named 'readme.txt" do
@@ -510,6 +665,17 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
 
             context 'when the file is not empty' do
               before { wv.file_resources << build(:file_resource, :readme_txt) }
+
+              it 'is valid' do
+                expect(form).to be_valid
+              end
+            end
+
+            context 'when readme.md and readme.txt files exist' do
+              before {
+                wv.file_resources << build(:file_resource, :readme_md)
+                wv.file_resources << build(:file_resource, :readme_txt)
+              }
 
               it 'is valid' do
                 expect(form).to be_valid
@@ -541,6 +707,17 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
                 expect(form).to be_valid
               end
             end
+
+            context 'when readme.md and readme.txt files exist' do
+              before {
+                wv.file_resources << build(:file_resource, :readme_md)
+                wv.file_resources << build(:file_resource, :readme_txt)
+              }
+
+              it 'is valid' do
+                expect(form).to be_valid
+              end
+            end
           end
 
           context "when the form's work version has a file named 'readme.txt" do
@@ -554,6 +731,17 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
 
             context 'when the file is not empty' do
               before { wv.file_resources << build(:file_resource, :readme_txt) }
+
+              it 'is valid' do
+                expect(form).to be_valid
+              end
+            end
+
+            context 'when readme.md and readme.txt files exist' do
+              before {
+                wv.file_resources << build(:file_resource, :readme_md)
+                wv.file_resources << build(:file_resource, :readme_txt)
+              }
 
               it 'is valid' do
                 expect(form).to be_valid
