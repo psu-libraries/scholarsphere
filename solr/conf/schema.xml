@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema name="Hydra" version="1.5">
+<schema name="Hydra" version="1.6">
   <!-- NOTE: various comments and unused configuration possibilities have been purged
-     from this file.  Please refer to http://wiki.apache.org/solr/SchemaXml,
-     as well as the default schema file included with Solr -->
+    from this file.  Please refer to http://wiki.apache.org/solr/SchemaXml,
+    as well as the default schema file included with Solr -->
 
   <uniqueKey>id</uniqueKey>
 
@@ -83,7 +83,7 @@
 
     <!-- date (_dt...) -->
     <!-- The format for this date field is of the form 1995-12-31T23:59:59Z
-         Optional fractional seconds are allowed: 1995-12-31T23:59:59.999Z -->
+        Optional fractional seconds are allowed: 1995-12-31T23:59:59.999Z -->
 
     <dynamicField name="*_dti" type="date" stored="false" indexed="true" multiValued="false"/>
     <dynamicField name="*_dtim" type="date" stored="false" indexed="true" multiValued="true"/>
@@ -251,7 +251,7 @@
     <fieldType name="tdouble" class="solr.DoublePointField" docValues="true"/>
 
     <!-- The format for this date field is of the form 1995-12-31T23:59:59Z
-         Optional fractional seconds are allowed: 1995-12-31T23:59:59.999Z
+        Optional fractional seconds are allowed: 1995-12-31T23:59:59.999Z
       -->
     <fieldType name="date" class="solr.DatePointField" docValues="true"/>
     <!-- A PointField based date field for faster date range queries and date faceting. -->
@@ -379,12 +379,12 @@
     </fieldType>
 
     <fieldType  name="textSuggest" class="solr.TextField" positionIncrementGap="100">
-       <analyzer>
+      <analyzer>
           <tokenizer class="solr.KeywordTokenizerFactory"/>
           <filter class="solr.LowerCaseFilterFactory"/>
         <filter class="solr.ASCIIFoldingFilterFactory"/>
           <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
-       </analyzer>
+      </analyzer>
     </fieldType>
 
     <!-- queries for paths match documents at that path, or in descendent paths -->
@@ -407,7 +407,6 @@
       </analyzer>
     </fieldType>
 
-<<<<<<< HEAD
     <!-- CJK text field using ICU for normalization and tokenization -->
     <fieldType name="text_cjk" class="solr.TextField" positionIncrementGap="10000" autoGeneratePhraseQueries="false">
       <analyzer>
@@ -424,8 +423,6 @@
       </analyzer>
     </fieldType>
 
-=======
->>>>>>> main
   </types>
 
 </schema>
