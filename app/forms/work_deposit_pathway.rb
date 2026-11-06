@@ -445,11 +445,10 @@ class WorkDepositPathway
           delegate "#{attr_name}=", to: :work_version, prefix: false
         end
 
-        validate :no_files_are_empty
-
-        validate :includes_readme_file,
+        validate :no_files_are_empty,
+                 :includes_readme_file,
                  :no_more_than_one_readme,
-                 if: :should_validate_readme?
+                 if: :should_validate?
 
         def form_partial
           'data_and_code_work_version'
@@ -477,7 +476,7 @@ class WorkDepositPathway
 
         private
 
-          def should_validate_readme?
+          def should_validate?
             return false if !published?
             return false if @current_user.admin? && changed_to_data_and_code?
 

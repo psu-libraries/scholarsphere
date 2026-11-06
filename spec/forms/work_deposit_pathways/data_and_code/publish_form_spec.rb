@@ -178,7 +178,7 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
 
               it 'is invalid' do
                 expect(form).not_to be_valid
-                expect(form.errors[:file_resources]).to include(I18n.t('activemodel.errors.models.work_version.attributes.file_resources.readme'))
+                expect(form.errors[:file_resources]).to include(I18n.t('activemodel.errors.models.work_version.attributes.file_resources.zero_byte'))
               end
             end
 
@@ -197,7 +197,7 @@ RSpec.describe WorkDepositPathway::DataAndCode::PublishForm, type: :model do
 
               it 'is invalid' do
                 expect(form).not_to be_valid
-                expect(form.errors[:file_resources]).to include(I18n.t('activemodel.errors.models.work_version.attributes.file_resources.readme'))
+                expect(form.errors[:file_resources]).to include(I18n.t('activemodel.errors.models.work_version.attributes.file_resources.zero_byte'))
               end
             end
 
