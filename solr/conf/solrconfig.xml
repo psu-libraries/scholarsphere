@@ -4,8 +4,6 @@
     from this file.  Please refer to https://solr.apache.org/guide/solr/latest/
     as well as the default solrconfig file included with Solr -->
 
-  <abortOnConfigurationError>${solr.abortOnConfigurationError:true}</abortOnConfigurationError>
-
   <luceneMatchVersion>9.11.0</luceneMatchVersion>
 
   <directoryFactory name="DirectoryFactory" class="${solr.directoryFactory:solr.StandardDirectoryFactory}"/>
