@@ -53,3 +53,4 @@ docker-compose.yml.local
 
 # Ignore agents md files for now
 AGENTS.md
+.env
