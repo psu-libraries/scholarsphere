@@ -690,6 +690,7 @@ en:
         alt_text:
           heading: Alt Text
           save_button: Update Alt Text
+        image_oversized_warning: "This image is too large for a thumbnail image to be generated. Thumbnail images can be uploaded on the work settings page after the work is published."
     file_version_memberships:
       edit:
         heading: Editing %{title}
