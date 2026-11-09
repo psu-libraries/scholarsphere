@@ -8,9 +8,6 @@ import './scripts/view_statistics_chart'
 // Thumbnail selection settings
 import './scripts/thumbnail_selection_init'
 
-// Custom script for blacklight frontend 7 modals to work with blacklight 8
-import './scripts/blacklight_modal_compat'
-
 // Load dependencies
 require('jquery/src/jquery')
 const bootstrap = require('bootstrap/dist/js/bootstrap')
@@ -21,7 +18,6 @@ require('select2/dist/js/select2')
 // This should be just enough JS to get the facet modals working.
 require('blacklight-frontend/app/javascript/blacklight/core')
 require('blacklight-frontend/app/javascript/blacklight/modal')
-require('blacklight-frontend/app/javascript/blacklight/facet_load')
 
 // Load images
 // Retrieve the path to the image via <%= image_pack_tag('image.png') %>

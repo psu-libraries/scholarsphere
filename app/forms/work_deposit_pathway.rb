@@ -445,8 +445,10 @@ class WorkDepositPathway
           delegate "#{attr_name}=", to: :work_version, prefix: false
         end
 
-        validate :includes_readme_file,
-                 if: :should_validate_readme?
+        validate :no_files_are_empty,
+                 :includes_readme_file,
+                 :no_more_than_one_readme,
+                 if: :should_validate?
 
         def form_partial
           'data_and_code_work_version'
@@ -474,7 +476,7 @@ class WorkDepositPathway
 
         private
 
-          def should_validate_readme?
+          def should_validate?
             return false if !published?
             return false if @current_user.admin? && changed_to_data_and_code?
 
@@ -491,14 +493,37 @@ class WorkDepositPathway
             Work::Types.data_and_code.include?(change)
           end
 
+          def no_files_are_empty
+            if file_resources.find do |fr|
+              fr.file_data['metadata']['size'].zero?
+            end
+              errors.add(:file_resources, I18n.t('activemodel.errors.models.work_version.attributes.file_resources.zero_byte'))
+            end
+          end
+
           def includes_readme_file
             unless file_resources.find do |fr|
-              fr.file_data['metadata']['size'].positive? &&
-                  fr.file_data['metadata']['filename'] =~ /readme/i
+              fr.file_data['metadata']['filename'] =~ /readme/i
             end && file_resources.find do |fr|
               fr.file_data['metadata']['filename'] !~ /readme/i
             end
               errors.add(:file_resources, :readme)
+            end
+          end
+
+          def no_more_than_one_readme
+            readme_count = 0
+
+            file_resources.each do |fr|
+              if fr.file_data['metadata']['filename'].match?(/readme/i)
+                readme_count += 1
+              end
+
+              break if readme_count > 1
+            end
+
+            if readme_count > 1
+              errors.add(:file_resources, I18n.t('activemodel.errors.models.work_version.attributes.file_resources.extra_readme'))
             end
           end
       end
