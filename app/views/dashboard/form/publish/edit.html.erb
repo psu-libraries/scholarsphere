@@ -88,6 +88,12 @@
             </div>
             <% if form.object.file_version_memberships.any? %>
               <%= render 'dashboard/form/files/uploaded_file_list', work_version: form.object %>
+
+              <% if form.object.file_version_memberships.any? { |m| m.file_resource.image? && m.file_resource.image_oversized? } %>
+                <div class="text-center">
+                  <small class="form-text text-muted"><%= t('dashboard.file_list.edit.image_oversized_warning') %></small>
+                </div>
+              <% end %>
             <% end %>
 
             <% if @resource.open_access_upload_active? %>

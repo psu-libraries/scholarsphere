@@ -98,7 +98,7 @@ class FileResource < ApplicationRecord
 
   def thumbnailable?
     mime_type = file_data.dig('metadata', 'mime_type') || ''
-    return true if mime_type.include?('image')
+    return !image_oversized? if mime_type.include?('image')
     return true if mime_type == PDF_MIME_TYPE
     return true if mime_type == DOCX_MIME_TYPE
 
@@ -136,6 +136,10 @@ class FileResource < ApplicationRecord
 
   def large_pdf?
     pdf? && page_count >= 100
+  end
+
+  def image_oversized?
+    file_data.dig('metadata', 'oversize')
   end
 
   private

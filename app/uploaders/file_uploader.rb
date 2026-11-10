@@ -3,6 +3,7 @@
 require 'image_processing/mini_magick'
 
 class FileUploader < Shrine
+  IMAGE_DIMENSION_LIMIT_ERROR_PATTERN = /width or height exceeds limit/i
   EXTRACTED_TEXT_SKIP_MIME_TYPES = %w[
     application/zip
     application/x-zip-compressed
@@ -61,6 +62,30 @@ class FileUploader < Shrine
     ensure
       tempfile.close! if tempfile.respond_to?(:close!) && tempfile != io
     end
+  end
+
+  add_metadata :oversize do |io, context|
+    mime_type = context.dig(:metadata, 'mime_type')
+    next unless mime_type&.start_with?('image/')
+
+    begin
+      tempfile =
+        if io.respond_to?(:download)
+          io.download
+        else
+          io
+        end
+
+      image = MiniMagick::Image.open(tempfile.path)
+      oversize = (image.width + image.height) > 32000
+    rescue MiniMagick::Error => e
+      raise unless e.message.match?(IMAGE_DIMENSION_LIMIT_ERROR_PATTERN)
+
+      oversize = true
+    ensure
+      tempfile.close! if tempfile.respond_to?(:close!) && tempfile != io
+    end
+    oversize
   end
 
   Attacher.promote_block do

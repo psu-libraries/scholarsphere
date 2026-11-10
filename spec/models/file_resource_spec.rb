@@ -360,8 +360,32 @@ RSpec.describe FileResource do
       context 'when mime type is image/png' do
         let(:mime_type) { 'image/png' }
 
-        it 'returns true' do
-          expect(file_resource.thumbnailable?).to eq true
+        context 'when oversize is not present in metadata' do
+          let(:file_data) { { 'metadata' => { 'mime_type' => mime_type } } }
+
+          it 'returns true' do
+            expect(file_resource.thumbnailable?).to eq true
+          end
+        end
+
+        context 'when oversize is false' do
+          let(:file_data) do
+            { 'metadata' => { 'mime_type' => mime_type, 'oversize' => false } }
+          end
+
+          it 'returns true' do
+            expect(file_resource.thumbnailable?).to eq true
+          end
+        end
+
+        context 'when oversize is true' do
+          let(:file_data) do
+            { 'metadata' => { 'mime_type' => mime_type, 'oversize' => true } }
+          end
+
+          it 'returns false' do
+            expect(file_resource.thumbnailable?).to eq false
+          end
         end
       end
 
