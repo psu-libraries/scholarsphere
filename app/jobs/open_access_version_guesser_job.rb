@@ -17,7 +17,6 @@ class OpenAccessVersionGuesserJob < ApplicationJob
 
     def update_open_access_version_if_undetermined(work_version, version)
       work_version.with_lock do
-        work_version.reload
         work_version.update!(open_access_version: version) if work_version.open_access_version.blank?
       end
     end
