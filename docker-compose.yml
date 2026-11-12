@@ -64,7 +64,7 @@ services:
       solr:
         condition: service_healthy
   seaweedfs:
-    image: chrislusf/seaweedfs:latest
+    image: chrislusf/seaweedfs:4.52
     ports:
       - ${SEAWEEEDFS_S3_PORT:-8333}:8333 # S3 API
       - 8888:8888 # File Browser GUI
@@ -75,7 +75,7 @@ services:
     volumes:
       - seaweedfs-data:/data
   solr:
-    image: solr:8.11.1-slim
+    image: solr:9.11.0
     restart: always
     environment:
       SOLR_STOP_WAIT: 10
