@@ -82,6 +82,7 @@ services:
       SOLR_USERNAME: scholarsphere
       SOLR_PASSWORD: scholarsphere
       SOLR_HOME: /var/solr/data
+      SOLR_MODULES: analysis-extras
     volumes:
     - solr-data:/var/solr/data
     ports:
