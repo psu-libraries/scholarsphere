@@ -292,9 +292,8 @@
 
     <fieldType name="text" class="solr.TextField" omitNorms="false">
       <analyzer>
-        <tokenizer class="solr.StandardTokenizerFactory"/>
-        <filter class="solr.LowerCaseFilterFactory"/>
-        <filter class="solr.ASCIIFoldingFilterFactory"/>  <!-- ASCII folding, case folding, diacritics removed -->
+        <tokenizer class="solr.ICUTokenizerFactory"/>
+        <filter class="solr.ICUFoldingFilterFactory"/>  <!-- NFKC, case folding, diacritics removed -->
         <filter class="solr.TrimFilterFactory"/>
       </analyzer>
     </fieldType>
@@ -311,8 +310,7 @@
     <fieldtype name="alphaSort" class="solr.TextField" sortMissingLast="true" omitNorms="true">
       <analyzer>
         <tokenizer class="solr.KeywordTokenizerFactory" />
-        <filter class="solr.LowerCaseFilterFactory"/>
-        <filter class="solr.ASCIIFoldingFilterFactory"/>
+        <filter class="solr.ICUFoldingFilterFactory"/>
         <filter class="solr.TrimFilterFactory" />
       </analyzer>
     </fieldtype>
@@ -320,9 +318,8 @@
     <!-- A text field with defaults appropriate for English -->
     <fieldType name="text_en" class="solr.TextField" positionIncrementGap="100">
       <analyzer>
-        <tokenizer class="solr.StandardTokenizerFactory"/>
-        <filter class="solr.LowerCaseFilterFactory"/>
-        <filter class="solr.ASCIIFoldingFilterFactory"/>  <!-- ASCII folding, case folding, diacritics removed -->
+        <tokenizer class="solr.ICUTokenizerFactory"/>
+        <filter class="solr.ICUFoldingFilterFactory"/>  <!-- NFKC, case folding, diacritics removed -->
         <filter class="solr.EnglishPossessiveFilterFactory"/>
         <!-- EnglishMinimalStemFilterFactory is less aggressive than PorterStemFilterFactory: -->
         <filter class="solr.EnglishMinimalStemFilterFactory"/>
@@ -336,9 +333,8 @@
     <!-- A text field with defaults appropriate for English an NGrams -->
     <fieldType name="text_en_ng" class="solr.TextField" positionIncrementGap="100">
       <analyzer type="index">
-        <tokenizer class="solr.StandardTokenizerFactory"/>
-        <filter class="solr.LowerCaseFilterFactory"/>
-        <filter class="solr.ASCIIFoldingFilterFactory"/>  <!-- ASCII folding, case folding, diacritics removed -->
+        <tokenizer class="solr.ICUTokenizerFactory"/>
+        <filter class="solr.ICUFoldingFilterFactory"/>  <!-- NFKC, case folding, diacritics removed -->
         <filter class="solr.EnglishPossessiveFilterFactory"/>
         <!-- EnglishMinimalStemFilterFactory is less aggressive than PorterStemFilterFactory: -->
         <filter class="solr.EnglishMinimalStemFilterFactory"/>
@@ -347,9 +343,8 @@
       </analyzer>
 
       <analyzer type="query">
-        <tokenizer class="solr.StandardTokenizerFactory"/>
-        <filter class="solr.LowerCaseFilterFactory"/>
-        <filter class="solr.ASCIIFoldingFilterFactory"/>  <!-- ASCII folding, case folding, diacritics removed -->
+        <tokenizer class="solr.ICUTokenizerFactory"/>
+        <filter class="solr.ICUFoldingFilterFactory"/>  <!-- NFKC, case folding, diacritics removed -->
         <filter class="solr.EnglishPossessiveFilterFactory"/>
         <!-- EnglishMinimalStemFilterFactory is less aggressive than PorterStemFilterFactory: -->
         <filter class="solr.EnglishMinimalStemFilterFactory"/>
