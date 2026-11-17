@@ -90,7 +90,7 @@ services:
     command: [
       "/bin/bash",
       "-c",
-      "solr -c && solr auth enable -credentials $$SOLR_USERNAME:$$SOLR_PASSWORD -z localhost:9983; solr stop && solr start -c -f",
+      "solr -c -f & PID=$$!; until curl -s http://localhost:8983/solr > /dev/null; do sleep 1; done; solr auth enable -credentials $$SOLR_USERNAME:$$SOLR_PASSWORD -z localhost:9983; wait $$PID",
     ]
     healthcheck:
       test: [
