@@ -110,12 +110,12 @@
     </arr>
   </requestHandler>
 
-  <requestHandler name="permissions" class="solr.SearchHandler" >
+  <requestHandler name="/permissions" class="solr.SearchHandler" >
     <lst name="defaults">
       <str name="facet">off</str>
       <str name="echoParams">all</str>
       <str name="rows">1</str>
-      <str name="q">{!raw f=id v=$id}</str> <!-- use id=666 instead of q=id:666 -->
+      <str name="q">{!raw f=id v=$id}</str>
       <str name="fl">
         id,
         access_ssim,
@@ -199,7 +199,7 @@
   <requestHandler name="/replication" class="solr.ReplicationHandler" startup="lazy" />
 
   <requestDispatcher handleSelect="true" >
-    <requestParsers enableRemoteStreaming="true" multipartUploadLimitInKB="2048" />
+    <!-- Removed 'enableRemoteStreaming' since Solr 9 handles this at the system level -->
   </requestDispatcher>
 
   <requestHandler name="/analysis/field" startup="lazy" class="solr.FieldAnalysisRequestHandler" />
