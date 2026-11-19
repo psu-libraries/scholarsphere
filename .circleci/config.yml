@@ -289,7 +289,7 @@ jobs:
         command: [
           "/bin/bash",
           "-c",
-          "solr -c && solr auth enable -credentials scholarsphere:scholarsphere -z localhost:9983; solr stop && solr -c -f",
+          "solr -c && solr auth enable -credentials scholarsphere-user:scholarsphere-pswrd -z localhost:9983; solr stop && solr -c -f",
           ]
     environment:
       RAILS_ENV: test
@@ -300,8 +300,8 @@ jobs:
       AWS_REGION: us-east-1
       SOLR_HOST: 127.0.0.1
       SOLR_COLLECTION: scholarsphere
-      SOLR_PASSWORD: scholarsphere
-      SOLR_USERNAME: scholarsphere
+      SOLR_PASSWORD: scholarsphere-pswrd
+      SOLR_USERNAME: scholarsphere-user
       POSTGRES_USERNAME: scholarsphere
       POSTGRES_PASSWORD: scholarsphere
       POSTGRES_DB: scholarsphere
@@ -362,11 +362,11 @@ jobs:
           POSTGRES_PASSWORD: scholarsphere
           POSTGRES_USER: scholarsphere
           POSTGRES_DB: scholarsphere
-      - image: solr:8.11.1-slim
+      - image: solr:9.11.0
         command: [
           "/bin/bash",
           "-c",
-          "solr -c && solr auth enable -credentials scholarsphere:scholarsphere -z localhost:9983; solr stop && solr -c -f",
+          "solr -c && solr auth enable -credentials scholarsphere-user:scholarsphere-pswrd -z localhost:9983; solr stop && solr -c -f",
           ]
     environment:
       RAILS_ENV: test
@@ -377,8 +377,8 @@ jobs:
       AWS_REGION: us-east-1
       SOLR_HOST: 127.0.0.1
       SOLR_COLLECTION: scholarsphere
-      SOLR_PASSWORD: scholarsphere
-      SOLR_USERNAME: scholarsphere
+      SOLR_PASSWORD: scholarsphere-pswrd
+      SOLR_USERNAME: scholarsphere-user
       POSTGRES_USERNAME: scholarsphere
       POSTGRES_PASSWORD: scholarsphere
       POSTGRES_DB: scholarsphere

@@ -1,8 +1,8 @@
 x-web_env: &web_env
   environment:
       REDIS_HOST: redis
-      SOLR_USERNAME: scholarsphere
-      SOLR_PASSWORD: scholarsphere
+      SOLR_USERNAME: scholarsphere-user
+      SOLR_PASSWORD: scholarsphere-pswrd
       BUNDLE_DEFAULT_INSTALL_USES_PATH: vendor/bundle
       REDIS_PASSWORD: redispassword
       OAUTH_APP_ID: ${OAUTH_APP_ID}
@@ -79,8 +79,8 @@ services:
     restart: always
     environment:
       SOLR_STOP_WAIT: 10
-      SOLR_USERNAME: scholarsphere
-      SOLR_PASSWORD: scholarsphere
+      SOLR_USERNAME: scholarsphere-user
+      SOLR_PASSWORD: scholarsphere-pswrd
       SOLR_MODULES: analysis-extras
     volumes:
     - solr-data:/var/solr
