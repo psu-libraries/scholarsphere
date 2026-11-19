@@ -39,7 +39,7 @@ x-web_env: &web_env
       ENABLE_OPEN_ACCESS_FEATURE: ${ENABLE_OPEN_ACCESS_FEATURE:-true}
 services:
   redis:
-    image: redis:8
+    image: redis:8.10
     command: redis-server --requirepass redispassword
     volumes:
       - redis-data:/data
