@@ -75,15 +75,15 @@ services:
     volumes:
       - seaweedfs-data:/data
   solr:
-    image: solr:8.11.1-slim
+    image: solr:9.11.0
     restart: always
     environment:
       SOLR_STOP_WAIT: 10
       SOLR_USERNAME: scholarsphere
       SOLR_PASSWORD: scholarsphere
-      SOLR_HOME: /var/solr/data
+      SOLR_MODULES: analysis-extras
     volumes:
-    - solr-data:/var/solr/data
+    - solr-data:/var/solr
     ports:
     - ${SOLR_PORT:-8983}:8983
     command: [
