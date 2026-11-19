@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <config>
   <!-- NOTE: various comments and unused configuration possibilities have been purged
-    from this file.  Please refer to Please refer to https://solr.apache.org/guide/solr/latest/
+    from this file.  Please refer to https://solr.apache.org/guide/solr/latest/
   as well as the default solrconfig file included with Solr -->
 
   <luceneMatchVersion>9.11.0</luceneMatchVersion>
@@ -12,10 +12,6 @@
       <str name="dir">${solr.core0.data.dir:}</str>
     </updateLog>
   </updateHandler>
-
-  <!-- solr lib dirs -->
-  <lib dir="${solr.install.dir:../../../..}/contrib/analysis-extras/lib" />
-  <lib dir="${solr.install.dir:../../../..}/contrib/analysis-extras/lucene-libs" />
 
   <dataDir>${solr.data.dir:}</dataDir>
 
@@ -200,6 +196,7 @@
 
   <requestDispatcher handleSelect="true" >
     <!-- Removed 'enableRemoteStreaming' since Solr 9 handles this at the system level -->
+    <requestParsers multipartUploadLimitInKB="2048" />
   </requestDispatcher>
 
   <requestHandler name="/analysis/field" startup="lazy" class="solr.FieldAnalysisRequestHandler" />
