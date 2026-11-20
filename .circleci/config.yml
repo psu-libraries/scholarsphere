@@ -268,13 +268,13 @@ jobs:
           root: .
           paths:
             - '*'
-      
+
   lint-yarn-unit:
     resource_class: large
     docker:
       - image: cimg/ruby:3.4.11-browsers
-      - image: redis:6.2.6
-      - image: chrislusf/seaweedfs:latest
+      - image: redis:8.10
+      - image: chrislusf/seaweedfs:4.52
         environment:
           AWS_ACCESS_KEY_ID: scholarsphere
           AWS_SECRET_ACCESS_KEY: scholarsphere
@@ -283,11 +283,15 @@ jobs:
           POSTGRES_PASSWORD: scholarsphere
           POSTGRES_USER: scholarsphere
           POSTGRES_DB: scholarsphere
-      - image: solr:8.11.1-slim
+      - image: solr:9.11.0
+        environment:
+          SOLR_MODULES: analysis-extras
+          SOLR_USERNAME: scholarsphere-user
+          SOLR_PASSWORD: scholarsphere-pswrd
         command: [
           "/bin/bash",
           "-c",
-          "solr -c && solr auth enable -credentials scholarsphere:scholarsphere -z localhost:9983; solr stop && solr -c -f",
+          "solr -c -f & PID=$!; until curl -s http://localhost:8983/solr > /dev/null; do sleep 1; done; solr auth enable -credentials ${SOLR_USERNAME}:${SOLR_PASSWORD} -z localhost:9983; wait $PID",
           ]
     environment:
       RAILS_ENV: test
@@ -298,8 +302,8 @@ jobs:
       AWS_REGION: us-east-1
       SOLR_HOST: 127.0.0.1
       SOLR_COLLECTION: scholarsphere
-      SOLR_PASSWORD: scholarsphere
-      SOLR_USERNAME: scholarsphere
+      SOLR_PASSWORD: scholarsphere-pswrd
+      SOLR_USERNAME: scholarsphere-user
       POSTGRES_USERNAME: scholarsphere
       POSTGRES_PASSWORD: scholarsphere
       POSTGRES_DB: scholarsphere
@@ -350,8 +354,8 @@ jobs:
     resource_class: large
     docker:
       - image: cimg/ruby:3.4.11-browsers
-      - image: redis:6.2.6
-      - image: chrislusf/seaweedfs:latest
+      - image: redis:8.10
+      - image: chrislusf/seaweedfs:4.52
         environment:
           AWS_ACCESS_KEY_ID: scholarsphere
           AWS_SECRET_ACCESS_KEY: scholarsphere
@@ -360,11 +364,13 @@ jobs:
           POSTGRES_PASSWORD: scholarsphere
           POSTGRES_USER: scholarsphere
           POSTGRES_DB: scholarsphere
-      - image: solr:8.11.1-slim
+      - image: solr:9.11.0
+        environment:
+          SOLR_MODULES: analysis-extras
         command: [
           "/bin/bash",
           "-c",
-          "solr -c && solr auth enable -credentials scholarsphere:scholarsphere -z localhost:9983; solr stop && solr -c -f",
+          "solr -c -f & PID=$!; until curl -s http://localhost:8983/solr > /dev/null; do sleep 1; done; solr auth enable -credentials scholarsphere-user:scholarsphere-pswrd -z localhost:9983; wait $PID",
           ]
     environment:
       RAILS_ENV: test
@@ -375,8 +381,8 @@ jobs:
       AWS_REGION: us-east-1
       SOLR_HOST: 127.0.0.1
       SOLR_COLLECTION: scholarsphere
-      SOLR_PASSWORD: scholarsphere
-      SOLR_USERNAME: scholarsphere
+      SOLR_PASSWORD: scholarsphere-pswrd
+      SOLR_USERNAME: scholarsphere-user
       POSTGRES_USERNAME: scholarsphere
       POSTGRES_PASSWORD: scholarsphere
       POSTGRES_DB: scholarsphere
@@ -430,14 +436,14 @@ workflows:
       - install-test-dependencies
       - lint-yarn-unit:
           name: lint-yarn-unit
-          requires: 
+          requires:
             - install-test-dependencies
           context:
             - org-global
           filters:
             branches:
               only: /.*/
-              
+
       - feature-tests:
           name: feature-tests
           requires:

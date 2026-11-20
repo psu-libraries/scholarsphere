@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <config>
   <!-- NOTE: various comments and unused configuration possibilities have been purged
-    from this file.  Please refer to http://wiki.apache.org/solr/SolrConfigXml,
+    from this file.  Please refer to https://solr.apache.org/guide/solr/latest/
   as well as the default solrconfig file included with Solr -->
 
-  <abortOnConfigurationError>${solr.abortOnConfigurationError:true}</abortOnConfigurationError>
-
-  <luceneMatchVersion>8.2.0</luceneMatchVersion>
-
+  <luceneMatchVersion>9.11.0</luceneMatchVersion>
   <directoryFactory name="DirectoryFactory" class="${solr.directoryFactory:solr.StandardDirectoryFactory}"/>
 
   <updateHandler class="solr.DirectUpdateHandler2">
@@ -15,10 +12,6 @@
       <str name="dir">${solr.core0.data.dir:}</str>
     </updateLog>
   </updateHandler>
-
-  <!-- solr lib dirs -->
-  <lib dir="${solr.install.dir:../../../..}/contrib/analysis-extras/lib" />
-  <lib dir="${solr.install.dir:../../../..}/contrib/analysis-extras/lucene-libs" />
 
   <dataDir>${solr.data.dir:}</dataDir>
 
@@ -113,12 +106,12 @@
     </arr>
   </requestHandler>
 
-  <requestHandler name="permissions" class="solr.SearchHandler" >
+  <requestHandler name="/permissions" class="solr.SearchHandler" >
     <lst name="defaults">
       <str name="facet">off</str>
       <str name="echoParams">all</str>
       <str name="rows">1</str>
-      <str name="q">{!raw f=id v=$id}</str> <!-- use id=666 instead of q=id:666 -->
+      <str name="q">{!raw f=id v=$id}</str>
       <str name="fl">
         id,
         access_ssim,
@@ -202,7 +195,8 @@
   <requestHandler name="/replication" class="solr.ReplicationHandler" startup="lazy" />
 
   <requestDispatcher handleSelect="true" >
-    <requestParsers enableRemoteStreaming="true" multipartUploadLimitInKB="2048" />
+    <!-- Removed 'enableRemoteStreaming' since Solr 9 handles this at the system level -->
+    <requestParsers multipartUploadLimitInKB="2048" />
   </requestDispatcher>
 
   <requestHandler name="/analysis/field" startup="lazy" class="solr.FieldAnalysisRequestHandler" />

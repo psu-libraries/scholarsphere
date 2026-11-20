@@ -1,8 +1,8 @@
 x-web_env: &web_env
   environment:
       REDIS_HOST: redis
-      SOLR_USERNAME: scholarsphere
-      SOLR_PASSWORD: scholarsphere
+      SOLR_USERNAME: scholarsphere-user
+      SOLR_PASSWORD: scholarsphere-pswrd
       BUNDLE_DEFAULT_INSTALL_USES_PATH: vendor/bundle
       REDIS_PASSWORD: redispassword
       OAUTH_APP_ID: ${OAUTH_APP_ID}
@@ -39,7 +39,7 @@ x-web_env: &web_env
       ENABLE_OPEN_ACCESS_FEATURE: ${ENABLE_OPEN_ACCESS_FEATURE:-true}
 services:
   redis:
-    image: redis:8
+    image: redis:8.10
     command: redis-server --requirepass redispassword
     volumes:
       - redis-data:/data
@@ -75,21 +75,21 @@ services:
     volumes:
       - seaweedfs-data:/data
   solr:
-    image: solr:8.11.1-slim
+    image: solr:9.11.0
     restart: always
     environment:
       SOLR_STOP_WAIT: 10
-      SOLR_USERNAME: scholarsphere
-      SOLR_PASSWORD: scholarsphere
-      SOLR_HOME: /var/solr/data
+      SOLR_USERNAME: scholarsphere-user
+      SOLR_PASSWORD: scholarsphere-pswrd
+      SOLR_MODULES: analysis-extras
     volumes:
-    - solr-data:/var/solr/data
+    - solr-data:/var/solr
     ports:
     - ${SOLR_PORT:-8983}:8983
     command: [
       "/bin/bash",
       "-c",
-      "solr -c && solr auth enable -credentials $$SOLR_USERNAME:$$SOLR_PASSWORD -z localhost:9983; solr stop && solr start -c -f",
+      "solr -c -f & PID=$$!; until curl -s http://localhost:8983/solr > /dev/null; do sleep 1; done; solr auth enable -credentials $$SOLR_USERNAME:$$SOLR_PASSWORD -z localhost:9983; wait $$PID",
     ]
     healthcheck:
       test: [
