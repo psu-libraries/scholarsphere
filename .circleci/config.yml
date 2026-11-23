@@ -367,10 +367,12 @@ jobs:
       - image: solr:9.11.0
         environment:
           SOLR_MODULES: analysis-extras
+          SOLR_USERNAME: scholarsphere-user
+          SOLR_PASSWORD: scholarsphere-pswrd
         command: [
           "/bin/bash",
           "-c",
-          "solr -c -f & PID=$!; until curl -s http://localhost:8983/solr > /dev/null; do sleep 1; done; solr auth enable -credentials scholarsphere-user:scholarsphere-pswrd -z localhost:9983; wait $PID",
+          "solr -c -f & PID=$!; until curl -s http://localhost:8983/solr > /dev/null; do sleep 1; done; solr auth enable -credentials ${SOLR_USERNAME}:${SOLR_PASSWORD} -z localhost:9983; wait $PID",
           ]
     environment:
       RAILS_ENV: test
