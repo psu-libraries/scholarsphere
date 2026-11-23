@@ -8,11 +8,11 @@ module Scholarsphere
     COLLECTION_PATH = '/solr/admin/collections'
 
     def solr_username
-      ENV.fetch('SOLR_USERNAME', 'scholarsphere')
+      ENV.fetch('SOLR_USERNAME', 'scholarsphere-user')
     end
 
     def solr_password
-      ENV.fetch('SOLR_PASSWORD', 'scholarsphere')
+      ENV.fetch('SOLR_PASSWORD', 'scholarsphere-pswrd')
     end
 
     def solr_host
