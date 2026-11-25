@@ -63,7 +63,11 @@ class PdfRemediation::BuildAutoRemediatedWorkVersion
         built_work_version.publish!
         lib_answers = LibanswersApiService.new
         lib_answers.work_remediation_ticket(built_work_version.work.id)
-        PdfRemediation::AutoRemediationNotifications.new(built_work_version).send_notifications
+        if built_work_version.published?
+          PdfRemediation::AutoRemediationNotifications.new(built_work_version).send_notifications
+        else
+          CurationSyncService.new(built_work_version.work).sync
+        end
       end
   end
 end
