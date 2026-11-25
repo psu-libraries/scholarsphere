@@ -52,6 +52,8 @@ RSpec.describe PdfRemediation::BuildAutoRemediatedWorkVersion do
         context 'when no remaining remediation jobs' do
           it 'builds a new work version, attaches the remediated file, and publishes' do
             allow(Down).to receive(:download).with(remediated_url).and_return(Tempfile.new('COMPLIANT'))
+            curation_sync_service = instance_double(CurationSyncService)
+            allow(CurationSyncService).to receive(:new).and_return(curation_sync_service)
             wv_count_before = WorkVersion.count
 
             result = described_class.call(file_resource, remediated_url)
