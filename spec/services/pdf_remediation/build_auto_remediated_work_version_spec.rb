@@ -52,6 +52,8 @@ RSpec.describe PdfRemediation::BuildAutoRemediatedWorkVersion do
         context 'when no remaining remediation jobs' do
           it 'builds a new work version, attaches the remediated file, and publishes' do
             allow(Down).to receive(:download).with(remediated_url).and_return(Tempfile.new('COMPLIANT'))
+            curation_sync_service = instance_double(CurationSyncService)
+            allow(CurationSyncService).to receive(:new).and_return(curation_sync_service)
             wv_count_before = WorkVersion.count
 
             result = described_class.call(file_resource, remediated_url)
@@ -68,9 +70,13 @@ RSpec.describe PdfRemediation::BuildAutoRemediatedWorkVersion do
             expect(result).to be_published
             expect(PdfRemediation::AutoRemediationNotifications)
               .to have_received(:new).with(result)
+            expect(CurationSyncService).not_to have_received(:new).with(result.work)
           end
 
           it 'remains draft when publish is attempted with legacy incomplete metadata' do
+            curation_sync_service = instance_double(CurationSyncService)
+            allow(CurationSyncService).to receive(:new).and_return(curation_sync_service)
+            allow(curation_sync_service).to receive(:sync)
             allow(Down).to receive(:download).with(remediated_url).and_return(Tempfile.new('remediated'))
             legacy_metadata = wv_being_remediated.metadata.deep_dup
             legacy_metadata['description'] = nil
@@ -80,6 +86,8 @@ RSpec.describe PdfRemediation::BuildAutoRemediatedWorkVersion do
 
             expect(result).to be_draft
             expect(result.description).to be_nil
+            expect(CurationSyncService).to have_received(:new).with(result.work)
+            expect(PdfRemediation::AutoRemediationNotifications).not_to have_received(:new)
           end
 
           it 'calls the Libanswers service with an admin curation ticket' do
